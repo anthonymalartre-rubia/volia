@@ -2,9 +2,9 @@
 
 import { getSupabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { LogOut } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 
-export default function TopBar({ user }) {
+export default function TopBar({ user, onToggleSidebar, searchProgress, isSearching }) {
   const router = useRouter();
   const supabase = getSupabase();
 
@@ -14,51 +14,77 @@ export default function TopBar({ user }) {
     router.refresh();
   };
 
-  return (
-    <div className="sticky top-0 z-50 w-full border-b border-[#1e1e24] bg-[#09090b]/82 backdrop-blur">
-      <div className="flex h-16 items-center justify-between px-6">
-        {/* Left side: Logo and title */}
-        <div className="flex items-center gap-4">
-          {/* Logo box with gradient */}
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
-            <span className="text-sm font-bold text-white">LG</span>
-          </div>
+  const progress = isSearching && searchProgress?.total > 0
+    ? (searchProgress.current / searchProgress.total) * 100
+    : 0;
 
-          {/* Title and badge */}
-          <div className="flex flex-col gap-1">
-            <h1 className="text-base font-semibold text-[#fafafa]">
-              Lead Generator
-            </h1>
-            <div className="inline-flex w-fit rounded-md bg-[#1e1e24] px-2 py-1">
-              <span className="text-xs font-medium text-[#52525b]">
-                Prospection DOM
-              </span>
+  return (
+    <div className="sticky top-0 z-50 w-full border-b border-[#1e1e24] bg-[#09090b]/90 backdrop-blur-xl">
+      <div className="flex h-14 items-center justify-between px-4">
+        {/* Left: hamburger + logo */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onToggleSidebar}
+            className="lg:hidden p-2 rounded-lg text-[#71717a] hover:text-[#fafafa] hover:bg-[#1e1e24] transition"
+          >
+            <Menu size={20} />
+          </button>
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600">
+              <span className="text-xs font-bold text-white">LG</span>
             </div>
+            <span className="text-sm font-semibold text-[#fafafa] hidden sm:block">Lead Generator</span>
           </div>
         </div>
 
-        {/* Right side: User info + Logout */}
-        <div className="flex items-center gap-4">
-          <div className="text-sm font-medium text-[#52525b] hidden sm:block">
-            Martinique · Guadeloupe · Guyane · La Réunion
+        {/* Center: progress indicator when searching */}
+        {isSearching && (
+          <div className="hidden sm:flex items-center gap-3 flex-1 max-w-md mx-8">
+            <div className="flex-1 h-1.5 bg-[#1e1e24] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 rounded-full"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <span className="text-xs text-[#52525b] font-mono whitespace-nowrap">
+              {searchProgress?.current}/{searchProgress?.total}
+            </span>
           </div>
+        )}
 
-          {user && (
-            <div className="flex items-center gap-3 ml-4 pl-4 border-l border-[#1e1e24]">
-              <span className="text-sm text-[#a1a1aa]">
+        {/* Right: user */}
+        {user && (
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#111114] border border-[#1e1e24]">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <span className="text-[10px] font-bold text-white">
+                  {user.email?.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              <span className="text-xs text-[#a1a1aa] hidden sm:block max-w-[160px] truncate">
                 {user.email}
               </span>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm text-[#71717a] hover:text-[#fafafa] hover:bg-[#1e1e24] transition"
-                title="Se déconnecter"
-              >
-                <LogOut size={16} />
-              </button>
             </div>
-          )}
-        </div>
+            <button
+              onClick={handleLogout}
+              className="p-2 rounded-lg text-[#52525b] hover:text-[#fafafa] hover:bg-[#1e1e24] transition"
+              title="Se déconnecter"
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Mobile progress bar */}
+      {isSearching && (
+        <div className="sm:hidden h-0.5 bg-[#1e1e24]">
+          <div
+            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      )}
     </div>
   );
 }

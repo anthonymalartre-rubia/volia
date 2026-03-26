@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { getSupabase } from '@/lib/supabase';
-import { DEPTS } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
+import Sidebar from '@/components/Sidebar';
+import OverviewPanel from '@/components/OverviewPanel';
 import SearchPanel from '@/components/SearchPanel';
 import ResultsPanel from '@/components/ResultsPanel';
+import ExportPanel from '@/components/ExportPanel';
 import { useRouter } from 'next/navigation';
 
-export default function Home() {
+export default function Dashboard() {
   const [prospects, setProspects] = useState([]);
-  const [activeTab, setActiveTab] = useState('search');
+  const [activeView, setActiveView] = useState('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [apiKeySet, setApiKeySet] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isEnriching, setIsEnriching] = useState(false);
@@ -78,6 +81,7 @@ export default function Home() {
   // Start scraping function
   const startScraping = async (depts, b2bCats, coproCats, customQueries) => {
     setIsSearching(true);
+    setActiveView('search');
     setSearchProgress({
       current: 0,
       total: 0,
@@ -86,7 +90,6 @@ export default function Home() {
     });
 
     const taskList = [];
-    const logs = [];
 
     // Build task list from all combinations
     for (const dept of depts) {
@@ -316,7 +319,7 @@ export default function Home() {
 
   // Delete all prospects function
   const deleteAllProspects = async () => {
-    if (!confirm('Are you sure? This will delete all prospects.')) {
+    if (!confirm('Êtes-vous sûr ? Tous les prospects seront supprimés.')) {
       return;
     }
 
@@ -328,9 +331,7 @@ export default function Home() {
           .neq('id', '');
         if (error) console.error('Error deleting prospects:', error);
       }
-      {
-        setProspects([]);
-      }
+      setProspects([]);
     } catch (error) {
       console.error('Error deleting all prospects:', error);
     }
@@ -339,7 +340,7 @@ export default function Home() {
   // Download CSV function
   const downloadCSV = (format) => {
     if (prospects.length === 0) {
-      alert('No prospects to download');
+      alert('Aucun prospect à exporter');
       return;
     }
 
@@ -394,42 +395,18 @@ export default function Home() {
     URL.revokeObjectURL(url);
   };
 
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-200">
-      <TopBar user={user} />
-
-      <div className="mx-auto max-w-7xl px-4 py-6">
-        {/* Tab Navigation */}
-        <div className="mb-6 flex gap-4 border-b border-slate-700">
-          <button
-            onClick={() => setActiveTab('search')}
-            className={`pb-3 px-1 font-medium transition-colors ${
-              activeTab === 'search'
-                ? 'border-b-2 border-blue-500 text-blue-400'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            Recherche
-          </button>
-          <button
-            onClick={() => setActiveTab('results')}
-            className={`pb-3 px-1 font-medium transition-colors flex items-center gap-2 ${
-              activeTab === 'results'
-                ? 'border-b-2 border-blue-500 text-blue-400'
-                : 'text-slate-400 hover:text-slate-300'
-            }`}
-          >
-            Résultats
-            {prospects.length > 0 && (
-              <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-bold bg-blue-600 text-white rounded-full">
-                {prospects.length}
-              </span>
-            )}
-          </button>
-        </div>
-
-        {/* Content Area */}
-        {activeTab === 'search' ? (
+  // Render active panel
+  const renderPanel = () => {
+    switch (activeView) {
+      case 'overview':
+        return (
+          <OverviewPanel
+            prospects={prospects}
+            onNavigate={setActiveView}
+          />
+        );
+      case 'search':
+        return (
           <SearchPanel
             apiKeySet={apiKeySet}
             isSearching={isSearching}
@@ -437,7 +414,9 @@ export default function Home() {
             onStartScraping={startScraping}
             onStopScraping={stopScraping}
           />
-        ) : (
+        );
+      case 'results':
+        return (
           <ResultsPanel
             prospects={prospects}
             isEnriching={isEnriching}
@@ -447,7 +426,42 @@ export default function Home() {
             onDeleteAll={deleteAllProspects}
             onDownloadCSV={downloadCSV}
           />
-        )}
+        );
+      case 'export':
+        return (
+          <ExportPanel
+            prospects={prospects}
+            onDownloadCSV={downloadCSV}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#09090b] text-[#fafafa]">
+      <TopBar
+        user={user}
+        onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+        searchProgress={searchProgress}
+        isSearching={isSearching}
+      />
+
+      <div className="flex">
+        <Sidebar
+          activeView={activeView}
+          onViewChange={setActiveView}
+          onClose={() => setSidebarOpen(false)}
+          isOpen={sidebarOpen}
+          prospectCount={prospects.length}
+        />
+
+        <main className="flex-1 min-h-[calc(100vh-3.5rem)] p-6">
+          <div className="max-w-6xl mx-auto">
+            {renderPanel()}
+          </div>
+        </main>
       </div>
     </div>
   );

@@ -168,15 +168,13 @@ export default function Dashboard() {
               newProspects.push({
                 place_id: place.place_id,
                 nom: place.nom,
-                adresse: place.adresse,
-                telephone: place.telephone,
-                site_web: place.site_web,
-                note: place.note,
-                nb_avis: place.nb_avis,
-                email: null,
-                email_method: null,
+                adresse: place.adresse || '',
+                telephone: place.telephone || '',
+                site_web: place.site_web || '',
+                note: place.note || null,
+                nb_avis: place.nb_avis || 0,
                 type: task.type,
-                departement: task.dept || null,
+                departement: task.dept || '971',
               });
             }
           }

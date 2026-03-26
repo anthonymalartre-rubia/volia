@@ -351,7 +351,7 @@ export default function SearchPanel({
       </div>
 
       {/* Logs */}
-      {isSearching && searchProgress?.logs?.length > 0 && (
+      {searchProgress?.logs?.length > 0 && (
         <div className="rounded-2xl border border-[#1e1e24] bg-[#0a0a0c] overflow-hidden">
           <div className="px-5 py-2.5 border-b border-[#1e1e24]">
             <h3 className="text-[10px] uppercase tracking-wider text-[#3f3f46] font-semibold">Logs</h3>

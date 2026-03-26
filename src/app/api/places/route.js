@@ -43,12 +43,14 @@ export async function POST(request) {
       );
     }
 
-    const allPlaces = [];
-    let pageToken = null;
-    const MAX_PAGES = 5; // Up to 100 results per query
-
-    for (let page = 0; page < MAX_PAGES; page++) {
-      const requestBody = {
+    const response = await fetch(PLACES_API_URL, {
+      method: 'POST',
+      headers: {
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': FIELD_MASK,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         textQuery: query,
         maxResultCount: 20,
         locationBias: {
@@ -60,58 +62,31 @@ export async function POST(request) {
             radius: deptData.r,
           },
         },
-      };
+      }),
+    });
 
-      if (pageToken) {
-        requestBody.pageToken = pageToken;
-      }
-
-      const response = await fetch(PLACES_API_URL, {
-        method: 'POST',
-        headers: {
-          'X-Goog-Api-Key': apiKey,
-          'X-Goog-FieldMask': FIELD_MASK,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error('Google Places API error:', errorData);
-        // If first page fails, return error; otherwise return what we have
-        if (page === 0) {
-          return Response.json(
-            { error: `Google Places API error: ${response.status}` },
-            { status: response.status }
-          );
-        }
-        break;
-      }
-
-      const data = await response.json();
-
-      const pagePlaces = (data.places || []).map((place) => ({
-        place_id: place.id || '',
-        nom: place.displayName?.text || '',
-        adresse: place.formattedAddress || '',
-        telephone: place.nationalPhoneNumber || place.internationalPhoneNumber || '',
-        site_web: place.websiteUri || '',
-        note: place.rating || null,
-        nb_avis: place.userRatingCount || 0,
-      }));
-
-      allPlaces.push(...pagePlaces);
-
-      // Check for next page
-      if (data.nextPageToken) {
-        pageToken = data.nextPageToken;
-      } else {
-        break; // No more pages
-      }
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('Google Places API error:', errorData);
+      return Response.json(
+        { error: `Google Places API error: ${response.status}` },
+        { status: response.status }
+      );
     }
 
-    return Response.json({ places: allPlaces });
+    const data = await response.json();
+
+    const places = (data.places || []).map((place) => ({
+      place_id: place.id || '',
+      nom: place.displayName?.text || '',
+      adresse: place.formattedAddress || '',
+      telephone: place.nationalPhoneNumber || place.internationalPhoneNumber || '',
+      site_web: place.websiteUri || '',
+      note: place.rating || null,
+      nb_avis: place.userRatingCount || 0,
+    }));
+
+    return Response.json({ places });
   } catch (error) {
     console.error('Places API route error:', error);
     return Response.json(

@@ -193,20 +193,24 @@ export default function Dashboard() {
 
     if (newProspects.length > 0 && supabase) {
       try {
+        let saveError = false;
         // Insert in batches of 50 to avoid payload limits
         for (let i = 0; i < newProspects.length; i += 50) {
           const batch = newProspects.slice(i, i + 50);
           const { error } = await supabase
             .from('prospects')
-            .upsert(batch, { onConflict: 'place_id' });
+            .insert(batch);
 
           if (error) {
             setSearchProgress((prev) => addLog(prev, `DB error: ${error.message} (code: ${error.code})`));
+            saveError = true;
             break;
           }
         }
-        setProspects((prev) => [...prev, ...newProspects]);
-        setSearchProgress((prev) => addLog(prev, `✓ ${newProspects.length} prospects sauvegardés`));
+        if (!saveError) {
+          setProspects((prev) => [...prev, ...newProspects]);
+          setSearchProgress((prev) => addLog(prev, `✓ ${newProspects.length} prospects sauvegardés`));
+        }
       } catch (error) {
         setSearchProgress((prev) => addLog(prev, `Exception: ${error.message}`));
       }

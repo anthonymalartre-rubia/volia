@@ -383,11 +383,84 @@ export default function Dashboard() {
     setIsDeepEnriching(false);
   }, [prospects, supabase]);
 
+  // Apollo premium enrichment
+  const [isApolloEnriching, setIsApolloEnriching] = useState(false);
+  const [apolloProgress, setApolloProgress] = useState({
+    current: 0, total: 0, currentSite: '', logs: [],
+  });
+  const stopApolloRef = useRef(false);
+
+  const startApolloEnrichment = useCallback(async () => {
+    stopApolloRef.current = false;
+    setIsApolloEnriching(true);
+    setApolloProgress({ current: 0, total: 0, currentSite: '', logs: [] });
+
+    const prospectsToEnrich = prospects.filter((p) => !p.email && p.site_web);
+    const total = prospectsToEnrich.length;
+    setApolloProgress((prev) => ({ ...prev, total }));
+
+    for (let i = 0; i < prospectsToEnrich.length; i++) {
+      if (stopApolloRef.current) break;
+
+      const prospect = prospectsToEnrich[i];
+      let domain = '';
+      try {
+        domain = new URL(prospect.site_web).hostname.replace(/^www\./, '');
+      } catch {}
+
+      setApolloProgress((prev) => ({
+        ...addLog(prev, `Apollo: ${prospect.nom}`),
+        current: i + 1,
+        currentSite: domain,
+      }));
+
+      try {
+        const response = await fetch('/api/enrich-apollo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: prospect.nom,
+            domain,
+            organization: prospect.nom,
+          }),
+        });
+        const data = await response.json();
+
+        if (data.email) {
+          setProspects((prev) =>
+            prev.map((p) =>
+              p.id === prospect.id
+                ? { ...p, email: data.email, email_method: 'apollo' }
+                : p
+            )
+          );
+          if (supabase) {
+            await supabase
+              .from('prospects')
+              .update({ email: data.email, email_method: 'apollo' })
+              .eq('id', prospect.id);
+          }
+          setApolloProgress((prev) => addLog(prev, `✓ ${data.email}`));
+        } else {
+          setApolloProgress((prev) => addLog(prev, `— pas d'email trouvé`));
+        }
+      } catch (error) {
+        setApolloProgress((prev) => addLog(prev, `✗ ${error.message}`));
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+    }
+
+    setIsApolloEnriching(false);
+  }, [prospects, supabase]);
+
   const stopEnrichment = useCallback(() => {
     stopEnrichRef.current = true;
     stopDeepEnrichRef.current = true;
+    stopApolloRef.current = true;
     setIsEnriching(false);
     setIsDeepEnriching(false);
+    setIsApolloEnriching(false);
   }, []);
 
   // Delete all prospects
@@ -496,10 +569,13 @@ export default function Dashboard() {
                   prospects={prospects}
                   isEnriching={isEnriching}
                   isDeepEnriching={isDeepEnriching}
+                  isApolloEnriching={isApolloEnriching}
                   enrichProgress={enrichProgress}
                   deepEnrichProgress={deepEnrichProgress}
+                  apolloProgress={apolloProgress}
                   onStartEnrichment={startEnrichment}
                   onStartDeepEnrichment={startDeepEnrichment}
+                  onStartApolloEnrichment={startApolloEnrichment}
                   onStopEnrichment={stopEnrichment}
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}

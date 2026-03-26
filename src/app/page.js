@@ -6,6 +6,7 @@ import { DEPTS } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
 import SearchPanel from '@/components/SearchPanel';
 import ResultsPanel from '@/components/ResultsPanel';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [prospects, setProspects] = useState([]);
@@ -13,6 +14,7 @@ export default function Home() {
   const [apiKeySet, setApiKeySet] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const [isEnriching, setIsEnriching] = useState(false);
+  const [user, setUser] = useState(null);
   const [searchProgress, setSearchProgress] = useState({
     current: 0,
     total: 0,
@@ -29,10 +31,21 @@ export default function Home() {
   });
 
   const supabase = getSupabase();
+  const router = useRouter();
 
-  // Check API configuration and load existing prospects on mount
+  // Get current user and load data on mount
   useEffect(() => {
     const initializeApp = async () => {
+      if (!supabase) return;
+
+      // Get current user
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      if (!currentUser) {
+        router.push('/login');
+        return;
+      }
+      setUser(currentUser);
+
       // Check if API is configured
       try {
         const response = await fetch('/api/places?health_check=true');
@@ -42,22 +55,20 @@ export default function Home() {
         setApiKeySet(false);
       }
 
-      // Load existing prospects from Supabase
-      if (supabase) {
-        try {
-          const { data, error } = await supabase
-            .from('prospects')
-            .select('*')
-            .order('created_at', { ascending: false });
+      // Load existing prospects for this user (RLS filters automatically)
+      try {
+        const { data, error } = await supabase
+          .from('prospects')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-          if (error) {
-            console.error('Error loading prospects:', error);
-          } else if (data) {
-            setProspects(data);
-          }
-        } catch (error) {
-          console.error('Error fetching prospects:', error);
+        if (error) {
+          console.error('Error loading prospects:', error);
+        } else if (data) {
+          setProspects(data);
         }
+      } catch (error) {
+        console.error('Error fetching prospects:', error);
       }
     };
 
@@ -147,6 +158,7 @@ export default function Home() {
                 dept: task.dept || null,
                 category: task.category || null,
                 query: queryStr,
+                user_id: user?.id,
                 created_at: new Date().toISOString(),
               });
             }
@@ -384,7 +396,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200">
-      <TopBar />
+      <TopBar user={user} />
 
       <div className="mx-auto max-w-7xl px-4 py-6">
         {/* Tab Navigation */}

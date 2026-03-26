@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
 let _supabase = null;
 
@@ -10,6 +10,6 @@ export function getSupabase() {
     console.warn('Missing Supabase environment variables');
     return null;
   }
-  _supabase = createClient(url, key);
+  _supabase = createBrowserClient(url, key);
   return _supabase;
 }

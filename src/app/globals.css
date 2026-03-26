@@ -4,16 +4,88 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
+html {
+  color-scheme: dark;
+}
+
 body {
   font-family: 'Inter', -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global focus-visible ring */
+*:focus-visible {
+  @apply ring-2 ring-indigo-500 ring-offset-2 ring-offset-[#09090b] outline-none;
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2a2a35; border-radius: 3px; }
+::-webkit-scrollbar-thumb {
+  background: #2a2a35;
+  border-radius: 3px;
+  transition: background 0.2s;
+}
 ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+::-webkit-scrollbar-thumb:active { background: #71717a; }
+
+/* Toast animations */
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-slide-in 0.3s ease-out;
+}
+
+.animate-toast-out {
+  animation: toast-fade-out 0.3s ease-in forwards;
+}
+
+/* Skeleton loading animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.animate-skeleton {
+  background: linear-gradient(90deg, #1e1e24 25%, #2a2a35 50%, #1e1e24 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
 
 /* Pulse animation for progress indicator */
 @keyframes pulse {

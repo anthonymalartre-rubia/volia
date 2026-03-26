@@ -159,13 +159,13 @@ export default function Dashboard() {
               seenPlaceIds.add(place.place_id);
               newProspects.push({
                 place_id: place.place_id,
-                name: place.name,
-                address: place.address,
-                phone: place.phone,
+                nom: place.name,
+                adresse: place.address,
+                telephone: place.phone,
                 site_web: place.website,
                 email: null,
                 email_method: null,
-                dept: task.dept || null,
+                departement: task.dept || null,
                 category: task.category || null,
                 query: queryStr,
                 user_id: user?.id,
@@ -465,7 +465,7 @@ export default function Dashboard() {
     const headers =
       format === 'zoho'
         ? ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Website', 'Address']
-        : ['name', 'email', 'phone', 'site_web', 'address', 'dept', 'category'];
+        : ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
 
     csv += headers.join(',') + '\n';
 
@@ -473,7 +473,7 @@ export default function Dashboard() {
       let row = [];
 
       if (format === 'zoho') {
-        const nameParts = prospect.name.split(' ');
+        const nameParts = (prospect.nom || '').split(' ');
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(' ') || '';
 
@@ -481,19 +481,19 @@ export default function Dashboard() {
           `"${firstName}"`,
           `"${lastName}"`,
           `"${prospect.email || ''}"`,
-          `"${prospect.phone || ''}"`,
-          `"${prospect.name}"`,
+          `"${prospect.telephone || ''}"`,
+          `"${prospect.nom || ''}"`,
           `"${prospect.site_web || ''}"`,
-          `"${prospect.address || ''}"`,
+          `"${prospect.adresse || ''}"`,
         ];
       } else {
         row = [
-          `"${prospect.name}"`,
+          `"${prospect.nom || ''}"`,
           `"${prospect.email || ''}"`,
-          `"${prospect.phone || ''}"`,
+          `"${prospect.telephone || ''}"`,
           `"${prospect.site_web || ''}"`,
-          `"${prospect.address || ''}"`,
-          `"${prospect.dept || ''}"`,
+          `"${prospect.adresse || ''}"`,
+          `"${prospect.departement || ''}"`,
           `"${prospect.category || ''}"`,
         ];
       }

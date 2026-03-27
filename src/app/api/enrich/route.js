@@ -1,5 +1,6 @@
 import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { checkLimit, incrementUsage } from '@/lib/usage';
 
 const BLOCKED_DOMAINS = [
   'example.com',
@@ -156,8 +157,16 @@ async function enrichEmail(url) {
 
 export async function POST(request) {
   try {
-    const { user } = await getAuthenticatedUser();
+    const { user, supabase } = await getAuthenticatedUser();
     if (!user) return Response.json({ error: 'Non autorise' }, { status: 401 });
+
+    const limitCheck = await checkLimit(supabase, user.id, 'enrichments');
+    if (!limitCheck.allowed) {
+      return Response.json(
+        { error: "Limite d'enrichissements atteinte. Passez au plan Pro.", limitReached: true, ...limitCheck },
+        { status: 429 }
+      );
+    }
 
     const { url } = await request.json();
 
@@ -168,6 +177,7 @@ export async function POST(request) {
     }
 
     const result = await enrichEmail(validation.url);
+    await incrementUsage(supabase, user.id, 'enrichments');
     return Response.json(result);
   } catch (error) {
     console.error('Enrich API route error:', error);

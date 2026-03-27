@@ -3,39 +3,34 @@
 import { useState, useEffect } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const router = useRouter();
   const supabase = getSupabase();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/reset-password',
       });
 
       if (error) {
         setError(error.message);
       } else {
-        router.push('/dashboard');
-        router.refresh();
+        setSuccess(true);
       }
     } catch (err) {
       setError('Une erreur est survenue. Réessayez.');
@@ -43,6 +38,41 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-[#09090b] flex items-center justify-center px-4">
+        <div
+          className={`w-full max-w-sm space-y-6 text-center transition-all duration-700 ease-out ${
+            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-lg shadow-green-500/20">
+            <CheckCircle2 className="h-7 w-7 text-white" />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-2xl font-bold text-[#fafafa]">Email envoyé</h1>
+            <p className="text-sm text-[#71717a] leading-relaxed">
+              Un email de réinitialisation a été envoyé à{' '}
+              <span className="text-[#fafafa] font-medium">{email}</span>.
+              <br />
+              Cliquez sur le lien pour définir un nouveau mot de passe.
+            </p>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 text-sm text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Retour à la connexion
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#09090b] flex items-center justify-center px-4">
@@ -56,16 +86,16 @@ export default function LoginPage() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/20">
             <span className="text-lg font-bold text-white">P</span>
           </div>
-          <h1 className="mt-4 text-2xl font-bold text-[#fafafa]">Prospectia<span className="text-rose-400">.ai</span></h1>
+          <h1 className="mt-4 text-2xl font-bold text-[#fafafa]">Mot de passe oublié</h1>
           <p className="mt-2 text-sm text-[#71717a]">
-            Connectez-vous à votre compte
+            Entrez votre email pour recevoir un lien de réinitialisation
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="flex items-start gap-3 rounded-lg border border-red-600/50 bg-red-600/10 px-4 py-3 text-sm text-red-400 animate-in fade-in">
+            <div className="flex items-start gap-3 rounded-lg border border-red-600/50 bg-red-600/10 px-4 py-3 text-sm text-red-400">
               <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
               <span>{error}</span>
             </div>
@@ -89,38 +119,6 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-[#a1a1aa] mb-1.5">
-              Mot de passe
-            </label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#52525b]" />
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="w-full rounded-lg border border-[#1e1e24] bg-[#111114] pl-10 pr-10 py-2.5 text-sm text-[#fafafa] placeholder-[#52525b] focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all duration-200"
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#a1a1aa] transition-colors duration-200"
-                tabIndex={-1}
-              >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
-            </div>
-            <div className="flex justify-end mt-1">
-              <Link href="/forgot-password" className="text-xs text-[#52525b] hover:text-indigo-400 transition-colors duration-200">
-                Mot de passe oublié ?
-              </Link>
-            </div>
-          </div>
-
           <button
             type="submit"
             disabled={loading}
@@ -129,18 +127,21 @@ export default function LoginPage() {
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Connexion...</span>
+                <span>Envoi...</span>
               </>
             ) : (
-              'Se connecter'
+              'Envoyer le lien'
             )}
           </button>
         </form>
 
         <p className="text-center text-sm text-[#71717a]">
-          Pas encore de compte ?{' '}
-          <Link href="/signup" className="text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200">
-            Créer un compte
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 hover:underline underline-offset-4 font-medium transition-colors duration-200"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Retour à la connexion
           </Link>
         </p>
       </div>

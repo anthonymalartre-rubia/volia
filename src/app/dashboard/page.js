@@ -13,6 +13,7 @@ const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
 const SearchPanel = lazy(() => import('@/components/SearchPanel'));
 const ResultsPanel = lazy(() => import('@/components/ResultsPanel'));
 const ExportPanel = lazy(() => import('@/components/ExportPanel'));
+const OnboardingOverlay = lazy(() => import('@/components/OnboardingOverlay'));
 
 const MAX_LOGS = 100;
 
@@ -61,6 +62,7 @@ export default function Dashboard() {
   const [tags, setTags] = useState([]);
   const [prospectTagMap, setProspectTagMap] = useState({});
   const [searchHistory, setSearchHistory] = useState([]);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Refs to avoid stale closures in async loops
   const stopSearchRef = useRef(false);
@@ -137,6 +139,12 @@ export default function Dashboard() {
 
       // Apply search history
       setSearchHistory(sessionsRes.data || []);
+
+      // Show onboarding for new users
+      const loadedProspects = prospectsRes.data || [];
+      if (loadedProspects.length === 0 && !localStorage.getItem('onboarding_completed')) {
+        setShowOnboarding(true);
+      }
     };
 
     initializeApp();
@@ -679,9 +687,19 @@ export default function Dashboard() {
   }, [supabase, user]);
 
   // CSV export with injection protection
-  const downloadCSV = useCallback((format, filteredList) => {
+  const downloadCSV = useCallback(async (format, filteredList) => {
     const list = filteredList || prospects;
     if (list.length === 0) return;
+
+    // Check export limit client-side
+    if (userPlan && userUsage) {
+      const exportLimit = userPlan.limits.exports_per_month;
+      const currentExports = userUsage.exports || 0;
+      if (exportLimit !== -1 && currentExports >= exportLimit) {
+        alert('Limite d\'exports atteinte pour ce mois. Passez au plan Pro pour continuer.');
+        return;
+      }
+    }
 
     const headers = format === 'zoho'
       ? ['First Name', 'Last Name', 'Email', 'Phone', 'Company', 'Website', 'Address']
@@ -722,7 +740,37 @@ export default function Dashboard() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  }, [prospects]);
+
+    // Increment export usage tracking
+    try {
+      const sb = getSupabase();
+      if (sb && user) {
+        const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+        const { data: existing } = await sb
+          .from('usage_tracking')
+          .select('id, exports')
+          .eq('user_id', user.id)
+          .eq('month', month)
+          .single();
+
+        if (existing) {
+          await sb
+            .from('usage_tracking')
+            .update({ exports: (existing.exports || 0) + 1, updated_at: new Date().toISOString() })
+            .eq('id', existing.id);
+        } else {
+          await sb
+            .from('usage_tracking')
+            .insert({ user_id: user.id, month, exports: 1 });
+        }
+
+        // Update local state so the limit check stays current
+        setUserUsage((prev) => prev ? { ...prev, exports: (prev.exports || 0) + 1 } : prev);
+      }
+    } catch (err) {
+      console.error('Failed to track export usage:', err);
+    }
+  }, [prospects, userPlan, userUsage, user]);
 
   // Panel loading fallback
   const panelFallback = (
@@ -813,6 +861,15 @@ export default function Dashboard() {
           </div>
         </main>
       </div>
+
+      {showOnboarding && (
+        <Suspense fallback={null}>
+          <OnboardingOverlay
+            onClose={() => setShowOnboarding(false)}
+            onStartSearch={() => setActiveView('search')}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

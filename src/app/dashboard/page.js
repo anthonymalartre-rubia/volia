@@ -52,6 +52,7 @@ export default function Dashboard() {
     foundScrape: 0, foundGuess: 0,
   });
   const [userPlan, setUserPlan] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userUsage, setUserUsage] = useState(null);
   const [isDeepEnriching, setIsDeepEnriching] = useState(false);
   const [deepEnrichProgress, setDeepEnrichProgress] = useState({
@@ -84,13 +85,14 @@ export default function Dashboard() {
       // Load plan
       const { data: profile } = await supabase
         .from('user_profiles')
-        .select('plan, stripe_customer_id')
+        .select('plan, stripe_customer_id, is_admin')
         .eq('id', currentUser.id)
         .single();
 
       if (profile) {
         const { getPlan } = await import('@/lib/plans');
         setUserPlan(getPlan(profile.plan));
+        setIsAdmin(!!profile.is_admin);
       }
 
       // Load usage
@@ -783,6 +785,7 @@ export default function Dashboard() {
             prospectCount={prospects.length}
             folders={folders}
             searchHistory={searchHistory}
+            isAdmin={isAdmin}
           />
           <UsageBanner
             plan={userPlan}

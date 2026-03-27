@@ -6,6 +6,7 @@ import {
   Users,
   Download,
   ChevronLeft,
+  Shield,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -15,7 +16,7 @@ const NAV_ITEMS = [
   { id: 'export', label: 'Exporter', icon: Download, description: 'CSV & Zoho' },
 ];
 
-export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount, searchHistory }) {
+export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount, searchHistory, isAdmin }) {
   return (
     <>
       {/* Mobile overlay */}
@@ -87,6 +88,22 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
               );
             })}
           </nav>
+
+          {/* Admin link */}
+          {isAdmin && (
+            <a
+              href="/admin"
+              className="mt-4 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
+            >
+              <div className="p-1.5 rounded-lg bg-amber-500/20">
+                <Shield size={16} />
+              </div>
+              <div className="flex-1 text-left">
+                <div>Administration</div>
+                <div className="text-[10px] text-amber-400/50">Gestion utilisateurs</div>
+              </div>
+            </a>
+          )}
 
           {/* Search history */}
           <div className="mt-6">

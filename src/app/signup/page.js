@@ -71,13 +71,18 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
 
       if (error) {
         setError(error.message);
+      } else if (data?.user?.identities?.length === 0) {
+        setError('Un compte existe deja avec cet email.');
+      } else if (data?.session) {
+        // Auto-confirmed → redirect to dashboard
+        router.push('/dashboard');
       } else {
         setSuccess(true);
       }

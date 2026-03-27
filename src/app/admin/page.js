@@ -135,6 +135,17 @@ export default function AdminPage() {
       const result = await res.json();
       if (res.ok) {
         showToast(result.message || 'Action effectuee', 'success');
+        // Send notification email via Resend when password is set
+        if (action === 'set_password') {
+          const targetUser = users.find(u => u.id === userId);
+          if (targetUser?.email) {
+            fetch('/api/admin/send-reset', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: targetUser.email, type: 'reset' }),
+            }).catch(() => {});
+          }
+        }
         await loadUsers();
       } else {
         showToast(result.error || 'Erreur', 'error');

@@ -1,10 +1,51 @@
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
+import { PLANS } from '@/lib/plans';
 
 export const metadata = {
-  title: 'Prospectia.ai — Vos prospects DOM-TOM, trouves par l\'IA',
+  title: 'Prospectia.ai — Vos prospects DOM-TOM, trouvés par l\'IA',
   description: 'La plateforme de prospection B2B la plus abordable pour les DOM-TOM. Recherche Google Places + enrichissement email en cascade. 92% moins cher que la concurrence.',
+};
+
+function formatPrice(cents) {
+  if (cents === 0) return '0';
+  return Math.round(cents / 100).toString();
+}
+
+function formatLimit(value) {
+  if (value === -1) return 'Illimité';
+  return value.toLocaleString('fr-FR');
+}
+
+const PLAN_FEATURES = {
+  free: [
+    `${formatLimit(PLANS.free.limits.searches_per_month)} recherches/mois`,
+    `${formatLimit(PLANS.free.limits.enrichments_per_month)} enrichissements/mois`,
+    `${formatLimit(PLANS.free.limits.exports_per_month)} exports/mois`,
+    `${formatLimit(PLANS.free.limits.folders)} dossiers`,
+    'Scraping email gratuit',
+    'Export CSV standard',
+    '4 départements DOM-TOM',
+  ],
+  pro: [
+    'Recherches illimitées',
+    `${formatLimit(PLANS.pro.limits.enrichments_per_month)} enrichissements/mois`,
+    'Exports illimités',
+    'Dossiers illimités',
+    'Waterfall complet (7 sources)',
+    'Export CSV + Zoho CRM',
+    'Support prioritaire',
+  ],
+  enterprise: [
+    'Tout dans Pro',
+    'Enrichissements illimités',
+    'Apollo + Enrichly + Anymail inclus',
+    'API access',
+    'Utilisateurs illimités',
+    'Webhooks & intégrations',
+    'SLA & support dédié',
+  ],
 };
 
 export default function LandingPage() {
@@ -21,7 +62,8 @@ export default function LandingPage() {
             <span className="text-violet-400 text-xs font-semibold">.ai</span>
           </Link>
           <div className="hidden sm:flex items-center gap-8">
-            <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">Fonctionnalites</Link>
+            <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">Fonctionnalités</Link>
+            <Link href="#how-it-works" className="text-sm text-zinc-500 hover:text-white transition">Comment ça marche</Link>
             <Link href="#pricing" className="text-sm text-zinc-500 hover:text-white transition">Pricing</Link>
           </div>
           <div className="flex items-center gap-3">
@@ -41,17 +83,17 @@ export default function LandingPage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.08] text-xs text-zinc-400 mb-8 backdrop-blur-sm">
             <div className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-            Specialise DOM-TOM — 971 &middot; 972 &middot; 973 &middot; 974
+            Spécialisé DOM-TOM &mdash; 971 &middot; 972 &middot; 973 &middot; 974
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.08] mb-8">
-            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Trouvez vos prospects.</span>
+            <span className="bg-gradient-to-b from-white via-white to-zinc-400 bg-clip-text text-transparent">Générez des leads qualifiés</span>
             <br />
-            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">L&apos;IA fait le reste.</span>
+            <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">dans les DOM-TOM.</span>
           </h1>
           <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Decrivez votre cible, Prospectia trouve les entreprises, emails
-            et telephones dans les DOM-TOM. 7 sources d&apos;enrichissement, 1 seul clic.
+            Prospection B2B automatisée en Guadeloupe, Martinique, Guyane et La Réunion.
+            Recherche Google Places, enrichissement email en cascade, export en 1 clic.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <HeroCTA />
@@ -59,14 +101,14 @@ export default function LandingPage() {
               href="#features"
               className="text-sm text-zinc-500 hover:text-zinc-300 transition flex items-center gap-1"
             >
-              Voir comment ca marche
+              Voir comment ça marche
               <ArrowRight size={14} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Chat mockup — shows the conversational flow */}
+      {/* Chat mockup */}
       <section className="px-6 pb-24">
         <div className="max-w-2xl mx-auto">
           <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm overflow-hidden shadow-2xl shadow-violet-500/5">
@@ -89,23 +131,23 @@ export default function LandingPage() {
               </div>
               {/* Options */}
               <div className="flex gap-2 pl-9">
-                <span className="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/25 text-violet-300 text-xs font-medium">B2B — Entreprises</span>
-                <span className="px-3 py-1.5 rounded-lg border border-white/[0.08] text-zinc-500 text-xs font-medium">Copropriete</span>
+                <span className="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/25 text-violet-300 text-xs font-medium">B2B &mdash; Entreprises</span>
+                <span className="px-3 py-1.5 rounded-lg border border-white/[0.08] text-zinc-500 text-xs font-medium">Copropriété</span>
                 <span className="px-3 py-1.5 rounded-lg border border-white/[0.08] text-zinc-500 text-xs font-medium">Les deux</span>
               </div>
               {/* User answer */}
               <div className="flex justify-end">
-                <span className="px-3.5 py-1.5 rounded-lg bg-violet-600/20 border border-violet-500/20 text-violet-300 text-xs">B2B — Entreprises</span>
+                <span className="px-3.5 py-1.5 rounded-lg bg-violet-600/20 border border-violet-500/20 text-violet-300 text-xs">B2B &mdash; Entreprises</span>
               </div>
               {/* Bot */}
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <MapPin size={11} className="text-white" />
                 </div>
-                <p className="text-sm text-zinc-300">Dans quels departements ?</p>
+                <p className="text-sm text-zinc-300">Dans quels départements ?</p>
               </div>
               <div className="flex gap-2 pl-9 flex-wrap">
-                {['971 Guadeloupe', '972 Martinique', '973 Guyane', '974 La Reunion'].map((d) => (
+                {['971 Guadeloupe', '972 Martinique', '973 Guyane', '974 La Réunion'].map((d) => (
                   <span key={d} className="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/25 text-violet-300 text-xs font-medium">{d}</span>
                 ))}
               </div>
@@ -125,45 +167,51 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Features Grid */}
       <section id="features" className="py-24 px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-violet-400 mb-3">Comment ca marche</p>
+            <p className="text-sm font-semibold text-violet-400 mb-3">Fonctionnalités</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Simple comme une conversation
+              Tout ce qu&apos;il faut pour prospecter
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-              Pas de formulaires complexes. Repondez a quelques questions,
-              Prospectia fait le travail.
+              Une plateforme complète pour trouver, enrichir et exporter vos leads DOM-TOM.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 icon: Search,
-                title: 'Definissez votre cible',
-                desc: 'Type de prospect, departements, categories. Notre assistant conversationnel vous guide etape par etape.',
+                title: 'Recherche Google Places',
+                desc: 'Interrogez l\'API Google Places par département et catégorie. 19 catégories B2B et copropriété prédéfinies.',
                 gradient: 'from-violet-500/20 to-indigo-500/20',
                 iconBg: 'from-violet-500 to-indigo-600',
               },
               {
-                icon: Layers,
-                title: 'Enrichissement cascade',
-                desc: '7 sources testees dans l\'ordre : scraping, Serper, Apollo, Enrichly, Anymail, Findymail. S\'arrete au premier email.',
+                icon: Mail,
+                title: 'Enrichissement email',
+                desc: 'Waterfall multi-sources : scraping, Serper, Apollo, Enrichly, Anymail, Findymail. S\'arrête au premier email trouvé.',
                 gradient: 'from-indigo-500/20 to-blue-500/20',
                 iconBg: 'from-indigo-500 to-blue-600',
               },
               {
-                icon: Mail,
-                title: 'Exportez et contactez',
-                desc: 'Organisez vos leads en listes, exportez en CSV ou format Zoho CRM. Pret pour votre outreach.',
+                icon: Tag,
+                title: 'Lead scoring & tags',
+                desc: 'Scoring automatique des emails (domain match, contact@, pro, générique). Organisez vos leads par dossiers.',
                 gradient: 'from-blue-500/20 to-cyan-500/20',
                 iconBg: 'from-blue-500 to-cyan-600',
               },
+              {
+                icon: Download,
+                title: 'Export CSV & Zoho CRM',
+                desc: 'Exportez en CSV standard ou au format Zoho CRM (Last Name, Company, Email, Phone). Prêt pour l\'outreach.',
+                gradient: 'from-cyan-500/20 to-teal-500/20',
+                iconBg: 'from-cyan-500 to-teal-600',
+              },
             ].map((feature) => (
-              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
+              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div className="relative">
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.iconBg} flex items-center justify-center mb-4 shadow-lg`}>
@@ -172,6 +220,58 @@ export default function LandingPage() {
                   <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
                   <p className="text-sm text-zinc-500 leading-relaxed">{feature.desc}</p>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how-it-works" className="py-24 px-6 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm font-semibold text-violet-400 mb-3">Comment ça marche</p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+              3 étapes, des centaines de leads
+            </h2>
+            <p className="text-zinc-500 text-lg max-w-xl mx-auto">
+              Pas de formulaires complexes. Répondez à quelques questions, Prospectia fait le travail.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                step: '01',
+                icon: MapPin,
+                title: 'Choisissez départements & catégories',
+                desc: 'Sélectionnez vos départements (971-974) et les catégories B2B ou copropriété qui vous intéressent. Ou lancez une requête personnalisée.',
+                gradient: 'from-violet-500 to-indigo-600',
+              },
+              {
+                step: '02',
+                icon: Zap,
+                title: 'Recherche & enrichissement automatiques',
+                desc: 'Prospectia interroge Google Places, déduplique les résultats et enrichit chaque prospect avec jusqu\'à 7 sources email différentes.',
+                gradient: 'from-indigo-500 to-blue-600',
+              },
+              {
+                step: '03',
+                icon: Download,
+                title: 'Exportez vos leads qualifiés',
+                desc: 'Filtrez par département, type ou recherche texte. Exportez en CSV standard ou format Zoho CRM, prêts pour votre campagne.',
+                gradient: 'from-blue-500 to-cyan-600',
+              },
+            ].map((item) => (
+              <div key={item.step} className="relative">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg flex-shrink-0`}>
+                    <item.icon size={20} className="text-white" />
+                  </div>
+                  <span className="text-4xl font-bold font-mono text-white/10">{item.step}</span>
+                </div>
+                <h3 className="font-semibold text-lg mb-3">{item.title}</h3>
+                <p className="text-sm text-zinc-500 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -188,7 +288,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl">
               92% moins cher qu&apos;Apollo seul. Notre waterfall teste chaque source
-              et s&apos;arrete des qu&apos;un email est trouve.
+              et s&apos;arrête dès qu&apos;un email est trouvé.
             </p>
           </div>
 
@@ -200,7 +300,7 @@ export default function LandingPage() {
               { name: 'Enrichly', tag: '$59/mo', color: 'from-cyan-500/20 to-blue-500/20 border-cyan-500/20', dot: 'bg-cyan-400' },
               { name: 'Anymail', tag: 'API', color: 'from-teal-500/20 to-emerald-500/20 border-teal-500/20', dot: 'bg-teal-400' },
               { name: 'Findymail', tag: 'API', color: 'from-sky-500/20 to-indigo-500/20 border-sky-500/20', dot: 'bg-sky-400' },
-              { name: 'Fallback', tag: 'Devine', color: 'from-zinc-500/20 to-zinc-600/20 border-zinc-500/20', dot: 'bg-zinc-400' },
+              { name: 'Fallback', tag: 'Deviné', color: 'from-zinc-500/20 to-zinc-600/20 border-zinc-500/20', dot: 'bg-zinc-400' },
             ].map((s, i) => (
               <div key={s.name} className={`relative p-4 rounded-xl bg-gradient-to-br ${s.color} border border-white/[0.06]`}>
                 <div className="flex items-center gap-2 mb-2">
@@ -213,7 +313,7 @@ export default function LandingPage() {
             ))}
           </div>
           <p className="text-center text-sm text-zinc-600 mt-6">
-            S&apos;arrete au premier email trouve &mdash; vous ne payez que ce qui est necessaire.
+            S&apos;arrête au premier email trouvé &mdash; vous ne payez que ce qui est nécessaire.
           </p>
         </div>
       </section>
@@ -223,10 +323,10 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
-              { value: '19', label: 'Categories', sub: 'B2B & Copro' },
-              { value: '4', label: 'Departements', sub: 'DOM-TOM' },
+              { value: '19', label: 'Catégories', sub: 'B2B & Copro' },
+              { value: '4', label: 'Départements', sub: 'DOM-TOM' },
               { value: '7', label: 'Sources', sub: 'Enrichissement' },
-              { value: '-92%', label: 'vs Apollo', sub: 'Cout/lead' },
+              { value: '-92%', label: 'vs Apollo', sub: 'Coût/lead' },
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-4xl sm:text-5xl font-bold font-mono bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">{stat.value}</div>
@@ -244,20 +344,20 @@ export default function LandingPage() {
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">Pricing transparent</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Le plus competitif du marche
+              Le plus compétitif du marché
             </h2>
             <p className="text-zinc-500 text-lg max-w-xl mx-auto">
-              Pas de credits caches. Pas de markup sur les API. Vous payez le cout reel.
+              Pas de crédits cachés. Pas de markup sur les API. Vous payez le coût réel.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Starter */}
-            <div className="p-8 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
-              <h3 className="text-lg font-semibold mb-1">Starter</h3>
+            <div className="p-8 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm">
+              <h3 className="text-lg font-semibold mb-1">{PLANS.free.name}</h3>
               <p className="text-sm text-zinc-500 mb-6">Pour tester la plateforme</p>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-4xl font-bold">0&euro;</span>
+                <span className="text-4xl font-bold">{formatPrice(PLANS.free.price)}&euro;</span>
                 <span className="text-zinc-600 text-sm">/mois</span>
               </div>
               <Link
@@ -267,13 +367,7 @@ export default function LandingPage() {
                 Commencer gratuitement
               </Link>
               <div className="space-y-3">
-                {[
-                  '100 recherches Google Places',
-                  'Scraping email gratuit',
-                  'Export CSV standard',
-                  '4 departements DOM-TOM',
-                  '1 utilisateur',
-                ].map((f) => (
+                {PLAN_FEATURES.free.map((f) => (
                   <div key={f} className="flex items-start gap-2">
                     <Check size={16} className="text-violet-400 mt-0.5 flex-shrink-0" />
                     <span className="text-sm text-zinc-400">{f}</span>
@@ -282,15 +376,16 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Pro */}
-            <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-transparent">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold rounded-full shadow-lg shadow-violet-500/20">
-                Populaire
+            {/* Pro — Recommended */}
+            <div className="relative p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-[#111114]/80 backdrop-blur-sm">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-xs font-semibold rounded-full shadow-lg shadow-violet-500/20 flex items-center gap-1.5">
+                <Crown size={12} />
+                Recommandé
               </div>
-              <h3 className="text-lg font-semibold mb-1">Pro</h3>
-              <p className="text-sm text-zinc-500 mb-6">Pour les equipes commerciales</p>
+              <h3 className="text-lg font-semibold mb-1">{PLANS.pro.name}</h3>
+              <p className="text-sm text-zinc-500 mb-6">Pour les équipes commerciales</p>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-4xl font-bold">49&euro;</span>
+                <span className="text-4xl font-bold">{formatPrice(PLANS.pro.price)}&euro;</span>
                 <span className="text-zinc-600 text-sm">/mois</span>
               </div>
               <Link
@@ -300,14 +395,7 @@ export default function LandingPage() {
                 Choisir Pro &rarr;
               </Link>
               <div className="space-y-3">
-                {[
-                  'Recherches illimitees',
-                  'Waterfall complet (7 sources)',
-                  'Export CSV + Zoho CRM',
-                  'Listes de leads illimitees',
-                  '5 utilisateurs',
-                  'Support prioritaire',
-                ].map((f) => (
+                {PLAN_FEATURES.pro.map((f) => (
                   <div key={f} className="flex items-start gap-2">
                     <Check size={16} className="text-violet-400 mt-0.5 flex-shrink-0" />
                     <span className="text-sm text-zinc-400">{f}</span>
@@ -317,28 +405,21 @@ export default function LandingPage() {
             </div>
 
             {/* Enterprise */}
-            <div className="p-8 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
-              <h3 className="text-lg font-semibold mb-1">Enterprise</h3>
+            <div className="p-8 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm">
+              <h3 className="text-lg font-semibold mb-1">{PLANS.enterprise.name}</h3>
               <p className="text-sm text-zinc-500 mb-6">Volume et sur-mesure</p>
               <div className="flex items-baseline gap-1 mb-6">
-                <span className="text-4xl font-bold">149&euro;</span>
+                <span className="text-4xl font-bold">{formatPrice(PLANS.enterprise.price)}&euro;</span>
                 <span className="text-zinc-600 text-sm">/mois</span>
               </div>
               <Link
                 href="/signup"
                 className="block w-full py-3 text-center text-sm font-semibold rounded-xl border border-white/[0.1] hover:bg-white/[0.05] transition mb-8 text-zinc-300"
               >
-                Contacter l&apos;equipe
+                Contacter l&apos;équipe
               </Link>
               <div className="space-y-3">
-                {[
-                  'Tout dans Pro',
-                  'Apollo + Enrichly + Anymail inclus',
-                  'API access',
-                  'Utilisateurs illimites',
-                  'Webhooks & integrations',
-                  'SLA & support dedie',
-                ].map((f) => (
+                {PLAN_FEATURES.enterprise.map((f) => (
                   <div key={f} className="flex items-start gap-2">
                     <Check size={16} className="text-violet-400 mt-0.5 flex-shrink-0" />
                     <span className="text-sm text-zinc-400">{f}</span>
@@ -348,8 +429,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Comparison */}
-          <div className="mt-16 p-8 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
+          {/* Comparison table */}
+          <div className="mt-16 p-8 rounded-2xl bg-[#111114]/80 backdrop-blur-sm border border-white/[0.06]">
             <h3 className="font-semibold mb-6 text-center text-zinc-300">Comparez avec la concurrence</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -363,10 +444,10 @@ export default function LandingPage() {
                 </thead>
                 <tbody>
                   {[
-                    ['Prix/mois', '49\u20AC', '79\u20AC', '~99\u20AC'],
+                    ['Prix/mois', `${formatPrice(PLANS.pro.price)}\u20AC`, '79\u20AC', '~99\u20AC'],
                     ['Sources enrichissement', '7', '1', '?'],
                     ['Focus DOM-TOM', '\u2713', '\u2717', '\u2717'],
-                    ['Google Places integre', '\u2713', '\u2717', '\u2717'],
+                    ['Google Places intégré', '\u2713', '\u2717', '\u2717'],
                     ['Export Zoho CRM', '\u2713', '\u2717', '\u2717'],
                     ['Interface conversationnelle', '\u2713', '\u2717', '\u2717'],
                   ].map(([label, ...values], i) => (
@@ -392,10 +473,10 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-violet-600/[0.08] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto text-center relative">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Pret a trouver vos prochains clients ?
+            Prêt à trouver vos prochains clients ?
           </h2>
           <p className="text-zinc-500 text-lg mb-8 max-w-xl mx-auto">
-            Creez votre compte en 30 secondes. Aucune carte bancaire requise.
+            Créez votre compte en 30 secondes. Aucune carte bancaire requise.
           </p>
           <FooterCTA />
         </div>
@@ -415,7 +496,7 @@ export default function LandingPage() {
             <span>Guadeloupe</span>
             <span>Martinique</span>
             <span>Guyane</span>
-            <span>La Reunion</span>
+            <span>La Réunion</span>
           </div>
           <p className="text-[11px] text-zinc-700">
             &copy; 2026 Prospectia.ai

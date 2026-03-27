@@ -7,6 +7,7 @@ import {
   Download,
   ChevronLeft,
   Shield,
+  Settings,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -88,6 +89,20 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
               );
             })}
           </nav>
+
+          {/* Settings link */}
+          <a
+            href="/settings"
+            className="mt-4 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-[#71717a] hover:text-[#fafafa] hover:bg-[#111114] transition-all duration-200"
+          >
+            <div className="p-1.5 rounded-lg bg-[#111114]">
+              <Settings size={16} />
+            </div>
+            <div className="flex-1 text-left">
+              <div>Parametres</div>
+              <div className="text-[10px] text-[#3f3f46]">Profil & compte</div>
+            </div>
+          </a>
 
           {/* Admin link */}
           {isAdmin && (

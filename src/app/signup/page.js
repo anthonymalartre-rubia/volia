@@ -84,7 +84,18 @@ export default function SignupPage() {
         // Auto-confirmed → redirect to dashboard
         router.push('/dashboard');
       } else {
-        setSuccess(true);
+        // Email auto-confirmed by trigger but Supabase didn't return session
+        // Sign in immediately since the trigger confirmed the email
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (!signInError) {
+          router.push('/dashboard');
+        } else {
+          // Fallback: show verification screen
+          setSuccess(true);
+        }
       }
     } catch (err) {
       setError('Une erreur est survenue. Réessayez.');

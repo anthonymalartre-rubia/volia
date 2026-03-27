@@ -2,10 +2,13 @@ import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY);
+}
 
 export async function POST(request) {
   try {
+    const stripe = getStripe();
     const { user, supabase } = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: 'Non autorise' }, { status: 401 });

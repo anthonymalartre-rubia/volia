@@ -21,7 +21,7 @@ export function NavAuth() {
     return (
       <Link
         href="/dashboard"
-        className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium transition-all"
+        className="px-5 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition-all"
       >
         Dashboard
       </Link>
@@ -32,15 +32,15 @@ export function NavAuth() {
     <>
       <Link
         href="/login"
-        className="px-4 py-2 text-sm text-[#a1a1aa] hover:text-white transition"
+        className="px-4 py-2 text-sm text-gray-500 hover:text-black transition"
       >
         Se connecter
       </Link>
       <Link
         href="/signup"
-        className="px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium transition-all"
+        className="px-5 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition-all"
       >
-        Essai gratuit
+        Commencer
       </Link>
     </>
   );
@@ -59,12 +59,12 @@ export function HeroCTA() {
   }, []);
 
   const href = isLoggedIn ? '/dashboard' : '/signup';
-  const text = isLoggedIn ? 'Accéder au dashboard' : 'Commencer gratuitement';
+  const text = isLoggedIn ? 'Acceder au dashboard' : 'Commencer gratuitement';
 
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-base font-semibold transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-500/40"
+      className="group inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-black text-white text-base font-semibold hover:bg-gray-800 transition-all"
     >
       {text}
       <ArrowRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
@@ -85,12 +85,12 @@ export function FooterCTA() {
   }, []);
 
   const href = isLoggedIn ? '/dashboard' : '/signup';
-  const text = isLoggedIn ? 'Accéder au dashboard' : 'Commencer gratuitement';
+  const text = isLoggedIn ? 'Acceder au dashboard' : 'Commencer gratuitement';
 
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-lg font-semibold transition-all shadow-lg shadow-indigo-600/25 hover:shadow-indigo-500/40"
+      className="group inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-white text-black text-lg font-semibold hover:bg-gray-100 transition-all"
     >
       {text}
       <ArrowRight size={20} className="group-hover:translate-x-0.5 transition-transform" />

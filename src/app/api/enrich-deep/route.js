@@ -1,5 +1,6 @@
 import dns from 'dns';
 import { promisify } from 'util';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 const resolveMx = promisify(dns.resolveMx);
 
@@ -437,6 +438,9 @@ import { validateUrl } from '@/lib/url-validation';
 
 export async function POST(request) {
   try {
+    const { user } = await getAuthenticatedUser();
+    if (!user) return Response.json({ error: 'Non autorise' }, { status: 401 });
+
     const { url } = await request.json();
 
     // SSRF validation

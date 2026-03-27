@@ -1,4 +1,5 @@
 import { validateUrl } from '@/lib/url-validation';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 const BLOCKED_DOMAINS = [
   'example.com',
@@ -152,6 +153,9 @@ async function enrichEmail(url) {
 
 export async function POST(request) {
   try {
+    const { user } = await getAuthenticatedUser();
+    if (!user) return Response.json({ error: 'Non autorise' }, { status: 401 });
+
     const { url } = await request.json();
 
     // SSRF validation

@@ -177,7 +177,7 @@ export default function Dashboard() {
     try {
       const { data, error } = await supabase
         .from('lead_folders')
-        .insert({ name, color })
+        .insert({ name, color, user_id: user?.id })
         .select()
         .single();
       if (error) {
@@ -190,7 +190,7 @@ export default function Dashboard() {
       console.error('Error creating folder:', error);
       return null;
     }
-  }, [supabase]);
+  }, [supabase, user]);
 
   // Delete folder (moves prospects to unassigned)
   const deleteFolder = useCallback(async (folderId) => {
@@ -694,11 +694,9 @@ export default function Dashboard() {
   const deleteAllProspects = useCallback(async (folderId) => {
     try {
       if (supabase && user) {
-        let query = supabase.from('prospects').delete();
+        let query = supabase.from('prospects').delete().eq('user_id', user.id);
         if (folderId && folderId !== 'all') {
           query = query.eq('folder_id', folderId);
-        } else {
-          query = query.neq('id', '00000000-0000-0000-0000-000000000000');
         }
         const { error } = await query;
         if (error) console.error('Error deleting prospects:', error);

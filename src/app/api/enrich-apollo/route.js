@@ -1,7 +1,12 @@
+import { getAuthenticatedUser } from '@/lib/auth';
+
 const APOLLO_API_URL = 'https://api.apollo.io/v1/people/match';
 
 export async function POST(request) {
   try {
+    const { user } = await getAuthenticatedUser();
+    if (!user) return Response.json({ error: 'Non autorise' }, { status: 401 });
+
     const apiKey = process.env.APOLLO_API_KEY;
     if (!apiKey) {
       return Response.json(

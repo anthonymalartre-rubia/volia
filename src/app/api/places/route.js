@@ -1,4 +1,6 @@
 import { DEPTS, PLACES_API_URL, FIELD_MASK } from '@/lib/constants';
+import { getAuthenticatedUser } from '@/lib/auth';
+import { checkLimit, incrementUsage } from '@/lib/usage';
 
 export async function GET() {
   // Health check — just checks if API key is set
@@ -11,6 +13,20 @@ export async function GET() {
 
 export async function POST(request) {
   try {
+    const { user, supabase } = await getAuthenticatedUser();
+
+    if (!user) {
+      return Response.json({ error: 'Authentification requise' }, { status: 401 });
+    }
+
+    const limitCheck = await checkLimit(supabase, user.id, 'searches');
+    if (!limitCheck.allowed) {
+      return Response.json(
+        { error: 'Limite de recherches atteinte pour ce mois. Passez au plan Pro pour continuer.', limitReached: true, ...limitCheck },
+        { status: 429 }
+      );
+    }
+
     const { query, dept } = await request.json();
 
     if (!query || typeof query !== 'string' || query.length > 200) {
@@ -86,6 +102,7 @@ export async function POST(request) {
       nb_avis: place.userRatingCount || 0,
     }));
 
+    await incrementUsage(supabase, user.id, 'searches');
     return Response.json({ places });
   } catch (error) {
     console.error('Places API route error:', error);

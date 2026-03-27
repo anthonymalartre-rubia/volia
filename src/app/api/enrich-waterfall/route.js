@@ -1,4 +1,6 @@
 import { validateUrl } from '@/lib/url-validation';
+import { getAuthenticatedUser } from '@/lib/auth';
+import { checkLimit, incrementUsage } from '@/lib/usage';
 
 // ─── Scraping (free) ────────────────────────────────────
 
@@ -255,6 +257,20 @@ const WATERFALL_STEPS = [
 
 export async function POST(request) {
   try {
+    const { user, supabase } = await getAuthenticatedUser();
+
+    if (!user) {
+      return Response.json({ error: 'Authentification requise' }, { status: 401 });
+    }
+
+    const limitCheck = await checkLimit(supabase, user.id, 'enrichments');
+    if (!limitCheck.allowed) {
+      return Response.json(
+        { error: "Limite d'enrichissements atteinte. Passez au plan Pro.", limitReached: true, ...limitCheck },
+        { status: 429 }
+      );
+    }
+
     const { url, name } = await request.json();
 
     if (!url) {
@@ -275,6 +291,7 @@ export async function POST(request) {
         const result = await step.fn(ctx);
         tried.push({ step: step.name, label: step.label, found: !!result?.email });
         if (result?.email) {
+          await incrementUsage(supabase, user.id, 'enrichments');
           return Response.json({
             email: result.email,
             source: result.source,
@@ -297,6 +314,7 @@ export async function POST(request) {
     // Final fallback: guess
     const guessEmail = domain ? `contact@${domain}` : null;
 
+    await incrementUsage(supabase, user.id, 'enrichments');
     return Response.json({
       email: guessEmail,
       source: 'guess',

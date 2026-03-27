@@ -59,8 +59,11 @@ export async function POST(request) {
       );
     }
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
     const response = await fetch(PLACES_API_URL, {
       method: 'POST',
+      signal: controller.signal,
       headers: {
         'X-Goog-Api-Key': apiKey,
         'X-Goog-FieldMask': FIELD_MASK,
@@ -80,6 +83,8 @@ export async function POST(request) {
         },
       }),
     });
+
+    clearTimeout(timeout);
 
     if (!response.ok) {
       const errorData = await response.text();

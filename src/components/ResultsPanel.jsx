@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback, useEffect, memo } from "react";
 import {
   Download,
   Trash2,
@@ -105,7 +105,7 @@ function TagDropdown({ tags, activeTags, onToggle, onCreate }) {
   );
 }
 
-export default function ResultsPanel({
+export default memo(function ResultsPanel({
   prospects = [],
   folders = [],
   activeFolder = 'all',
@@ -698,4 +698,4 @@ export default function ResultsPanel({
       </div>
     </div>
   );
-}
+})

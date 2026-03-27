@@ -2,6 +2,13 @@ import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 
+// ─── Timeout helper for external API calls ──────────────
+function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
 // ─── Scraping (free) ────────────────────────────────────
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -94,7 +101,7 @@ async function apolloEnrich(domain, name) {
   if (!apiKey) return null;
 
   try {
-    const res = await fetch('https://api.apollo.io/v1/people/match', {
+    const res = await fetchWithTimeout('https://api.apollo.io/v1/people/match', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
       body: JSON.stringify({
@@ -130,7 +137,7 @@ async function serperEnrich(name, domain) {
   try {
     // Search for email addresses associated with the company
     const emailQuery = `"${name}" "${domain}" email contact @${domain}`;
-    const res = await fetch('https://google.serper.dev/search', {
+    const res = await fetchWithTimeout('https://google.serper.dev/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
       body: JSON.stringify({ q: emailQuery, num: 10 }),
@@ -164,7 +171,7 @@ async function serperLinkedinMatch(name, domain) {
 
   try {
     const query = `site:linkedin.com/company "${name}" ${domain || ''}`.trim();
-    const res = await fetch('https://google.serper.dev/search', {
+    const res = await fetchWithTimeout('https://google.serper.dev/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
       body: JSON.stringify({ q: query, num: 3 }),
@@ -185,7 +192,7 @@ async function enrichlyEnrich(domain, name) {
   if (!apiKey) return null;
 
   try {
-    const res = await fetch('https://api.enrichly.io/v1/enrich', {
+    const res = await fetchWithTimeout('https://api.enrichly.io/v1/enrich', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({ domain, company_name: name }),
@@ -206,7 +213,7 @@ async function anymailEnrich(domain) {
   if (!apiKey) return null;
 
   try {
-    const res = await fetch(`https://api.anymailfinder.com/v5.0/search/company.json`, {
+    const res = await fetchWithTimeout(`https://api.anymailfinder.com/v5.0/search/company.json`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({ domain }),
@@ -230,7 +237,7 @@ async function findymailEnrich(domain, name) {
   if (!apiKey) return null;
 
   try {
-    const res = await fetch('https://app.findymail.com/api/search/company', {
+    const res = await fetchWithTimeout('https://app.findymail.com/api/search/company', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({ domain, company_name: name }),

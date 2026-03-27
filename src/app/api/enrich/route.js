@@ -128,11 +128,14 @@ async function enrichEmail(url) {
   let validEmails = emails.filter(isValidEmail);
 
   if (validEmails.length === 0) {
-    for (const path of COMMON_PATHS) {
-      const pathUrl = url.endsWith('/') ? `${url}${path.slice(1)}` : `${url}${path}`;
-      html = await fetchUrl(pathUrl);
-      if (html) {
-        emails = extractEmailsFromHtml(html);
+    // Fetch all common paths in parallel instead of sequentially (~4x faster)
+    const pathUrls = COMMON_PATHS.map(path =>
+      url.endsWith('/') ? `${url}${path.slice(1)}` : `${url}${path}`
+    );
+    const results = await Promise.allSettled(pathUrls.map(fetchUrl));
+    for (const result of results) {
+      if (result.status === 'fulfilled' && result.value) {
+        emails = extractEmailsFromHtml(result.value);
         validEmails = emails.filter(isValidEmail);
         if (validEmails.length > 0) break;
       }

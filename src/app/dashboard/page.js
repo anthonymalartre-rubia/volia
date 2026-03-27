@@ -82,90 +82,61 @@ export default function Dashboard() {
       }
       setUser(currentUser);
 
-      // Load plan and admin status
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('plan, stripe_customer_id, is_admin')
-        .eq('id', currentUser.id)
-        .single();
-
-      if (profile) {
-        const { getPlan } = await import('@/lib/plans');
-        setUserPlan(getPlan(profile.plan));
-        setIsAdmin(!!profile.is_admin);
-      }
-
-      // Load usage
+      // Load all data in parallel (instead of sequential — saves ~600ms)
       const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
-      const { data: usage } = await supabase
-        .from('usage_tracking')
-        .select('searches, enrichments, exports')
-        .eq('user_id', currentUser.id)
-        .eq('month', month)
-        .single();
+      const { getPlan } = await import('@/lib/plans');
 
-      setUserUsage(usage || { searches: 0, enrichments: 0, exports: 0 });
+      const [
+        profileRes,
+        usageRes,
+        healthRes,
+        foldersRes,
+        tagsRes,
+        ptRes,
+        prospectsRes,
+        sessionsRes,
+      ] = await Promise.all([
+        supabase.from('user_profiles').select('plan, stripe_customer_id, is_admin').eq('id', currentUser.id).single(),
+        supabase.from('usage_tracking').select('searches, enrichments, exports').eq('user_id', currentUser.id).eq('month', month).single(),
+        fetch('/api/places').then(r => r.ok).catch(() => false),
+        supabase.from('lead_folders').select('*').order('created_at', { ascending: true }),
+        supabase.from('lead_tags').select('*').order('name'),
+        supabase.from('prospect_tags').select('prospect_id, tag_id'),
+        supabase.from('prospects').select('*').order('created_at', { ascending: false }),
+        supabase.from('search_sessions').select('*').order('created_at', { ascending: false }).limit(20),
+      ]);
 
-      // Health check (GET is still unauthenticated — just checks config)
-      try {
-        const response = await fetch('/api/places');
-        setApiKeySet(response.ok);
-      } catch {
-        setApiKeySet(false);
+      // Apply profile
+      if (profileRes.data) {
+        setUserPlan(getPlan(profileRes.data.plan));
+        setIsAdmin(!!profileRes.data.is_admin);
       }
 
-      // Load folders
-      try {
-        const { data: foldersData, error: foldersError } = await supabase
-          .from('lead_folders')
-          .select('*')
-          .order('created_at', { ascending: true });
-        if (!foldersError && foldersData) {
-          setFolders(foldersData);
-        }
-      } catch (error) {
-        console.error('Error fetching folders:', error);
-      }
+      // Apply usage
+      setUserUsage(usageRes.data || { searches: 0, enrichments: 0, exports: 0 });
 
-      // Load tags
-      const { data: tagsData } = await supabase
-        .from('lead_tags')
-        .select('*')
-        .order('name');
-      setTags(tagsData || []);
+      // Apply API health
+      setApiKeySet(healthRes);
 
-      // Load prospect-tag associations
-      const { data: ptData } = await supabase
-        .from('prospect_tags')
-        .select('prospect_id, tag_id');
+      // Apply folders
+      if (!foldersRes.error && foldersRes.data) setFolders(foldersRes.data);
+
+      // Apply tags
+      setTags(tagsRes.data || []);
+
+      // Apply prospect-tag map
       const tagMap = {};
-      (ptData || []).forEach(pt => {
+      (ptRes.data || []).forEach(pt => {
         if (!tagMap[pt.prospect_id]) tagMap[pt.prospect_id] = [];
         tagMap[pt.prospect_id].push(pt.tag_id);
       });
       setProspectTagMap(tagMap);
 
-      // Load existing prospects (RLS filters by user)
-      try {
-        const { data, error } = await supabase
-          .from('prospects')
-          .select('*')
-          .order('created_at', { ascending: false });
+      // Apply prospects
+      if (!prospectsRes.error && prospectsRes.data) setProspects(prospectsRes.data);
 
-        if (!error && data) {
-          setProspects(data);
-        }
-      } catch (error) {
-        console.error('Error fetching prospects:', error);
-      }
-
-      // Load search history
-      const { data: sessions } = await supabase
-        .from('search_sessions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
-      setSearchHistory(sessions || []);
+      // Apply search history
+      setSearchHistory(sessionsRes.data || []);
     };
 
     initializeApp();
@@ -215,7 +186,7 @@ export default function Dashboard() {
   }, [supabase, activeFolder]);
 
   // Tag CRUD
-  const createTag = async (name, color) => {
+  const createTag = useCallback(async (name, color) => {
     if (!supabase || !user) return null;
     const { data } = await supabase
       .from('lead_tags')
@@ -224,9 +195,9 @@ export default function Dashboard() {
       .single();
     if (data) setTags(prev => [...prev, data]);
     return data;
-  };
+  }, [supabase, user]);
 
-  const deleteTag = async (tagId) => {
+  const deleteTag = useCallback(async (tagId) => {
     if (!supabase) return;
     await supabase.from('lead_tags').delete().eq('id', tagId);
     setTags(prev => prev.filter(t => t.id !== tagId));
@@ -237,25 +208,21 @@ export default function Dashboard() {
       });
       return next;
     });
-  };
+  }, [supabase]);
 
-  const toggleProspectTag = async (prospectId, tagId) => {
+  const toggleProspectTag = useCallback(async (prospectId, tagId) => {
     if (!supabase) return;
-    const current = prospectTagMap[prospectId] || [];
-    if (current.includes(tagId)) {
-      await supabase.from('prospect_tags').delete().eq('prospect_id', prospectId).eq('tag_id', tagId);
-      setProspectTagMap(prev => ({
-        ...prev,
-        [prospectId]: (prev[prospectId] || []).filter(t => t !== tagId),
-      }));
-    } else {
-      await supabase.from('prospect_tags').insert({ prospect_id: prospectId, tag_id: tagId });
-      setProspectTagMap(prev => ({
-        ...prev,
-        [prospectId]: [...(prev[prospectId] || []), tagId],
-      }));
-    }
-  };
+    setProspectTagMap(prev => {
+      const current = prev[prospectId] || [];
+      if (current.includes(tagId)) {
+        supabase.from('prospect_tags').delete().eq('prospect_id', prospectId).eq('tag_id', tagId);
+        return { ...prev, [prospectId]: current.filter(t => t !== tagId) };
+      } else {
+        supabase.from('prospect_tags').insert({ prospect_id: prospectId, tag_id: tagId });
+        return { ...prev, [prospectId]: [...current, tagId] };
+      }
+    });
+  }, [supabase]);
 
   // Start scraping function — now accepts folderId
   const startScraping = useCallback(async (depts, b2bCats, coproCats, customQueries, folderId) => {

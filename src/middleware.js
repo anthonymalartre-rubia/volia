@@ -2,6 +2,21 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
 export async function middleware(request) {
+  const pathname = request.nextUrl.pathname;
+
+  // Skip auth check entirely for public routes (saves ~100ms per request)
+  const isPublicRoute =
+    pathname === '/' ||
+    pathname.startsWith('/login') ||
+    pathname.startsWith('/signup') ||
+    pathname.startsWith('/api') ||
+    pathname.startsWith('/auth');
+
+  if (isPublicRoute) {
+    return NextResponse.next({ request });
+  }
+
+  // Only create Supabase client for protected routes
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -29,18 +44,8 @@ export async function middleware(request) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
-
-  // Public routes — accessible without auth
-  const isPublicRoute =
-    pathname === '/' ||
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/signup') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/auth');
-
-  // If not logged in and trying to access protected routes, redirect to login
-  if (!user && !isPublicRoute) {
+  // If not logged in, redirect to login
+  if (!user) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);

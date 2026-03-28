@@ -1,12 +1,29 @@
 import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
+import { createClient } from '@supabase/supabase-js';
 
 // ─── Timeout helper for external API calls ──────────────
 function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+// ─── RGPD: Personal email filtering ─────────────────────
+const PERSONAL_DOMAINS = new Set([
+  'gmail.com', 'yahoo.com', 'yahoo.fr', 'hotmail.com', 'hotmail.fr',
+  'outlook.com', 'outlook.fr', 'live.com', 'live.fr', 'msn.com',
+  'orange.fr', 'free.fr', 'sfr.fr', 'laposte.net', 'wanadoo.fr',
+  'aol.com', 'icloud.com', 'me.com', 'mac.com', 'protonmail.com',
+  'proton.me', 'gmx.com', 'gmx.fr', 'mail.com', 'yandex.com',
+  'zoho.com', 'fastmail.com', 'tutanota.com',
+]);
+
+function isPersonalEmail(email) {
+  if (!email) return false;
+  const domain = email.split('@')[1]?.toLowerCase();
+  return PERSONAL_DOMAINS.has(domain);
 }
 
 // ─── Scraping (free) ────────────────────────────────────
@@ -31,6 +48,7 @@ function extractEmails(html) {
     const [local, domain] = e.split('@');
     if (!local || !domain) return false;
     if (BLOCKED_DOMAINS.has(domain)) return false;
+    if (PERSONAL_DOMAINS.has(domain)) return false;
     if (local.includes('noreply') || local.includes('mailer-daemon')) return false;
     if (/\.(png|jpg|jpeg|gif|css|js|svg|pdf)$/i.test(local)) return false;
     return true;
@@ -53,7 +71,7 @@ function scoreEmail(email, domain) {
   }
 
   if (['contact', 'info', 'support', 'hello', 'business', 'accueil', 'reception'].some((p) => local.toLowerCase().startsWith(p))) score += 50;
-  if (['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'yahoo.fr', 'orange.fr', 'free.fr'].includes(emailDomain.toLowerCase())) score -= 30;
+  if (PERSONAL_DOMAINS.has(emailDomain.toLowerCase())) return -Infinity;
   return score;
 }
 
@@ -132,6 +150,7 @@ async function apolloEnrich(domain, name) {
     if (!res.ok) return null;
     const data = await res.json();
     if (data.person?.email) {
+      if (isPersonalEmail(data.person.email)) return null;
       return {
         email: data.person.email,
         source: 'apollo',
@@ -174,9 +193,10 @@ async function serperEnrich(name, domain) {
 
     // Filter: prefer emails matching the domain
     const domainEmails = foundEmails.filter((e) => e.includes(domain));
-    const bestEmail = domainEmails[0] || foundEmails.find((e) =>
-      !['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'example.com'].includes(e.split('@')[1])
-    );
+    const bestEmail = domainEmails[0] || foundEmails.find((e) => {
+      const emailDomain = e.split('@')[1];
+      return !PERSONAL_DOMAINS.has(emailDomain) && emailDomain !== 'example.com';
+    });
 
     if (bestEmail) {
       return { email: bestEmail, source: 'serper' };
@@ -313,6 +333,23 @@ export async function POST(request) {
     const ctx = { url: validation.url, domain, name };
     const tried = [];
 
+    // ─── Check opt-out list: never enrich emails that opted out ───
+    async function isOptedOut(email) {
+      if (!email) return false;
+      try {
+        const adminSupabase = createClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL,
+          process.env.SUPABASE_SERVICE_ROLE_KEY
+        );
+        const { data } = await adminSupabase
+          .from('opt_out_list')
+          .select('email')
+          .eq('email', email.toLowerCase().trim())
+          .maybeSingle();
+        return !!data;
+      } catch { return false; }
+    }
+
     // If a specific method is requested (Enterprise feature), only run that step
     const stepsToRun = method
       ? WATERFALL_STEPS.filter((s) => s.name === method)
@@ -321,6 +358,14 @@ export async function POST(request) {
     for (const step of stepsToRun) {
       try {
         const result = await step.fn(ctx);
+        if (result?.email && isPersonalEmail(result.email)) {
+          tried.push({ step: step.name, label: step.label, found: true, skipped: 'email_personnel' });
+          continue;
+        }
+        if (result?.email && await isOptedOut(result.email)) {
+          tried.push({ step: step.name, label: step.label, found: true, skipped: 'opt_out' });
+          continue;
+        }
         tried.push({ step: step.name, label: step.label, found: !!result?.email });
         if (result?.email) {
           await incrementUsage(supabase, user.id, 'enrichments');

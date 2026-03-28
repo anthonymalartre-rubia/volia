@@ -590,6 +590,7 @@ export default function LandingPage() {
             <Link href="/cgu" className="hover:text-zinc-400 transition">CGU</Link>
             <Link href="/confidentialite" className="hover:text-zinc-400 transition">Confidentialité</Link>
             <Link href="/rgpd" className="hover:text-zinc-400 transition">RGPD</Link>
+            <Link href="/opt-out" className="hover:text-zinc-400 transition">Opt-out / Suppression</Link>
           </div>
           <p className="text-[11px] text-zinc-700">
             &copy; 2026 Prospectia.ai

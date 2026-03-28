@@ -24,6 +24,22 @@ const BLOCKED_DOMAINS = [
   'sample.com',
 ];
 
+// ─── RGPD: Personal email filtering ─────────────────────
+const PERSONAL_DOMAINS = new Set([
+  'gmail.com', 'yahoo.com', 'yahoo.fr', 'hotmail.com', 'hotmail.fr',
+  'outlook.com', 'outlook.fr', 'live.com', 'live.fr', 'msn.com',
+  'orange.fr', 'free.fr', 'sfr.fr', 'laposte.net', 'wanadoo.fr',
+  'aol.com', 'icloud.com', 'me.com', 'mac.com', 'protonmail.com',
+  'proton.me', 'gmx.com', 'gmx.fr', 'mail.com', 'yandex.com',
+  'zoho.com', 'fastmail.com', 'tutanota.com',
+]);
+
+function isPersonalEmail(email) {
+  if (!email) return false;
+  const domain = email.split('@')[1]?.toLowerCase();
+  return PERSONAL_DOMAINS.has(domain);
+}
+
 const BLOCKED_EXTENSIONS = [
   '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg',
   '.css', '.js', '.json', '.xml', '.pdf', '.doc',
@@ -71,6 +87,7 @@ function isValidEmail(email) {
   const [localPart, domain] = email.split('@');
   if (!localPart || !domain) return false;
   if (BLOCKED_DOMAINS.includes(domain.toLowerCase())) return false;
+  if (PERSONAL_DOMAINS.has(domain.toLowerCase())) return false;
   if (BLOCKED_EXTENSIONS.some((ext) => localPart.toLowerCase().endsWith(ext))) return false;
   if (localPart.toLowerCase().includes('noreply') || localPart.toLowerCase().includes('mailer-daemon')) return false;
   return true;
@@ -96,11 +113,8 @@ function scoreEmail(email, domain) {
   const contactPrefixes = ['contact', 'info', 'support', 'hello', 'business', 'accueil', 'reception'];
   if (contactPrefixes.some((prefix) => localPart.toLowerCase().startsWith(prefix))) score += 50;
 
-  // Generic email providers get lower score
-  const genericDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'yahoo.fr', 'orange.fr', 'free.fr', 'sfr.fr', 'laposte.net'];
-  if (genericDomains.includes(emailDomain.toLowerCase())) {
-    score -= 30;
-  }
+  // RGPD: personal email domains are rejected entirely
+  if (PERSONAL_DOMAINS.has(emailDomain.toLowerCase())) return -Infinity;
 
   return score;
 }

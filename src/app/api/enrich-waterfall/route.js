@@ -298,7 +298,7 @@ export async function POST(request) {
       );
     }
 
-    const { url, name } = await request.json();
+    const { url, name, method } = await request.json();
 
     if (!url) {
       return Response.json({ error: 'url required' }, { status: 400 });
@@ -313,7 +313,12 @@ export async function POST(request) {
     const ctx = { url: validation.url, domain, name };
     const tried = [];
 
-    for (const step of WATERFALL_STEPS) {
+    // If a specific method is requested (Enterprise feature), only run that step
+    const stepsToRun = method
+      ? WATERFALL_STEPS.filter((s) => s.name === method)
+      : WATERFALL_STEPS;
+
+    for (const step of stepsToRun) {
       try {
         const result = await step.fn(ctx);
         tried.push({ step: step.name, label: step.label, found: !!result?.email });

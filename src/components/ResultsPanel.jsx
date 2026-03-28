@@ -23,6 +23,8 @@ import {
   Folder,
   FolderOpen,
   X,
+  ChevronDown,
+  Lock,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
@@ -129,6 +131,7 @@ export default memo(function ResultsPanel({
   onDeleteTag,
   onToggleProspectTag,
   onBulkEnrich,
+  userPlan,
 }) {
   const [searchText, setSearchText] = useState("");
   const [selectedDept, setSelectedDept] = useState("all");
@@ -137,6 +140,19 @@ export default memo(function ResultsPanel({
   const [copiedEmail, setCopiedEmail] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [tooltipId, setTooltipId] = useState(null);
+  const [showEnrichDropdown, setShowEnrichDropdown] = useState(false);
+
+  const isEnterprise = userPlan?.id === 'enterprise';
+
+  const ENRICH_METHODS = [
+    { id: null, label: 'Waterfall (auto)', icon: '🔄', description: 'Essaie chaque source dans l\'ordre' },
+    { id: 'scrape', label: 'Scraping uniquement', icon: '🌐', description: 'Scrape le site web directement' },
+    { id: 'serper', label: 'Serper.dev (Google)', icon: '🔍', description: 'Recherche Google via Serper' },
+    { id: 'apollo', label: 'Apollo.io', icon: '🚀', description: 'Enrichissement Apollo People' },
+    { id: 'enrichly', label: 'Enrichly', icon: '📧', description: 'API Enrichly' },
+    { id: 'anymail', label: 'Anymail Finder', icon: '📬', description: 'API Anymail Finder' },
+    { id: 'findymail', label: 'Findymail', icon: '✉️', description: 'API Findymail' },
+  ];
 
   const folderProspects = useMemo(() => {
     if (activeFolder === 'all') return prospects;
@@ -429,14 +445,66 @@ export default memo(function ResultsPanel({
           </div>
         )}
 
-        <button
-          onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder)}
-          disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-        >
-          <Zap className="h-3.5 w-3.5" />
-          Enrichir tout ({prospectsWithoutEmail})
-        </button>
+        <div className="relative">
+          <div className="flex">
+            <button
+              onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, null)}
+              disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
+              className="flex items-center gap-2 px-3 py-2 rounded-l-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              <Zap className="h-3.5 w-3.5" />
+              Enrichir tout ({prospectsWithoutEmail})
+            </button>
+            <button
+              onClick={() => setShowEnrichDropdown(!showEnrichDropdown)}
+              disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
+              className="flex items-center px-1.5 py-2 rounded-r-lg text-xs font-medium bg-violet-700 text-white hover:bg-violet-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all border-l border-violet-500/30"
+            >
+              <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          {showEnrichDropdown && (
+            <div className="absolute z-50 top-full mt-1 left-0 w-64 rounded-lg border border-[#1e1e24] bg-[#111114] shadow-xl py-1">
+              <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#52525b] font-semibold">
+                Méthode d'enrichissement
+              </div>
+              {ENRICH_METHODS.map((m) => {
+                const isLocked = m.id !== null && !isEnterprise;
+                return (
+                  <button
+                    key={m.id || 'waterfall'}
+                    onClick={() => {
+                      if (isLocked) return;
+                      setShowEnrichDropdown(false);
+                      onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, m.id);
+                    }}
+                    disabled={isLocked}
+                    className={`w-full text-left px-3 py-2 flex items-center gap-2.5 text-xs transition-colors ${
+                      isLocked
+                        ? 'opacity-40 cursor-not-allowed'
+                        : 'hover:bg-[#1e1e24] cursor-pointer'
+                    }`}
+                  >
+                    <span className="text-sm">{m.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[#fafafa] font-medium flex items-center gap-1.5">
+                        {m.label}
+                        {isLocked && <Lock className="h-3 w-3 text-[#52525b]" />}
+                      </div>
+                      <div className="text-[10px] text-[#52525b] truncate">{m.description}</div>
+                    </div>
+                    {isLocked && (
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-medium whitespace-nowrap">
+                        Enterprise
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
         <div className="flex-1" />
 

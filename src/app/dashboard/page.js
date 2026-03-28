@@ -574,7 +574,7 @@ export default function Dashboard() {
   });
   const stopWaterfallRef = useRef(false);
 
-  const startWaterfallEnrichment = useCallback(async (customList = null) => {
+  const startWaterfallEnrichment = useCallback(async (customList = null, method = null) => {
     stopWaterfallRef.current = false;
     setIsWaterfallEnriching(true);
     const initStats = { scrape: 0, serper: 0, apollo: 0, enrichly: 0, anymail: 0, findymail: 0, guess: 0 };
@@ -603,7 +603,7 @@ export default function Dashboard() {
         const response = await fetch('/api/enrich-waterfall', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: prospect.site_web, name: prospect.nom }),
+          body: JSON.stringify({ url: prospect.site_web, name: prospect.nom, method: method || undefined }),
         });
         const data = await response.json();
 
@@ -658,11 +658,11 @@ export default function Dashboard() {
     setIsWaterfallEnriching(false);
   }, []);
 
-  const handleBulkEnrich = async (folderId) => {
+  const handleBulkEnrich = async (folderId, method = null) => {
     let toEnrich = prospects.filter(p => !p.email && p.site_web);
     if (folderId) toEnrich = toEnrich.filter(p => p.folder_id === folderId);
     if (toEnrich.length === 0) return;
-    startWaterfallEnrichment(toEnrich);
+    startWaterfallEnrichment(toEnrich, method);
   };
 
   // Delete all prospects (optionally scoped to folder)
@@ -847,6 +847,7 @@ export default function Dashboard() {
                   onBulkEnrich={handleBulkEnrich}
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}
+                  userPlan={userPlan}
                   tags={tags}
                   prospectTagMap={prospectTagMap}
                   onCreateTag={createTag}

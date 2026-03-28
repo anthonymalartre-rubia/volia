@@ -104,22 +104,31 @@ async function scrapeForEmail(url) {
   return null;
 }
 
-// ─── Apollo ($79/mo) ────────────────────────────────────
+// ─── Apollo (People Enrichment API) ─────────────────────
 
 async function apolloEnrich(domain, name) {
   const apiKey = process.env.APOLLO_API_KEY;
   if (!apiKey) return null;
 
   try {
-    const res = await fetchWithTimeout('https://api.apollo.io/v1/people/match', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
-      body: JSON.stringify({
-        domain: domain || undefined,
-        organization_name: name || undefined,
-        reveal_personal_emails: false,
-      }),
-    });
+    // Build query params per Apollo docs
+    const params = new URLSearchParams();
+    if (domain) params.set('domain', domain);
+    if (name) params.set('organization_name', name);
+    params.set('reveal_personal_emails', 'false');
+    params.set('reveal_phone_number', 'false');
+
+    const res = await fetchWithTimeout(
+      `https://api.apollo.io/api/v1/people/match?${params.toString()}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+          'x-api-key': apiKey,
+        },
+      }
+    );
     if (!res.ok) return null;
     const data = await res.json();
     if (data.person?.email) {
@@ -131,6 +140,7 @@ async function apolloEnrich(domain, name) {
           last_name: data.person.last_name,
           title: data.person.title,
           linkedin_url: data.person.linkedin_url,
+          organization: data.person.organization?.name || null,
         },
       };
     }

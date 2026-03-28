@@ -8,6 +8,7 @@ import {
   ChevronLeft,
   Shield,
   Settings,
+  ShieldCheck,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -15,9 +16,10 @@ const NAV_ITEMS = [
   { id: 'search', label: 'Recherche', icon: Search, description: 'Google Places' },
   { id: 'results', label: 'Mes leads', icon: Users, description: 'Prospects trouvés' },
   { id: 'export', label: 'Exporter', icon: Download, description: 'CSV & Zoho' },
+  { id: 'verify', label: 'Verification', icon: ShieldCheck, description: 'Validite emails', enterprise: true },
 ];
 
-export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount, searchHistory, isAdmin }) {
+export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount, searchHistory, isAdmin, userPlan }) {
   return (
     <>
       {/* Mobile overlay */}
@@ -47,7 +49,7 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
 
           {/* Navigation */}
           <nav className="space-y-1.5" role="navigation" aria-label="Navigation principale">
-            {NAV_ITEMS.map((item) => {
+            {NAV_ITEMS.filter(item => !item.enterprise || userPlan?.id === 'enterprise').map((item) => {
               const isActive = activeView === item.id;
               return (
                 <button

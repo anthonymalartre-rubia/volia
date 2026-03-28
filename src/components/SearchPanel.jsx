@@ -812,6 +812,7 @@ export default function SearchPanel({
 
                   {/* Contacts list */}
                   {companyResults.contacts?.length > 0 ? (
+                    <>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <Users size={13} className="text-content-muted" />
@@ -868,6 +869,12 @@ export default function SearchPanel({
                         </div>
                       ))}
                     </div>
+                    {companyResults.source && (
+                      <div className="text-[10px] text-content-faint text-right">
+                        Source : {companyResults.source === 'apollo' ? 'Apollo.io' : companyResults.source === 'serper' ? 'Serper.dev' : companyResults.source.includes('guess') ? 'Email deviné (pattern)' : companyResults.source}
+                      </div>
+                    )}
+                  </>
                   ) : (
                     <div className="text-center py-4 text-sm text-content-muted">
                       Aucun contact trouve. Essayez avec un nom d'entreprise different ou ajoutez le domaine.

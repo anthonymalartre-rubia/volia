@@ -14,6 +14,7 @@ const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
 const SearchPanel = lazy(() => import('@/components/SearchPanel'));
 const ResultsPanel = lazy(() => import('@/components/ResultsPanel'));
 const ExportPanel = lazy(() => import('@/components/ExportPanel'));
+const EmailVerifier = lazy(() => import('@/components/EmailVerifier'));
 const OnboardingOverlay = lazy(() => import('@/components/OnboardingOverlay'));
 
 const MAX_LOGS = 100;
@@ -935,6 +936,7 @@ export default function Dashboard() {
             folders={folders}
             searchHistory={searchHistory}
             isAdmin={isAdmin}
+            userPlan={userPlan}
           />
           <UsageBanner
             plan={userPlan}
@@ -1001,6 +1003,9 @@ export default function Dashboard() {
               )}
               {activeView === 'export' && (
                 <ExportPanel prospects={prospects} onDownloadCSV={downloadCSV} />
+              )}
+              {activeView === 'verify' && (
+                <EmailVerifier userPlan={userPlan} />
               )}
             </Suspense>
           </div>

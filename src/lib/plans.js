@@ -32,6 +32,7 @@ export const PLANS = {
       enrichments_per_month: -1,
       folders: -1,
       exports_per_month: -1,
+      verifications_per_month: 5000,
     },
   },
 };

@@ -35,39 +35,138 @@ export async function POST(request) {
     // ─── Mode 1: LinkedIn profile lookup ───────────────────
     if (linkedin_url) {
       const apolloKey = process.env.APOLLO_API_KEY;
-      if (!apolloKey) return Response.json({ error: 'APOLLO_API_KEY non configuré' }, { status: 500 });
+      const serperKey = process.env.SERPER_API_KEY;
+      let person = null;
+      let source = 'none';
+      let email = null;
 
-      const res = await fetchWithTimeout('https://api.apollo.io/api/v1/people/match', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': apolloKey },
-        body: JSON.stringify({ linkedin_url, reveal_personal_emails: false }),
-      });
+      // Extract name from LinkedIn URL slug (free, always available)
+      const slugName = linkedin_url.match(/linkedin\.com\/in\/([^/?]+)/)?.[1]
+        ?.replace(/-+/g, ' ')
+        ?.replace(/\d+/g, '')
+        ?.trim()
+        ?.split(' ')
+        ?.map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        ?.join(' ') || null;
 
-      if (!res.ok) return Response.json({ error: `Apollo error: ${res.status}` }, { status: res.status });
-      const data = await res.json();
-      const person = data.person;
+      // Step 1: Serper Google search (cheap — try first)
+      if (serperKey && slugName) {
+        try {
+          const query = `"${slugName}" email linkedin`;
+          const res = await fetchWithTimeout('https://google.serper.dev/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-API-KEY': serperKey },
+            body: JSON.stringify({ q: query, num: 10, gl: 'fr' }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const allText = (data.organic || []).map(r => `${r.title || ''} ${r.snippet || ''}`).join(' ');
+            const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+            const found = [...new Set((allText.match(emailRegex) || []).map(e => e.toLowerCase()))];
 
-      if (!person) return Response.json({ contacts: [], source: 'apollo' });
+            // Pick best non-personal email
+            const match = found.find(e => !PERSONAL_DOMAINS.has(e.split('@')[1]));
+            if (match) {
+              email = match;
+              source = 'serper';
+            }
+          }
+        } catch {}
+      }
 
-      await incrementUsage(supabase, user.id, 'enrichments');
+      // Step 2: Apollo People Match (more expensive — only if Serper didn't find email)
+      if (!email && apolloKey) {
+        try {
+          const res = await fetchWithTimeout('https://api.apollo.io/api/v1/people/match', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-api-key': apolloKey },
+            body: JSON.stringify({ linkedin_url, reveal_personal_emails: false }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.person) {
+              person = data.person;
+              if (data.person.email) {
+                email = data.person.email;
+                source = 'apollo';
+              }
+            }
+          }
+        } catch {}
+      }
+
+      const contactName = person
+        ? [person.first_name, person.last_name].filter(Boolean).join(' ')
+        : slugName;
+      const companyDomain = person?.organization?.primary_domain
+        || (email ? email.split('@')[1] : null);
+
+      // Step 2b: If Serper found email but no Apollo data, try Serper with domain for better results
+      if (email && !person && serperKey && companyDomain && slugName) {
+        try {
+          const query = `"${slugName}" email "@${companyDomain}"`;
+          const res = await fetchWithTimeout('https://google.serper.dev/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-API-KEY': serperKey },
+            body: JSON.stringify({ q: query, num: 10, gl: 'fr' }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const allText = (data.organic || []).map(r => `${r.title || ''} ${r.snippet || ''}`).join(' ');
+            const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+            const found = [...new Set((allText.match(emailRegex) || []).map(e => e.toLowerCase()))];
+            const domainMatch = found.find(e => e.endsWith(`@${companyDomain}`));
+            if (domainMatch) {
+              email = domainMatch;
+            }
+          }
+        } catch {}
+      }
+
+      // Step 3: If still no email but we have name + domain, guess email patterns
+      if (!email && contactName && companyDomain) {
+        const nameParts = contactName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/\s+/);
+        if (nameParts.length >= 2) {
+          const first = nameParts[0];
+          const last = nameParts[nameParts.length - 1];
+          const patterns = [
+            `${first}.${last}@${companyDomain}`,
+            `${first[0]}.${last}@${companyDomain}`,
+            `${first}@${companyDomain}`,
+            `${first}${last}@${companyDomain}`,
+            `${last}.${first}@${companyDomain}`,
+            `contact@${companyDomain}`,
+          ];
+          email = patterns[0];
+          source = source === 'none' ? 'guess' : `${source}+guess`;
+        }
+      }
+
+      const contact = {
+        name: contactName,
+        email,
+        title: person?.title || null,
+        linkedin_url: person?.linkedin_url || linkedin_url,
+        phone: person?.phone_numbers?.[0]?.sanitized_number || null,
+        company: person?.organization?.name || null,
+        company_domain: companyDomain,
+      };
+
+      // Only count as usage if we found something
+      if (email || person) {
+        await incrementUsage(supabase, user.id, 'enrichments');
+      }
+
       return Response.json({
-        contacts: [{
-          name: [person.first_name, person.last_name].filter(Boolean).join(' '),
-          email: person.email || null,
-          title: person.title || null,
-          linkedin_url: person.linkedin_url || linkedin_url,
-          phone: person.phone_numbers?.[0]?.sanitized_number || null,
-          company: person.organization?.name || null,
-          company_domain: person.organization?.primary_domain || null,
-        }],
-        company: person.organization ? {
+        contacts: (email || person) ? [contact] : [],
+        company: person?.organization ? {
           name: person.organization.name,
           domain: person.organization.primary_domain,
           industry: person.organization.industry,
           employees: person.organization.estimated_num_employees,
           linkedin_url: person.organization.linkedin_url,
         } : null,
-        source: 'apollo',
+        source,
       });
     }
 

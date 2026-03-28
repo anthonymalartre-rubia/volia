@@ -31,6 +31,19 @@ import {
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
+import { Info } from "lucide-react";
+
+// Reusable tooltip on hover
+function InfoTooltip({ text, wide }) {
+  return (
+    <div className="relative group/info inline-flex ml-1 cursor-help">
+      <Info size={11} className="text-[#3f3f46] group-hover/info:text-[#71717a] transition-colors" />
+      <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 bg-[#1e1e24] border border-[#27272a] rounded-lg text-[10px] text-[#a1a1aa] leading-relaxed opacity-0 group-hover/info:opacity-100 pointer-events-none transition-opacity z-30 shadow-xl whitespace-normal ${wide ? 'w-56' : 'w-44'}`}>
+        {text}
+      </div>
+    </div>
+  );
+}
 
 const shortUrl = (url) => {
   if (!url) return "";
@@ -44,15 +57,15 @@ const shortUrl = (url) => {
 const PAGE_SIZE = 50;
 
 const EMAIL_METHOD_INFO = {
-  scrape: { label: "Trouvé sur le site", color: "text-green-400" },
-  "deep-verified": { label: "Vérifié (MX + pattern)", color: "text-purple-400" },
-  "deep-pattern": { label: "Généré par pattern", color: "text-purple-400/70" },
-  serper: { label: "Serper.dev (Google)", color: "text-yellow-400" },
-  apollo: { label: "Apollo.io", color: "text-orange-400" },
-  enrichly: { label: "Enrichly", color: "text-cyan-400" },
-  anymail: { label: "Anymail Finder", color: "text-teal-400" },
-  findymail: { label: "Findymail", color: "text-sky-400" },
-  guess: { label: "Email probable (contact@)", color: "text-amber-400" },
+  scrape: { label: "Trouvé sur le site", color: "text-green-400", tip: "Email extrait directement depuis le site web de l'entreprise (pages contact, mentions legales, mailto)" },
+  "deep-verified": { label: "Vérifié (MX + pattern)", color: "text-purple-400", tip: "Email genere par pattern (prenom.nom@domaine) puis verifie via les enregistrements MX du serveur mail" },
+  "deep-pattern": { label: "Généré par pattern", color: "text-purple-400/70", tip: "Email genere automatiquement par pattern (ex: contact@domaine.com) mais non verifie — fiabilite moyenne" },
+  serper: { label: "Serper.dev (Google)", color: "text-yellow-400", tip: "Email trouve dans les resultats de recherche Google via l'API Serper — bonne fiabilite" },
+  apollo: { label: "Apollo.io", color: "text-orange-400", tip: "Email du contact principal trouve dans la base Apollo (220M+ contacts professionnels) — haute fiabilite" },
+  enrichly: { label: "Enrichly", color: "text-cyan-400", tip: "Email professionnel trouve via l'API Enrichly" },
+  anymail: { label: "Anymail Finder", color: "text-teal-400", tip: "Email trouve et verifie par Anymail Finder avec verification MX" },
+  findymail: { label: "Findymail", color: "text-sky-400", tip: "Email verifie avec taux de delivrabilite eleve via Findymail" },
+  guess: { label: "Email probable (contact@)", color: "text-amber-400", tip: "Aucun email trouve — contact@domaine.com est genere automatiquement. Fiabilite faible, a verifier manuellement" },
 };
 
 const folderColorClass = (color) => {
@@ -377,10 +390,10 @@ export default memo(function ResultsPanel({
       {/* Stats row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: "Prospects", value: stats.total, icon: Search, color: "text-indigo-400", bgColor: "bg-indigo-500/10", border: "border-indigo-500/20" },
-          { label: "Emails", value: stats.emails, icon: Mail, color: "text-green-400", bgColor: "bg-green-500/10", border: "border-[#1e1e24]" },
-          { label: "Téléphones", value: stats.phones, icon: Phone, color: "text-[#a1a1aa]", bgColor: "bg-[#1e1e24]", border: "border-[#1e1e24]" },
-          { label: "Sites web", value: stats.websites, icon: Globe, color: "text-blue-400", bgColor: "bg-blue-500/10", border: "border-[#1e1e24]" },
+          { label: "Prospects", value: stats.total, icon: Search, color: "text-indigo-400", bgColor: "bg-indigo-500/10", border: "border-indigo-500/20", tip: "Nombre total d'entreprises trouvees via Google Places" },
+          { label: "Emails", value: stats.emails, icon: Mail, color: "text-green-400", bgColor: "bg-green-500/10", border: "border-[#1e1e24]", tip: "Leads ayant un email (trouve ou devine). La couleur de l'email indique la source" },
+          { label: "Téléphones", value: stats.phones, icon: Phone, color: "text-[#a1a1aa]", bgColor: "bg-[#1e1e24]", border: "border-[#1e1e24]", tip: "Leads ayant un numero de telephone fourni par Google" },
+          { label: "Sites web", value: stats.websites, icon: Globe, color: "text-blue-400", bgColor: "bg-blue-500/10", border: "border-[#1e1e24]", tip: "Leads ayant un site web. Necessaire pour l'enrichissement email" },
         ].map((stat) => (
           <div key={stat.label} className={`flex items-center gap-3 p-4 rounded-2xl border ${stat.border} bg-[#111114] hover:border-[#27272a] transition-colors`}>
             <div className={`p-2 rounded-lg ${stat.bgColor}`}>
@@ -388,7 +401,7 @@ export default memo(function ResultsPanel({
             </div>
             <div>
               <div className={`text-xl font-bold font-mono ${stat.color} tabular-nums`}>{stat.value}</div>
-              <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider">{stat.label}</div>
+              <div className="text-[10px] text-[#3f3f46] uppercase tracking-wider flex items-center">{stat.label}<InfoTooltip text={stat.tip} /></div>
             </div>
           </div>
         ))}
@@ -626,9 +639,10 @@ export default memo(function ResultsPanel({
       </div>
 
       {/* Email method legend */}
-      <div className="flex flex-wrap gap-3 px-1">
+      <div className="flex flex-wrap gap-3 px-1 items-center">
+        <span className="text-[10px] text-[#27272a] font-medium uppercase tracking-wider">Sources :</span>
         {Object.entries(EMAIL_METHOD_INFO).map(([method, info]) => (
-          <div key={method} className="flex items-center gap-1.5">
+          <div key={method} className="relative group/legend flex items-center gap-1.5 cursor-help">
             <div className={`w-1.5 h-1.5 rounded-full ${
               method === 'scrape' ? 'bg-green-400' :
               method === 'deep-verified' ? 'bg-purple-400' :
@@ -640,7 +654,10 @@ export default memo(function ResultsPanel({
               method === 'findymail' ? 'bg-sky-400' :
               'bg-amber-400'
             }`} />
-            <span className="text-[10px] text-[#3f3f46]">{info.label}</span>
+            <span className="text-[10px] text-[#3f3f46] group-hover/legend:text-[#71717a] transition-colors">{info.label}</span>
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 bg-[#1e1e24] border border-[#27272a] rounded-lg text-[10px] text-[#a1a1aa] leading-relaxed w-52 opacity-0 group-hover/legend:opacity-100 pointer-events-none transition-opacity z-30 shadow-xl">
+              {info.tip}
+            </div>
           </div>
         ))}
       </div>
@@ -651,15 +668,27 @@ export default memo(function ResultsPanel({
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-[#1e1e24] bg-[#0a0a0c]">
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Type</th>
+                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                  <span className="flex items-center">Type<InfoTooltip text="B2B = entreprise, Copro = syndic/gestion immobiliere, Custom = recherche personnalisee" /></span>
+                </th>
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Nom</th>
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Téléphone</th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Email</th>
+                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                  <span className="flex items-center">Email<InfoTooltip text="La couleur indique la source : vert = trouve sur le site, jaune = Google, orange = Apollo, ambre = devine (contact@). Survolez un email pour voir la source." wide /></span>
+                </th>
                 <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Site</th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Note</th>
-                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">Dept</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">Score</th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">Tags</th>
+                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                  <span className="flex items-center">Note<InfoTooltip text="Note moyenne Google Maps (sur 5) et nombre d'avis entre parentheses. Une note elevee avec beaucoup d'avis indique une entreprise active." wide /></span>
+                </th>
+                <th className="px-4 py-3 text-left font-medium text-[#3f3f46] uppercase tracking-wider text-[10px]">
+                  <span className="flex items-center">Dept<InfoTooltip text="Departement d'outre-mer : 971 Guadeloupe, 972 Martinique, 973 Guyane, 974 La Reunion" /></span>
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">
+                  <span className="flex items-center">Score<InfoTooltip text="Score de qualite du lead (0-100). Base sur : email verifie (+30), telephone (+20), site web (+15), bonne note Google (+15), avis (+10), adresse (+10). Plus le score est eleve, plus le lead est exploitable." wide /></span>
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-[#71717a]">
+                  <span className="flex items-center">Tags<InfoTooltip text="Etiquettes personnalisees pour organiser vos leads. Cliquez + pour ajouter un tag, cliquez sur un tag pour le retirer." /></span>
+                </th>
                 <th className="px-3 py-2 text-center text-[10px] font-medium text-[#3f3f46] uppercase tracking-wider w-10"></th>
               </tr>
             </thead>

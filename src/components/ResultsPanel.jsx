@@ -503,18 +503,19 @@ export default memo(function ResultsPanel({
       </div>
 
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-2 p-3 rounded-2xl border border-line bg-surface-card">
+      <div className="flex flex-wrap items-center gap-2 p-2 sm:p-3 rounded-2xl border border-line bg-surface-card">
         {/* Enrichment */}
         {!isEnriching && !isDeepEnriching && !isWaterfallEnriching ? (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="relative group/tip">
               <button
                 onClick={onStartEnrichment}
                 disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
               >
                 <Zap size={14} />
-                Enrichir
+                <span className="hidden sm:inline">Enrichir</span>
+                <span className="sm:hidden">Enrichir</span>
               </button>
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-52 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
                 <div className="font-semibold text-content-primary mb-1">Scraping basique</div>
@@ -526,10 +527,11 @@ export default memo(function ResultsPanel({
               <button
                 onClick={onStartDeepEnrichment}
                 disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
               >
                 <Radar size={14} />
-                Deep Enrich
+                <span className="hidden sm:inline">Deep Enrich</span>
+                <span className="sm:hidden">Deep</span>
               </button>
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
                 <div className="font-semibold text-content-primary mb-1">Crawl approfondi</div>
@@ -541,10 +543,11 @@ export default memo(function ResultsPanel({
               <button
                 onClick={onStartWaterfallEnrichment}
                 disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 disabled:bg-surface-elevated disabled:from-surface-elevated disabled:to-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed shadow-lg shadow-orange-600/10"
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 disabled:bg-surface-elevated disabled:from-surface-elevated disabled:to-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed shadow-lg shadow-orange-600/10"
               >
                 <Crown size={14} />
-                Waterfall Pro
+                <span className="hidden sm:inline">Waterfall Pro</span>
+                <span className="sm:hidden">Waterfall</span>
               </button>
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-64 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
                 <div className="font-semibold text-orange-400 mb-1">Enrichissement cascade</div>
@@ -779,7 +782,7 @@ export default memo(function ResultsPanel({
       </div>
 
       {/* Email method legend */}
-      <div className="flex flex-wrap gap-3 px-1 items-center">
+      <div className="hidden sm:flex flex-wrap gap-3 px-1 items-center">
         <span className="text-[10px] text-content-dim font-medium uppercase tracking-wider">Sources :</span>
         {Object.entries(EMAIL_METHOD_INFO).map(([method, info]) => (
           <div key={method} className="relative group/legend flex items-center gap-1.5 cursor-help">
@@ -804,7 +807,7 @@ export default memo(function ResultsPanel({
 
       {/* Bulk action bar */}
       {selectedIds.size > 0 && (
-        <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
           <span className="text-xs font-medium text-indigo-400">
             {selectedIds.size} sélectionné{selectedIds.size > 1 ? 's' : ''}
           </span>
@@ -837,8 +840,143 @@ export default memo(function ResultsPanel({
         </div>
       )}
 
-      {/* Table */}
-      <div className="rounded-2xl border border-line bg-surface-card overflow-hidden">
+      {/* Mobile card layout (< md) */}
+      <div className="md:hidden space-y-2">
+        {displayProspects.map((p) => {
+          const methodInfo = EMAIL_METHOD_INFO[p.email_method];
+          const isSelected = selectedIds.has(p.id);
+          const score = p.lead_score || computeLeadScore(p);
+          const scoreInfo = getScoreLabel(score);
+          return (
+            <div
+              key={p.id}
+              className={`rounded-xl border p-3 transition-colors ${
+                isSelected
+                  ? 'border-indigo-500/30 bg-indigo-500/5'
+                  : !p.email
+                  ? 'border-red-500/10 bg-red-950/5'
+                  : 'border-line bg-surface-card'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
+                  <button
+                    onClick={() => toggleSelect(p.id)}
+                    className="p-1 rounded hover:bg-surface-elevated transition flex-shrink-0"
+                  >
+                    {isSelected ? (
+                      <CheckSquare size={16} className="text-indigo-400" />
+                    ) : (
+                      <SquareIcon size={16} className="text-content-dim" />
+                    )}
+                  </button>
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-content-primary truncate">{p.nom}</div>
+                    <div className="text-[11px] text-content-faint truncate">{p.adresse}</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <span className={`inline-block px-2 py-0.5 rounded border text-[10px] font-semibold uppercase ${getTypeStyle(p.type)}`}>
+                    {p.type}
+                  </span>
+                  <span className={`inline-flex items-center justify-center w-8 text-center px-1 py-0.5 rounded-md text-xs font-bold font-mono ${scoreInfo.bg} ${scoreInfo.color}`}>
+                    {score}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-2 space-y-1.5 pl-8">
+                {p.telephone && (
+                  <a href={`tel:${p.telephone}`} className="flex items-center gap-2 text-xs text-content-secondary min-h-[32px]">
+                    <Phone size={12} className="text-content-faint flex-shrink-0" />
+                    <span className="font-mono">{p.telephone}</span>
+                  </a>
+                )}
+                {p.email ? (
+                  <div className="flex items-center gap-2 text-xs min-h-[32px]">
+                    <Mail size={12} className="text-content-faint flex-shrink-0" />
+                    <span className={`truncate ${methodInfo?.color || 'text-content-secondary'}`}>
+                      {p.email}
+                      {p.email_method === 'guess' && <span className="ml-1 text-[10px] opacity-50">~</span>}
+                    </span>
+                    <button
+                      onClick={() => copyEmail(p.email, p.id)}
+                      className="p-1 rounded hover:bg-surface-elevated transition flex-shrink-0"
+                    >
+                      {copiedEmail === p.id ? (
+                        <Check size={12} className="text-green-400" />
+                      ) : (
+                        <Copy size={12} className="text-content-faint" />
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-xs text-content-faint italic min-h-[32px]">
+                    <Mail size={12} className="text-content-dim flex-shrink-0" />
+                    Non enrichi
+                  </div>
+                )}
+                {p.site_web && (
+                  <a href={p.site_web} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-indigo-400/70 hover:text-indigo-400 transition min-h-[32px]">
+                    <Globe size={12} className="flex-shrink-0" />
+                    <span className="truncate">{shortUrl(p.site_web)}</span>
+                    <ExternalLink size={10} className="flex-shrink-0" />
+                  </a>
+                )}
+                {p.note && (
+                  <div className="flex items-center gap-2 text-xs min-h-[32px]">
+                    <span className="text-yellow-500 text-sm">&#9733;</span>
+                    <span className="text-content-secondary font-mono">{p.note}</span>
+                    {p.nb_avis > 0 && <span className="text-content-faint text-[10px]">({p.nb_avis} avis)</span>}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-2 pl-8 flex items-center justify-between">
+                <div className="flex flex-wrap gap-1 items-center">
+                  {(prospectTagMap?.[p.id] || []).map(tagId => {
+                    const tag = tags?.find(t => t.id === tagId);
+                    if (!tag) return null;
+                    return (
+                      <span
+                        key={tagId}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-500/20 text-violet-400"
+                        onClick={() => onToggleProspectTag?.(p.id, tagId)}
+                      >
+                        {tag.name}
+                      </span>
+                    );
+                  })}
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => startEdit(p)}
+                    className="p-2 rounded-lg hover:bg-surface-elevated text-content-faint hover:text-content-secondary transition min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  >
+                    <Pencil size={14} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (deleteConfirmId === p.id) confirmDelete(p.id);
+                      else setDeleteConfirmId(p.id);
+                    }}
+                    className={`p-2 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center ${
+                      deleteConfirmId === p.id
+                        ? 'bg-red-600/20 text-red-400'
+                        : 'hover:bg-red-600/10 text-content-faint hover:text-red-400'
+                    }`}
+                  >
+                    {deleteConfirmId === p.id ? <AlertTriangle size={14} /> : <Trash2 size={14} />}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop table (md+) */}
+      <div className="hidden md:block rounded-2xl border border-line bg-surface-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
@@ -1170,42 +1308,43 @@ export default memo(function ResultsPanel({
           </table>
         </div>
 
-        {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-line bg-surface-deep">
-          <div className="flex items-center gap-3">
-            <span className="text-[10px] text-content-faint">
-              {filteredProspects.length} résultat{filteredProspects.length > 1 ? 's' : ''}
-              {filteredProspects.length !== prospects.length && ` sur ${prospects.length}`}
+      </div>
+
+      {/* Pagination (shared between mobile and desktop) */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-3 rounded-xl md:rounded-none border border-line md:border-0 bg-surface-deep md:bg-surface-card">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-[10px] text-content-faint">
+            {filteredProspects.length} résultat{filteredProspects.length > 1 ? 's' : ''}
+            {filteredProspects.length !== prospects.length && ` sur ${prospects.length}`}
+          </span>
+          {prospectsWithoutEmail > 0 && (
+            <span className="text-[10px] text-amber-500/70 flex items-center gap-1">
+              <Mail size={10} />
+              {prospectsWithoutEmail} sans email
             </span>
-            {prospectsWithoutEmail > 0 && (
-              <span className="text-[10px] text-amber-500/70 flex items-center gap-1">
-                <Mail size={10} />
-                {prospectsWithoutEmail} sans email
-              </span>
-            )}
-          </div>
-          {totalPages > 1 && (
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setPage(Math.max(0, page - 1))}
-                disabled={page === 0}
-                className="p-1.5 rounded-lg hover:bg-surface-elevated text-content-muted disabled:opacity-20 transition"
-              >
-                <ChevronLeft size={14} />
-              </button>
-              <span className="text-[10px] font-mono text-content-muted px-2 tabular-nums">
-                {page + 1} / {totalPages}
-              </span>
-              <button
-                onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
-                disabled={page >= totalPages - 1}
-                className="p-1.5 rounded-lg hover:bg-surface-elevated text-content-muted disabled:opacity-20 transition"
-              >
-                <ChevronRight size={14} />
-              </button>
-            </div>
           )}
         </div>
+        {totalPages > 1 && (
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setPage(Math.max(0, page - 1))}
+              disabled={page === 0}
+              className="p-2 sm:p-1.5 rounded-lg hover:bg-surface-elevated text-content-muted disabled:opacity-20 transition min-h-[44px] sm:min-h-0 min-w-[44px] sm:min-w-0 flex items-center justify-center"
+            >
+              <ChevronLeft size={14} />
+            </button>
+            <span className="text-[10px] font-mono text-content-muted px-2 tabular-nums">
+              {page + 1} / {totalPages}
+            </span>
+            <button
+              onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
+              disabled={page >= totalPages - 1}
+              className="p-2 sm:p-1.5 rounded-lg hover:bg-surface-elevated text-content-muted disabled:opacity-20 transition min-h-[44px] sm:min-h-0 min-w-[44px] sm:min-w-0 flex items-center justify-center"
+            >
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { sendEmail } from '@/lib/email';
+import { paymentSuccessEmail, subscriptionCancelledEmail } from '@/lib/emailTemplates';
+import { PLANS } from '@/lib/plans';
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -42,6 +45,28 @@ export async function POST(request) {
             updated_at: new Date().toISOString(),
           })
           .eq('id', userId);
+
+        // Send payment success email
+        try {
+          const { data: profile } = await supabaseAdmin
+            .from('user_profiles')
+            .select('email, full_name')
+            .eq('id', userId)
+            .single();
+
+          if (profile?.email) {
+            const plan = PLANS[planId] || { name: planId, price: 0 };
+            const template = paymentSuccessEmail(
+              profile.full_name,
+              plan.name,
+              session.amount_total || plan.price
+            );
+            sendEmail({ to: profile.email, subject: template.subject, html: template.html })
+              .catch((err) => console.error('[webhook] Payment email failed:', err));
+          }
+        } catch (emailErr) {
+          console.error('[webhook] Payment email error:', emailErr);
+        }
       }
       break;
     }
@@ -56,7 +81,7 @@ export async function POST(request) {
       const subscription = event.data.object;
       const { data } = await supabaseAdmin
         .from('user_profiles')
-        .select('id')
+        .select('id, email, full_name')
         .eq('stripe_subscription_id', subscription.id)
         .single();
 
@@ -69,6 +94,17 @@ export async function POST(request) {
             updated_at: new Date().toISOString(),
           })
           .eq('id', data.id);
+
+        // Send subscription cancelled email
+        if (data.email) {
+          try {
+            const template = subscriptionCancelledEmail(data.full_name);
+            sendEmail({ to: data.email, subject: template.subject, html: template.html })
+              .catch((err) => console.error('[webhook] Cancellation email failed:', err));
+          } catch (emailErr) {
+            console.error('[webhook] Cancellation email error:', emailErr);
+          }
+        }
       }
       break;
     }

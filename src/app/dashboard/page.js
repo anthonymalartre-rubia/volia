@@ -6,7 +6,7 @@ import { DEPTS } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // Lazy load panels — only loaded when navigated to
 const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
@@ -71,6 +71,7 @@ export default function Dashboard() {
 
   const supabase = getSupabase();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Get current user and load data on mount
   useEffect(() => {
@@ -140,10 +141,15 @@ export default function Dashboard() {
       // Apply search history
       setSearchHistory(sessionsRes.data || []);
 
-      // Show onboarding for new users
+      // Show onboarding for new users, or when triggered from settings (?onboarding=1)
       const loadedProspects = prospectsRes.data || [];
-      if (loadedProspects.length === 0 && !localStorage.getItem('onboarding_completed')) {
+      const forceOnboarding = searchParams.get('onboarding') === '1';
+      if (forceOnboarding || (loadedProspects.length === 0 && !localStorage.getItem('onboarding_completed'))) {
         setShowOnboarding(true);
+        // Clean up the URL query param without reloading
+        if (forceOnboarding) {
+          router.replace('/dashboard', { scroll: false });
+        }
       }
     };
 
@@ -840,7 +846,7 @@ export default function Dashboard() {
           />
         </div>
 
-        <main className="flex-1 min-h-[calc(100vh-3.5rem)] p-6">
+        <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)] p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
             <Suspense fallback={panelFallback}>
               {activeView === 'overview' && (

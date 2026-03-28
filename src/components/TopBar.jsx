@@ -30,7 +30,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
         <div className="flex items-center gap-3">
           <button
             onClick={onToggleSidebar}
-            className="lg:hidden p-2.5 rounded-lg text-content-tertiary hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
+            className="md:hidden p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-content-tertiary hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
             aria-label="Ouvrir le menu"
           >
             <Menu size={20} />

@@ -6,7 +6,8 @@ import { getSupabase } from '@/lib/supabase';
 import { PLANS } from '@/lib/plans';
 import {
   User, Lock, CreditCard, Trash2, Shield, Mail, Calendar,
-  Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon
+  Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon,
+  BookOpen,
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 
@@ -365,6 +366,38 @@ export default function SettingsPage() {
               }`}>
                 {theme === 'dark' ? <Moon size={10} className="text-gray-600" /> : <Sun size={10} className="text-amber-500" />}
               </div>
+            </button>
+          </div>
+        </div>
+
+        {/* === Onboarding Guide Section === */}
+        <div className="rounded-xl border border-line bg-surface-card p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-violet-500/20">
+              <BookOpen className="h-5 w-5 text-violet-400" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold">Guide de demarrage</h2>
+              <p className="text-xs text-content-tertiary">Revisitez le tutoriel de prise en main</p>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium">Tutoriel interactif</p>
+              <p className="text-xs text-content-tertiary mt-0.5">
+                Redecouvrez les fonctionnalites de Prospectia.ai etape par etape.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                localStorage.removeItem('onboarding_completed');
+                router.push('/dashboard?onboarding=1');
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors shrink-0"
+            >
+              <BookOpen className="h-4 w-4" />
+              Revoir le guide
             </button>
           </div>
         </div>

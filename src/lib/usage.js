@@ -1,5 +1,7 @@
 // src/lib/usage.js
 import { getPlan, isLimitReached } from './plans';
+import { sendEmail } from './email';
+import { usageWarningEmail, usageLimitReachedEmail } from './emailTemplates';
 
 function getCurrentMonth() {
   const now = new Date();
@@ -56,7 +58,7 @@ export async function checkLimit(supabase, userId, action) {
   };
 }
 
-// Increment usage counter
+// Increment usage counter and send warning emails if thresholds are crossed
 export async function incrementUsage(supabase, userId, action, amount = 1) {
   const month = getCurrentMonth();
 
@@ -67,14 +69,64 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
     .eq('month', month)
     .single();
 
+  const previousCount = existing ? (existing[action] || 0) : 0;
+  const newCount = previousCount + amount;
+
   if (existing) {
     await supabase
       .from('usage_tracking')
-      .update({ [action]: (existing[action] || 0) + amount, updated_at: new Date().toISOString() })
+      .update({ [action]: newCount, updated_at: new Date().toISOString() })
       .eq('id', existing.id);
   } else {
     await supabase
       .from('usage_tracking')
       .insert({ user_id: userId, month, [action]: amount });
+  }
+
+  // ─── Usage warning emails ──────────────────────────────────────────────────
+  // Send emails when crossing the 80% or 100% threshold.
+  // We check that the previous count was below the threshold to avoid duplicates.
+  try {
+    const plan = await getUserPlan(supabase, userId);
+    const limitKey = `${action}_per_month`;
+    const limit = plan.limits[limitKey];
+
+    // Skip for unlimited plans
+    if (limit === -1) return;
+
+    const prevPercent = Math.floor((previousCount / limit) * 100);
+    const newPercent = Math.floor((newCount / limit) * 100);
+
+    // Determine which threshold was just crossed
+    let thresholdCrossed = null;
+    if (newPercent >= 100 && prevPercent < 100) {
+      thresholdCrossed = 100;
+    } else if (newPercent >= 80 && prevPercent < 80) {
+      thresholdCrossed = 80;
+    }
+
+    if (thresholdCrossed) {
+      // Fetch user email
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('email, full_name')
+        .eq('id', userId)
+        .single();
+
+      if (profile?.email) {
+        const limitType = action; // 'searches', 'enrichments', 'exports'
+        let template;
+        if (thresholdCrossed === 100) {
+          template = usageLimitReachedEmail(profile.full_name, plan.name, limitType);
+        } else {
+          template = usageWarningEmail(profile.full_name, thresholdCrossed, plan.name, limitType);
+        }
+        sendEmail({ to: profile.email, subject: template.subject, html: template.html })
+          .catch((err) => console.error(`[usage] ${thresholdCrossed}% email failed:`, err));
+      }
+    }
+  } catch (emailErr) {
+    // Never let email errors affect usage tracking
+    console.error('[usage] Warning email error:', emailErr);
   }
 }

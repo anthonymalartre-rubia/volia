@@ -69,7 +69,7 @@ function OptionChips({ options, selected, onToggle, colorClass = "indigo" }) {
           <button
             key={value}
             onClick={() => onToggle(value)}
-            className={`px-3.5 py-2 rounded-xl text-sm font-medium border transition-all active:scale-[0.97] ${isActive ? c.active : c.inactive}`}
+            className={`px-3.5 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 rounded-xl text-sm font-medium border transition-all active:scale-[0.97] ${isActive ? c.active : c.inactive}`}
           >
             {label}
           </button>
@@ -342,7 +342,7 @@ export default function SearchPanel({
         ref={scrollRef}
         className="rounded-2xl border border-line bg-surface-card overflow-hidden"
       >
-        <div className="p-5 space-y-5 max-h-[calc(100vh-16rem)] overflow-y-auto">
+        <div className="p-3 sm:p-5 space-y-4 sm:space-y-5 max-h-[calc(100vh-16rem)] overflow-y-auto">
 
           {/* Step 1: Type */}
           <BotMessage>
@@ -350,24 +350,24 @@ export default function SearchPanel({
           </BotMessage>
 
           {step === 0 && !searchType && (
-            <div className="flex flex-wrap gap-2 pl-10 animate-in fade-in duration-300">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 pl-2 sm:pl-10 animate-in fade-in duration-300">
               <button
                 onClick={() => handleTypeSelect('b2b')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-blue-500/30 hover:text-blue-400 hover:bg-blue-600/10 transition-all active:scale-[0.97]"
+                className="flex items-center gap-2 px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-blue-500/30 hover:text-blue-400 hover:bg-blue-600/10 transition-all active:scale-[0.97]"
               >
                 <Building2 size={15} />
                 B2B — Entreprises
               </button>
               <button
                 onClick={() => handleTypeSelect('copro')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-purple-500/30 hover:text-purple-400 hover:bg-purple-600/10 transition-all active:scale-[0.97]"
+                className="flex items-center gap-2 px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-purple-500/30 hover:text-purple-400 hover:bg-purple-600/10 transition-all active:scale-[0.97]"
               >
                 <Home size={15} />
                 Copropriete — Syndics
               </button>
               <button
                 onClick={() => handleTypeSelect('both')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-indigo-500/30 hover:text-indigo-400 hover:bg-indigo-600/10 transition-all active:scale-[0.97]"
+                className="flex items-center gap-2 px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-indigo-500/30 hover:text-indigo-400 hover:bg-indigo-600/10 transition-all active:scale-[0.97]"
               >
                 <Sparkles size={15} />
                 Les deux
@@ -376,9 +376,9 @@ export default function SearchPanel({
           )}
 
           {step === 0 && !searchType && (
-            <div className="pl-10 space-y-2 animate-in fade-in duration-500">
+            <div className="pl-2 sm:pl-10 space-y-2 animate-in fade-in duration-500">
               <p className="text-[10px] uppercase tracking-wider text-content-faint font-semibold">ou decrivez ce que vous cherchez</p>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <div className="relative flex-1">
                   <PenLine size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-faint" />
                   <input
@@ -388,13 +388,13 @@ export default function SearchPanel({
                     onKeyDown={(e) => e.key === 'Enter' && handleNlSubmit()}
                     placeholder="Ex: je cherche des restaurants haut de gamme et des hotels 4 etoiles..."
                     disabled={nlParsing}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-line-hover bg-surface-input text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-amber-500/40 transition disabled:opacity-50"
+                    className="w-full pl-9 pr-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl border border-line-hover bg-surface-input text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-amber-500/40 transition disabled:opacity-50"
                   />
                 </div>
                 <button
                   onClick={handleNlSubmit}
                   disabled={!nlInput.trim() || nlParsing}
-                  className="px-4 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-medium hover:bg-amber-500/20 transition disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-medium hover:bg-amber-500/20 transition disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {nlParsing ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                   {nlParsing ? 'Analyse...' : 'Analyser'}
@@ -422,7 +422,7 @@ export default function SearchPanel({
               </BotMessage>
 
               {step === 1 && (
-                <div className="pl-10 space-y-3">
+                <div className="pl-2 sm:pl-10 space-y-3">
                   {/* Search + quick actions */}
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1">
@@ -432,13 +432,13 @@ export default function SearchPanel({
                         value={deptSearch}
                         onChange={(e) => setDeptSearch(e.target.value)}
                         placeholder="Rechercher un departement..."
-                        className="w-full pl-8 pr-3 py-2 bg-surface-card border border-line rounded-lg text-xs text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/30 transition"
+                        className="w-full pl-8 pr-3 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 bg-surface-card border border-line rounded-lg text-xs text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/30 transition"
                       />
                     </div>
-                    <button onClick={selectAllDepts} className="px-2.5 py-2 rounded-lg bg-surface-card border border-line text-[10px] text-content-muted hover:text-content-primary transition whitespace-nowrap">
+                    <button onClick={selectAllDepts} className="px-2.5 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-surface-card border border-line text-[10px] text-content-muted hover:text-content-primary transition whitespace-nowrap">
                       Tout
                     </button>
-                    <button onClick={clearAllDepts} className="px-2.5 py-2 rounded-lg bg-surface-card border border-line text-[10px] text-content-muted hover:text-content-primary transition whitespace-nowrap">
+                    <button onClick={clearAllDepts} className="px-2.5 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-surface-card border border-line text-[10px] text-content-muted hover:text-content-primary transition whitespace-nowrap">
                       Aucun
                     </button>
                   </div>
@@ -449,7 +449,7 @@ export default function SearchPanel({
                     </div>
                   )}
                   {/* Regions */}
-                  <div className="max-h-64 overflow-y-auto space-y-1 pr-1">
+                  <div className="max-h-48 sm:max-h-64 overflow-y-auto space-y-1 pr-1 -webkit-overflow-scrolling-touch">
                     {Object.entries(REGIONS).map(([key, region]) => {
                       const q = deptSearch.toLowerCase();
                       const matchingDepts = region.depts.filter(code => {
@@ -510,7 +510,7 @@ export default function SearchPanel({
                   <button
                     onClick={confirmDepts}
                     disabled={selectedDepts.length === 0}
-                    className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition disabled:text-content-faint disabled:cursor-not-allowed"
+                    className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition disabled:text-content-faint disabled:cursor-not-allowed min-h-[44px] sm:min-h-0"
                   >
                     Continuer <ChevronRight size={14} />
                   </button>
@@ -545,7 +545,7 @@ export default function SearchPanel({
               )}
 
               {step === 2 && searchType === 'custom' && (
-                <div className="pl-10 space-y-3 animate-in fade-in duration-300">
+                <div className="pl-2 sm:pl-10 space-y-3 animate-in fade-in duration-300">
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -553,12 +553,12 @@ export default function SearchPanel({
                       onChange={(e) => setFreeSearchInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && addFreeSearch()}
                       placeholder="Ex: boulangerie, coiffeur, cabinet comptable, salle de sport..."
-                      className="flex-1 bg-surface-deep border border-line rounded-xl px-4 py-2.5 text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-amber-500/40 transition"
+                      className="flex-1 bg-surface-deep border border-line rounded-xl px-4 py-3 sm:py-2.5 min-h-[44px] text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-amber-500/40 transition"
                     />
                     <button
                       onClick={addFreeSearch}
                       disabled={!freeSearchInput.trim()}
-                      className="px-3 py-2.5 rounded-xl bg-surface-elevated hover:bg-line-hover text-content-secondary transition disabled:opacity-30 disabled:cursor-not-allowed"
+                      className="px-3 py-3 sm:py-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-surface-elevated hover:bg-line-hover text-content-secondary transition disabled:opacity-30 disabled:cursor-not-allowed"
                     >
                       <Plus size={16} />
                     </button>
@@ -586,7 +586,7 @@ export default function SearchPanel({
               )}
 
               {step === 2 && searchType !== 'custom' && (
-                <div className="pl-10 space-y-3">
+                <div className="pl-2 sm:pl-10 space-y-3">
                   {/* Search + select/deselect */}
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1">
@@ -596,7 +596,7 @@ export default function SearchPanel({
                         value={catSearch}
                         onChange={(e) => setCatSearch(e.target.value)}
                         placeholder="Rechercher une catégorie..."
-                        className="w-full pl-7 pr-3 py-1.5 rounded-lg bg-surface-input border border-line text-xs text-content-primary placeholder:text-content-faint focus:outline-none focus:border-indigo-500/50"
+                        className="w-full pl-7 pr-3 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-lg bg-surface-input border border-line text-xs text-content-primary placeholder:text-content-faint focus:outline-none focus:border-indigo-500/50"
                       />
                     </div>
                   </div>

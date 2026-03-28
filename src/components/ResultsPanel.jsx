@@ -145,13 +145,13 @@ export default memo(function ResultsPanel({
   const isEnterprise = userPlan?.id === 'enterprise';
 
   const ENRICH_METHODS = [
-    { id: null, label: 'Waterfall (auto)', icon: '🔄', description: 'Essaie chaque source dans l\'ordre' },
-    { id: 'scrape', label: 'Scraping uniquement', icon: '🌐', description: 'Scrape le site web directement' },
-    { id: 'serper', label: 'Serper.dev (Google)', icon: '🔍', description: 'Recherche Google via Serper' },
-    { id: 'apollo', label: 'Apollo.io', icon: '🚀', description: 'Enrichissement Apollo People' },
-    { id: 'enrichly', label: 'Enrichly', icon: '📧', description: 'API Enrichly' },
-    { id: 'anymail', label: 'Anymail Finder', icon: '📬', description: 'API Anymail Finder' },
-    { id: 'findymail', label: 'Findymail', icon: '✉️', description: 'API Findymail' },
+    { id: null, label: 'Waterfall (auto)', icon: '🔄', description: 'Teste chaque source une par une jusqu\'a trouver un email', cost: 'Gratuit d\'abord, puis payant si besoin' },
+    { id: 'scrape', label: 'Scraping du site', icon: '🌐', description: 'Parcourt le site web et ses pages contact pour extraire les emails visibles', cost: 'Gratuit / illimite' },
+    { id: 'serper', label: 'Recherche Google', icon: '🔍', description: 'Cherche l\'email de l\'entreprise dans les resultats Google', cost: '2 500 recherches gratuites/mois' },
+    { id: 'apollo', label: 'Apollo.io', icon: '🚀', description: 'Trouve le contact principal de l\'entreprise via la base Apollo (220M+ contacts)', cost: '1 credit/recherche' },
+    { id: 'enrichly', label: 'Enrichly', icon: '📧', description: 'Trouve l\'email professionnel via la base de donnees Enrichly', cost: 'Payant' },
+    { id: 'anymail', label: 'Anymail Finder', icon: '📬', description: 'Verifie et trouve les emails professionnels avec verification MX', cost: 'Payant' },
+    { id: 'findymail', label: 'Findymail', icon: '✉️', description: 'Trouve les emails verifies avec un taux de delivrabilite eleve', cost: 'Payant' },
   ];
 
   const folderProspects = useMemo(() => {
@@ -465,7 +465,7 @@ export default memo(function ResultsPanel({
           </div>
 
           {showEnrichDropdown && (
-            <div className="absolute z-50 top-full mt-1 left-0 w-64 rounded-lg border border-[#1e1e24] bg-[#111114] shadow-xl py-1">
+            <div className="absolute z-50 top-full mt-1 right-0 w-80 rounded-lg border border-[#1e1e24] bg-[#111114] shadow-xl py-1">
               <div className="px-3 py-1.5 text-[10px] uppercase tracking-wider text-[#52525b] font-semibold">
                 Méthode d'enrichissement
               </div>
@@ -486,13 +486,14 @@ export default memo(function ResultsPanel({
                         : 'hover:bg-[#1e1e24] cursor-pointer'
                     }`}
                   >
-                    <span className="text-sm">{m.icon}</span>
+                    <span className="text-base leading-none">{m.icon}</span>
                     <div className="flex-1 min-w-0">
                       <div className="text-[#fafafa] font-medium flex items-center gap-1.5">
                         {m.label}
                         {isLocked && <Lock className="h-3 w-3 text-[#52525b]" />}
                       </div>
-                      <div className="text-[10px] text-[#52525b] truncate">{m.description}</div>
+                      <div className="text-[10px] text-[#71717a] leading-snug">{m.description}</div>
+                      <div className="text-[9px] text-[#3f3f46] mt-0.5">{m.cost}</div>
                     </div>
                     {isLocked && (
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 font-medium whitespace-nowrap">

@@ -6,6 +6,7 @@ import { DEPTS, REGIONS } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
+import UpgradeBanner from '@/components/UpgradeBanner';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // Lazy load panels — only loaded when navigated to
@@ -896,7 +897,13 @@ export default function Dashboard() {
           />
         </div>
 
-        <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)] p-3 sm:p-4 md:p-6">
+        <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)]">
+          <UpgradeBanner
+            plan={userPlan}
+            usage={userUsage}
+            onUpgrade={() => handleUpgrade('pro')}
+          />
+          <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
             <Suspense fallback={panelFallback}>
               {activeView === 'overview' && (
@@ -950,6 +957,7 @@ export default function Dashboard() {
                 <ExportPanel prospects={prospects} onDownloadCSV={downloadCSV} />
               )}
             </Suspense>
+          </div>
           </div>
         </main>
       </div>

@@ -41,7 +41,7 @@ import {
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
-import { Info } from "lucide-react";
+import { Info, Lightbulb } from "lucide-react";
 
 // Reusable tooltip on hover
 function InfoTooltip({ text, wide }) {
@@ -229,6 +229,37 @@ function EnrichmentProgressBanner({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function OnboardingHint({ storageKey, children }) {
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem(storageKey) === '1' || localStorage.getItem('onboarding_completed') != null;
+  });
+
+  if (dismissed) return null;
+
+  const handleDismiss = () => {
+    setDismissed(true);
+    try { localStorage.setItem(storageKey, '1'); } catch {}
+  };
+
+  return (
+    <div className="flex items-start gap-2.5 px-3.5 py-3 rounded-xl border border-indigo-500/25 bg-indigo-500/[0.07] animate-gentle-glow">
+      <div className="p-1.5 rounded-lg bg-indigo-500/15 flex-shrink-0 mt-0.5">
+        <Lightbulb size={14} className="text-indigo-400" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-indigo-300 leading-relaxed">{children}</p>
+      </div>
+      <button
+        onClick={handleDismiss}
+        className="px-2.5 py-1 rounded-lg text-[10px] font-semibold text-indigo-400 border border-indigo-500/25 hover:bg-indigo-500/15 transition flex-shrink-0"
+      >
+        Compris
+      </button>
     </div>
   );
 }
@@ -818,6 +849,20 @@ export default memo(function ResultsPanel({
         </div>
       </div>
 
+      {/* Onboarding hint: enrichment */}
+      {folderProspects.length > 0 && stats.emails === 0 && (
+        <OnboardingHint storageKey="hint_enrich_dismissed">
+          Cliquez ici pour trouver les emails de vos prospects
+        </OnboardingHint>
+      )}
+
+      {/* Onboarding hint: export */}
+      {stats.emails > 0 && (
+        <OnboardingHint storageKey="hint_export_dismissed">
+          Exportez vos leads en CSV pour votre CRM
+        </OnboardingHint>
+      )}
+
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2 p-2 sm:p-3 rounded-2xl border border-line bg-surface-card">
         {/* Enrichment */}
@@ -1182,38 +1227,40 @@ export default memo(function ResultsPanel({
         })}
       </div>
 
-      {/* Bulk action bar */}
+      {/* Sticky bulk action bar — fixed at bottom of viewport */}
       {selectedIds.size > 0 && (
-        <div className="flex flex-wrap items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 rounded-xl border border-indigo-500/20 bg-indigo-500/5">
-          <span className="text-xs font-medium text-indigo-400">
-            {selectedIds.size} sélectionné{selectedIds.size > 1 ? 's' : ''}
-          </span>
-          <button
-            onClick={() => {
-              const ids = Array.from(selectedIds);
-              const withoutEmail = prospects.filter(p => ids.includes(p.id) && p.site_web && !p.email);
-              if (withoutEmail.length > 0) {
-                onBulkEnrich?.(null, null, ids);
-              }
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-medium transition"
-          >
-            <Zap size={12} />
-            Enrichir
-          </button>
-          <button
-            onClick={deleteSelected}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/10 border border-red-600/20 text-red-400 text-[11px] font-medium hover:bg-red-600/20 transition"
-          >
-            <Trash2 size={12} />
-            Supprimer
-          </button>
-          <button
-            onClick={() => setSelectedIds(new Set())}
-            className="ml-auto text-[11px] text-content-muted hover:text-content-secondary transition"
-          >
-            Désélectionner
-          </button>
+        <div className="fixed bottom-0 left-0 md:left-64 right-0 z-[50] bg-surface-card border-t border-line px-4 sm:px-6 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.15)]">
+          <div className="max-w-6xl mx-auto flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="text-xs font-medium text-indigo-400">
+              {selectedIds.size} sélectionné{selectedIds.size > 1 ? 's' : ''}
+            </span>
+            <button
+              onClick={() => {
+                const ids = Array.from(selectedIds);
+                const withoutEmail = prospects.filter(p => ids.includes(p.id) && p.site_web && !p.email);
+                if (withoutEmail.length > 0) {
+                  onBulkEnrich?.(null, null, ids);
+                }
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-medium transition"
+            >
+              <Zap size={12} />
+              Enrichir
+            </button>
+            <button
+              onClick={deleteSelected}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/10 border border-red-600/20 text-red-400 text-[11px] font-medium hover:bg-red-600/20 transition"
+            >
+              <Trash2 size={12} />
+              Supprimer
+            </button>
+            <button
+              onClick={() => setSelectedIds(new Set())}
+              className="ml-auto text-[11px] text-content-muted hover:text-content-secondary transition"
+            >
+              Désélectionner
+            </button>
+          </div>
         </div>
       )}
 

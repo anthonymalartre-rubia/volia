@@ -7,7 +7,7 @@ import { PLANS } from '@/lib/plans';
 import {
   User, Lock, CreditCard, Trash2, Shield, Mail, Calendar,
   Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon,
-  BookOpen,
+  BookOpen, BarChart3, ArrowUpRight,
 } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 
@@ -32,6 +32,9 @@ export default function SettingsPage() {
 
   // Billing
   const [billingLoading, setBillingLoading] = useState(false);
+
+  // Usage data
+  const [userUsage, setUserUsage] = useState(null);
 
   // Delete account
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -69,6 +72,17 @@ export default function SettingsPage() {
       .single();
 
     setProfile(prof);
+
+    // Fetch usage data for current month
+    const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+    const { data: usageData } = await supabase
+      .from('usage_tracking')
+      .select('searches, enrichments, exports')
+      .eq('user_id', authUser.id)
+      .eq('month', month)
+      .single();
+    setUserUsage(usageData || { searches: 0, enrichments: 0, exports: 0 });
+
     setLoading(false);
   }
 
@@ -519,6 +533,84 @@ export default function SettingsPage() {
               Mettre a jour le mot de passe
             </button>
           </form>
+        </div>
+
+        {/* === Usage This Month Section === */}
+        <div className="rounded-xl border border-line bg-surface-card p-6">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-violet-500/20">
+              <BarChart3 className="h-5 w-5 text-violet-400" />
+            </div>
+            <div>
+              <h2 className="text-base font-semibold">Utilisation ce mois</h2>
+              <p className="text-xs text-content-tertiary">
+                Plan {currentPlan.name} — Renouvellement le {(() => {
+                  const now = new Date();
+                  const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+                  return nextMonth.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+                })()}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              { label: 'Recherches', current: userUsage?.searches || 0, limit: currentPlan.limits.searches_per_month },
+              { label: 'Enrichissements', current: userUsage?.enrichments || 0, limit: currentPlan.limits.enrichments_per_month },
+              { label: 'Exports', current: userUsage?.exports || 0, limit: currentPlan.limits.exports_per_month },
+            ].map(({ label, current, limit }) => {
+              const isUnlimited = limit === -1;
+              const pct = isUnlimited ? 0 : Math.min(100, Math.round((current / limit) * 100));
+              const barColor = isUnlimited ? 'bg-violet-500'
+                : pct >= 90 ? 'bg-red-500'
+                : pct >= 60 ? 'bg-amber-500'
+                : 'bg-emerald-500';
+              const textColor = isUnlimited ? 'text-content-tertiary'
+                : pct >= 90 ? 'text-red-400'
+                : pct >= 60 ? 'text-amber-400'
+                : 'text-emerald-400';
+
+              return (
+                <div key={label}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-sm text-content-secondary">{label}</span>
+                    <span className={`text-sm font-medium ${textColor}`}>
+                      {current} / {isUnlimited ? '\u221e' : limit} {label.toLowerCase()} utilisé{label !== 'Exports' ? 'e' : ''}s
+                    </span>
+                  </div>
+                  {!isUnlimited && (
+                    <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${barColor}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  )}
+                  {isUnlimited && (
+                    <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
+                      <div className="h-full rounded-full bg-violet-500/30 w-full" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {planId === 'free' && (
+            <div className="mt-5 pt-4 border-t border-line flex items-center justify-between">
+              <p className="text-sm text-content-secondary">
+                Passez Pro pour des limites plus élevées
+              </p>
+              <button
+                onClick={handleUpgradePro}
+                disabled={billingLoading}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/20 disabled:opacity-40"
+              >
+                {billingLoading ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <ArrowUpRight className="h-3.5 w-3.5" />}
+                Passer Pro
+              </button>
+            </div>
+          )}
         </div>
 
         {/* === Plan & Billing Section === */}

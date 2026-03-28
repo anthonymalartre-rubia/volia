@@ -3,6 +3,8 @@ import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download,
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import ThemeToggle from '@/components/ThemeToggle';
 import { PLANS } from '@/lib/plans';
+import FAQSection from '@/components/FAQSection';
+import InteractiveDemo from '@/components/InteractiveDemo';
 
 export const metadata = {
   title: 'Prospectia.ai — Trouvez vos prospects partout en France',
@@ -66,6 +68,7 @@ export default function LandingPage() {
             <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">Fonctionnalités</Link>
             <Link href="#how-it-works" className="text-sm text-zinc-500 hover:text-white transition">Comment ça marche</Link>
             <Link href="#pricing" className="text-sm text-zinc-500 hover:text-white transition">Pricing</Link>
+            <Link href="#faq" className="text-sm text-zinc-500 hover:text-white transition">FAQ</Link>
           </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
@@ -110,64 +113,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Chat mockup */}
-      <section className="px-6 pb-24">
-        <div className="max-w-2xl mx-auto">
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm overflow-hidden shadow-2xl shadow-violet-500/5">
-            {/* Mock top bar */}
-            <div className="flex items-center gap-2 px-5 py-3 border-b border-white/[0.06] bg-white/[0.02]">
-              <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-                <span className="text-[8px] font-bold text-white">P</span>
-              </div>
-              <span className="text-xs font-semibold text-zinc-400">Prospectia<span className="text-violet-400">.ai</span></span>
-              <span className="text-[10px] text-zinc-600 ml-auto">Nouvelle recherche</span>
-            </div>
-            {/* Chat messages */}
-            <div className="p-5 space-y-4">
-              {/* Bot */}
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Zap size={11} className="text-white" />
-                </div>
-                <p className="text-sm text-zinc-300">Quel type de prospects recherchez-vous ?</p>
-              </div>
-              {/* Options */}
-              <div className="flex gap-2 pl-9">
-                <span className="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/25 text-violet-300 text-xs font-medium">B2B &mdash; Entreprises</span>
-                <span className="px-3 py-1.5 rounded-lg border border-white/[0.08] text-zinc-500 text-xs font-medium">Copropriété</span>
-                <span className="px-3 py-1.5 rounded-lg border border-white/[0.08] text-zinc-500 text-xs font-medium">Les deux</span>
-              </div>
-              {/* User answer */}
-              <div className="flex justify-end">
-                <span className="px-3.5 py-1.5 rounded-lg bg-violet-600/20 border border-violet-500/20 text-violet-300 text-xs">B2B &mdash; Entreprises</span>
-              </div>
-              {/* Bot */}
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <MapPin size={11} className="text-white" />
-                </div>
-                <p className="text-sm text-zinc-300">Dans quels départements ?</p>
-              </div>
-              <div className="flex gap-2 pl-9 flex-wrap">
-                {['75 Paris', '69 Rhône', '13 Bouches-du-Rhône', '33 Gironde', '59 Nord'].map((d) => (
-                  <span key={d} className="px-3 py-1.5 rounded-lg bg-violet-500/15 border border-violet-500/25 text-violet-300 text-xs font-medium">{d}</span>
-                ))}
-              </div>
-              {/* Typing indicator */}
-              <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
-                  <Zap size={11} className="text-white" />
-                </div>
-                <div className="flex gap-1 py-2">
-                  <div className="w-1.5 h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <div className="w-1.5 h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <div className="w-1.5 h-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:300ms]" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Interactive Demo */}
+      <InteractiveDemo />
 
       {/* Features Grid */}
       <section id="features" className="py-24 px-6 border-t border-white/[0.06]">
@@ -469,6 +416,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* FAQ */}
+      <FAQSection />
 
       {/* Final CTA */}
       <section className="relative py-28 px-6 border-t border-white/[0.06] overflow-hidden">

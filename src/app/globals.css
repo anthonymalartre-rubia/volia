@@ -146,3 +146,30 @@ body {
 .animate-pulse-dot {
   animation: pulse 1.5s infinite;
 }
+
+/* Gentle glow animation for onboarding hints */
+@keyframes gentle-glow {
+  0%, 100% { box-shadow: 0 0 8px 0 rgba(99, 102, 241, 0.15); }
+  50% { box-shadow: 0 0 16px 4px rgba(99, 102, 241, 0.25); }
+}
+.animate-gentle-glow {
+  animation: gentle-glow 2.5s ease-in-out infinite;
+}
+
+/* Step fade-in for interactive demo */
+@keyframes step-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-step-fade-in {
+  animation: step-fade-in 0.5s ease-out forwards;
+}
+
+/* Progress bar fill animation */
+@keyframes progress-fill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.animate-progress-fill {
+  animation: progress-fill 2.5s ease-out forwards;
+}

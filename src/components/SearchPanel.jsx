@@ -6,6 +6,7 @@ import {
   Send, Square, Sparkles, MapPin, Building2, Home, Search, PenLine, Loader2,
   Plus, X, Play, RotateCcw, ChevronRight, FolderPlus, Folder, Zap,
   UtensilsCrossed, Briefcase, Building, Hotel, HardHat, ShoppingBag, ArrowRight,
+  Lightbulb,
 } from "lucide-react";
 
 function BotMessage({ children, icon: Icon, delay = 0 }) {
@@ -88,6 +89,37 @@ const FOLDER_COLORS = [
   { value: 'amber', label: 'Ambre', class: 'bg-amber-500' },
   { value: 'rose', label: 'Rose', class: 'bg-rose-500' },
 ];
+
+function OnboardingHint({ storageKey, children }) {
+  const [dismissed, setDismissed] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem(storageKey) === '1' || localStorage.getItem('onboarding_completed') != null;
+  });
+
+  if (dismissed) return null;
+
+  const handleDismiss = () => {
+    setDismissed(true);
+    try { localStorage.setItem(storageKey, '1'); } catch {}
+  };
+
+  return (
+    <div className="flex items-start gap-2.5 px-3.5 py-3 rounded-xl border border-indigo-500/25 bg-indigo-500/[0.07] animate-gentle-glow">
+      <div className="p-1.5 rounded-lg bg-indigo-500/15 flex-shrink-0 mt-0.5">
+        <Lightbulb size={14} className="text-indigo-400" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs text-indigo-300 leading-relaxed">{children}</p>
+      </div>
+      <button
+        onClick={handleDismiss}
+        className="px-2.5 py-1 rounded-lg text-[10px] font-semibold text-indigo-400 border border-indigo-500/25 hover:bg-indigo-500/15 transition flex-shrink-0"
+      >
+        Compris
+      </button>
+    </div>
+  );
+}
 
 const QUICK_SEARCH_PRESETS = [
   {
@@ -429,6 +461,15 @@ export default function SearchPanel({
           <BotMessage>
             Quel type de prospects recherchez-vous ?
           </BotMessage>
+
+          {/* Onboarding hint for new users */}
+          {step === 0 && !searchType && (
+            <div className="pl-2 sm:pl-10">
+              <OnboardingHint storageKey="hint_search_dismissed">
+                Commencez par une recherche rapide pour decouvrir la plateforme
+              </OnboardingHint>
+            </div>
+          )}
 
           {/* Quick search presets */}
           {step === 0 && !searchType && (

@@ -108,7 +108,10 @@ async function scrapeForEmail(url) {
   if (emails.length > 0) {
     const scored = emails.map((e) => ({ email: e, score: scoreEmail(e, domain) }));
     scored.sort((a, b) => b.score - a.score);
-    return { email: scored[0].email, source: 'scrape' };
+    // Only return if the best email has a positive score (domain matches)
+    if (scored[0].score > 0) {
+      return { email: scored[0].email, source: 'scrape' };
+    }
   }
   return null;
 }
@@ -396,16 +399,13 @@ export async function POST(request) {
       linkedinUrl = await serperLinkedinMatch(name, domain);
     }
 
-    // Final fallback: guess
-    const guessEmail = domain ? `contact@${domain}` : null;
-
-    await incrementUsage(supabase, user.id, 'enrichments');
+    // No fallback guess — only return verified emails from real sources
     return Response.json({
-      email: guessEmail,
-      source: 'guess',
+      email: null,
+      source: null,
       extra: null,
       linkedin_url: linkedinUrl,
-      waterfall: [...tried, { step: 'guess', label: 'Email deviné', found: !!guessEmail }],
+      waterfall: tried,
     });
   } catch (error) {
     console.error('Waterfall enrichment error:', error);

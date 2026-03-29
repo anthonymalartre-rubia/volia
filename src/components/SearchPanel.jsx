@@ -367,18 +367,8 @@ export default function SearchPanel({
     } else {
       if (selectedCats.length === 0) return;
     }
-    setStep(3);
+    setStep(4);
   };
-
-  const addCustom = () => {
-    if (customInput.trim()) {
-      setCustomQueries((prev) => [...prev, customInput.trim()]);
-      setCustomInput('');
-    }
-  };
-
-  const skipCustom = () => setStep(4);
-  const confirmCustom = () => setStep(4);
 
   const selectFolder = (folder) => {
     setSelectedFolder(folder);
@@ -1290,70 +1280,7 @@ export default function SearchPanel({
             </>
           )}
 
-          {/* Step 4: Custom queries */}
-          {step >= 3 && (
-            <>
-              <BotMessage icon={Search} delay={step === 3 ? 400 : 0}>
-                {t('search.addCustomSearches')} <span className="text-content-muted">{t('search.optional')}</span>
-              </BotMessage>
-
-              {step === 3 && (
-                <div className="pl-10 space-y-3 animate-in fade-in duration-300">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={customInput}
-                      onChange={(e) => setCustomInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && addCustom()}
-                      placeholder={t('search.customSearchPlaceholder')}
-                      className="flex-1 bg-surface-deep border border-line rounded-xl px-4 py-2.5 text-sm text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/40 transition"
-                    />
-                    <button
-                      onClick={addCustom}
-                      disabled={!customInput.trim()}
-                      className="px-3 py-2.5 rounded-xl bg-surface-elevated hover:bg-line-hover text-content-secondary transition disabled:opacity-30 disabled:cursor-not-allowed"
-                    >
-                      <Plus size={16} />
-                    </button>
-                  </div>
-                  {customQueries.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {customQueries.map((q, i) => (
-                        <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium">
-                          {q}
-                          <button onClick={() => setCustomQueries((prev) => prev.filter((_, idx) => idx !== i))} className="text-amber-600 hover:text-amber-300">
-                            <X size={12} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  <div className="flex gap-3">
-                    {customQueries.length > 0 ? (
-                      <button onClick={confirmCustom} className="flex items-center gap-1.5 text-sm font-medium text-indigo-400 hover:text-indigo-300 transition">
-                        {t('search.continue')} <ChevronRight size={14} />
-                      </button>
-                    ) : (
-                      <button onClick={skipCustom} className="flex items-center gap-1.5 text-sm font-medium text-content-muted hover:text-content-secondary transition">
-                        {t('search.skip')} <ChevronRight size={14} />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {step > 3 && customQueries.length > 0 && (
-                <UserMessage>
-                  {t('search.customSearchCount', { count: customQueries.length })}
-                </UserMessage>
-              )}
-              {step > 3 && customQueries.length === 0 && (
-                <UserMessage>{t('search.noCustomSearch')}</UserMessage>
-              )}
-            </>
-          )}
-
-          {/* Step 5: Folder selection */}
+          {/* Step 4: Folder selection */}
           {step >= 4 && (
             <>
               <BotMessage icon={Folder} delay={step === 4 ? 400 : 0}>

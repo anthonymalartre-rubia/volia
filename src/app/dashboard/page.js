@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { getSupabase } from '@/lib/supabase';
-import { DEPTS, REGIONS } from '@/lib/constants';
+import { DEPTS, REGIONS, COUNTRIES, getDeptData, getCountryForDept, getRegionsForCountry, getDeptsForCountry } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
@@ -68,17 +68,21 @@ function generateSessionLabel(depts, b2bCats, coproCats, customQueries) {
     catPart = coproCats.length <= 2 ? coproCats.map(c => c.charAt(0).toUpperCase() + c.slice(1)).join(', ') : `Copro (${coproCats.length} cat.)`;
   }
 
-  // Build department part
+  // Build department part — multi-country aware
   let deptPart = '';
-  const totalDepts = Object.keys(DEPTS).length;
+  const countryCode = depts.length > 0 ? getCountryForDept(depts[0]) : 'FR';
+  const countryDepts = getDeptsForCountry(countryCode);
+  const countryRegions = getRegionsForCountry(countryCode);
+  const totalDepts = Object.keys(countryDepts).length;
+  const countryName = COUNTRIES[countryCode]?.name || 'France';
 
   if (depts.length >= totalDepts - 2) {
-    deptPart = 'France entiere';
+    deptPart = `${countryName} entiere`;
   } else if (depts.length === 1) {
-    deptPart = DEPTS[depts[0]]?.name || depts[0];
+    deptPart = getDeptData(depts[0])?.name || depts[0];
   } else {
     // Check if depts match a region
-    const matchedRegion = Object.values(REGIONS).find(r => {
+    const matchedRegion = Object.values(countryRegions).find(r => {
       const rDepts = r.depts.sort();
       const sDepts = [...depts].sort();
       return rDepts.length === sDepts.length && rDepts.every((d, i) => d === sDepts[i]);
@@ -86,7 +90,7 @@ function generateSessionLabel(depts, b2bCats, coproCats, customQueries) {
     if (matchedRegion) {
       deptPart = matchedRegion.name;
     } else {
-      deptPart = `${depts.length} depts`;
+      deptPart = `${depts.length} zones`;
     }
   }
 
@@ -310,7 +314,7 @@ export default function Dashboard() {
 
     const taskList = [];
     for (const dept of depts) {
-      const deptName = DEPTS[dept]?.name || dept;
+      const deptName = getDeptData(dept)?.name || dept;
       for (const cat of b2bCats) {
         taskList.push({ dept, deptName, category: cat, type: 'b2b' });
       }

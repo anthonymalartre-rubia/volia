@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { DEPTS, REGIONS, B2B_CATS, COPRO_CATS, B2B_GROUPS, COPRO_GROUPS } from "@/lib/constants";
+import { DEPTS, REGIONS, B2B_CATS, COPRO_CATS, B2B_GROUPS, COPRO_GROUPS, COUNTRIES, getRegionsForCountry, getDeptsForCountry } from "@/lib/constants";
 import {
   Send, Square, Sparkles, MapPin, Building2, Home, Search, PenLine, Loader2,
   Plus, X, Play, RotateCcw, ChevronRight, FolderPlus, Folder, Zap,
@@ -198,6 +198,7 @@ export default function SearchPanel({
 }) {
   const [step, setStep] = useState(0);
   const [searchType, setSearchType] = useState(null);
+  const [selectedCountry, setSelectedCountry] = useState('FR');
   const [selectedDepts, setSelectedDepts] = useState([]);
   const [selectedCats, setSelectedCats] = useState([]);
   const [customQueries, setCustomQueries] = useState([]);
@@ -231,8 +232,11 @@ export default function SearchPanel({
   const [catSearch, setCatSearch] = useState('');
   const [expandedCatGroups, setExpandedCatGroups] = useState(new Set());
 
+  const activeRegions = getRegionsForCountry(selectedCountry);
+  const activeDepts = getDeptsForCountry(selectedCountry);
+
   const toggleRegion = (regionKey) => {
-    const region = REGIONS[regionKey];
+    const region = activeRegions[regionKey];
     if (!region) return;
     const allSelected = region.depts.every(d => selectedDepts.includes(d));
     if (allSelected) {
@@ -250,8 +254,15 @@ export default function SearchPanel({
     });
   };
 
-  const selectAllDepts = () => setSelectedDepts(Object.keys(DEPTS));
+  const selectAllDepts = () => setSelectedDepts(Object.keys(activeDepts));
   const clearAllDepts = () => setSelectedDepts([]);
+
+  const handleCountryChange = (code) => {
+    setSelectedCountry(code);
+    setSelectedDepts([]);
+    setExpandedRegions(new Set());
+    setDeptSearch('');
+  };
 
   const handleTypeSelect = (type) => {
     setSearchType(type);
@@ -400,6 +411,7 @@ export default function SearchPanel({
   const handleReset = () => {
     setStep(0);
     setSearchType(null);
+    setSelectedCountry('FR');
     setSelectedDepts([]);
     setSelectedCats([]);
     setCustomQueries([]);
@@ -900,17 +912,36 @@ export default function SearchPanel({
             </UserMessage>
           )}
 
-          {/* Step 2: Departments */}
+          {/* Step 2: Country + Departments */}
           {step >= 1 && (
             <>
               <BotMessage icon={MapPin} delay={step === 1 ? 400 : 0}>
                 <div>
-                  Dans quels departements ? <span className="text-content-muted">Selectionnez par region ou individuellement</span>
+                  Dans quel pays et quelles zones ? <span className="text-content-muted">Selectionnez un pays puis les regions</span>
                 </div>
               </BotMessage>
 
               {step === 1 && (
                 <div className="pl-2 sm:pl-10 space-y-3">
+                  {/* Country selector */}
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(COUNTRIES).map(([code, country]) => (
+                      <button
+                        key={code}
+                        onClick={() => handleCountryChange(code)}
+                        className={`flex items-center gap-2 px-3.5 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 rounded-xl text-sm font-medium border transition-all active:scale-[0.97] ${
+                          selectedCountry === code
+                            ? 'bg-indigo-600/20 border-indigo-500/30 text-indigo-400'
+                            : 'border-line-hover text-content-tertiary hover:border-content-faint hover:text-content-secondary'
+                        }`}
+                      >
+                        <span className="text-base">{country.flag}</span>
+                        {country.name}
+                        <span className="text-[10px] text-content-faint font-mono">{country.zones}</span>
+                      </button>
+                    ))}
+                  </div>
+
                   {/* Search + quick actions */}
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1">
@@ -919,7 +950,7 @@ export default function SearchPanel({
                         type="text"
                         value={deptSearch}
                         onChange={(e) => setDeptSearch(e.target.value)}
-                        placeholder="Rechercher un departement..."
+                        placeholder={selectedCountry === 'FR' ? 'Rechercher un departement...' : selectedCountry === 'CH' ? 'Rechercher un canton...' : 'Rechercher une province...'}
                         className="w-full pl-8 pr-3 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 bg-surface-card border border-line rounded-lg text-xs text-content-primary placeholder-content-faint focus:outline-none focus:border-indigo-500/30 transition"
                       />
                     </div>
@@ -933,18 +964,18 @@ export default function SearchPanel({
                   {/* Selected count */}
                   {selectedDepts.length > 0 && (
                     <div className="text-[10px] text-indigo-400 font-medium">
-                      {selectedDepts.length} departement{selectedDepts.length > 1 ? 's' : ''} selectionne{selectedDepts.length > 1 ? 's' : ''}
+                      {COUNTRIES[selectedCountry]?.flag} {selectedDepts.length} {selectedCountry === 'FR' ? 'departement' : selectedCountry === 'CH' ? 'canton' : 'province'}{selectedDepts.length > 1 ? 's' : ''} selectionne{selectedDepts.length > 1 ? 's' : ''}
                     </div>
                   )}
                   {/* Regions */}
                   <div className="max-h-48 sm:max-h-64 overflow-y-auto space-y-1 pr-1 -webkit-overflow-scrolling-touch">
-                    {Object.entries(REGIONS).map(([key, region]) => {
+                    {Object.entries(activeRegions).map(([key, region]) => {
                       const q = deptSearch.toLowerCase();
                       const matchingDepts = region.depts.filter(code => {
-                        const d = DEPTS[code];
+                        const d = activeDepts[code];
                         if (!d) return false;
                         if (!q) return true;
-                        return code.includes(q) || d.name.toLowerCase().includes(q) || region.name.toLowerCase().includes(q);
+                        return code.toLowerCase().includes(q) || d.name.toLowerCase().includes(q) || region.name.toLowerCase().includes(q);
                       });
                       if (matchingDepts.length === 0) return null;
                       const allSelected = matchingDepts.every(d => selectedDepts.includes(d));
@@ -973,7 +1004,7 @@ export default function SearchPanel({
                           {isExpanded && (
                             <div className="flex flex-wrap gap-1.5 px-3 py-2 bg-surface-base border-t border-line">
                               {matchingDepts.map(code => {
-                                const d = DEPTS[code];
+                                const d = activeDepts[code];
                                 const isSelected = selectedDepts.includes(code);
                                 return (
                                   <button
@@ -985,7 +1016,7 @@ export default function SearchPanel({
                                         : 'border-line text-content-muted hover:border-content-faint hover:text-content-secondary'
                                     }`}
                                   >
-                                    {code} {d.name}
+                                    {d.name}
                                   </button>
                                 );
                               })}
@@ -1007,9 +1038,9 @@ export default function SearchPanel({
 
               {step > 1 && (
                 <UserMessage>
-                  {selectedDepts.length > 10
-                    ? `${selectedDepts.length} departements selectionnes`
-                    : selectedDepts.map((d) => DEPTS[d]?.name).join(', ')}
+                  {COUNTRIES[selectedCountry]?.flag} {selectedDepts.length > 10
+                    ? `${selectedDepts.length} zones selectionnees`
+                    : selectedDepts.map((d) => activeDepts[d]?.name || d).join(', ')}
                 </UserMessage>
               )}
             </>

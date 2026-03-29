@@ -1,4 +1,4 @@
-import { DEPTS, PLACES_API_URL, FIELD_MASK } from '@/lib/constants';
+import { DEPTS, PLACES_API_URL, FIELD_MASK, getDeptData } from '@/lib/constants';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 
@@ -51,10 +51,11 @@ export async function POST(request) {
       );
     }
 
-    const deptData = DEPTS[dept];
+    // Support multi-country zone codes (FR: "75", BE: "BE-BRU", CH: "CH-GE", etc.)
+    const deptData = getDeptData(dept);
     if (!deptData) {
       return Response.json(
-        { error: `Department not found: ${dept}` },
+        { error: `Zone not found: ${dept}` },
         { status: 400 }
       );
     }

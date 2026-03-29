@@ -342,7 +342,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
               { value: '150+', label: 'Catégories', sub: 'B2B & Copropriété' },
-              { value: '101', label: 'Départements', sub: 'France entière + DOM-TOM' },
+              { value: '4', label: 'Pays', sub: '🇫🇷 🇧🇪 🇨🇭 🇱🇺' },
               { value: '7', label: 'Sources', sub: 'Enrichissement waterfall' },
               { value: '49€', label: 'vs 99€', sub: 'Apollo.io seul' },
             ].map((stat) => (

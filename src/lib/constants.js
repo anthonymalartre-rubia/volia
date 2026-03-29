@@ -1,3 +1,106 @@
+// ─── Pays disponibles ─────────────────────────────────────
+// Chaque pays a ses propres régions et zones (départements/provinces/cantons)
+// Format zone : { name, lat, lng, r (rayon en mètres) }
+
+export const COUNTRIES = {
+  FR: { name: 'France', flag: '🇫🇷', code: 'fr', zones: 101 },
+  BE: { name: 'Belgique', flag: '🇧🇪', code: 'be', zones: 11 },
+  CH: { name: 'Suisse', flag: '🇨🇭', code: 'ch', zones: 26 },
+  LU: { name: 'Luxembourg', flag: '🇱🇺', code: 'lu', zones: 1 },
+};
+
+// ─── Belgique — Provinces ──────────────────────────────────
+export const REGIONS_BE = {
+  'be-flandre': { name: 'Flandre', depts: ['BE-VAN','BE-VLI','BE-VOV','BE-VWV','BE-VBR'] },
+  'be-wallonie': { name: 'Wallonie', depts: ['BE-WHT','BE-WLG','BE-WLX','BE-WNA','BE-WBR'] },
+  'be-bruxelles': { name: 'Bruxelles-Capitale', depts: ['BE-BRU'] },
+};
+
+export const DEPTS_BE = {
+  'BE-BRU': { name: 'Bruxelles-Capitale', lat: 50.8503, lng: 4.3517, r: 15000 },
+  'BE-VAN': { name: 'Anvers', lat: 51.2194, lng: 4.4025, r: 35000 },
+  'BE-VLI': { name: 'Limbourg', lat: 50.9311, lng: 5.3325, r: 30000 },
+  'BE-VOV': { name: 'Flandre-Orientale', lat: 51.0543, lng: 3.7174, r: 30000 },
+  'BE-VWV': { name: 'Flandre-Occidentale', lat: 51.0545, lng: 3.1600, r: 35000 },
+  'BE-VBR': { name: 'Brabant flamand', lat: 50.8860, lng: 4.7000, r: 25000 },
+  'BE-WHT': { name: 'Hainaut', lat: 50.4542, lng: 3.9563, r: 35000 },
+  'BE-WLG': { name: 'Liège', lat: 50.6326, lng: 5.5797, r: 35000 },
+  'BE-WLX': { name: 'Luxembourg', lat: 49.8153, lng: 5.4966, r: 40000 },
+  'BE-WNA': { name: 'Namur', lat: 50.4674, lng: 4.8720, r: 35000 },
+  'BE-WBR': { name: 'Brabant wallon', lat: 50.6680, lng: 4.6155, r: 20000 },
+};
+
+// ─── Suisse — Cantons ──────────────────────────────────────
+export const REGIONS_CH = {
+  'ch-romande': { name: 'Suisse romande', depts: ['CH-GE','CH-VD','CH-VS','CH-NE','CH-FR','CH-JU'] },
+  'ch-centrale': { name: 'Suisse centrale', depts: ['CH-BE','CH-LU','CH-UR','CH-SZ','CH-OW','CH-NW','CH-ZG'] },
+  'ch-orientale': { name: 'Suisse orientale', depts: ['CH-ZH','CH-SG','CH-TG','CH-GR','CH-GL','CH-SH','CH-AR','CH-AI'] },
+  'ch-nord': { name: 'Suisse du Nord-Ouest', depts: ['CH-BS','CH-BL','CH-AG','CH-SO'] },
+  'ch-sud': { name: 'Tessin', depts: ['CH-TI'] },
+};
+
+export const DEPTS_CH = {
+  'CH-GE': { name: 'Genève', lat: 46.2044, lng: 6.1432, r: 15000 },
+  'CH-VD': { name: 'Vaud', lat: 46.5197, lng: 6.6323, r: 35000 },
+  'CH-VS': { name: 'Valais', lat: 46.2331, lng: 7.3602, r: 45000 },
+  'CH-NE': { name: 'Neuchâtel', lat: 46.9920, lng: 6.9311, r: 20000 },
+  'CH-FR': { name: 'Fribourg', lat: 46.8065, lng: 7.1620, r: 25000 },
+  'CH-JU': { name: 'Jura', lat: 47.3669, lng: 7.1630, r: 25000 },
+  'CH-BE': { name: 'Berne', lat: 46.9480, lng: 7.4474, r: 40000 },
+  'CH-LU': { name: 'Lucerne', lat: 47.0502, lng: 8.3093, r: 25000 },
+  'CH-UR': { name: 'Uri', lat: 46.8804, lng: 8.6441, r: 25000 },
+  'CH-SZ': { name: 'Schwyz', lat: 47.0207, lng: 8.6530, r: 20000 },
+  'CH-OW': { name: 'Obwald', lat: 46.8958, lng: 8.2428, r: 15000 },
+  'CH-NW': { name: 'Nidwald', lat: 46.9579, lng: 8.3855, r: 15000 },
+  'CH-ZG': { name: 'Zoug', lat: 47.1724, lng: 8.5174, r: 12000 },
+  'CH-ZH': { name: 'Zurich', lat: 47.3769, lng: 8.5417, r: 30000 },
+  'CH-SG': { name: 'Saint-Gall', lat: 47.4245, lng: 9.3767, r: 30000 },
+  'CH-TG': { name: 'Thurgovie', lat: 47.5535, lng: 9.0549, r: 25000 },
+  'CH-GR': { name: 'Grisons', lat: 46.8508, lng: 9.5320, r: 50000 },
+  'CH-GL': { name: 'Glaris', lat: 47.0404, lng: 9.0682, r: 15000 },
+  'CH-SH': { name: 'Schaffhouse', lat: 47.6960, lng: 8.6351, r: 15000 },
+  'CH-AR': { name: 'Appenzell Rh.-Ext.', lat: 47.3838, lng: 9.3108, r: 12000 },
+  'CH-AI': { name: 'Appenzell Rh.-Int.', lat: 47.3315, lng: 9.4102, r: 10000 },
+  'CH-BS': { name: 'Bâle-Ville', lat: 47.5596, lng: 7.5886, r: 10000 },
+  'CH-BL': { name: 'Bâle-Campagne', lat: 47.4417, lng: 7.7633, r: 20000 },
+  'CH-AG': { name: 'Argovie', lat: 47.3887, lng: 8.0457, r: 30000 },
+  'CH-SO': { name: 'Soleure', lat: 47.2088, lng: 7.5323, r: 20000 },
+  'CH-TI': { name: 'Tessin', lat: 46.3316, lng: 8.8004, r: 40000 },
+};
+
+// ─── Luxembourg ────────────────────────────────────────────
+export const REGIONS_LU = {
+  'lu-all': { name: 'Luxembourg', depts: ['LU-LU'] },
+};
+
+export const DEPTS_LU = {
+  'LU-LU': { name: 'Luxembourg', lat: 49.6117, lng: 6.1319, r: 35000 },
+};
+
+// ─── Helpers pour accéder aux données par pays ─────────────
+export function getRegionsForCountry(countryCode) {
+  const map = { FR: REGIONS, BE: REGIONS_BE, CH: REGIONS_CH, LU: REGIONS_LU };
+  return map[countryCode] || REGIONS;
+}
+
+export function getDeptsForCountry(countryCode) {
+  const map = { FR: DEPTS, BE: DEPTS_BE, CH: DEPTS_CH, LU: DEPTS_LU };
+  return map[countryCode] || DEPTS;
+}
+
+// Lookup global — cherche dans tous les pays
+export function getDeptData(code) {
+  return DEPTS[code] || DEPTS_BE[code] || DEPTS_CH[code] || DEPTS_LU[code] || null;
+}
+
+export function getCountryForDept(code) {
+  if (DEPTS[code]) return 'FR';
+  if (DEPTS_BE[code]) return 'BE';
+  if (DEPTS_CH[code]) return 'CH';
+  if (DEPTS_LU[code]) return 'LU';
+  return 'FR';
+}
+
 // ─── Régions et départements de France ─────────────────────
 // Chaque département a : name, lat/lng du chef-lieu, r (rayon de recherche en mètres)
 // Les régions servent au regroupement dans l'UI de sélection

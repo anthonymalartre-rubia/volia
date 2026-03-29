@@ -356,6 +356,129 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Email Verification Feature */}
+      <section className="py-24 px-6 border-t border-white/[0.06]">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left — Text */}
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400 mb-6">
+                <Shield size={12} />
+                Enterprise
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+                Vérifiez vos emails en masse avant d&apos;envoyer
+              </h2>
+              <p className="text-zinc-400 text-lg mb-8 leading-relaxed">
+                Importez votre base de données emails et vérifiez instantanément lesquels sont valides.
+                Plus besoin d&apos;envoyer pour savoir — notre vérification SMTP détecte les faux emails <strong className="text-zinc-200">sans envoyer un seul message</strong>.
+              </p>
+
+              <div className="space-y-4">
+                {[
+                  {
+                    icon: Mail,
+                    title: 'Vérification SMTP silencieuse',
+                    desc: 'On vérifie si la boîte mail existe via le protocole SMTP, sans envoyer d\'email. Aucun risque de bounce ou de blacklisting.',
+                  },
+                  {
+                    icon: Download,
+                    title: 'Import CSV en masse',
+                    desc: 'Importez des milliers d\'emails d\'un coup. Résultats en quelques minutes avec statut : valide, invalide, catch-all ou inconnu.',
+                  },
+                  {
+                    icon: Shield,
+                    title: 'Protégez votre réputation',
+                    desc: 'Un taux de bounce >5% peut blacklister votre domaine. Nettoyez votre base avant chaque campagne.',
+                  },
+                ].map((item) => (
+                  <div key={item.title} className="flex gap-4">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <item.icon size={16} className="text-emerald-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold mb-1">{item.title}</h4>
+                      <p className="text-xs text-zinc-500 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — Visual mock */}
+            <div className="relative">
+              <div className="absolute -inset-4 bg-gradient-to-br from-emerald-500/10 via-transparent to-violet-500/10 rounded-3xl blur-2xl pointer-events-none" />
+              <div className="relative rounded-2xl border border-white/[0.08] bg-[#0c0c12] p-6 space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                      <Mail size={14} className="text-emerald-400" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold">Vérification emails</div>
+                      <div className="text-[10px] text-zinc-600">2 847 emails importés</div>
+                    </div>
+                  </div>
+                  <div className="text-[10px] text-zinc-600 px-2 py-1 rounded bg-white/[0.03] border border-white/[0.06]">CSV importé</div>
+                </div>
+
+                {/* Progress bar */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[10px]">
+                    <span className="text-zinc-500">Progression</span>
+                    <span className="text-emerald-400 font-mono">100%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-white/[0.05] overflow-hidden">
+                    <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-400" style={{width: '100%'}} />
+                  </div>
+                </div>
+
+                {/* Stats grid */}
+                <div className="grid grid-cols-4 gap-3">
+                  {[
+                    { label: 'Valides', value: '2 103', pct: '73.8%', color: 'text-green-400', bg: 'bg-green-500/10' },
+                    { label: 'Invalides', value: '412', pct: '14.5%', color: 'text-red-400', bg: 'bg-red-500/10' },
+                    { label: 'Catch-all', value: '281', pct: '9.9%', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+                    { label: 'Inconnus', value: '51', pct: '1.8%', color: 'text-zinc-400', bg: 'bg-zinc-500/10' },
+                  ].map((stat) => (
+                    <div key={stat.label} className={`p-3 rounded-xl ${stat.bg} border border-white/[0.04] text-center`}>
+                      <div className={`text-lg font-bold font-mono ${stat.color}`}>{stat.value}</div>
+                      <div className="text-[10px] text-zinc-600 mt-0.5">{stat.label}</div>
+                      <div className={`text-[9px] font-mono mt-0.5 ${stat.color}/60`}>{stat.pct}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Sample rows */}
+                <div className="space-y-1.5">
+                  {[
+                    { email: 'contact@dupont-btp.fr', status: 'Valide', color: 'text-green-400', dot: 'bg-green-400' },
+                    { email: 'info@garage-martin.com', status: 'Valide', color: 'text-green-400', dot: 'bg-green-400' },
+                    { email: 'direction@inexistant.fr', status: 'Invalide', color: 'text-red-400', dot: 'bg-red-400' },
+                    { email: 'contact@hotel-riviera.fr', status: 'Catch-all', color: 'text-amber-400', dot: 'bg-amber-400' },
+                  ].map((row) => (
+                    <div key={row.email} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+                      <span className="text-xs text-zinc-400 font-mono">{row.email}</span>
+                      <div className="flex items-center gap-1.5">
+                        <div className={`w-1.5 h-1.5 rounded-full ${row.dot}`} />
+                        <span className={`text-[10px] font-medium ${row.color}`}>{row.status}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom CTA */}
+                <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+                  <span className="text-[10px] text-zinc-600">Coût : ~0,0005€/email via MillionVerifier</span>
+                  <span className="text-[10px] text-emerald-400 font-semibold">Exporter les valides →</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Full Competitor Comparison */}
       <section id="vs-concurrence" className="py-24 px-6 border-t border-white/[0.06]">
         <div className="max-w-5xl mx-auto">

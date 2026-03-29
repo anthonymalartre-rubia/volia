@@ -7,6 +7,10 @@ export const COUNTRIES = {
   BE: { name: 'Belgique', flag: '🇧🇪', code: 'be', zones: 11 },
   CH: { name: 'Suisse', flag: '🇨🇭', code: 'ch', zones: 26 },
   LU: { name: 'Luxembourg', flag: '🇱🇺', code: 'lu', zones: 1 },
+  DE: { name: 'Allemagne', flag: '🇩🇪', code: 'de', zones: 16 },
+  UK: { name: 'Royaume-Uni', flag: '🇬🇧', code: 'gb', zones: 12 },
+  ES: { name: 'Espagne', flag: '🇪🇸', code: 'es', zones: 17 },
+  IT: { name: 'Italie', flag: '🇮🇹', code: 'it', zones: 20 },
 };
 
 // ─── Belgique — Provinces ──────────────────────────────────
@@ -77,20 +81,135 @@ export const DEPTS_LU = {
   'LU-LU': { name: 'Luxembourg', lat: 49.6117, lng: 6.1319, r: 35000 },
 };
 
+// ─── Allemagne — Bundesländer ──────────────────────────────
+export const REGIONS_DE = {
+  'de-nord': { name: 'Nord', depts: ['DE-HH','DE-SH','DE-NI','DE-HB','DE-MV'] },
+  'de-ouest': { name: 'Ouest', depts: ['DE-NW','DE-HE','DE-RP','DE-SL'] },
+  'de-est': { name: 'Est', depts: ['DE-BE','DE-BB','DE-SN','DE-ST','DE-TH'] },
+  'de-sud': { name: 'Sud', depts: ['DE-BY','DE-BW'] },
+};
+
+export const DEPTS_DE = {
+  'DE-BE': { name: 'Berlin', lat: 52.5200, lng: 13.4050, r: 20000 },
+  'DE-HH': { name: 'Hambourg', lat: 53.5511, lng: 9.9937, r: 15000 },
+  'DE-HB': { name: 'Brême', lat: 53.0793, lng: 8.8017, r: 12000 },
+  'DE-NW': { name: 'Rhénanie-du-Nord-Westphalie', lat: 51.4332, lng: 7.6616, r: 60000 },
+  'DE-BY': { name: 'Bavière', lat: 48.7904, lng: 11.4979, r: 80000 },
+  'DE-BW': { name: 'Bade-Wurtemberg', lat: 48.6616, lng: 9.3501, r: 60000 },
+  'DE-NI': { name: 'Basse-Saxe', lat: 52.6367, lng: 9.8451, r: 70000 },
+  'DE-HE': { name: 'Hesse', lat: 50.6521, lng: 9.1624, r: 50000 },
+  'DE-SN': { name: 'Saxe', lat: 51.1045, lng: 13.2017, r: 50000 },
+  'DE-RP': { name: 'Rhénanie-Palatinat', lat: 49.9129, lng: 7.4500, r: 50000 },
+  'DE-SH': { name: 'Schleswig-Holstein', lat: 54.2194, lng: 9.6961, r: 50000 },
+  'DE-BB': { name: 'Brandebourg', lat: 52.4125, lng: 12.5316, r: 60000 },
+  'DE-ST': { name: 'Saxe-Anhalt', lat: 51.9503, lng: 11.6923, r: 50000 },
+  'DE-TH': { name: 'Thuringe', lat: 50.8610, lng: 11.0520, r: 45000 },
+  'DE-MV': { name: 'Mecklembourg-Poméranie', lat: 53.6127, lng: 12.4296, r: 60000 },
+  'DE-SL': { name: 'Sarre', lat: 49.3964, lng: 7.0230, r: 25000 },
+};
+
+// ─── Royaume-Uni — Régions ─────────────────────────────────
+export const REGIONS_UK = {
+  'uk-england-south': { name: 'South England', depts: ['UK-LON','UK-SE','UK-SW'] },
+  'uk-england-mid': { name: 'Midlands & East', depts: ['UK-WM','UK-EM','UK-EA'] },
+  'uk-england-north': { name: 'North England', depts: ['UK-NW','UK-NE','UK-YH'] },
+  'uk-nations': { name: 'Scotland, Wales & N. Ireland', depts: ['UK-SC','UK-WA','UK-NI'] },
+};
+
+export const DEPTS_UK = {
+  'UK-LON': { name: 'London', lat: 51.5074, lng: -0.1278, r: 25000 },
+  'UK-SE': { name: 'South East', lat: 51.3148, lng: -0.5600, r: 60000 },
+  'UK-SW': { name: 'South West', lat: 50.7184, lng: -3.5339, r: 70000 },
+  'UK-WM': { name: 'West Midlands', lat: 52.4862, lng: -1.8904, r: 50000 },
+  'UK-EM': { name: 'East Midlands', lat: 52.8311, lng: -1.3290, r: 50000 },
+  'UK-EA': { name: 'East of England', lat: 52.2405, lng: 0.9027, r: 60000 },
+  'UK-NW': { name: 'North West', lat: 53.4808, lng: -2.2426, r: 60000 },
+  'UK-NE': { name: 'North East', lat: 54.9783, lng: -1.6178, r: 45000 },
+  'UK-YH': { name: 'Yorkshire & Humber', lat: 53.9591, lng: -1.0815, r: 55000 },
+  'UK-SC': { name: 'Scotland', lat: 56.4907, lng: -4.2026, r: 100000 },
+  'UK-WA': { name: 'Wales', lat: 52.1307, lng: -3.7837, r: 70000 },
+  'UK-NI': { name: 'Northern Ireland', lat: 54.7877, lng: -6.4923, r: 60000 },
+};
+
+// ─── Espagne — Comunidades Autónomas ───────────────────────
+export const REGIONS_ES = {
+  'es-nord': { name: 'Nord', depts: ['ES-GA','ES-AS','ES-CB','ES-PV','ES-NA','ES-AR'] },
+  'es-est': { name: 'Est & Îles', depts: ['ES-CT','ES-VC','ES-MU','ES-IB'] },
+  'es-centre': { name: 'Centre', depts: ['ES-MD','ES-CL','ES-CM','ES-EX','ES-RI'] },
+  'es-sud': { name: 'Sud', depts: ['ES-AN','ES-CN'] },
+};
+
+export const DEPTS_ES = {
+  'ES-MD': { name: 'Madrid', lat: 40.4168, lng: -3.7038, r: 30000 },
+  'ES-CT': { name: 'Catalogne', lat: 41.3851, lng: 2.1734, r: 60000 },
+  'ES-AN': { name: 'Andalousie', lat: 37.3891, lng: -5.9845, r: 80000 },
+  'ES-VC': { name: 'Communaute valencienne', lat: 39.4699, lng: -0.3763, r: 60000 },
+  'ES-GA': { name: 'Galice', lat: 42.8782, lng: -8.5448, r: 60000 },
+  'ES-CL': { name: 'Castille-et-Leon', lat: 41.6523, lng: -4.7245, r: 80000 },
+  'ES-PV': { name: 'Pays basque', lat: 43.2630, lng: -2.9350, r: 35000 },
+  'ES-CN': { name: 'Canaries', lat: 28.1235, lng: -15.4363, r: 60000 },
+  'ES-CM': { name: 'Castille-La Manche', lat: 39.8628, lng: -4.0273, r: 70000 },
+  'ES-MU': { name: 'Murcie', lat: 37.9922, lng: -1.1307, r: 40000 },
+  'ES-AR': { name: 'Aragon', lat: 41.6488, lng: -0.8891, r: 65000 },
+  'ES-EX': { name: 'Estremadure', lat: 39.4937, lng: -6.0679, r: 65000 },
+  'ES-AS': { name: 'Asturies', lat: 43.3619, lng: -5.8494, r: 40000 },
+  'ES-IB': { name: 'Iles Baleares', lat: 39.5696, lng: 2.6502, r: 50000 },
+  'ES-NA': { name: 'Navarre', lat: 42.8169, lng: -1.6432, r: 40000 },
+  'ES-CB': { name: 'Cantabrie', lat: 43.1828, lng: -3.9878, r: 30000 },
+  'ES-RI': { name: 'La Rioja', lat: 42.2871, lng: -2.5396, r: 25000 },
+};
+
+// ─── Italie — Regioni ──────────────────────────────────────
+export const REGIONS_IT = {
+  'it-nord-ouest': { name: 'Nord-Ouest', depts: ['IT-LOM','IT-PIE','IT-LIG','IT-VDA'] },
+  'it-nord-est': { name: 'Nord-Est', depts: ['IT-VEN','IT-EMR','IT-FVG','IT-TAA'] },
+  'it-centre': { name: 'Centre', depts: ['IT-LAZ','IT-TOS','IT-UMB','IT-MAR'] },
+  'it-sud': { name: 'Sud', depts: ['IT-CAM','IT-PUG','IT-CAL','IT-ABR','IT-MOL','IT-BAS'] },
+  'it-iles': { name: 'Iles', depts: ['IT-SIC','IT-SAR'] },
+};
+
+export const DEPTS_IT = {
+  'IT-LOM': { name: 'Lombardie', lat: 45.4654, lng: 9.1859, r: 60000 },
+  'IT-LAZ': { name: 'Latium', lat: 41.9028, lng: 12.4964, r: 50000 },
+  'IT-CAM': { name: 'Campanie', lat: 40.8518, lng: 14.2681, r: 50000 },
+  'IT-VEN': { name: 'Venetie', lat: 45.4408, lng: 12.3155, r: 55000 },
+  'IT-SIC': { name: 'Sicile', lat: 37.6000, lng: 14.0154, r: 70000 },
+  'IT-EMR': { name: 'Emilie-Romagne', lat: 44.4949, lng: 11.3426, r: 60000 },
+  'IT-PIE': { name: 'Piemont', lat: 45.0703, lng: 7.6869, r: 55000 },
+  'IT-PUG': { name: 'Pouilles', lat: 41.1257, lng: 16.8666, r: 60000 },
+  'IT-TOS': { name: 'Toscane', lat: 43.7711, lng: 11.2486, r: 60000 },
+  'IT-CAL': { name: 'Calabre', lat: 38.9100, lng: 16.5880, r: 50000 },
+  'IT-SAR': { name: 'Sardaigne', lat: 39.2238, lng: 9.1217, r: 70000 },
+  'IT-LIG': { name: 'Ligurie', lat: 44.4056, lng: 8.9463, r: 40000 },
+  'IT-MAR': { name: 'Marches', lat: 43.6158, lng: 13.5189, r: 45000 },
+  'IT-ABR': { name: 'Abruzzes', lat: 42.3515, lng: 13.3920, r: 40000 },
+  'IT-FVG': { name: 'Frioul-Venetie Julienne', lat: 45.6361, lng: 13.8040, r: 40000 },
+  'IT-TAA': { name: 'Trentin-Haut-Adige', lat: 46.0748, lng: 11.1217, r: 45000 },
+  'IT-UMB': { name: 'Ombrie', lat: 42.7149, lng: 12.3896, r: 35000 },
+  'IT-BAS': { name: 'Basilicate', lat: 40.6395, lng: 15.8052, r: 40000 },
+  'IT-MOL': { name: 'Molise', lat: 41.5609, lng: 14.6685, r: 30000 },
+  'IT-VDA': { name: 'Vallee d\'Aoste', lat: 45.7375, lng: 7.3209, r: 25000 },
+};
+
 // ─── Helpers pour accéder aux données par pays ─────────────
+const ALL_REGIONS = { FR: null, BE: REGIONS_BE, CH: REGIONS_CH, LU: REGIONS_LU, DE: REGIONS_DE, UK: REGIONS_UK, ES: REGIONS_ES, IT: REGIONS_IT };
+const ALL_DEPTS = { FR: null, BE: DEPTS_BE, CH: DEPTS_CH, LU: DEPTS_LU, DE: DEPTS_DE, UK: DEPTS_UK, ES: DEPTS_ES, IT: DEPTS_IT };
+// Note: FR mapped to null here, resolved lazily below since REGIONS/DEPTS declared later
+
 export function getRegionsForCountry(countryCode) {
-  const map = { FR: REGIONS, BE: REGIONS_BE, CH: REGIONS_CH, LU: REGIONS_LU };
-  return map[countryCode] || REGIONS;
+  if (countryCode === 'FR') return REGIONS;
+  return ALL_REGIONS[countryCode] || REGIONS;
 }
 
 export function getDeptsForCountry(countryCode) {
-  const map = { FR: DEPTS, BE: DEPTS_BE, CH: DEPTS_CH, LU: DEPTS_LU };
-  return map[countryCode] || DEPTS;
+  if (countryCode === 'FR') return DEPTS;
+  return ALL_DEPTS[countryCode] || DEPTS;
 }
 
 // Lookup global — cherche dans tous les pays
 export function getDeptData(code) {
-  return DEPTS[code] || DEPTS_BE[code] || DEPTS_CH[code] || DEPTS_LU[code] || null;
+  return DEPTS[code] || DEPTS_BE[code] || DEPTS_CH[code] || DEPTS_LU[code]
+    || DEPTS_DE[code] || DEPTS_UK[code] || DEPTS_ES[code] || DEPTS_IT[code] || null;
 }
 
 export function getCountryForDept(code) {
@@ -98,6 +217,10 @@ export function getCountryForDept(code) {
   if (DEPTS_BE[code]) return 'BE';
   if (DEPTS_CH[code]) return 'CH';
   if (DEPTS_LU[code]) return 'LU';
+  if (DEPTS_DE[code]) return 'DE';
+  if (DEPTS_UK[code]) return 'UK';
+  if (DEPTS_ES[code]) return 'ES';
+  if (DEPTS_IT[code]) return 'IT';
   return 'FR';
 }
 
@@ -455,3 +578,32 @@ export const COPRO_CATS = Object.values(COPRO_GROUPS).flat();
 export const PLACES_API_URL = "https://places.googleapis.com/v1/places:searchText";
 
 export const FIELD_MASK = "places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount";
+
+// ─── Domaines email personnels (RGPD) — multi-pays ────────
+// Centralisé ici pour éviter la duplication dans les API routes
+export const PERSONAL_DOMAINS = new Set([
+  // International
+  'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'live.com', 'msn.com',
+  'aol.com', 'icloud.com', 'me.com', 'mac.com', 'protonmail.com', 'proton.me',
+  'mail.com', 'yandex.com', 'zoho.com', 'fastmail.com', 'tutanota.com',
+  // France
+  'yahoo.fr', 'hotmail.fr', 'outlook.fr', 'live.fr',
+  'orange.fr', 'free.fr', 'sfr.fr', 'laposte.net', 'wanadoo.fr',
+  'gmx.fr', 'bbox.fr', 'numericable.fr', 'neuf.fr',
+  // Allemagne
+  'web.de', 'gmx.de', 'gmx.net', 't-online.de', 'freenet.de',
+  'arcor.de', 'online.de', 'posteo.de', 'mailbox.org',
+  // Italie
+  'libero.it', 'virgilio.it', 'alice.it', 'tin.it', 'tiscali.it',
+  'fastwebnet.it', 'email.it', 'pec.it',
+  // Espagne
+  'telefonica.net', 'terra.es', 'ya.com', 'ono.com',
+  'hotmail.es', 'outlook.es', 'yahoo.es',
+  // Royaume-Uni
+  'btinternet.com', 'sky.com', 'talktalk.net', 'virginmedia.com',
+  'hotmail.co.uk', 'yahoo.co.uk', 'outlook.co.uk', 'live.co.uk',
+  // Belgique
+  'skynet.be', 'telenet.be', 'proximus.be', 'hotmail.be',
+  // Suisse
+  'bluewin.ch', 'sunrise.ch', 'gmx.ch',
+]);

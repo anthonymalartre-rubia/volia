@@ -1,15 +1,6 @@
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-
-// ─── Personal email filtering ───────────────────────────
-const PERSONAL_DOMAINS = new Set([
-  'gmail.com', 'yahoo.com', 'yahoo.fr', 'hotmail.com', 'hotmail.fr',
-  'outlook.com', 'outlook.fr', 'live.com', 'live.fr', 'msn.com',
-  'orange.fr', 'free.fr', 'sfr.fr', 'laposte.net', 'wanadoo.fr',
-  'aol.com', 'icloud.com', 'me.com', 'mac.com', 'protonmail.com',
-  'proton.me', 'gmx.com', 'gmx.fr', 'mail.com', 'yandex.com',
-  'zoho.com', 'fastmail.com', 'tutanota.com',
-]);
+import { PERSONAL_DOMAINS } from '@/lib/constants';
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
   const controller = new AbortController();

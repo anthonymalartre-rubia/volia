@@ -1,4 +1,5 @@
 import { getAuthenticatedUser } from '@/lib/auth';
+import { trackApiCall } from '@/lib/apiCosts';
 
 const APOLLO_API_URL = 'https://api.apollo.io/v1/people/match';
 
@@ -38,6 +39,7 @@ export async function POST(request) {
         reveal_personal_emails: false,
       }),
     });
+    trackApiCall('apollo', user.id, 'people/match');
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -63,6 +65,7 @@ export async function POST(request) {
           domain: domain || undefined,
         }),
       });
+      trackApiCall('apollo', user.id, 'organizations/enrich');
 
       if (orgResponse.ok) {
         const orgData = await orgResponse.json();

@@ -31,6 +31,13 @@ export async function GET() {
     const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
     // Run all queries in parallel
+    // Build last 6 months list
+    const last6Months = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      last6Months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
+    }
+
     const [
       profilesRes,
       prospectsCountRes,
@@ -39,6 +46,8 @@ export async function GET() {
       enrichmentSourcesRes,
       usageHistoryRes,
       prospectsByUserRes,
+      apiCostsThisMonthRes,
+      apiCostsHistoryRes,
     ] = await Promise.all([
       // All user profiles
       admin.from('user_profiles').select('id, plan, stripe_customer_id, created_at'),
@@ -50,17 +59,14 @@ export async function GET() {
       admin.from('usage_tracking').select('*').eq('month', currentMonth),
       // Enrichment sources breakdown
       admin.from('prospects').select('email_method'),
-      // Usage history last 6 months — get all recent months
-      (() => {
-        const months = [];
-        for (let i = 5; i >= 0; i--) {
-          const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-          months.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`);
-        }
-        return admin.from('usage_tracking').select('month, searches, enrichments, exports').in('month', months);
-      })(),
+      // Usage history last 6 months
+      admin.from('usage_tracking').select('month, searches, enrichments, exports').in('month', last6Months),
       // Prospect counts per user
       admin.from('prospects').select('user_id'),
+      // API costs this month
+      admin.from('api_usage_monthly').select('service, call_count, total_cost_cents').eq('month', currentMonth),
+      // API costs last 6 months
+      admin.from('api_usage_monthly').select('service, month, call_count, total_cost_cents').in('month', last6Months),
     ]);
 
     const profiles = profilesRes.data || [];
@@ -128,6 +134,30 @@ export async function GET() {
       prospects: prospectCountMap[u.user_id] || 0,
     }));
 
+    // API costs this month (per service)
+    const apiCostsThisMonth = {};
+    let totalApiCostCents = 0;
+    (apiCostsThisMonthRes.data || []).forEach(row => {
+      apiCostsThisMonth[row.service] = {
+        calls: row.call_count || 0,
+        cost_cents: parseFloat(row.total_cost_cents) || 0,
+      };
+      totalApiCostCents += parseFloat(row.total_cost_cents) || 0;
+    });
+
+    // API costs history (per month, all services aggregated)
+    const apiCostsHistory = {};
+    last6Months.forEach(m => { apiCostsHistory[m] = { total_cents: 0, services: {} }; });
+    (apiCostsHistoryRes.data || []).forEach(row => {
+      if (apiCostsHistory[row.month]) {
+        apiCostsHistory[row.month].total_cents += parseFloat(row.total_cost_cents) || 0;
+        apiCostsHistory[row.month].services[row.service] = {
+          calls: row.call_count || 0,
+          cost_cents: parseFloat(row.total_cost_cents) || 0,
+        };
+      }
+    });
+
     return NextResponse.json({
       global: {
         totalUsers: profiles.length,
@@ -144,6 +174,11 @@ export async function GET() {
       enrichmentSources,
       usageHistory,
       usagePerUser,
+      apiCosts: {
+        thisMonth: apiCostsThisMonth,
+        totalThisMonth: totalApiCostCents,
+        history: apiCostsHistory,
+      },
     });
   } catch (err) {
     console.error('Admin stats GET error:', err);

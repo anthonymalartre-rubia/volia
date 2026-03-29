@@ -1,6 +1,7 @@
 import { DEPTS, PLACES_API_URL, FIELD_MASK, getDeptData } from '@/lib/constants';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
+import { trackApiCall } from '@/lib/apiCosts';
 
 export async function GET() {
   // Health check — just checks if API key is set
@@ -86,6 +87,7 @@ export async function POST(request) {
     });
 
     clearTimeout(timeout);
+    trackApiCall('google_places', user.id, 'searchText');
 
     if (!response.ok) {
       const errorData = await response.text();

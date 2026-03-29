@@ -556,7 +556,95 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Row 3 — Top Users table */}
+                {/* Row 3 — API Costs */}
+                <div className="rounded-xl border border-line bg-surface-card p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <DollarSign className="h-4 w-4 text-amber-400" />
+                      <h2 className="text-sm font-semibold">Couts API ce mois</h2>
+                    </div>
+                    {dashboardStats.apiCosts && (
+                      <span className="text-lg font-bold text-amber-400">
+                        {(dashboardStats.apiCosts.totalThisMonth / 100).toFixed(2)} €
+                      </span>
+                    )}
+                  </div>
+                  {(() => {
+                    const apiCosts = dashboardStats.apiCosts?.thisMonth || {};
+                    const entries = Object.entries(apiCosts).sort((a, b) => b[1].cost_cents - a[1].cost_cents);
+                    const maxCost = entries.length > 0 ? Math.max(...entries.map(([, v]) => v.cost_cents)) : 1;
+                    const serviceColors = {
+                      google_places: { bar: 'bg-blue-500', text: 'Google Places' },
+                      anthropic: { bar: 'bg-amber-600', text: 'Anthropic Claude' },
+                      serper: { bar: 'bg-emerald-500', text: 'Serper.dev' },
+                      apollo: { bar: 'bg-violet-500', text: 'Apollo.io' },
+                      enrichly: { bar: 'bg-yellow-500', text: 'Enrichly' },
+                      anymail: { bar: 'bg-pink-500', text: 'Anymail Finder' },
+                      findymail: { bar: 'bg-teal-500', text: 'Findymail' },
+                      resend: { bar: 'bg-purple-500', text: 'Resend' },
+                      millionverifier: { bar: 'bg-orange-500', text: 'MillionVerifier' },
+                    };
+                    if (entries.length === 0) {
+                      return <p className="text-xs text-content-muted">Aucun appel API enregistre ce mois. Les couts seront visibles apres la prochaine utilisation.</p>;
+                    }
+                    return (
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        {/* Left: cost bars */}
+                        <div className="space-y-3">
+                          {entries.map(([service, data]) => {
+                            const info = serviceColors[service] || { bar: 'bg-gray-500', text: service };
+                            return (
+                              <div key={service}>
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-xs text-content-secondary">{info.text}</span>
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-[10px] font-mono text-content-muted">{data.calls.toLocaleString('fr-FR')} appels</span>
+                                    <span className="text-xs font-mono font-medium text-amber-400">{(data.cost_cents / 100).toFixed(2)} €</span>
+                                  </div>
+                                </div>
+                                <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
+                                  <div
+                                    className={`h-full rounded-full transition-all ${info.bar}`}
+                                    style={{ width: `${Math.max((data.cost_cents / maxCost) * 100, 2)}%` }}
+                                  />
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {/* Right: cost history (6 months) */}
+                        <div>
+                          <h3 className="text-xs text-content-muted mb-3 font-medium">Historique couts (6 mois)</h3>
+                          {(() => {
+                            const costHistory = dashboardStats.apiCosts?.history || {};
+                            const months = Object.keys(costHistory).sort();
+                            const maxMonthCost = Math.max(...months.map(m => costHistory[m].total_cents), 1);
+                            return (
+                              <div className="space-y-3">
+                                {months.map(m => (
+                                  <div key={m}>
+                                    <div className="flex items-center justify-between mb-1">
+                                      <span className="text-[10px] text-content-muted font-medium">{getMonthLabel(m)}</span>
+                                      <span className="text-xs font-mono font-medium text-content-secondary">{(costHistory[m].total_cents / 100).toFixed(2)} €</span>
+                                    </div>
+                                    <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
+                                      <div
+                                        className="h-full rounded-full bg-amber-500 transition-all"
+                                        style={{ width: `${Math.max((costHistory[m].total_cents / maxMonthCost) * 100, 1)}%` }}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Row 4 — Top Users table */}
                 <div className="rounded-xl border border-line bg-surface-card overflow-hidden">
                   <div className="px-5 py-4 border-b border-line flex items-center gap-2">
                     <Crown className="h-4 w-4 text-amber-400" />

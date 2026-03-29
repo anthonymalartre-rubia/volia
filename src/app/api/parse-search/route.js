@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
+import { trackApiCall } from '@/lib/apiCosts';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -46,6 +47,8 @@ Demande de l'utilisateur : "${query.trim()}"`,
         },
       ],
     });
+
+    trackApiCall('anthropic', null, 'messages.create');
 
     const text = message.content[0]?.text || "[]";
     const jsonMatch = text.match(/\[[\s\S]*\]/);

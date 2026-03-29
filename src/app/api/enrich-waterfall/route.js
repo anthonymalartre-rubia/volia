@@ -3,6 +3,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { createClient } from '@supabase/supabase-js';
 import { PERSONAL_DOMAINS } from '@/lib/constants';
+import { trackApiCall } from '@/lib/apiCosts';
 
 // ─── Timeout helper for external API calls ──────────────
 function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
@@ -141,6 +142,7 @@ async function apolloEnrich(domain, name) {
         },
       }
     );
+    trackApiCall('apollo', null, 'people/match');
     if (!res.ok) return null;
     const data = await res.json();
     if (data.person?.email) {
@@ -178,6 +180,7 @@ async function serperEnrich(name, domain) {
       headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
       body: JSON.stringify({ q: emailQuery, num: 10 }),
     });
+    trackApiCall('serper', null, 'search');
     if (!res.ok) return null;
     const data = await res.json();
 
@@ -213,6 +216,7 @@ async function serperLinkedinMatch(name, domain) {
       headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
       body: JSON.stringify({ q: query, num: 3 }),
     });
+    trackApiCall('serper', null, 'search/linkedin');
     if (!res.ok) return null;
     const data = await res.json();
     const linkedinUrl = data.organic?.find((r) =>
@@ -234,6 +238,7 @@ async function enrichlyEnrich(domain, name) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({ domain, company_name: name }),
     });
+    trackApiCall('enrichly', null, 'enrich');
     if (!res.ok) return null;
     const data = await res.json();
     if (data.email) {
@@ -255,6 +260,7 @@ async function anymailEnrich(domain) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({ domain }),
     });
+    trackApiCall('anymail', null, 'search/company');
     if (!res.ok) return null;
     const data = await res.json();
     if (data.email) {
@@ -279,6 +285,7 @@ async function findymailEnrich(domain, name) {
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
       body: JSON.stringify({ domain, company_name: name }),
     });
+    trackApiCall('findymail', null, 'search/company');
     if (!res.ok) return null;
     const data = await res.json();
     if (data.email) {

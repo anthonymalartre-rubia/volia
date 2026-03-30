@@ -156,6 +156,25 @@ export default function Dashboard() {
       const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
       const { getPlan } = await import('@/lib/plans');
 
+      // Supabase caps at 1000 rows per query — paginate to fetch all prospects
+      async function fetchAllProspects() {
+        const PAGE_SIZE = 1000;
+        let allData = [];
+        let from = 0;
+        while (true) {
+          const { data, error } = await supabase
+            .from('prospects')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .range(from, from + PAGE_SIZE - 1);
+          if (error || !data || data.length === 0) break;
+          allData = allData.concat(data);
+          if (data.length < PAGE_SIZE) break;
+          from += PAGE_SIZE;
+        }
+        return { data: allData, error: null };
+      }
+
       const [
         profileRes,
         usageRes,
@@ -172,7 +191,7 @@ export default function Dashboard() {
         supabase.from('lead_folders').select('*').order('created_at', { ascending: true }),
         supabase.from('lead_tags').select('*').order('name'),
         supabase.from('prospect_tags').select('prospect_id, tag_id'),
-        supabase.from('prospects').select('*').order('created_at', { ascending: false }).limit(50000),
+        fetchAllProspects(),
         supabase.from('search_sessions').select('*').order('created_at', { ascending: false }).limit(20),
       ]);
 

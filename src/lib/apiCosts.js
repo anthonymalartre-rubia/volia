@@ -6,9 +6,6 @@ export const API_COSTS = {
   anthropic:         { cost: 1.5,   label: 'Anthropic Claude',  color: '#D4A574' },
   serper:            { cost: 0.1,   label: 'Serper.dev',        color: '#22C55E' },
   apollo:            { cost: 3.0,   label: 'Apollo.io',         color: '#6366F1' },
-  enrichly:          { cost: 1.0,   label: 'Enrichly',          color: '#F59E0B' },
-  anymail:           { cost: 1.0,   label: 'Anymail Finder',    color: '#EC4899' },
-  findymail:         { cost: 1.0,   label: 'Findymail',         color: '#14B8A6' },
   resend:            { cost: 0.1,   label: 'Resend',            color: '#8B5CF6' },
   millionverifier:   { cost: 0.3,   label: 'MillionVerifier',   color: '#F97316' },
 };

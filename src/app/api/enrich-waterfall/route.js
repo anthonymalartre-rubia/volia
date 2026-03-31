@@ -296,70 +296,39 @@ async function serperLinkedinMatch(name, domain) {
   } catch { return null; }
 }
 
-// ─── Enrichly ($59/mo for 5000) ─────────────────────────
+// ─── Serper Domain Discovery ───────────────────────────
+// For prospects without a website, discover their domain via Google search
 
-async function enrichlyEnrich(domain, name) {
-  const apiKey = process.env.ENRICHLY_API_KEY;
-  if (!apiKey) return null;
+const SKIP_DOMAINS = new Set([
+  'facebook.com', 'instagram.com', 'twitter.com', 'linkedin.com', 'youtube.com',
+  'tiktok.com', 'pinterest.com', 'tripadvisor.com', 'tripadvisor.fr',
+  'pagesjaunes.fr', 'societe.com', 'infogreffe.fr', 'verif.com',
+  'google.com', 'google.fr', 'yelp.com', 'yelp.fr', 'horaires.lefigaro.fr',
+  'lafourchette.com', 'thefork.com', 'booking.com', 'airbnb.com', 'airbnb.fr',
+  'wikipedia.org', 'wikidata.org', 'kompass.com', 'mappy.com',
+]);
 
-  try {
-    const res = await fetchWithTimeout('https://api.enrichly.io/v1/enrich', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({ domain, company_name: name }),
-    });
-    trackApiCall('enrichly', null, 'enrich');
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data.email) {
-      return { email: data.email, source: 'enrichly' };
-    }
-  } catch {}
-  return null;
-}
-
-// ─── Anymail Finder ─────────────────────────────────────
-
-async function anymailEnrich(domain) {
-  const apiKey = process.env.ANYMAIL_API_KEY;
-  if (!apiKey) return null;
+async function serperDiscoverDomain(name) {
+  const apiKey = process.env.SERPER_API_KEY;
+  if (!apiKey || !name) return null;
 
   try {
-    const res = await fetchWithTimeout(`https://api.anymailfinder.com/v5.0/search/company.json`, {
+    const res = await fetchWithTimeout('https://google.serper.dev/search', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({ domain }),
+      headers: { 'Content-Type': 'application/json', 'X-API-KEY': apiKey },
+      body: JSON.stringify({ q: `"${name}" site officiel`, num: 5 }),
     });
-    trackApiCall('anymail', null, 'search/company');
+    trackApiCall('serper', null, 'search/domain-discovery');
     if (!res.ok) return null;
     const data = await res.json();
-    if (data.email) {
-      return { email: data.email, source: 'anymail' };
-    }
-    if (data.emails?.length > 0) {
-      return { email: data.emails[0], source: 'anymail' };
-    }
-  } catch {}
-  return null;
-}
 
-// ─── Findymail ──────────────────────────────────────────
-
-async function findymailEnrich(domain, name) {
-  const apiKey = process.env.FINDYMAIL_API_KEY;
-  if (!apiKey) return null;
-
-  try {
-    const res = await fetchWithTimeout('https://app.findymail.com/api/search/company', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-      body: JSON.stringify({ domain, company_name: name }),
-    });
-    trackApiCall('findymail', null, 'search/company');
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (data.email) {
-      return { email: data.email, source: 'findymail' };
+    for (const result of (data.organic || [])) {
+      try {
+        const hostname = new URL(result.link).hostname.replace(/^www\./, '');
+        if (!SKIP_DOMAINS.has(hostname) && hostname.includes('.')) {
+          return hostname;
+        }
+      } catch {}
     }
   } catch {}
   return null;
@@ -372,9 +341,6 @@ const WATERFALL_STEPS = [
   { name: 'serper', label: 'Serper.dev', fn: async (ctx) => serperEnrich(ctx.name, ctx.domain) },
   { name: 'apollo', label: 'Apollo.io', fn: async (ctx) => apolloEnrich(ctx.domain, ctx.name) },
   { name: 'apollo_org', label: 'Apollo Org', fn: async (ctx) => apolloOrgEnrich(ctx.domain, ctx.name) },
-  { name: 'enrichly', label: 'Enrichly', fn: async (ctx) => enrichlyEnrich(ctx.domain, ctx.name) },
-  { name: 'anymail', label: 'Anymail Finder', fn: async (ctx) => anymailEnrich(ctx.domain) },
-  { name: 'findymail', label: 'Findymail', fn: async (ctx) => findymailEnrich(ctx.domain, ctx.name) },
 ];
 
 export async function POST(request) {
@@ -409,6 +375,17 @@ export async function POST(request) {
       }
       validatedUrl = validation.url;
       domain = extractDomain(validatedUrl);
+    }
+
+    // If no URL/domain, discover domain via Google search
+    let discoveredDomain = false;
+    if (!domain && name) {
+      const found = await serperDiscoverDomain(name);
+      if (found) {
+        domain = found;
+        validatedUrl = `https://${found}`;
+        discoveredDomain = true;
+      }
     }
 
     const ctx = { url: validatedUrl, domain, name };

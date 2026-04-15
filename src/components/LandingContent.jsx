@@ -1,14 +1,17 @@
 'use client';
 
+import { lazy, Suspense } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3 } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
-import InteractiveDemo from '@/components/InteractiveDemo';
 import TypewriterText from '@/components/TypewriterText';
-import MouseParticles from '@/components/MouseParticles';
 import { useI18n } from '@/lib/i18n';
+
+// Lazy-load heavy components (canvas + demo)
+const MouseParticles = lazy(() => import('@/components/MouseParticles'));
+const InteractiveDemo = lazy(() => import('@/components/InteractiveDemo'));
 
 function formatPrice(cents) {
   if (cents === 0) return '0';
@@ -64,7 +67,7 @@ export default function LandingContent() {
       {/* Hero */}
       <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-28 px-4 sm:px-6 overflow-hidden">
         {/* Interactive particle background */}
-        <MouseParticles />
+        <Suspense fallback={null}><MouseParticles /></Suspense>
         {/* Background glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-violet-600/15 via-indigo-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-20 right-[10%] w-72 h-72 bg-violet-500/8 rounded-full blur-3xl pointer-events-none" />
@@ -108,7 +111,7 @@ export default function LandingContent() {
       </section>
 
       {/* Interactive Demo */}
-      <InteractiveDemo />
+      <Suspense fallback={null}><InteractiveDemo /></Suspense>
 
       {/* Why an aggregator */}
       <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">

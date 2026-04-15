@@ -164,7 +164,7 @@ export default function Dashboard() {
         while (true) {
           const { data, error } = await supabase
             .from('prospects')
-            .select('*')
+            .select('id,place_id,nom,adresse,telephone,email,email_method,site_web,note,nb_avis,type,departement,folder_id,search_session_id,created_at,updated_at')
             .order('created_at', { ascending: false })
             .range(from, from + PAGE_SIZE - 1);
           if (error || !data || data.length === 0) break;

@@ -19,8 +19,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: 'Prospectia.ai — Prospection B2B automatisée en France',
-  description: 'La plateforme de prospection B2B la plus abordable en France. 101 départements, recherche Google Places, enrichissement email en cascade, export CSV et Zoho CRM.',
+  title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
+  description: 'Prospection B2B automatisée : scraping intelligent + recherche Google. 150+ catégories, 101 départements, scoring de confiance, export CSV et Zoho CRM. À partir de 49€/mois.',
 };
 
 export default function RootLayout({ children }) {

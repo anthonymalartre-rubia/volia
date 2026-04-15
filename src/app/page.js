@@ -1,8 +1,8 @@
 import LandingContent from '@/components/LandingContent';
 
 export const metadata = {
-  title: 'Prospectia.ai — L\'agrégateur de prospection B2B le moins cher de France',
-  description: 'Agrégateur all-in-one : Apollo, Serper, Enrichly, Anymail, Findymail réunis en une seule plateforme. 150+ catégories, 101 départements, scoring IA. À partir de 49€/mois — 5x moins cher que la concurrence.',
+  title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
+  description: 'Prospectia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. 150+ catégories B2B, 101 départements, scoring de confiance. À partir de 49€/mois.',
 };
 
 export default function LandingPage() {

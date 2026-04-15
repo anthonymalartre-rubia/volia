@@ -19,8 +19,27 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata = {
-  title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
+  metadataBase: new URL('https://scraping-dom-ezdrive.vercel.app'),
+  title: {
+    default: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',
+    template: '%s | Prospectia.ai',
+  },
   description: 'Prospection B2B automatisée : scraping intelligent + recherche Google. 150+ catégories, 101 départements, scoring de confiance, export CSV et Zoho CRM. À partir de 49€/mois.',
+  keywords: ['prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'Zoho CRM', 'email professionnel'],
+  authors: [{ name: 'Prospectia.ai' }],
+  creator: 'Prospectia.ai',
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    siteName: 'Prospectia.ai',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -43,6 +43,7 @@ export default function LandingContent() {
   return (
     <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden" style={{'--c-bg-base':'9 9 11','--c-bg-card':'17 17 20','--c-bg-elevated':'30 30 36','--c-bg-alt':'13 13 16','--c-border':'30 30 36','--c-border-hover':'39 39 42','--c-text-primary':'250 250 250','--c-text-secondary':'161 161 170','--c-text-tertiary':'113 113 122','--c-text-muted':'82 82 91','--c-text-faint':'63 63 70'}}>
       {/* Navigation */}
+      <header>
       <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
@@ -63,7 +64,9 @@ export default function LandingContent() {
           </div>
         </div>
       </nav>
+      </header>
 
+      <main>
       {/* Hero */}
       <section className="relative pt-24 sm:pt-32 pb-16 sm:pb-28 px-4 sm:px-6 overflow-hidden">
         {/* Interactive particle background */}
@@ -649,6 +652,8 @@ export default function LandingContent() {
           <FooterCTA />
         </div>
       </section>
+
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-white/[0.06] py-12 px-6">

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /admin
+Disallow: /opt-out
+
+Sitemap: https://scraping-dom-ezdrive.vercel.app/sitemap.xml

@@ -3,12 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 
 const WORDS = [
-  "Apollo + Hunter + Snov.io",
-  "7 sources d'enrichissement",
+  "l'email de chaque entreprise",
+  "scraping + Google",
   "150+ catégories B2B",
-  "le scoring IA",
+  "un scoring de confiance",
   "101 départements",
-  "le waterfall email",
+  "49€/mois tout inclus",
 ];
 
 const TYPING_SPEED = 60;

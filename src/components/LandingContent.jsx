@@ -305,7 +305,7 @@ export default function LandingContent() {
             {[
               { value: '150+', label: t('landing.stats.categories'), sub: t('landing.stats.categoriesSub') },
               { value: '8', label: t('landing.stats.countries'), sub: '\u{1F1EB}\u{1F1F7} \u{1F1E7}\u{1F1EA} \u{1F1E8}\u{1F1ED} \u{1F1F1}\u{1F1FA} \u{1F1E9}\u{1F1EA} \u{1F1EC}\u{1F1E7} \u{1F1EA}\u{1F1F8} \u{1F1EE}\u{1F1F9}' },
-              { value: '7', label: t('landing.stats.sources'), sub: t('landing.stats.sourcesSub') },
+              { value: '2', label: t('landing.stats.sources'), sub: t('landing.stats.sourcesSub') },
               { value: '49\u20AC', label: t('landing.stats.vs'), sub: t('landing.stats.vsSub') },
             ].map((stat) => (
               <div key={stat.label}>

@@ -750,7 +750,7 @@ const en = {
     },
     // CTA
     cta: {
-      title: 'Stop paying for 3 tools. Switch to the aggregator.',
+      title: 'Find emails. Prospect. Convert.',
       desc: 'Scraping + Google, AI scoring, 150+ categories, 101 departments.',
       sub: 'Create your account in 30 seconds — no credit card required.',
     },

@@ -750,7 +750,7 @@ const fr = {
     },
     // CTA
     cta: {
-      title: 'Arretez de payer 3 outils. Passez a l\'agregateur.',
+      title: 'Trouvez les emails. Prospectez. Convertissez.',
       desc: 'Scraping + Google, scoring IA, 150+ categories, 101 departements.',
       sub: 'Creez votre compte en 30 secondes — aucune carte bancaire requise.',
     },

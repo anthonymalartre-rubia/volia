@@ -743,21 +743,23 @@ export default function Dashboard() {
                 : p
             )
           );
-          if (supabase) {
+          if (supabase && user) {
             const { error: saveError } = await supabase
               .from('prospects')
-              .update({ email: data.email, email_method: method })
-              .eq('id', prospect.id);
+              .update({ email: data.email, email_method: method, updated_at: new Date().toISOString() })
+              .eq('id', prospect.id)
+              .eq('user_id', user.id);
             if (saveError) {
-              console.error('Failed to save email for', prospect.id, saveError);
+              console.error('Failed to save email for', prospect.nom, saveError);
               // Retry once after 1s
               await new Promise(r => setTimeout(r, 1000));
               const { error: retryError } = await supabase
                 .from('prospects')
-                .update({ email: data.email, email_method: method })
-                .eq('id', prospect.id);
+                .update({ email: data.email, email_method: method, updated_at: new Date().toISOString() })
+                .eq('id', prospect.id)
+                .eq('user_id', user.id);
               if (retryError) {
-                console.error('Retry failed for', prospect.id, retryError);
+                console.error('Retry failed for', prospect.nom, retryError);
               }
             }
           }

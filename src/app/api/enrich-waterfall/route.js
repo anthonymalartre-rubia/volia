@@ -272,17 +272,17 @@ export async function POST(request) {
 
     if (url) {
       const validation = validateUrl(url);
-      if (!validation.valid) {
-        return Response.json({ error: validation.error }, { status: 400 });
-      }
-      validatedUrl = validation.url;
-      domain = extractDomain(validatedUrl);
+      if (validation.valid) {
+        validatedUrl = validation.url;
+        domain = extractDomain(validatedUrl);
 
-      // If the URL is a third-party site (booking, tripadvisor, etc.), treat as no URL
-      if (domain && SKIP_DOMAINS.has(domain)) {
-        validatedUrl = null;
-        domain = null;
+        // If the URL is a third-party site (booking, tripadvisor, etc.), treat as no URL
+        if (domain && SKIP_DOMAINS.has(domain)) {
+          validatedUrl = null;
+          domain = null;
+        }
       }
+      // If URL is invalid, continue with name-only (don't reject the request)
     }
 
     // If no URL/domain (or third-party URL), discover the real domain via Google search

@@ -105,6 +105,10 @@ export async function middleware(request) {
     pathname.startsWith('/confidentialite') ||
     pathname.startsWith('/rgpd') ||
     pathname.startsWith('/opt-out') ||
+    pathname.startsWith('/prospection') ||
+    pathname.startsWith('/vs') ||
+    pathname.startsWith('/alternative') ||
+    pathname.startsWith('/blog') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/auth');
 

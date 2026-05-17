@@ -1,4 +1,5 @@
 import { getAllSeoUrls } from '@/lib/slugs';
+import { getAllCompetitors } from '@/lib/competitors';
 
 /**
  * Dynamic sitemap generated at build time + ISR.
@@ -28,5 +29,12 @@ export default async function sitemap() {
     lastModified: now,
   }));
 
-  return [...staticPages, ...seoUrls];
+  // Competitor comparison pages (high-intent)
+  const competitors = getAllCompetitors();
+  const vsUrls = competitors.flatMap((c) => [
+    { url: `${baseUrl}/vs/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
+    { url: `${baseUrl}/alternative/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
+  ]);
+
+  return [...staticPages, ...seoUrls, ...vsUrls];
 }

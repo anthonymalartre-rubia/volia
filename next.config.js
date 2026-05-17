@@ -35,38 +35,10 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
 
-  // 301 redirects from old/secondary domains to the canonical one
-  async redirects() {
-    return [
-      // Redirect old Vercel preview URL to canonical
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'scraping-dom-ezdrive.vercel.app' }],
-        destination: 'https://prospectia.cloud/:path*',
-        permanent: true,
-      },
-      // Redirect getprospectia.com to canonical
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'getprospectia.com' }],
-        destination: 'https://prospectia.cloud/:path*',
-        permanent: true,
-      },
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.getprospectia.com' }],
-        destination: 'https://prospectia.cloud/:path*',
-        permanent: true,
-      },
-      // Redirect www.prospectia.cloud to non-www canonical
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.prospectia.cloud' }],
-        destination: 'https://prospectia.cloud/:path*',
-        permanent: true,
-      },
-    ];
-  },
+  // Redirections gérées nativement dans Vercel :
+  // - getprospectia.com → prospectia.cloud (configuré côté Vercel)
+  // - scraping-dom-ezdrive.vercel.app → prospectia.cloud (à configurer)
+  // - www.prospectia.cloud → prospectia.cloud (à configurer)
 };
 
 module.exports = nextConfig;

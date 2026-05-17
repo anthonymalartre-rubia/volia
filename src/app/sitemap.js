@@ -1,5 +1,6 @@
 import { getAllSeoUrls } from '@/lib/slugs';
 import { getAllCompetitors } from '@/lib/competitors';
+import { getAllPosts } from '@/lib/blog';
 
 /**
  * Dynamic sitemap generated at build time + ISR.
@@ -36,5 +37,14 @@ export default async function sitemap() {
     { url: `${baseUrl}/alternative/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
   ]);
 
-  return [...staticPages, ...seoUrls, ...vsUrls];
+  // Blog
+  const blogIndex = [{ url: `${baseUrl}/blog`, priority: 0.7, changeFrequency: 'weekly', lastModified: now }];
+  const blogPosts = getAllPosts().map((p) => ({
+    url: `${baseUrl}/blog/${p.slug}`,
+    priority: 0.6,
+    changeFrequency: 'monthly',
+    lastModified: new Date(p.publishedAt),
+  }));
+
+  return [...staticPages, ...seoUrls, ...vsUrls, ...blogIndex, ...blogPosts];
 }

@@ -7,6 +7,10 @@ export const metadata = {
   description: 'Prospectia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. 150+ catégories B2B, 101 départements, scoring de confiance. À partir de 49€/mois.',
   alternates: {
     canonical: SITE_URL,
+    languages: {
+      'fr-FR': SITE_URL,
+      'x-default': SITE_URL,
+    },
   },
   openGraph: {
     title: 'Prospectia.ai — Trouvez l\'email de n\'importe quelle entreprise en France',

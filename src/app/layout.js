@@ -42,6 +42,40 @@ export const metadata = {
   },
 };
 
+// Global Schema.org Organization — appliqué partout
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Prospectia',
+  alternateName: 'Prospectia.cloud',
+  url: 'https://prospectia.cloud',
+  logo: 'https://prospectia.cloud/icon.svg',
+  description: 'Plateforme de prospection B2B automatisée en France. Scraping intelligent + recherche Google pour trouver les emails professionnels.',
+  sameAs: [],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    email: 'contact@prospectia.cloud',
+    availableLanguage: ['French', 'English'],
+  },
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'FR',
+  },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Prospectia',
+  url: 'https://prospectia.cloud',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: 'https://prospectia.cloud/prospection?q={search_term_string}',
+    'query-input': 'required name=search_term_string',
+  },
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
@@ -55,6 +89,9 @@ export default function RootLayout({ children }) {
             } catch(e) {}
           })();
         `}} />
+        {/* Global Organization + WebSite schemas */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body className="bg-surface-base min-h-screen antialiased">
         <ThemeProvider>

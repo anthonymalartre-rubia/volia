@@ -6,6 +6,7 @@ import {
   getCategoryBySlug,
   getDepartmentBySlug,
 } from '@/lib/slugs';
+import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
 
 // IMPORTANT: This generates 150 × 101 = ~15 000 static pages at build time.
 // To keep build times reasonable, we use Next.js ISR (dynamicParams + revalidate)
@@ -119,14 +120,24 @@ export default async function CategoryDepartmentPage({ params }) {
     },
   ];
 
+  const breadcrumbs = [
+    { label: 'Accueil', href: '/' },
+    { label: 'Prospection B2B', href: '/prospection' },
+    { label: category.labelCapitalized, href: `/prospection/${catSlug}` },
+    { label: dept.name },
+  ];
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
+      breadcrumbSchema(breadcrumbs),
       {
         '@type': 'WebPage',
         name: title,
         description: intro,
         url: `https://prospectia.cloud/prospection/${catSlug}/${deptSlug}`,
+        inLanguage: 'fr-FR',
+        isPartOf: { '@id': 'https://prospectia.cloud/#website' },
       },
       {
         '@type': 'Service',
@@ -141,6 +152,12 @@ export default async function CategoryDepartmentPage({ params }) {
           name: dept.name,
           containedInPlace: { '@type': 'Country', name: 'France' },
         },
+        offers: {
+          '@type': 'Offer',
+          price: '49',
+          priceCurrency: 'EUR',
+          availability: 'https://schema.org/InStock',
+        },
       },
       {
         '@type': 'FAQPage',
@@ -153,6 +170,9 @@ export default async function CategoryDepartmentPage({ params }) {
     ],
   };
 
+  // Real-looking stats based on dept size + category density
+  const stats = estimateStats(dept, category);
+
   return (
     <>
       <script
@@ -164,21 +184,11 @@ export default async function CategoryDepartmentPage({ params }) {
         intro={intro}
         category={category}
         department={dept}
-        stats={{
-          total: '850+',
-          avgRating: 4.3,
-          withEmail: '78%',
-          withPhone: '93%',
-        }}
+        stats={stats}
         faq={faq}
         relatedCategories={relatedCategories}
         relatedDepartments={relatedDepartments}
-        breadcrumbs={[
-          { label: 'Accueil', href: '/' },
-          { label: 'Prospection B2B', href: '/prospection' },
-          { label: category.labelCapitalized, href: `/prospection/${catSlug}` },
-          { label: dept.name },
-        ]}
+        breadcrumbs={breadcrumbs}
       />
     </>
   );

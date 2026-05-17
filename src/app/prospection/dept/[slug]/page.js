@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import ProspectionSeoPage from '@/components/ProspectionSeoPage';
 import { getAllCategories, getAllDepartments, getDepartmentBySlug } from '@/lib/slugs';
+import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
 
 export async function generateStaticParams() {
   return getAllDepartments().map((dept) => ({ slug: dept.slug }));
@@ -78,14 +79,22 @@ export default async function DepartmentPage({ params }) {
     },
   ];
 
+  const breadcrumbs = [
+    { label: 'Accueil', href: '/' },
+    { label: 'Prospection B2B', href: '/prospection' },
+    { label: dept.name },
+  ];
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
+      breadcrumbSchema(breadcrumbs),
       {
         '@type': 'WebPage',
         name: title,
         description: intro,
         url: `https://prospectia.cloud/prospection/dept/${slug}`,
+        inLanguage: 'fr-FR',
       },
       {
         '@type': 'Place',
@@ -108,6 +117,13 @@ export default async function DepartmentPage({ params }) {
     ],
   };
 
+  const stats = estimateStats(dept, null);
+  // Inflate for dept view (all categories combined)
+  const inflatedStats = {
+    ...stats,
+    total: (parseInt(stats.total.replace(/\s/g, ''), 10) * 30).toLocaleString('fr-FR'),
+  };
+
   return (
     <>
       <script
@@ -119,20 +135,11 @@ export default async function DepartmentPage({ params }) {
         intro={intro}
         category={null}
         department={dept}
-        stats={{
-          total: '25 000+',
-          avgRating: 4.2,
-          withEmail: '76%',
-          withPhone: '94%',
-        }}
+        stats={inflatedStats}
         faq={faq}
         relatedCategories={relatedCategories}
         relatedDepartments={relatedDepartments}
-        breadcrumbs={[
-          { label: 'Accueil', href: '/' },
-          { label: 'Prospection B2B', href: '/prospection' },
-          { label: dept.name },
-        ]}
+        breadcrumbs={breadcrumbs}
       />
     </>
   );

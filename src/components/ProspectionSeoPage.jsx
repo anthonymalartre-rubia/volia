@@ -76,6 +76,7 @@ export default function ProspectionSeoPage({
           </div>
         )}
 
+        <article>
         {/* Hero / H1 */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-300 mb-6">
@@ -173,9 +174,9 @@ export default function ProspectionSeoPage({
             <div className="grid md:grid-cols-2 gap-8">
               {relatedCategories.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
+                  <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
                     Autres secteurs {department ? `à ${department.name}` : ''}
-                  </h3>
+                  </h2>
                   <ul className="space-y-2">
                     {relatedCategories.slice(0, 12).map((rc, i) => (
                       <li key={i}>
@@ -193,9 +194,9 @@ export default function ProspectionSeoPage({
               )}
               {relatedDepartments.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
+                  <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
                     {category ? `${category.labelPlural} dans d'autres départements` : 'Autres départements'}
-                  </h3>
+                  </h2>
                   <ul className="space-y-2">
                     {relatedDepartments.slice(0, 12).map((rd, i) => (
                       <li key={i}>
@@ -211,6 +212,43 @@ export default function ProspectionSeoPage({
                   </ul>
                 </div>
               )}
+            </div>
+          </section>
+        )}
+
+        {/* Bonus content cluster — internal linking massif */}
+        {(category || department) && (
+          <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
+              <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
+                Ressources prospection B2B
+              </h2>
+              <div className="grid md:grid-cols-3 gap-3 text-sm">
+                <Link href="/blog/trouver-email-entreprise-france" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                  <ArrowRight size={12} />
+                  Comment trouver l&apos;email d&apos;une entreprise
+                </Link>
+                <Link href="/blog/rgpd-prospection-b2b" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                  <ArrowRight size={12} />
+                  Guide RGPD pour la prospection B2B
+                </Link>
+                <Link href="/blog/cold-emailing-2026" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                  <ArrowRight size={12} />
+                  Cold emailing en 2026 : ce qui marche
+                </Link>
+                <Link href="/vs/apollo" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                  <ArrowRight size={12} />
+                  Prospectia vs Apollo.io
+                </Link>
+                <Link href="/vs/hunter" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                  <ArrowRight size={12} />
+                  Prospectia vs Hunter.io
+                </Link>
+                <Link href="/prospection" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                  <ArrowRight size={12} />
+                  Tous les secteurs disponibles
+                </Link>
+              </div>
             </div>
           </section>
         )}
@@ -235,6 +273,7 @@ export default function ProspectionSeoPage({
             <p className="text-xs text-zinc-500 mt-4">Aucune carte bancaire requise · 7 jours d'essai</p>
           </div>
         </section>
+        </article>
       </main>
 
       {/* Minimal footer */}

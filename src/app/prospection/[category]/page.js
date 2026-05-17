@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import ProspectionSeoPage from '@/components/ProspectionSeoPage';
 import { getAllCategories, getAllDepartments, getCategoryBySlug } from '@/lib/slugs';
+import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
 
 // Generate static pages at build time (1 per category)
 export async function generateStaticParams() {
@@ -83,15 +84,23 @@ export default async function CategoryPage({ params }) {
     },
   ];
 
+  const breadcrumbs = [
+    { label: 'Accueil', href: '/' },
+    { label: 'Prospection B2B', href: '/prospection' },
+    { label: category.labelCapitalized },
+  ];
+
   // JSON-LD ItemList + FAQPage
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
+      breadcrumbSchema(breadcrumbs),
       {
         '@type': 'WebPage',
         name: title,
         description: intro,
         url: `https://prospectia.cloud/prospection/${categorySlug}`,
+        inLanguage: 'fr-FR',
       },
       {
         '@type': 'FAQPage',
@@ -102,6 +111,13 @@ export default async function CategoryPage({ params }) {
         })),
       },
     ],
+  };
+
+  const stats = estimateStats(null, category);
+  // Inflate for category view (all France, not single dept)
+  const inflatedStats = {
+    ...stats,
+    total: (parseInt(stats.total.replace(/\s/g, ''), 10) * 50).toLocaleString('fr-FR'),
   };
 
   return (
@@ -115,20 +131,11 @@ export default async function CategoryPage({ params }) {
         intro={intro}
         category={category}
         department={null}
-        stats={{
-          total: '8 500+',
-          avgRating: 4.3,
-          withEmail: '78%',
-          withPhone: '92%',
-        }}
+        stats={inflatedStats}
         faq={faq}
         relatedCategories={relatedCategories}
         relatedDepartments={relatedDepartments}
-        breadcrumbs={[
-          { label: 'Accueil', href: '/' },
-          { label: 'Prospection B2B', href: '/prospection' },
-          { label: category.labelCapitalized },
-        ]}
+        breadcrumbs={breadcrumbs}
       />
     </>
   );

@@ -1008,7 +1008,7 @@ export default memo(function ResultsPanel({
             title={t('results.chooseColumns')}
           >
             <Columns3 size={14} />
-            <span className="hidden sm:inline">{t('results.columns')}</span>
+            <span className="hidden sm:inline">{t('results.columnsLabel')}</span>
           </button>
           {showColumnPicker && (
             <div className="absolute z-50 top-full mt-1 right-0 w-52 rounded-lg border border-line bg-surface-card shadow-xl py-1">

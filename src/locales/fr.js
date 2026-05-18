@@ -315,7 +315,7 @@ const fr = {
     cascadeStep7: '',
     stopsWhenFound: "S'arrete des qu'un email est trouve",
     // Column picker
-    columns: 'Colonnes',
+    columnsLabel: 'Colonnes',
     visibleColumns: 'Colonnes visibles',
     required: 'requis',
     // Export

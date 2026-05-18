@@ -1310,7 +1310,9 @@ export default memo(function ResultsPanel({
                   <div className="flex items-center gap-2 text-xs min-h-[32px]">
                     <Mail size={12} className="text-content-dim flex-shrink-0" />
                     <span className="text-content-dim">—</span>
-                    <span className="text-content-faint italic text-[10px]">{t('results.notFound')}</span>
+                    <span className={`italic text-[10px] ${p.email_method ? 'text-content-faint' : 'text-amber-600'}`}>
+                      {p.email_method ? t('results.notFound') : t('results.notEnrichedYet')}
+                    </span>
                   </div>
                 )}
                 {p.site_web && (
@@ -1550,7 +1552,9 @@ export default memo(function ResultsPanel({
                       ) : (
                         <span className="inline-flex items-center gap-1.5 text-[10px] text-content-dim">
                           <span>—</span>
-                          <span className="italic text-content-faint">{t('results.notFound')}</span>
+                          <span className={`italic ${p.email_method ? 'text-content-faint' : 'text-amber-600'}`}>
+                            {p.email_method ? t('results.notFound') : t('results.notEnrichedYet')}
+                          </span>
                         </span>
                       )}
                     </td>

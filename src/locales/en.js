@@ -331,6 +331,7 @@ const en = {
     emailQuality: 'Email quality:',
     // Table
     notFound: 'Not found',
+    notEnrichedYet: 'Not yet enriched',
     // Bulk actions
     selected: '{{count}} selected',
     deselect: 'Deselect',

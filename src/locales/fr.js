@@ -331,6 +331,7 @@ const fr = {
     emailQuality: 'Qualite email :',
     // Table
     notFound: 'Non trouve',
+    notEnrichedYet: 'Pas encore enrichi',
     // Bulk actions
     selected: '{{count}} selectionne{{plural}}',
     deselect: 'Deselectionner',

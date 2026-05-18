@@ -2,18 +2,21 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
-const ThemeContext = createContext({ theme: 'dark', toggle: () => {} });
+const ThemeContext = createContext({ theme: 'light', toggle: () => {} });
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('dark');
+  // Default theme is light. Users can toggle to dark, and the choice persists
+  // in localStorage. We still honor the OS preference for users who explicitly
+  // prefer dark mode (and haven't yet chosen).
+  const [theme, setTheme] = useState('light');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('theme');
     if (saved === 'light' || saved === 'dark') {
       setTheme(saved);
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      setTheme('light');
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
     }
     setMounted(true);
   }, []);

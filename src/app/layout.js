@@ -80,13 +80,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Prevent flash of wrong theme */}
+        {/* Prevent flash of wrong theme — default = light */}
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
             try {
               var t = localStorage.getItem('theme');
-              if (t === 'light') document.documentElement.classList.add('light');
-            } catch(e) {}
+              var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+              var useLight = t === 'light' || (!t && !prefersDark);
+              if (useLight) document.documentElement.classList.add('light');
+            } catch(e) {
+              document.documentElement.classList.add('light');
+            }
           })();
         `}} />
         {/* Global Organization + WebSite schemas */}

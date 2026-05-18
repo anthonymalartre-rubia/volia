@@ -392,7 +392,7 @@ const en = {
 
   // ─── Onboarding ────────────────────────────────────────────
   onboarding: {
-    welcome: 'Welcome to Prospectia.ai!',
+    welcome: 'Welcome to Prospectia!',
     welcomeDesc: 'Generate qualified B2B leads across France in just a few clicks.',
     step1Title: 'Choose your departments and categories',
     step1Desc: 'Launch an automatic search via Google Places to find prospects.',

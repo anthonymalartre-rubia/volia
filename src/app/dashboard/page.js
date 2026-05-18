@@ -340,10 +340,12 @@ export default function Dashboard() {
       for (const cat of coproCats) {
         taskList.push({ dept, deptName, category: cat, type: 'copro' });
       }
-    }
-    if (customQueries?.length > 0) {
-      for (const query of customQueries) {
-        taskList.push({ query, type: 'custom' });
+      // Les recherches custom (langage naturel) doivent aussi tourner sur
+      // CHAQUE département sélectionné, pas seulement le premier.
+      if (customQueries?.length > 0) {
+        for (const query of customQueries) {
+          taskList.push({ dept, deptName, query, type: 'custom' });
+        }
       }
     }
 

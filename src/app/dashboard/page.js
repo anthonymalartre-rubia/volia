@@ -27,6 +27,31 @@ function addLog(prev, message) {
   return { ...prev, logs };
 }
 
+// ─── Dashboard view ↔ URL mapping ────────────────────────────────────
+// Option B: les onglets du dashboard sont sync'd avec ?view=... pour
+// permettre les bookmarks, le browser back/forward, le partage de lien
+// et un tracking analytics granulaire par onglet.
+//
+// Les slugs URL sont volontairement plus parlants que les view IDs
+// internes (ex: "leads" vs id interne "results").
+const VIEW_TO_URL_SLUG = {
+  overview: null,    // pas de param → /dashboard (URL la plus propre par défaut)
+  search: 'search',
+  results: 'leads',
+  export: 'export',
+  verify: 'verify',
+};
+const URL_SLUG_TO_VIEW = Object.fromEntries(
+  Object.entries(VIEW_TO_URL_SLUG)
+    .filter(([, slug]) => slug !== null)
+    .map(([view, slug]) => [slug, view])
+);
+
+function buildDashboardUrl(view) {
+  const slug = VIEW_TO_URL_SLUG[view];
+  return slug ? `/dashboard?view=${slug}` : '/dashboard';
+}
+
 // Extract root domain from a URL for deduplication (e.g. "https://www.road.io/foo" → "road.io")
 function extractDomain(url) {
   if (!url) return null;
@@ -135,6 +160,9 @@ export default function Dashboard() {
   const [prospects, setProspects] = useState([]);
   const [folders, setFolders] = useState([]);
   const [activeFolder, setActiveFolder] = useState('all'); // 'all' | folder id
+  // activeView est sync'd avec ?view=... dans l'URL (voir handleViewChange
+  // plus bas et l'effet de sync URL→state). On initialise à 'overview' ;
+  // l'effet alignera l'état sur l'URL au premier render côté client.
   const [activeView, setActiveView] = useState('overview');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [apiKeySet, setApiKeySet] = useState(false);
@@ -171,6 +199,28 @@ export default function Dashboard() {
   const supabase = getSupabase();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // ─── Sync URL ↔ activeView ───────────────────────────────────────
+  // Source de vérité : l'URL. Quand ?view=X change (navigation utilisateur,
+  // bouton précédent/suivant, refresh, partage de lien), on aligne le
+  // state. Le handler handleViewChange ci-dessous push l'URL quand
+  // l'utilisateur clique sur un onglet.
+  useEffect(() => {
+    const urlSlug = searchParams.get('view');
+    const viewFromUrl = urlSlug ? (URL_SLUG_TO_VIEW[urlSlug] || 'overview') : 'overview';
+    if (viewFromUrl !== activeView) {
+      setActiveView(viewFromUrl);
+    }
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleViewChange = useCallback((view) => {
+    // Validation : on n'accepte que les vues connues, sinon fallback overview.
+    const safeView = VIEW_TO_URL_SLUG.hasOwnProperty(view) ? view : 'overview';
+    setActiveView(safeView);
+    const targetUrl = buildDashboardUrl(safeView);
+    // scroll:false → on garde la position de scroll en changeant d'onglet.
+    router.push(targetUrl, { scroll: false });
+  }, [router]);
 
   // Get current user and load data on mount
   useEffect(() => {
@@ -264,9 +314,11 @@ export default function Dashboard() {
       const forceOnboarding = searchParams.get('onboarding') === '1';
       if (forceOnboarding || (loadedProspects.length === 0 && !localStorage.getItem('onboarding_completed'))) {
         setShowOnboarding(true);
-        // Clean up the URL query param without reloading
+        // Clean up the `onboarding` URL param sans casser le `view` éventuel.
         if (forceOnboarding) {
-          router.replace('/dashboard', { scroll: false });
+          const currentView = searchParams.get('view');
+          const targetUrl = currentView ? `/dashboard?view=${currentView}` : '/dashboard';
+          router.replace(targetUrl, { scroll: false });
         }
       }
     };
@@ -360,7 +412,7 @@ export default function Dashboard() {
   const startScraping = useCallback(async (depts, b2bCats, coproCats, customQueries, folderId) => {
     stopSearchRef.current = false;
     setIsSearching(true);
-    setActiveView('search');
+    handleViewChange('search');
     setSearchProgress({ current: 0, total: 0, currentQuery: '', logs: [] });
 
     const taskList = [];
@@ -1049,7 +1101,7 @@ export default function Dashboard() {
         <div className="flex flex-col">
           <Sidebar
             activeView={activeView}
-            onViewChange={setActiveView}
+            onViewChange={handleViewChange}
             onClose={() => setSidebarOpen(false)}
             isOpen={sidebarOpen}
             prospectCount={prospects.length}
@@ -1089,7 +1141,7 @@ export default function Dashboard() {
                   onStopScraping={stopScraping}
                   folders={folders}
                   onCreateFolder={createFolder}
-                  onNavigateToLeads={() => setActiveView('results')}
+                  onNavigateToLeads={() => handleViewChange('results')}
                   totalProspects={prospects.length}
                 />
               )}
@@ -1139,7 +1191,7 @@ export default function Dashboard() {
         <Suspense fallback={null}>
           <OnboardingOverlay
             onClose={() => setShowOnboarding(false)}
-            onStartSearch={() => setActiveView('search')}
+            onStartSearch={() => handleViewChange('search')}
           />
         </Suspense>
       )}

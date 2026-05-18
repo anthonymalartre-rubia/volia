@@ -93,6 +93,12 @@ const fr = {
     stopSearch: 'Arreter',
     searchComplete: 'Recherche terminee !',
     newSearch: 'Nouvelle recherche',
+    searchCompleteTitle: 'Vos prospects sont prets',
+    searchCompleteSubtitleSingular: 'prospect ajoute a vos leads',
+    searchCompleteSubtitlePlural: 'prospects ajoutes a vos leads',
+    searchCompleteNextStep: 'Etape suivante : enrichissez les emails et exportez votre liste',
+    viewMyLeads: 'Voir mes leads',
+    viewMyLeadsWithCount: 'Voir mes {count} leads',
     initializing: 'Initialisation...',
     logs: 'Logs',
     // LinkedIn / Company search

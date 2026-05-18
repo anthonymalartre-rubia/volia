@@ -1023,6 +1023,8 @@ export default function Dashboard() {
                   onStopScraping={stopScraping}
                   folders={folders}
                   onCreateFolder={createFolder}
+                  onNavigateToLeads={() => setActiveView('results')}
+                  totalProspects={prospects.length}
                 />
               )}
               {activeView === 'results' && (

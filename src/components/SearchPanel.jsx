@@ -8,6 +8,7 @@ import {
   Plus, X, Play, RotateCcw, ChevronRight, FolderPlus, Folder, Zap,
   UtensilsCrossed, Briefcase, Building, Hotel, HardHat, ShoppingBag, ArrowRight,
   Lightbulb, Globe, User, Users, ExternalLink, Mail, Phone, Crown, Link2,
+  CheckCircle2,
 } from "lucide-react";
 
 // LinkedIn SVG icon (lucide-react doesn't include brand icons)
@@ -196,6 +197,8 @@ export default function SearchPanel({
   searchProgress,
   folders = [],
   onCreateFolder,
+  onNavigateToLeads,
+  totalProspects = 0,
 }) {
   const { t } = useI18n();
   const [step, setStep] = useState(0);
@@ -1451,25 +1454,66 @@ export default function SearchPanel({
             </BotMessage>
           )}
 
-          {/* Search complete */}
+          {/* Search complete — hero success card with primary CTA "Voir mes leads" */}
           {confirmed && !isSearching && (
-            <BotMessage icon={Sparkles}>
-              <div className="space-y-3">
-                <p>{t('search.searchComplete')}</p>
-                {searchProgress?.logs?.length > 0 && (
-                  <p className="text-content-muted text-xs">
-                    {searchProgress.logs[searchProgress.logs.length - 1]}
-                  </p>
-                )}
-                <button
-                  onClick={handleReset}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-line-hover text-sm text-content-muted hover:text-content-secondary hover:border-content-faint transition active:scale-[0.97]"
-                >
-                  <RotateCcw size={14} />
-                  {t('search.newSearch')}
-                </button>
+            <div className="pl-2 sm:pl-10 animate-in fade-in slide-in-from-bottom-2 duration-400">
+              <div className="relative overflow-hidden rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-indigo-500/10 p-5 sm:p-6">
+                {/* Decorative glow */}
+                <div className="pointer-events-none absolute -top-12 -right-12 w-48 h-48 rounded-full bg-emerald-500/20 blur-3xl" />
+                <div className="pointer-events-none absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-indigo-500/15 blur-3xl" />
+
+                <div className="relative">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                      <CheckCircle2 size={24} className="text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base sm:text-lg font-semibold text-content-primary leading-tight">
+                        {t('search.searchCompleteTitle')}
+                      </h3>
+                      <p className="mt-1 text-sm text-content-secondary">
+                        <span className="font-semibold text-emerald-500">
+                          {(searchProgress?.savedCount ?? searchProgress?.current ?? 0).toLocaleString('fr-FR')}
+                        </span>{' '}
+                        {(searchProgress?.savedCount ?? searchProgress?.current ?? 0) === 1
+                          ? t('search.searchCompleteSubtitleSingular')
+                          : t('search.searchCompleteSubtitlePlural')}
+                      </p>
+                      <p className="mt-2 text-xs text-content-muted">
+                        {t('search.searchCompleteNextStep')}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex flex-col sm:flex-row gap-2.5">
+                    <button
+                      onClick={() => onNavigateToLeads && onNavigateToLeads()}
+                      disabled={!onNavigateToLeads}
+                      className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 hover:from-indigo-500 hover:to-purple-500 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Users size={16} />
+                      {totalProspects > 0
+                        ? t('search.viewMyLeadsWithCount').replace('{count}', totalProspects.toLocaleString('fr-FR'))
+                        : t('search.viewMyLeads')}
+                      <ArrowRight size={16} />
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-line-hover bg-surface-card text-sm font-medium text-content-secondary hover:text-content-primary hover:border-content-faint hover:bg-surface-elevated transition-all active:scale-[0.98]"
+                    >
+                      <RotateCcw size={14} />
+                      {t('search.newSearch')}
+                    </button>
+                  </div>
+
+                  {searchProgress?.logs?.length > 0 && (
+                    <p className="mt-3 text-[11px] text-content-faint">
+                      {searchProgress.logs[searchProgress.logs.length - 1]}
+                    </p>
+                  )}
+                </div>
               </div>
-            </BotMessage>
+            </div>
           )}
         </div>
 

@@ -240,7 +240,7 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#08080c] flex items-center justify-center">
+      <div className="min-h-screen bg-surface-base flex items-center justify-center">
         <RefreshCw className="h-6 w-6 text-violet-400 animate-spin" />
       </div>
     );
@@ -250,7 +250,7 @@ export default function SettingsPage() {
   const planId = profile?.plan || 'free';
 
   return (
-    <div className="min-h-screen bg-[#08080c] text-content-primary">
+    <div className="min-h-screen bg-surface-base text-content-primary">
       {/* Toast */}
       {toast && (
         <div className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-lg animate-in fade-in slide-in-from-top-2 ${

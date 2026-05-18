@@ -48,7 +48,7 @@ function BotMessage({ children, icon: Icon, delay = 0 }) {
       <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0 mt-0.5">
         {Icon ? <Icon size={13} className="text-white" /> : <Sparkles size={13} className="text-white" />}
       </div>
-      <div className="flex-1 text-sm text-[#e4e4e7] leading-relaxed">{children}</div>
+      <div className="flex-1 text-sm text-content-primary leading-relaxed">{children}</div>
     </div>
   );
 }
@@ -1296,7 +1296,7 @@ export default function SearchPanel({
                         <button
                           key={f.id}
                           onClick={() => selectFolder(f)}
-                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-indigo-500/30 hover:text-[#e4e4e7] hover:bg-surface-elevated transition-all active:scale-[0.97]"
+                          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line-hover text-sm font-medium text-content-secondary hover:border-indigo-500/30 hover:text-content-primary hover:bg-surface-elevated transition-all active:scale-[0.97]"
                         >
                           <div className={`w-2.5 h-2.5 rounded-full ${folderColorClass(f.color)}`} />
                           {f.name}

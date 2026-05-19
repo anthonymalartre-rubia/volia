@@ -461,6 +461,8 @@ export default memo(function ResultsPanel({
   userPlan,
   onUpdateProspect,
   onDeleteProspect,
+  onBulkDeleteProspects,
+  onBulkUpdateProspects,
 }) {
   const { t } = useI18n();
   const [searchText, setSearchText] = useState("");
@@ -568,16 +570,37 @@ export default memo(function ResultsPanel({
   };
 
   const toggleSelectAll = () => {
-    if (selectedIds.size === displayProspects.length) {
-      setSelectedIds(new Set());
+    // Bug fix P1 #7 (cross-page) : avant on comparait selectedIds.size avec
+    // displayProspects.length (50 max par page). Cocher la page 1 puis aller
+    // en page 2 affichait à tort "tout coché" et clic = désélection globale.
+    // Maintenant on vérifie seulement les ids VISIBLES dans la page courante.
+    const visibleIds = displayProspects.map(p => p.id);
+    const allVisibleSelected = visibleIds.length > 0 && visibleIds.every(id => selectedIds.has(id));
+    if (allVisibleSelected) {
+      // Décocher uniquement les visibles, garder les autres pages cochées
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        for (const id of visibleIds) next.delete(id);
+        return next;
+      });
     } else {
-      setSelectedIds(new Set(displayProspects.map(p => p.id)));
+      // Cocher les visibles en plus de ce qui était déjà coché
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        for (const id of visibleIds) next.add(id);
+        return next;
+      });
     }
   };
 
   const deleteSelected = () => {
-    for (const id of selectedIds) {
-      onDeleteProspect?.(id);
+    // 1 seul round-trip Supabase pour N prospects (P1 perf).
+    const ids = Array.from(selectedIds);
+    if (onBulkDeleteProspects) {
+      onBulkDeleteProspects(ids);
+    } else {
+      // Fallback si la prop n'est pas passée
+      for (const id of ids) onDeleteProspect?.(id);
     }
     setSelectedIds(new Set());
   };
@@ -617,6 +640,30 @@ export default memo(function ResultsPanel({
 
   const isEnterprise = userPlan?.id === 'enterprise';
 
+
+  // Lookup map tag id → tag (P1 perf).
+  // Avant : tags.find(t => t.id === tagId) à chaque tag de chaque ligne à
+  // chaque re-render → O(P × T) sur 50 prospects × ~10 tags = 500 itérations
+  // de tableau par render. Maintenant O(1) sur le hash.
+  const tagsById = useMemo(
+    () => Object.fromEntries((tags || []).map((t) => [t.id, t])),
+    [tags]
+  );
+
+  // Liste dynamique des codes dépt présents dans les prospects (P1 bug fix).
+  // Avant : le dropdown utilisait DEPTS (FR uniquement, 101 codes), donc un
+  // prospect avec dept='BE-BRU' ou 'CH-GE' était impossible à filtrer.
+  // Maintenant on dérive la liste des dépts du contenu réel + libellé via DEPTS.
+  const availableDepts = useMemo(() => {
+    const codes = new Set();
+    for (const p of prospects) {
+      if (p.departement) codes.add(p.departement);
+    }
+    return [...codes].sort().map((code) => ({
+      code,
+      name: DEPTS[code]?.name || code,
+    }));
+  }, [prospects]);
 
   const folderProspects = useMemo(() => {
     // When in 'archived' view, show ONLY archived prospects
@@ -998,7 +1045,13 @@ export default memo(function ResultsPanel({
             <button
               onClick={() => {
                 if (!confirm(`Desarchiver ${folderProspects.length} prospect(s) ?`)) return;
-                folderProspects.forEach((p) => onUpdateProspect?.(p.id, { archived_at: null }));
+                // 1 seul round-trip pour N prospects (P1 perf).
+                const ids = folderProspects.map((p) => p.id);
+                if (onBulkUpdateProspects) {
+                  onBulkUpdateProspects(ids, { archived_at: null });
+                } else {
+                  folderProspects.forEach((p) => onUpdateProspect?.(p.id, { archived_at: null }));
+                }
               }}
               className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-surface-elevated text-content-secondary hover:bg-surface-active transition-all"
               title="Remettre ces prospects dans la liste active"
@@ -1166,8 +1219,8 @@ export default memo(function ResultsPanel({
           className="px-3 py-2.5 bg-surface-card border border-line rounded-xl text-xs text-content-tertiary focus:outline-none focus:border-indigo-500/30"
         >
           <option value="all">{t('results.allDepartments')}</option>
-          {Object.entries(DEPTS).map(([code, dept]) => (
-            <option key={code} value={code}>{code} {dept.name}</option>
+          {availableDepts.map(({ code, name }) => (
+            <option key={code} value={code}>{code} {name}</option>
           ))}
         </select>
         <select
@@ -1339,7 +1392,7 @@ export default memo(function ResultsPanel({
               <div className="mt-2 pl-8 flex items-center justify-between">
                 <div className="flex flex-wrap gap-1 items-center">
                   {(prospectTagMap?.[p.id] || []).map(tagId => {
-                    const tag = tags?.find(t => t.id === tagId);
+                    const tag = tagsById[tagId];
                     if (!tag) return null;
                     return (
                       <span
@@ -1385,15 +1438,17 @@ export default memo(function ResultsPanel({
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-line bg-surface-deep">
-                {/* Select all checkbox */}
+                {/* Select all checkbox — indicateur basé UNIQUEMENT sur la page
+                    visible (P1 bug fix). Sinon, cocher 50 sur page 1 puis aller
+                    en page 2 affichait à tort un check plein. */}
                 <th className="px-2 py-3 w-8">
                   <button
                     onClick={toggleSelectAll}
                     className="p-0.5 rounded hover:bg-surface-elevated transition"
                   >
-                    {selectedIds.size > 0 && selectedIds.size === displayProspects.length ? (
+                    {displayProspects.length > 0 && displayProspects.every(p => selectedIds.has(p.id)) ? (
                       <CheckSquare size={14} className="text-indigo-400" />
-                    ) : selectedIds.size > 0 ? (
+                    ) : displayProspects.some(p => selectedIds.has(p.id)) ? (
                       <div className="w-3.5 h-3.5 rounded border border-indigo-400 bg-indigo-400/20 flex items-center justify-center">
                         <div className="w-1.5 h-0.5 bg-indigo-400 rounded-full" />
                       </div>
@@ -1623,7 +1678,7 @@ export default memo(function ResultsPanel({
                     <td className="px-3 py-2">
                       <div className="flex flex-wrap gap-1 items-center">
                         {(prospectTagMap?.[p.id] || []).map(tagId => {
-                          const tag = tags?.find(t => t.id === tagId);
+                          const tag = tagsById[tagId];
                           if (!tag) return null;
                           return (
                             <span

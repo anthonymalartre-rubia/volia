@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 // Use service role to manage opt-out list
 function getSupabaseAdmin() {
@@ -11,10 +12,24 @@ function getSupabaseAdmin() {
 
 export async function POST(request) {
   try {
+    // Rate-limit anti-sabotage (P1 audit) : sans ça, n'importe qui peut
+    // POSTer en masse une liste d'emails connus et déclencher la suppression
+    // de tous les leads correspondants chez tous les utilisateurs.
+    // 3 req max / IP / heure suffit largement pour un usage légitime.
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
+    const rate = checkRateLimit(`opt-out:${ip}`, 3, 60 * 60 * 1000);
+    if (!rate.success) {
+      return NextResponse.json(
+        { error: 'Trop de demandes. Reessayez dans 1 heure.' },
+        { status: 429 }
+      );
+    }
+
     const { email, company, reason } = await request.json();
 
-    if (!email || !email.includes('@')) {
-      return NextResponse.json({ error: 'Email requis' }, { status: 400 });
+    // Validation email plus stricte
+    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return NextResponse.json({ error: 'Email invalide' }, { status: 400 });
     }
 
     const supabase = getSupabaseAdmin();

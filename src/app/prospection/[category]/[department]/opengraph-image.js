@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og';
 import { getCategoryBySlug, getDepartmentBySlug } from '@/lib/slugs';
 
 export const runtime = 'edge';
+export const revalidate = 86400; // cache 24h (P1 perf)
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

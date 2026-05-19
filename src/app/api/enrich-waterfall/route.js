@@ -5,6 +5,21 @@ import { createClient } from '@supabase/supabase-js';
 import { PERSONAL_DOMAINS } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
 
+// Client admin réutilisé entre invocations (P1 perf).
+// Avant : recréé à chaque check isOptedOut() → 50-100ms de setup par appel,
+// soit ~5s perdues sur un waterfall qui teste 80 prospects × 7 étapes.
+// On lazy-init pour ne pas planter le build si les env vars manquent.
+let _adminSupabase = null;
+function getAdminSupabase() {
+  if (!_adminSupabase) {
+    _adminSupabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+  }
+  return _adminSupabase;
+}
+
 // ─── Timeout helper for external API calls ──────────────
 function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
   const controller = new AbortController();
@@ -311,11 +326,7 @@ export async function POST(request) {
     async function isOptedOut(email) {
       if (!email) return false;
       try {
-        const adminSupabase = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL,
-          process.env.SUPABASE_SERVICE_ROLE_KEY
-        );
-        const { data } = await adminSupabase
+        const { data } = await getAdminSupabase()
           .from('opt_out_list')
           .select('email')
           .eq('email', email.toLowerCase().trim())

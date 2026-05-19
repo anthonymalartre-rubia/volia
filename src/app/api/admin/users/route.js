@@ -75,15 +75,33 @@ export async function POST(request) {
       }
 
       case 'set_password': {
+        // Validation serveur (P1 audit) : le client impose 6 chars dans le form
+        // mais c'est trivialement bypassable. On exige au moins 8 caractères
+        // pour les changements de password admin (bonne pratique NIST).
+        if (typeof data?.password !== 'string' || data.password.length < 8) {
+          return NextResponse.json(
+            { error: 'Mot de passe trop court (8 caracteres minimum)' },
+            { status: 400 }
+          );
+        }
+        if (data.password.length > 128) {
+          return NextResponse.json(
+            { error: 'Mot de passe trop long (128 caracteres maximum)' },
+            { status: 400 }
+          );
+        }
         // Directly set a new password (admin override)
         const { error } = await admin.auth.admin.updateUserById(userId, {
           password: data.password,
         });
-        if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+        if (error) return NextResponse.json({ error: 'Echec de la mise a jour du mot de passe' }, { status: 500 });
         return NextResponse.json({ success: true, message: 'Mot de passe mis a jour' });
       }
 
       case 'update_email': {
+        if (typeof data?.email !== 'string' || !data.email.includes('@')) {
+          return NextResponse.json({ error: 'Email invalide' }, { status: 400 });
+        }
         const { error } = await admin.auth.admin.updateUserById(userId, {
           email: data.email,
           email_confirm: true,

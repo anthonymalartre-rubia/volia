@@ -12,10 +12,23 @@ function getSupabaseAdmin() {
   );
 }
 
+// Validation anti open-redirect (P1 audit sécurité).
+// On n'accepte que des paths internes commençant par "/" mais pas "//"
+// (qui sont protocol-relative et peuvent envoyer vers un autre domaine).
+// On bloque aussi les caractères de contrôle (CR/LF) qui peuvent injecter
+// des headers Location.
+function safeRedirectPath(next) {
+  if (typeof next !== 'string') return '/dashboard';
+  if (!next.startsWith('/') || next.startsWith('//') || next.startsWith('/\\')) return '/dashboard';
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u001f\u007f]/.test(next)) return "/dashboard";
+  return next;
+}
+
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
-  const next = searchParams.get('next') || '/dashboard';
+  const next = safeRedirectPath(searchParams.get('next'));
 
   if (!code) {
     return NextResponse.redirect(`${origin}/login?error=missing_code`);

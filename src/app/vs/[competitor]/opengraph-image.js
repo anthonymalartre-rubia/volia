@@ -2,6 +2,9 @@ import { ImageResponse } from 'next/og';
 import { getCompetitor } from '@/lib/competitors';
 
 export const runtime = 'edge';
+// Cache 24h (P1 perf) : sans ça chaque hit crawler/social recompute l'image
+// (~200ms edge + facture Vercel). Désormais 1 compute / image / jour.
+export const revalidate = 86400;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

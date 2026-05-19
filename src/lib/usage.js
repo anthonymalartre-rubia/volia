@@ -43,9 +43,13 @@ export async function getUserPlan(supabase, userId) {
 }
 
 // Check if user can perform an action
+// Avant : 2 roundtrips séquentiels (getUserPlan puis getUsage) = ~300-600ms.
+// Cumulé sur un waterfall de 80 prospects = 24-48s perdus. Maintenant en parallèle.
 export async function checkLimit(supabase, userId, action) {
-  const plan = await getUserPlan(supabase, userId);
-  const usage = await getUsage(supabase, userId);
+  const [plan, usage] = await Promise.all([
+    getUserPlan(supabase, userId),
+    getUsage(supabase, userId),
+  ]);
   const limit = plan.limits[`${action}_per_month`];
   const current = usage[action] || 0;
 

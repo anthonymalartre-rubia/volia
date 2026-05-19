@@ -195,6 +195,10 @@ export default function Dashboard() {
   const stopSearchRef = useRef(false);
   const stopEnrichRef = useRef(false);
   const stopDeepEnrichRef = useRef(false);
+  // ID de la search_session active. Utilisé par le listener beforeunload
+  // pour marquer la session comme 'stopped' si l'onglet est fermé pendant
+  // un scraping en cours (audit P1 bug #9 — sessions zombies 'running').
+  const activeSessionIdRef = useRef(null);
 
   const supabase = getSupabase();
   const router = useRouter();
@@ -223,6 +227,28 @@ export default function Dashboard() {
   }, [router]);
 
   // Get current user and load data on mount
+  // Beforeunload : si l'utilisateur ferme l'onglet pendant un scraping,
+  // on marque la session comme 'stopped' au lieu de la laisser à 'running'
+  // à vie (audit P1 bug #9). On utilise navigator.sendBeacon() qui est conçu
+  // pour ce cas — la requête est garantie envoyée même si la page meurt.
+  useEffect(() => {
+    const handler = () => {
+      const sid = activeSessionIdRef.current;
+      if (!sid) return;
+      try {
+        const payload = new Blob(
+          [JSON.stringify({ session_id: sid })],
+          { type: 'application/json' }
+        );
+        navigator.sendBeacon('/api/sessions/mark-stopped', payload);
+      } catch {
+        // sendBeacon peut throw si la page est déjà détruite — ignoré.
+      }
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, []);
+
   useEffect(() => {
     const initializeApp = async () => {
       if (!supabase) return;
@@ -450,6 +476,9 @@ export default function Dashboard() {
         folder_id: folderId || null,
       }).select().single();
       session = sessionData;
+      // Tracker la session courante pour le listener beforeunload
+      // (cf. useEffect plus haut). Réinitialisé à null à la fin de la boucle.
+      activeSessionIdRef.current = session?.id || null;
     }
 
     const newProspects = [];
@@ -613,6 +642,8 @@ export default function Dashboard() {
       ]);
     }
 
+    // Reset le tracker beforeunload — la session est terminée proprement.
+    activeSessionIdRef.current = null;
     setIsSearching(false);
   }, [prospects, user, supabase]);
 
@@ -1017,6 +1048,43 @@ export default function Dashboard() {
     }
   }, [supabase]);
 
+  // Bulk delete (P1 perf) : avant, ResultsPanel itérait N fois deleteProspect
+  // → 100 prospects = 100 round-trips séquentiels (~10s). Maintenant 1 seul
+  // appel .delete().in('id', ids) → ~200ms peu importe la taille.
+  const deleteProspectsBulk = useCallback(async (ids) => {
+    if (!Array.isArray(ids) || ids.length === 0) return;
+    try {
+      const idSet = new Set(ids);
+      setProspects((prev) => prev.filter((p) => !idSet.has(p.id)));
+      if (supabase) {
+        await supabase.from('prospect_tags').delete().in('prospect_id', ids);
+        const { error } = await supabase.from('prospects').delete().in('id', ids);
+        if (error) console.error('Error bulk-deleting prospects:', error);
+      }
+    } catch (error) {
+      console.error('Error bulk-deleting prospects:', error);
+    }
+  }, [supabase]);
+
+  // Bulk update (P1 perf) : pareil pour "Désarchiver tout".
+  // updates = { archived_at: null } etc.
+  const updateProspectsBulk = useCallback(async (ids, updates) => {
+    if (!Array.isArray(ids) || ids.length === 0 || !updates) return;
+    try {
+      const idSet = new Set(ids);
+      setProspects((prev) => prev.map((p) => idSet.has(p.id) ? { ...p, ...updates } : p));
+      if (supabase) {
+        const { error } = await supabase
+          .from('prospects')
+          .update({ ...updates, updated_at: new Date().toISOString() })
+          .in('id', ids);
+        if (error) console.error('Error bulk-updating prospects:', error);
+      }
+    } catch (error) {
+      console.error('Error bulk-updating prospects:', error);
+    }
+  }, [supabase]);
+
   // CSV export with injection protection
   const downloadCSV = useCallback(async (format, filteredList) => {
     const list = filteredList || prospects;
@@ -1161,6 +1229,8 @@ export default function Dashboard() {
                   userPlan={userPlan}
                   onUpdateProspect={updateProspect}
                   onDeleteProspect={deleteProspect}
+                  onBulkDeleteProspects={deleteProspectsBulk}
+                  onBulkUpdateProspects={updateProspectsBulk}
                   tags={tags}
                   prospectTagMap={prospectTagMap}
                   onCreateTag={createTag}

@@ -1,13 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
-import { createClient } from '@supabase/supabase-js';
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-}
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 export async function DELETE() {
   try {

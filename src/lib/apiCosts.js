@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseAdmin } from './supabase-admin';
 
 // Cost per API call in euro cents (approximate)
 export const API_COSTS = {
@@ -9,16 +9,7 @@ export const API_COSTS = {
   millionverifier:   { cost: 0.3,   label: 'MillionVerifier',   color: '#F97316' },
 };
 
-let _admin = null;
-function getAdmin() {
-  if (!_admin) {
-    _admin = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-  }
-  return _admin;
-}
+const getAdmin = getSupabaseAdmin;
 
 function getCurrentMonth() {
   const now = new Date();

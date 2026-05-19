@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { PLANS } from '@/lib/plans';
 import { cleanEnv } from '@/lib/envClean';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 /**
  * POST /api/stripe/sync-subscription
@@ -27,13 +27,6 @@ function getStripe() {
     maxNetworkRetries: 1,
     timeout: 15000,
   });
-}
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
 }
 
 export async function POST() {

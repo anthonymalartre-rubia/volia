@@ -1,20 +1,13 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 import { sendEmail } from '@/lib/email';
 import { paymentSuccessEmail, subscriptionCancelledEmail } from '@/lib/emailTemplates';
 import { PLANS } from '@/lib/plans';
 import { cleanEnv } from '@/lib/envClean';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 function getStripe() {
   return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY));
-}
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
 }
 
 export async function POST(request) {

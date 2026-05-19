@@ -1,24 +1,13 @@
 import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { createClient } from '@supabase/supabase-js';
 import { PERSONAL_DOMAINS } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
-// Client admin réutilisé entre invocations (P1 perf).
-// Avant : recréé à chaque check isOptedOut() → 50-100ms de setup par appel,
-// soit ~5s perdues sur un waterfall qui teste 80 prospects × 7 étapes.
-// On lazy-init pour ne pas planter le build si les env vars manquent.
-let _adminSupabase = null;
-function getAdminSupabase() {
-  if (!_adminSupabase) {
-    _adminSupabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-  }
-  return _adminSupabase;
-}
+// Client admin réutilisé via le singleton de lib/supabase-admin (P1 perf
+// + immunité aux \n dans les env vars).
+const getAdminSupabase = getSupabaseAdmin;
 
 // ─── Timeout helper for external API calls ──────────────
 function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {

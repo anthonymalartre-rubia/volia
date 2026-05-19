@@ -1,16 +1,10 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { sendEmail } from '@/lib/email';
 import { welcomeEmail } from '@/lib/emailTemplates';
-
-function getSupabaseAdmin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
-}
+import { cleanEnv } from '@/lib/envClean';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 // Validation anti open-redirect (P1 audit sécurité).
 // On n'accepte que des paths internes commençant par "/" mais pas "//"
@@ -37,8 +31,8 @@ export async function GET(request) {
   // Create a Supabase client that can exchange the code
   const cookieStore = await cookies();
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_URL),
+    cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
     {
       cookies: {
         getAll() {

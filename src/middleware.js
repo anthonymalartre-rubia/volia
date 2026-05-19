@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import { checkRateLimit } from './lib/rateLimit';
+import { cleanEnv } from './lib/envClean';
 
 // Auth-related paths that should be rate-limited on POST
 const RATE_LIMITED_PATHS = ['/login', '/signup', '/forgot-password'];
@@ -123,8 +124,8 @@ export async function middleware(request) {
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_URL),
+    cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
     {
       cookies: {
         getAll() {

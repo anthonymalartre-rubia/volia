@@ -37,7 +37,7 @@ const FAQ_ITEMS = [
   {
     question: "Mes donnees sont-elles securisees ?",
     answer:
-      "Absolument. Vos donnees sont stockees sur Supabase avec chiffrement au repos et en transit. Nous sommes conformes au RGPD : vos leads vous appartiennent, vous pouvez les supprimer a tout moment. Aucune donnee n'est partagee avec des tiers.",
+      "Absolument. Toutes vos donnees sont chiffrees au repos et en transit (TLS 1.2+). Nous sommes conformes au RGPD : vos leads vous appartiennent, vous pouvez les exporter ou les supprimer a tout moment depuis votre dashboard. Aucune donnee n'est revendue ni partagee a des tiers commerciaux.",
   },
   {
     question: "Puis-je annuler a tout moment ?",

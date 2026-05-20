@@ -348,7 +348,7 @@ export default function ConfidentialitePage() {
                 <span className="text-content-primary font-medium">Data Privacy Framework (DPF)</span> : lorsque disponible,
                 nos fournisseurs américains sont certifiés au titre du EU-U.S. Data Privacy Framework (décision d&apos;adéquation
                 de la Commission européenne du 10 juillet 2023), offrant une protection supplémentaire. C&apos;est le cas
-                notamment de Google, Vercel, Supabase, Stripe et Apollo.io.
+                notamment de Google, Vercel, Supabase et Stripe.
               </li>
               <li>
                 <span className="text-content-primary font-medium">Royaume-Uni</span> : le Royaume-Uni bénéficie d&apos;une

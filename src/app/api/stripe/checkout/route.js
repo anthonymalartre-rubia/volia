@@ -80,6 +80,11 @@ export async function POST(request) {
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: stripePriceId, quantity: 1 }],
+      // Carte uniquement — on désactive Klarna (incompatible avec les abos
+      // récurrents), Amazon Pay (rare en B2B FR), et Link saved cards
+      // (qui pré-affiche des cartes d'autres SaaS, source de confusion).
+      // Pour réactiver Link plus tard : ['card', 'link'].
+      payment_method_types: ['card'],
       success_url: `${origin}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/dashboard?upgrade=cancelled`,
       // metadata sur la session : disponible dans checkout.session.completed

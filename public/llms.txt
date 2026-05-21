@@ -45,6 +45,7 @@ Prospectia est le seul outil français combinant **découverte (Google Places) +
 - Étude marché : https://prospectia.cloud/etude/prospection-b2b-france-2026
 - Annuaire outils prospection : https://prospectia.cloud/outils (14 outils analysés)
 - Comparatifs 1-vs-1 entre outils : https://prospectia.cloud/outils/comparatif (91 face-à-face uniques)
+- Ressources gratuites (templates, calculateurs, checklists) : https://prospectia.cloud/ressources (8 ressources téléchargeables)
 - Blog (37+ articles) : https://prospectia.cloud/blog
 - Guides sectoriels : https://prospectia.cloud/guide
 - Glossaire prospection B2B (60+ termes) : https://prospectia.cloud/glossaire

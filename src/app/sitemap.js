@@ -3,6 +3,7 @@ import { getAllCompetitors, getAllPairs } from '@/lib/competitors';
 import { getAllPosts } from '@/lib/blog';
 import { getAllGlossaryTerms } from '@/lib/glossary';
 import { getAllGuides } from '@/lib/guides';
+import { getAllResources } from '@/lib/resources';
 
 /**
  * Sitemap multi-fichiers via Next.js generateSitemaps().
@@ -107,7 +108,18 @@ export default async function sitemap({ id }) {
       })),
     ];
 
-    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...blog, ...glossary, ...guides];
+    // Ressources (hub + 8 lead magnets)
+    const ressources = [
+      { url: `${baseUrl}/ressources`, priority: 0.9, changeFrequency: 'weekly', lastModified: now },
+      ...getAllResources().map((r) => ({
+        url: `${baseUrl}/ressources/${r.slug}`,
+        priority: 0.8,
+        changeFrequency: 'monthly',
+        lastModified: now,
+      })),
+    ];
+
+    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...ressources, ...blog, ...glossary, ...guides];
   }
 
   // ─── Chunks SEO programmatiques ────────────────────────────────────

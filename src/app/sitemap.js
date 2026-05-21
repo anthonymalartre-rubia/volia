@@ -1,5 +1,5 @@
 import { getAllSeoUrls } from '@/lib/slugs';
-import { getAllCompetitors } from '@/lib/competitors';
+import { getAllCompetitors, getAllPairs } from '@/lib/competitors';
 import { getAllPosts } from '@/lib/blog';
 import { getAllGlossaryTerms } from '@/lib/glossary';
 import { getAllGuides } from '@/lib/guides';
@@ -62,10 +62,20 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/outils/${c.slug}`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
     ]);
 
-    // Hub /outils (index des 14 outils)
+    // Hub /outils (index des 14 outils) + hub des 91 comparatifs 1-vs-1
     const outilsHub = [
       { url: `${baseUrl}/outils`, priority: 0.8, changeFrequency: 'weekly', lastModified: now },
+      { url: `${baseUrl}/outils/comparatif`, priority: 0.8, changeFrequency: 'weekly', lastModified: now },
     ];
+
+    // 91 pages de comparatif 1-vs-1 entre les 14 outils (priority 0.6, plus
+    // élevée que les pages SEO programmatiques car contenu unique fort).
+    const pairsUrls = getAllPairs().map((p) => ({
+      url: `${baseUrl}/outils/comparatif/${p.slug}`,
+      priority: 0.6,
+      changeFrequency: 'monthly',
+      lastModified: now,
+    }));
 
     const blog = [
       { url: `${baseUrl}/blog`, priority: 0.7, changeFrequency: 'weekly', lastModified: now },
@@ -97,7 +107,7 @@ export default async function sitemap({ id }) {
       })),
     ];
 
-    return [...staticPages, ...outilsHub, ...vsUrls, ...blog, ...glossary, ...guides];
+    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...blog, ...glossary, ...guides];
   }
 
   // ─── Chunks SEO programmatiques ────────────────────────────────────

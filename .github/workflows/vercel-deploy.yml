@@ -39,6 +39,10 @@ jobs:
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      # Anticipe le passage forcé à Node 24 le 2 juin 2026 sur les runners
+      # GitHub. Évite un warning de deprecation sur actions/checkout@v4
+      # et actions/setup-node@v4 qui tournent encore sur Node 20.
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
     steps:
       - name: Checkout

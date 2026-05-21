@@ -4,7 +4,7 @@ import {
   ArrowLeft, Check, X, ExternalLink, Euro, Star, Zap, Sparkles,
   TrendingUp, ShieldCheck, Users, Globe,
 } from 'lucide-react';
-import { getCompetitor, getAllCompetitors } from '@/lib/competitors';
+import { getCompetitor, getAllCompetitors, getPairsFor } from '@/lib/competitors';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
@@ -48,6 +48,9 @@ export default async function OutilPage({ params }) {
   const alternatives = getAllCompetitors()
     .filter((other) => other.slug !== slug)
     .slice(0, 3);
+
+  // Les 13 comparatifs 1-vs-1 où cet outil apparaît
+  const pairsForThis = getPairsFor(slug);
 
   const savingsPct = Math.max(0, Math.round(((c.pricing - 19) / c.pricing) * 100));
   const isExpensive = c.pricing >= 100;
@@ -323,8 +326,35 @@ export default async function OutilPage({ params }) {
               href="/comparatif-outils-prospection-b2b-france"
               className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-violet-300 hover:text-violet-200 transition group"
             >
-              Voir le comparatif complet des 11 outils →
+              Voir le comparatif complet des 14 outils →
             </Link>
+          </section>
+
+          {/* Comparatifs 1-vs-1 où cet outil apparaît */}
+          <section className="mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 flex items-center gap-2">
+              {c.name} vs… <span className="text-base font-normal text-content-tertiary">{pairsForThis.length} comparatifs</span>
+            </h2>
+            <p className="text-content-secondary leading-relaxed mb-4">
+              Comparaison côte-à-côte avec chacun des autres outils analysés sur Prospectia :
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {pairsForThis.map((p) => {
+                const other = p.a.slug === c.slug ? p.b : p.a;
+                return (
+                  <Link
+                    key={p.slug}
+                    href={`/outils/comparatif/${p.slug}`}
+                    className="group rounded-xl border border-line bg-surface-card hover:bg-surface-elevated hover:border-violet-500/30 transition px-3 py-2 flex items-center gap-2"
+                  >
+                    <span className="text-content-tertiary text-xs">vs</span>
+                    <span className="text-sm font-medium text-content-primary group-hover:text-violet-400 transition truncate">
+                      {other.name}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
           </section>
 
           {/* CTA */}

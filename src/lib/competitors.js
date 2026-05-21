@@ -332,3 +332,74 @@ export function getCompetitor(slug) {
 export function getAllCompetitors() {
   return Object.values(COMPETITORS);
 }
+
+// ─── Helpers pour les comparatifs 1-vs-1 entre outils ────────────────────
+//
+// Pour 14 outils on a C(14,2) = 91 combinaisons uniques.
+// On normalise l'ordre alphabétique pour éviter le contenu dupliqué :
+// "apollo-vs-hunter" existe, "hunter-vs-apollo" redirige (côté page).
+
+/**
+ * Génère un slug de paire normalisé (ordre alphabétique).
+ * Ex: pairSlug('hunter', 'apollo') → 'apollo-vs-hunter'
+ */
+export function pairSlug(a, b) {
+  if (!a || !b || a === b) return null;
+  const [first, second] = [a, b].sort();
+  return `${first}-vs-${second}`;
+}
+
+/**
+ * Parse un slug de paire et retourne les 2 competitors.
+ * Ex: parsePairSlug('apollo-vs-hunter') → { a: {...}, b: {...} }
+ *
+ * Retourne aussi `canonical` = le slug normalisé pour permettre une
+ * redirection 301 si le slug n'est pas dans l'ordre alphabétique.
+ */
+export function parsePairSlug(slug) {
+  if (!slug || !slug.includes('-vs-')) return null;
+  // On split sur le 1er '-vs-' uniquement (sinon 'la-growth-machine-vs-X' casse)
+  const idx = slug.indexOf('-vs-');
+  const aSlug = slug.slice(0, idx);
+  const bSlug = slug.slice(idx + '-vs-'.length);
+  const a = COMPETITORS[aSlug];
+  const b = COMPETITORS[bSlug];
+  if (!a || !b || a === b) return null;
+  return {
+    a,
+    b,
+    canonical: pairSlug(a.slug, b.slug),
+  };
+}
+
+/**
+ * Liste toutes les paires uniques (ordre alphabétique). C(N, 2).
+ * Pour N = 14 → 91 paires.
+ */
+export function getAllPairs() {
+  const all = getAllCompetitors();
+  const pairs = [];
+  for (let i = 0; i < all.length; i++) {
+    for (let j = i + 1; j < all.length; j++) {
+      const a = all[i];
+      const b = all[j];
+      pairs.push({
+        slug: pairSlug(a.slug, b.slug),
+        a,
+        b,
+      });
+    }
+  }
+  return pairs;
+}
+
+/**
+ * Retourne toutes les paires impliquant un competitor donné.
+ * Utilisé pour le maillage interne depuis /outils/[X].
+ * Ex: getPairsFor('apollo') → 13 paires (apollo vs chacun des 13 autres).
+ */
+export function getPairsFor(competitorSlug) {
+  return getAllPairs().filter(
+    (p) => p.a.slug === competitorSlug || p.b.slug === competitorSlug
+  );
+}

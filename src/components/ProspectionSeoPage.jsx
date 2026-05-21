@@ -3,7 +3,7 @@ import { Search, MapPin, Mail, Phone, Globe, CheckCircle2, ArrowRight, Zap, Shie
 import {
   MarketSizeBlock, KpiBlock, PersonaBlock, SeasonalityBlock, BestApproachBlock,
   PitchBlock, ObjectionBlock, GlossaryBlock, PainPointsBlock, TopRegionsBlock,
-  DeptContextBlock, RegionContextBlock,
+  DeptContextBlock, RegionContextBlock, DeptOverviewBlock, SiblingCitiesBlock,
 } from './ProspectionContentBlocks';
 
 /**
@@ -37,6 +37,11 @@ export default function ProspectionSeoPage({
   deptData = null,       // depuis dept-data.js (combinaison cat × dept)
   regionData = null,     // depuis region-data.js (combinaison cat × région)
   region = null,         // { slug, name }
+  // ── Pour pages dept-only (sans catégorie) : vue d'ensemble du territoire ──
+  deptOverviewCategories = null, // [{ label, href }] catégories phares du dept
+  // ── Pour pages /[cat]/ville/[city] : autres villes du même dept ──
+  siblingCities = null, // [{ slug, name, pop }] villes du même dept (toutes, current incluse)
+  currentCitySlug = null,
 }) {
   const heroBadge = department && category
     ? `${category.labelCapitalized} • ${department.name}`
@@ -161,9 +166,18 @@ export default function ProspectionSeoPage({
         {/* Taille du marché */}
         <MarketSizeBlock data={categoryData} category={category} />
 
-        {/* Context géo (uniquement sur les pages avec dept ou region) */}
-        <DeptContextBlock deptData={deptData} dept={department} category={category} />
-        <RegionContextBlock regionData={regionData} region={region} category={category} />
+        {/* Pages /dept/[slug] sans catégorie : vue d'ensemble territoriale */}
+        {!category && deptData && (
+          <DeptOverviewBlock
+            deptData={deptData}
+            dept={department}
+            popularCategories={deptOverviewCategories || []}
+          />
+        )}
+
+        {/* Context géo (uniquement sur les pages avec catégorie + dept ou region) */}
+        {category && <DeptContextBlock deptData={deptData} dept={department} category={category} />}
+        {category && <RegionContextBlock regionData={regionData} region={region} category={category} />}
 
         {/* KPIs sectoriels */}
         <KpiBlock data={categoryData} category={category} />
@@ -188,6 +202,11 @@ export default function ProspectionSeoPage({
 
         {/* Top régions (seulement sur les pages catégorie nationales — pas si déjà sur une page geo) */}
         {!department && !region && <TopRegionsBlock data={categoryData} category={category} />}
+
+        {/* Autres villes du même dept (uniquement sur pages /[cat]/ville/[city]) */}
+        {siblingCities?.length > 0 && category && (
+          <SiblingCitiesBlock cities={siblingCities} category={category} currentCitySlug={currentCitySlug} />
+        )}
 
         {/* Glossaire métier */}
         <GlossaryBlock data={categoryData} category={category} />

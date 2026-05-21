@@ -418,6 +418,167 @@ export function RegionContextBlock({ regionData, region, category }) {
   );
 }
 
+// ─── 12bis. Block DeptOverview — pages /dept/[slug] sans cat ─
+// Vue d'ensemble exhaustive du département : aucune catégorie ciblée,
+// donc on montre la richesse économique + 12 catégories d'entrée.
+export function DeptOverviewBlock({ deptData, dept, popularCategories = [] }) {
+  if (!deptData || !dept) return null;
+
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+        <Building2 size={22} className="text-violet-400" />
+        Le tissu économique du {dept.name}
+      </h2>
+      <p className="text-zinc-400 mb-6 max-w-3xl text-sm leading-relaxed">
+        Profil du département pour calibrer votre ciblage commercial : densité, secteurs phares, entreprises emblématiques.
+      </p>
+
+      {/* Bandeau profil + champions */}
+      <div className="grid md:grid-cols-2 gap-4 mb-4">
+        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <MapPin size={11} />
+            Profil démographique & économique
+          </div>
+          <dl className="space-y-2 text-sm">
+            <div className="flex justify-between gap-3 pb-2 border-b border-white/[0.04]">
+              <dt className="text-zinc-500">Population</dt>
+              <dd className="text-zinc-100 font-semibold tabular-nums">{deptData.population}</dd>
+            </div>
+            <div className="flex justify-between gap-3 pb-2 border-b border-white/[0.04]">
+              <dt className="text-zinc-500">Densité</dt>
+              <dd className="text-zinc-200 font-medium text-right max-w-[60%]">{deptData.density}</dd>
+            </div>
+            <div className="flex justify-between gap-3 pb-2 border-b border-white/[0.04]">
+              <dt className="text-zinc-500">Top villes</dt>
+              <dd className="text-zinc-200 font-medium text-right max-w-[60%]">{deptData.topCities?.join(', ')}</dd>
+            </div>
+            <div className="flex justify-between gap-3">
+              <dt className="text-zinc-500">Positionnement</dt>
+              <dd className="text-violet-300 font-medium text-right max-w-[60%]">{deptData.economy?.tag}</dd>
+            </div>
+          </dl>
+          {deptData.economy?.comment && (
+            <p className="text-xs text-zinc-400 leading-relaxed mt-4 pt-3 border-t border-white/[0.04]">
+              {deptData.economy.comment}
+            </p>
+          )}
+        </div>
+
+        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <Target size={11} />
+            Secteurs phares
+          </div>
+          <ul className="space-y-2 mb-4">
+            {deptData.keySectors?.map((s, i) => (
+              <li key={i} className="text-sm text-zinc-200 flex items-start gap-2">
+                <ArrowRight size={11} className="text-violet-400 flex-shrink-0 mt-1" />
+                <span>{s}</span>
+              </li>
+            ))}
+          </ul>
+          {deptData.notableCompanies?.length > 0 && (
+            <>
+              <div className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+                Entreprises emblématiques
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {deptData.notableCompanies.map((c, i) => (
+                  <span key={i} className="px-2.5 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-[11px] text-violet-200">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Highlight éco */}
+      {deptData.economicNote && (
+        <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/[0.04] p-4 mb-4">
+          <div className="text-xs font-semibold text-indigo-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <Lightbulb size={11} />
+            À retenir
+          </div>
+          <p className="text-sm text-zinc-200 leading-relaxed">{deptData.economicNote}</p>
+        </div>
+      )}
+
+      {/* Conseil prospection local */}
+      {deptData.prospectingTip && (
+        <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.04] p-4 mb-6">
+          <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <Lightbulb size={11} />
+            Conseil de prospection local
+          </div>
+          <p className="text-sm text-zinc-200 leading-relaxed">{deptData.prospectingTip}</p>
+        </div>
+      )}
+
+      {/* Entrées catégories phares */}
+      {popularCategories.length > 0 && (
+        <div>
+          <h3 className="text-base font-semibold text-zinc-100 mb-3 mt-6">
+            Explorer par secteur dans le {dept.name}
+          </h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
+            {popularCategories.slice(0, 12).map((c, i) => (
+              <Link
+                key={i}
+                href={c.href}
+                className="group rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-violet-500/30 hover:bg-violet-500/[0.05] p-3 transition flex items-center justify-between gap-2"
+              >
+                <span className="text-sm text-zinc-200 group-hover:text-white transition truncate">{c.label}</span>
+                <ArrowRight size={12} className="text-zinc-500 group-hover:text-violet-400 transition flex-shrink-0" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ─── 12ter. Block SiblingCities — autres villes du même dept ─
+// Sur les pages /[cat]/ville/[city], affiche les autres villes du dept
+// pour le même secteur. Maillage interne + utilité user.
+export function SiblingCitiesBlock({ cities = [], category, currentCitySlug }) {
+  const siblings = (cities || []).filter((c) => c.slug !== currentCitySlug);
+  if (siblings.length === 0 || !category) return null;
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+        <MapPin size={22} className="text-violet-400" />
+        {category.labelCapitalized} dans les autres villes du département
+      </h2>
+      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+        Élargissez votre ciblage aux communes voisines, classées par population.
+      </p>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
+        {siblings.slice(0, 12).map((c) => (
+          <Link
+            key={c.slug}
+            href={`/prospection/${category.slug}/ville/${c.slug}`}
+            className="group rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-violet-500/30 hover:bg-violet-500/[0.05] p-3 transition"
+          >
+            <div className="text-sm font-medium text-zinc-100 group-hover:text-white transition truncate">
+              {category.labelCapitalized} {c.name}
+            </div>
+            {c.pop && (
+              <div className="text-[11px] text-zinc-500 mt-0.5 tabular-nums">
+                {(c.pop / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 0 })} k hab.
+              </div>
+            )}
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ─── 12. Block top regions (pour pages /[cat]) ─────────
 export function TopRegionsBlock({ data, category }) {
   if (!data?.topRegions?.length) return null;

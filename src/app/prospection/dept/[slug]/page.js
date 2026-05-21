@@ -156,6 +156,7 @@ export default async function DepartmentPage({ params }) {
         relatedDepartments={relatedDepartments}
         breadcrumbs={breadcrumbs}
         deptData={getDeptData(dept.code)}
+        deptOverviewCategories={catLinksThisDept}
       />
     </>
   );

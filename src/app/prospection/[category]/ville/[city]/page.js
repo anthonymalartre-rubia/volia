@@ -181,6 +181,8 @@ export default async function CategoryCityPage({ params }) {
         breadcrumbs={breadcrumbs}
         categoryData={getCategoryData(category)}
         deptData={getDeptData(city.dept)}
+        siblingCities={getCitiesByDept(city.dept).sort((a, b) => (b.pop || 0) - (a.pop || 0))}
+        currentCitySlug={city.slug}
       />
     </>
   );

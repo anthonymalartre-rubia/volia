@@ -25,6 +25,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Hyper-concentré', comment: 'L\'Île-de-France produit 31 % du PIB français sur 2 % du territoire. Marché ultra-compétitif mais profondeur unique.' },
     bestForProspecting: 'Cycle de décision rapide, ICP très éduqués sur les outils. Différenciation = verticalisation (par secteur) et timing exact.',
+    flagshipCompanies: ['LVMH', 'BNP Paribas', 'L\'Oréal', 'Sanofi', 'TotalEnergies', 'AXA', 'Société Générale', 'Renault'],
+    economicHighlight: '13 sièges du CAC 40 + Station F (1 000 startups) + La Défense (1er quartier d\'affaires européen).',
   },
   'aura': {
     population: '8,1 M',
@@ -39,6 +41,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Industriel + tertiaire', comment: 'Région la plus diversifiée économiquement de France, équilibre industrie/services/agriculture.' },
     bestForProspecting: 'Préférer Lyon pour les services, Grenoble pour la deep tech, vallée du Rhône pour l\'industrie.',
+    flagshipCompanies: ['Sanofi Pasteur', 'STMicroelectronics', 'Michelin', 'BioMérieux', 'Schneider Electric', 'Crédit Agricole CIB', 'Renault Trucks'],
+    economicHighlight: '2e PIB régional + 60 % du domaine skiable français + 12 000 emplois Michelin à Clermont-Ferrand.',
   },
   'paca': {
     population: '5,1 M',
@@ -53,6 +57,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Méditerranéen contrasté', comment: 'Très forte saisonnalité côté tourisme, mais filières techno solides hors saison.' },
     bestForProspecting: 'Démarcher hors haute saison touristique (oct-avril). Sophia Antipolis et Marseille = vrais bassins B2B.',
+    flagshipCompanies: ['CMA CGM', 'Airbus Helicopters', 'Amadeus', 'IBM Sophia', 'Naval Group', 'Pernod Ricard', 'STMicro Rousset'],
+    economicHighlight: 'Sophia Antipolis = plus grande technopole d\'Europe (36 000 emplois tech) + Marseille = 1er port français.',
   },
   'occitanie': {
     population: '6,1 M',
@@ -67,6 +73,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Dynamique tech', comment: 'Croissance démographique la plus forte de France métropolitaine, écosystème universitaire massif.' },
     bestForProspecting: 'Toulouse pour l\'aérospatial et la deep tech, Montpellier pour le SaaS et le eHealth.',
+    flagshipCompanies: ['Airbus', 'CNES', 'Dell Technologies', 'Pierre Fabre', 'Continental Automotive', 'Sopra Steria', 'Sanofi Pasteur Mérieux'],
+    economicHighlight: 'Capitale européenne aéronautique (Toulouse) + 1ère région française pour la croissance démographique.',
   },
   'na': {
     population: '6,1 M',
@@ -81,6 +89,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Diversifié rural-urbain', comment: 'Plus grande région métropolitaine en surface, équilibre Bordeaux urbain / Niort financier / Limousin rural.' },
     bestForProspecting: 'Bordeaux pour la tech et le vin, Niort pour les services financiers et assurance.',
+    flagshipCompanies: ['MAIF', 'MAAF', 'Hennessy', 'Martell', 'Dassault Aviation', 'CDiscount', 'Léa Nature', 'TotalEnergies Pau'],
+    economicHighlight: 'Niort = capitale française du mutualisme + Cognac = 70 % des exports de spiritueux français.',
   },
   'hdf': {
     population: '6,0 M',
@@ -95,6 +105,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Reconversion réussie', comment: 'Région post-industrielle qui s\'est repositionnée sur la distribution, le numérique et la logistique.' },
     bestForProspecting: 'Lille pour la distribution et le digital, façade maritime pour la logistique import-export.',
+    flagshipCompanies: ['Auchan', 'Decathlon', 'Bonduelle', 'Boulanger', 'Kiabi', 'Roquette', 'Chanel (Compiègne)'],
+    economicHighlight: 'Capitale française de la distribution (Auchan, Decathlon, Bonduelle, Kiabi) + Eurométropole avec la Belgique.',
   },
   'ge': {
     population: '5,5 M',
@@ -109,6 +121,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Transfrontalier', comment: 'Triple frontière (Allemagne, Belgique, Luxembourg) qui structure l\'économie régionale.' },
     bestForProspecting: 'Strasbourg pour pharma et institutions UE, Champagne-Ardenne pour le luxe, Moselle pour services aux frontaliers.',
+    flagshipCompanies: ['Moët & Chandon', 'Veuve Clicquot', 'PSA Mulhouse', 'Lilly France', 'Smart (Hambach)', 'ArcelorMittal', 'Mumm'],
+    economicHighlight: 'Champagne AOC = 5,7 Md€ + 110 000 frontaliers au Luxembourg + 2e siège institutionnel UE après Bruxelles.',
   },
   'pdl': {
     population: '3,9 M',
@@ -123,6 +137,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Industriel innovant', comment: 'Tissu d\'ETI familiales très dynamique, faible taux de chômage.' },
     bestForProspecting: 'Nantes pour la tech et le naval, Vendée pour le tourisme événementiel.',
+    flagshipCompanies: ['Chantiers de l\'Atlantique', 'Lactalis', 'Bénéteau', 'MMA', 'Puy du Fou', 'Brioche Pasquier', 'Yves Rocher (Cholet)'],
+    economicHighlight: 'Chantiers de l\'Atlantique = constructeur naval n°1 mondial + Puy du Fou = n°1 français parcs à thème en CA.',
   },
   'bretagne': {
     population: '3,4 M',
@@ -137,6 +153,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Identité forte', comment: 'Tissu d\'entreprises ancrées localement, forte fierté régionale, écosystème agroalimentaire mondial.' },
     bestForProspecting: 'Rennes pour la cybersécurité, Brest pour le maritime, l\'IAA partout (Triskalia, Cooperl, etc.).',
+    flagshipCompanies: ['Crédit Mutuel Arkéa', 'Cooperl Arc Atlantique', 'Bigard', 'Yves Rocher', 'Bridor', 'Naval Group Brest'],
+    economicHighlight: '1ère région française IAA + Cyber Campus Rennes (cluster cybersécurité national).',
   },
   'normandie': {
     population: '3,3 M',
@@ -151,6 +169,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Industriel lourd', comment: 'Industrie chimique et raffinage en mutation vers la transition énergétique.' },
     bestForProspecting: 'Le Havre pour la logistique, Rouen pour l\'industrie lourde, Cosmetic Valley pour la beauté.',
+    flagshipCompanies: ['TotalEnergies (Gonfreville)', 'Sanofi (Le Trait)', 'Renault Cléon', 'NXP Semiconductors', 'Bosch'],
+    economicHighlight: 'Le Havre = 1er port FR conteneurs (2,9 M EVP/an) + 2e pôle pétrochimique français.',
   },
   'cvl': {
     population: '2,6 M',
@@ -165,6 +185,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Discret performant', comment: 'Région souvent oubliée, mais 1ère pour la cosmétique et 2e pour la pharma françaises.' },
     bestForProspecting: 'Pharma-cosmétique = ICP n°1 sur Tours-Orléans-Chartres.',
+    flagshipCompanies: ['Cosmetic Valley HQ', 'Sanofi', 'Servier', 'Ipsen', 'MBDA', 'Nexter', 'Hutchinson'],
+    economicHighlight: '1ère région française cosmétique (Cosmetic Valley) + 2e pharma + 1ère défense terrestre.',
   },
   'bfc': {
     population: '2,8 M',
@@ -179,6 +201,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Industriel exportateur', comment: 'Forte tradition industrielle et savoir-faire spécialisés, économie tournée vers l\'export (Allemagne, Suisse).' },
     bestForProspecting: 'Dijon pour la gastronomie premium, Besançon pour la microtechnique, Belfort pour l\'énergie.',
+    flagshipCompanies: ['PSA Sochaux', 'Alstom (Belfort)', 'Amora', 'Maille', 'GE Energy', 'Édulis'],
+    economicHighlight: 'PSA Sochaux = berceau historique Peugeot + Alstom Belfort = hub énergétique.',
   },
   'corse': {
     population: '345 k',
@@ -193,6 +217,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Insulaire saisonnier', comment: 'Économie ultra-saisonnière : 90 % du CA touristique entre mai et octobre.' },
     bestForProspecting: 'Démarchage uniquement entre novembre et avril, hors saison. Ciblage hôtellerie et IAA artisanale.',
+    flagshipCompanies: ['Corsica Ferries', 'Air Corsica', 'Domaine Pieretti', 'Casanova', 'Charcuterie Stagnetto'],
+    economicHighlight: '4,5 M de touristes/an + filière AOP forte (charcuterie, fromage, vin, clémentine).',
   },
   'om': {
     population: '2,2 M',
@@ -207,6 +233,8 @@ const REGION_DATA = {
     ],
     businessClimate: { tag: 'Insulaire diversifié', comment: 'Économies très contrastées : Réunion la plus avancée, Mayotte en construction, Guyane axée spatial.' },
     bestForProspecting: 'Saisonnalité inversée (haute saison déc-avril aux Antilles). Marché de niche, mais peu de concurrence.',
+    flagshipCompanies: ['Centre Spatial Guyanais', 'Bourbon Tourisme', 'CMA CGM Réunion', 'Cilam', 'Distillerie Reimonenq', 'Royal Bourbon'],
+    economicHighlight: 'Centre Spatial Guyanais (Kourou) = base de lancement Ariane + La Réunion = bassin économique DROM le plus dynamique.',
   },
 };
 

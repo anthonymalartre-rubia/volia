@@ -950,6 +950,173 @@ const CATEGORY_OVERRIDES = {
   'chocolaterie': {
     pitchHook: 'Bonjour {first_name}, en chocolaterie artisanale Noël + Pâques font 60 % du CA. Comment {company} étoffe les cadeaux corporate hors saison ?',
   },
+
+  // ───── Vague v3 : longue traîne stratégique (+37) ────
+
+  // Hôtellerie & Restauration (+3)
+  'restauration rapide': {
+    marketSize: '28 000 restaurants de restauration rapide en France (hors fast-food multinational), marché en croissance +6 % par an.',
+    pitchHook: 'Bonjour {first_name}, en restauration rapide la livraison (Uber Eats, Deliveroo) coûte 25-30 %. Comment {company} équilibre VAE et sur place ?',
+  },
+  'discothèque': {
+    marketSize: '1 300 discothèques en France (baisse continue : -50 % en 15 ans), recentrage sur l\'événementiel privé.',
+    pitchHook: 'Bonjour {first_name}, le marché discothèque baisse mais l\'événementiel privé (CE, mariages) explose. Comment {company} se positionne ?',
+  },
+  'camping': {
+    marketSize: '8 000 campings en France (1ère destination camping d\'Europe), 11 millions d\'emplacements vendus/an.',
+    pitchHook: 'Bonjour {first_name}, en camping le mobile-home pèse 60 % du CA. Comment {company} attire les fournisseurs et services aux campeurs ?',
+    seasonality: {
+      peak: 'juin-août (saison touristique)',
+      low: 'novembre-mars (fermeture pour beaucoup)',
+      comment: 'Prospectez novembre-mars pour la saison N+1. Décisions d\'achat équipement = janvier-février.',
+    },
+  },
+
+  // Commerce & Distribution (+5)
+  'magasin de vêtements': {
+    pitchHook: 'Bonjour {first_name}, en boutique de prêt-à-porter la concurrence Shein/Zara est rude. Comment {company} se positionne sur la qualité ou la niche ?',
+  },
+  'magasin de bricolage': {
+    pitchHook: 'Bonjour {first_name}, en bricolage le pro représente 40 % du CA. Comment {company} démarche les artisans BTP locaux ?',
+  },
+  'magasin de sport': {
+    pitchHook: 'Bonjour {first_name}, en sport indé la pression Decathlon/Intersport est constante. Comment {company} se différencie sur la spécialisation ?',
+  },
+  'caviste': {
+    marketSize: '5 800 cavistes indépendants en France (Syndicat des Cavistes Pros), marché de 1,4 Md€ tiré par le vin nature.',
+    pitchHook: 'Bonjour {first_name}, chez caviste le vin nature et la dégustation événementielle font la diff. Comment {company} attire les CHR pros ?',
+  },
+  'magasin bio': {
+    pitchHook: 'Bonjour {first_name}, post-2022 le marché bio a baissé (-5 % en 2023). Comment {company} regagne du terrain face aux GMS bio (Carrefour, Biocoop) ?',
+  },
+
+  // Automobile & Transport (+3)
+  'location voiture': {
+    marketSize: '4 200 agences de location automobile en France, marché dominé par Europcar, Hertz, Avis.',
+    pitchHook: 'Bonjour {first_name}, en location auto le B2B (flotte entreprise) est plus rentable que le B2C. Comment {company} démarche les PME ?',
+  },
+  'transport routier': {
+    marketSize: '32 000 entreprises de transport routier de marchandises en France, en tension sur le recrutement chauffeurs.',
+    pitchHook: 'Bonjour {first_name}, en TRM la pénurie de chauffeurs + hausse gazole pèsent fort. Comment {company} sécurise les contrats long terme ?',
+  },
+  'déménagement': {
+    pitchHook: 'Bonjour {first_name}, en déménagement le pic juin-août fait 50 % du CA. Comment {company} maintient l\'activité B2B (entreprises) hors saison ?',
+  },
+
+  // Santé & Bien-être (+4)
+  'clinique': {
+    marketSize: '5 200 cliniques privées en France (FHP 2024), 65 % de la chirurgie ambulatoire française.',
+    pitchHook: 'Bonjour {first_name}, en clinique privée la course aux praticiens libéraux est vitale. Comment {company} attire les nouveaux médecins ?',
+    persona: {
+      titles: ['Directeur d\'établissement', 'Directeur médical', 'DAF', 'Responsable RH'],
+      decisionMaker: 'directeur d\'établissement + comité médical',
+      painPoint: 'recrutement médecins, conventions CPAM, modernisation équipements',
+    },
+  },
+  'laboratoire d\'analyses': {
+    marketSize: '1 200 laboratoires d\'analyses médicales en France (regroupés en grands groupes : Cerba, Synlab, Eurofins, Inovie).',
+    pitchHook: 'Bonjour {first_name}, en LBM la concentration s\'accélère. Comment {company} se positionne face aux grands groupes (Cerba, Synlab) ?',
+  },
+  'spa': {
+    pitchHook: 'Bonjour {first_name}, en spa l\'abonnement et le bon cadeau B2B (entreprises CE) sont les leviers de fidélisation. Comment {company} les active ?',
+  },
+  'centre de yoga': {
+    pitchHook: 'Bonjour {first_name}, en yoga la fidélisation par abonnement + retraites = clé. Comment {company} démarche les entreprises pour le yoga corporate ?',
+  },
+
+  // BTP & Construction (+6)
+  'maçon': {
+    marketSize: '95 000 entreprises de maçonnerie en France, profession en tension avec 25 000 postes ouverts.',
+    pitchHook: 'Bonjour {first_name}, en maçonnerie le carnet est plein mais les chantiers s\'allongent. Comment {company} priorise les nouveaux clients ?',
+  },
+  'chauffagiste': {
+    pitchHook: 'Bonjour {first_name}, avec MaPrimeRénov\' et la transition PAC, la demande explose. Comment {company} gère la formation de ses équipes ?',
+  },
+  'entreprise de construction': {
+    pitchHook: 'Bonjour {first_name}, en entreprise générale BTP le carnet long est essentiel. Comment {company} se positionne sur les AO publics 2026 ?',
+  },
+  'entreprise de rénovation': {
+    pitchHook: 'Bonjour {first_name}, en rénovation MaPrimeRénov\' a boosté la demande mais complique les devis. Comment {company} gère le sourcing artisans ?',
+  },
+  'entreprise de nettoyage': {
+    marketSize: '36 000 entreprises de nettoyage industriel en France, secteur en croissance porté par tertiaire et collectivités.',
+    pitchHook: 'Bonjour {first_name}, en nettoyage B2B le contrat tertiaire long terme est l\'or. Comment {company} démarche les directions des services généraux ?',
+  },
+  'diagnostiqueur immobilier': {
+    pitchHook: 'Bonjour {first_name}, en diagnostic immo le DPE et la mise aux normes 2025-2034 = volume. Comment {company} se positionne face à la concurrence ?',
+  },
+
+  // Services aux entreprises (+4)
+  'société de nettoyage': {
+    pitchHook: 'Bonjour {first_name}, en nettoyage tertiaire B2B le tendering est essentiel. Comment {company} génère les invitations à concourir ?',
+  },
+  'société de sécurité': {
+    marketSize: '12 000 entreprises de sécurité privée en France (CNAPS 2024), 170 000 agents.',
+    pitchHook: 'Bonjour {first_name}, en sécurité privée la tension recrutement et la qualité agents font la diff. Comment {company} se différencie sur les AO ?',
+  },
+  'cabinet de recrutement': {
+    pitchHook: 'Bonjour {first_name}, en cabinet recrutement la pénurie de talents fait baisser le taux de placement. Comment {company} sécurise ses mandats ?',
+  },
+  'courtier en crédit': {
+    pitchHook: 'Bonjour {first_name}, en courtage crédit la baisse du marché immo 2023-24 a divisé les transactions. Comment {company} compense sur le rachat / pro ?',
+  },
+
+  // Immobilier (+3)
+  'marchand de biens': {
+    pitchHook: 'Bonjour {first_name}, en marchand de biens le sourcing off-market est tout. Comment {company} identifie les biens avant qu\'ils n\'arrivent en agence ?',
+  },
+  'expert immobilier': {
+    pitchHook: 'Bonjour {first_name}, en expertise immo les missions banque + assurance sont les plus stables. Comment {company} se référence chez ces clients ?',
+  },
+  'géomètre-expert': {
+    pitchHook: 'Bonjour {first_name}, en géomètre la transition BIM et les missions PLU/AO publics sont en hausse. Comment {company} se positionne ?',
+  },
+
+  // Industrie & Artisanat (+2)
+  'pressing': {
+    pitchHook: 'Bonjour {first_name}, en pressing la baisse du tertiaire (télétravail) a réduit le volume. Comment {company} se positionne sur le linge de maison ?',
+  },
+  'blanchisserie': {
+    pitchHook: 'Bonjour {first_name}, en blanchisserie B2B (hôtels, restos, hôpitaux) le contrat long est vital. Comment {company} démarche les CHR locaux ?',
+  },
+
+  // Finance & Assurance (+2)
+  'cabinet de gestion de patrimoine': {
+    pitchHook: 'Bonjour {first_name}, en CGP la prospection famille fortunée passe par le réseau. Comment {company} digitalise sans dénaturer l\'approche ?',
+  },
+  'courtier': {
+    pitchHook: 'Bonjour {first_name}, en courtage la baisse 2024 a redistribué les cartes. Comment {company} sécurise ses portefeuilles 2026 ?',
+  },
+
+  // Éducation & Culture (+4)
+  'centre de formation': {
+    pitchHook: 'Bonjour {first_name}, en CFA la réforme apprentissage a tout changé. Comment {company} démarche les OPCO et les entreprises directement ?',
+  },
+  'cours particuliers': {
+    pitchHook: 'Bonjour {first_name}, en cours particuliers Acadomia/Complétude dominent. Comment {company} se positionne sur la spécialisation (prépa, maths) ?',
+  },
+  'école de danse': {
+    pitchHook: 'Bonjour {first_name}, en école de danse la fidélisation enfants + adultes corporate (CE) est complémentaire. Comment {company} attire les CE ?',
+  },
+  'cinéma': {
+    pitchHook: 'Bonjour {first_name}, en cinéma indé la programmation art et essai vs blockbusters = positionnement clé. Comment {company} se différencie du multiplex ?',
+  },
+
+  // Technologie & Digital (+2)
+  'réparation informatique': {
+    pitchHook: 'Bonjour {first_name}, en réparation info B2C vs infogérance B2B = 2 mondes. Comment {company} équilibre les deux ?',
+  },
+  'téléphonie': {
+    pitchHook: 'Bonjour {first_name}, en téléphonie pro Orange/Bouygues/SFR dominent. Comment {company} démarche les PME pour des forfaits sur-mesure ?',
+  },
+
+  // Agriculture & Alimentation (+2)
+  'coopérative agricole': {
+    pitchHook: 'Bonjour {first_name}, en coop agricole le marché et l\'export sont en mutation. Comment {company} démarche les industriels acheteurs ?',
+  },
+  'pépinière': {
+    pitchHook: 'Bonjour {first_name}, en pépinière B2B (paysagistes, collectivités) le contrat de fourniture annuel = rente. Comment {company} les sécurise ?',
+  },
 };
 
 /**

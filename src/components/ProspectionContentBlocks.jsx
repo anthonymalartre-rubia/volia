@@ -386,6 +386,25 @@ export function RegionContextBlock({ regionData, region, category }) {
           </ul>
         </div>
       </div>
+      {regionData.flagshipCompanies?.length > 0 && (
+        <div className="mb-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+            <Building2 size={11} />
+            Champions régionaux
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {regionData.flagshipCompanies.map((c, i) => (
+              <span key={i} className="px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-200">
+                {c}
+              </span>
+            ))}
+          </div>
+          {regionData.economicHighlight && (
+            <p className="text-xs text-zinc-400 leading-relaxed mt-3">{regionData.economicHighlight}</p>
+          )}
+        </div>
+      )}
+
       {regionData.bestForProspecting && (
         <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.04] p-4">
           <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">

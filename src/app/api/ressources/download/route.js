@@ -126,24 +126,32 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Erreur enregistrement' }, { status: 500 });
     }
 
-    // Envoie l'email de delivery via Resend
-    const emailSent = await sendEmail({
+    // Envoie l'email de delivery via Resend (avec fallback automatique)
+    const emailResult = await sendEmail({
       to: normalizedEmail,
       subject: `Votre ressource : ${resource.title}`,
       html: thankYouEmailHtml({ firstName: first_name, resource }),
     }).catch((err) => {
       console.error('[ressources/download] email send error', err);
-      return null;
+      return { success: false, error: err?.message || 'Unknown error' };
     });
 
-    // Marque l'email comme envoyé si réussi (best effort, ne bloque pas la réponse)
-    if (emailSent) {
-      await supabase
-        .from('resource_leads')
-        .update({ email_sent: true, email_sent_at: new Date().toISOString() })
-        .eq('email', normalizedEmail)
-        .eq('resource_slug', resource_slug);
-    }
+    // Persiste le statut RÉEL d'envoi (avec l'id Resend ou l'erreur précise)
+    // Si fallback utilisé, on log aussi le from utilisé pour comprendre.
+    const updatePayload = {
+      email_sent: !!emailResult?.success,
+      email_sent_at: emailResult?.success ? new Date().toISOString() : null,
+      email_provider_id: emailResult?.id || null,
+      email_error: emailResult?.success
+        ? null
+        : `${emailResult?.error || 'Unknown'}${emailResult?.fromUsed ? ` (from: ${emailResult.fromUsed})` : ''}`,
+    };
+
+    await supabase
+      .from('resource_leads')
+      .update(updatePayload)
+      .eq('email', normalizedEmail)
+      .eq('resource_slug', resource_slug);
 
     return NextResponse.json({
       ok: true,

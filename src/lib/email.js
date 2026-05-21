@@ -9,8 +9,15 @@ const FALLBACK_FROM = 'Prospectia <onboarding@resend.dev>';
 
 /**
  * Send a transactional email via Resend API.
- * @param {{ to: string, subject: string, html: string, replyTo?: string }} options
- * @returns {Promise<{ success: boolean, id?: string, error?: string }>}
+ *
+ * Comportement avec fallback automatique :
+ *   1. Tentative depuis le domaine custom (hello@prospectia.cloud)
+ *   2. Si Resend refuse avec "domain not verified" ou "validation_error" ou 403,
+ *      retentative depuis onboarding@resend.dev (sandbox Resend qui marche
+ *      toujours, mais limité à l'email du compte Resend en mode dev).
+ *
+ * @param {{ to, subject, html, replyTo? }} options
+ * @returns {Promise<{ success, id?, error?, fromUsed?, fallbackUsed?, status? }>}
  */
 export async function sendEmail({ to, subject, html, replyTo }) {
   const apiKey = cleanEnv(process.env.RESEND_API_KEY);
@@ -19,12 +26,44 @@ export async function sendEmail({ to, subject, html, replyTo }) {
     return { success: false, error: 'RESEND_API_KEY not configured' };
   }
 
-  // Resend impose d'utiliser leur sandbox sender quand on a une clé de test
-  // OU quand le domaine n'a pas encore été vérifié sur Resend.
   const isTestKey = apiKey.startsWith('re_test_');
   const customFrom = cleanEnv(process.env.RESEND_FROM_ADDRESS);
-  const from = isTestKey ? FALLBACK_FROM : (customFrom || DEFAULT_FROM);
+  const primaryFrom = isTestKey ? FALLBACK_FROM : (customFrom || DEFAULT_FROM);
 
+  // Try 1 : sender custom
+  const firstAttempt = await callResend({ apiKey, from: primaryFrom, to, subject, html, replyTo });
+  if (firstAttempt.success) {
+    return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false };
+  }
+
+  // Si on était déjà sur le sandbox, pas de fallback possible
+  if (primaryFrom === FALLBACK_FROM) {
+    return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false };
+  }
+
+  // Cas qui méritent un fallback : domain non vérifié, validation, 403
+  const errMsg = (firstAttempt.error || '').toLowerCase();
+  const shouldFallback =
+    errMsg.includes('domain') ||
+    errMsg.includes('verify') ||
+    errMsg.includes('not allowed') ||
+    errMsg.includes('validation') ||
+    firstAttempt.status === 403;
+
+  if (!shouldFallback) {
+    return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false };
+  }
+
+  console.warn(`[email] Primary sender ${primaryFrom} refused (${firstAttempt.error}). Retrying with ${FALLBACK_FROM}...`);
+  const fallbackAttempt = await callResend({ apiKey, from: FALLBACK_FROM, to, subject, html, replyTo });
+
+  if (fallbackAttempt.success) {
+    return { ...fallbackAttempt, fromUsed: FALLBACK_FROM, fallbackUsed: true };
+  }
+  return { ...fallbackAttempt, fromUsed: FALLBACK_FROM, fallbackUsed: true };
+}
+
+async function callResend({ apiKey, from, to, subject, html, replyTo }) {
   try {
     const body = { from, to: [to], subject, html };
     if (replyTo) body.reply_to = replyTo;
@@ -38,17 +77,18 @@ export async function sendEmail({ to, subject, html, replyTo }) {
       body: JSON.stringify(body),
     });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      console.error('[email] Resend API error:', data);
-      return { success: false, error: data.message || 'Resend API error' };
+      const errorMsg = data.message || data.name || `HTTP ${res.status}`;
+      console.error(`[email] Resend error (status ${res.status}, from ${from}):`, data);
+      return { success: false, error: errorMsg, status: res.status };
     }
 
-    console.log(`[email] Sent "${subject}" to ${to} (id: ${data.id})`);
+    console.log(`[email] Sent "${subject}" to ${to} via ${from} (id: ${data.id})`);
     return { success: true, id: data.id };
   } catch (err) {
-    console.error('[email] Failed to send email:', err);
-    return { success: false, error: err.message };
+    console.error('[email] Network/fetch error:', err);
+    return { success: false, error: err.message || 'Network error' };
   }
 }

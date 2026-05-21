@@ -59,8 +59,10 @@ jobs:
       - name: Build (Vercel CLI build, identique à un build sur la plateforme)
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
+      # --archive=tgz : nécessaire car le build produit > 15 000 fichiers
+      # (limite Vercel CLI). L'archive tgz est dépaquetée côté Vercel.
       - name: Deploy to production
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Output deploy URL
         run: echo "Production deploy live on https://prospectia.cloud"

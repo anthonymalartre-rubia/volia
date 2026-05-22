@@ -7,6 +7,7 @@ import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
 import UpgradeBanner from '@/components/UpgradeBanner';
+import OnboardingChecklist from '@/components/OnboardingChecklist';
 import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -1315,7 +1316,7 @@ export default function Dashboard() {
           <UpgradeBanner
             plan={userPlan}
             usage={userUsage}
-            onUpgrade={() => handleUpgrade('pro')}
+            onUpgrade={(targetPlan) => handleUpgrade(targetPlan || 'pro')}
           />
           <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
@@ -1391,6 +1392,9 @@ export default function Dashboard() {
           />
         </Suspense>
       )}
+
+      {/* Checklist persistante (bottom-right, dismissable session) */}
+      <OnboardingChecklist />
 
       {limitModal && (
         <LimitReachedModal

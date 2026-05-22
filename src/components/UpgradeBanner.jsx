@@ -10,8 +10,17 @@ export default function UpgradeBanner({ plan, usage, onUpgrade }) {
 
   if (dismissed || !plan || !usage) return null;
 
-  // Only show for free/starter plan users
-  if (plan.id !== 'free') return null;
+  // Plan suivant à proposer en upgrade
+  // Mapping : free → solo, solo → pro, pro → business, business → null (déjà top)
+  const upgradeTarget = {
+    free: { id: 'solo', name: 'Solo', price: '19' },
+    starter: { id: 'solo', name: 'Solo', price: '19' },
+    solo: { id: 'pro', name: 'Pro', price: '49' },
+    pro: { id: 'business', name: 'Business', price: '99' },
+  }[plan.id];
+
+  // Si pas de cible (plan business déjà), ne montre pas
+  if (!upgradeTarget) return null;
 
   const items = [
     { key: 'searches', label: t('upgrade.searches'), current: usage.searches || 0, limit: plan.limits.searches_per_month },
@@ -76,10 +85,10 @@ export default function UpgradeBanner({ plan, usage, onUpgrade }) {
               )}
             </span>
             <button
-              onClick={onUpgrade}
+              onClick={() => onUpgrade?.(upgradeTarget.id)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/20 shrink-0"
             >
-              {t('upgrade.upgradePro')} <ArrowUpRight className="h-3 w-3" />
+              Passer à {upgradeTarget.name} ({upgradeTarget.price} €/mo) <ArrowUpRight className="h-3 w-3" />
             </button>
           </div>
         </div>

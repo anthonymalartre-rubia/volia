@@ -520,7 +520,9 @@ export default function SettingsPage() {
             {/* Quick stats */}
             <div className="relative mt-6 pt-5 border-t border-line">
               <p className="text-[10px] uppercase tracking-wider text-content-muted font-semibold mb-3">{t('settings.quickStats')}</p>
-              <div className="grid grid-cols-3 gap-3">
+              {/* sm:grid-cols-3 — sur ≤640px on stacke pour éviter d'écraser les 3 cards
+                  avec leurs text-2xl. Sur sm+ on garde la grille horizontale. */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { label: t('settings.searches'), current: userUsage?.searches || 0, limit: currentPlan.limits.searches_per_month, color: 'indigo' },
                   { label: t('settings.enrichments'), current: userUsage?.enrichments || 0, limit: currentPlan.limits.enrichments_per_month, color: 'violet' },

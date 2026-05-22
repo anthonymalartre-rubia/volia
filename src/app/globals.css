@@ -266,3 +266,17 @@ body {
   --c-text-muted: 82 82 91;   /* zinc-600 instead of zinc-500 */
   --c-text-faint: 113 113 122; /* zinc-500 instead of zinc-400 */
 }
+
+/* ─────────────────────────────────────────────────────────────────────
+   iOS Safari zoom-fix : tout input < 16px déclenche un zoom auto au
+   focus sur iPhone, ce qui casse le layout. On force 16px sur mobile
+   uniquement pour les contrôles de formulaire — la taille visuelle
+   désirée reste contrôlée par les classes Tailwind sur desktop.
+   ───────────────────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}

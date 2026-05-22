@@ -429,6 +429,7 @@ export default memo(function ResultsPanel({
   onDeleteProspect,
   onBulkDeleteProspects,
   onBulkUpdateProspects,
+  onStartSearch,
 }) {
   const { t } = useI18n();
   const [searchText, setSearchText] = useState("");
@@ -709,17 +710,44 @@ export default memo(function ResultsPanel({
     }
   }, []);
 
-  // Empty state
+  // Empty state — un user qui atterrit ici sans prospects est au début de
+  // son parcours. CTA explicite vers la recherche + 3 chips presets pour
+  // l'inspirer sur ce qu'il peut chercher.
   if (prospects.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 px-6">
-        <div className="w-16 h-16 rounded-2xl bg-surface-card border border-line flex items-center justify-center mb-6">
-          <Inbox size={28} className="text-content-dim" />
+      <div className="flex flex-col items-center justify-center py-20 sm:py-24 px-6 max-w-2xl mx-auto">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500/15 to-violet-500/15 border border-indigo-500/30 flex items-center justify-center mb-6">
+          <Inbox size={28} className="text-indigo-400" />
         </div>
-        <h3 className="text-lg font-semibold text-content-primary mb-2">{t('results.noProspects')}</h3>
-        <p className="text-sm text-content-muted text-center max-w-xs">
-          {t('results.noProspectsDesc')}
+        <h3 className="text-xl sm:text-2xl font-bold text-content-primary mb-2 text-center">
+          {t('results.noProspects') || 'Aucun prospect pour le moment'}
+        </h3>
+        <p className="text-sm text-content-tertiary text-center max-w-md mb-7 leading-relaxed">
+          Lancez votre première recherche pour découvrir les entreprises de votre cible —
+          le résultat apparaîtra ici en quelques secondes.
         </p>
+        <button
+          type="button"
+          onClick={() => onStartSearch && onStartSearch()}
+          className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.02]"
+        >
+          <Search size={16} />
+          Lancer ma première recherche
+        </button>
+        {/* Suggestions de recherches populaires pour inspirer */}
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
+          <span className="text-[11px] uppercase tracking-wider text-content-muted font-semibold">Idées :</span>
+          {['Restaurants à Paris', 'Avocats à Lyon', 'Agences web 75'].map((idea) => (
+            <button
+              key={idea}
+              type="button"
+              onClick={() => onStartSearch && onStartSearch()}
+              className="px-3 py-1 rounded-full border border-line bg-surface-card hover:border-indigo-500/40 hover:bg-indigo-500/[0.06] text-xs text-content-secondary hover:text-content-primary transition"
+            >
+              {idea}
+            </button>
+          ))}
+        </div>
       </div>
     );
   }

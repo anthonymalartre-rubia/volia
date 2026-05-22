@@ -1396,6 +1396,7 @@ export default function Dashboard() {
                   onDeleteAll={deleteAllProspects}
                   onDownloadCSV={downloadCSV}
                   userPlan={userPlan}
+                  onStartSearch={() => handleViewChange('search')}
                   onUpdateProspect={updateProspect}
                   onDeleteProspect={deleteProspect}
                   onBulkDeleteProspects={deleteProspectsBulk}
@@ -1430,7 +1431,7 @@ export default function Dashboard() {
 
       {/* Checklist persistante (bottom-right, dismissable session) — lazy */}
       <Suspense fallback={null}>
-        <OnboardingChecklist />
+        <OnboardingChecklist isAdmin={isAdmin} />
       </Suspense>
 
       {limitModal && (

@@ -12,34 +12,24 @@ import {
   User, ChevronDown, ChevronUp, X, Sparkles, ArrowRight,
 } from 'lucide-react';
 
+// adminOnly: true → l'étape n'est montrée qu'aux admins (features /admin
+// non accessibles aux users standards aujourd'hui). À retirer le jour où
+// CSV import et campagnes deviennent self-serve.
 const STEPS = [
   {
     id: 'first_search',
     title: 'Lancez votre 1ère recherche',
     desc: 'Trouvez 50 prospects en 30 secondes : catégorie + département',
     icon: Search,
-    cta: { label: 'Démarrer une recherche', href: '/dashboard' },
-  },
-  {
-    id: 'first_csv_import',
-    title: 'Importez votre 1ère liste CSV',
-    desc: 'Récupérez vos contacts existants depuis Excel ou Notion',
-    icon: Upload,
-    cta: { label: 'Importer un CSV', href: '/admin/prospection' },
-  },
-  {
-    id: 'first_campaign',
-    title: 'Lancez votre 1ère campagne email',
-    desc: 'Cold email avec templating {{first_name}} + footer RGPD auto',
-    icon: Send,
-    cta: { label: 'Créer une campagne', href: '/admin/prospection/campaigns/new' },
+    // ?view=search déclenche handleViewChange dans le dashboard
+    cta: { label: 'Démarrer une recherche', href: '/dashboard?view=search' },
   },
   {
     id: 'first_export',
     title: 'Exportez en CSV pour votre CRM',
     desc: 'Format HubSpot / Salesforce / Pipedrive prêt à l\'emploi',
     icon: Download,
-    cta: { label: 'Voir mes recherches', href: '/dashboard' },
+    cta: { label: 'Voir mes leads', href: '/dashboard?view=results' },
   },
   {
     id: 'profile_completed',
@@ -48,9 +38,25 @@ const STEPS = [
     icon: User,
     cta: { label: 'Aller aux réglages', href: '/settings' },
   },
+  {
+    id: 'first_csv_import',
+    title: 'Importez votre 1ère liste CSV',
+    desc: 'Récupérez vos contacts existants depuis Excel ou Notion',
+    icon: Upload,
+    cta: { label: 'Importer un CSV', href: '/admin/prospection' },
+    adminOnly: true,
+  },
+  {
+    id: 'first_campaign',
+    title: 'Lancez votre 1ère campagne email',
+    desc: 'Cold email avec templating {{first_name}} + footer RGPD auto',
+    icon: Send,
+    cta: { label: 'Créer une campagne', href: '/admin/prospection/campaigns/new' },
+    adminOnly: true,
+  },
 ];
 
-export default function OnboardingChecklist() {
+export default function OnboardingChecklist({ isAdmin = false }) {
   const [state, setState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
@@ -77,8 +83,11 @@ export default function OnboardingChecklist() {
   if (loading || dismissed || !state) return null;
   if (state.completed_at) return null;
 
-  const stepsDone = STEPS.filter((s) => state.steps?.[s.id]).length;
-  const pct = Math.round((stepsDone / STEPS.length) * 100);
+  // Filtre admin-only pour les users standards (CSV import + campagnes
+  // ne sont accessibles qu'aux admins aujourd'hui).
+  const visibleSteps = STEPS.filter((s) => !s.adminOnly || isAdmin);
+  const stepsDone = visibleSteps.filter((s) => state.steps?.[s.id]).length;
+  const pct = Math.round((stepsDone / visibleSteps.length) * 100);
 
   function handleDismiss() {
     sessionStorage.setItem('onboarding_checklist_dismissed', '1');
@@ -99,7 +108,7 @@ export default function OnboardingChecklist() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold text-white">Démarrez avec Prospectia</div>
-            <div className="text-[11px] text-zinc-500 tabular-nums">{stepsDone}/{STEPS.length} étapes · {pct}%</div>
+            <div className="text-[11px] text-zinc-500 tabular-nums">{stepsDone}/{visibleSteps.length} étapes · {pct}%</div>
           </div>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
@@ -126,7 +135,7 @@ export default function OnboardingChecklist() {
       {/* Steps list (collapsable) */}
       {!collapsed && (
         <ul className="divide-y divide-white/[0.04] max-h-[60vh] overflow-y-auto">
-          {STEPS.map((step) => {
+          {visibleSteps.map((step) => {
             const done = !!state.steps?.[step.id];
             const Icon = step.icon;
             return (

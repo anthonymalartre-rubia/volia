@@ -4,6 +4,7 @@ import { getAllCompetitors } from '@/lib/competitors';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import { TestimonialsBlock, ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
 
 export const metadata = {
   title: 'Tous les outils de prospection B2B en 2026 — Prospectia',
@@ -156,6 +157,25 @@ export default function OutilsIndex() {
               Voir le comparatif complet →
             </Link>
           </div>
+
+          {/* Comparatif inline rapide */}
+          <div className="mb-12">
+            <CompetitorMiniBlock />
+          </div>
+
+          {/* Témoignages */}
+          <TestimonialsBlock
+            limit={3}
+            title="Pourquoi ils ont choisi Prospectia"
+            subtitle="Vu de l'intérieur — feedbacks de commerciaux et fondateurs B2B."
+          />
+
+          {/* Lead magnet */}
+          <ResourceTeaserBlock
+            title="Hésitez entre 3 outils ? Démarrez par ce PDF gratuit"
+            subtitle="20 templates cold email + checklist warmup domaine. Utile que vous choisissiez Prospectia, Apollo, Hunter ou un autre."
+            cta="Récupérer le PDF gratuit"
+          />
 
           {/* CTA */}
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">

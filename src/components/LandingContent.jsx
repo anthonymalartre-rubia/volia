@@ -8,6 +8,7 @@ import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { useI18n } from '@/lib/i18n';
+import { TestimonialsBlock, ClientLogosStrip, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 
 function formatPrice(cents) {
   if (cents === 0) return '0';
@@ -197,6 +198,9 @@ export default function LandingContent() {
           </div>
         </div>
       </section>
+
+      {/* Strip logos clients — social proof immédiat post-hero */}
+      <ClientLogosStrip title="Ils prospectent déjà avec Prospectia (profils anonymisés)" />
 
       {/* Why an aggregator */}
       <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
@@ -637,6 +641,19 @@ export default function LandingContent() {
       </section>
 
       {/* Pricing */}
+      {/* Testimonials — rassure avant la décision d'achat */}
+      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+        <TestimonialsBlock />
+      </section>
+
+      {/* Lead magnet teaser — capture les hésitants sur le PDF gratuit */}
+      <section className="py-12 px-4 sm:px-6">
+        <ResourceTeaserBlock
+          title="Pas prêt à signer ? Récupérez 20 templates cold email B2B"
+          subtitle="PDF 30 pages : intros qui taquinent, lignes d'objet à fort taux d'ouverture, séquences en 3 touches. Testé sur 50 000 envois."
+        />
+      </section>
+
       <section id="pricing" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">

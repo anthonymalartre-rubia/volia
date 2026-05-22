@@ -6,6 +6,7 @@ import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 import StudyCallout from '@/components/StudyCallout';
+import { ResourceTeaserBlock, TestimonialsBlock } from '@/components/MarketingBlocks';
 
 // ISR : on rebuild la page article toutes les 30 min, et on autorise les
 // slugs non pré-rendus (dynamicParams) → un article programmé apparaît
@@ -307,6 +308,16 @@ export default async function BlogPost({ params }) {
           {/* Étude callout — 1 backlink interne contextuel par article */}
           <StudyCallout />
 
+          {/* Lead magnet inline post-article — capture les lecteurs engagés */}
+          <div className="mt-12">
+            <ResourceTeaserBlock
+              title="Téléchargez 20 templates cold email B2B"
+              subtitle="Le PDF gratuit qui complète cet article : intros qui taquinent la curiosité, séquences en 3 touches, lignes d'objet à fort taux d'ouverture."
+              resourceSlug="templates-cold-email-b2b-fr"
+              cta="Récupérer le PDF"
+            />
+          </div>
+
           {/* CTA after article */}
           <div className="mt-12 rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
@@ -324,6 +335,11 @@ export default async function BlogPost({ params }) {
             </Link>
           </div>
         </article>
+
+        {/* Mini-testimonials avant articles connexes */}
+        <div className="max-w-3xl mx-auto mt-16">
+          <TestimonialsBlock limit={3} title="Ils ont déjà adopté Prospectia" subtitle="Profils représentatifs basés sur le NPS interne." />
+        </div>
 
         {/* Related posts */}
         {otherPosts.length > 0 && (

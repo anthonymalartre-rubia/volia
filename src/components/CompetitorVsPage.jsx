@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Check, X, Zap, ArrowRight, TrendingDown, Award, Shield, Globe } from 'lucide-react';
+import { TestimonialsBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 
 /**
  * Reusable component for /vs/[competitor] comparison pages.
@@ -215,6 +216,21 @@ export default function CompetitorVsPage({ competitor }) {
             </div>
           </div>
         </section>
+
+        {/* Lead magnet : guide de migration depuis le concurrent */}
+        <ResourceTeaserBlock
+          title={`Guide migration : passer de ${competitor.name} à Prospectia`}
+          subtitle="20 templates cold email + checklist warmup domaine pour reprendre vos campagnes sans perte de délivrabilité. PDF 30 pages."
+          resourceSlug="templates-cold-email-b2b-fr"
+          cta="Récupérer le guide"
+        />
+
+        {/* Témoignages de migration (réutilise le pool, focus B2B) */}
+        <TestimonialsBlock
+          limit={3}
+          title={`Pourquoi ils ont quitté ${competitor.name} pour Prospectia`}
+          subtitle="Témoignages de commerciaux et fondateurs B2B qui ont fait le switch."
+        />
 
         {/* CTA */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6">

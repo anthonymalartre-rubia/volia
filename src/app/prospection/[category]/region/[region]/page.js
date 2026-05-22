@@ -7,7 +7,7 @@ import {
   getCategoryBySlug,
   getRegionBySlug,
 } from '@/lib/slugs';
-import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
+import { breadcrumbSchema, estimateStats, serviceSchema } from '@/lib/seo-helpers';
 import { getCategoryData } from '@/lib/category-data';
 import { getRegionData } from '@/lib/region-data';
 
@@ -164,6 +164,12 @@ export default async function CategoryRegionPage({ params }) {
           identifier: d.code,
         })),
       },
+      serviceSchema({
+        name: `Recherche email ${category.labelPlural} en ${region.name}`,
+        description: intro,
+        url: `https://prospectia.cloud/prospection/${catSlug}/region/${region.slug}`,
+        areaName: region.name,
+      }),
       {
         '@type': 'FAQPage',
         mainEntity: faq.map((item) => ({

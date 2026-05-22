@@ -6,9 +6,10 @@ import {
   getCategoryBySlug,
   getDepartmentBySlug,
 } from '@/lib/slugs';
-import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
+import { breadcrumbSchema, estimateStats, serviceSchema } from '@/lib/seo-helpers';
 import { getCategoryData } from '@/lib/category-data';
 import { getDeptData } from '@/lib/dept-data';
+import { getCrossSectorSlugs } from '@/lib/cross-sector';
 
 // IMPORTANT: This generates 150 × 101 = ~15 000 static pages at build time.
 // To keep build times reasonable, we use Next.js ISR (dynamicParams + revalidate)
@@ -83,14 +84,24 @@ export default async function CategoryDepartmentPage({ params }) {
       href: `/prospection/${catSlug}/${d.slug}`,
     }));
 
-  // Other categories in same department
-  const relatedCategories = allCats
-    .filter((c) => c.group === category.group && c.slug !== catSlug)
-    .slice(0, 12)
+  // Mix : 6 cross-sector localisés au dept + 6 same-group localisés au dept
+  const crossSlugs = getCrossSectorSlugs(catSlug);
+  const crossSectorCats = crossSlugs
+    .map((slug) => allCats.find((c) => c.slug === slug))
+    .filter(Boolean)
+    .slice(0, 6)
     .map((c) => ({
       label: `${c.labelCapitalized} ${dept.name}`,
       href: `/prospection/${c.slug}/${deptSlug}`,
     }));
+  const sameGroupCats = allCats
+    .filter((c) => c.group === category.group && c.slug !== catSlug && !crossSlugs.includes(c.slug))
+    .slice(0, 6)
+    .map((c) => ({
+      label: `${c.labelCapitalized} ${dept.name}`,
+      href: `/prospection/${c.slug}/${deptSlug}`,
+    }));
+  const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code})`;
   const intro = `Vous cherchez à contacter les ${category.labelPlural} situés dans le département ${dept.name} (${dept.code}) ? Prospectia identifie automatiquement tous les ${category.labelPlural} géolocalisés dans le ${dept.name} via Google Places, puis trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Exportez la liste complète en CSV en moins de 5 minutes, avec nom, adresse, téléphone, email vérifié, site web et note Google.`;
@@ -144,26 +155,12 @@ export default async function CategoryDepartmentPage({ params }) {
         inLanguage: 'fr-FR',
         isPartOf: { '@id': 'https://prospectia.cloud/#website' },
       },
-      {
-        '@type': 'Service',
+      serviceSchema({
         name: `Recherche email ${category.labelPlural} ${dept.name}`,
-        provider: {
-          '@type': 'Organization',
-          name: 'Prospectia',
-          url: 'https://prospectia.cloud',
-        },
-        areaServed: {
-          '@type': 'AdministrativeArea',
-          name: dept.name,
-          containedInPlace: { '@type': 'Country', name: 'France' },
-        },
-        offers: {
-          '@type': 'Offer',
-          price: '49',
-          priceCurrency: 'EUR',
-          availability: 'https://schema.org/InStock',
-        },
-      },
+        description: intro,
+        url: `https://prospectia.cloud/prospection/${catSlug}/${deptSlug}`,
+        areaName: dept.name,
+      }),
       {
         '@type': 'FAQPage',
         mainEntity: faq.map((item) => ({

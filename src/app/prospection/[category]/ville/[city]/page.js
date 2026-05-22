@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import ProspectionSeoPage from '@/components/ProspectionSeoPage';
 import { getAllCategories, getCategoryBySlug, getAllDepartments } from '@/lib/slugs';
 import { getAllCities, getCityBySlug, getCitiesByDept } from '@/lib/cities';
-import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
+import { breadcrumbSchema, estimateStats, serviceSchema } from '@/lib/seo-helpers';
 import { DEPTS } from '@/lib/constants';
 import { getCategoryData } from '@/lib/category-data';
 import { getDeptData } from '@/lib/dept-data';
@@ -127,18 +127,12 @@ export default async function CategoryCityPage({ params }) {
         url: `https://prospectia.cloud/prospection/${catSlug}/ville/${citySlug}`,
         inLanguage: 'fr-FR',
       },
-      {
-        '@type': 'Service',
+      serviceSchema({
         name: `Recherche email ${category.labelPlural} ${city.name}`,
-        provider: { '@type': 'Organization', name: 'Prospectia', url: 'https://prospectia.cloud' },
-        areaServed: {
-          '@type': 'City',
-          name: city.name,
-          containedInPlace: { '@type': 'Country', name: 'France' },
-          geo: { '@type': 'GeoCoordinates', latitude: city.lat, longitude: city.lng },
-        },
-        offers: { '@type': 'Offer', price: '49', priceCurrency: 'EUR' },
-      },
+        description: intro,
+        url: `https://prospectia.cloud/prospection/${catSlug}/ville/${citySlug}`,
+        areaName: city.name,
+      }),
       {
         '@type': 'FAQPage',
         mainEntity: faq.map((item) => ({

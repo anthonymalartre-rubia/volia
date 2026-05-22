@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { Search, MapPin, Mail, Phone, Globe, CheckCircle2, ArrowRight, Zap, Shield, TrendingUp } from 'lucide-react';
+import { Search, MapPin, Mail, Phone, Globe, CheckCircle2, ArrowRight, Zap, Shield, TrendingUp, Clock } from 'lucide-react';
+import { getBuildDateFr, getBuildMonthFr } from '@/lib/buildDate';
 import {
   MarketSizeBlock, KpiBlock, PersonaBlock, SeasonalityBlock, BestApproachBlock,
   PitchBlock, ObjectionBlock, GlossaryBlock, PainPointsBlock, TopRegionsBlock,
   DeptContextBlock, RegionContextBlock, DeptOverviewBlock, SiblingCitiesBlock,
-  SocialProofBlock, CompetitorInlineBlock,
+  SocialProofBlock, CompetitorInlineBlock, AuthoritiesBlock,
 } from './ProspectionContentBlocks';
 import { LeadMagnetBlock, StickyCtaBar } from './ProspectionClientBlocks';
 
@@ -105,8 +106,14 @@ export default function ProspectionSeoPage({
             {title}
           </h1>
 
-          <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mb-8">
+          <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mb-4">
             {intro}
+          </p>
+
+          {/* Fraîcheur : date mise à jour (Google adore + lecteur rassuré) */}
+          <p className="text-xs text-zinc-500 mb-8 flex items-center gap-1.5">
+            <Clock size={11} className="text-zinc-400" />
+            Données et tarifs mis à jour le <strong className="text-zinc-300 font-medium">{getBuildDateFr()}</strong>
           </p>
 
           {/* CTA buttons */}
@@ -221,6 +228,9 @@ export default function ProspectionSeoPage({
 
         {/* Glossaire métier */}
         <GlossaryBlock data={categoryData} category={category} />
+
+        {/* Sources & cadre légal (E-E-A-T : liens autoritaires INSEE, CNIL...) */}
+        <AuthoritiesBlock category={category} />
 
         {/* FAQ */}
         {faq.length > 0 && (

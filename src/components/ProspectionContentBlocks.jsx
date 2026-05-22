@@ -121,6 +121,35 @@ function tpl(text, vars = {}) {
 }
 
 // ─── 1. MarketSize — chiffre clé du marché ──────────────
+// Si la valeur mentionne "INSEE" ou "CNIL", on linke vers l'autorité (boost E-E-A-T).
+function linkifyAuthorities(text) {
+  if (!text) return text;
+  return text.split(/(INSEE|CNIL|FNAIM|CAPEB|CNB|CSOEC|CSN|Atout France|Ordre des Pharmaciens|FHP|DREES)/i).map((part, i) => {
+    const key = part.toLowerCase();
+    const map = {
+      'insee': 'https://www.insee.fr/fr/statistiques',
+      'cnil': 'https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique',
+      'fnaim': 'https://www.fnaim.fr',
+      'capeb': 'https://www.capeb.fr',
+      'cnb': 'https://www.cnb.avocat.fr',
+      'csoec': 'https://www.experts-comptables.fr',
+      'csn': 'https://www.notaires.fr',
+      'atout france': 'https://www.atout-france.fr',
+      'ordre des pharmaciens': 'https://www.ordre.pharmacien.fr',
+      'fhp': 'https://www.fhp.fr',
+      'drees': 'https://drees.solidarites-sante.gouv.fr',
+    };
+    if (map[key]) {
+      return (
+        <a key={i} href={map[key]} target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2 decoration-violet-500/40 hover:decoration-violet-400">
+          {part}
+        </a>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export function MarketSizeBlock({ data, category }) {
   if (!data?.marketSize) return null;
   return (
@@ -134,7 +163,9 @@ export function MarketSizeBlock({ data, category }) {
             <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-2">
               Taille du marché — {category?.labelPlural || 'secteur'}
             </h2>
-            <p className="text-base text-zinc-200 leading-relaxed">{data.marketSize}</p>
+            <p className="text-base text-zinc-200 leading-relaxed">
+              {linkifyAuthorities(data.marketSize)}
+            </p>
           </div>
         </div>
       </div>
@@ -514,6 +545,49 @@ export function RegionContextBlock({ regionData, region, category }) {
           <p className="text-sm text-zinc-200 leading-relaxed">{regionData.bestForProspecting}</p>
         </div>
       )}
+    </section>
+  );
+}
+
+// ─── 12quater. Block Authorities — sources autoritaires (E-E-A-T) ──
+// Affiché sur toutes les pages prospection juste avant la FAQ.
+// Indique les sources utilisées + cadre légal — boost Google + crédibilité.
+export function AuthoritiesBlock({ category }) {
+  const items = [
+    { name: 'INSEE', url: 'https://www.insee.fr/fr/statistiques', label: 'Statistiques entreprises France' },
+    { name: 'CNIL', url: 'https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique', label: 'Cadre RGPD prospection B2B' },
+    { name: 'data.gouv.fr', url: 'https://www.data.gouv.fr', label: 'Données publiques ouvertes' },
+    { name: 'Bpifrance Création', url: 'https://bpifrance-creation.fr', label: 'Démographie d\'entreprise' },
+  ];
+  return (
+    <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
+      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+        <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <BookOpen size={11} />
+          Sources & cadre légal
+        </div>
+        <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+          Les chiffres et conseils sectoriels de cette page sont calibrés à partir de sources publiques officielles.
+          La prospection est encadrée par le <a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">RGPD article 6.1.f (intérêt légitime)</a> pour le B2B.
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {items.map((it) => (
+            <a
+              key={it.name}
+              href={it.url}
+              target="_blank"
+              rel="noopener"
+              className="group flex items-start gap-2 p-2.5 rounded-lg border border-white/[0.04] hover:border-violet-500/30 hover:bg-violet-500/[0.04] transition"
+            >
+              <ArrowRight size={11} className="text-zinc-500 group-hover:text-violet-400 transition mt-0.5 flex-shrink-0" />
+              <div className="min-w-0">
+                <div className="text-xs font-semibold text-zinc-200 group-hover:text-white transition">{it.name}</div>
+                <div className="text-[10px] text-zinc-500 truncate">{it.label}</div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

@@ -3,8 +3,9 @@ import ProspectionSeoPage from '@/components/ProspectionSeoPage';
 import {
   getAllCategories, getAllDepartments, getAllRegions, getCategoryBySlug,
 } from '@/lib/slugs';
-import { breadcrumbSchema, estimateStats } from '@/lib/seo-helpers';
+import { breadcrumbSchema, estimateStats, productSchema } from '@/lib/seo-helpers';
 import { getCategoryData } from '@/lib/category-data';
+import { getCrossSectorSlugs } from '@/lib/cross-sector';
 
 // Generate static pages at build time (1 per category)
 export async function generateStaticParams() {
@@ -61,14 +62,27 @@ export default async function CategoryPage({ params }) {
 
   const relatedDepartments = [...regionLinks, ...popularDeptLinks];
 
-  // Other categories in the same group
-  const relatedCategories = getAllCategories()
-    .filter((c) => c.group === category.group && c.slug !== categorySlug)
-    .slice(0, 12)
+  // Mix : 6 cross-sector (complémentaires) + 6 same-group (verticales)
+  // pour un maillage plus naturel et plus large que le seul même-groupe.
+  const allCats = getAllCategories();
+  const crossSlugs = getCrossSectorSlugs(categorySlug);
+  const crossSectorCats = crossSlugs
+    .map((slug) => allCats.find((c) => c.slug === slug))
+    .filter(Boolean)
+    .slice(0, 6)
+    .map((c) => ({
+      label: c.labelCapitalized,
+      href: `/prospection/${c.slug}`,
+      _cross: true,
+    }));
+  const sameGroupCats = allCats
+    .filter((c) => c.group === category.group && c.slug !== categorySlug && !crossSlugs.includes(c.slug))
+    .slice(0, 6)
     .map((c) => ({
       label: c.labelCapitalized,
       href: `/prospection/${c.slug}`,
     }));
+  const relatedCategories = [...crossSectorCats, ...sameGroupCats];
 
   const title = `Trouver l'email de tous les ${category.labelPlural} en France`;
   const intro = `Vous cherchez à contacter les ${category.labelPlural} en France ? Prospectia agrège les ${category.labelPlural} de tous les départements français et trouve leur email professionnel grâce à notre moteur de scraping et recherche Google. Plus besoin d'aller chercher manuellement sur Pages Jaunes, LinkedIn ou société.com — exportez les contacts en CSV en quelques clics.`;
@@ -114,6 +128,11 @@ export default async function CategoryPage({ params }) {
         url: `https://prospectia.cloud/prospection/${categorySlug}`,
         inLanguage: 'fr-FR',
       },
+      productSchema({
+        name: `Recherche email ${category.labelPlural} en France`,
+        description: intro,
+        url: `https://prospectia.cloud/prospection/${categorySlug}`,
+      }),
       {
         '@type': 'FAQPage',
         mainEntity: faq.map((item) => ({

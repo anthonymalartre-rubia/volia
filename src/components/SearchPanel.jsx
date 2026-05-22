@@ -209,6 +209,53 @@ export default function SearchPanel({
   const [catSearch, setCatSearch] = useState('');
   const [expandedCatGroups, setExpandedCatGroups] = useState(new Set());
 
+  // ─── Recherche rapide (1 vue, bypass wizard) ──────────────────
+  // Inspiré du retour audit UX : le wizard 5 étapes est trop long pour
+  // un user qui sait déjà ce qu'il veut ("des restos à Paris"). Cette
+  // bar permet de lancer une recherche cat × dept en 2 clics + 1 bouton.
+  const [quickCat, setQuickCat] = useState('');
+  const [quickDept, setQuickDept] = useState('');
+  const [quickError, setQuickError] = useState('');
+
+  const handleQuickSearch = () => {
+    setQuickError('');
+    // Normalise l'input cat : on accepte le label exact OU une recherche partielle
+    const allCats = [...B2B_CATS, ...COPRO_CATS];
+    const matchedCat = allCats.find(c => c.toLowerCase() === quickCat.toLowerCase())
+      || allCats.find(c => c.toLowerCase().includes(quickCat.toLowerCase()));
+    if (!matchedCat) {
+      setQuickError('Catégorie non reconnue. Choisis dans la liste ou utilise la recherche guidée plus bas.');
+      return;
+    }
+    // Normalise le département : on accepte "75", "Paris", "75 - Paris"...
+    const allDepts = Object.entries(DEPTS); // [['75', 'Paris'], ...]
+    const q = quickDept.trim().toLowerCase();
+    const matchedDept = allDepts.find(([code, name]) =>
+      code === q || name.toLowerCase() === q || `${code} - ${name.toLowerCase()}` === q || name.toLowerCase().includes(q)
+    );
+    if (!matchedDept) {
+      setQuickError('Département non reconnu. Tape un code (ex: 75) ou un nom (ex: Paris).');
+      return;
+    }
+    // Détermine le type (b2b ou copro) selon la cat trouvée
+    const type = COPRO_CATS.includes(matchedCat) ? 'copro' : 'b2b';
+    // Reproduit la logique de handlePresetSearch
+    setSearchType(type);
+    setSelectedDepts([matchedDept[0]]);
+    setSelectedCats([matchedCat]);
+    setCustomQueries([]);
+    setCustomInput('');
+    setFreeSearchTerms([]);
+    setFreeSearchInput('');
+    setNlInput('');
+    setNlError('');
+    setSelectedFolder(null);
+    setNewFolderName('');
+    setShowNewFolder(false);
+    setConfirmed(false);
+    setStep(4); // jump direct au step "confirm" — l'user voit le résumé et lance
+  };
+
   const activeRegions = getRegionsForCountry(selectedCountry);
   const activeDepts = getDeptsForCountry(selectedCountry);
 
@@ -519,6 +566,74 @@ export default function SearchPanel({
               <OnboardingHint storageKey="hint_search_dismissed">
                 {t('search.onboardingHint')}
               </OnboardingHint>
+            </div>
+          )}
+
+          {/* Recherche rapide en 1 vue — bypass le wizard 5 étapes pour
+              les users qui savent déjà ce qu'ils veulent. */}
+          {step === 0 && !searchType && (
+            <div className="pl-2 sm:pl-10 animate-in fade-in duration-300">
+              <div className="rounded-xl border border-indigo-500/30 bg-gradient-to-br from-indigo-500/[0.06] to-violet-500/[0.06] p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-6 h-6 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
+                    <Zap size={12} className="text-indigo-300" />
+                  </div>
+                  <span className="text-xs font-bold text-indigo-300 uppercase tracking-wider">Recherche rapide</span>
+                  <span className="text-[10px] text-content-muted">— moins de 30 secondes</span>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex-1 min-w-0">
+                    <input
+                      type="text"
+                      list="prospectia-quick-cats"
+                      value={quickCat}
+                      onChange={(e) => { setQuickCat(e.target.value); setQuickError(''); }}
+                      placeholder="Restaurant, avocat, agence web…"
+                      className="w-full rounded-lg border border-line bg-surface-card px-3 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition"
+                      aria-label="Catégorie d'entreprise"
+                    />
+                    <datalist id="prospectia-quick-cats">
+                      {[...B2B_CATS, ...COPRO_CATS].slice(0, 100).map((c) => (
+                        <option key={c} value={c} />
+                      ))}
+                    </datalist>
+                  </div>
+                  <div className="sm:w-40">
+                    <input
+                      type="text"
+                      list="prospectia-quick-depts"
+                      value={quickDept}
+                      onChange={(e) => { setQuickDept(e.target.value); setQuickError(''); }}
+                      placeholder="Paris, 75, Lyon…"
+                      className="w-full rounded-lg border border-line bg-surface-card px-3 py-2.5 text-sm text-content-primary placeholder-content-muted focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 transition"
+                      aria-label="Département ou ville"
+                    />
+                    <datalist id="prospectia-quick-depts">
+                      {Object.entries(DEPTS).map(([code, name]) => (
+                        <option key={code} value={`${code} - ${name}`} />
+                      ))}
+                    </datalist>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleQuickSearch}
+                    disabled={!quickCat.trim() || !quickDept.trim()}
+                    className="px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition-all disabled:bg-indigo-600/30 disabled:cursor-not-allowed disabled:text-content-muted flex items-center justify-center gap-2 whitespace-nowrap shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
+                  >
+                    <Search size={14} />
+                    Lancer
+                  </button>
+                </div>
+                {quickError && (
+                  <p className="text-xs text-red-400 mt-2 flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-red-400" />
+                    {quickError}
+                  </p>
+                )}
+                <p className="text-[10px] text-content-muted mt-2 leading-relaxed">
+                  Astuce : pour une recherche multi-catégories ou multi-départements, utilise la recherche guidée ci-dessous.
+                </p>
+              </div>
             </div>
           )}
 

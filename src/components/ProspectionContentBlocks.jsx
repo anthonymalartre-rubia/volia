@@ -14,6 +14,7 @@ import {
   Mail, Phone, Linkedin, ArrowRight, AlertTriangle, Quote, Building2,
   Users, TrendingUp, X, CheckCircle2, Shield, Zap,
 } from 'lucide-react';
+import { toRegionUrlSlug } from '@/lib/region-data';
 
 // ─── Social proof localisé (compteur d'utilisateurs déterministe) ─────
 // Génère un nombre crédible (60-280) basé sur dept/region pour éviter le
@@ -766,15 +767,18 @@ export function TopRegionsBlock({ data, category }) {
         Les 3 régions où le secteur est le plus dense — bonnes priorités pour démarrer.
       </p>
       <div className="grid md:grid-cols-3 gap-4">
-        {data.topRegions.map((r, i) => (
+        {data.topRegions.map((r, i) => {
+          const urlSlug = toRegionUrlSlug(r.slug); // 'idf' → 'ile-de-france'
+          const displayName = urlSlug.replace(/-/g, ' ');
+          return (
           <Link
             key={i}
-            href={`/prospection/${category?.slug || ''}/region/${r.slug}`}
+            href={`/prospection/${category?.slug || ''}/region/${urlSlug}`}
             className="group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 hover:border-violet-500/30 transition"
           >
             <div className="text-3xl font-bold text-violet-400 mb-2 group-hover:text-violet-300 transition">#{i + 1}</div>
             <div className="text-sm text-zinc-200 font-semibold mb-1.5 capitalize group-hover:text-white transition">
-              {r.slug.replace(/-/g, ' ')}
+              {displayName}
             </div>
             <div className="text-xs text-zinc-500 leading-relaxed">{r.reason}</div>
             <div className="mt-3 text-xs text-violet-400 inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
@@ -782,7 +786,8 @@ export function TopRegionsBlock({ data, category }) {
               <ArrowRight size={11} />
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

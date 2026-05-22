@@ -238,12 +238,58 @@ const REGION_DATA = {
   },
 };
 
+// Mapping inverse pour convertir un key court (idf, aura, paca...)
+// → slug long URL-friendly (ile-de-france, auvergne-rhone-alpes, paca).
+// Utile pour les liens internes générés depuis category-data.js qui
+// référencent les régions par leur key court.
+const KEY_TO_URL_SLUG = {
+  'idf': 'ile-de-france',
+  'aura': 'auvergne-rhone-alpes',
+  'bfc': 'bourgogne-franche-comte',
+  'bretagne': 'bretagne',
+  'cvl': 'centre-val-de-loire',
+  'ge': 'grand-est',
+  'hdf': 'hauts-de-france',
+  'normandie': 'normandie',
+  'na': 'nouvelle-aquitaine',
+  'occitanie': 'occitanie',
+  'pdl': 'pays-de-la-loire',
+  'paca': 'provence-alpes-cote-d-azur',
+  'corse': 'corse',
+  'om': 'outre-mer',
+};
+
+// Mapping inverse : slug long → key court
+const URL_SLUG_TO_KEY = Object.fromEntries(
+  Object.entries(KEY_TO_URL_SLUG).map(([k, v]) => [v, k])
+);
+
 /**
- * Récupère la data enrichie pour une région (par slug).
+ * Convertit un identifiant de région (key court OU slug long) en slug URL.
+ * Toujours retourne le slug long (utilisable dans une URL).
  */
-export function getRegionData(regionSlug) {
-  if (!regionSlug) return null;
-  return REGION_DATA[regionSlug] || null;
+export function toRegionUrlSlug(keyOrSlug) {
+  if (!keyOrSlug) return null;
+  return KEY_TO_URL_SLUG[keyOrSlug] || keyOrSlug;
+}
+
+/**
+ * Convertit un identifiant de région (key court OU slug long) en key courte.
+ * Utile pour aller chercher dans REGION_DATA (qui est keyé court).
+ */
+export function toRegionShortKey(keyOrSlug) {
+  if (!keyOrSlug) return null;
+  return URL_SLUG_TO_KEY[keyOrSlug] || keyOrSlug;
+}
+
+/**
+ * Récupère la data enrichie pour une région.
+ * Accepte indifféremment la key courte ('idf') ou le slug long ('ile-de-france').
+ */
+export function getRegionData(regionKeyOrSlug) {
+  if (!regionKeyOrSlug) return null;
+  const key = toRegionShortKey(regionKeyOrSlug);
+  return REGION_DATA[key] || null;
 }
 
 export { REGION_DATA };

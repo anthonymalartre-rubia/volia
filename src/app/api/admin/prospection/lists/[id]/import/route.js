@@ -15,6 +15,7 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { parseCsv, normalizeContact } from '@/lib/prospection';
+import { trackOnboardingStep } from '@/lib/onboarding';
 
 const MAX_ROWS = 50_000;       // Anti-bombing
 const CHUNK_SIZE = 500;        // Bulk insert chunk
@@ -112,6 +113,11 @@ export async function POST(request, { params }) {
     phone: c.phone,
     company: c.company,
   }));
+
+  // Onboarding : marque first_csv_import si au moins 1 contact inséré (fire-and-forget)
+  if (inserted > 0) {
+    trackOnboardingStep(user.id, 'first_csv_import');
+  }
 
   return NextResponse.json({
     ok: true,

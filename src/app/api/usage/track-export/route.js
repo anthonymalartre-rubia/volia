@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { incrementUsage, checkLimit } from '@/lib/usage';
+import { trackOnboardingStep } from '@/lib/onboarding';
 
 /**
  * POST /api/usage/track-export
@@ -35,6 +36,9 @@ export async function POST() {
     }
 
     await incrementUsage(supabase, user.id, 'exports');
+
+    // Onboarding : marque first_export (fire-and-forget)
+    trackOnboardingStep(user.id, 'first_export');
 
     return NextResponse.json({ success: true });
   } catch (error) {

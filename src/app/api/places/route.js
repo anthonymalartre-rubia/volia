@@ -2,6 +2,7 @@ import { DEPTS, PLACES_API_URL, FIELD_MASK, getDeptData } from '@/lib/constants'
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { trackApiCall } from '@/lib/apiCosts';
+import { trackOnboardingStep } from '@/lib/onboarding';
 
 export async function GET() {
   // Health check — just checks if API key is set
@@ -115,6 +116,8 @@ export async function POST(request) {
     // facture la valeur (les prospects obtenus), pas l'API call.
     if (places.length > 0) {
       await incrementUsage(supabase, user.id, 'searches', places.length);
+      // Onboarding : marque first_search (fire-and-forget)
+      trackOnboardingStep(user.id, 'first_search');
     }
     return Response.json({ places });
   } catch (error) {

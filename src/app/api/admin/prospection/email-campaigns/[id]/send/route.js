@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/admin-auth';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { trackOnboardingStep } from '@/lib/onboarding';
 
 export async function POST(request, { params }) {
   const auth = await requireAdmin();
@@ -91,6 +92,11 @@ export async function POST(request, { params }) {
     .eq('id', id);
 
   if (upErr) return NextResponse.json({ error: upErr.message }, { status: 500 });
+
+  // Onboarding : marque first_campaign (fire-and-forget)
+  if (totalQueued > 0) {
+    trackOnboardingStep(user.id, 'first_campaign');
+  }
 
   return NextResponse.json({
     ok: true,

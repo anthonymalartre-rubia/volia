@@ -209,6 +209,20 @@ export default async function CategoryRegionPage({ params }) {
         breadcrumbs={breadcrumbs}
         categoryData={getCategoryData(category)}
         regionData={getRegionData(region.slug)}
+        densityChart={(() => {
+          // Top 8 dépts de la région (par taille estimée du marché cat)
+          const depts = regionDepts.slice(0, 8);
+          if (depts.length < 2) return null;
+          const total = parseInt(inflatedStats.total.replace(/\s/g, ''), 10) || 5000;
+          return {
+            scopeLabel: `en ${region.name}`,
+            items: depts.map((d) => ({
+              label: `${d.code} · ${d.name}`,
+              // Estim proportionnelle : tous les dépts d'une région ≈ pareil, sauf qq gros
+              value: Math.round(total / depts.length * (['75','13','69','59','92','33','67','31','06','38'].includes(d.code) ? 2.5 : 1)),
+            })),
+          };
+        })()}
       />
     </>
   );

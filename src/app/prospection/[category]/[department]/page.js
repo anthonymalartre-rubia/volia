@@ -10,6 +10,7 @@ import { breadcrumbSchema, estimateStats, serviceSchema } from '@/lib/seo-helper
 import { getCategoryData } from '@/lib/category-data';
 import { getDeptData } from '@/lib/dept-data';
 import { getCrossSectorSlugs } from '@/lib/cross-sector';
+import { getCitiesByDept } from '@/lib/cities';
 
 // IMPORTANT: This generates 150 × 101 = ~15 000 static pages at build time.
 // To keep build times reasonable, we use Next.js ISR (dynamicParams + revalidate)
@@ -193,6 +194,20 @@ export default async function CategoryDepartmentPage({ params }) {
         breadcrumbs={breadcrumbs}
         categoryData={getCategoryData(category)}
         deptData={getDeptData(dept.code)}
+        densityChart={(() => {
+          // Top 6 villes du dept (par population) avec volume estimé proportionnel.
+          const cities = getCitiesByDept(dept.code).sort((a, b) => (b.pop || 0) - (a.pop || 0)).slice(0, 6);
+          if (cities.length < 2) return null;
+          const total = parseInt(stats.total.replace(/\s/g, ''), 10) || 1000;
+          const popTotal = cities.reduce((s, c) => s + (c.pop || 0), 0) || 1;
+          return {
+            scopeLabel: `dans le ${dept.name}`,
+            items: cities.map((c) => ({
+              label: c.name,
+              value: Math.round(total * ((c.pop || 0) / popTotal)),
+            })),
+          };
+        })()}
       />
     </>
   );

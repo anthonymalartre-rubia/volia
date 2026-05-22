@@ -15,9 +15,9 @@ import {
   PitchBlock, ObjectionBlock, GlossaryBlock, PainPointsBlock, TopRegionsBlock,
   DeptContextBlock, RegionContextBlock, DeptOverviewBlock, SiblingCitiesBlock,
   SocialProofBlock, CompetitorInlineBlock, AuthoritiesBlock,
-  TrustBadgesBlock, DemoCtaBlock,
+  TrustBadgesBlock, DemoCtaBlock, SamplePreviewBlock, DensityChartBlock,
 } from './ProspectionContentBlocks';
-import { LeadMagnetBlock, StickyCtaBar } from './ProspectionClientBlocks';
+import { LeadMagnetBlock, StickyCtaBar, StickyTOC } from './ProspectionClientBlocks';
 
 /**
  * Reusable component for programmatic SEO pages.
@@ -55,6 +55,8 @@ export default function ProspectionSeoPage({
   // ── Pour pages /[cat]/ville/[city] : autres villes du même dept ──
   siblingCities = null, // [{ slug, name, pop }] villes du même dept (toutes, current incluse)
   currentCitySlug = null,
+  // ── DensityChart : { items: [{ label, value }], scopeLabel: "par région" } ──
+  densityChart = null,
 }) {
   const heroBadge = department && category
     ? `${category.labelCapitalized} • ${department.name}`
@@ -63,6 +65,21 @@ export default function ProspectionSeoPage({
     : category
     ? category.labelPlural
     : 'Prospection B2B France';
+
+  // Sections pour le sommaire ancré (sticky TOC). Filtre celles qui n'apparaîtront pas.
+  const tocSections = [
+    category && { id: 'apercu', label: 'Aperçu produit' },
+    categoryData?.kpis?.length && { id: 'chiffres-cles', label: 'Chiffres clés' },
+    categoryData?.persona && { id: 'persona', label: 'Qui contacter' },
+    categoryData?.seasonality && { id: 'saisonnalite', label: 'Saisonnalité' },
+    categoryData?.pitchHook && { id: 'pitch', label: 'Pitch type' },
+    densityChart?.items?.length && { id: 'repartition', label: 'Répartition' },
+    category && { id: 'comparatif', label: 'vs Apollo / Hunter' },
+    categoryData?.objections?.length && { id: 'objections', label: 'Objections' },
+    categoryData?.glossary?.length && { id: 'lexique', label: 'Lexique' },
+    { id: 'demo', label: 'Réserver une démo' },
+    faq?.length > 0 && { id: 'faq', label: 'Questions fréquentes' },
+  ].filter(Boolean);
 
   return (
     <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
@@ -161,6 +178,11 @@ export default function ProspectionSeoPage({
         {/* Social proof juste après les stats — moment de confiance */}
         <SocialProofBlock department={department} region={region} category={category} />
 
+        {/* Sample preview produit (5 entreprises anonymisées) — pousse signup */}
+        <div id="apercu" className="scroll-mt-24">
+          {category && <SamplePreviewBlock category={category} department={department} stats={stats} />}
+        </div>
+
         {/* Why Prospectia (3 features) */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-8">
@@ -205,31 +227,50 @@ export default function ProspectionSeoPage({
         {category && <RegionContextBlock regionData={regionData} region={region} category={category} />}
 
         {/* KPIs sectoriels */}
-        <KpiBlock data={categoryData} category={category} />
+        <div id="chiffres-cles" className="scroll-mt-24">
+          <KpiBlock data={categoryData} category={category} />
+        </div>
 
         {/* Persona */}
-        <PersonaBlock data={categoryData} category={category} />
+        <div id="persona" className="scroll-mt-24">
+          <PersonaBlock data={categoryData} category={category} />
+        </div>
 
         {/* Pain points */}
         <PainPointsBlock data={categoryData} category={category} />
 
         {/* Saisonnalité */}
-        <SeasonalityBlock data={categoryData} category={category} />
+        <div id="saisonnalite" className="scroll-mt-24">
+          <SeasonalityBlock data={categoryData} category={category} />
+        </div>
 
         {/* Best approach */}
         <BestApproachBlock data={categoryData} category={category} />
 
         {/* Pitch hook */}
-        <PitchBlock data={categoryData} category={category} />
+        <div id="pitch" className="scroll-mt-24">
+          <PitchBlock data={categoryData} category={category} />
+        </div>
+
+        {/* Density chart : répartition territoriale (top régions/dépts/villes) */}
+        {densityChart?.items?.length > 0 && (
+          <div id="repartition" className="scroll-mt-24">
+            <DensityChartBlock category={category} items={densityChart.items} scopeLabel={densityChart.scopeLabel} />
+          </div>
+        )}
 
         {/* Lead magnet contextuel (capture email — milieu de page, le hot spot) */}
         {category && <LeadMagnetBlock category={category} />}
 
         {/* Comparatif vs Apollo/Hunter — différenciation visuelle */}
-        {category && <CompetitorInlineBlock category={category} />}
+        <div id="comparatif" className="scroll-mt-24">
+          {category && <CompetitorInlineBlock category={category} />}
+        </div>
 
         {/* Objections */}
-        <ObjectionBlock data={categoryData} category={category} />
+        <div id="objections" className="scroll-mt-24">
+          <ObjectionBlock data={categoryData} category={category} />
+        </div>
 
         {/* Top régions (seulement sur les pages catégorie nationales — pas si déjà sur une page geo) */}
         {!department && !region && <TopRegionsBlock data={categoryData} category={category} />}
@@ -240,17 +281,21 @@ export default function ProspectionSeoPage({
         )}
 
         {/* Glossaire métier */}
-        <GlossaryBlock data={categoryData} category={category} />
+        <div id="lexique" className="scroll-mt-24">
+          <GlossaryBlock data={categoryData} category={category} />
+        </div>
 
         {/* Sources & cadre légal (E-E-A-T : liens autoritaires INSEE, CNIL...) */}
         <AuthoritiesBlock category={category} />
 
         {/* Demo CTA — alternative au signup pour les indécis */}
-        <DemoCtaBlock category={category} />
+        <div id="demo" className="scroll-mt-24">
+          <DemoCtaBlock category={category} />
+        </div>
 
         {/* FAQ */}
         {faq.length > 0 && (
-          <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
+          <section id="faq" className="max-w-3xl mx-auto px-4 sm:px-6 mb-16 scroll-mt-24">
             <h2 className="text-2xl sm:text-3xl font-bold mb-8">
               Questions fréquentes
             </h2>
@@ -465,6 +510,9 @@ export default function ProspectionSeoPage({
 
       {/* Sticky CTA bottom bar — apparaît après scroll, contextualisé */}
       <StickyCtaBar category={category} department={department} region={region} stats={stats} />
+
+      {/* Sticky TOC (desktop only) — sommaire ancré + scroll-spy */}
+      <StickyTOC sections={tocSections} />
     </div>
   );
 }

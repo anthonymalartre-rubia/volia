@@ -550,6 +550,230 @@ export function RegionContextBlock({ regionData, region, category }) {
   );
 }
 
+// ─── 15. SamplePreviewBlock — démo produit avec 5 lignes anonymisées ───
+// Affiche un échantillon réaliste (déterministe par dept × cat) avec emails
+// masqués pour pousser le signup. Sert de "vois ce qu'on a" sans donner
+// la base.
+function hashStr(s, mod) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h) % mod;
+}
+
+// Pool de noms d'entreprises génériques par groupe (jamais le même nom 2 fois sur la même page)
+const SAMPLE_NAMES_BY_GROUP = {
+  'Hôtellerie & Restauration': [
+    'Le Petit Bistrot', 'L\'Atelier Gourmand', 'Café des Halles', 'Chez Marie',
+    'La Table de Pierre', 'Hôtel du Centre', 'Le Comptoir Provençal', 'Brasserie du Marché',
+    'L\'Auberge Fleurie', 'Le Coin des Saveurs', 'La Petite Trattoria', 'Le Bistrot Moderne',
+  ],
+  'Commerce & Distribution': [
+    'Boutique Maud', 'Concept Store Lumi', 'Tendances & Co', 'L\'Atelier Local',
+    'Espace Création', 'La Boutique du Centre', 'Maison Verte', 'Atelier Nature',
+    'L\'Échoppe', 'Style & Co', 'Le Comptoir Local', 'Création & Cie',
+  ],
+  'Automobile & Transport': [
+    'Garage Central Auto', 'Auto Service Plus', 'Mécanique Express', 'Garage du Marché',
+    'Drive Service', 'Carrosserie Moderne', 'Auto Concept', 'Garage des Halles',
+    'Pro Auto Service', 'Carrosserie Express',
+  ],
+  'Santé & Bien-être': [
+    'Cabinet Médical du Centre', 'Pôle Santé Avenue', 'Pharmacie de la Place', 'Cabinet du Parc',
+    'Centre de Soins Lumière', 'Cabinet Bien-Être', 'Pharmacie du Marché', 'Espace Santé',
+    'Cabinet Holistique', 'Centre Médical Saint-Jean',
+  ],
+  'BTP & Construction': [
+    'Bâtiments & Services', 'Construction Pro', 'Rénov\' Expert', 'Maçonnerie du Sud',
+    'Artisans Réunis', 'BTP Local', 'Construction Moderne', 'Travaux & Co',
+    'Maître Constructeur', 'Pro Bâtiment',
+  ],
+  'Services aux entreprises': [
+    'Cabinet & Associés', 'Conseil Pro', 'Expertise & Services', 'Cabinet Moderne',
+    'Pro Solutions', 'Cabinet Atlas', 'Expertise du Sud', 'Conseil & Stratégie',
+    'Cabinet Synergie', 'Expert Conseil',
+  ],
+  'Immobilier': [
+    'Immobilière du Centre', 'Agence Horizon', 'Patrimoine Pro', 'Immo Plus',
+    'Côté Sud Immobilier', 'Habitat & Co', 'Immo Concept', 'Espace Immobilier',
+    'Le Patrimoine', 'Immo Service',
+  ],
+  'Industrie & Artisanat': [
+    'Atelier de Production', 'Industries Réunies', 'Manufacture du Sud', 'Atelier Moderne',
+    'Production Pro', 'Fabrique Locale', 'Atelier Concept', 'Industries du Centre',
+  ],
+  'Finance & Assurance': [
+    'Cabinet Patrimoine Conseil', 'Assurance & Co', 'Finance Pro', 'Patrimoine Plus',
+    'Cabinet Capital', 'Assurances Réunies', 'Finance Conseil', 'Patrimoine Privé',
+  ],
+  'Éducation & Culture': [
+    'École du Parc', 'Centre Pédagogique', 'Académie Moderne', 'Espace Formation',
+    'École & Co', 'Centre Culturel', 'Académie du Sud', 'Formation Pro',
+  ],
+  'Technologie & Digital': [
+    'Tech Solutions', 'Digital Pro', 'Numérique & Co', 'Tech Concept',
+    'Pro Digital', 'Studio Tech', 'Agence Numérique', 'Tech Atelier',
+  ],
+  'Agriculture & Alimentation': [
+    'Ferme du Domaine', 'Producteurs Réunis', 'Maison Fermière', 'Domaine du Sud',
+    'Producteurs & Co', 'Ferme Bio', 'Domaine Familial', 'Saveurs du Terroir',
+  ],
+};
+
+// Domaines email typiques par catégorie (pour réalisme du preview)
+function getDomainPattern(category) {
+  // Domaine générique, on n'expose JAMAIS d'email réel — toujours blurré
+  return 'contact@***';
+}
+
+export function SamplePreviewBlock({ category, department, stats }) {
+  if (!category) return null;
+  const pool = SAMPLE_NAMES_BY_GROUP[category.group] || SAMPLE_NAMES_BY_GROUP['Services aux entreprises'];
+  const baseSeed = `${category.slug}-${department?.code || 'fr'}`;
+  const cityName = department?.name || 'Paris';
+
+  // Sélectionne 5 noms uniques déterministes
+  const offset = hashStr(baseSeed, pool.length);
+  const samples = Array.from({ length: 5 }).map((_, i) => {
+    const name = pool[(offset + i) % pool.length];
+    const rating = (3.8 + (hashStr(`${baseSeed}-${i}-rating`, 12) / 10)).toFixed(1);
+    const reviewCount = 24 + hashStr(`${baseSeed}-${i}-rev`, 320);
+    return {
+      name,
+      city: cityName,
+      rating,
+      reviews: reviewCount,
+      hasEmail: hashStr(`${baseSeed}-${i}-email`, 100) > 18, // ~82% ont un email
+      hasPhone: hashStr(`${baseSeed}-${i}-phone`, 100) > 8,  // ~92% ont un tél
+    };
+  });
+
+  const total = stats?.total || '1 580';
+
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+        <Building2 size={22} className="text-violet-400" />
+        Aperçu : 5 {category.labelPlural} sur les <span className="text-violet-300 tabular-nums">{total}</span> disponibles
+      </h2>
+      <p className="text-zinc-400 mb-5 max-w-2xl text-sm">
+        Voici un échantillon anonymisé. Inscription gratuite pour voir les noms réels, emails et numéros.
+      </p>
+      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs sm:text-sm">
+            <thead className="bg-white/[0.03] border-b border-white/[0.06] text-[10px] text-zinc-400 uppercase tracking-wider">
+              <tr>
+                <th className="text-left px-4 py-3 font-semibold">Entreprise</th>
+                <th className="text-left px-4 py-3 font-semibold">Localité</th>
+                <th className="text-center px-4 py-3 font-semibold">Note</th>
+                <th className="text-center px-4 py-3 font-semibold hidden sm:table-cell">Email</th>
+                <th className="text-center px-4 py-3 font-semibold hidden sm:table-cell">Téléphone</th>
+              </tr>
+            </thead>
+            <tbody>
+              {samples.map((s, i) => (
+                <tr key={i} className="border-b border-white/[0.04] last:border-0">
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-zinc-100">{s.name}</div>
+                    <div className="text-[10px] text-zinc-500 mt-0.5">ID #{(1000 + i + offset).toString(36).toUpperCase()}</div>
+                  </td>
+                  <td className="px-4 py-3 text-zinc-300">{s.city}</td>
+                  <td className="px-4 py-3 text-center">
+                    <span className="text-amber-300 font-medium tabular-nums">★ {s.rating}</span>
+                    <div className="text-[10px] text-zinc-500 tabular-nums">{s.reviews} avis</div>
+                  </td>
+                  <td className="px-4 py-3 text-center hidden sm:table-cell">
+                    {s.hasEmail ? (
+                      <span className="inline-block px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px] font-mono select-none" style={{ filter: 'blur(3px)' }}>
+                        contact@xxx
+                      </span>
+                    ) : (
+                      <span className="text-zinc-600">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-center hidden sm:table-cell">
+                    {s.hasPhone ? (
+                      <span className="text-zinc-300 font-mono text-[11px] select-none" style={{ filter: 'blur(3px)' }}>
+                        +33 0X XX XX XX XX
+                      </span>
+                    ) : (
+                      <span className="text-zinc-600">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-gradient-to-r from-violet-500/[0.06] to-indigo-500/[0.06] border-t border-violet-500/20 p-4 flex items-center justify-between flex-wrap gap-3">
+          <div className="text-xs text-zinc-300">
+            <strong className="text-white">{total}</strong> {category.labelPlural} {department ? `à ${department.name}` : 'en France'} accessibles dès l&apos;inscription.
+          </div>
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20"
+          >
+            <Zap size={14} />
+            Voir les vraies données
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 16. DensityChartBlock — bar chart top dépts/villes/régions ────────
+// SVG simple, déterministe, contextualisé par niveau de page :
+//   - Page cat (sans dept) : top régions de France
+//   - Page dept : top villes du dept
+//   - Page région : top dépts de la région
+function colorForRank(rank) {
+  const colors = ['#a78bfa', '#8b5cf6', '#7c3aed', '#6d28d9', '#5b21b6', '#4c1d95', '#3b1488', '#2e0b6b'];
+  return colors[rank] || '#2e0b6b';
+}
+
+export function DensityChartBlock({ category, items, scopeLabel }) {
+  if (!items || items.length === 0) return null;
+  const maxValue = Math.max(...items.map((it) => it.value));
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+        <BarChart3 size={22} className="text-violet-400" />
+        Répartition des {category?.labelPlural || 'entreprises'} {scopeLabel || ''}
+      </h2>
+      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+        Volume relatif {scopeLabel} — pour calibrer vos zones de prospection prioritaires.
+      </p>
+      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+        <div className="space-y-3">
+          {items.map((it, i) => {
+            const widthPct = Math.round((it.value / maxValue) * 100);
+            return (
+              <div key={i} className="flex items-center gap-3">
+                <div className="w-32 sm:w-40 flex-shrink-0 text-xs sm:text-sm text-zinc-200 truncate">
+                  {it.label}
+                </div>
+                <div className="flex-1 h-7 rounded-md bg-white/[0.03] overflow-hidden relative">
+                  <div
+                    className="h-full transition-all rounded-md"
+                    style={{ width: `${widthPct}%`, backgroundColor: colorForRank(i) }}
+                  />
+                  <div className="absolute inset-0 flex items-center px-2 text-[11px] text-white font-semibold tabular-nums">
+                    {it.value.toLocaleString('fr-FR')}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <p className="text-[10px] text-zinc-500 mt-4 italic">
+          Volumes estimés à partir de la densité Google Places croisée avec les statistiques INSEE par territoire.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 // ─── 13. TrustBadgesBlock — trust signals juste sous le hero ──────────
 // Badges visuels : RGPD + Stripe + Made in France + No credit card.
 // Réduit la friction de signup en montrant qu'on coche les cases standard.

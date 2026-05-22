@@ -112,6 +112,71 @@ export function LeadMagnetBlock({ category }) {
   );
 }
 
+// ─── Sticky TOC (sommaire ancré desktop, scroll-spy) ───────────────────
+// Liste des sections de la page → liens ancrés. Met en valeur la section
+// active au scroll. Caché en mobile (place limitée).
+export function StickyTOC({ sections = [] }) {
+  const [active, setActive] = useState(sections[0]?.id || null);
+
+  useEffect(() => {
+    if (!sections.length) return;
+    // Observe chaque section : on active la première qui croise le top 30 % du viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: '-30% 0px -60% 0px' }
+    );
+    sections.forEach((s) => {
+      const el = document.getElementById(s.id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [sections]);
+
+  if (!sections.length) return null;
+
+  return (
+    <aside className="hidden xl:block fixed top-24 right-6 w-56 z-30">
+      <nav className="rounded-xl border border-white/[0.06] bg-black/40 backdrop-blur-md p-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <div className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+          <BookOpenLine size={11} />
+          Sur cette page
+        </div>
+        <ul className="space-y-1.5">
+          {sections.map((s) => (
+            <li key={s.id}>
+              <a
+                href={`#${s.id}`}
+                className={`block text-xs leading-snug transition border-l-2 pl-2.5 ${
+                  active === s.id
+                    ? 'border-violet-500 text-violet-300 font-medium'
+                    : 'border-white/[0.05] text-zinc-500 hover:text-zinc-200 hover:border-white/30'
+                }`}
+              >
+                {s.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+  );
+}
+
+// Mini icon book (pas de BookOpen suffisant dans lucide-react pour le TOC)
+function BookOpenLine({ size = 12 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+    </svg>
+  );
+}
+
 // ─── Sticky bottom CTA bar ─────────────────────────────
 // Apparaît après ~600px de scroll, contextualisée par catégorie/dept.
 export function StickyCtaBar({ category, department, region, stats }) {

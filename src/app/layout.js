@@ -113,12 +113,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
-        {/* Preconnect aux domaines tiers utilisés sur la quasi-totalité des pages */}
-        <link rel="preconnect" href="https://js.stripe.com" />
+        {/* Preconnect aux domaines tiers présents sur quasi toutes les pages.
+            Note: Stripe (js.stripe.com, api.stripe.com) déplacé sur /settings
+            uniquement — ça ne sert à rien sur la landing et ça gaspille une
+            connexion qui retarde le LCP mobile. */}
         <link rel="preconnect" href="https://va.vercel-scripts.com" />
-        <link rel="preconnect" href="https://vitals.vercel-insights.com" />
-        <link rel="dns-prefetch" href="https://api.stripe.com" />
-        {/* DNS-prefetch Supabase (auth + queries client) */}
+        <link rel="dns-prefetch" href="https://vitals.vercel-insights.com" />
+        {/* DNS-prefetch Supabase (auth + queries client une fois loggé) */}
         <link rel="dns-prefetch" href="https://kqrarrrojdtxijkhejhg.supabase.co" />
 
         {/* Prevent flash of wrong theme — default = light */}

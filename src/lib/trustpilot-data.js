@@ -31,10 +31,19 @@
 //
 // ─────────────────────────────────────────────────────────────────────
 
-// Lu depuis env var. Si absent → Trustpilot désactivé partout, aucun
-// composant ne s'affiche, le JSON-LD aggregateRating n'est pas injecté.
+// Business Unit ID Trustpilot — valeur publique (présente dans tous les
+// snippets widgets). Hardcoded en fallback pour que tout fonctionne même
+// sans env var ; la env var permet de switcher facilement de profil si
+// nécessaire (staging, test, etc.).
 export const TRUSTPILOT_BUSINESS_UNIT_ID =
-  process.env.NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID || '';
+  process.env.NEXT_PUBLIC_TRUSTPILOT_BUSINESS_UNIT_ID ||
+  '6a1184b9bcabb859c867ccb1';
+
+// Token public du Review Collector (widget officiel Trustpilot qui permet
+// aux users de laisser un avis depuis notre dashboard). Public, à garder
+// hardcoded — il authentifie ce widget spécifique pour le profil
+// prospectia.cloud.
+export const TRUSTPILOT_REVIEW_COLLECTOR_TOKEN = '35703c39-4ee9-4524-a257-954a1c329973';
 
 // Note moyenne et nombre d'avis actuels — à updater MANUELLEMENT.
 // Sources : dashboard Trustpilot business.trustpilot.com → Reviews.

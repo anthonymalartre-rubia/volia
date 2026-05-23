@@ -20,12 +20,15 @@ const nextConfig = {
     //   et tout fetch d'image externe (Google Places, etc.).
     const csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://va.vercel-scripts.com",
+      // widget.trustpilot.com : script bootstrap du Review Collector
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://va.vercel-scripts.com https://widget.trustpilot.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "img-src 'self' data: blob: https:",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://va.vercel-scripts.com https://vitals.vercel-insights.com",
-      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
+      // *.trustpilot.com : appels API du widget pour récupérer config + envoyer reviews
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://va.vercel-scripts.com https://vitals.vercel-insights.com https://*.trustpilot.com",
+      // widget.trustpilot.com : le Review Collector affiche un iframe pour le formulaire d'avis
+      "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://widget.trustpilot.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",

@@ -17,7 +17,18 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-lg font-semibold text-content-primary">Vue d&apos;ensemble</h2>
+      {/* Header de section avec hiérarchie premium (label uppercase + titre + subtitle) */}
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-400 mb-2">
+          Aperçu général
+        </p>
+        <h2 className="text-2xl sm:text-3xl font-bold text-content-primary tracking-tight">
+          Vue d&apos;ensemble
+        </h2>
+        <p className="text-sm text-content-tertiary mt-1.5 leading-relaxed">
+          Statistiques et tendances de vos campagnes de prospection.
+        </p>
+      </div>
 
       {/* KPI cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -54,7 +65,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
       {/* Enrichment progress — the most important metric */}
       {hasData && (
-        <div className="rounded-xl border border-line bg-surface-card p-5">
+        <div className="rounded-2xl border border-line bg-surface-card p-6 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <Zap className="h-4 w-4 text-violet-400" /> Progression enrichissement
           </h3>
@@ -88,7 +99,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Weekly trend */}
-        <div className="rounded-xl border border-line bg-surface-card p-4">
+        <div className="rounded-2xl border border-line bg-surface-card p-5 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <BarChart3 className="h-4 w-4" /> Tendance (4 semaines)
           </h3>
@@ -118,7 +129,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
         </div>
 
         {/* By department — top 6 */}
-        <div className="rounded-xl border border-line bg-surface-card p-4">
+        <div className="rounded-2xl border border-line bg-surface-card p-5 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <MapPin className="h-4 w-4" /> Top departements
           </h3>
@@ -150,7 +161,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
       {/* Score distribution & email methods */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-line bg-surface-card p-4">
+        <div className="rounded-2xl border border-line bg-surface-card p-5 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <Target className="h-4 w-4" /> Qualite des leads
           </h3>
@@ -179,7 +190,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
           )}
         </div>
 
-        <div className="rounded-xl border border-line bg-surface-card p-4">
+        <div className="rounded-2xl border border-line bg-surface-card p-5 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
             <CheckCircle className="h-4 w-4" /> Sources d&apos;enrichissement
           </h3>
@@ -226,15 +237,15 @@ export default function OverviewPanel({ prospects, searchHistory }) {
 
 function KpiCard({ icon: Icon, label, value, sub, color = 'text-violet-400', bgColor = 'bg-violet-500/10' }) {
   return (
-    <div className="rounded-xl border border-line bg-surface-card p-4">
-      <div className="flex items-center gap-2 mb-2">
-        <div className={`p-1.5 rounded-lg ${bgColor}`}>
+    <div className="group rounded-2xl border border-line bg-surface-card p-5 shadow-sm hover:shadow-md hover:border-line-hover transition-all duration-200">
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className={`p-2 rounded-xl ${bgColor} group-hover:scale-105 transition-transform`}>
           <Icon className={`h-4 w-4 ${color}`} />
         </div>
-        <span className="text-[11px] text-content-tertiary uppercase tracking-wider">{label}</span>
+        <span className="text-[11px] text-content-tertiary uppercase tracking-wider font-semibold">{label}</span>
       </div>
-      <div className="text-2xl font-bold text-content-primary tabular-nums">{value}</div>
-      {sub && <div className="text-[10px] text-content-muted mt-1">{sub}</div>}
+      <div className="text-3xl font-bold text-content-primary tabular-nums tracking-tight">{value}</div>
+      {sub && <div className="text-[11px] text-content-muted mt-1.5">{sub}</div>}
     </div>
   );
 }

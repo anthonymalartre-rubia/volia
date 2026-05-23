@@ -35,11 +35,15 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
 
       {/* Sidebar */}
       <aside className={`
-        fixed top-14 left-0 z-40 h-[calc(100vh-3.5rem)] w-64 bg-surface-base border-r border-line
+        relative fixed top-14 left-0 z-40 h-[calc(100vh-3.5rem)] w-64
+        bg-surface-base/90 backdrop-blur-xl border-r border-line
         transition-transform duration-300 ease-out
         md:translate-x-0 md:static md:z-auto
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
+        {/* Hint gradient violet au sommet — signal visuel "premium" subtil */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent pointer-events-none" />
+
         <div className="flex flex-col h-full p-4">
           {/* Close button mobile */}
           <button
@@ -51,7 +55,7 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
           </button>
 
           {/* Navigation */}
-          <nav className="space-y-1.5" role="navigation" aria-label="Navigation principale">
+          <nav className="space-y-1" role="navigation" aria-label="Navigation principale">
             {NAV_ITEMS.filter(item => !item.paid || userPlan?.id === 'pro' || userPlan?.id === 'enterprise').map((item) => {
               const isActive = activeView === item.id;
               return (
@@ -100,10 +104,13 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
             })}
           </nav>
 
+          {/* Séparateur subtil entre Navigation et Settings/Admin */}
+          <div className="my-5 h-px bg-line" />
+
           {/* Settings link */}
           <a
             href="/settings"
-            className="mt-4 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-content-tertiary hover:text-content-primary hover:bg-surface-card transition-all duration-200"
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-content-tertiary hover:text-content-primary hover:bg-surface-card transition-all duration-200"
           >
             <div className="p-1.5 rounded-lg bg-surface-card">
               <Settings size={16} />
@@ -118,7 +125,7 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
           {isAdmin && (
             <a
               href="/admin"
-              className="mt-4 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
+              className="mt-1 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
             >
               <div className="p-1.5 rounded-lg bg-amber-500/20">
                 <Shield size={16} />
@@ -153,11 +160,13 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
             </div>
           </div>
 
-          {/* Bottom info */}
+          {/* Bottom info — encart subtil avec hint gradient violet/indigo */}
           <div className="mt-auto">
-            <div className="p-4 rounded-xl bg-gradient-to-br from-surface-card to-surface-alt border border-line">
-              <p className="text-[10px] uppercase tracking-wider text-content-faint font-semibold mb-2">{t('sidebar.allFrance')}</p>
-              <p className="text-[10px] text-content-muted leading-relaxed">{t('sidebar.franceMeta')}</p>
+            <div className="relative p-4 rounded-xl bg-gradient-to-br from-violet-500/[0.05] to-indigo-500/[0.05] border border-violet-500/15 overflow-hidden">
+              {/* Mini blob violet en bas-droite pour donner du caractère */}
+              <div className="absolute -bottom-8 -right-8 w-20 h-20 rounded-full bg-violet-500/15 blur-2xl pointer-events-none" />
+              <p className="relative text-[10px] uppercase tracking-wider text-violet-300 font-semibold mb-2">{t('sidebar.allFrance')}</p>
+              <p className="relative text-[10px] text-content-muted leading-relaxed">{t('sidebar.franceMeta')}</p>
             </div>
           </div>
         </div>

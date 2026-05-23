@@ -12,6 +12,7 @@ import UpgradeBanner from '@/components/UpgradeBanner';
 const OnboardingChecklist = lazy(() => import('@/components/OnboardingChecklist'));
 const ReferralBanner = lazy(() => import('@/components/ReferralBanner'));
 const ReviewSolicitationBanner = lazy(() => import('@/components/ReviewSolicitationBanner'));
+const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgroundDecor'));
 import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -1264,7 +1265,14 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-surface-base text-content-primary">
+    <div className="min-h-screen bg-surface-base text-content-primary relative">
+      {/* Décor de fond subtil (blobs gradient + grid pattern) — visible
+          en dark mode uniquement. Apporte un peu d'âme "premium app"
+          au dashboard sans distraire. Lazy pour ne pas bloquer LCP. */}
+      <Suspense fallback={null}>
+        <DashboardBackgroundDecor />
+      </Suspense>
+
       <TopBar
         user={user}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
@@ -1357,6 +1365,33 @@ export default function Dashboard() {
           </Suspense>
           <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
+            {/* Header de section premium pour les vues non-overview (Recherche,
+                Leads, Export, Vérifier). OverviewPanel a déjà son propre
+                header intégré. Apporte la hiérarchie typo de la landing. */}
+            {activeView !== 'overview' && (
+              (() => {
+                const meta = {
+                  search:  { kicker: 'Découvrir', title: 'Recherche', sub: 'Trouvez des prospects via Google Places — 150+ catégories, 101 départements, 6 provinces BE, 6 cantons CH.' },
+                  results: { kicker: 'Vos leads',  title: `Prospects${prospects.length ? ` · ${prospects.length.toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
+                  export:  { kicker: 'Données',    title: 'Export CSV', sub: 'Exportez en CSV compatible HubSpot / Salesforce / Zoho / Pipedrive.' },
+                  verify:  { kicker: 'Validation', title: 'Vérifier un email', sub: 'Confirmez la délivrabilité d\'un email avant de l\'envoyer.' },
+                }[activeView];
+                if (!meta) return null;
+                return (
+                  <div className="mb-6 sm:mb-8">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-400 mb-2">
+                      {meta.kicker}
+                    </p>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-content-primary tracking-tight">
+                      {meta.title}
+                    </h2>
+                    <p className="text-sm text-content-tertiary mt-1.5 leading-relaxed max-w-2xl">
+                      {meta.sub}
+                    </p>
+                  </div>
+                );
+              })()
+            )}
             <Suspense fallback={panelFallback}>
               {activeView === 'overview' && (
                 <OverviewPanel

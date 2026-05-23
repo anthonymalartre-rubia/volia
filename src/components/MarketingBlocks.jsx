@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import { Star, ArrowRight, Shield, CheckCircle2, Quote, Download, Mail, Briefcase, Rocket, Code2, Users, UserCircle2, Target } from 'lucide-react';
 import { getTestimonials } from '@/lib/testimonials';
+import { MarketingCard } from '@/components/ui';
 
 // ─── TestimonialsBlock ────────────────────────────────────────────
 // Affiche 3 ou 6 témoignages dans une grille. Sector-aware (peut prioriser).
@@ -22,7 +23,7 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((t, i) => (
-          <article key={i} className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 flex flex-col">
+          <MarketingCard key={i} as="article" size="md" className="flex flex-col">
             <Quote size={18} className="text-violet-400/60 mb-3" />
             <p className="text-sm text-zinc-200 leading-relaxed mb-4 flex-1">
               « {t.content} »
@@ -37,7 +38,7 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
               <div className="text-xs text-zinc-400">{t.role} · {t.company}</div>
               <div className="text-[10px] text-zinc-500 mt-0.5">{t.location} · {t.sector}</div>
             </div>
-          </article>
+          </MarketingCard>
         ))}
       </div>
     </section>
@@ -125,10 +126,13 @@ export function BuiltForProfilesBlock({
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {BUILT_FOR_PROFILES.map(({ slug, icon: Icon, label, pitch, metric, gradient, iconColor }) => (
-          <Link
+          <MarketingCard
             key={slug}
+            variant="persona"
+            size="md"
             href={`/pour/${slug}`}
-            className={`group relative rounded-2xl border border-white/[0.06] bg-gradient-to-br ${gradient} p-5 hover:border-white/[0.12] hover:scale-[1.02] transition-all duration-200 flex flex-col`}
+            gradientClass={`bg-gradient-to-br ${gradient}`}
+            className="group flex flex-col"
           >
             <div className="flex items-start justify-between gap-3 mb-3">
               <div className={`w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center ${iconColor}`}>
@@ -144,7 +148,7 @@ export function BuiltForProfilesBlock({
               Voir la page dédiée
               <ArrowRight size={11} className="group-hover:translate-x-0.5 transition" />
             </div>
-          </Link>
+          </MarketingCard>
         ))}
       </div>
       {/* Mini-strip stats produit honnêtes — pas de fake clients, juste les faits */}

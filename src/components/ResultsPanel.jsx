@@ -91,23 +91,23 @@ function EnrichmentProgressBanner({
   const isRunning = isEnriching || isDeepEnriching || isWaterfallEnriching;
   if (!isRunning && !justFinished) return null;
 
-  let progress, methodLabel, accentFrom, accentTo;
+  // Tous les modes d'enrichissement partagent la même couleur d'accent
+  // (violet/indigo brand) — le LABEL change, pas la palette. Évite le bruit
+  // visuel d'un système 3-couleurs anxiogène pendant les opérations longues.
+  let progress, methodLabel;
   if (isWaterfallEnriching || (justFinished && justFinished.type === "waterfall")) {
     progress = waterfallProgress;
     methodLabel = t('results.waterfallPro');
-    accentFrom = "from-orange-500";
-    accentTo = "to-amber-500";
   } else if (isDeepEnriching || (justFinished && justFinished.type === "deep")) {
     progress = deepEnrichProgress;
     methodLabel = t('results.deepEnrich');
-    accentFrom = "from-purple-500";
-    accentTo = "to-indigo-500";
   } else {
     progress = enrichProgress;
     methodLabel = "Scraping";
-    accentFrom = "from-indigo-500";
-    accentTo = "to-purple-500";
   }
+  // Gradient brand unifié (violet → indigo)
+  const accentFrom = "from-violet-600";
+  const accentTo = "to-indigo-600";
 
   const current = progress?.current || 0;
   const total = progress?.total || 0;
@@ -194,7 +194,7 @@ function EnrichmentProgressBanner({
           <div className="px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 shrink-0">
-                <Loader2 size={16} className="text-indigo-400 animate-spin" />
+                <Loader2 size={16} className="text-violet-400 animate-spin" />
                 <span className="text-xs font-semibold text-content-primary">{methodLabel}</span>
               </div>
               <div className="flex items-center gap-2 shrink-0">

@@ -7,6 +7,7 @@ import { LogOut, Menu, Loader2, Sun, Moon, Globe } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
 import NotificationBell from '@/components/NotificationBell';
+import { LogoIcon } from '@/components/ui';
 
 export default function TopBar({ user, onToggleSidebar, searchProgress, isSearching }) {
   const router = useRouter();
@@ -39,9 +40,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/20">
-              <span className="text-xs font-bold text-white">P</span>
-            </div>
+            <LogoIcon size="sm" />
             <span className="text-sm font-semibold text-content-primary hidden sm:block tracking-tight">
               Prospectia<span className="text-violet-400">.cloud</span>
             </span>

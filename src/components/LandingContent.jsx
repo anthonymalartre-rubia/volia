@@ -10,6 +10,7 @@ import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { useI18n } from '@/lib/i18n';
 import { TestimonialsBlock, BuiltForProfilesBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 import TrustpilotReviewsBlock from '@/components/TrustpilotReviewsBlock';
+import { LogoIcon } from '@/components/ui';
 import TrustpilotBadge from '@/components/TrustpilotBadge';
 
 function formatPrice(cents) {
@@ -120,12 +121,10 @@ export default function LandingContent() {
       <header>
       <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-1">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
-              <span className="text-[11px] font-bold text-white">P</span>
-            </div>
-            <span className="text-lg font-bold tracking-tight">Prospectia</span>
-            <span className="text-violet-400 text-xs font-semibold">.ai</span>
+          <Link href="/" className="flex items-center gap-1.5">
+            <LogoIcon size="sm" />
+            <span className="text-lg font-bold tracking-tight ml-1">Prospectia</span>
+            <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.features')}</Link>
@@ -853,10 +852,8 @@ export default function LandingContent() {
           {/* Bottom legal */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center">
-                <span className="text-[8px] font-bold text-white">P</span>
-              </div>
-              <span className="text-sm font-bold tracking-tight">Prospectia</span>
+              <LogoIcon size="xs" />
+              <span className="text-sm font-bold tracking-tight ml-1">Prospectia</span>
               <span className="text-violet-400 text-[10px] font-semibold">.cloud</span>
             </div>
             <div className="flex items-center gap-6 text-xs text-zinc-600">

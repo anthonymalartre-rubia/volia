@@ -5,6 +5,13 @@
       <stop offset="100%" style="stop-color:#8b5cf6"/>
     </linearGradient>
   </defs>
+  <!-- Fond carré gradient indigo→violet, coins arrondis iOS-style -->
   <rect width="180" height="180" rx="40" fill="url(#g)"/>
-  <text x="90" y="125" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="110" fill="white">P</text>
+  <!-- Symbole P stylisé avec viseur/cible intégré -->
+  <!-- Barre verticale du P -->
+  <rect x="40" y="36" width="17" height="108" fill="white"/>
+  <!-- Boucle du P (cercle radar) -->
+  <circle cx="98" cy="70" r="36" fill="none" stroke="white" stroke-width="17"/>
+  <!-- Viseur central (diamant rotated 45°) -->
+  <rect x="88" y="60" width="20" height="20" fill="white" transform="rotate(45 98 70)"/>
 </svg>

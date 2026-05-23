@@ -5,22 +5,25 @@
 // auth shell). Schizophrénie complète alors que le domaine officiel
 // est prospectia.cloud (cf CLAUDE.md).
 //
-// Ce composant centralise le rendu pour qu'un changement futur (ex:
-// rebranding, accent color update) se fasse en 1 endroit.
+// Maintenant : utilise le composant <Logo /> (vrai logo Prospectia avec
+// symbole P + viseur, intégré en mai 2026). Le placeholder "P" carré
+// dans un gradient a été remplacé partout.
 //
-// Variants :
-// - default : "Prospectia" + ".cloud" violet (usage standard)
-// - logo : avec le P carré violet/indigo à gauche (header nav, hero)
-// - compact : juste "Prospectia" sans suffixe (très petits espaces)
+// Variants conservés pour rétro-compat avec l'ancienne API :
+// - default : juste le wordmark "Prospectia" (image SVG)
+// - logo : symbole P + texte "Prospectia"
+// - compact : juste le symbole P (rare)
 
 import Link from 'next/link';
+import Image from 'next/image';
+import { LogoIcon } from './Logo';
 
 const SIZES = {
-  xs: { text: 'text-sm', logo: 'w-6 h-6 text-[10px]', suffix: 'text-[10px]' },
-  sm: { text: 'text-base', logo: 'w-7 h-7 text-[11px]', suffix: 'text-xs' },
-  md: { text: 'text-lg', logo: 'w-8 h-8 text-xs', suffix: 'text-xs' },
-  lg: { text: 'text-xl', logo: 'w-9 h-9 text-sm', suffix: 'text-sm' },
-  xl: { text: 'text-2xl', logo: 'w-12 h-12 text-base', suffix: 'text-base' },
+  xs: { wordmarkH: 'h-4', iconSize: 'xs', gap: 'gap-1.5' },
+  sm: { wordmarkH: 'h-5', iconSize: 'sm', gap: 'gap-2' },
+  md: { wordmarkH: 'h-6', iconSize: 'sm', gap: 'gap-2' },
+  lg: { wordmarkH: 'h-7', iconSize: 'md', gap: 'gap-2.5' },
+  xl: { wordmarkH: 'h-10', iconSize: 'lg', gap: 'gap-3' },
 };
 
 export default function BrandWordmark({
@@ -31,22 +34,34 @@ export default function BrandWordmark({
   className = '',
 }) {
   const s = SIZES[size] || SIZES.md;
+
+  // variant="compact" : juste le symbole P (sans wordmark)
+  if (variant === 'compact') {
+    return <LogoIcon size={s.iconSize} className={className} asLink={asLink} href={href} />;
+  }
+
+  // variant="logo" : symbole P + wordmark côte à côte
+  // variant="default" : juste wordmark
   const inner = (
-    <span className={`inline-flex items-center gap-1.5 font-bold tracking-tight ${className}`}>
-      {variant === 'logo' && (
-        <span className={`rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold mr-1 shadow-lg shadow-violet-500/20 ${s.logo}`}>
-          P
-        </span>
-      )}
-      <span className={s.text}>Prospectia</span>
-      {variant !== 'compact' && (
-        <span className={`text-violet-400 font-semibold ${s.suffix}`}>.cloud</span>
-      )}
+    <span className={`inline-flex items-center ${s.gap} text-content-primary ${className}`}>
+      {variant === 'logo' && <LogoIcon size={s.iconSize} />}
+      <Image
+        src="/logos/prospectia-wordmark.svg"
+        alt="Prospectia"
+        width={367}
+        height={100}
+        className={`w-auto ${s.wordmarkH}`}
+        priority={size === 'lg' || size === 'xl'}
+      />
     </span>
   );
 
   if (asLink) {
-    return <Link href={href} className="inline-flex items-center hover:opacity-90 transition">{inner}</Link>;
+    return (
+      <Link href={href} className="inline-flex items-center hover:opacity-90 transition">
+        {inner}
+      </Link>
+    );
   }
   return inner;
 }

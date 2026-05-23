@@ -8,6 +8,7 @@ import { getCompetitor, getAllCompetitors, getPairsFor } from '@/lib/competitors
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import { LogoIcon } from '@/components/ui';
 
 // 14 outils → 14 pages /outils/[outil]
 export async function generateStaticParams() {
@@ -275,7 +276,7 @@ export default async function OutilPage({ params }) {
             {/* Prospectia featured */}
             <div className="rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.04] p-5 mb-4">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center font-bold text-white flex-shrink-0">P</div>
+                <LogoIcon size="md" className="flex-shrink-0" />
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-baseline gap-2 mb-1">
                     <h3 className="text-lg font-bold text-content-primary">Prospectia</h3>

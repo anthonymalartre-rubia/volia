@@ -5,6 +5,13 @@
       <stop offset="100%" style="stop-color:#8b5cf6"/>
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#g)"/>
-  <text x="16" y="22" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="18" fill="white">P</text>
+  <!-- Fond carré gradient indigo→violet, coins arrondis -->
+  <rect width="32" height="32" rx="7" fill="url(#g)"/>
+  <!-- Symbole P stylisé avec viseur/cible intégré (rappel du logo brand) -->
+  <!-- Barre verticale du P -->
+  <rect x="7.2" y="6.5" width="3" height="19" fill="white"/>
+  <!-- Boucle du P (cercle radar) -->
+  <circle cx="17.5" cy="12.5" r="6.5" fill="none" stroke="white" stroke-width="3"/>
+  <!-- Viseur central (diamant rotated 45°) -->
+  <rect x="15.7" y="10.7" width="3.6" height="3.6" fill="white" transform="rotate(45 17.5 12.5)"/>
 </svg>

@@ -4,6 +4,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { LogoIcon } from '@/components/ui';
 
 export default function AuthPageShell({
   children,
@@ -36,9 +37,7 @@ export default function AuthPageShell({
             {backLabel}
           </Link>
           <Link href="/" className="flex items-center gap-1">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
-              <span className="text-[11px] font-bold text-white">P</span>
-            </div>
+            <LogoIcon size="sm" className="mr-1.5" />
             <span className="text-lg font-bold tracking-tight">Prospectia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>

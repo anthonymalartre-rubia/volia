@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/lib/theme';
+import { LogoIcon } from '@/components/ui';
 
 /**
  * Shared header for "reader" pages : blog, guides, glossary.
@@ -15,9 +16,7 @@ export default function ReaderHeader() {
     <nav className="fixed top-0 w-full z-50 bg-surface-base/80 backdrop-blur-2xl border-b border-line">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-1">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
-            <span className="text-[11px] font-bold text-white">P</span>
-          </div>
+          <LogoIcon size="sm" className="mr-1.5" />
           <span className="text-lg font-bold tracking-tight text-content-primary">Prospectia</span>
           <span className="text-violet-500 dark:text-violet-400 text-xs font-semibold">.cloud</span>
         </Link>

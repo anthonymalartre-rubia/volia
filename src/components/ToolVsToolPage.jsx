@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import { LogoIcon } from '@/components/ui';
 
 /**
  * Composant rendu pour /outils/comparatif/[X]-vs-[Y].
@@ -233,7 +234,7 @@ export default function ToolVsToolPage({ a, b }) {
           {/* Prospectia alternative card */}
           <div className="rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.04] p-6 mb-12">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center font-bold text-white flex-shrink-0">P</div>
+              <LogoIcon size="md" className="flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-baseline gap-2 mb-1">
                   <h3 className="text-lg font-bold text-content-primary">Prospectia, l&apos;alternative française aux deux</h3>

@@ -9,7 +9,7 @@ import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, ArrowLeft } from 'lucide
 import ThemeToggle from '@/components/ThemeToggle';
 import AuthBackgroundDecor from '@/components/AuthBackgroundDecor';
 import { GOOGLE_OAUTH_ENABLED } from '@/lib/auth-config';
-import { Button, Input } from '@/components/ui';
+import { Button, Input, LogoIcon } from '@/components/ui';
 
 // SVG inline Google logo officiel — pas dispo dans lucide
 function GoogleIcon() {
@@ -100,9 +100,7 @@ export default function LoginPage() {
       >
         {/* Logo */}
         <div className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 shadow-lg shadow-violet-500/20">
-            <span className="text-lg font-bold text-white">P</span>
-          </div>
+          <LogoIcon size="lg" className="mx-auto" />
           <h1 className="mt-4 text-2xl font-bold text-content-primary">Prospectia<span className="text-violet-400">.cloud</span></h1>
           <p className="mt-2 text-sm text-content-tertiary">
             {t('auth.loginTitle')}

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight, Check, Zap, AlertTriangle, Target, BarChart3, Shield, Star } from 'lucide-react';
 import { TestimonialsBlock, ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
 import { getAllPersonas } from '@/lib/personas';
+import { LogoIcon } from '@/components/ui';
 
 export default function PersonaPage({ persona }) {
   const otherPersonas = getAllPersonas().filter((p) => p.slug !== persona.slug).slice(0, 5);
@@ -11,9 +12,7 @@ export default function PersonaPage({ persona }) {
       <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center mr-1.5">
-              <span className="text-[11px] font-bold text-white">P</span>
-            </div>
+            <LogoIcon size="sm" className="mr-1.5" />
             <span className="text-lg font-bold tracking-tight">Prospectia</span>
             <span className="text-violet-400 text-xs font-semibold">.cloud</span>
           </Link>

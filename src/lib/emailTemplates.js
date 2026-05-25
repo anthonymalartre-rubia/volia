@@ -114,7 +114,7 @@ function layout({ preheader = '', content, accent = COLORS.brand }) {
           <tr>
             <td style="text-align:center;padding:0 0 24px;">
               <a href="${APP_URL}" style="text-decoration:none;">
-                <span style="display:inline-block;vertical-align:middle;width:36px;height:36px;background:linear-gradient(135deg,${COLORS.brand} 0%,${COLORS.brandDark} 100%);border-radius:8px;line-height:36px;font-size:18px;font-weight:800;color:#ffffff;text-align:center;margin-right:10px;">P</span>
+                <span style="display:inline-block;vertical-align:middle;width:36px;height:36px;background:linear-gradient(135deg,${COLORS.brand} 0%,${COLORS.brandDark} 100%);border-radius:8px;line-height:36px;font-size:20px;font-weight:800;color:#ffffff;text-align:center;margin-right:10px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">V</span>
                 <span style="display:inline-block;vertical-align:middle;font-size:22px;font-weight:700;color:${COLORS.text};letter-spacing:-0.3px;">Volia</span>
               </a>
             </td>

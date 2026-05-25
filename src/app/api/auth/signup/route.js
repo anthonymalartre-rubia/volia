@@ -64,7 +64,12 @@ export async function POST(request) {
       email: normalizedEmail,
       password,
       options: {
-        redirectTo: `${origin}/dashboard`,
+        // Page client-side qui gère le #access_token= hash de Supabase Verify
+        // puis redirige vers /dashboard. Sans ça, le user atterrit sur
+        // /dashboard, le middleware Next ne voit pas de cookie session
+        // (le token est dans le HASH, invisible côté serveur) et le redirige
+        // vers /login → mauvaise UX, doit re-saisir ses identifiants.
+        redirectTo: `${origin}/auth/confirm?next=/dashboard`,
       },
     });
 

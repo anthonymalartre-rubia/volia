@@ -358,6 +358,146 @@ export default function LandingContent() {
       <BuiltForProfilesBlock />
 
       {/* ──────────────────────────────────────────────────────────────
+          LA SUITE VOLIA — 3 modules connectés (positioning hub)
+          ─────────────────────────────────────────────────────────────
+          Repositionne Volia comme PLATEFORME multi-produits (vs juste
+          outil prospection). Pattern HubSpot/Attio. Chaque module a
+          sa couleur accent (violet/blue/emerald) + son statut LIVE/
+          BETA/SOON pour transparence.
+       */}
+      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
+        <div className="max-w-6xl mx-auto">
+          <MotionInView>
+            <div className="text-center mb-14">
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">La suite Volia</p>
+              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                3 modules connectés pour automatiser votre growth B2B
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+                Trouvez vos prospects, contactez-les, suivez vos deals.
+                Le tout dans une seule plateforme française.
+              </p>
+            </div>
+          </MotionInView>
+
+          {/* 3 product cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+            {[
+              {
+                name: 'Prospection',
+                tagline: 'Trouvez les emails de toute entreprise française',
+                status: 'LIVE',
+                statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+                icon: Search,
+                color: 'violet',
+                bg: 'from-violet-50 via-white to-violet-50/50',
+                border: 'border-violet-300',
+                iconBg: 'from-violet-500 to-indigo-600',
+                bullets: [
+                  '150+ secteurs · 101 départements',
+                  'Scraping + recherche Google',
+                  'Scoring de confiance par lead',
+                ],
+                href: '/produits/prospection',
+                cta: 'Découvrir',
+              },
+              {
+                name: 'Campagnes',
+                tagline: 'Envoyez vos séquences email & SMS automatisées',
+                status: 'BETA',
+                statusColor: 'bg-blue-100 text-blue-700 border-blue-300',
+                icon: Mail,
+                color: 'blue',
+                bg: 'from-blue-50 via-white to-cyan-50/50',
+                border: 'border-blue-300',
+                iconBg: 'from-blue-500 to-cyan-600',
+                bullets: [
+                  'Email cold + relances auto',
+                  'SMS Twilio intégré',
+                  'Templates pré-écrits',
+                ],
+                href: '/produits/campagnes',
+                cta: 'Découvrir',
+              },
+              {
+                name: 'CRM',
+                tagline: 'Pipeline et suivi commercial natif Volia',
+                status: 'BIENTÔT',
+                statusColor: 'bg-amber-100 text-amber-700 border-amber-300',
+                icon: Layers,
+                color: 'emerald',
+                bg: 'from-emerald-50 via-white to-teal-50/50',
+                border: 'border-emerald-300',
+                iconBg: 'from-emerald-500 to-teal-600',
+                bullets: [
+                  'Contacts auto depuis Campagnes',
+                  'Pipeline Kanban deals',
+                  'Reporting closing rate',
+                ],
+                href: '/produits/crm',
+                cta: 'Rejoindre la beta',
+              },
+            ].map((mod, i) => {
+              const Icon = mod.icon;
+              return (
+                <MotionInView key={mod.name} delay={i * 120}>
+                  <Link
+                    href={mod.href}
+                    className={`group block h-full p-7 rounded-2xl border-2 ${mod.border} bg-gradient-to-br ${mod.bg} shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
+                  >
+                    {/* Header : icon + status badge */}
+                    <div className="flex items-center justify-between mb-5">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${mod.iconBg} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+                        <Icon size={22} className="text-white" />
+                      </div>
+                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${mod.statusColor}`}>
+                        {mod.status}
+                      </span>
+                    </div>
+
+                    {/* Module name */}
+                    <div className="text-xs text-content-tertiary uppercase tracking-wider mb-1">Volia</div>
+                    <h3 className="text-2xl font-bold text-content-primary mb-2">{mod.name}</h3>
+                    <p className="text-sm text-content-secondary mb-5 leading-relaxed">{mod.tagline}</p>
+
+                    {/* Bullets */}
+                    <ul className="space-y-2 mb-6">
+                      {mod.bullets.map((b) => (
+                        <li key={b} className="flex items-start gap-2 text-sm text-content-secondary">
+                          <Check size={14} className={`flex-shrink-0 mt-0.5 text-${mod.color}-600`} />
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA pseudo-button */}
+                    <div className={`inline-flex items-center gap-1.5 text-sm font-semibold text-${mod.color}-700 group-hover:gap-2 transition-all`}>
+                      {mod.cta}
+                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </Link>
+                </MotionInView>
+              );
+            })}
+          </div>
+
+          {/* Data flow tagline */}
+          <MotionInView delay={400}>
+            <div className="text-center">
+              <div className="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white border border-line shadow-sm text-sm">
+                <span className="font-semibold text-violet-700">Prospects</span>
+                <ArrowRight size={14} className="text-content-tertiary" />
+                <span className="font-semibold text-blue-700">Campagnes</span>
+                <ArrowRight size={14} className="text-content-tertiary" />
+                <span className="font-semibold text-emerald-700">Deals</span>
+                <span className="ml-2 text-content-tertiary">Données partagées entre les 3 modules.</span>
+              </div>
+            </div>
+          </MotionInView>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────
           POWERED BY — stack technique (trust signal moderne)
        */}
       <section className="py-12 px-4 sm:px-6 border-t border-line">

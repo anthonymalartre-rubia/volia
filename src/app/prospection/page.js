@@ -38,7 +38,7 @@ export default function ProspectionIndexPage() {
     departments.filter((d) => region.depts.includes(d.code));
 
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
+    <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
       <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">

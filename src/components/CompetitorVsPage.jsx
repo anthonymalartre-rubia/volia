@@ -31,7 +31,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
   ];
 
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
+    <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Nav */}
       <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">

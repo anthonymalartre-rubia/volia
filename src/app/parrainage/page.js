@@ -63,7 +63,7 @@ export default function ParrainagePage() {
   if (!authed) return <GuestScreen />;
 
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary">
+    <div className="min-h-screen bg-surface-base text-content-primary">
       <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition">
@@ -294,7 +294,7 @@ function Step({ num, title, desc }) {
 
 function Loading() {
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-secondary flex items-center justify-center">
+    <div className="min-h-screen bg-surface-base text-content-secondary flex items-center justify-center">
       <Loader2 size={20} className="animate-spin" />
     </div>
   );
@@ -302,7 +302,7 @@ function Loading() {
 
 function GuestScreen() {
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
+    <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Background animé : 2 gradients flous + grid pattern subtil */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/20 blur-[120px]" />

@@ -8,7 +8,7 @@ export default function PersonaPage({ persona }) {
   const otherPersonas = getAllPersonas().filter((p) => p.slug !== persona.slug).slice(0, 5);
 
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary">
+    <div className="min-h-screen bg-surface-base text-content-primary">
       <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">

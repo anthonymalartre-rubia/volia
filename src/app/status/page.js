@@ -45,7 +45,7 @@ export default function StatusPage() {
   const overall = OVERALL_META[data?.overall] || OVERALL_META.ok;
 
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary">
+    <div className="min-h-screen bg-surface-base text-content-primary">
       <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition">

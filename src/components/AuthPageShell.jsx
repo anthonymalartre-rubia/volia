@@ -14,7 +14,7 @@ export default function AuthPageShell({
   contentWidth = 'max-w-md', // 'max-w-md' | 'max-w-lg' | 'max-w-2xl' | 'max-w-3xl'
 }) {
   return (
-    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
+    <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Background blobs animés (cohérent avec /parrainage, /newsletter) */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-violet-600/15 blur-[120px]" />

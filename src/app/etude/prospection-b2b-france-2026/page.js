@@ -485,7 +485,7 @@ export default function EtudePage() {
               ))}
             </div>
 
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.06] p-4">
+            <div className="rounded-xl border border-amber-400 bg-amber-100/60 p-4">
               <p className="text-sm text-content-secondary leading-relaxed">
                 ⚖️ <strong className="text-content-primary">À surveiller</strong> : la délibération CNIL n°2022-103
                 fixe le cadre du démarchage B2B. Les obligations pratiques sont (1) cibler une fonction et pas un particulier,

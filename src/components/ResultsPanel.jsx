@@ -278,9 +278,9 @@ const EMAIL_METHOD_INFO_KEYS = {
   "deep-verified": { labelKey: "results.badges.verified", color: "text-purple-400", tipKey: "results.badges.verifiedDesc" },
   "deep-pattern": { labelKey: "results.badges.guessed", color: "text-purple-400/70", tipKey: "results.badges.guessedDesc" },
   serper: { labelKey: "results.badges.serper", color: "text-yellow-400", tipKey: "results.badges.serperDesc" },
-  apollo: { labelKey: "results.badges.apollo", color: "text-orange-400", tipKey: "results.badges.apolloDesc" },
+  apollo: { labelKey: "results.badges.apollo", color: "text-orange-600", tipKey: "results.badges.apolloDesc" },
   apollo_org: { labelKey: "results.badges.apolloOrg", color: "text-indigo-400", tipKey: "results.badges.apolloOrgDesc" },
-  guess: { labelKey: "results.badges.fallback", color: "text-amber-400", tipKey: "results.badges.fallbackDesc" },
+  guess: { labelKey: "results.badges.fallback", color: "text-amber-600", tipKey: "results.badges.fallbackDesc" },
 };
 
 // Helper to resolve EMAIL_METHOD_INFO with t()
@@ -334,7 +334,7 @@ function EmailBadge({ method }) {
 
   if (method === 'guess') {
     return (
-      <span className="inline-flex items-center gap-0.5 px-1.5 py-[1px] rounded-full text-[9px] font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/20 whitespace-nowrap">
+      <span className="inline-flex items-center gap-0.5 px-1.5 py-[1px] rounded-full text-[9px] font-semibold bg-amber-100 text-amber-600 border border-amber-300 whitespace-nowrap">
         <AlertTriangle size={8} className="flex-shrink-0" />
         {t('results.badges.probableShort')}
       </span>
@@ -695,7 +695,7 @@ export default memo(function ResultsPanel({
     switch (type) {
       case "b2b": return "bg-blue-500/10 text-blue-400 border-blue-500/20";
       case "copro": return "bg-purple-500/10 text-purple-400 border-purple-500/20";
-      case "custom": return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+      case "custom": return "bg-amber-500/10 text-amber-600 border-amber-300";
       default: return "bg-surface-elevated text-content-muted border-line";
     }
   };
@@ -903,7 +903,7 @@ export default memo(function ResultsPanel({
                   <span className="text-[9px] text-yellow-400 font-medium">{t('results.otherCount', { count: stats.googleEmails })} Google</span>
                 )}
                 {stats.guessedEmails > 0 && (
-                  <span className="text-[9px] text-amber-400 font-medium">{t('results.probableCount', { count: stats.guessedEmails })}</span>
+                  <span className="text-[9px] text-amber-600 font-medium">{t('results.probableCount', { count: stats.guessedEmails })}</span>
                 )}
                 {stats.otherEmails > 0 && (
                   <span className="text-[9px] text-cyan-400 font-medium">{t('results.otherCount', { count: stats.otherEmails })}</span>
@@ -1155,7 +1155,7 @@ export default memo(function ResultsPanel({
                         <td className="px-3 py-2 text-content-secondary truncate max-w-[140px]">{p.adresse || '\u2014'}</td>
                         <td className="px-3 py-2 text-content-secondary font-mono">{p.telephone || '\u2014'}</td>
                         <td className="px-3 py-2 text-green-400/70 truncate max-w-[140px]">{p.email || '\u2014'}</td>
-                        <td className="px-3 py-2 text-amber-400 font-mono">{p.note != null ? p.note : '\u2014'}</td>
+                        <td className="px-3 py-2 text-amber-600 font-mono">{p.note != null ? p.note : '\u2014'}</td>
                         <td className="px-3 py-2">
                           {p.type ? (
                             <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium border ${getTypeStyle(p.type)}`}>

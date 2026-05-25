@@ -306,13 +306,13 @@ export default function HeroSearchWidget() {
       {/* Error state (rate limit, service down, etc.) */}
       {error && (
         <div className="mt-5 pt-5 border-t border-line">
-          <div className={`rounded-xl p-4 ${error.status === 429 ? 'border border-amber-500/30 bg-amber-500/[0.08]' : 'border border-red-500/30 bg-red-500/[0.08]'}`}>
+          <div className={`rounded-xl p-4 ${error.status === 429 ? 'border border-amber-400 bg-amber-500/[0.08]' : 'border border-red-500/30 bg-red-500/[0.08]'}`}>
             <div className="flex items-start gap-3">
-              <span className={`text-xl ${error.status === 429 ? 'text-amber-400' : 'text-red-400'}`}>
+              <span className={`text-xl ${error.status === 429 ? 'text-amber-600' : 'text-red-400'}`}>
                 {error.status === 429 ? '⏱️' : '⚠️'}
               </span>
               <div className="flex-1 min-w-0">
-                <div className={`text-sm font-semibold ${error.status === 429 ? 'text-amber-300' : 'text-red-300'}`}>
+                <div className={`text-sm font-semibold ${error.status === 429 ? 'text-amber-700' : 'text-red-300'}`}>
                   {error.status === 429 ? 'Limite quotidienne atteinte' : 'Service temporairement indisponible'}
                 </div>
                 <p className="text-xs text-content-secondary mt-1 leading-relaxed">
@@ -362,7 +362,7 @@ function CategoryResult({ result, remainingToday }) {
         {/* Badge "Aperçu anonymisé" pour ne pas tromper le visiteur — c'est
             de la vraie data Google Places mais masquée par éthique RGPD. */}
         {isAnonymized && (
-          <div className="px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-semibold uppercase tracking-wider">
+          <div className="px-2 py-0.5 rounded-md bg-amber-100 border border-amber-400 text-amber-700 text-[10px] font-semibold uppercase tracking-wider">
             Aperçu anonymisé
           </div>
         )}
@@ -379,7 +379,7 @@ function CategoryResult({ result, remainingToday }) {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
               <div className="font-semibold text-content-primary text-sm flex items-center gap-2">
                 {p.name}
-                <span className="flex items-center gap-0.5 text-xs text-amber-400">
+                <span className="flex items-center gap-0.5 text-xs text-amber-600">
                   <Star size={11} className="fill-amber-400" /> {p.rating}
                 </span>
               </div>
@@ -431,7 +431,7 @@ function CompanyResult({ result }) {
           </div>
           {/* Badge "Exemple démo" — obligatoire pour ne pas laisser croire
               que les emails affichés sont réels. RGPD + intégrité. */}
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-[10px] font-semibold text-amber-300 uppercase tracking-wider whitespace-nowrap">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-100 border border-amber-400 text-[10px] font-semibold text-amber-700 uppercase tracking-wider whitespace-nowrap">
             Exemple démo
           </span>
         </div>
@@ -447,7 +447,7 @@ function CompanyResult({ result }) {
                 {e.verified ? (
                   <span className="px-1.5 py-0.5 rounded bg-green-500/15 text-green-400 text-[10px] font-semibold">✓ Vérifié</span>
                 ) : (
-                  <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 text-[10px] font-semibold">Pattern</span>
+                  <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-600 text-[10px] font-semibold">Pattern</span>
                 )}
               </div>
             </div>
@@ -473,7 +473,7 @@ function VerifyResult({ result }) {
   const colors = {
     green: 'bg-green-500/15 border-green-500/30 text-green-400',
     red: 'bg-red-500/15 border-red-500/30 text-red-400',
-    amber: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
+    amber: 'bg-amber-100 border-amber-400 text-amber-600',
   };
   return (
     <div>

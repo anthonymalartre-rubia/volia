@@ -12,8 +12,8 @@ import { getSupabase } from '@/lib/supabase';
 const STATUS_META = {
   draft:     { label: 'Brouillon',  color: 'text-content-tertiary', bg: 'bg-content-tertiary/10', icon: <Clock size={11} /> },
   scheduled: { label: 'Planifiée',  color: 'text-blue-400',         bg: 'bg-blue-500/10',          icon: <Clock size={11} /> },
-  sending:   { label: 'En cours',   color: 'text-amber-400',        bg: 'bg-amber-500/10',         icon: <Send size={11} /> },
-  paused:    { label: 'En pause',   color: 'text-orange-400',       bg: 'bg-orange-500/10',        icon: <Pause size={11} /> },
+  sending:   { label: 'En cours',   color: 'text-amber-600',        bg: 'bg-amber-500/10',         icon: <Send size={11} /> },
+  paused:    { label: 'En pause',   color: 'text-orange-600',       bg: 'bg-orange-500/10',        icon: <Pause size={11} /> },
   sent:      { label: 'Envoyée',    color: 'text-emerald-400',      bg: 'bg-emerald-500/10',       icon: <CheckCircle2 size={11} /> },
   failed:    { label: 'Échouée',    color: 'text-red-400',          bg: 'bg-red-500/10',           icon: <XCircle size={11} /> },
 };
@@ -80,9 +80,9 @@ export default function SmsHubPage() {
         </div>
 
         {/* Avertissement RGPD/cadre légal */}
-        <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-4 text-sm text-amber-200">
+        <div className="mb-6 rounded-2xl border border-amber-400 bg-amber-50 p-4 text-sm text-amber-700">
           <div className="flex items-start gap-2">
-            <AlertTriangle size={16} className="mt-0.5 flex-shrink-0 text-amber-400" />
+            <AlertTriangle size={16} className="mt-0.5 flex-shrink-0 text-amber-600" />
             <div>
               <strong className="text-amber-100">SMS B2B en France :</strong> opt-in préalable obligatoire pour les particuliers (CNIL).
               En B2B avec une <em>relation établie</em>, intérêt légitime acceptable mais opt-out obligatoire (STOP au 36111).
@@ -195,8 +195,8 @@ function GuestScreen() {
 function NoAdminScreen({ email, signOut }) {
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
-        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-4"><ShieldOff size={20} className="text-amber-300" /></div>
+      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
+        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 border border-amber-400 flex items-center justify-center mb-4"><ShieldOff size={20} className="text-amber-700" /></div>
         <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
         <p className="text-sm text-content-secondary mb-2">Connecté en tant que <strong>{email}</strong>, mais ce compte n&apos;a pas les droits.</p>
         <button onClick={signOut} className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"><LogIn size={14} />Changer de compte</button>

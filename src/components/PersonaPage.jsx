@@ -66,13 +66,13 @@ export default function PersonaPage({ persona }) {
         {persona.painPoints?.length > 0 && (
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 flex items-center gap-2">
-              <AlertTriangle size={22} className="text-amber-400" />
+              <AlertTriangle size={22} className="text-amber-600" />
               Les douleurs que vous connaissez
             </h2>
             <div className="grid md:grid-cols-3 gap-4">
               {persona.painPoints.map((pain, i) => (
                 <div key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-5">
-                  <div className="text-3xl font-bold text-amber-400 mb-2">{i + 1}.</div>
+                  <div className="text-3xl font-bold text-amber-600 mb-2">{i + 1}.</div>
                   <p className="text-sm text-content-secondary leading-relaxed">{pain}</p>
                 </div>
               ))}

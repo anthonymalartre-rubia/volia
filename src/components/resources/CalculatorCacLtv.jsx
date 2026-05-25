@@ -76,7 +76,7 @@ export default function CalculatorCacLtv() {
   const verdict = useMemo(() => {
     if (results.ratioNette >= 5) return { label: 'Excellent', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30', advice: 'Vous pouvez investir agressivement en acquisition.' };
     if (results.ratioNette >= 3) return { label: 'Sain', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30', advice: 'Ratio cible atteint. Scalez en parallèle des fondations.' };
-    if (results.ratioNette >= 1.5) return { label: 'À optimiser', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30', advice: 'Réduire le CAC ou augmenter la LTV (anti-churn, upsell).' };
+    if (results.ratioNette >= 1.5) return { label: 'À optimiser', color: 'text-amber-600', bg: 'bg-amber-500/10', border: 'border-amber-400', advice: 'Réduire le CAC ou augmenter la LTV (anti-churn, upsell).' };
     return { label: 'Critique', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', advice: 'Votre business saigne. Ne pas scaler avant correction.' };
   }, [results.ratioNette]);
 
@@ -114,7 +114,7 @@ export default function CalculatorCacLtv() {
               </button>
               <button
                 onClick={reset}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-elevated hover:bg-amber-500/10 text-content-secondary hover:text-amber-400 border border-line hover:border-amber-500/30 transition"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-elevated hover:bg-amber-500/10 text-content-secondary hover:text-amber-600 border border-line hover:border-amber-400 transition"
                 title="Réinitialiser"
               >
                 <RotateCcw size={11} />
@@ -184,11 +184,11 @@ export default function CalculatorCacLtv() {
           <div className="rounded-2xl border border-line bg-surface-card p-5">
             <div className="flex items-center justify-between mb-2">
               <div className="text-xs text-content-tertiary uppercase tracking-wider">NRR (Net Revenue Retention)</div>
-              <div className={`text-xs px-2 py-0.5 rounded-full ${results.nrrAnnuel >= 100 ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-400'}`}>
+              <div className={`text-xs px-2 py-0.5 rounded-full ${results.nrrAnnuel >= 100 ? 'bg-green-500/10 text-green-400' : 'bg-amber-500/10 text-amber-600'}`}>
                 {results.nrrAnnuel >= 100 ? '✓ Croissance organique' : '⚠ Décroissance'}
               </div>
             </div>
-            <div className={`text-3xl font-bold mb-1 tabular-nums ${results.nrrAnnuel >= 100 ? 'text-green-400' : 'text-amber-400'}`}>
+            <div className={`text-3xl font-bold mb-1 tabular-nums ${results.nrrAnnuel >= 100 ? 'text-green-400' : 'text-amber-600'}`}>
               <CountUp value={results.nrrAnnuel} formatter={(n) => `${Math.round(n)}%`} />
             </div>
             <div className="text-xs text-content-secondary">

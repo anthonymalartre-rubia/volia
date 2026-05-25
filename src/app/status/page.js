@@ -8,14 +8,14 @@ const REFRESH_INTERVAL = 30000; // 30 sec
 
 const STATUS_META = {
   operational: { label: 'Opérationnel', color: 'text-emerald-400', bg: 'bg-emerald-500/15', border: 'border-emerald-500/30', icon: CheckCircle2 },
-  degraded: { label: 'Dégradé', color: 'text-amber-400', bg: 'bg-amber-500/15', border: 'border-amber-500/30', icon: AlertTriangle },
+  degraded: { label: 'Dégradé', color: 'text-amber-600', bg: 'bg-amber-100', border: 'border-amber-400', icon: AlertTriangle },
   down: { label: 'Down', color: 'text-red-400', bg: 'bg-red-500/15', border: 'border-red-500/30', icon: XCircle },
   unknown: { label: 'Inconnu', color: 'text-content-secondary', bg: 'bg-zinc-500/15', border: 'border-zinc-500/30', icon: AlertTriangle },
 };
 
 const OVERALL_META = {
   ok: { label: 'Tous les services opérationnels', color: 'text-emerald-400', bg: 'bg-emerald-500/[0.08]', border: 'border-emerald-500/30' },
-  degraded: { label: 'Service dégradé en cours', color: 'text-amber-400', bg: 'bg-amber-500/[0.08]', border: 'border-amber-500/30' },
+  degraded: { label: 'Service dégradé en cours', color: 'text-amber-600', bg: 'bg-amber-500/[0.08]', border: 'border-amber-400' },
   down: { label: 'Incident en cours — investigation', color: 'text-red-400', bg: 'bg-red-500/[0.08]', border: 'border-red-500/30' },
 };
 
@@ -127,7 +127,7 @@ export default function StatusPage() {
             <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Légende</h3>
             <ul className="space-y-1.5 text-xs">
               <li className="flex items-center gap-2"><CheckCircle2 size={12} className="text-emerald-400" /> <strong className="text-emerald-400">Opérationnel</strong> — le service répond normalement</li>
-              <li className="flex items-center gap-2"><AlertTriangle size={12} className="text-amber-400" /> <strong className="text-amber-400">Dégradé</strong> — latence élevée ou erreurs intermittentes</li>
+              <li className="flex items-center gap-2"><AlertTriangle size={12} className="text-amber-600" /> <strong className="text-amber-600">Dégradé</strong> — latence élevée ou erreurs intermittentes</li>
               <li className="flex items-center gap-2"><XCircle size={12} className="text-red-400" /> <strong className="text-red-400">Down</strong> — service indisponible (incident en cours)</li>
             </ul>
             <p className="text-[11px] text-content-tertiary mt-3 leading-relaxed">

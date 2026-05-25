@@ -396,7 +396,7 @@ export default function AdminPage() {
                     <div className="flex items-center gap-2 mt-1.5 text-[10px] text-content-muted">
                       <span className="px-1.5 py-0.5 rounded bg-surface-elevated">{dashboardStats.revenue.planCounts.free} free</span>
                       <span className="px-1.5 py-0.5 rounded bg-violet-500/15 text-violet-400">{dashboardStats.revenue.planCounts.pro} pro</span>
-                      <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400">{dashboardStats.revenue.planCounts.enterprise} ent.</span>
+                      <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-600">{dashboardStats.revenue.planCounts.enterprise} ent.</span>
                     </div>
                   </div>
 
@@ -434,7 +434,7 @@ export default function AdminPage() {
                   <div className="rounded-xl border border-line bg-surface-card p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="p-1.5 rounded-lg bg-orange-500/20">
-                        <Search className="h-4 w-4 text-orange-400" />
+                        <Search className="h-4 w-4 text-orange-600" />
                       </div>
                       <span className="text-xs text-content-tertiary">Recherches ce mois</span>
                     </div>
@@ -567,11 +567,11 @@ export default function AdminPage() {
                 <div className="rounded-xl border border-line bg-surface-card p-5">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-amber-400" />
+                      <DollarSign className="h-4 w-4 text-amber-600" />
                       <h2 className="text-sm font-semibold">Couts API ce mois</h2>
                     </div>
                     {dashboardStats.apiCosts && (
-                      <span className="text-lg font-bold text-amber-400">
+                      <span className="text-lg font-bold text-amber-600">
                         {(dashboardStats.apiCosts.totalThisMonth / 100).toFixed(2)} €
                       </span>
                     )}
@@ -606,7 +606,7 @@ export default function AdminPage() {
                                   <span className="text-xs text-content-secondary">{info.text}</span>
                                   <div className="flex items-center gap-3">
                                     <span className="text-[10px] font-mono text-content-muted">{data.calls.toLocaleString('fr-FR')} appels</span>
-                                    <span className="text-xs font-mono font-medium text-amber-400">{(data.cost_cents / 100).toFixed(2)} €</span>
+                                    <span className="text-xs font-mono font-medium text-amber-600">{(data.cost_cents / 100).toFixed(2)} €</span>
                                   </div>
                                 </div>
                                 <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
@@ -654,7 +654,7 @@ export default function AdminPage() {
                 {/* Row 4 — Top Users table */}
                 <div className="rounded-xl border border-line bg-surface-card overflow-hidden">
                   <div className="px-5 py-4 border-b border-line flex items-center gap-2">
-                    <Crown className="h-4 w-4 text-amber-400" />
+                    <Crown className="h-4 w-4 text-amber-600" />
                     <h2 className="text-sm font-semibold">Top 10 utilisateurs actifs ce mois</h2>
                   </div>
                   {topUsers.length === 0 ? (
@@ -686,12 +686,12 @@ export default function AdminPage() {
                                   <div className="flex items-center gap-2">
                                     <span className="text-[10px] text-content-muted font-mono w-4">{i + 1}.</span>
                                     <span className="text-content-primary font-medium truncate max-w-[200px]">{u.email}</span>
-                                    {u.is_admin && <Crown className="h-3 w-3 text-amber-400 shrink-0" />}
+                                    {u.is_admin && <Crown className="h-3 w-3 text-amber-600 shrink-0" />}
                                   </div>
                                 </td>
                                 <td className="px-4 py-3">
                                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                                    u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
+                                    u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-600' :
                                     u.plan === 'pro' ? 'bg-violet-500/20 text-violet-400' :
                                     'bg-surface-elevated text-content-tertiary'
                                   }`}>
@@ -775,7 +775,7 @@ export default function AdminPage() {
                     >
                       {/* Avatar */}
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shrink-0 ${
-                        u.is_admin ? 'bg-amber-500/20 text-amber-400' : 'bg-violet-500/15 text-violet-400'
+                        u.is_admin ? 'bg-amber-500/20 text-amber-600' : 'bg-violet-500/15 text-violet-400'
                       }`}>
                         {(u.email || '?')[0].toUpperCase()}
                       </div>
@@ -784,9 +784,9 @@ export default function AdminPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium truncate">{u.email}</span>
-                          {u.is_admin && <Crown className="h-3.5 w-3.5 text-amber-400 shrink-0" />}
+                          {u.is_admin && <Crown className="h-3.5 w-3.5 text-amber-600 shrink-0" />}
                           {!isEmailConfirmed && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-orange-500/20 text-orange-400 shrink-0">Non confirme</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-orange-500/20 text-orange-600 shrink-0">Non confirme</span>
                           )}
                         </div>
                         <div className="flex items-center gap-3 mt-0.5">
@@ -797,7 +797,7 @@ export default function AdminPage() {
 
                       {/* Plan badge */}
                       <span className={`px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${
-                        u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-400' :
+                        u.plan === 'enterprise' ? 'bg-amber-500/20 text-amber-600' :
                         u.plan === 'pro' ? 'bg-violet-500/20 text-violet-400' :
                         'bg-surface-elevated text-content-tertiary'
                       }`}>
@@ -840,7 +840,7 @@ export default function AdminPage() {
                             <div className="flex items-center gap-1.5">
                               {isEmailConfirmed
                                 ? <><UserCheck className="h-3.5 w-3.5 text-emerald-400" /><span className="text-sm text-emerald-400">Oui</span></>
-                                : <><UserX className="h-3.5 w-3.5 text-orange-400" /><span className="text-sm text-orange-400">Non</span></>
+                                : <><UserX className="h-3.5 w-3.5 text-orange-600" /><span className="text-sm text-orange-600">Non</span></>
                               }
                             </div>
                           </div>
@@ -968,7 +968,7 @@ export default function AdminPage() {
                             disabled={actionLoading === `toggle_admin-${u.id}`}
                             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-colors ${
                               u.is_admin
-                                ? 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
+                                ? 'bg-amber-500/20 text-amber-600 hover:bg-amber-500/30'
                                 : 'bg-surface-elevated text-content-tertiary hover:text-content-primary hover:bg-surface-active'
                             }`}
                           >

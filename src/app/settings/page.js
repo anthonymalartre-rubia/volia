@@ -477,7 +477,7 @@ export default function SettingsPage() {
                     {user?.email || '--'}
                   </h2>
                   <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase tracking-wide ${
-                    planId === 'enterprise' ? 'bg-amber-500/15 text-amber-600 border border-amber-500/30' :
+                    planId === 'enterprise' ? 'bg-amber-100 text-amber-600 border border-amber-400' :
                     planId === 'pro' ? 'bg-violet-500/15 text-violet-600 border border-violet-500/30' :
                     'bg-surface-elevated text-content-tertiary border border-line'
                   }`}>
@@ -640,9 +640,9 @@ export default function SettingsPage() {
                 />
 
                 {/* GDPR Filter — version compacte */}
-                <div className={`rounded-xl border ${filterPersonalEmails ? 'border-line bg-surface-card' : 'border-amber-500/30 bg-amber-500/[0.03]'} p-4`}>
+                <div className={`rounded-xl border ${filterPersonalEmails ? 'border-line bg-surface-card' : 'border-amber-400 bg-amber-50'} p-4`}>
                   <div className="flex items-start gap-3">
-                    <div className={`flex-shrink-0 mt-0.5 p-1.5 rounded-lg ${filterPersonalEmails ? 'bg-violet-500/10' : 'bg-amber-500/15'}`}>
+                    <div className={`flex-shrink-0 mt-0.5 p-1.5 rounded-lg ${filterPersonalEmails ? 'bg-violet-500/10' : 'bg-amber-100'}`}>
                       <Filter className={`h-4 w-4 ${filterPersonalEmails ? 'text-violet-500' : 'text-amber-600'}`} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -659,12 +659,12 @@ export default function SettingsPage() {
                       </div>
 
                       {!filterPersonalEmails && (
-                        <details className="mt-3 rounded-lg bg-amber-500/10 border border-amber-500/20 overflow-hidden">
+                        <details className="mt-3 rounded-lg bg-amber-500/10 border border-amber-300 overflow-hidden">
                           <summary className="cursor-pointer px-3 py-2 flex items-center gap-2 text-xs font-semibold text-amber-700 hover:bg-amber-500/10">
                             <ShieldAlert className="h-3.5 w-3.5" />
                             {t('settings.gdprWarningTitle')}
                           </summary>
-                          <div className="px-3 py-3 border-t border-amber-500/20 space-y-2">
+                          <div className="px-3 py-3 border-t border-amber-300 space-y-2">
                             <p className="text-xs text-content-secondary leading-relaxed">{t('settings.gdprWarningP1')}</p>
                             <p className="text-xs text-content-secondary leading-relaxed">{t('settings.gdprWarningP2')}</p>
                             <p className="text-xs text-content-secondary leading-relaxed">{t('settings.gdprWarningP3')}</p>

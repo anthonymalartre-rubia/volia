@@ -35,7 +35,7 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
   return (
     <div className={`relative p-7 rounded-2xl backdrop-blur-sm ${
       highlighted
-        ? 'border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-[#111114]/80'
+        ? 'border border-violet-500/30 bg-gradient-to-b from-violet-50 via-violet-50/50 to-white'
         : 'border border-line bg-surface-card/80'
     }`}>
       {badge && (
@@ -498,7 +498,7 @@ export default function LandingContent() {
                   {[
                     { label: t('landing.emailVerif.valid'), value: '2 103', pct: '73.8%', color: 'text-green-400', bg: 'bg-green-500/10' },
                     { label: t('landing.emailVerif.invalid'), value: '412', pct: '14.5%', color: 'text-red-400', bg: 'bg-red-500/10' },
-                    { label: t('landing.emailVerif.catchAll'), value: '281', pct: '9.9%', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+                    { label: t('landing.emailVerif.catchAll'), value: '281', pct: '9.9%', color: 'text-amber-600', bg: 'bg-amber-500/10' },
                     { label: t('landing.emailVerif.unknown'), value: '51', pct: '1.8%', color: 'text-content-secondary', bg: 'bg-zinc-500/10' },
                   ].map((stat) => (
                     <div key={stat.label} className={`p-3 rounded-xl ${stat.bg} border border-line text-center`}>
@@ -515,7 +515,7 @@ export default function LandingContent() {
                     { email: 'contact@dupont-btp.fr', status: t('landing.emailVerif.valid'), color: 'text-green-400', dot: 'bg-green-400' },
                     { email: 'info@garage-martin.com', status: t('landing.emailVerif.valid'), color: 'text-green-400', dot: 'bg-green-400' },
                     { email: 'direction@inexistant.fr', status: t('landing.emailVerif.invalid'), color: 'text-red-400', dot: 'bg-red-400' },
-                    { email: 'contact@hotel-riviera.fr', status: t('landing.emailVerif.catchAll'), color: 'text-amber-400', dot: 'bg-amber-400' },
+                    { email: 'contact@hotel-riviera.fr', status: t('landing.emailVerif.catchAll'), color: 'text-amber-600', dot: 'bg-amber-400' },
                   ].map((row) => (
                     <div key={row.email} className="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-elevated/40 border border-line">
                       <span className="text-xs text-content-secondary font-mono">{row.email}</span>

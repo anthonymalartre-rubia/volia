@@ -120,9 +120,9 @@ function NewSmsContent() {
         </div>
 
         {lists.length === 0 ? (
-          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-6 text-center">
-            <AlertTriangle size={20} className="mx-auto mb-2 text-amber-400" />
-            <p className="text-sm text-amber-200 mb-3">Aucune liste. Importez d&apos;abord des contacts avec numéros mobiles.</p>
+          <div className="rounded-2xl border border-amber-400 bg-amber-50 p-6 text-center">
+            <AlertTriangle size={20} className="mx-auto mb-2 text-amber-600" />
+            <p className="text-sm text-amber-700 mb-3">Aucune liste. Importez d&apos;abord des contacts avec numéros mobiles.</p>
             <Link href="/admin/prospection" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
               <Users size={14} />
               Aller aux listes
@@ -233,7 +233,7 @@ function NewSmsContent() {
                     <Metric icon={<Euro size={12} />} label="Total estimé" value={`${totalCost} €`} highlight />
                   </div>
                   {segments > 1 && (
-                    <p className="text-[10px] text-amber-300 leading-relaxed">
+                    <p className="text-[10px] text-amber-700 leading-relaxed">
                       ⚠ Message multi-segments ({segments} parts). Chaque part facturée séparément. Réduisez à 160 chars pour 1 segment.
                     </p>
                   )}
@@ -282,12 +282,12 @@ function Block({ title, icon, children }) {
 
 function Metric({ icon, label, value, warn = false, highlight = false, small = false }) {
   return (
-    <div className={`rounded-lg px-2.5 py-2 ${highlight ? 'bg-emerald-500/10 border border-emerald-500/30' : warn ? 'bg-amber-500/10 border border-amber-500/30' : 'bg-surface-elevated border border-line'}`}>
+    <div className={`rounded-lg px-2.5 py-2 ${highlight ? 'bg-emerald-500/10 border border-emerald-500/30' : warn ? 'bg-amber-500/10 border border-amber-400' : 'bg-surface-elevated border border-line'}`}>
       <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-content-tertiary">
         {icon}
         {label}
       </div>
-      <div className={`${small ? 'text-xs' : 'text-sm'} font-mono font-semibold tabular-nums ${highlight ? 'text-emerald-300' : warn ? 'text-amber-300' : 'text-content-primary'}`}>
+      <div className={`${small ? 'text-xs' : 'text-sm'} font-mono font-semibold tabular-nums ${highlight ? 'text-emerald-300' : warn ? 'text-amber-700' : 'text-content-primary'}`}>
         {value}
       </div>
     </div>
@@ -312,7 +312,7 @@ function GuestScreen() {
 function NoAdminScreen({ email, signOut }) {
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
+      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
         <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
         <p className="text-sm text-content-secondary mb-2">Connecté en tant que <strong>{email}</strong>.</p>
         <button onClick={signOut} className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"><LogIn size={14} />Changer de compte</button>

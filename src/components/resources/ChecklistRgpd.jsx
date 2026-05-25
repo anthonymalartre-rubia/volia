@@ -104,7 +104,7 @@ export default function ChecklistRgpd() {
         tagline="⚖️ Conformité art. 6.1.f RGPD"
       />
 
-      <div className="mb-8 rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-4 text-sm text-content-secondary keep-together">
+      <div className="mb-8 rounded-2xl border border-amber-400 bg-amber-50 p-4 text-sm text-content-secondary keep-together">
         ⚖️ <strong className="text-content-primary">Cadre légal :</strong>{' '}
         en France, le cold email B2B est légal sous régime de l&apos;intérêt légitime (RGPD art. 6.1.f).
         La CNIL a sanctionné <strong>87 entreprises en 2024</strong>, dont une douzaine sur des cas B2B.

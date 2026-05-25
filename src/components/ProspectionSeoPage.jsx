@@ -188,7 +188,7 @@ export default function ProspectionSeoPage({
             <StatCard icon={Search} label="Entreprises" value={stats.total} color="text-violet-400" />
             <StatCard icon={Mail} label="Avec email" value={stats.withEmail} color="text-green-400" />
             <StatCard icon={Phone} label="Avec téléphone" value={stats.withPhone} color="text-blue-400" />
-            <StatCard icon={CheckCircle2} label="Note moyenne" value={`${stats.avgRating}/5`} color="text-amber-400" />
+            <StatCard icon={CheckCircle2} label="Note moyenne" value={`${stats.avgRating}/5`} color="text-amber-600" />
           </div>
         </section>
 

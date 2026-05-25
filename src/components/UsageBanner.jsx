@@ -40,7 +40,7 @@ export default function UsageBanner({ plan, usage, onUpgrade }) {
             <div key={label}>
               <div className="flex items-center justify-between text-xs mb-1">
                 <span className="text-content-secondary">{label}</span>
-                <span className={isMaxed ? 'text-red-400' : isWarning ? 'text-amber-400' : 'text-content-tertiary'}>
+                <span className={isMaxed ? 'text-red-400' : isWarning ? 'text-amber-600' : 'text-content-tertiary'}>
                   {current} / {isUnlimited ? '\u221e' : limit}
                 </span>
               </div>

@@ -137,8 +137,8 @@ export default function RGPDPage() {
           {PROSPECT_RIGHTS.map((right) => (
             <div key={right.title + '-prospect'} className="p-6 rounded-xl border border-line bg-surface-card">
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
-                  <right.icon size={18} className="text-amber-400" />
+                <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-300 flex items-center justify-center flex-shrink-0">
+                  <right.icon size={18} className="text-amber-600" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <h2 className="text-lg font-semibold text-content-primary mb-2">{right.title}</h2>

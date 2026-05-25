@@ -166,7 +166,7 @@ export default function ListDetailPage() {
           <StatCard icon={<Users size={14} className="text-violet-400" />} label="Total" value={list?.contacts_count || 0} />
           <StatCard icon={<Mail size={14} className="text-green-400" />} label="Emails" value={list?.email_count || 0} />
           <StatCard icon={<Phone size={14} className="text-indigo-400" />} label="Téléphones" value={list?.phone_count || 0} />
-          <StatCard icon={<Ban size={14} className="text-amber-400" />} label="Opt-out" value={list?.opt_out_count || 0} />
+          <StatCard icon={<Ban size={14} className="text-amber-600" />} label="Opt-out" value={list?.opt_out_count || 0} />
         </div>
 
         {/* Dropzone import */}
@@ -219,11 +219,11 @@ export default function ListDetailPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
               <Stat label="Parsé" value={importResult.parsed} />
               <Stat label="Insérés" value={importResult.inserted} color="text-green-400" />
-              <Stat label="Doublons" value={importResult.duplicates} color="text-amber-400" />
+              <Stat label="Doublons" value={importResult.duplicates} color="text-amber-600" />
               <Stat label="Skip (erreur)" value={importResult.skipped} color="text-red-400" />
             </div>
             {importResult.warnings?.length > 0 && (
-              <div className="mt-3 text-xs text-amber-300">
+              <div className="mt-3 text-xs text-amber-700">
                 <strong>Warnings :</strong>
                 <ul className="list-disc list-inside mt-1">
                   {importResult.warnings.map((w, i) => <li key={i}>{w}</li>)}
@@ -291,7 +291,7 @@ export default function ListDetailPage() {
                     <td className="p-3 text-content-tertiary text-xs">{c.position_title || '—'}</td>
                     <td className="p-3 text-center">
                       {c.opt_out ? (
-                        <span className="inline-flex items-center gap-1 text-xs text-amber-400" title={c.opt_out_reason}>
+                        <span className="inline-flex items-center gap-1 text-xs text-amber-600" title={c.opt_out_reason}>
                           <Ban size={11} /> opt-out
                         </span>
                       ) : c.bounce_count > 0 ? (
@@ -305,7 +305,7 @@ export default function ListDetailPage() {
                       )}
                     </td>
                     <td className="p-3 text-right whitespace-nowrap">
-                      <button onClick={() => toggleOptOut(c)} className="p-1 text-content-tertiary hover:text-amber-400 transition" title={c.opt_out ? 'Réactiver' : 'Marquer opt-out'}>
+                      <button onClick={() => toggleOptOut(c)} className="p-1 text-content-tertiary hover:text-amber-600 transition" title={c.opt_out ? 'Réactiver' : 'Marquer opt-out'}>
                         <Ban size={12} />
                       </button>
                       <button onClick={() => deleteContact(c.id)} className="p-1 text-content-tertiary hover:text-red-400 transition" title="Supprimer">

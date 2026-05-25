@@ -203,7 +203,7 @@ export default function TemplateIcp() {
         <div className="mt-3 text-sm space-y-1">
           <div><strong className="text-green-400">Score 80-100</strong> : Tier 1 — prospection prioritaire, 5-10 touches max sur 30 jours</div>
           <div><strong className="text-blue-400">Score 50-79</strong> : Tier 2 — prospection standard, 3-5 touches sur 21 jours</div>
-          <div><strong className="text-amber-400">Score &lt; 50</strong> : Tier 3 — ne pas prospecter activement (laisser en nurturing inbound)</div>
+          <div><strong className="text-amber-600">Score &lt; 50</strong> : Tier 3 — ne pas prospecter activement (laisser en nurturing inbound)</div>
         </div>
       </section>
 

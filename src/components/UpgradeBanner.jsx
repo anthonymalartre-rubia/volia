@@ -39,9 +39,9 @@ export default function UpgradeBanner({ plan, usage, onUpgrade }) {
   const pct = Math.min(100, Math.round((top.current / top.limit) * 100));
   const isMaxed = pct >= 100;
 
-  const accentBorder = isMaxed ? 'border-red-500/30' : 'border-amber-500/30';
+  const accentBorder = isMaxed ? 'border-red-500/30' : 'border-amber-400';
   const accentBg = isMaxed ? 'bg-red-500/5' : 'bg-amber-500/5';
-  const accentText = isMaxed ? 'text-red-400' : 'text-amber-400';
+  const accentText = isMaxed ? 'text-red-400' : 'text-amber-600';
   const accentIcon = isMaxed ? 'bg-red-500/20' : 'bg-amber-500/20';
   const barColor = isMaxed ? 'bg-red-500' : 'bg-amber-500';
 

@@ -125,14 +125,14 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
           {isAdmin && (
             <a
               href="/admin"
-              className="mt-1 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-amber-400 hover:bg-amber-500/10 transition-all duration-200"
+              className="mt-1 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-amber-600 hover:bg-amber-500/10 transition-all duration-200"
             >
               <div className="p-1.5 rounded-lg bg-amber-500/20">
                 <Shield size={16} />
               </div>
               <div className="flex-1 text-left">
                 <div>{t('sidebar.admin')}</div>
-                <div className="text-[10px] text-amber-400/50">{t('sidebar.adminDesc')}</div>
+                <div className="text-[10px] text-amber-600/50">{t('sidebar.adminDesc')}</div>
               </div>
             </a>
           )}

@@ -148,9 +148,9 @@ Anthony</p>
         </div>
 
         {lists.length === 0 ? (
-          <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-6 text-center">
-            <AlertTriangle size={20} className="mx-auto mb-2 text-amber-400" />
-            <p className="text-sm text-amber-200 mb-3">
+          <div className="rounded-2xl border border-amber-400 bg-amber-50 p-6 text-center">
+            <AlertTriangle size={20} className="mx-auto mb-2 text-amber-600" />
+            <p className="text-sm text-amber-700 mb-3">
               Vous n&apos;avez aucune liste de prospects. Créez-en une et importez votre CSV pour commencer.
             </p>
             <Link href="/admin/prospection" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition">
@@ -381,9 +381,9 @@ function GuestScreen() {
 function NoAdminScreen({ email, signOut }) {
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
-        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-4">
-          <ShieldOff size={20} className="text-amber-300" />
+      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
+        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 border border-amber-400 flex items-center justify-center mb-4">
+          <ShieldOff size={20} className="text-amber-700" />
         </div>
         <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
         <p className="text-sm text-content-secondary mb-2">Connecté en tant que <strong>{email}</strong>, mais ce compte n&apos;a pas les droits.</p>

@@ -187,7 +187,7 @@ export default function ProspectionHubPage() {
                   <Stat icon={<Phone size={11} />} value={l.phone_count} label="tels" />
                 </div>
                 {l.opt_out_count > 0 && (
-                  <div className="mt-2 inline-flex items-center gap-1 text-[10px] text-amber-400">
+                  <div className="mt-2 inline-flex items-center gap-1 text-[10px] text-amber-600">
                     <AlertCircle size={10} />
                     {l.opt_out_count} opt-out{l.opt_out_count > 1 ? 's' : ''}
                   </div>
@@ -250,9 +250,9 @@ function GuestScreen() {
 function NoAdminScreen({ email, signOut }) {
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
-        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-4">
-          <ShieldOff size={20} className="text-amber-300" />
+      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
+        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 border border-amber-400 flex items-center justify-center mb-4">
+          <ShieldOff size={20} className="text-amber-700" />
         </div>
         <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
         <p className="text-sm text-content-secondary mb-2">

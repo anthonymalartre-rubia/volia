@@ -13,8 +13,8 @@ import { getSupabase } from '@/lib/supabase';
 const STATUS_META = {
   draft:     { label: 'Brouillon',  color: 'text-content-tertiary', bg: 'bg-content-tertiary/10', icon: <Clock size={12} /> },
   scheduled: { label: 'Planifiée',  color: 'text-blue-400',         bg: 'bg-blue-500/10',          icon: <Clock size={12} /> },
-  sending:   { label: 'En cours',   color: 'text-amber-400',        bg: 'bg-amber-500/10',         icon: <Send size={12} /> },
-  paused:    { label: 'En pause',   color: 'text-orange-400',       bg: 'bg-orange-500/10',        icon: <Pause size={12} /> },
+  sending:   { label: 'En cours',   color: 'text-amber-600',        bg: 'bg-amber-500/10',         icon: <Send size={12} /> },
+  paused:    { label: 'En pause',   color: 'text-orange-600',       bg: 'bg-orange-500/10',        icon: <Pause size={12} /> },
   sent:      { label: 'Envoyée',    color: 'text-emerald-400',      bg: 'bg-emerald-500/10',       icon: <CheckCircle2 size={12} /> },
   failed:    { label: 'Échouée',    color: 'text-red-400',          bg: 'bg-red-500/10',           icon: <XCircle size={12} /> },
 };
@@ -212,21 +212,21 @@ export default function CampaignDetailPage() {
 
         {/* Progress bar si sending */}
         {['sending', 'scheduled'].includes(campaign.status) && (
-          <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-5">
+          <div className="mb-6 rounded-2xl border border-amber-400 bg-amber-50 p-5">
             <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-              <div className="text-sm font-semibold text-amber-200">
+              <div className="text-sm font-semibold text-amber-700">
                 {campaign.status === 'sending' ? 'Envoi en cours' : 'Planifiée'}
               </div>
-              <div className="text-xs text-amber-300/80 tabular-nums">
+              <div className="text-xs text-amber-700/80 tabular-nums">
                 {sent} / {total} envoyés ({progress}%)
                 {etaMinutes > 0 && campaign.status === 'sending' && ` · ~${etaMinutes} min restantes`}
                 {campaign.scheduled_at && campaign.status === 'scheduled' && ` · démarrage ${new Date(campaign.scheduled_at).toLocaleString('fr-FR')}`}
               </div>
             </div>
-            <div className="h-2 rounded-full bg-amber-500/15 overflow-hidden">
+            <div className="h-2 rounded-full bg-amber-100 overflow-hidden">
               <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all" style={{ width: `${progress}%` }} />
             </div>
-            <p className="text-[11px] text-amber-300/70 mt-2">
+            <p className="text-[11px] text-amber-700/70 mt-2">
               Stats actualisées automatiquement toutes les 30s. Le cron tourne toutes les 5 min.
             </p>
           </div>
@@ -358,7 +358,7 @@ export default function CampaignDetailPage() {
                 Bonnes pratiques RGPD : éviter nuit, weekend, jours fériés.
               </p>
             </div>
-            <div className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-3 mb-4 text-xs text-amber-200">
+            <div className="rounded-lg bg-amber-500/10 border border-amber-400 p-3 mb-4 text-xs text-amber-700">
               <strong>Cette action est irréversible.</strong> Les opt-out sont automatiquement exclus, et chaque mail contient un lien de désabonnement.
             </div>
             <div className="flex items-center gap-2 justify-end">
@@ -475,9 +475,9 @@ function GuestScreen() {
 function NoAdminScreen({ email, signOut }) {
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
-        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-4">
-          <ShieldOff size={20} className="text-amber-300" />
+      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
+        <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 border border-amber-400 flex items-center justify-center mb-4">
+          <ShieldOff size={20} className="text-amber-700" />
         </div>
         <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
         <p className="text-sm text-content-secondary mb-2">Connecté en tant que <strong>{email}</strong>, mais ce compte n&apos;a pas les droits.</p>

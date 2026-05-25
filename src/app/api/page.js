@@ -295,7 +295,7 @@ export default function ApiDocsPage() {
               </thead>
               <tbody>
                 <tr className="border-t border-line"><td className="p-3 font-mono text-violet-300">200</td><td className="p-3 text-content-secondary">Succès</td></tr>
-                <tr className="border-t border-line"><td className="p-3 font-mono text-amber-300">400</td><td className="p-3 text-content-secondary">Requête invalide (paramètre manquant ou format incorrect)</td></tr>
+                <tr className="border-t border-line"><td className="p-3 font-mono text-amber-700">400</td><td className="p-3 text-content-secondary">Requête invalide (paramètre manquant ou format incorrect)</td></tr>
                 <tr className="border-t border-line"><td className="p-3 font-mono text-red-300">401</td><td className="p-3 text-content-secondary">Clé API manquante, invalide ou révoquée</td></tr>
                 <tr className="border-t border-line"><td className="p-3 font-mono text-red-300">429</td><td className="p-3 text-content-secondary">Quota du plan atteint</td></tr>
                 <tr className="border-t border-line"><td className="p-3 font-mono text-red-300">500</td><td className="p-3 text-content-secondary">Erreur serveur — réessayez ou contactez-nous</td></tr>

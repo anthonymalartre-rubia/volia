@@ -119,7 +119,7 @@ export default function CalculatorRoiProspection() {
   const verdict = useMemo(() => {
     if (results.roiMensuel >= 300) return { label: 'Excellent', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30' };
     if (results.roiMensuel >= 100) return { label: 'Bon ROI', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30' };
-    if (results.roiMensuel >= 0) return { label: 'Rentable mais à optimiser', color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30' };
+    if (results.roiMensuel >= 0) return { label: 'Rentable mais à optimiser', color: 'text-amber-600', bg: 'bg-amber-500/10', border: 'border-amber-400' };
     return { label: 'Déficitaire', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30' };
   }, [results.roiMensuel]);
 
@@ -158,7 +158,7 @@ export default function CalculatorRoiProspection() {
               </button>
               <button
                 onClick={reset}
-                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-elevated hover:bg-amber-500/10 text-content-secondary hover:text-amber-400 border border-line hover:border-amber-500/30 transition"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium bg-surface-elevated hover:bg-amber-500/10 text-content-secondary hover:text-amber-600 border border-line hover:border-amber-400 transition"
                 title="Réinitialiser aux valeurs par défaut"
               >
                 <RotateCcw size={11} />

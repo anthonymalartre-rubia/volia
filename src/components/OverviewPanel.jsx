@@ -58,7 +58,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
           icon={Globe}
           label="Sites web"
           value={analytics.withWebsite.toLocaleString('fr-FR')}
-          color="text-amber-400"
+          color="text-amber-600"
           bgColor="bg-amber-500/10"
         />
       </div>

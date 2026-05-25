@@ -11,7 +11,7 @@ import {
 const TYPE_META = {
   enrichment_done:        { Icon: Mail,        color: 'text-green-400',   bg: 'bg-green-500/10' },
   search_complete:        { Icon: Mail,        color: 'text-green-400',   bg: 'bg-green-500/10' },
-  quota_warning:          { Icon: AlertCircle, color: 'text-amber-400',   bg: 'bg-amber-500/10' },
+  quota_warning:          { Icon: AlertCircle, color: 'text-amber-600',   bg: 'bg-amber-500/10' },
   quota_reached:          { Icon: AlertCircle, color: 'text-red-400',     bg: 'bg-red-500/10' },
   payment_success:        { Icon: CreditCard,  color: 'text-green-400',   bg: 'bg-green-500/10' },
   payment_failed:         { Icon: CreditCard,  color: 'text-red-400',     bg: 'bg-red-500/10' },

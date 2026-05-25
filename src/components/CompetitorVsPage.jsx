@@ -89,7 +89,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
         {isAlternative && (
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
-              <AlertTriangle size={22} className="text-amber-400" />
+              <AlertTriangle size={22} className="text-amber-600" />
               Pourquoi les utilisateurs quittent {competitor.name} en 2026
             </h2>
             <p className="text-sm text-content-secondary mb-6 max-w-2xl">
@@ -319,7 +319,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
 function SwitchReason({ num, title, desc }) {
   return (
     <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
-      <div className="text-3xl font-bold text-amber-400 mb-2">{num}.</div>
+      <div className="text-3xl font-bold text-amber-600 mb-2">{num}.</div>
       <h3 className="text-base font-semibold text-content-primary mb-2 leading-tight">{title}</h3>
       <p className="text-sm text-content-secondary leading-relaxed">{desc}</p>
     </div>

@@ -34,6 +34,6 @@ export function computeLeadScore(prospect) {
 export function getScoreLabel(score) {
   if (score >= 80) return { label: 'Excellent', color: 'text-green-400', bg: 'bg-green-500/20' };
   if (score >= 60) return { label: 'Bon', color: 'text-blue-400', bg: 'bg-blue-500/20' };
-  if (score >= 40) return { label: 'Moyen', color: 'text-amber-400', bg: 'bg-amber-500/20' };
+  if (score >= 40) return { label: 'Moyen', color: 'text-amber-600', bg: 'bg-amber-500/20' };
   return { label: 'Faible', color: 'text-red-400', bg: 'bg-red-500/20' };
 }

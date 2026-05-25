@@ -108,7 +108,7 @@ export default function ProspectionBeHub() {
               <StatCard icon={MapPin} label="Provinces" value="6" color="text-violet-400" />
               <StatCard icon={Users} label="Secteurs" value="150+" color="text-green-400" />
               <StatCard icon={Mail} label="Taux email" value="70-85%" color="text-blue-400" />
-              <StatCard icon={Shield} label="RGPD" value="✓" color="text-amber-400" />
+              <StatCard icon={Shield} label="RGPD" value="✓" color="text-amber-600" />
             </div>
           </section>
 

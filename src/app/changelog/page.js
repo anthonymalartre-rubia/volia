@@ -19,7 +19,7 @@ export const metadata = {
 const TYPE_META = {
   feature: { icon: Sparkles, label: 'Nouveau', color: 'text-violet-400', bg: 'bg-violet-500/10' },
   improvement: { icon: CheckCircle2, label: 'Amélioré', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-  fix: { icon: Wrench, label: 'Corrigé', color: 'text-amber-400', bg: 'bg-amber-500/10' },
+  fix: { icon: Wrench, label: 'Corrigé', color: 'text-amber-600', bg: 'bg-amber-500/10' },
   security: { icon: Shield, label: 'Sécurité', color: 'text-red-400', bg: 'bg-red-500/10' },
 };
 

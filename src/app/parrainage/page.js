@@ -93,7 +93,7 @@ export default function ParrainagePage() {
         <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <StatCard icon={Users} label="Filleuls invités" value={stats?.total || 0} color="text-violet-400" />
-            <StatCard icon={Clock} label="En attente" value={stats?.pending || 0} color="text-amber-400" />
+            <StatCard icon={Clock} label="En attente" value={stats?.pending || 0} color="text-amber-600" />
             <StatCard icon={CheckCircle2} label="Payants" value={stats?.qualified || 0} color="text-emerald-400" />
             <StatCard icon={Gift} label="Mois gagnés" value={stats?.bonus_months_earned || 0} color="text-pink-400" highlight />
           </div>
@@ -270,7 +270,7 @@ function StatCard({ icon: Icon, label, value, color, highlight }) {
 
 function StatusBadge({ status }) {
   const map = {
-    pending: { label: 'En attente', color: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
+    pending: { label: 'En attente', color: 'bg-amber-100 text-amber-700 border-amber-400' },
     qualified: { label: 'Payant ✓', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
     rewarded: { label: 'Récompensé', color: 'bg-pink-500/15 text-pink-300 border-pink-500/30' },
     expired: { label: 'Expiré', color: 'bg-zinc-500/15 text-content-secondary border-zinc-500/30' },

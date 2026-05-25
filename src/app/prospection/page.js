@@ -115,12 +115,12 @@ export default function ProspectionIndexPage() {
                 href={`/prospection/restaurant/region/${r.slug}`}
                 className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm transition ${
                   r.key === 'om'
-                    ? 'border-amber-500/30 bg-amber-500/[0.06] hover:bg-amber-500/15 text-amber-200 hover:text-content-primary'
+                    ? 'border-amber-400 bg-amber-100/60 hover:bg-amber-100 text-amber-700 hover:text-content-primary'
                     : 'border-line bg-surface-elevated/40 hover:bg-violet-500/10 hover:border-violet-500/30 text-content-secondary hover:text-content-primary'
                 }`}
               >
                 {r.key === 'om' ? (
-                  <Palmtree size={12} className="text-amber-400 flex-shrink-0" />
+                  <Palmtree size={12} className="text-amber-600 flex-shrink-0" />
                 ) : (
                   <MapPin size={12} className="text-violet-400 flex-shrink-0" />
                 )}
@@ -167,8 +167,8 @@ export default function ProspectionIndexPage() {
 
             {/* Outre-mer : section dédiée et visuellement distincte */}
             {overseasRegion && (
-              <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.03] p-5">
-                <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <div className="rounded-2xl border border-amber-300 bg-amber-50 p-5">
+                <h3 className="text-sm font-semibold text-amber-700 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <Palmtree size={14} />
                   Outre-mer (DROM)
                   <span className="text-content-tertiary font-normal normal-case tracking-normal text-xs">
@@ -184,9 +184,9 @@ export default function ProspectionIndexPage() {
                     <Link
                       key={dept.slug}
                       href={`/prospection/dept/${dept.slug}`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/[0.05] hover:bg-amber-500/15 hover:border-amber-500/40 text-sm text-amber-200 hover:text-content-primary transition"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-300 bg-amber-100/60 hover:bg-amber-100 hover:border-amber-500 text-sm text-amber-700 hover:text-content-primary transition"
                     >
-                      <span className="text-xs font-mono text-amber-400 flex-shrink-0">{dept.code}</span>
+                      <span className="text-xs font-mono text-amber-600 flex-shrink-0">{dept.code}</span>
                       <span className="truncate">{dept.name}</span>
                     </Link>
                   ))}

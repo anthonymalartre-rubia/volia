@@ -114,9 +114,9 @@ export default function AdminLeadsPage() {
   if (authState === 'no-admin') {
     return (
       <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-        <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
-          <div className="w-12 h-12 mx-auto rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center mb-4">
-            <ShieldOff size={20} className="text-amber-300" />
+        <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
+          <div className="w-12 h-12 mx-auto rounded-xl bg-amber-100 border border-amber-400 flex items-center justify-center mb-4">
+            <ShieldOff size={20} className="text-amber-700" />
           </div>
           <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
           <p className="text-sm text-content-secondary mb-2">
@@ -176,7 +176,7 @@ export default function AdminLeadsPage() {
           <StatCard label="Total leads" value={stats.total} color="text-content-primary" />
           <StatCard label="Email livré" value={stats.sent} color="text-green-400" icon={<CheckCircle size={14} className="text-green-400" />} />
           <StatCard label="Échec envoi" value={stats.failed} color="text-red-400" icon={<XCircle size={14} className="text-red-400" />} />
-          <StatCard label="Opt-out RGPD" value={stats.optedOut} color="text-amber-400" icon={<AlertCircle size={14} className="text-amber-400" />} />
+          <StatCard label="Opt-out RGPD" value={stats.optedOut} color="text-amber-600" icon={<AlertCircle size={14} className="text-amber-600" />} />
         </div>
 
         {/* Warning si beaucoup d'échecs */}
@@ -265,7 +265,7 @@ export default function AdminLeadsPage() {
                     </td>
                     <td className="p-3 text-center">
                       {l.opt_out ? (
-                        <span title="Opt-out RGPD" className="inline-flex items-center gap-1 text-amber-400 text-xs">
+                        <span title="Opt-out RGPD" className="inline-flex items-center gap-1 text-amber-600 text-xs">
                           <AlertCircle size={12} /> opt-out
                         </span>
                       ) : l.email_sent ? (

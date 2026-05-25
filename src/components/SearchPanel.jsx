@@ -542,10 +542,10 @@ export default function SearchPanel({
       </div>
 
       {!apiKeySet && (
-        <div className="flex items-start gap-3 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 mb-6">
+        <div className="flex items-start gap-3 p-4 rounded-xl border border-amber-300 bg-amber-500/5 mb-6">
           <Sparkles size={18} className="text-amber-500 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-sm font-medium text-amber-400">{t('search.configRequired')}</p>
+            <p className="text-sm font-medium text-amber-600">{t('search.configRequired')}</p>
             <p className="text-xs text-content-tertiary mt-1">
               {t('search.configRequiredDesc')}
             </p>
@@ -645,8 +645,8 @@ export default function SearchPanel({
           {step === 0 && !searchType && (
             <div className="pl-2 sm:pl-10 space-y-3 animate-in fade-in duration-300">
               <div className="flex items-center gap-2">
-                <Zap size={14} className="text-amber-400" />
-                <span className="text-xs font-semibold text-amber-400">{t('search.quickSearches')}</span>
+                <Zap size={14} className="text-amber-600" />
+                <span className="text-xs font-semibold text-amber-600">{t('search.quickSearches')}</span>
               </div>
               <p className="text-[10px] text-content-muted -mt-1">{t('search.quickSearchDesc')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -656,16 +656,16 @@ export default function SearchPanel({
                     <button
                       key={preset.id}
                       onClick={() => handlePresetSearch(preset)}
-                      className="group flex items-center gap-3 px-3.5 py-3 rounded-xl border border-amber-500/20 bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-500/40 transition-all active:scale-[0.97] text-left"
+                      className="group flex items-center gap-3 px-3.5 py-3 rounded-xl border border-amber-300 bg-amber-500/5 hover:bg-amber-500/10 hover:border-amber-500 transition-all active:scale-[0.97] text-left"
                     >
-                      <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500/20 transition">
-                        <PresetIcon size={15} className="text-amber-400" />
+                      <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-300 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500/20 transition">
+                        <PresetIcon size={15} className="text-amber-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-sm font-medium text-content-primary truncate">{t(preset.nameKey)}</div>
                         <div className="text-[10px] text-content-muted">{t(preset.subtitleKey)}</div>
                       </div>
-                      <ArrowRight size={14} className="text-amber-500/40 group-hover:text-amber-400 transition flex-shrink-0" />
+                      <ArrowRight size={14} className="text-amber-500/40 group-hover:text-amber-600 transition flex-shrink-0" />
                     </button>
                   );
                 })}
@@ -725,7 +725,7 @@ export default function SearchPanel({
                 <button
                   onClick={handleNlSubmit}
                   disabled={!nlInput.trim() || nlParsing}
-                  className="px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-medium hover:bg-amber-500/20 transition disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl bg-amber-500/10 border border-amber-400 text-amber-600 text-sm font-medium hover:bg-amber-500/20 transition disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {nlParsing ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                   {nlParsing ? t('search.analyzing') : t('search.analyze')}
@@ -1171,9 +1171,9 @@ export default function SearchPanel({
                   {freeSearchTerms.length > 0 && (
                     <div className="flex flex-wrap gap-2">
                       {freeSearchTerms.map((t, i) => (
-                        <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium">
+                        <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-300 text-amber-600 text-xs font-medium">
                           {t}
-                          <button onClick={() => setFreeSearchTerms((prev) => prev.filter((_, idx) => idx !== i))} className="text-amber-600 hover:text-amber-300">
+                          <button onClick={() => setFreeSearchTerms((prev) => prev.filter((_, idx) => idx !== i))} className="text-amber-600 hover:text-amber-700">
                             <X size={12} />
                           </button>
                         </div>

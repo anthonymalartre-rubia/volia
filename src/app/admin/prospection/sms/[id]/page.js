@@ -13,8 +13,8 @@ import { getSupabase } from '@/lib/supabase';
 const STATUS_META = {
   draft:     { label: 'Brouillon',  color: 'text-content-tertiary', bg: 'bg-content-tertiary/10', icon: <Clock size={12} /> },
   scheduled: { label: 'Planifiée',  color: 'text-blue-400',         bg: 'bg-blue-500/10',          icon: <Clock size={12} /> },
-  sending:   { label: 'En cours',   color: 'text-amber-400',        bg: 'bg-amber-500/10',         icon: <Send size={12} /> },
-  paused:    { label: 'En pause',   color: 'text-orange-400',       bg: 'bg-orange-500/10',        icon: <Pause size={12} /> },
+  sending:   { label: 'En cours',   color: 'text-amber-600',        bg: 'bg-amber-500/10',         icon: <Send size={12} /> },
+  paused:    { label: 'En pause',   color: 'text-orange-600',       bg: 'bg-orange-500/10',        icon: <Pause size={12} /> },
   sent:      { label: 'Envoyée',    color: 'text-emerald-400',      bg: 'bg-emerald-500/10',       icon: <CheckCircle2 size={12} /> },
   failed:    { label: 'Échouée',    color: 'text-red-400',          bg: 'bg-red-500/10',           icon: <XCircle size={12} /> },
 };
@@ -185,18 +185,18 @@ export default function SmsDetailPage() {
         )}
 
         {['sending', 'scheduled'].includes(campaign.status) && (
-          <div className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-5">
+          <div className="mb-6 rounded-2xl border border-amber-400 bg-amber-50 p-5">
             <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
-              <div className="text-sm font-semibold text-amber-200">
+              <div className="text-sm font-semibold text-amber-700">
                 {campaign.status === 'sending' ? 'Envoi SMS en cours' : 'Planifiée'}
               </div>
-              <div className="text-xs text-amber-300/80 tabular-nums">
+              <div className="text-xs text-amber-700/80 tabular-nums">
                 {sent} / {total} envoyés ({progress}%)
                 {etaMinutes > 0 && campaign.status === 'sending' && ` · ~${etaMinutes} min restantes`}
                 {campaign.scheduled_at && campaign.status === 'scheduled' && ` · démarrage ${new Date(campaign.scheduled_at).toLocaleString('fr-FR')}`}
               </div>
             </div>
-            <div className="h-2 rounded-full bg-amber-500/15 overflow-hidden">
+            <div className="h-2 rounded-full bg-amber-100 overflow-hidden">
               <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 transition-all" style={{ width: `${progress}%` }} />
             </div>
           </div>
@@ -315,7 +315,7 @@ export default function SmsDetailPage() {
               />
               <p className="text-[10px] text-content-tertiary mt-1">RGPD : éviter 20h-8h, dimanche, jours fériés.</p>
             </div>
-            <div className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-3 mb-4 text-xs text-amber-200">
+            <div className="rounded-lg bg-amber-500/10 border border-amber-400 p-3 mb-4 text-xs text-amber-700">
               <strong>Action irréversible.</strong> Footer STOP ajouté automatiquement.
               Le cron envoie ~20 SMS / 5 min.
             </div>
@@ -409,7 +409,7 @@ function GuestScreen() {
 function NoAdminScreen({ email, signOut }) {
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
-      <div className="max-w-md w-full rounded-2xl border border-amber-500/30 bg-amber-500/[0.04] p-8 text-center">
+      <div className="max-w-md w-full rounded-2xl border border-amber-400 bg-amber-50 p-8 text-center">
         <h1 className="text-xl font-bold mb-2">Accès admin requis</h1>
         <p className="text-sm text-content-secondary mb-2">Connecté en tant que <strong>{email}</strong>.</p>
         <button onClick={signOut} className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition"><LogIn size={14} />Changer de compte</button>

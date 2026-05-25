@@ -169,7 +169,7 @@ export default function ChecklistWarmup() {
               <th className="text-left p-2 font-semibold">Métrique</th>
               <th className="text-left p-2 font-semibold text-green-400">Excellent</th>
               <th className="text-left p-2 font-semibold text-blue-400">Bon</th>
-              <th className="text-left p-2 font-semibold text-amber-400">Warning</th>
+              <th className="text-left p-2 font-semibold text-amber-600">Warning</th>
               <th className="text-left p-2 font-semibold text-red-400">Critique</th>
             </tr>
           </thead>

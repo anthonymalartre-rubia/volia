@@ -30,7 +30,7 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
             </p>
             <div className="flex items-center gap-1 mb-3">
               {Array.from({ length: t.rating || 5 }).map((_, k) => (
-                <Star key={k} size={11} className="text-amber-300 fill-amber-300" />
+                <Star key={k} size={11} className="text-amber-700 fill-amber-300" />
               ))}
             </div>
             <div className="border-t border-line pt-3">
@@ -94,7 +94,7 @@ const BUILT_FOR_PROFILES = [
     pitch: 'Plan Solo à 19 €/mois — le moins cher du marché pour solo. Pas d\'engagement.',
     metric: 'À partir de 19 €',
     gradient: 'from-amber-500/15 to-yellow-500/15',
-    iconColor: 'text-amber-300',
+    iconColor: 'text-amber-700',
   },
   {
     slug: 'sales-managers',
@@ -271,7 +271,7 @@ export function CompetitorMiniBlock() {
 function CompetitorCard({ name, value, tone, note, featured = false }) {
   const toneMap = {
     red: 'text-red-300',
-    orange: 'text-orange-300',
+    orange: 'text-orange-700',
     emerald: 'text-emerald-300',
   };
   return (

@@ -89,7 +89,7 @@ export function CompetitorInlineBlock({ category }) {
         </div>
         <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
           <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2">Hunter.io</div>
-          <div className="text-3xl font-bold text-orange-300 tabular-nums mb-1">~ 55 %</div>
+          <div className="text-3xl font-bold text-orange-700 tabular-nums mb-1">~ 55 %</div>
           <div className="text-xs text-content-tertiary leading-relaxed">
             Bon sur les domaines avec site web, faible sur les artisans et commerces sans site
           </div>
@@ -246,8 +246,8 @@ export function SeasonalityBlock({ data, category }) {
         Quand prospecter les {category?.labelPlural || 'entreprises'} ?
       </h2>
       <div className="grid md:grid-cols-3 gap-4 mb-4">
-        <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
-          <div className="text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2">À éviter (haute saison)</div>
+        <div className="rounded-xl border border-amber-300 bg-amber-50 p-4">
+          <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-2">À éviter (haute saison)</div>
           <div className="text-sm text-content-secondary leading-relaxed">{peak}</div>
         </div>
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-4">
@@ -336,13 +336,13 @@ export function ObjectionBlock({ data, category }) {
   return (
     <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
       <h2 className="text-2xl sm:text-3xl font-bold mb-6 flex items-center gap-2">
-        <AlertTriangle size={22} className="text-amber-400" />
+        <AlertTriangle size={22} className="text-amber-600" />
         Objections fréquentes des {category?.labelPlural || 'cibles'} et comment répondre
       </h2>
       <div className="space-y-3">
         {data.objections.map((o, i) => (
           <div key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-5">
-            <div className="text-sm text-amber-300 font-semibold mb-2">« {o.objection} »</div>
+            <div className="text-sm text-amber-700 font-semibold mb-2">« {o.objection} »</div>
             <div className="text-sm text-content-secondary leading-relaxed">
               <strong className="text-emerald-300">→ </strong>
               {o.reponse}
@@ -679,7 +679,7 @@ export function SamplePreviewBlock({ category, department, stats }) {
                   </td>
                   <td className="px-4 py-3 text-content-secondary">{s.city}</td>
                   <td className="px-4 py-3 text-center">
-                    <span className="text-amber-300 font-medium tabular-nums">★ {s.rating}</span>
+                    <span className="text-amber-700 font-medium tabular-nums">★ {s.rating}</span>
                     <div className="text-[10px] text-content-tertiary tabular-nums">{s.reviews} avis</div>
                   </td>
                   <td className="px-4 py-3 text-center hidden sm:table-cell">
@@ -797,7 +797,7 @@ export function TrustBadgesBlock() {
           tone="violet"
         />
         <TrustBadge
-          icon={<Zap size={14} className="text-amber-300" />}
+          icon={<Zap size={14} className="text-amber-700" />}
           label="Sans carte bancaire"
           tone="amber"
         />
@@ -811,7 +811,7 @@ function TrustBadge({ icon, label, tone = 'violet' }) {
     emerald: 'border-emerald-500/20 bg-emerald-500/[0.04] text-emerald-100',
     blue: 'border-blue-500/20 bg-blue-500/[0.04] text-blue-100',
     violet: 'border-violet-500/20 bg-violet-500/[0.04] text-violet-100',
-    amber: 'border-amber-500/20 bg-amber-500/[0.04] text-amber-100',
+    amber: 'border-amber-300 bg-amber-50 text-amber-100',
   };
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${toneMap[tone]}`}>

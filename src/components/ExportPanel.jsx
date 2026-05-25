@@ -155,7 +155,7 @@ export default function ExportPanel({ prospects, onDownloadCSV }) {
                   <td className="px-4 py-2 text-content-secondary truncate max-w-[140px]">{p.adresse || '\u2014'}</td>
                   <td className="px-4 py-2 text-content-secondary font-mono">{p.telephone || '\u2014'}</td>
                   <td className="px-4 py-2 text-green-400/70 truncate max-w-[140px]">{p.email || '\u2014'}</td>
-                  <td className="px-4 py-2 text-amber-400 font-mono">{p.note != null ? p.note : '\u2014'}</td>
+                  <td className="px-4 py-2 text-amber-600 font-mono">{p.note != null ? p.note : '\u2014'}</td>
                   <td className="px-4 py-2 text-content-muted">{p.type || '\u2014'}</td>
                 </tr>
               ))}

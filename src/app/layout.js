@@ -122,14 +122,17 @@ export default function RootLayout({ children }) {
         {/* DNS-prefetch Supabase (auth + queries client une fois loggé) */}
         <link rel="dns-prefetch" href="https://kqrarrrojdtxijkhejhg.supabase.co" />
 
-        {/* Prevent flash of wrong theme — default = light */}
+        {/* Prevent flash of wrong theme — default = LIGHT pour tout le monde
+            (décision rebrand Volia mai 2026, voir lib/theme.js). On n'honore
+            PLUS la préférence OS dark : seul le toggle explicite via
+            ThemeToggle peut activer le dark. */}
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
             try {
               var t = localStorage.getItem('theme');
-              var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-              var useLight = t === 'light' || (!t && !prefersDark);
-              if (useLight) document.documentElement.classList.add('light');
+              if (t !== 'dark') {
+                document.documentElement.classList.add('light');
+              }
             } catch(e) {
               document.documentElement.classList.add('light');
             }

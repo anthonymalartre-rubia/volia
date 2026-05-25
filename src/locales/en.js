@@ -642,7 +642,7 @@ const en = {
     hero: {
       badge: 'Cheapest on the French market - Solo at EUR 19/month - unlimited prospects',
       title: 'Prospect with',
-      subtitle: 'Volia scrapes websites and searches Google to find the professional email of every business. <strong class="text-zinc-200">150+ categories, 101 departments</strong>, confidence scoring.',
+      subtitle: 'Volia scrapes websites and searches Google to find the professional email of every business. <strong class="text-content-secondary">150+ categories, 101 departments</strong>, confidence scoring.',
       price: 'Starting at EUR 19/month - cheapest in France. Cancel anytime.',
       compare: 'Compare with competition',
       sourcesLabel: 'Integrated sources:',
@@ -651,10 +651,10 @@ const en = {
     why: {
       label: 'Why an aggregator?',
       title: 'Smart scraping + Google search',
-      desc: 'Scraping alone is not enough — many sites don\'t display their email. Volia combines <strong class="text-zinc-300">website scraping</strong> with <strong class="text-zinc-300">Google search</strong> to maximize coverage. No website? We discover it automatically.',
-      stat1Label: 'Coverage rate with <strong class="text-zinc-400">scraping only</strong>',
+      desc: 'Scraping alone is not enough — many sites don\'t display their email. Volia combines <strong class="text-content-secondary">website scraping</strong> with <strong class="text-content-secondary">Google search</strong> to maximize coverage. No website? We discover it automatically.',
+      stat1Label: 'Coverage rate with <strong class="text-content-secondary">scraping only</strong>',
       stat2Label: 'Coverage rate with <strong class="text-violet-400">scraping + Google</strong>',
-      stat3Label: 'Cost per lead vs. <strong class="text-zinc-400">separate subscriptions</strong> to each tool',
+      stat3Label: 'Cost per lead vs. <strong class="text-content-secondary">separate subscriptions</strong> to each tool',
     },
     // Features
     features: {
@@ -690,7 +690,7 @@ const en = {
     waterfall: {
       label: 'Cascade enrichment',
       title: 'Scraping + Google. The best email with confidence score.',
-      desc: 'Volia automatically scrapes every company\'s website, then searches Google if no email is found. <strong class="text-zinc-300">No website? We discover it via Google.</strong>',
+      desc: 'Volia automatically scrapes every company\'s website, then searches Google if no email is found. <strong class="text-content-secondary">No website? We discover it via Google.</strong>',
       confidence: 'Confidence',
       stopsFirst: 'Stops at the first email found — you only pay for what\'s needed.',
       free: 'Free',
@@ -711,7 +711,7 @@ const en = {
     emailVerif: {
       badge: 'Enterprise',
       title: 'Verify your emails in bulk before sending',
-      desc: 'Import your email database and instantly verify which ones are valid. No need to send to find out — our SMTP verification detects fake emails <strong class="text-zinc-200">without sending a single message</strong>.',
+      desc: 'Import your email database and instantly verify which ones are valid. No need to send to find out — our SMTP verification detects fake emails <strong class="text-content-secondary">without sending a single message</strong>.',
       smtp: 'Silent SMTP verification',
       smtpDesc: 'We verify if the mailbox exists via SMTP protocol, without sending an email. No risk of bounce or blacklisting.',
       csvImport: 'Bulk CSV import',

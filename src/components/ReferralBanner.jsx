@@ -63,8 +63,8 @@ export default function ReferralBanner() {
           <Gift className="h-4 w-4 text-pink-300" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-zinc-100 mb-1.5">{message}</p>
-          <p className="text-xs text-zinc-400 leading-relaxed">
+          <p className="text-sm font-medium text-content-primary mb-1.5">{message}</p>
+          <p className="text-xs text-content-secondary leading-relaxed">
             Pour chaque ami qui devient client payant via votre lien, vous gagnez 1 mois gratuit. Aucune limite.
           </p>
           <div className="mt-3 flex items-center gap-2">
@@ -80,7 +80,7 @@ export default function ReferralBanner() {
         </div>
         <button
           onClick={handleDismiss}
-          className="p-1 rounded-md hover:bg-surface-elevated transition-colors shrink-0 text-zinc-500 hover:text-zinc-200"
+          className="p-1 rounded-md hover:bg-surface-elevated transition-colors shrink-0 text-content-tertiary hover:text-content-secondary"
           aria-label="Masquer pour 7 jours"
         >
           <X className="h-3.5 w-3.5" />

@@ -12,14 +12,14 @@ export default function FAQSection() {
   };
 
   return (
-    <section id="faq" className="py-24 px-6 border-t border-white/[0.06]">
+    <section id="faq" className="py-24 px-6 border-t border-line">
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-sm font-semibold text-violet-400 mb-3">FAQ</p>
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Questions frequentes
           </h2>
-          <p className="text-zinc-500 text-lg max-w-xl mx-auto">
+          <p className="text-content-tertiary text-lg max-w-xl mx-auto">
             Tout ce que vous devez savoir sur Volia.fr
           </p>
         </div>
@@ -28,18 +28,18 @@ export default function FAQSection() {
           {FAQ_ITEMS.map((item, index) => (
             <div
               key={index}
-              className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm overflow-hidden transition-colors hover:border-white/[0.1]"
+              className="rounded-2xl border border-line bg-surface-elevated/40 backdrop-blur-sm overflow-hidden transition-colors hover:border-line-hover"
             >
               <button
                 onClick={() => toggle(index)}
                 className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
               >
-                <span className="text-sm sm:text-base font-medium text-zinc-200">
+                <span className="text-sm sm:text-base font-medium text-content-secondary">
                   {item.question}
                 </span>
                 <ChevronDown
                   size={18}
-                  className={`text-zinc-500 flex-shrink-0 transition-transform duration-300 ${
+                  className={`text-content-tertiary flex-shrink-0 transition-transform duration-300 ${
                     openIndex === index ? "rotate-180" : ""
                   }`}
                 />
@@ -50,7 +50,7 @@ export default function FAQSection() {
                 }`}
               >
                 <div className="px-6 pb-5 pt-0">
-                  <p className="text-sm text-zinc-400 leading-relaxed">
+                  <p className="text-sm text-content-secondary leading-relaxed">
                     {item.answer}
                   </p>
                 </div>

@@ -14,7 +14,7 @@ export default function AuthPageShell({
   contentWidth = 'max-w-md', // 'max-w-md' | 'max-w-lg' | 'max-w-2xl' | 'max-w-3xl'
 }) {
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
+    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Background blobs animés (cohérent avec /parrainage, /newsletter) */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-violet-600/15 blur-[120px]" />
@@ -30,9 +30,9 @@ export default function AuthPageShell({
       </div>
 
       {/* Top nav minimaliste */}
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href={backHref} className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
+          <Link href={backHref} className="flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition">
             <ArrowLeft size={14} />
             {backLabel}
           </Link>
@@ -57,14 +57,14 @@ export default function AuthPageShell({
         </div>
       </main>
 
-      <footer className="border-t border-white/[0.06] py-6 bg-[#08080c]/50 backdrop-blur-xl relative">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500">
+      <footer className="border-t border-line py-6 bg-surface-base/50 backdrop-blur-xl relative">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-content-tertiary">
           <span>© 2026 Volia.fr — Prospection B2B France · Belgique · Suisse</span>
           <div className="flex gap-4">
-            <Link href="/cgu" className="hover:text-zinc-300 transition">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-zinc-300 transition">Confidentialité</Link>
-            <Link href="/rgpd" className="hover:text-zinc-300 transition">RGPD</Link>
-            <Link href="/status" className="hover:text-zinc-300 transition">Status</Link>
+            <Link href="/cgu" className="hover:text-content-secondary transition">CGU</Link>
+            <Link href="/confidentialite" className="hover:text-content-secondary transition">Confidentialité</Link>
+            <Link href="/rgpd" className="hover:text-content-secondary transition">RGPD</Link>
+            <Link href="/status" className="hover:text-content-secondary transition">Status</Link>
           </div>
         </div>
       </footer>

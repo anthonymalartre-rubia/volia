@@ -16,7 +16,7 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
         <h2 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
           {title}
         </h2>
-        <p className="text-sm text-zinc-400 max-w-2xl mx-auto">{subtitle}</p>
+        <p className="text-sm text-content-secondary max-w-2xl mx-auto">{subtitle}</p>
         {/* Strip étoiles + nb d'avis volontairement retiré tant qu'aucun
             collecteur d'avis tiers vérifiable (Trustpilot, G2…) n'est
             branché. Reaffichez-le dès que la donnée est sourçable. */}
@@ -25,7 +25,7 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
         {items.map((t, i) => (
           <MarketingCard key={i} as="article" size="md" className="flex flex-col">
             <Quote size={18} className="text-violet-400/60 mb-3" />
-            <p className="text-sm text-zinc-200 leading-relaxed mb-4 flex-1">
+            <p className="text-sm text-content-secondary leading-relaxed mb-4 flex-1">
               « {t.content} »
             </p>
             <div className="flex items-center gap-1 mb-3">
@@ -33,10 +33,10 @@ export function TestimonialsBlock({ sector = null, limit = 6, title = 'Ce que di
                 <Star key={k} size={11} className="text-amber-300 fill-amber-300" />
               ))}
             </div>
-            <div className="border-t border-white/[0.04] pt-3">
-              <div className="text-sm font-semibold text-white">{t.name}</div>
-              <div className="text-xs text-zinc-400">{t.role} · {t.company}</div>
-              <div className="text-[10px] text-zinc-500 mt-0.5">{t.location} · {t.sector}</div>
+            <div className="border-t border-line pt-3">
+              <div className="text-sm font-semibold text-content-primary">{t.name}</div>
+              <div className="text-xs text-content-secondary">{t.role} · {t.company}</div>
+              <div className="text-[10px] text-content-tertiary mt-0.5">{t.location} · {t.sector}</div>
             </div>
           </MarketingCard>
         ))}
@@ -120,7 +120,7 @@ export function BuiltForProfilesBlock({
         <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
           {title}
         </h2>
-        <p className="text-sm text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-sm text-content-secondary max-w-2xl mx-auto leading-relaxed">
           {subtitle}
         </p>
       </div>
@@ -135,16 +135,16 @@ export function BuiltForProfilesBlock({
             className="group flex flex-col"
           >
             <div className="flex items-start justify-between gap-3 mb-3">
-              <div className={`w-10 h-10 rounded-xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center ${iconColor}`}>
+              <div className={`w-10 h-10 rounded-xl bg-surface-elevated border border-line flex items-center justify-center ${iconColor}`}>
                 <Icon size={18} />
               </div>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-white/[0.06] border border-white/[0.06] text-[10px] font-mono font-semibold text-zinc-300 tabular-nums whitespace-nowrap">
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-elevated border border-line text-[10px] font-mono font-semibold text-content-secondary tabular-nums whitespace-nowrap">
                 {metric}
               </span>
             </div>
-            <h3 className="text-sm font-bold text-white mb-1.5 leading-tight">{label}</h3>
-            <p className="text-xs text-zinc-400 leading-relaxed flex-1 mb-3">{pitch}</p>
-            <div className="inline-flex items-center gap-1 text-xs font-semibold text-zinc-300 group-hover:text-white transition">
+            <h3 className="text-sm font-bold text-content-primary mb-1.5 leading-tight">{label}</h3>
+            <p className="text-xs text-content-secondary leading-relaxed flex-1 mb-3">{pitch}</p>
+            <div className="inline-flex items-center gap-1 text-xs font-semibold text-content-secondary group-hover:text-content-primary transition">
               Voir la page dédiée
               <ArrowRight size={11} className="group-hover:translate-x-0.5 transition" />
             </div>
@@ -152,22 +152,22 @@ export function BuiltForProfilesBlock({
         ))}
       </div>
       {/* Mini-strip stats produit honnêtes — pas de fake clients, juste les faits */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-zinc-500">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[11px] text-content-tertiary">
         <span className="inline-flex items-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-emerald-400" />
-          <strong className="text-zinc-300 font-mono">101</strong> départements FR
+          <strong className="text-content-secondary font-mono">101</strong> départements FR
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-emerald-400" />
-          <strong className="text-zinc-300 font-mono">150+</strong> catégories B2B
+          <strong className="text-content-secondary font-mono">150+</strong> catégories B2B
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-emerald-400" />
-          <strong className="text-zinc-300 font-mono">70-85%</strong> taux découverte email
+          <strong className="text-content-secondary font-mono">70-85%</strong> taux découverte email
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-emerald-400" />
-          Conforme <strong className="text-zinc-300">RGPD</strong>
+          Conforme <strong className="text-content-secondary">RGPD</strong>
         </span>
       </div>
     </section>
@@ -192,18 +192,18 @@ const CLIENT_PROFILES = [
 export function ClientLogosStrip({ title = 'Ils prospectent avec Volia' }) {
   return (
     <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-12">
-      <p className="text-center text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-5">
+      <p className="text-center text-xs font-semibold text-content-tertiary uppercase tracking-wider mb-5">
         {title}
       </p>
       <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 opacity-70">
         {CLIENT_PROFILES.map((p, i) => (
           <div
             key={i}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] text-xs"
+            className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-line bg-surface-elevated/40 text-xs"
           >
-            <span className="font-medium text-zinc-300">{p.name}</span>
-            <span className="text-zinc-600">·</span>
-            <span className="text-zinc-500">{p.size}</span>
+            <span className="font-medium text-content-secondary">{p.name}</span>
+            <span className="text-content-tertiary">·</span>
+            <span className="text-content-tertiary">{p.size}</span>
           </div>
         ))}
       </div>
@@ -232,7 +232,7 @@ export function ResourceTeaserBlock({
               Gratuit · sans CB
             </div>
             <h3 className="text-lg sm:text-xl font-bold mb-1.5 leading-tight">{title}</h3>
-            <p className="text-sm text-zinc-300 leading-relaxed">{subtitle}</p>
+            <p className="text-sm text-content-secondary leading-relaxed">{subtitle}</p>
           </div>
           <Link
             href={`/ressources/${resourceSlug}/telecharger`}
@@ -256,7 +256,7 @@ export function CompetitorMiniBlock() {
       <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-center leading-tight">
         Pourquoi Volia gagne en France
       </h2>
-      <p className="text-sm text-zinc-400 mb-8 max-w-2xl mx-auto text-center">
+      <p className="text-sm text-content-secondary mb-8 max-w-2xl mx-auto text-center">
         Les outils US (Apollo, Hunter, Lusha) sont conçus pour le marché américain. En France ils plafonnent. Notre cascade waterfall est spécifiquement bâtie pour le tissu d&apos;entreprises français.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
@@ -275,15 +275,15 @@ function CompetitorCard({ name, value, tone, note, featured = false }) {
     emerald: 'text-emerald-300',
   };
   return (
-    <div className={`rounded-xl p-5 text-center ${featured ? 'border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] relative' : 'border border-white/[0.06] bg-white/[0.02]'}`}>
+    <div className={`rounded-xl p-5 text-center ${featured ? 'border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] relative' : 'border border-line bg-surface-elevated/40'}`}>
       {featured && (
         <div className="absolute -top-2 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full bg-violet-500 text-[10px] font-bold text-white uppercase tracking-wider">
           Notre approche
         </div>
       )}
-      <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">{name}</div>
+      <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2">{name}</div>
       <div className={`text-3xl font-bold tabular-nums mb-1.5 ${toneMap[tone]}`}>{value}</div>
-      <div className="text-xs text-zinc-500 leading-snug">{note}</div>
+      <div className="text-xs text-content-tertiary leading-snug">{note}</div>
     </div>
   );
 }

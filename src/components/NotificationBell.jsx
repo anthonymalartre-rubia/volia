@@ -15,7 +15,7 @@ const TYPE_META = {
   quota_reached:          { Icon: AlertCircle, color: 'text-red-400',     bg: 'bg-red-500/10' },
   payment_success:        { Icon: CreditCard,  color: 'text-green-400',   bg: 'bg-green-500/10' },
   payment_failed:         { Icon: CreditCard,  color: 'text-red-400',     bg: 'bg-red-500/10' },
-  subscription_cancelled: { Icon: CreditCard,  color: 'text-zinc-400',    bg: 'bg-zinc-500/10' },
+  subscription_cancelled: { Icon: CreditCard,  color: 'text-content-secondary',    bg: 'bg-zinc-500/10' },
   plan_changed:           { Icon: TrendingUp,  color: 'text-violet-400',  bg: 'bg-violet-500/10' },
   new_feature:            { Icon: Sparkles,    color: 'text-violet-400',  bg: 'bg-violet-500/10' },
   study_published:        { Icon: Award,       color: 'text-violet-400',  bg: 'bg-violet-500/10' },
@@ -23,7 +23,7 @@ const TYPE_META = {
   admin_message:          { Icon: Megaphone,   color: 'text-indigo-400',  bg: 'bg-indigo-500/10' },
 };
 
-const DEFAULT_META = { Icon: Bell, color: 'text-zinc-400', bg: 'bg-zinc-500/10' };
+const DEFAULT_META = { Icon: Bell, color: 'text-content-secondary', bg: 'bg-zinc-500/10' };
 
 function timeAgo(iso) {
   if (!iso) return '';

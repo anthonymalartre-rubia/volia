@@ -36,7 +36,7 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
     <div className={`relative p-7 rounded-2xl backdrop-blur-sm ${
       highlighted
         ? 'border border-violet-500/30 bg-gradient-to-b from-violet-500/[0.08] to-[#111114]/80'
-        : 'border border-white/[0.06] bg-[#111114]/80'
+        : 'border border-line bg-surface-card/80'
     }`}>
       {badge && (
         <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-[11px] font-semibold rounded-full shadow-lg flex items-center gap-1.5 whitespace-nowrap ${badgeColors[badge.color] || badgeColors.violet}`}>
@@ -46,11 +46,11 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
       )}
 
       <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
-      <p className="text-xs text-zinc-500 mb-5 min-h-[32px]">{tagline}</p>
+      <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{tagline}</p>
 
       <div className="flex items-baseline gap-1 mb-1">
-        <span className="text-4xl font-bold">{formatPrice(price)}<span className="text-2xl text-zinc-400">&euro;</span></span>
-        <span className="text-zinc-600 text-sm">{isYearly ? t('landing.pricing.perYear') : t('landing.pricing.perMonth')}</span>
+        <span className="text-4xl font-bold">{formatPrice(price)}<span className="text-2xl text-content-secondary">&euro;</span></span>
+        <span className="text-content-tertiary text-sm">{isYearly ? t('landing.pricing.perYear') : t('landing.pricing.perMonth')}</span>
       </div>
       {isYearly && !isFree && (
         <p className="text-[11px] text-emerald-400 font-medium mb-5">
@@ -58,7 +58,7 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
         </p>
       )}
       {!isYearly && !isFree && (
-        <p className="text-[11px] text-zinc-500 mb-5">
+        <p className="text-[11px] text-content-tertiary mb-5">
           ou {formatPrice(plan.priceYearly)}&euro;/an ({t('landing.pricing.savePercent')})
         </p>
       )}
@@ -69,7 +69,7 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
         className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-6 ${
           highlighted
             ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-500/20'
-            : 'border border-white/[0.1] hover:bg-white/[0.05] text-zinc-300'
+            : 'border border-line-hover hover:bg-surface-elevated text-content-secondary'
         }`}
       >
         {cta}{highlighted ? ' →' : ''}
@@ -79,7 +79,7 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
         {(Array.isArray(features) ? features : []).map((f) => (
           <div key={f} className="flex items-start gap-2">
             <Check size={15} className="text-violet-400 mt-0.5 flex-shrink-0" />
-            <span className="text-xs text-zinc-400 leading-relaxed">{f}</span>
+            <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
           </div>
         ))}
       </div>
@@ -116,10 +116,10 @@ export default function LandingContent() {
   ];
 
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden" style={{'--c-bg-base':'9 9 11','--c-bg-card':'17 17 20','--c-bg-elevated':'30 30 36','--c-bg-alt':'13 13 16','--c-border':'30 30 36','--c-border-hover':'39 39 42','--c-text-primary':'250 250 250','--c-text-secondary':'161 161 170','--c-text-tertiary':'113 113 122','--c-text-muted':'82 82 91','--c-text-faint':'63 63 70'}}>
+    <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Navigation */}
       <header>
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1.5">
             <LogoIcon size="sm" />
@@ -127,11 +127,11 @@ export default function LandingContent() {
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="hidden sm:flex items-center gap-6">
-            <Link href="#features" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.features')}</Link>
-            <Link href="/prospection" className="text-sm text-zinc-500 hover:text-white transition">Prospection</Link>
-            <Link href="#pricing" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.pricing')}</Link>
-            <Link href="/blog" className="text-sm text-zinc-500 hover:text-white transition">Blog</Link>
-            <Link href="#faq" className="text-sm text-zinc-500 hover:text-white transition">{t('landing.nav.faq')}</Link>
+            <Link href="#features" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.features')}</Link>
+            <Link href="/prospection" className="text-sm text-content-tertiary hover:text-content-primary transition">Prospection</Link>
+            <Link href="#pricing" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.pricing')}</Link>
+            <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">Blog</Link>
+            <Link href="#faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
           </div>
           <div className="flex items-center gap-3">
             <NavAuth />
@@ -153,7 +153,7 @@ export default function LandingContent() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-500/15 to-violet-500/15 border border-emerald-500/30 text-xs text-emerald-300 mb-6 backdrop-blur-sm font-medium">
             <TrendingDown size={12} className="text-emerald-400" />
             <span className="text-emerald-400 font-bold">LE MOINS CHER DU MARCHÉ FRANÇAIS</span>
-            <span className="text-zinc-500">·</span>
+            <span className="text-content-tertiary">·</span>
             <span>À partir de 19 €/mois</span>
           </div>
 
@@ -167,18 +167,18 @@ export default function LandingContent() {
           </h1>
 
           {/* Sous-titre orienté économies — message "le moins cher du marché" */}
-          <p className="text-base sm:text-lg text-zinc-400 max-w-2xl mx-auto mb-4 leading-relaxed">
-            Scraping intelligent + recherche Google. <strong className="text-white">150+ secteurs, 101 départements.</strong>
+          <p className="text-base sm:text-lg text-content-secondary max-w-2xl mx-auto mb-4 leading-relaxed">
+            Scraping intelligent + recherche Google. <strong className="text-content-primary">150+ secteurs, 101 départements.</strong>
           </p>
           {/* Banderole de prix — argument de vente principal */}
           <div className="inline-flex items-center flex-wrap justify-center gap-x-3 gap-y-2 mb-8 text-sm">
             <span className="text-emerald-400 font-semibold">À partir de 19 €/mois</span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-zinc-400">vs Hunter 49 €</span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-zinc-400">vs Apollo 99 $</span>
-            <span className="text-zinc-700">·</span>
-            <span className="text-zinc-400">vs Lemlist 39 €</span>
+            <span className="text-content-muted">·</span>
+            <span className="text-content-secondary">vs Hunter 49 €</span>
+            <span className="text-content-muted">·</span>
+            <span className="text-content-secondary">vs Apollo 99 $</span>
+            <span className="text-content-muted">·</span>
+            <span className="text-content-secondary">vs Lemlist 39 €</span>
           </div>
 
           {/* Widget de recherche fonctionnel */}
@@ -187,7 +187,7 @@ export default function LandingContent() {
           </div>
 
           {/* Social proof rapide */}
-          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-zinc-500 flex-wrap">
+          <div className="mt-6 flex items-center justify-center gap-4 text-xs text-content-tertiary flex-wrap">
             <span className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
               Aucune carte bancaire requise
@@ -214,42 +214,42 @@ export default function LandingContent() {
       <BuiltForProfilesBlock />
 
       {/* Why an aggregator */}
-      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.why.label')}</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               {t('landing.why.title')}
             </h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.desc') }} />
+            <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.desc') }} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 text-center">
+            <div className="p-6 rounded-2xl border border-line bg-surface-card/80 text-center">
               <div className="text-5xl font-bold font-mono bg-gradient-to-b from-red-400 to-red-600 bg-clip-text text-transparent mb-2">~40%</div>
-              <p className="text-sm text-zinc-500" dangerouslySetInnerHTML={{ __html: t('landing.why.stat1Label') }} />
+              <p className="text-sm text-content-tertiary" dangerouslySetInnerHTML={{ __html: t('landing.why.stat1Label') }} />
             </div>
             <div className="p-6 rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/[0.08] to-transparent text-center">
               <div className="text-5xl font-bold font-mono bg-gradient-to-b from-violet-400 to-violet-600 bg-clip-text text-transparent mb-2">~85%</div>
-              <p className="text-sm text-zinc-500" dangerouslySetInnerHTML={{ __html: t('landing.why.stat2Label') }} />
+              <p className="text-sm text-content-tertiary" dangerouslySetInnerHTML={{ __html: t('landing.why.stat2Label') }} />
             </div>
-            <div className="p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 text-center">
+            <div className="p-6 rounded-2xl border border-line bg-surface-card/80 text-center">
               <div className="text-5xl font-bold font-mono bg-gradient-to-b from-green-400 to-green-600 bg-clip-text text-transparent mb-2">-80%</div>
-              <p className="text-sm text-zinc-500" dangerouslySetInnerHTML={{ __html: t('landing.why.stat3Label') }} />
+              <p className="text-sm text-content-tertiary" dangerouslySetInnerHTML={{ __html: t('landing.why.stat3Label') }} />
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section id="features" className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.features.label')}</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               {t('landing.features.title')}
             </h2>
-            <p className="text-zinc-500 text-lg max-w-xl mx-auto">
+            <p className="text-content-tertiary text-lg max-w-xl mx-auto">
               {t('landing.features.desc')}
             </p>
           </div>
@@ -299,14 +299,14 @@ export default function LandingContent() {
                 iconBg: 'from-green-500 to-emerald-600',
               },
             ].map((feature) => (
-              <div key={feature.title} className="group relative p-6 rounded-2xl border border-white/[0.06] bg-[#111114]/80 backdrop-blur-sm hover:bg-white/[0.04] transition-colors">
+              <div key={feature.title} className="group relative p-6 rounded-2xl border border-line bg-surface-card/80 backdrop-blur-sm hover:bg-surface-elevated/60 transition-colors">
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 <div className="relative">
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.iconBg} flex items-center justify-center mb-4 shadow-lg`}>
                     <feature.icon size={18} className="text-white" />
                   </div>
                   <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-                  <p className="text-sm text-zinc-500 leading-relaxed">{feature.desc}</p>
+                  <p className="text-sm text-content-tertiary leading-relaxed">{feature.desc}</p>
                 </div>
               </div>
             ))}
@@ -315,14 +315,14 @@ export default function LandingContent() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section id="how-it-works" className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.howItWorks.label')}</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               {t('landing.howItWorks.title')}
             </h2>
-            <p className="text-zinc-500 text-lg max-w-xl mx-auto">
+            <p className="text-content-tertiary text-lg max-w-xl mx-auto">
               {t('landing.howItWorks.desc')}
             </p>
           </div>
@@ -359,7 +359,7 @@ export default function LandingContent() {
                   <span className="text-4xl font-bold font-mono text-white/10">{item.step}</span>
                 </div>
                 <h3 className="font-semibold text-lg mb-3">{item.title}</h3>
-                <p className="text-sm text-zinc-500 leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-content-tertiary leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -367,12 +367,12 @@ export default function LandingContent() {
       </section>
 
       {/* Waterfall visual */}
-      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.waterfall.label')}</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4 max-w-lg" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.title') }} />
-            <p className="text-zinc-500 text-lg max-w-xl" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.desc') }} />
+            <p className="text-content-tertiary text-lg max-w-xl" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.desc') }} />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
@@ -381,25 +381,25 @@ export default function LandingContent() {
               { name: 'Scraping site web', desc: 'Extrait les emails du site, pages contact et mentions legales.', tag: t('landing.waterfall.free'), score: '100%', color: 'from-green-500/20 to-emerald-500/20 border-green-500/20', dot: 'bg-green-400' },
               { name: 'Recherche Google', desc: 'Cherche l\'email sur Google si le scraping ne trouve rien.', tag: 'Inclus', score: '90%', color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/20', dot: 'bg-yellow-400' },
             ].map((s, i) => (
-              <div key={s.name} className={`relative p-5 rounded-xl bg-gradient-to-br ${s.color} border border-white/[0.06]`}>
+              <div key={s.name} className={`relative p-5 rounded-xl bg-gradient-to-br ${s.color} border border-line`}>
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-2.5 h-2.5 rounded-full ${s.dot}`} />
-                  <span className="text-[10px] font-mono text-zinc-500">0{i + 1}</span>
+                  <span className="text-[10px] font-mono text-content-tertiary">0{i + 1}</span>
                 </div>
                 <h4 className="text-base font-semibold mb-1">{s.name}</h4>
-                <p className="text-xs text-zinc-500 mb-2">{s.desc}</p>
-                <span className="text-[10px] text-zinc-400 font-medium">{s.tag}</span>
+                <p className="text-xs text-content-tertiary mb-2">{s.desc}</p>
+                <span className="text-[10px] text-content-secondary font-medium">{s.tag}</span>
               </div>
             ))}
           </div>
-          <p className="text-center text-sm text-zinc-600 mt-6">
+          <p className="text-center text-sm text-content-tertiary mt-6">
             {t('landing.waterfall.stopsFirst')}
           </p>
         </div>
       </section>
 
       {/* Stats */}
-      <section className="py-20 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section className="py-20 px-4 sm:px-6 border-t border-line">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
@@ -410,8 +410,8 @@ export default function LandingContent() {
             ].map((stat) => (
               <div key={stat.label}>
                 <div className="text-4xl sm:text-5xl font-bold font-mono bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">{stat.value}</div>
-                <div className="text-sm text-zinc-400 mt-2">{stat.label}</div>
-                <div className="text-[10px] text-zinc-600 mt-0.5">{stat.sub}</div>
+                <div className="text-sm text-content-secondary mt-2">{stat.label}</div>
+                <div className="text-[10px] text-content-tertiary mt-0.5">{stat.sub}</div>
               </div>
             ))}
           </div>
@@ -419,7 +419,7 @@ export default function LandingContent() {
       </section>
 
       {/* Email Verification Feature */}
-      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left -- Text */}
@@ -431,7 +431,7 @@ export default function LandingContent() {
               <h2 className="text-3xl sm:text-4xl font-bold mb-4">
                 {t('landing.emailVerif.title')}
               </h2>
-              <p className="text-zinc-400 text-lg mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('landing.emailVerif.desc') }} />
+              <p className="text-content-secondary text-lg mb-8 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('landing.emailVerif.desc') }} />
 
               <div className="space-y-4">
                 {[
@@ -457,7 +457,7 @@ export default function LandingContent() {
                     </div>
                     <div>
                       <h4 className="text-sm font-semibold mb-1">{item.title}</h4>
-                      <p className="text-xs text-zinc-500 leading-relaxed">{item.desc}</p>
+                      <p className="text-xs text-content-tertiary leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -467,7 +467,7 @@ export default function LandingContent() {
             {/* Right -- Visual mock */}
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-br from-emerald-500/10 via-transparent to-violet-500/10 rounded-3xl blur-2xl pointer-events-none" />
-              <div className="relative rounded-2xl border border-white/[0.08] bg-[#0c0c12] p-6 space-y-4">
+              <div className="relative rounded-2xl border border-line bg-surface-card p-6 space-y-4">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -476,19 +476,19 @@ export default function LandingContent() {
                     </div>
                     <div>
                       <div className="text-sm font-semibold">{t('landing.emailVerif.mockTitle')}</div>
-                      <div className="text-[10px] text-zinc-600">{t('landing.emailVerif.mockImported')}</div>
+                      <div className="text-[10px] text-content-tertiary">{t('landing.emailVerif.mockImported')}</div>
                     </div>
                   </div>
-                  <div className="text-[10px] text-zinc-600 px-2 py-1 rounded bg-white/[0.03] border border-white/[0.06]">{t('landing.emailVerif.mockCsvDone')}</div>
+                  <div className="text-[10px] text-content-tertiary px-2 py-1 rounded bg-surface-elevated/60 border border-line">{t('landing.emailVerif.mockCsvDone')}</div>
                 </div>
 
                 {/* Progress bar */}
                 <div className="space-y-2">
                   <div className="flex justify-between text-[10px]">
-                    <span className="text-zinc-500">{t('landing.emailVerif.progress')}</span>
+                    <span className="text-content-tertiary">{t('landing.emailVerif.progress')}</span>
                     <span className="text-emerald-400 font-mono">100%</span>
                   </div>
-                  <div className="h-2 rounded-full bg-white/[0.05] overflow-hidden">
+                  <div className="h-2 rounded-full bg-surface-elevated overflow-hidden">
                     <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-400" style={{width: '100%'}} />
                   </div>
                 </div>
@@ -499,11 +499,11 @@ export default function LandingContent() {
                     { label: t('landing.emailVerif.valid'), value: '2 103', pct: '73.8%', color: 'text-green-400', bg: 'bg-green-500/10' },
                     { label: t('landing.emailVerif.invalid'), value: '412', pct: '14.5%', color: 'text-red-400', bg: 'bg-red-500/10' },
                     { label: t('landing.emailVerif.catchAll'), value: '281', pct: '9.9%', color: 'text-amber-400', bg: 'bg-amber-500/10' },
-                    { label: t('landing.emailVerif.unknown'), value: '51', pct: '1.8%', color: 'text-zinc-400', bg: 'bg-zinc-500/10' },
+                    { label: t('landing.emailVerif.unknown'), value: '51', pct: '1.8%', color: 'text-content-secondary', bg: 'bg-zinc-500/10' },
                   ].map((stat) => (
-                    <div key={stat.label} className={`p-3 rounded-xl ${stat.bg} border border-white/[0.04] text-center`}>
+                    <div key={stat.label} className={`p-3 rounded-xl ${stat.bg} border border-line text-center`}>
                       <div className={`text-lg font-bold font-mono ${stat.color}`}>{stat.value}</div>
-                      <div className="text-[10px] text-zinc-600 mt-0.5">{stat.label}</div>
+                      <div className="text-[10px] text-content-tertiary mt-0.5">{stat.label}</div>
                       <div className={`text-[9px] font-mono mt-0.5 ${stat.color}/60`}>{stat.pct}</div>
                     </div>
                   ))}
@@ -517,8 +517,8 @@ export default function LandingContent() {
                     { email: 'direction@inexistant.fr', status: t('landing.emailVerif.invalid'), color: 'text-red-400', dot: 'bg-red-400' },
                     { email: 'contact@hotel-riviera.fr', status: t('landing.emailVerif.catchAll'), color: 'text-amber-400', dot: 'bg-amber-400' },
                   ].map((row) => (
-                    <div key={row.email} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                      <span className="text-xs text-zinc-400 font-mono">{row.email}</span>
+                    <div key={row.email} className="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-elevated/40 border border-line">
+                      <span className="text-xs text-content-secondary font-mono">{row.email}</span>
                       <div className="flex items-center gap-1.5">
                         <div className={`w-1.5 h-1.5 rounded-full ${row.dot}`} />
                         <span className={`text-[10px] font-medium ${row.color}`}>{row.status}</span>
@@ -528,8 +528,8 @@ export default function LandingContent() {
                 </div>
 
                 {/* Bottom CTA */}
-                <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
-                  <span className="text-[10px] text-zinc-600">{t('landing.emailVerif.cost')}</span>
+                <div className="flex items-center justify-between pt-2 border-t border-line">
+                  <span className="text-[10px] text-content-tertiary">{t('landing.emailVerif.cost')}</span>
                   <span className="text-[10px] text-emerald-400 font-semibold">{t('landing.emailVerif.exportValid')}</span>
                 </div>
               </div>
@@ -539,23 +539,23 @@ export default function LandingContent() {
       </section>
 
       {/* Full Competitor Comparison */}
-      <section id="vs-concurrence" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section id="vs-concurrence" className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.competition.label')}</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               {t('landing.competition.title')}
             </h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.competition.desc') }} />
+            <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.competition.desc') }} />
           </div>
 
           <div className="p-1 rounded-2xl bg-gradient-to-b from-violet-500/20 to-transparent">
-            <div className="p-6 sm:p-8 rounded-2xl bg-[#0c0c12] border border-white/[0.04]">
+            <div className="p-6 sm:p-8 rounded-2xl bg-surface-card border border-line">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/[0.08]">
-                      <th className="text-left py-4 px-4 font-medium text-zinc-600 min-w-[140px]"></th>
+                    <tr className="border-b border-line">
+                      <th className="text-left py-4 px-4 font-medium text-content-tertiary min-w-[140px]"></th>
                       <th className="text-center py-4 px-4 min-w-[120px]">
                         <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-1">
                           <TrendingDown size={10} /> Le moins cher
@@ -564,9 +564,9 @@ export default function LandingContent() {
                         <div className="text-violet-400/60 text-xs mt-0.5">dès 19&euro;/{t('landing.competition.month')}</div>
                       </th>
                       {COMPETITORS.map((c) => (
-                        <th key={c.name} className="text-center py-4 px-4 font-medium text-zinc-600 min-w-[100px]">
+                        <th key={c.name} className="text-center py-4 px-4 font-medium text-content-tertiary min-w-[100px]">
                           <div>{c.name}</div>
-                          <div className="text-zinc-700 text-xs mt-0.5">dès {c.entryPrice}/{t('landing.competition.month')}</div>
+                          <div className="text-content-muted text-xs mt-0.5">dès {c.entryPrice}/{t('landing.competition.month')}</div>
                         </th>
                       ))}
                     </tr>
@@ -580,15 +580,15 @@ export default function LandingContent() {
                       { label: t('landing.competition.b2bCategories'), volia: '150+', key: 'categories' },
                       { label: t('landing.competition.googlePlaces'), volia: true, key: 'google', competitors: [false, false, false, false, false] },
                     ].map((row) => (
-                      <tr key={row.label} className="border-b border-white/[0.04]">
-                        <td className="py-3.5 px-4 text-zinc-400">{row.label}</td>
+                      <tr key={row.label} className="border-b border-line">
+                        <td className="py-3.5 px-4 text-content-secondary">{row.label}</td>
                         <td className="py-3.5 px-4 text-center">
                           {typeof row.volia === 'boolean' ? (
                             <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-violet-500/20">
                               <Check size={14} className="text-violet-400" />
                             </span>
                           ) : (
-                            <span className="font-semibold text-white">{row.volia}</span>
+                            <span className="font-semibold text-content-primary">{row.volia}</span>
                           )}
                         </td>
                         {COMPETITORS.map((c) => {
@@ -596,9 +596,9 @@ export default function LandingContent() {
                           return (
                             <td key={c.name} className="py-3.5 px-4 text-center">
                               {typeof val === 'boolean' ? (
-                                val ? <Check size={14} className="text-zinc-500 mx-auto" /> : <X size={14} className="text-zinc-800 mx-auto" />
+                                val ? <Check size={14} className="text-content-tertiary mx-auto" /> : <X size={14} className="text-zinc-800 mx-auto" />
                               ) : (
-                                <span className="text-zinc-600">{val}</span>
+                                <span className="text-content-tertiary">{val}</span>
                               )}
                             </td>
                           );
@@ -606,27 +606,27 @@ export default function LandingContent() {
                       </tr>
                     ))}
                     {/* Price rows : Entry tier (Solo) + Pro tier */}
-                    <tr className="border-t-2 border-white/[0.08]">
-                      <td className="py-4 px-4 text-zinc-300 font-semibold">Ticket d'entrée</td>
+                    <tr className="border-t-2 border-line">
+                      <td className="py-4 px-4 text-content-secondary font-semibold">Ticket d'entrée</td>
                       <td className="py-4 px-4 text-center">
                         <span className="text-2xl font-bold text-emerald-400">19&euro;</span>
                         <div className="text-[10px] text-emerald-400/60 mt-0.5 uppercase tracking-wider font-bold">Solo</div>
                       </td>
                       {COMPETITORS.map((c) => (
                         <td key={c.name} className="py-4 px-4 text-center">
-                          <span className="text-lg text-zinc-600">{c.entryPrice}</span>
+                          <span className="text-lg text-content-tertiary">{c.entryPrice}</span>
                         </td>
                       ))}
                     </tr>
-                    <tr className="border-t border-white/[0.04]">
-                      <td className="py-4 px-4 text-zinc-300 font-semibold">Plan Pro</td>
+                    <tr className="border-t border-line">
+                      <td className="py-4 px-4 text-content-secondary font-semibold">Plan Pro</td>
                       <td className="py-4 px-4 text-center">
                         <span className="text-2xl font-bold text-violet-400">49&euro;</span>
                         <div className="text-[10px] text-violet-400/60 mt-0.5 uppercase tracking-wider font-bold">Recommandé</div>
                       </td>
                       {COMPETITORS.map((c) => (
                         <td key={c.name} className="py-4 px-4 text-center">
-                          <span className="text-lg text-zinc-600">{c.proPrice}</span>
+                          <span className="text-lg text-content-tertiary">{c.proPrice}</span>
                         </td>
                       ))}
                     </tr>
@@ -644,7 +644,7 @@ export default function LandingContent() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg mb-2">{t('landing.competition.calcTitle')}</h3>
-                <p className="text-sm text-zinc-400 leading-relaxed" dangerouslySetInnerHTML={{ __html: t('landing.competition.calcDesc') }} />
+                <p className="text-sm text-content-secondary leading-relaxed" dangerouslySetInnerHTML={{ __html: t('landing.competition.calcDesc') }} />
               </div>
             </div>
           </div>
@@ -653,7 +653,7 @@ export default function LandingContent() {
 
       {/* Pricing */}
       {/* Testimonials — rassure avant la décision d'achat */}
-      <section className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section className="py-24 px-4 sm:px-6 border-t border-line">
         <TestimonialsBlock />
         {/* Bloc Trustpilot — affiché uniquement si activé (Business Unit
             ID set + au moins 1 avis dans trustpilot-data.js). En attendant,
@@ -669,14 +669,14 @@ export default function LandingContent() {
         />
       </section>
 
-      <section id="pricing" className="py-24 px-4 sm:px-6 border-t border-white/[0.06]">
+      <section id="pricing" className="py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.pricing.label')}</p>
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
               {t('landing.pricing.title')}
             </h2>
-            <p className="text-zinc-500 text-lg max-w-2xl mx-auto mb-6">
+            <p className="text-content-tertiary text-lg max-w-2xl mx-auto mb-6">
               {t('landing.pricing.desc')}
             </p>
             {/* Banderole économies vs concurrents */}
@@ -686,11 +686,11 @@ export default function LandingContent() {
             </div>
 
             {/* Toggle Monthly / Yearly */}
-            <div className="inline-flex items-center gap-2 p-1 rounded-xl border border-white/[0.08] bg-white/[0.02]">
+            <div className="inline-flex items-center gap-2 p-1 rounded-xl border border-line bg-surface-elevated/40">
               <button
                 onClick={() => setPricingPeriod('monthly')}
                 className={`px-5 py-2 rounded-lg text-sm font-medium transition ${
-                  !isYearly ? 'bg-white/[0.08] text-white' : 'text-zinc-500 hover:text-zinc-300'
+                  !isYearly ? 'bg-surface-elevated text-content-primary' : 'text-content-tertiary hover:text-content-secondary'
                 }`}
               >
                 {t('landing.pricing.monthly')}
@@ -698,7 +698,7 @@ export default function LandingContent() {
               <button
                 onClick={() => setPricingPeriod('yearly')}
                 className={`px-5 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2 ${
-                  isYearly ? 'bg-white/[0.08] text-white' : 'text-zinc-500 hover:text-zinc-300'
+                  isYearly ? 'bg-surface-elevated text-content-primary' : 'text-content-tertiary hover:text-content-secondary'
                 }`}
               >
                 {t('landing.pricing.yearly')}
@@ -762,7 +762,7 @@ export default function LandingContent() {
           </div>
 
           {/* Footer note */}
-          <p className="mt-10 text-center text-sm text-zinc-500">
+          <p className="mt-10 text-center text-sm text-content-tertiary">
             {isYearly ? t('landing.pricing.yearlySave') : (
               <>
                 {t('landing.pricing.questions')}{' '}
@@ -779,13 +779,13 @@ export default function LandingContent() {
       <FAQSection />
 
       {/* Final CTA */}
-      <section className="relative py-28 px-4 sm:px-6 border-t border-white/[0.06] overflow-hidden">
+      <section className="relative py-28 px-4 sm:px-6 border-t border-line overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-violet-600/[0.08] via-transparent to-transparent pointer-events-none" />
         <div className="max-w-3xl mx-auto text-center relative">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             {t('landing.cta.title')}
           </h2>
-          <p className="text-zinc-500 text-lg mb-3 max-w-xl mx-auto">
+          <p className="text-content-tertiary text-lg mb-3 max-w-xl mx-auto">
             {t('landing.cta.desc')}
           </p>
           <p className="text-sm text-violet-400 font-semibold mb-8">
@@ -798,53 +798,53 @@ export default function LandingContent() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.06] py-12 px-4 sm:px-6">
+      <footer className="border-t border-line py-12 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
           {/* SEO link clusters */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10 pb-10 border-b border-white/[0.06]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10 pb-10 border-b border-line">
             {/* Product */}
             <div>
-              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Produit</h3>
+              <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Produit</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/" className="text-zinc-500 hover:text-violet-400 transition">Accueil</Link></li>
-                <li><Link href="/signup" className="text-zinc-500 hover:text-violet-400 transition">Inscription</Link></li>
-                <li><Link href="/login" className="text-zinc-500 hover:text-violet-400 transition">Connexion</Link></li>
-                <li><Link href="#pricing" className="text-zinc-500 hover:text-violet-400 transition">Tarifs</Link></li>
+                <li><Link href="/" className="text-content-tertiary hover:text-violet-400 transition">Accueil</Link></li>
+                <li><Link href="/signup" className="text-content-tertiary hover:text-violet-400 transition">Inscription</Link></li>
+                <li><Link href="/login" className="text-content-tertiary hover:text-violet-400 transition">Connexion</Link></li>
+                <li><Link href="#pricing" className="text-content-tertiary hover:text-violet-400 transition">Tarifs</Link></li>
               </ul>
             </div>
 
             {/* Comparatifs */}
             <div>
-              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Comparatifs</h3>
+              <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Comparatifs</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/vs/apollo" className="text-zinc-500 hover:text-violet-400 transition">vs Apollo.io</Link></li>
-                <li><Link href="/vs/hunter" className="text-zinc-500 hover:text-violet-400 transition">vs Hunter.io</Link></li>
-                <li><Link href="/vs/lusha" className="text-zinc-500 hover:text-violet-400 transition">vs Lusha</Link></li>
-                <li><Link href="/vs/snov" className="text-zinc-500 hover:text-violet-400 transition">vs Snov.io</Link></li>
+                <li><Link href="/vs/apollo" className="text-content-tertiary hover:text-violet-400 transition">vs Apollo.io</Link></li>
+                <li><Link href="/vs/hunter" className="text-content-tertiary hover:text-violet-400 transition">vs Hunter.io</Link></li>
+                <li><Link href="/vs/lusha" className="text-content-tertiary hover:text-violet-400 transition">vs Lusha</Link></li>
+                <li><Link href="/vs/snov" className="text-content-tertiary hover:text-violet-400 transition">vs Snov.io</Link></li>
               </ul>
             </div>
 
             {/* Prospection populaires */}
             <div>
-              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Prospection</h3>
+              <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Prospection</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/prospection" className="text-zinc-500 hover:text-violet-400 transition">Tous secteurs</Link></li>
-                <li><Link href="/prospection/restaurant" className="text-zinc-500 hover:text-violet-400 transition">Restaurants</Link></li>
-                <li><Link href="/prospection/hotel" className="text-zinc-500 hover:text-violet-400 transition">Hôtels</Link></li>
-                <li><Link href="/prospection/avocat" className="text-zinc-500 hover:text-violet-400 transition">Avocats</Link></li>
-                <li><Link href="/prospection/dept/75-paris" className="text-zinc-500 hover:text-violet-400 transition">Paris (75)</Link></li>
+                <li><Link href="/prospection" className="text-content-tertiary hover:text-violet-400 transition">Tous secteurs</Link></li>
+                <li><Link href="/prospection/restaurant" className="text-content-tertiary hover:text-violet-400 transition">Restaurants</Link></li>
+                <li><Link href="/prospection/hotel" className="text-content-tertiary hover:text-violet-400 transition">Hôtels</Link></li>
+                <li><Link href="/prospection/avocat" className="text-content-tertiary hover:text-violet-400 transition">Avocats</Link></li>
+                <li><Link href="/prospection/dept/75-paris" className="text-content-tertiary hover:text-violet-400 transition">Paris (75)</Link></li>
               </ul>
             </div>
 
             {/* Ressources */}
             <div>
-              <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Ressources</h3>
+              <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Ressources</h3>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/blog" className="text-zinc-500 hover:text-violet-400 transition">Blog</Link></li>
-                <li><Link href="/guide" className="text-zinc-500 hover:text-violet-400 transition">Guides sectoriels</Link></li>
-                <li><Link href="/glossaire" className="text-zinc-500 hover:text-violet-400 transition">Glossaire B2B</Link></li>
-                <li><Link href="/blog/rgpd-prospection-b2b" className="text-zinc-500 hover:text-violet-400 transition">Guide RGPD</Link></li>
-                <li><Link href="/blog/cold-emailing-2026" className="text-zinc-500 hover:text-violet-400 transition">Cold emailing 2026</Link></li>
+                <li><Link href="/blog" className="text-content-tertiary hover:text-violet-400 transition">Blog</Link></li>
+                <li><Link href="/guide" className="text-content-tertiary hover:text-violet-400 transition">Guides sectoriels</Link></li>
+                <li><Link href="/glossaire" className="text-content-tertiary hover:text-violet-400 transition">Glossaire B2B</Link></li>
+                <li><Link href="/blog/rgpd-prospection-b2b" className="text-content-tertiary hover:text-violet-400 transition">Guide RGPD</Link></li>
+                <li><Link href="/blog/cold-emailing-2026" className="text-content-tertiary hover:text-violet-400 transition">Cold emailing 2026</Link></li>
               </ul>
             </div>
           </div>
@@ -856,13 +856,13 @@ export default function LandingContent() {
               <span className="text-sm font-bold tracking-tight ml-1">Volia</span>
               <span className="text-violet-400 text-[10px] font-semibold">.fr</span>
             </div>
-            <div className="flex items-center gap-6 text-xs text-zinc-600">
-              <Link href="/cgu" className="hover:text-zinc-400 transition">{t('landing.footer.cgu')}</Link>
-              <Link href="/confidentialite" className="hover:text-zinc-400 transition">{t('landing.footer.privacy')}</Link>
-              <Link href="/rgpd" className="hover:text-zinc-400 transition">{t('landing.footer.gdpr')}</Link>
-              <Link href="/opt-out" className="hover:text-zinc-400 transition">{t('landing.footer.optOut')}</Link>
+            <div className="flex items-center gap-6 text-xs text-content-tertiary">
+              <Link href="/cgu" className="hover:text-content-secondary transition">{t('landing.footer.cgu')}</Link>
+              <Link href="/confidentialite" className="hover:text-content-secondary transition">{t('landing.footer.privacy')}</Link>
+              <Link href="/rgpd" className="hover:text-content-secondary transition">{t('landing.footer.gdpr')}</Link>
+              <Link href="/opt-out" className="hover:text-content-secondary transition">{t('landing.footer.optOut')}</Link>
             </div>
-            <p className="text-[11px] text-zinc-700">
+            <p className="text-[11px] text-content-muted">
               &copy; 2026 Volia.fr
             </p>
           </div>

@@ -178,9 +178,9 @@ export default function HeroSearchWidget() {
   };
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl p-3 sm:p-5">
+    <div className="rounded-2xl border border-line bg-surface-elevated/40 backdrop-blur-xl p-3 sm:p-5">
       {/* Tabs */}
-      <div className="flex flex-wrap gap-1 mb-4 p-1 rounded-xl bg-white/[0.03] border border-white/[0.04]">
+      <div className="flex flex-wrap gap-1 mb-4 p-1 rounded-xl bg-surface-elevated/60 border border-line">
         {TABS.map((t) => {
           const Icon = t.icon;
           const active = tab === t.id;
@@ -191,7 +191,7 @@ export default function HeroSearchWidget() {
               className={`flex-1 min-w-0 flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition ${
                 active
                   ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/20'
-                  : 'text-zinc-400 hover:text-white hover:bg-white/[0.05]'
+                  : 'text-content-secondary hover:text-content-primary hover:bg-surface-elevated'
               }`}
             >
               <Icon size={14} />
@@ -205,24 +205,24 @@ export default function HeroSearchWidget() {
       {tab === 'category' && (
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="flex-1 relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
             <input
               type="text"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               placeholder="Restaurants, avocats, hôtels..."
-              className="w-full pl-9 pr-3 py-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500/50"
+              className="w-full pl-9 pr-3 py-3 rounded-lg bg-surface-card/60 border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500/50"
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />
           </div>
           <div className="flex-1 relative">
-            <Globe size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <Globe size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Ville ou département..."
-              className="w-full pl-9 pr-3 py-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500/50"
+              className="w-full pl-9 pr-3 py-3 rounded-lg bg-surface-card/60 border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500/50"
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />
           </div>
@@ -240,13 +240,13 @@ export default function HeroSearchWidget() {
       {tab === 'company' && (
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="flex-1 relative">
-            <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
             <input
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Nom de l'entreprise (ex: OpenAI)"
-              className="w-full pl-9 pr-3 py-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500/50"
+              className="w-full pl-9 pr-3 py-3 rounded-lg bg-surface-card/60 border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500/50"
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />
           </div>
@@ -264,13 +264,13 @@ export default function HeroSearchWidget() {
       {tab === 'verify' && (
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="flex-1 relative">
-            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+            <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
             <input
               type="email"
               value={emailToVerify}
               onChange={(e) => setEmailToVerify(e.target.value)}
               placeholder="contact@entreprise.com"
-              className="w-full pl-9 pr-3 py-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500/50"
+              className="w-full pl-9 pr-3 py-3 rounded-lg bg-surface-card/60 border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500/50"
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
             />
           </div>
@@ -286,7 +286,7 @@ export default function HeroSearchWidget() {
       )}
 
       {/* Quick try suggestions */}
-      <div className="flex flex-wrap items-center gap-2 mt-3 text-xs text-zinc-500">
+      <div className="flex flex-wrap items-center gap-2 mt-3 text-xs text-content-tertiary">
         <span>Essai rapide :</span>
         {QUICK_TRIES[tab].map((q, i) => (
           <button
@@ -296,7 +296,7 @@ export default function HeroSearchWidget() {
               else if (tab === 'company') { setCompany(q.name); handleSearch(q); }
               else { setEmailToVerify(q.email); handleSearch(q); }
             }}
-            className="px-2 py-1 rounded-md bg-white/[0.04] hover:bg-violet-500/10 hover:text-violet-300 border border-white/[0.04] hover:border-violet-500/30 text-zinc-400 transition"
+            className="px-2 py-1 rounded-md bg-surface-elevated/60 hover:bg-violet-500/10 hover:text-violet-300 border border-line hover:border-violet-500/30 text-content-secondary transition"
           >
             {q.label || `${q.cat} ${q.city}`}
           </button>
@@ -305,7 +305,7 @@ export default function HeroSearchWidget() {
 
       {/* Error state (rate limit, service down, etc.) */}
       {error && (
-        <div className="mt-5 pt-5 border-t border-white/[0.08]">
+        <div className="mt-5 pt-5 border-t border-line">
           <div className={`rounded-xl p-4 ${error.status === 429 ? 'border border-amber-500/30 bg-amber-500/[0.08]' : 'border border-red-500/30 bg-red-500/[0.08]'}`}>
             <div className="flex items-start gap-3">
               <span className={`text-xl ${error.status === 429 ? 'text-amber-400' : 'text-red-400'}`}>
@@ -315,7 +315,7 @@ export default function HeroSearchWidget() {
                 <div className={`text-sm font-semibold ${error.status === 429 ? 'text-amber-300' : 'text-red-300'}`}>
                   {error.status === 429 ? 'Limite quotidienne atteinte' : 'Service temporairement indisponible'}
                 </div>
-                <p className="text-xs text-zinc-300 mt-1 leading-relaxed">
+                <p className="text-xs text-content-secondary mt-1 leading-relaxed">
                   {error.message}
                 </p>
                 <Link
@@ -333,7 +333,7 @@ export default function HeroSearchWidget() {
 
       {/* Results */}
       {result && (
-        <div className="mt-5 pt-5 border-t border-white/[0.08]">
+        <div className="mt-5 pt-5 border-t border-line">
           {result.type === 'category' && (
             <CategoryResult result={result} remainingToday={remainingToday} />
           )}
@@ -368,34 +368,34 @@ function CategoryResult({ result, remainingToday }) {
         )}
         {/* Compteur essais restants */}
         {typeof remainingToday === 'number' && remainingToday >= 0 && (
-          <div className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-zinc-400 text-[10px] tabular-nums">
+          <div className="px-2 py-0.5 rounded-md bg-surface-elevated/60 border border-line text-content-secondary text-[10px] tabular-nums">
             {remainingToday > 0 ? `${remainingToday} essai${remainingToday > 1 ? 's' : ''} restant${remainingToday > 1 ? 's' : ''} aujourd'hui` : 'Dernier essai gratuit utilisé'}
           </div>
         )}
       </div>
       <div className="space-y-2 mb-4">
         {data.examples.map((p, i) => (
-          <div key={i} className="rounded-lg bg-white/[0.03] border border-white/[0.04] p-3">
+          <div key={i} className="rounded-lg bg-surface-elevated/60 border border-line p-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
-              <div className="font-semibold text-white text-sm flex items-center gap-2">
+              <div className="font-semibold text-content-primary text-sm flex items-center gap-2">
                 {p.name}
                 <span className="flex items-center gap-0.5 text-xs text-amber-400">
                   <Star size={11} className="fill-amber-400" /> {p.rating}
                 </span>
               </div>
-              <div className="text-[10px] text-zinc-500">{p.address}</div>
+              <div className="text-[10px] text-content-tertiary">{p.address}</div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-              <div className="flex items-center gap-1.5 text-zinc-300">
+              <div className="flex items-center gap-1.5 text-content-secondary">
                 <Mail size={11} className="text-violet-400 flex-shrink-0" />
                 <span className="truncate font-mono">{p.email}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-zinc-400">
-                <Phone size={11} className="text-zinc-500 flex-shrink-0" />
+              <div className="flex items-center gap-1.5 text-content-secondary">
+                <Phone size={11} className="text-content-tertiary flex-shrink-0" />
                 <span className="font-mono">{p.phone}</span>
               </div>
-              <div className="flex items-center gap-1.5 text-zinc-400">
-                <Globe size={11} className="text-zinc-500 flex-shrink-0" />
+              <div className="flex items-center gap-1.5 text-content-secondary">
+                <Globe size={11} className="text-content-tertiary flex-shrink-0" />
                 <span className="truncate">{p.website}</span>
               </div>
             </div>
@@ -405,7 +405,7 @@ function CategoryResult({ result, remainingToday }) {
       <div className="rounded-xl bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div>
           <div className="text-sm font-semibold text-white">+{(data.total - 3).toLocaleString('fr-FR')} autres résultats disponibles</div>
-          <div className="text-xs text-zinc-400 mt-0.5">Créez votre compte pour voir tous les emails et exporter en CSV</div>
+          <div className="text-xs text-content-secondary mt-0.5">Créez votre compte pour voir tous les emails et exporter en CSV</div>
         </div>
         <Link
           href="/signup"
@@ -423,11 +423,11 @@ function CompanyResult({ result }) {
   const { data } = result;
   return (
     <div>
-      <div className="rounded-lg bg-white/[0.03] border border-white/[0.04] p-4 mb-3">
+      <div className="rounded-lg bg-surface-elevated/60 border border-line p-4 mb-3">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div>
-            <h3 className="text-lg font-bold text-white">{data.name}</h3>
-            <div className="text-xs text-zinc-500">{data.domain} · {data.industry} · {data.employees} employés · Fondée en {data.foundedYear}</div>
+            <h3 className="text-lg font-bold text-content-primary">{data.name}</h3>
+            <div className="text-xs text-content-tertiary">{data.domain} · {data.industry} · {data.employees} employés · Fondée en {data.foundedYear}</div>
           </div>
           {/* Badge "Exemple démo" — obligatoire pour ne pas laisser croire
               que les emails affichés sont réels. RGPD + intégrité. */}
@@ -437,13 +437,13 @@ function CompanyResult({ result }) {
         </div>
         <div className="space-y-2">
           {data.emails.map((e, i) => (
-            <div key={i} className="flex items-center justify-between gap-2 py-2 px-3 rounded bg-white/[0.02]">
+            <div key={i} className="flex items-center justify-between gap-2 py-2 px-3 rounded bg-surface-elevated/40">
               <div>
-                <div className="text-sm font-semibold text-white">{e.person}</div>
-                <div className="text-[10px] text-zinc-500">{e.role}</div>
+                <div className="text-sm font-semibold text-content-primary">{e.person}</div>
+                <div className="text-[10px] text-content-tertiary">{e.role}</div>
               </div>
               <div className="flex items-center gap-2 text-xs">
-                <span className="font-mono text-zinc-300">{e.email}</span>
+                <span className="font-mono text-content-secondary">{e.email}</span>
                 {e.verified ? (
                   <span className="px-1.5 py-0.5 rounded bg-green-500/15 text-green-400 text-[10px] font-semibold">✓ Vérifié</span>
                 ) : (
@@ -455,7 +455,7 @@ function CompanyResult({ result }) {
         </div>
       </div>
       <div className="rounded-xl bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="text-sm text-zinc-300">+15 autres contacts disponibles chez {data.name}</div>
+        <div className="text-sm text-content-secondary">+15 autres contacts disponibles chez {data.name}</div>
         <Link
           href="/signup"
           className="px-5 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30 flex items-center gap-2 whitespace-nowrap"
@@ -488,7 +488,7 @@ function VerifyResult({ result }) {
         <p className="text-xs opacity-80">{data.detail}</p>
       </div>
       <div className="rounded-xl bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="text-sm text-zinc-300">Vérifiez vos listes d'emails en masse — jusqu'à 50 000 emails/heure</div>
+        <div className="text-sm text-content-secondary">Vérifiez vos listes d'emails en masse — jusqu'à 50 000 emails/heure</div>
         <Link
           href="/signup"
           className="px-5 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30 flex items-center gap-2 whitespace-nowrap"

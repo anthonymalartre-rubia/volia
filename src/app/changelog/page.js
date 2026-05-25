@@ -42,10 +42,10 @@ export default function ChangelogPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <div className="dark min-h-screen bg-[#08080c] text-white">
-        <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+      <div className="dark min-h-screen bg-surface-base text-content-primary">
+        <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
+            <Link href="/" className="flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition">
               <ArrowLeft size={14} />
               Volia
             </Link>
@@ -64,7 +64,7 @@ export default function ChangelogPage() {
             <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-4 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
               Tout ce qu&apos;on a livré récemment
             </h1>
-            <p className="text-base text-zinc-400 leading-relaxed max-w-2xl">
+            <p className="text-base text-content-secondary leading-relaxed max-w-2xl">
               Volia est en développement continu. Ici la liste exhaustive des releases — features, améliorations et corrections. Transparence totale.
             </p>
           </section>
@@ -79,7 +79,7 @@ export default function ChangelogPage() {
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-violet-500/15 border border-violet-500/30 text-xs font-bold text-violet-300">
                       v{entry.version}
                     </div>
-                    <span className="text-xs text-zinc-500 inline-flex items-center gap-1.5">
+                    <span className="text-xs text-content-tertiary inline-flex items-center gap-1.5">
                       <Calendar size={11} />
                       {new Date(entry.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </span>
@@ -92,7 +92,7 @@ export default function ChangelogPage() {
                       const meta = TYPE_META[item.type] || TYPE_META.improvement;
                       const Icon = meta.icon;
                       return (
-                        <li key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 flex items-start gap-3">
+                        <li key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-3.5 flex items-start gap-3">
                           <span className={`inline-flex items-center justify-center w-7 h-7 rounded-md ${meta.bg} flex-shrink-0`}>
                             <Icon size={12} className={meta.color} />
                           </span>
@@ -102,12 +102,12 @@ export default function ChangelogPage() {
                                 {meta.label}
                               </span>
                               {item.tag && (
-                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] text-zinc-400 font-medium">
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-elevated/60 border border-line text-content-secondary font-medium">
                                   {item.tag}
                                 </span>
                               )}
                             </div>
-                            <p className="text-sm text-zinc-200 leading-relaxed">{item.text}</p>
+                            <p className="text-sm text-content-secondary leading-relaxed">{item.text}</p>
                           </div>
                         </li>
                       );
@@ -122,7 +122,7 @@ export default function ChangelogPage() {
           <section className="max-w-3xl mx-auto px-4 sm:px-6 mt-16">
             <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
               <h2 className="text-2xl font-bold mb-3">Une feature à suggérer ?</h2>
-              <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
+              <p className="text-content-secondary mb-6 max-w-xl mx-auto">
                 On lit chaque demande. Écrivez-nous à <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a> ou rejoignez la newsletter pour suivre les prochaines releases.
               </p>
               <Link href="/newsletter" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
@@ -133,13 +133,13 @@ export default function ChangelogPage() {
           </section>
         </main>
 
-        <footer className="border-t border-white/[0.06] py-8 mt-16">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
+        <footer className="border-t border-line py-8 mt-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-content-tertiary">
             <span>© 2026 Volia.fr</span>
             <div className="flex gap-4">
-              <Link href="/status" className="hover:text-zinc-300">Status</Link>
-              <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>
-              <Link href="/rgpd" className="hover:text-zinc-300">RGPD</Link>
+              <Link href="/status" className="hover:text-content-secondary">Status</Link>
+              <Link href="/cgu" className="hover:text-content-secondary">CGU</Link>
+              <Link href="/rgpd" className="hover:text-content-secondary">RGPD</Link>
             </div>
           </div>
         </footer>

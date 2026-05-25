@@ -15,14 +15,14 @@ import Link from 'next/link';
 
 const VARIANTS = {
   // Card neutre : fond white/[0.02], border white/[0.06]
-  default: 'bg-white/[0.02] border border-white/[0.06]',
+  default: 'bg-surface-elevated/40 border border-line',
 
   // Card mise en avant (ex: plan pricing "Recommandé"). Ring violet visible.
   highlighted:
     'bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] border-2 border-violet-500/30 relative',
 
   // Card persona/secteur avec accent coloré subtil (couleur passée via gradientClass)
-  persona: 'border border-white/[0.06]',
+  persona: 'border border-line',
 };
 
 const SIZES = {
@@ -57,7 +57,7 @@ export default function MarketingCard({
 }) {
   const interactive = !!(href || onClick);
   const interactiveClasses = interactive
-    ? 'hover:border-white/[0.12] hover:scale-[1.01] transition-all duration-200 cursor-pointer'
+    ? 'hover:border-line-hover hover:scale-[1.01] transition-all duration-200 cursor-pointer'
     : '';
 
   const classes = `${VARIANTS[variant] || VARIANTS.default} ${SIZES[size] || SIZES.md} ${gradientClass} ${interactiveClasses} ${className}`.trim();

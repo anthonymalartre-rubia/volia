@@ -40,7 +40,7 @@ export default function TrustpilotReviewsBlock({
         <h2 className="text-2xl sm:text-3xl font-bold mb-3 leading-tight bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
           {title}
         </h2>
-        <p className="text-sm text-zinc-400 max-w-2xl mx-auto leading-relaxed mb-5">
+        <p className="text-sm text-content-secondary max-w-2xl mx-auto leading-relaxed mb-5">
           {subtitle}
         </p>
 
@@ -63,11 +63,11 @@ export default function TrustpilotReviewsBlock({
             ))}
           </div>
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 text-left">
-            <span className="text-3xl font-bold tabular-nums text-white">
+            <span className="text-3xl font-bold tabular-nums text-content-primary">
               {data.rating.toFixed(1)}
             </span>
-            <span className="text-sm text-zinc-400">
-              / 5 sur <strong className="text-zinc-200 tabular-nums">{data.reviewCount}</strong> avis vérifiés
+            <span className="text-sm text-content-secondary">
+              / 5 sur <strong className="text-content-secondary tabular-nums">{data.reviewCount}</strong> avis vérifiés
             </span>
           </div>
         </MarketingCard>
@@ -78,7 +78,7 @@ export default function TrustpilotReviewsBlock({
             href={data.profileUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] text-zinc-200 hover:text-white text-sm font-semibold transition"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 bg-surface-elevated/40 hover:bg-surface-elevated/60 text-content-secondary hover:text-content-primary text-sm font-semibold transition"
           >
             Voir tous les avis sur Trustpilot
             <ExternalLink size={13} />

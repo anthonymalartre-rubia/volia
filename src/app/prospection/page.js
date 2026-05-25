@@ -38,8 +38,8 @@ export default function ProspectionIndexPage() {
     departments.filter((d) => region.depts.includes(d.code));
 
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
@@ -47,7 +47,7 @@ export default function ProspectionIndexPage() {
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-zinc-400 hover:text-white transition">Se connecter</Link>
+            <Link href="/login" className="text-sm text-content-secondary hover:text-content-primary transition">Se connecter</Link>
             <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">
               Essayer gratuitement
             </Link>
@@ -65,8 +65,8 @@ export default function ProspectionIndexPage() {
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
             Trouvez les emails B2B de toutes les entreprises françaises
           </h1>
-          <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl">
-            Volia couvre <strong className="text-white">150 secteurs d&apos;activité</strong> dans les <strong className="text-white">101 départements français</strong>. Explorez par catégorie ou par département pour trouver les emails professionnels de vos prospects.
+          <p className="text-lg text-content-secondary leading-relaxed max-w-3xl">
+            Volia couvre <strong className="text-content-primary">150 secteurs d&apos;activité</strong> dans les <strong className="text-content-primary">101 départements français</strong>. Explorez par catégorie ou par département pour trouver les emails professionnels de vos prospects.
           </p>
         </section>
 
@@ -87,7 +87,7 @@ export default function ProspectionIndexPage() {
                       <Link
                         key={cat.slug}
                         href={`/prospection/${cat.slug}`}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-violet-500/10 hover:border-violet-500/30 text-sm text-zinc-300 hover:text-white transition"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-line bg-surface-elevated/40 hover:bg-violet-500/10 hover:border-violet-500/30 text-sm text-content-secondary hover:text-content-primary transition"
                       >
                         <ArrowRight size={12} className="text-violet-400 flex-shrink-0" />
                         <span className="truncate">{cat.labelCapitalized}</span>
@@ -115,8 +115,8 @@ export default function ProspectionIndexPage() {
                 href={`/prospection/restaurant/region/${r.slug}`}
                 className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border text-sm transition ${
                   r.key === 'om'
-                    ? 'border-amber-500/30 bg-amber-500/[0.06] hover:bg-amber-500/15 text-amber-200 hover:text-white'
-                    : 'border-white/[0.06] bg-white/[0.02] hover:bg-violet-500/10 hover:border-violet-500/30 text-zinc-300 hover:text-white'
+                    ? 'border-amber-500/30 bg-amber-500/[0.06] hover:bg-amber-500/15 text-amber-200 hover:text-content-primary'
+                    : 'border-line bg-surface-elevated/40 hover:bg-violet-500/10 hover:border-violet-500/30 text-content-secondary hover:text-content-primary'
                 }`}
               >
                 {r.key === 'om' ? (
@@ -125,7 +125,7 @@ export default function ProspectionIndexPage() {
                   <MapPin size={12} className="text-violet-400 flex-shrink-0" />
                 )}
                 <span className="truncate">{r.name}</span>
-                <span className="ml-auto text-xs text-zinc-500 flex-shrink-0">{r.depts.length}</span>
+                <span className="ml-auto text-xs text-content-tertiary flex-shrink-0">{r.depts.length}</span>
               </Link>
             ))}
           </div>
@@ -145,7 +145,7 @@ export default function ProspectionIndexPage() {
                   <h3 className="text-sm font-semibold text-violet-400 uppercase tracking-wider mb-3 flex items-center gap-2">
                     <MapPin size={12} />
                     {region.name}
-                    <span className="text-zinc-500 font-normal normal-case tracking-normal text-xs">
+                    <span className="text-content-tertiary font-normal normal-case tracking-normal text-xs">
                       · {regionDepts.length} départements
                     </span>
                   </h3>
@@ -154,7 +154,7 @@ export default function ProspectionIndexPage() {
                       <Link
                         key={dept.slug}
                         href={`/prospection/dept/${dept.slug}`}
-                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-violet-500/10 hover:border-violet-500/30 text-sm text-zinc-300 hover:text-white transition"
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-line bg-surface-elevated/40 hover:bg-violet-500/10 hover:border-violet-500/30 text-sm text-content-secondary hover:text-content-primary transition"
                       >
                         <span className="text-xs font-mono text-violet-400 flex-shrink-0">{dept.code}</span>
                         <span className="truncate">{dept.name}</span>
@@ -171,11 +171,11 @@ export default function ProspectionIndexPage() {
                 <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider mb-3 flex items-center gap-2">
                   <Palmtree size={14} />
                   Outre-mer (DROM)
-                  <span className="text-zinc-500 font-normal normal-case tracking-normal text-xs">
+                  <span className="text-content-tertiary font-normal normal-case tracking-normal text-xs">
                     · {deptsInRegion(overseasRegion).length} territoires
                   </span>
                 </h3>
-                <p className="text-xs text-zinc-400 mb-4 leading-relaxed">
+                <p className="text-xs text-content-secondary mb-4 leading-relaxed">
                   Guadeloupe, Martinique, Guyane, La Réunion, Mayotte —
                   marchés B2B souvent ignorés mais avec une concurrence plus faible.
                 </p>
@@ -184,7 +184,7 @@ export default function ProspectionIndexPage() {
                     <Link
                       key={dept.slug}
                       href={`/prospection/dept/${dept.slug}`}
-                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/[0.05] hover:bg-amber-500/15 hover:border-amber-500/40 text-sm text-amber-200 hover:text-white transition"
+                      className="flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/20 bg-amber-500/[0.05] hover:bg-amber-500/15 hover:border-amber-500/40 text-sm text-amber-200 hover:text-content-primary transition"
                     >
                       <span className="text-xs font-mono text-amber-400 flex-shrink-0">{dept.code}</span>
                       <span className="truncate">{dept.name}</span>
@@ -200,7 +200,7 @@ export default function ProspectionIndexPage() {
         <section className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <h2 className="text-2xl font-bold mb-3">Prêt à prospecter ?</h2>
-            <p className="text-zinc-400 mb-6">Accédez aux entreprises et leurs emails B2B en quelques clics. Gratuit pour commencer · à partir de 19 €/mois.</p>
+            <p className="text-content-secondary mb-6">Accédez aux entreprises et leurs emails B2B en quelques clics. Gratuit pour commencer · à partir de 19 €/mois.</p>
             <Link
               href="/signup"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30"
@@ -211,12 +211,12 @@ export default function ProspectionIndexPage() {
         </section>
       </main>
 
-      <footer className="border-t border-white/[0.06] py-8 mt-16">
+      <footer className="border-t border-line py-8 mt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-zinc-500">© 2026 Volia.fr</div>
-          <div className="flex gap-4 text-xs text-zinc-500">
-            <Link href="/cgu" className="hover:text-zinc-300 transition">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-zinc-300 transition">Confidentialité</Link>
+          <div className="text-xs text-content-tertiary">© 2026 Volia.fr</div>
+          <div className="flex gap-4 text-xs text-content-tertiary">
+            <Link href="/cgu" className="hover:text-content-secondary transition">CGU</Link>
+            <Link href="/confidentialite" className="hover:text-content-secondary transition">Confidentialité</Link>
           </div>
         </div>
       </footer>

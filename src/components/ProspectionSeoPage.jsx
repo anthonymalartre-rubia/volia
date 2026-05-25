@@ -104,9 +104,9 @@ export default function ProspectionSeoPage({
   ].filter(Boolean);
 
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
+    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Top nav minimaliste */}
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
@@ -114,7 +114,7 @@ export default function ProspectionSeoPage({
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-zinc-400 hover:text-white transition">Se connecter</Link>
+            <Link href="/login" className="text-sm text-content-secondary hover:text-content-primary transition">Se connecter</Link>
             <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">
               Essayer gratuitement
             </Link>
@@ -126,13 +126,13 @@ export default function ProspectionSeoPage({
         {/* Breadcrumbs */}
         {breadcrumbs.length > 0 && (
           <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-8">
-            <nav className="text-xs text-zinc-500 flex items-center gap-2 flex-wrap" aria-label="Fil d'Ariane">
+            <nav className="text-xs text-content-tertiary flex items-center gap-2 flex-wrap" aria-label="Fil d'Ariane">
               {breadcrumbs.map((bc, i) => (
                 <span key={i} className="flex items-center gap-2">
                   {bc.href ? (
                     <Link href={bc.href} className="hover:text-violet-400 transition">{bc.label}</Link>
                   ) : (
-                    <span className="text-zinc-300">{bc.label}</span>
+                    <span className="text-content-secondary">{bc.label}</span>
                   )}
                   {i < breadcrumbs.length - 1 && <span>›</span>}
                 </span>
@@ -153,14 +153,14 @@ export default function ProspectionSeoPage({
             {title}
           </h1>
 
-          <p className="text-lg text-zinc-400 leading-relaxed max-w-3xl mb-4">
+          <p className="text-lg text-content-secondary leading-relaxed max-w-3xl mb-4">
             {intro}
           </p>
 
           {/* Fraîcheur : date mise à jour (Google adore + lecteur rassuré) */}
-          <p className="text-xs text-zinc-500 mb-8 flex items-center gap-1.5">
-            <Clock size={11} className="text-zinc-400" />
-            Données et tarifs mis à jour le <strong className="text-zinc-300 font-medium">{getBuildDateFr()}</strong>
+          <p className="text-xs text-content-tertiary mb-8 flex items-center gap-1.5">
+            <Clock size={11} className="text-content-secondary" />
+            Données et tarifs mis à jour le <strong className="text-content-secondary font-medium">{getBuildDateFr()}</strong>
           </p>
 
           {/* CTA buttons */}
@@ -174,7 +174,7 @@ export default function ProspectionSeoPage({
             </Link>
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/10 hover:bg-white/[0.04] text-white text-sm font-semibold transition"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/10 hover:bg-surface-elevated/60 text-content-primary text-sm font-semibold transition"
             >
               Comment ça marche
               <ArrowRight size={16} />
@@ -323,13 +323,13 @@ export default function ProspectionSeoPage({
               {faq.map((item, i) => (
                 <details
                   key={i}
-                  className="group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 hover:bg-white/[0.04] transition"
+                  className="group rounded-xl border border-line bg-surface-elevated/40 p-5 hover:bg-surface-elevated/60 transition"
                 >
-                  <summary className="cursor-pointer font-semibold text-white flex items-center justify-between">
+                  <summary className="cursor-pointer font-semibold text-content-primary flex items-center justify-between">
                     {item.question}
                     <span className="text-violet-400 group-open:rotate-180 transition-transform">▼</span>
                   </summary>
-                  <p className="text-zinc-400 mt-3 leading-relaxed">{item.answer}</p>
+                  <p className="text-content-secondary mt-3 leading-relaxed">{item.answer}</p>
                 </details>
               ))}
             </div>
@@ -342,7 +342,7 @@ export default function ProspectionSeoPage({
             <div className="grid md:grid-cols-2 gap-8">
               {relatedCategories.length > 0 && (
                 <div>
-                  <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
+                  <h2 className="text-sm font-semibold text-content-secondary uppercase tracking-wider mb-4">
                     Autres secteurs {department ? `à ${department.name}` : ''}
                   </h2>
                   <ul className="space-y-2">
@@ -350,7 +350,7 @@ export default function ProspectionSeoPage({
                       <li key={i}>
                         <Link
                           href={rc.href}
-                          className="text-sm text-zinc-400 hover:text-violet-400 transition flex items-center gap-2"
+                          className="text-sm text-content-secondary hover:text-violet-400 transition flex items-center gap-2"
                         >
                           <ArrowRight size={12} />
                           {rc.label}
@@ -362,7 +362,7 @@ export default function ProspectionSeoPage({
               )}
               {relatedDepartments.length > 0 && (
                 <div>
-                  <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
+                  <h2 className="text-sm font-semibold text-content-secondary uppercase tracking-wider mb-4">
                     {category ? `${category.labelPlural} dans d'autres départements` : 'Autres départements'}
                   </h2>
                   <ul className="space-y-2">
@@ -370,7 +370,7 @@ export default function ProspectionSeoPage({
                       <li key={i}>
                         <Link
                           href={rd.href}
-                          className="text-sm text-zinc-400 hover:text-violet-400 transition flex items-center gap-2"
+                          className="text-sm text-content-secondary hover:text-violet-400 transition flex items-center gap-2"
                         >
                           <ArrowRight size={12} />
                           {rd.label}
@@ -387,32 +387,32 @@ export default function ProspectionSeoPage({
         {/* Bonus content cluster — internal linking massif */}
         {(category || department) && (
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
-              <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-4">
+            <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">
+              <h2 className="text-sm font-semibold text-content-secondary uppercase tracking-wider mb-4">
                 Ressources prospection B2B
               </h2>
               <div className="grid md:grid-cols-3 gap-3 text-sm">
-                <Link href="/blog/trouver-email-entreprise-france" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                <Link href="/blog/trouver-email-entreprise-france" className="text-content-secondary hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
                   Comment trouver l&apos;email d&apos;une entreprise
                 </Link>
-                <Link href="/blog/rgpd-prospection-b2b" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                <Link href="/blog/rgpd-prospection-b2b" className="text-content-secondary hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
                   Guide RGPD pour la prospection B2B
                 </Link>
-                <Link href="/blog/cold-emailing-2026" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                <Link href="/blog/cold-emailing-2026" className="text-content-secondary hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
                   Cold emailing en 2026 : ce qui marche
                 </Link>
-                <Link href="/vs/apollo" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                <Link href="/vs/apollo" className="text-content-secondary hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
                   Volia vs Apollo.io
                 </Link>
-                <Link href="/vs/hunter" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                <Link href="/vs/hunter" className="text-content-secondary hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
                   Volia vs Hunter.io
                 </Link>
-                <Link href="/prospection" className="text-zinc-400 hover:text-violet-400 transition flex items-center gap-2">
+                <Link href="/prospection" className="text-content-secondary hover:text-violet-400 transition flex items-center gap-2">
                   <ArrowRight size={12} />
                   Tous les secteurs disponibles
                 </Link>
@@ -428,7 +428,7 @@ export default function ProspectionSeoPage({
             <h2 className="text-2xl font-bold mb-3">
               Trouvez vos prospects en quelques clics
             </h2>
-            <p className="text-zinc-400 mb-6 max-w-xl mx-auto">
+            <p className="text-content-secondary mb-6 max-w-xl mx-auto">
               Volia trouve les entreprises et leurs emails partout en France. Gratuit pour commencer · à partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
@@ -438,14 +438,14 @@ export default function ProspectionSeoPage({
               <Zap size={16} />
               Démarrer gratuitement
             </Link>
-            <p className="text-xs text-zinc-500 mt-4">Aucune carte bancaire requise · plan Starter gratuit à vie</p>
+            <p className="text-xs text-content-tertiary mt-4">Aucune carte bancaire requise · plan Starter gratuit à vie</p>
           </div>
         </section>
         </article>
       </main>
 
       {/* Footer renforcé : 4 colonnes + trust strip + social */}
-      <footer className="border-t border-white/[0.06] mt-16 bg-black/40">
+      <footer className="border-t border-line mt-16 bg-surface-base/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
             {/* Brand col */}
@@ -455,10 +455,10 @@ export default function ProspectionSeoPage({
                 <span className="text-base font-bold">Volia</span>
                 <span className="text-violet-400 text-xs font-semibold">.fr</span>
               </div>
-              <p className="text-xs text-zinc-500 leading-relaxed mb-4">
+              <p className="text-xs text-content-tertiary leading-relaxed mb-4">
                 Agrégateur de prospection B2B. 150 secteurs, 101 départements français, cascade waterfall 70-85 % de couverture email.
               </p>
-              <a href="https://www.linkedin.com/company/volia" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-violet-300 transition">
+              <a href="https://www.linkedin.com/company/volia" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-xs text-content-secondary hover:text-violet-300 transition">
                 <LinkedinIcon size={12} />
                 LinkedIn
               </a>
@@ -466,69 +466,69 @@ export default function ProspectionSeoPage({
 
             {/* Produit */}
             <div>
-              <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Produit</div>
+              <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Produit</div>
               <ul className="space-y-2 text-xs">
-                <li><Link href="/dashboard" className="text-zinc-400 hover:text-violet-300 transition">Dashboard</Link></li>
-                <li><Link href="/#pricing" className="text-zinc-400 hover:text-violet-300 transition">Tarifs</Link></li>
-                <li><Link href="/api-docs" className="text-zinc-400 hover:text-violet-300 transition">API publique</Link></li>
-                <li><Link href="/prospection" className="text-zinc-400 hover:text-violet-300 transition">France · tous les secteurs</Link></li>
-                <li><Link href="/prospection-be" className="text-zinc-400 hover:text-violet-300 transition">🇧🇪 Belgique francophone</Link></li>
-                <li><Link href="/prospection-ch" className="text-zinc-400 hover:text-violet-300 transition">🇨🇭 Suisse romande</Link></li>
-                <li><Link href="/pour/sdr" className="text-zinc-400 hover:text-violet-300 transition">Pour SDR</Link></li>
-                <li><Link href="/pour/fondateurs" className="text-zinc-400 hover:text-violet-300 transition">Pour fondateurs</Link></li>
-                <li><Link href="/pour/agences-web" className="text-zinc-400 hover:text-violet-300 transition">Pour agences web</Link></li>
+                <li><Link href="/dashboard" className="text-content-secondary hover:text-violet-300 transition">Dashboard</Link></li>
+                <li><Link href="/#pricing" className="text-content-secondary hover:text-violet-300 transition">Tarifs</Link></li>
+                <li><Link href="/api-docs" className="text-content-secondary hover:text-violet-300 transition">API publique</Link></li>
+                <li><Link href="/prospection" className="text-content-secondary hover:text-violet-300 transition">France · tous les secteurs</Link></li>
+                <li><Link href="/prospection-be" className="text-content-secondary hover:text-violet-300 transition">🇧🇪 Belgique francophone</Link></li>
+                <li><Link href="/prospection-ch" className="text-content-secondary hover:text-violet-300 transition">🇨🇭 Suisse romande</Link></li>
+                <li><Link href="/pour/sdr" className="text-content-secondary hover:text-violet-300 transition">Pour SDR</Link></li>
+                <li><Link href="/pour/fondateurs" className="text-content-secondary hover:text-violet-300 transition">Pour fondateurs</Link></li>
+                <li><Link href="/pour/agences-web" className="text-content-secondary hover:text-violet-300 transition">Pour agences web</Link></li>
               </ul>
             </div>
 
             {/* Ressources */}
             <div>
-              <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Ressources</div>
+              <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Ressources</div>
               <ul className="space-y-2 text-xs">
-                <li><Link href="/blog" className="text-zinc-400 hover:text-violet-300 transition">Blog</Link></li>
-                <li><Link href="/ressources" className="text-zinc-400 hover:text-violet-300 transition">Lead magnets</Link></li>
-                <li><Link href="/glossaire" className="text-zinc-400 hover:text-violet-300 transition">Glossaire</Link></li>
-                <li><Link href="/comparatif-outils-prospection-b2b-france" className="text-zinc-400 hover:text-violet-300 transition">Comparatif outils</Link></li>
-                <li><Link href="/etude/prospection-b2b-france-2026" className="text-zinc-400 hover:text-violet-300 transition">Étude marché 2026</Link></li>
-                <li><Link href="/newsletter" className="text-zinc-400 hover:text-violet-300 transition">📬 Newsletter mensuelle</Link></li>
-                <li><Link href="/parrainage" className="text-zinc-400 hover:text-violet-300 transition">🎁 Parrainage</Link></li>
-                <li><Link href="/changelog" className="text-zinc-400 hover:text-violet-300 transition">📋 Changelog</Link></li>
-                <li><Link href="/status" className="text-zinc-400 hover:text-violet-300 transition">⚡ Status</Link></li>
+                <li><Link href="/blog" className="text-content-secondary hover:text-violet-300 transition">Blog</Link></li>
+                <li><Link href="/ressources" className="text-content-secondary hover:text-violet-300 transition">Lead magnets</Link></li>
+                <li><Link href="/glossaire" className="text-content-secondary hover:text-violet-300 transition">Glossaire</Link></li>
+                <li><Link href="/comparatif-outils-prospection-b2b-france" className="text-content-secondary hover:text-violet-300 transition">Comparatif outils</Link></li>
+                <li><Link href="/etude/prospection-b2b-france-2026" className="text-content-secondary hover:text-violet-300 transition">Étude marché 2026</Link></li>
+                <li><Link href="/newsletter" className="text-content-secondary hover:text-violet-300 transition">📬 Newsletter mensuelle</Link></li>
+                <li><Link href="/parrainage" className="text-content-secondary hover:text-violet-300 transition">🎁 Parrainage</Link></li>
+                <li><Link href="/changelog" className="text-content-secondary hover:text-violet-300 transition">📋 Changelog</Link></li>
+                <li><Link href="/status" className="text-content-secondary hover:text-violet-300 transition">⚡ Status</Link></li>
               </ul>
             </div>
 
             {/* Société + Légal */}
             <div>
-              <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Société & légal</div>
+              <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Société & légal</div>
               <ul className="space-y-2 text-xs">
-                <li><Link href="/cgu" className="text-zinc-400 hover:text-violet-300 transition">CGU</Link></li>
-                <li><Link href="/confidentialite" className="text-zinc-400 hover:text-violet-300 transition">Confidentialité</Link></li>
-                <li><Link href="/rgpd" className="text-zinc-400 hover:text-violet-300 transition">Droits RGPD</Link></li>
-                <li><Link href="/opt-out" className="text-zinc-400 hover:text-violet-300 transition">Opt-out / désinscription</Link></li>
-                <li><a href="mailto:hello@volia.fr" className="text-zinc-400 hover:text-violet-300 transition">hello@volia.fr</a></li>
+                <li><Link href="/cgu" className="text-content-secondary hover:text-violet-300 transition">CGU</Link></li>
+                <li><Link href="/confidentialite" className="text-content-secondary hover:text-violet-300 transition">Confidentialité</Link></li>
+                <li><Link href="/rgpd" className="text-content-secondary hover:text-violet-300 transition">Droits RGPD</Link></li>
+                <li><Link href="/opt-out" className="text-content-secondary hover:text-violet-300 transition">Opt-out / désinscription</Link></li>
+                <li><a href="mailto:hello@volia.fr" className="text-content-secondary hover:text-violet-300 transition">hello@volia.fr</a></li>
               </ul>
             </div>
           </div>
 
           {/* Trust strip + copyright */}
-          <div className="border-t border-white/[0.04] pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-500">
+          <div className="border-t border-line pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-3 text-[11px] text-content-tertiary">
               <span className="flex items-center gap-1.5">
                 <Shield size={11} className="text-emerald-400" /> RGPD compliant
               </span>
-              <span className="text-zinc-700">·</span>
+              <span className="text-content-muted">·</span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 size={11} className="text-blue-400" /> Paiement Stripe
               </span>
-              <span className="text-zinc-700">·</span>
+              <span className="text-content-muted">·</span>
               <span className="flex items-center gap-1.5">
                 🇫🇷 Made in France
               </span>
-              <span className="text-zinc-700">·</span>
+              <span className="text-content-muted">·</span>
               <span className="flex items-center gap-1.5">
                 <TrendingUp size={11} className="text-violet-400" /> Next.js + Supabase + Vercel
               </span>
             </div>
-            <div className="text-[11px] text-zinc-600">
+            <div className="text-[11px] text-content-tertiary">
               © 2026 Volia.fr — {countryCopy.footerCopy} · Édité par Suraya, France
             </div>
           </div>
@@ -546,22 +546,22 @@ export default function ProspectionSeoPage({
 
 function StatCard({ icon: Icon, label, value, color }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+    <div className="rounded-xl border border-line bg-surface-elevated/40 p-4">
       <Icon size={20} className={`${color} mb-2`} />
-      <div className="text-2xl font-bold text-white tabular-nums">{value}</div>
-      <div className="text-xs text-zinc-500 mt-1">{label}</div>
+      <div className="text-2xl font-bold text-content-primary tabular-nums">{value}</div>
+      <div className="text-xs text-content-tertiary mt-1">{label}</div>
     </div>
   );
 }
 
 function FeatureCard({ icon: Icon, title, desc }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-6">
+    <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">
       <div className="w-10 h-10 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4">
         <Icon size={18} className="text-violet-400" />
       </div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-sm text-zinc-400 leading-relaxed">{desc}</p>
+      <p className="text-sm text-content-secondary leading-relaxed">{desc}</p>
     </div>
   );
 }

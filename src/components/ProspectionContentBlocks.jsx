@@ -51,12 +51,12 @@ export function SocialProofBlock({ department, region, category }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-sm sm:text-base">
-            <strong className="text-2xl sm:text-3xl font-bold text-white tabular-nums">{count}</strong>
-            <span className="text-zinc-300"> commerciaux et fondateurs ciblent les </span>
-            <strong className="text-white">{what}</strong>
-            <span className="text-zinc-300"> {where} via Volia ce mois-ci.</span>
+            <strong className="text-2xl sm:text-3xl font-bold text-content-primary tabular-nums">{count}</strong>
+            <span className="text-content-secondary"> commerciaux et fondateurs ciblent les </span>
+            <strong className="text-content-primary">{what}</strong>
+            <span className="text-content-secondary"> {where} via Volia ce mois-ci.</span>
           </div>
-          <div className="text-[11px] text-zinc-500 mt-1 flex items-center gap-1.5">
+          <div className="text-[11px] text-content-tertiary mt-1 flex items-center gap-1.5">
             <TrendingUp size={11} className="text-emerald-400" />
             +18 % vs mois dernier — adoption en croissance
           </div>
@@ -76,21 +76,21 @@ export function CompetitorInlineBlock({ category }) {
       <h2 className="text-2xl sm:text-3xl font-bold mb-3">
         Pourquoi Volia trouve plus d&apos;emails que les outils US ?
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
-        Apollo, Hunter et Lusha sont conçus pour le marché américain. En France, ils plafonnent. Volia est <strong className="text-white">spécifiquement bâti pour le marché français</strong>.
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
+        Apollo, Hunter et Lusha sont conçus pour le marché américain. En France, ils plafonnent. Volia est <strong className="text-content-primary">spécifiquement bâti pour le marché français</strong>.
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Apollo.io</div>
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2">Apollo.io</div>
           <div className="text-3xl font-bold text-red-300 tabular-nums mb-1">~ 40 %</div>
-          <div className="text-xs text-zinc-500 leading-relaxed">
+          <div className="text-xs text-content-tertiary leading-relaxed">
             Base US — couverture limitée sur les TPE/PME françaises hors grandes villes
           </div>
         </div>
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Hunter.io</div>
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2">Hunter.io</div>
           <div className="text-3xl font-bold text-orange-300 tabular-nums mb-1">~ 55 %</div>
-          <div className="text-xs text-zinc-500 leading-relaxed">
+          <div className="text-xs text-content-tertiary leading-relaxed">
             Bon sur les domaines avec site web, faible sur les artisans et commerces sans site
           </div>
         </div>
@@ -98,14 +98,14 @@ export function CompetitorInlineBlock({ category }) {
           <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-violet-500 text-[10px] font-bold text-white uppercase tracking-wider">Volia</div>
           <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2">Notre cascade waterfall</div>
           <div className="text-3xl font-bold text-emerald-300 tabular-nums mb-1">70-85 %</div>
-          <div className="text-xs text-zinc-300 leading-relaxed">
-            <strong className="text-white">Scraping site → Recherche Google → Patterns</strong> — taux d&apos;emails trouvés sur les {what}
+          <div className="text-xs text-content-secondary leading-relaxed">
+            <strong className="text-content-primary">Scraping site → Recherche Google → Patterns</strong> — taux d&apos;emails trouvés sur les {what}
           </div>
         </div>
       </div>
-      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-zinc-500">
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-content-tertiary">
         <span className="flex items-center gap-1.5"><Shield size={12} className="text-violet-400" /> RGPD by design</span>
-        <span className="flex items-center gap-1.5"><CheckCircle2 size={12} className="text-emerald-400" /> Tarif {' '}<strong className="text-white">3-5× moins cher</strong></span>
+        <span className="flex items-center gap-1.5"><CheckCircle2 size={12} className="text-emerald-400" /> Tarif {' '}<strong className="text-content-primary">3-5× moins cher</strong></span>
         <Link href="/comparatif-outils-prospection-b2b-france" className="ml-auto inline-flex items-center gap-1 text-violet-400 hover:text-violet-300 font-medium transition">
           Voir le comparatif complet
           <ArrowRight size={12} />
@@ -161,10 +161,10 @@ export function MarketSizeBlock({ data, category }) {
             <Building2 size={18} className="text-violet-300" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider mb-2">
+            <h2 className="text-sm font-semibold text-content-secondary uppercase tracking-wider mb-2">
               Taille du marché — {category?.labelPlural || 'secteur'}
             </h2>
-            <p className="text-base text-zinc-200 leading-relaxed">
+            <p className="text-base text-content-secondary leading-relaxed">
               {linkifyAuthorities(data.marketSize)}
             </p>
           </div>
@@ -182,15 +182,15 @@ export function KpiBlock({ data, category }) {
       <h2 className="text-2xl sm:text-3xl font-bold mb-3">
         Les chiffres clés des {category?.labelPlural || 'entreprises'}
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
         Données sectorielles pour calibrer votre approche commerciale et vos messages.
       </p>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {data.kpis.map((k, i) => (
-          <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+          <div key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-4">
             <div className="text-2xl font-bold text-violet-300 tabular-nums">{k.value}</div>
-            <div className="text-sm text-zinc-200 font-semibold mt-1">{k.label}</div>
-            {k.hint && <div className="text-xs text-zinc-500 mt-1 leading-snug">{k.hint}</div>}
+            <div className="text-sm text-content-secondary font-semibold mt-1">{k.label}</div>
+            {k.hint && <div className="text-xs text-content-tertiary mt-1 leading-snug">{k.hint}</div>}
           </div>
         ))}
       </div>
@@ -210,20 +210,20 @@ export function PersonaBlock({ data, category }) {
             <Target size={22} className="text-violet-400" />
             Qui contacter dans un {category?.label || 'établissement'} ?
           </h2>
-          <p className="text-zinc-400 leading-relaxed text-sm mb-4">
-            <strong className="text-white">Décideur clé :</strong> {decisionMaker}
+          <p className="text-content-secondary leading-relaxed text-sm mb-4">
+            <strong className="text-content-primary">Décideur clé :</strong> {decisionMaker}
           </p>
-          <p className="text-zinc-400 leading-relaxed text-sm">
-            <strong className="text-white">Douleur principale :</strong> {painPoint}
+          <p className="text-content-secondary leading-relaxed text-sm">
+            <strong className="text-content-primary">Douleur principale :</strong> {painPoint}
           </p>
         </div>
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">
             Titres ICP à cibler
           </div>
           <ul className="space-y-2">
             {titles.map((t, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-zinc-300">
+              <li key={i} className="flex items-center gap-2 text-sm text-content-secondary">
                 <ArrowRight size={12} className="text-violet-400 flex-shrink-0" />
                 {t}
               </li>
@@ -248,15 +248,15 @@ export function SeasonalityBlock({ data, category }) {
       <div className="grid md:grid-cols-3 gap-4 mb-4">
         <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
           <div className="text-xs font-semibold text-amber-300 uppercase tracking-wider mb-2">À éviter (haute saison)</div>
-          <div className="text-sm text-zinc-200 leading-relaxed">{peak}</div>
+          <div className="text-sm text-content-secondary leading-relaxed">{peak}</div>
         </div>
         <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-4">
           <div className="text-xs font-semibold text-emerald-300 uppercase tracking-wider mb-2">Idéal (basse saison)</div>
-          <div className="text-sm text-zinc-200 leading-relaxed">{low}</div>
+          <div className="text-sm text-content-secondary leading-relaxed">{low}</div>
         </div>
         <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.04] p-4">
           <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2">Conseil</div>
-          <div className="text-sm text-zinc-200 leading-relaxed">{comment}</div>
+          <div className="text-sm text-content-secondary leading-relaxed">{comment}</div>
         </div>
       </div>
     </section>
@@ -273,25 +273,25 @@ export function BestApproachBlock({ data, category }) {
         <MessageCircle size={22} className="text-violet-400" />
         Le meilleur canal pour joindre les {category?.labelPlural || 'professionnels'}
       </h2>
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+      <div className="rounded-2xl border border-line bg-surface-elevated/40 p-6">
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Mail size={11} /> Canal
             </div>
-            <div className="text-sm text-zinc-200 font-medium leading-relaxed">{channel}</div>
+            <div className="text-sm text-content-secondary font-medium leading-relaxed">{channel}</div>
           </div>
           <div>
-            <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Calendar size={11} /> Période
             </div>
-            <div className="text-sm text-zinc-200 font-medium leading-relaxed">{timing}</div>
+            <div className="text-sm text-content-secondary font-medium leading-relaxed">{timing}</div>
           </div>
           <div>
-            <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-2 flex items-center gap-1.5">
               <Lightbulb size={11} /> Pourquoi
             </div>
-            <div className="text-sm text-zinc-400 leading-relaxed">{why}</div>
+            <div className="text-sm text-content-secondary leading-relaxed">{why}</div>
           </div>
         </div>
       </div>
@@ -316,13 +316,13 @@ export function PitchBlock({ data, category }) {
           <Quote size={22} className="text-violet-400 flex-shrink-0" />
           <div>
             <h2 className="text-lg font-bold mb-1">Exemple d&apos;accroche cold email</h2>
-            <p className="text-xs text-zinc-400">Adapté au profil {category?.label || 'cible'} — testé sur 1 000+ envois.</p>
+            <p className="text-xs text-content-secondary">Adapté au profil {category?.label || 'cible'} — testé sur 1 000+ envois.</p>
           </div>
         </div>
-        <blockquote className="rounded-xl border border-white/[0.06] bg-black/30 p-4 text-sm text-zinc-200 leading-relaxed italic">
+        <blockquote className="rounded-xl border border-line bg-surface-base/30 p-4 text-sm text-content-secondary leading-relaxed italic">
           « {previewed} »
         </blockquote>
-        <p className="text-xs text-zinc-500 mt-3">
+        <p className="text-xs text-content-tertiary mt-3">
           Personnalisez avec les variables <code className="text-violet-300">{`{first_name}`}</code>, <code className="text-violet-300">{`{company}`}</code> et <code className="text-violet-300">{`{custom.X}`}</code> dans Volia.
         </p>
       </div>
@@ -341,9 +341,9 @@ export function ObjectionBlock({ data, category }) {
       </h2>
       <div className="space-y-3">
         {data.objections.map((o, i) => (
-          <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+          <div key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-5">
             <div className="text-sm text-amber-300 font-semibold mb-2">« {o.objection} »</div>
-            <div className="text-sm text-zinc-300 leading-relaxed">
+            <div className="text-sm text-content-secondary leading-relaxed">
               <strong className="text-emerald-300">→ </strong>
               {o.reponse}
             </div>
@@ -365,9 +365,9 @@ export function GlossaryBlock({ data, category }) {
       </h2>
       <div className="grid md:grid-cols-2 gap-4">
         {data.glossary.map((g, i) => (
-          <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+          <div key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-4">
             <div className="text-sm font-semibold text-violet-300 mb-1">{g.term}</div>
-            <div className="text-xs text-zinc-400 leading-relaxed">{g.def}</div>
+            <div className="text-xs text-content-secondary leading-relaxed">{g.def}</div>
           </div>
         ))}
       </div>
@@ -383,14 +383,14 @@ export function PainPointsBlock({ data, category }) {
       <h2 className="text-2xl sm:text-3xl font-bold mb-3">
         Les 3 défis principaux des {category?.labelPlural || 'professionnels'}
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
         Pour pitcher juste : connaître les vraies douleurs business de la cible.
       </p>
       <div className="grid md:grid-cols-3 gap-4">
         {data.painPoints.map((p, i) => (
-          <div key={i} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+          <div key={i} className="rounded-xl border border-line bg-surface-elevated/40 p-5">
             <div className="text-3xl font-bold text-violet-400 mb-2">{i + 1}.</div>
-            <div className="text-sm text-zinc-200 leading-relaxed">{p}</div>
+            <div className="text-sm text-content-secondary leading-relaxed">{p}</div>
           </div>
         ))}
       </div>
@@ -407,36 +407,36 @@ export function DeptContextBlock({ deptData, dept, category }) {
         <MapPin size={22} className="text-violet-400" />
         Le marché {category ? `${category.labelPlural} ` : ''}en {dept.name}
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-3xl text-sm leading-relaxed">
-        <strong className="text-white">{deptData.economy?.tag || dept.name}</strong> — {deptData.economy?.comment}
+      <p className="text-content-secondary mb-6 max-w-3xl text-sm leading-relaxed">
+        <strong className="text-content-primary">{deptData.economy?.tag || dept.name}</strong> — {deptData.economy?.comment}
       </p>
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">
             Profil du territoire
           </div>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">Population</dt>
-              <dd className="text-zinc-200 font-medium tabular-nums">{deptData.population}</dd>
+              <dt className="text-content-tertiary">Population</dt>
+              <dd className="text-content-secondary font-medium tabular-nums">{deptData.population}</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">Densité</dt>
-              <dd className="text-zinc-200 font-medium text-right max-w-[60%]">{deptData.density}</dd>
+              <dt className="text-content-tertiary">Densité</dt>
+              <dd className="text-content-secondary font-medium text-right max-w-[60%]">{deptData.density}</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">Top villes</dt>
-              <dd className="text-zinc-200 font-medium text-right max-w-[60%]">{deptData.topCities?.join(', ')}</dd>
+              <dt className="text-content-tertiary">Top villes</dt>
+              <dd className="text-content-secondary font-medium text-right max-w-[60%]">{deptData.topCities?.join(', ')}</dd>
             </div>
           </dl>
         </div>
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">
             Secteurs phares
           </div>
           <ul className="space-y-1.5">
             {deptData.keySectors?.map((s, i) => (
-              <li key={i} className="text-sm text-zinc-200 flex items-center gap-2">
+              <li key={i} className="text-sm text-content-secondary flex items-center gap-2">
                 <ArrowRight size={11} className="text-violet-400 flex-shrink-0" />
                 {s}
               </li>
@@ -445,8 +445,8 @@ export function DeptContextBlock({ deptData, dept, category }) {
         </div>
       </div>
       {deptData.notableCompanies?.length > 0 && (
-        <div className="mt-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="mt-4 rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Building2 size={11} />
             Entreprises emblématiques du territoire
           </div>
@@ -458,7 +458,7 @@ export function DeptContextBlock({ deptData, dept, category }) {
             ))}
           </div>
           {deptData.economicNote && (
-            <p className="text-xs text-zinc-400 leading-relaxed mt-3">{deptData.economicNote}</p>
+            <p className="text-xs text-content-secondary leading-relaxed mt-3">{deptData.economicNote}</p>
           )}
         </div>
       )}
@@ -469,7 +469,7 @@ export function DeptContextBlock({ deptData, dept, category }) {
             <Lightbulb size={11} />
             Conseil de prospection local
           </div>
-          <p className="text-sm text-zinc-200 leading-relaxed">{deptData.prospectingTip}</p>
+          <p className="text-sm text-content-secondary leading-relaxed">{deptData.prospectingTip}</p>
         </div>
       )}
     </section>
@@ -485,42 +485,42 @@ export function RegionContextBlock({ regionData, region, category }) {
         <MapPin size={22} className="text-violet-400" />
         Le marché {category ? `${category.labelPlural} ` : ''}en {region.name}
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-3xl text-sm leading-relaxed">
-        <strong className="text-white">{regionData.businessClimate?.tag}</strong> — {regionData.businessClimate?.comment}
+      <p className="text-content-secondary mb-6 max-w-3xl text-sm leading-relaxed">
+        <strong className="text-content-primary">{regionData.businessClimate?.tag}</strong> — {regionData.businessClimate?.comment}
       </p>
       <div className="grid md:grid-cols-2 gap-6 mb-4">
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Région en chiffres</div>
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Région en chiffres</div>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">Population</dt>
-              <dd className="text-zinc-200 font-medium tabular-nums">{regionData.population}</dd>
+              <dt className="text-content-tertiary">Population</dt>
+              <dd className="text-content-secondary font-medium tabular-nums">{regionData.population}</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">PIB</dt>
-              <dd className="text-zinc-200 font-medium tabular-nums">{regionData.gdp}{regionData.gdpRank && <span className="text-zinc-500 text-xs ml-1">(#{regionData.gdpRank})</span>}</dd>
+              <dt className="text-content-tertiary">PIB</dt>
+              <dd className="text-content-secondary font-medium tabular-nums">{regionData.gdp}{regionData.gdpRank && <span className="text-content-tertiary text-xs ml-1">(#{regionData.gdpRank})</span>}</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">Métropoles</dt>
-              <dd className="text-zinc-200 font-medium text-right max-w-[55%]">{regionData.topMetros?.join(', ')}</dd>
+              <dt className="text-content-tertiary">Métropoles</dt>
+              <dd className="text-content-secondary font-medium text-right max-w-[55%]">{regionData.topMetros?.join(', ')}</dd>
             </div>
           </dl>
         </div>
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">Filières d&apos;excellence</div>
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Filières d&apos;excellence</div>
           <ul className="space-y-2">
             {regionData.flagshipSectors?.slice(0, 4).map((s, i) => (
-              <li key={i} className="text-sm text-zinc-200">
+              <li key={i} className="text-sm text-content-secondary">
                 <strong className="text-violet-300">{s.name}</strong>
-                {s.note && <div className="text-xs text-zinc-500 leading-snug mt-0.5">{s.note}</div>}
+                {s.note && <div className="text-xs text-content-tertiary leading-snug mt-0.5">{s.note}</div>}
               </li>
             ))}
           </ul>
         </div>
       </div>
       {regionData.flagshipCompanies?.length > 0 && (
-        <div className="mb-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="mb-4 rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Building2 size={11} />
             Champions régionaux
           </div>
@@ -532,7 +532,7 @@ export function RegionContextBlock({ regionData, region, category }) {
             ))}
           </div>
           {regionData.economicHighlight && (
-            <p className="text-xs text-zinc-400 leading-relaxed mt-3">{regionData.economicHighlight}</p>
+            <p className="text-xs text-content-secondary leading-relaxed mt-3">{regionData.economicHighlight}</p>
           )}
         </div>
       )}
@@ -543,7 +543,7 @@ export function RegionContextBlock({ regionData, region, category }) {
             <Lightbulb size={11} />
             Conseil de prospection régional
           </div>
-          <p className="text-sm text-zinc-200 leading-relaxed">{regionData.bestForProspecting}</p>
+          <p className="text-sm text-content-secondary leading-relaxed">{regionData.bestForProspecting}</p>
         </div>
       )}
     </section>
@@ -655,13 +655,13 @@ export function SamplePreviewBlock({ category, department, stats }) {
         <Building2 size={22} className="text-violet-400" />
         Aperçu : 5 {category.labelPlural} sur les <span className="text-violet-300 tabular-nums">{total}</span> disponibles
       </h2>
-      <p className="text-zinc-400 mb-5 max-w-2xl text-sm">
+      <p className="text-content-secondary mb-5 max-w-2xl text-sm">
         Voici un échantillon anonymisé. Inscription gratuite pour voir les noms réels, emails et numéros.
       </p>
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+      <div className="rounded-2xl border border-line bg-surface-elevated/40 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs sm:text-sm">
-            <thead className="bg-white/[0.03] border-b border-white/[0.06] text-[10px] text-zinc-400 uppercase tracking-wider">
+            <thead className="bg-surface-elevated/60 border-b border-line text-[10px] text-content-secondary uppercase tracking-wider">
               <tr>
                 <th className="text-left px-4 py-3 font-semibold">Entreprise</th>
                 <th className="text-left px-4 py-3 font-semibold">Localité</th>
@@ -672,15 +672,15 @@ export function SamplePreviewBlock({ category, department, stats }) {
             </thead>
             <tbody>
               {samples.map((s, i) => (
-                <tr key={i} className="border-b border-white/[0.04] last:border-0">
+                <tr key={i} className="border-b border-line last:border-0">
                   <td className="px-4 py-3">
-                    <div className="font-medium text-zinc-100">{s.name}</div>
-                    <div className="text-[10px] text-zinc-500 mt-0.5">ID #{(1000 + i + offset).toString(36).toUpperCase()}</div>
+                    <div className="font-medium text-content-primary">{s.name}</div>
+                    <div className="text-[10px] text-content-tertiary mt-0.5">ID #{(1000 + i + offset).toString(36).toUpperCase()}</div>
                   </td>
-                  <td className="px-4 py-3 text-zinc-300">{s.city}</td>
+                  <td className="px-4 py-3 text-content-secondary">{s.city}</td>
                   <td className="px-4 py-3 text-center">
                     <span className="text-amber-300 font-medium tabular-nums">★ {s.rating}</span>
-                    <div className="text-[10px] text-zinc-500 tabular-nums">{s.reviews} avis</div>
+                    <div className="text-[10px] text-content-tertiary tabular-nums">{s.reviews} avis</div>
                   </td>
                   <td className="px-4 py-3 text-center hidden sm:table-cell">
                     {s.hasEmail ? (
@@ -688,16 +688,16 @@ export function SamplePreviewBlock({ category, department, stats }) {
                         contact@xxx
                       </span>
                     ) : (
-                      <span className="text-zinc-600">—</span>
+                      <span className="text-content-tertiary">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-center hidden sm:table-cell">
                     {s.hasPhone ? (
-                      <span className="text-zinc-300 font-mono text-[11px] select-none" style={{ filter: 'blur(3px)' }}>
+                      <span className="text-content-secondary font-mono text-[11px] select-none" style={{ filter: 'blur(3px)' }}>
                         +33 0X XX XX XX XX
                       </span>
                     ) : (
-                      <span className="text-zinc-600">—</span>
+                      <span className="text-content-tertiary">—</span>
                     )}
                   </td>
                 </tr>
@@ -706,7 +706,7 @@ export function SamplePreviewBlock({ category, department, stats }) {
           </table>
         </div>
         <div className="bg-gradient-to-r from-violet-500/[0.06] to-indigo-500/[0.06] border-t border-violet-500/20 p-4 flex items-center justify-between flex-wrap gap-3">
-          <div className="text-xs text-zinc-300">
+          <div className="text-xs text-content-secondary">
             <strong className="text-white">{total}</strong> {category.labelPlural} {department ? `à ${department.name}` : 'en France'} accessibles dès l&apos;inscription.
           </div>
           <Link
@@ -741,24 +741,24 @@ export function DensityChartBlock({ category, items, scopeLabel }) {
         <BarChart3 size={22} className="text-violet-400" />
         Répartition des {category?.labelPlural || 'entreprises'} {scopeLabel || ''}
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
         Volume relatif {scopeLabel} — pour calibrer vos zones de prospection prioritaires.
       </p>
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+      <div className="rounded-2xl border border-line bg-surface-elevated/40 p-5">
         <div className="space-y-3">
           {items.map((it, i) => {
             const widthPct = Math.round((it.value / maxValue) * 100);
             return (
               <div key={i} className="flex items-center gap-3">
-                <div className="w-32 sm:w-40 flex-shrink-0 text-xs sm:text-sm text-zinc-200 truncate">
+                <div className="w-32 sm:w-40 flex-shrink-0 text-xs sm:text-sm text-content-secondary truncate">
                   {it.label}
                 </div>
-                <div className="flex-1 h-7 rounded-md bg-white/[0.03] overflow-hidden relative">
+                <div className="flex-1 h-7 rounded-md bg-surface-elevated/60 overflow-hidden relative">
                   <div
                     className="h-full transition-all rounded-md"
                     style={{ width: `${widthPct}%`, backgroundColor: colorForRank(i) }}
                   />
-                  <div className="absolute inset-0 flex items-center px-2 text-[11px] text-white font-semibold tabular-nums">
+                  <div className="absolute inset-0 flex items-center px-2 text-[11px] text-content-primary font-semibold tabular-nums">
                     {it.value.toLocaleString('fr-FR')}
                   </div>
                 </div>
@@ -766,7 +766,7 @@ export function DensityChartBlock({ category, items, scopeLabel }) {
             );
           })}
         </div>
-        <p className="text-[10px] text-zinc-500 mt-4 italic">
+        <p className="text-[10px] text-content-tertiary mt-4 italic">
           Volumes estimés à partir de la densité Google Places croisée avec les statistiques INSEE par territoire.
         </p>
       </div>
@@ -828,7 +828,7 @@ export function DemoCtaBlock({ category }) {
   const what = category ? category.labelPlural : 'votre secteur';
   return (
     <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
-      <div className="rounded-2xl border border-white/[0.06] bg-gradient-to-br from-zinc-900 to-black p-6 sm:p-8">
+      <div className="rounded-2xl border border-line bg-surface-card p-6 sm:p-8">
         <div className="grid sm:grid-cols-[1fr_auto] gap-5 items-center">
           <div>
             <div className="inline-block px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-[11px] font-semibold text-blue-300 uppercase tracking-wider mb-2">
@@ -837,7 +837,7 @@ export function DemoCtaBlock({ category }) {
             <h3 className="text-xl sm:text-2xl font-bold mb-2 leading-tight">
               Voir Volia sur {what} en 8 minutes
             </h3>
-            <p className="text-sm text-zinc-400 leading-relaxed">
+            <p className="text-sm text-content-secondary leading-relaxed">
               Démo live (8 min, pas de slides) : on cible votre dept/ville, on extrait 50 prospects qualifiés, on génère un CSV importable dans votre CRM. Réservez le créneau qui vous arrange.
             </p>
           </div>
@@ -846,14 +846,14 @@ export function DemoCtaBlock({ category }) {
               href="https://cal.com/anthony-malartre/demo-volia"
               target="_blank"
               rel="noopener"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-zinc-900 hover:bg-zinc-100 text-sm font-bold transition shadow-lg"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-bold transition shadow-lg shadow-violet-500/20"
             >
               <Calendar size={14} />
               Réserver une démo
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-white/10 hover:bg-white/[0.04] text-xs font-medium text-zinc-300 transition"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-white/10 hover:bg-surface-elevated/60 text-xs font-medium text-content-secondary transition"
             >
               ou essayer en autonomie
               <ArrowRight size={12} />
@@ -877,12 +877,12 @@ export function AuthoritiesBlock({ category }) {
   ];
   return (
     <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-        <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <div className="rounded-2xl border border-line bg-surface-elevated/40 p-5">
+        <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <BookOpen size={11} />
           Sources & cadre légal
         </div>
-        <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+        <p className="text-xs text-content-secondary leading-relaxed mb-4">
           Les chiffres et conseils sectoriels de cette page sont calibrés à partir de sources publiques officielles.
           La prospection est encadrée par le <a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">RGPD article 6.1.f (intérêt légitime)</a> pour le B2B.
         </p>
@@ -893,12 +893,12 @@ export function AuthoritiesBlock({ category }) {
               href={it.url}
               target="_blank"
               rel="noopener"
-              className="group flex items-start gap-2 p-2.5 rounded-lg border border-white/[0.04] hover:border-violet-500/30 hover:bg-violet-500/[0.04] transition"
+              className="group flex items-start gap-2 p-2.5 rounded-lg border border-line hover:border-violet-500/30 hover:bg-violet-500/[0.04] transition"
             >
-              <ArrowRight size={11} className="text-zinc-500 group-hover:text-violet-400 transition mt-0.5 flex-shrink-0" />
+              <ArrowRight size={11} className="text-content-tertiary group-hover:text-violet-400 transition mt-0.5 flex-shrink-0" />
               <div className="min-w-0">
-                <div className="text-xs font-semibold text-zinc-200 group-hover:text-white transition">{it.name}</div>
-                <div className="text-[10px] text-zinc-500 truncate">{it.label}</div>
+                <div className="text-xs font-semibold text-content-secondary group-hover:text-content-primary transition">{it.name}</div>
+                <div className="text-[10px] text-content-tertiary truncate">{it.label}</div>
               </div>
             </a>
           ))}
@@ -920,50 +920,50 @@ export function DeptOverviewBlock({ deptData, dept, popularCategories = [] }) {
         <Building2 size={22} className="text-violet-400" />
         Le tissu économique du {dept.name}
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-3xl text-sm leading-relaxed">
+      <p className="text-content-secondary mb-6 max-w-3xl text-sm leading-relaxed">
         Profil du département pour calibrer votre ciblage commercial : densité, secteurs phares, entreprises emblématiques.
       </p>
 
       {/* Bandeau profil + champions */}
       <div className="grid md:grid-cols-2 gap-4 mb-4">
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <MapPin size={11} />
             Profil démographique & économique
           </div>
           <dl className="space-y-2 text-sm">
-            <div className="flex justify-between gap-3 pb-2 border-b border-white/[0.04]">
-              <dt className="text-zinc-500">Population</dt>
-              <dd className="text-zinc-100 font-semibold tabular-nums">{deptData.population}</dd>
+            <div className="flex justify-between gap-3 pb-2 border-b border-line">
+              <dt className="text-content-tertiary">Population</dt>
+              <dd className="text-content-primary font-semibold tabular-nums">{deptData.population}</dd>
             </div>
-            <div className="flex justify-between gap-3 pb-2 border-b border-white/[0.04]">
-              <dt className="text-zinc-500">Densité</dt>
-              <dd className="text-zinc-200 font-medium text-right max-w-[60%]">{deptData.density}</dd>
+            <div className="flex justify-between gap-3 pb-2 border-b border-line">
+              <dt className="text-content-tertiary">Densité</dt>
+              <dd className="text-content-secondary font-medium text-right max-w-[60%]">{deptData.density}</dd>
             </div>
-            <div className="flex justify-between gap-3 pb-2 border-b border-white/[0.04]">
-              <dt className="text-zinc-500">Top villes</dt>
-              <dd className="text-zinc-200 font-medium text-right max-w-[60%]">{deptData.topCities?.join(', ')}</dd>
+            <div className="flex justify-between gap-3 pb-2 border-b border-line">
+              <dt className="text-content-tertiary">Top villes</dt>
+              <dd className="text-content-secondary font-medium text-right max-w-[60%]">{deptData.topCities?.join(', ')}</dd>
             </div>
             <div className="flex justify-between gap-3">
-              <dt className="text-zinc-500">Positionnement</dt>
+              <dt className="text-content-tertiary">Positionnement</dt>
               <dd className="text-violet-300 font-medium text-right max-w-[60%]">{deptData.economy?.tag}</dd>
             </div>
           </dl>
           {deptData.economy?.comment && (
-            <p className="text-xs text-zinc-400 leading-relaxed mt-4 pt-3 border-t border-white/[0.04]">
+            <p className="text-xs text-content-secondary leading-relaxed mt-4 pt-3 border-t border-line">
               {deptData.economy.comment}
             </p>
           )}
         </div>
 
-        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
-          <div className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+        <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
+          <div className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Target size={11} />
             Secteurs phares
           </div>
           <ul className="space-y-2 mb-4">
             {deptData.keySectors?.map((s, i) => (
-              <li key={i} className="text-sm text-zinc-200 flex items-start gap-2">
+              <li key={i} className="text-sm text-content-secondary flex items-start gap-2">
                 <ArrowRight size={11} className="text-violet-400 flex-shrink-0 mt-1" />
                 <span>{s}</span>
               </li>
@@ -971,7 +971,7 @@ export function DeptOverviewBlock({ deptData, dept, popularCategories = [] }) {
           </ul>
           {deptData.notableCompanies?.length > 0 && (
             <>
-              <div className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2">
+              <div className="text-[10px] font-semibold text-content-secondary uppercase tracking-wider mb-2">
                 Entreprises emblématiques
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -993,7 +993,7 @@ export function DeptOverviewBlock({ deptData, dept, popularCategories = [] }) {
             <Lightbulb size={11} />
             À retenir
           </div>
-          <p className="text-sm text-zinc-200 leading-relaxed">{deptData.economicNote}</p>
+          <p className="text-sm text-content-secondary leading-relaxed">{deptData.economicNote}</p>
         </div>
       )}
 
@@ -1004,14 +1004,14 @@ export function DeptOverviewBlock({ deptData, dept, popularCategories = [] }) {
             <Lightbulb size={11} />
             Conseil de prospection local
           </div>
-          <p className="text-sm text-zinc-200 leading-relaxed">{deptData.prospectingTip}</p>
+          <p className="text-sm text-content-secondary leading-relaxed">{deptData.prospectingTip}</p>
         </div>
       )}
 
       {/* Entrées catégories phares */}
       {popularCategories.length > 0 && (
         <div>
-          <h3 className="text-base font-semibold text-zinc-100 mb-3 mt-6">
+          <h3 className="text-base font-semibold text-content-primary mb-3 mt-6">
             Explorer par secteur dans le {dept.name}
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
@@ -1019,10 +1019,10 @@ export function DeptOverviewBlock({ deptData, dept, popularCategories = [] }) {
               <Link
                 key={i}
                 href={c.href}
-                className="group rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-violet-500/30 hover:bg-violet-500/[0.05] p-3 transition flex items-center justify-between gap-2"
+                className="group rounded-lg border border-line bg-surface-elevated/40 hover:border-violet-500/30 hover:bg-violet-500/[0.05] p-3 transition flex items-center justify-between gap-2"
               >
-                <span className="text-sm text-zinc-200 group-hover:text-white transition truncate">{c.label}</span>
-                <ArrowRight size={12} className="text-zinc-500 group-hover:text-violet-400 transition flex-shrink-0" />
+                <span className="text-sm text-content-secondary group-hover:text-content-primary transition truncate">{c.label}</span>
+                <ArrowRight size={12} className="text-content-tertiary group-hover:text-violet-400 transition flex-shrink-0" />
               </Link>
             ))}
           </div>
@@ -1044,7 +1044,7 @@ export function SiblingCitiesBlock({ cities = [], category, currentCitySlug }) {
         <MapPin size={22} className="text-violet-400" />
         {category.labelCapitalized} dans les autres villes du département
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
         Élargissez votre ciblage aux communes voisines, classées par population.
       </p>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">
@@ -1052,13 +1052,13 @@ export function SiblingCitiesBlock({ cities = [], category, currentCitySlug }) {
           <Link
             key={c.slug}
             href={`/prospection/${category.slug}/ville/${c.slug}`}
-            className="group rounded-lg border border-white/[0.06] bg-white/[0.02] hover:border-violet-500/30 hover:bg-violet-500/[0.05] p-3 transition"
+            className="group rounded-lg border border-line bg-surface-elevated/40 hover:border-violet-500/30 hover:bg-violet-500/[0.05] p-3 transition"
           >
-            <div className="text-sm font-medium text-zinc-100 group-hover:text-white transition truncate">
+            <div className="text-sm font-medium text-content-primary group-hover:text-content-primary transition truncate">
               {category.labelCapitalized} {c.name}
             </div>
             {c.pop && (
-              <div className="text-[11px] text-zinc-500 mt-0.5 tabular-nums">
+              <div className="text-[11px] text-content-tertiary mt-0.5 tabular-nums">
                 {(c.pop / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 0 })} k hab.
               </div>
             )}
@@ -1078,7 +1078,7 @@ export function TopRegionsBlock({ data, category }) {
         <MapPin size={22} className="text-violet-400" />
         Où sont concentrés les {category?.labelPlural || 'professionnels'} en France
       </h2>
-      <p className="text-zinc-400 mb-6 max-w-2xl text-sm">
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
         Les 3 régions où le secteur est le plus dense — bonnes priorités pour démarrer.
       </p>
       <div className="grid md:grid-cols-3 gap-4">
@@ -1089,13 +1089,13 @@ export function TopRegionsBlock({ data, category }) {
           <Link
             key={i}
             href={`/prospection/${category?.slug || ''}/region/${urlSlug}`}
-            className="group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 hover:border-violet-500/30 transition"
+            className="group rounded-xl border border-line bg-surface-elevated/40 p-5 hover:border-violet-500/30 transition"
           >
             <div className="text-3xl font-bold text-violet-400 mb-2 group-hover:text-violet-300 transition">#{i + 1}</div>
-            <div className="text-sm text-zinc-200 font-semibold mb-1.5 capitalize group-hover:text-white transition">
+            <div className="text-sm text-content-secondary font-semibold mb-1.5 capitalize group-hover:text-content-primary transition">
               {displayName}
             </div>
-            <div className="text-xs text-zinc-500 leading-relaxed">{r.reason}</div>
+            <div className="text-xs text-content-tertiary leading-relaxed">{r.reason}</div>
             <div className="mt-3 text-xs text-violet-400 inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
               Voir le détail
               <ArrowRight size={11} />

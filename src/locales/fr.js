@@ -642,7 +642,7 @@ const fr = {
     hero: {
       badge: 'Le moins cher du marche  -  Solo 19 EUR/mois  -  prospects illimites',
       title: 'Prospectez avec',
-      subtitle: 'Volia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. <strong class="text-zinc-200">150+ categories, 101 departements</strong>, scoring de confiance.',
+      subtitle: 'Volia scrape les sites web et cherche sur Google pour trouver l\'email professionnel de chaque entreprise. <strong class="text-content-secondary">150+ categories, 101 departements</strong>, scoring de confiance.',
       price: 'A partir de 19 EUR/mois - le moins cher de France. Annulez a tout moment.',
       compare: 'Comparer avec la concurrence',
       sourcesLabel: 'Sources integrees :',
@@ -651,10 +651,10 @@ const fr = {
     why: {
       label: 'Pourquoi un agregateur ?',
       title: 'Scraping intelligent + recherche Google',
-      desc: 'Le scraping seul ne suffit pas — beaucoup de sites n\'affichent pas leur email. Volia combine le <strong class="text-zinc-300">scraping de sites web</strong> avec la <strong class="text-zinc-300">recherche Google</strong> pour maximiser le taux de couverture. Si le site n\'existe pas, on le decouvre automatiquement.',
-      stat1Label: 'Taux de couverture avec <strong class="text-zinc-400">scraping seul</strong>',
+      desc: 'Le scraping seul ne suffit pas — beaucoup de sites n\'affichent pas leur email. Volia combine le <strong class="text-content-secondary">scraping de sites web</strong> avec la <strong class="text-content-secondary">recherche Google</strong> pour maximiser le taux de couverture. Si le site n\'existe pas, on le decouvre automatiquement.',
+      stat1Label: 'Taux de couverture avec <strong class="text-content-secondary">scraping seul</strong>',
       stat2Label: 'Taux de couverture avec <strong class="text-violet-400">scraping + Google</strong>',
-      stat3Label: 'Cout par lead vs. <strong class="text-zinc-400">abonnements separes</strong> a chaque outil',
+      stat3Label: 'Cout par lead vs. <strong class="text-content-secondary">abonnements separes</strong> a chaque outil',
     },
     // Features
     features: {
@@ -690,7 +690,7 @@ const fr = {
     waterfall: {
       label: 'Enrichissement en cascade',
       title: 'Scraping + Google. Le meilleur email avec score de confiance.',
-      desc: 'Volia scrape automatiquement le site web de chaque entreprise, puis cherche sur Google si aucun email n\'est trouve. <strong class="text-zinc-300">Pas de site web ? On le decouvre via Google.</strong>',
+      desc: 'Volia scrape automatiquement le site web de chaque entreprise, puis cherche sur Google si aucun email n\'est trouve. <strong class="text-content-secondary">Pas de site web ? On le decouvre via Google.</strong>',
       confidence: 'Confiance',
       stopsFirst: 'S\'arrete au premier email trouve — vous ne payez que ce qui est necessaire.',
       free: 'Gratuit',
@@ -711,7 +711,7 @@ const fr = {
     emailVerif: {
       badge: 'Enterprise',
       title: 'Verifiez vos emails en masse avant d\'envoyer',
-      desc: 'Importez votre base de donnees emails et verifiez instantanement lesquels sont valides. Plus besoin d\'envoyer pour savoir — notre verification SMTP detecte les faux emails <strong class="text-zinc-200">sans envoyer un seul message</strong>.',
+      desc: 'Importez votre base de donnees emails et verifiez instantanement lesquels sont valides. Plus besoin d\'envoyer pour savoir — notre verification SMTP detecte les faux emails <strong class="text-content-secondary">sans envoyer un seul message</strong>.',
       smtp: 'Verification SMTP silencieuse',
       smtpDesc: 'On verifie si la boite mail existe via le protocole SMTP, sans envoyer d\'email. Aucun risque de bounce ou de blacklisting.',
       csvImport: 'Import CSV en masse',

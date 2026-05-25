@@ -56,7 +56,7 @@ function OptOutInner() {
           <Shield size={22} className="text-violet-300" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Droit d&apos;opposition RGPD</h1>
-        <p className="text-sm text-zinc-400 max-w-xl mx-auto leading-relaxed">
+        <p className="text-sm text-content-secondary max-w-xl mx-auto leading-relaxed">
           Supprimez vos données personnelles de notre base de prospects. Traitement sous 48 h, conforme à l&apos;article 21 du RGPD.
         </p>
       </div>
@@ -74,7 +74,7 @@ function OptOutInner() {
               {oneClickOk && !alreadyOptedOut && (
                 <>
                   <p className="text-base font-semibold text-emerald-300 mb-1">Désinscription confirmée</p>
-                  <p className="text-sm text-zinc-300 leading-relaxed">
+                  <p className="text-sm text-content-secondary leading-relaxed">
                     Vous ne recevrez plus de {oneClickChannel === 'sms' ? 'SMS' : 'mails'} de prospection.
                     Votre {oneClickChannel === 'sms' ? 'numéro' : 'adresse'} est retirée de toutes nos listes + ajoutée à notre blocklist permanente.
                   </p>
@@ -83,13 +83,13 @@ function OptOutInner() {
               {oneClickOk && alreadyOptedOut && (
                 <>
                   <p className="text-base font-semibold text-emerald-300 mb-1">Vous étiez déjà désinscrit</p>
-                  <p className="text-sm text-zinc-300 leading-relaxed">Aucune action supplémentaire nécessaire.</p>
+                  <p className="text-sm text-content-secondary leading-relaxed">Aucune action supplémentaire nécessaire.</p>
                 </>
               )}
               {oneClickError && (
                 <>
                   <p className="text-base font-semibold text-red-300 mb-1">Erreur lors de la désinscription</p>
-                  <p className="text-sm text-zinc-300 leading-relaxed">
+                  <p className="text-sm text-content-secondary leading-relaxed">
                     Code : <code className="text-xs bg-red-500/10 px-1.5 py-0.5 rounded">{oneClickError}</code>. Utilisez le formulaire ci-dessous pour saisir manuellement votre email.
                   </p>
                 </>
@@ -100,25 +100,25 @@ function OptOutInner() {
       )}
 
       {/* Card explication */}
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl p-6 mb-6">
+      <div className="rounded-2xl border border-line bg-surface-elevated/40 backdrop-blur-xl p-6 mb-6">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-violet-500/15 border border-violet-500/30 flex items-center justify-center flex-shrink-0">
             <Eye size={14} className="text-violet-300" />
           </div>
           <div>
             <h2 className="text-base font-semibold mb-2">Pourquoi cette page ?</h2>
-            <p className="text-sm text-zinc-400 leading-relaxed mb-2">
+            <p className="text-sm text-content-secondary leading-relaxed mb-2">
               Volia collecte des données professionnelles publiques (email pro, nom d&apos;entreprise, téléphone) via Google Places dans le cadre de la prospection B2B (RGPD art. 6.1.f — intérêt légitime).
             </p>
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Conformément à l&apos;<a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">article 21 du RGPD</a>, vous pouvez à tout moment exercer votre droit d&apos;opposition. Votre demande sera traitée sous <strong className="text-white">48 heures</strong>.
+            <p className="text-sm text-content-secondary leading-relaxed">
+              Conformément à l&apos;<a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">article 21 du RGPD</a>, vous pouvez à tout moment exercer votre droit d&apos;opposition. Votre demande sera traitée sous <strong className="text-content-primary">48 heures</strong>.
             </p>
           </div>
         </div>
       </div>
 
       {/* Form */}
-      <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl p-6 sm:p-7">
+      <div className="rounded-2xl border border-line bg-surface-elevated/40 backdrop-blur-xl p-6 sm:p-7">
         <h2 className="text-lg font-bold mb-5 flex items-center gap-2">
           <Lock size={16} className="text-violet-400" />
           Demande de suppression
@@ -129,7 +129,7 @@ function OptOutInner() {
             <CheckCircle2 size={18} className="text-emerald-400 mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-sm font-semibold text-emerald-300">Demande enregistrée</p>
-              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{message}</p>
+              <p className="text-xs text-content-secondary mt-1 leading-relaxed">{message}</p>
             </div>
           </div>
         )}
@@ -138,18 +138,18 @@ function OptOutInner() {
             <AlertCircle size={18} className="text-red-400 mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-sm font-semibold text-red-300">Erreur</p>
-              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{message}</p>
+              <p className="text-xs text-content-secondary mt-1 leading-relaxed">{message}</p>
             </div>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-xs font-medium text-zinc-300 uppercase tracking-wider mb-2">
+            <label htmlFor="email" className="block text-xs font-medium text-content-secondary uppercase tracking-wider mb-2">
               Adresse email <span className="text-red-400">*</span>
             </label>
             <div className="relative">
-              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+              <Mail size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
               <input
                 id="email"
                 type="email"
@@ -157,15 +157,15 @@ function OptOutInner() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="votre@email.pro"
-                className="w-full pl-9 pr-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition"
+                className="w-full pl-9 pr-4 py-3 rounded-xl bg-surface-base/40 border border-white/10 text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition"
               />
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1.5">L&apos;email à supprimer de notre base.</p>
+            <p className="text-[11px] text-content-tertiary mt-1.5">L&apos;email à supprimer de notre base.</p>
           </div>
 
           <div>
-            <label htmlFor="company" className="block text-xs font-medium text-zinc-300 uppercase tracking-wider mb-2">
-              Entreprise <span className="text-zinc-500 normal-case">(optionnel)</span>
+            <label htmlFor="company" className="block text-xs font-medium text-content-secondary uppercase tracking-wider mb-2">
+              Entreprise <span className="text-content-tertiary normal-case">(optionnel)</span>
             </label>
             <input
               id="company"
@@ -173,13 +173,13 @@ function OptOutInner() {
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               placeholder="Nom de votre entreprise"
-              className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition"
+              className="w-full px-4 py-3 rounded-xl bg-surface-base/40 border border-white/10 text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition"
             />
           </div>
 
           <div>
-            <label htmlFor="reason" className="block text-xs font-medium text-zinc-300 uppercase tracking-wider mb-2">
-              Motif <span className="text-zinc-500 normal-case">(optionnel)</span>
+            <label htmlFor="reason" className="block text-xs font-medium text-content-secondary uppercase tracking-wider mb-2">
+              Motif <span className="text-content-tertiary normal-case">(optionnel)</span>
             </label>
             <textarea
               id="reason"
@@ -187,7 +187,7 @@ function OptOutInner() {
               onChange={(e) => setReason(e.target.value)}
               placeholder="Précisez la raison de votre demande si vous le souhaitez (aide à améliorer nos pratiques)..."
               rows={3}
-              className="w-full px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition resize-none"
+              className="w-full px-4 py-3 rounded-xl bg-surface-base/40 border border-white/10 text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/30 transition resize-none"
             />
           </div>
 
@@ -201,7 +201,7 @@ function OptOutInner() {
           </button>
         </form>
 
-        <p className="text-[11px] text-zinc-500 mt-4 leading-relaxed text-center">
+        <p className="text-[11px] text-content-tertiary mt-4 leading-relaxed text-center">
           🔒 Votre email sera supprimé de notre base + ajouté à notre liste d&apos;exclusion permanente.<br />
           Pour toute question : <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a>
         </p>
@@ -212,7 +212,7 @@ function OptOutInner() {
 
 export default function OptOutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#08080c]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-surface-base" />}>
       <OptOutInner />
     </Suspense>
   );

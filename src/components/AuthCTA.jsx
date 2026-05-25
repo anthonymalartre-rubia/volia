@@ -32,7 +32,7 @@ export function NavAuth() {
     <>
       <Link
         href="/login"
-        className="px-4 py-2 text-sm text-content-secondary hover:text-white transition"
+        className="px-4 py-2 text-sm text-content-secondary hover:text-content-primary transition"
       >
         Se connecter
       </Link>

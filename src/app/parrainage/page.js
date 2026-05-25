@@ -63,10 +63,10 @@ export default function ParrainagePage() {
   if (!authed) return <GuestScreen />;
 
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white">
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+    <div className="dark min-h-screen bg-surface-base text-content-primary">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
+          <Link href="/dashboard" className="flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition">
             <ArrowLeft size={14} />
             Dashboard
           </Link>
@@ -84,7 +84,7 @@ export default function ParrainagePage() {
             Programme de parrainage
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">Invitez vos amis, gagnez des mois gratuits</h1>
-          <p className="text-base text-zinc-400 leading-relaxed">
+          <p className="text-base text-content-secondary leading-relaxed">
             Pour chaque ami qui devient client payant grâce à votre lien, vous gagnez <strong className="text-emerald-300">1 mois gratuit</strong> sur votre abonnement Volia. Pas de limite : 5 amis = 5 mois offerts.
           </p>
         </section>
@@ -109,7 +109,7 @@ export default function ParrainagePage() {
           <div className="rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-500/[0.06] to-indigo-500/[0.06] p-6">
             <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2">Votre lien de parrainage</div>
             <div className="flex items-center gap-2 mb-4 flex-wrap">
-              <code className="flex-1 px-3 py-2.5 rounded-lg bg-black/40 border border-white/10 font-mono text-sm text-white break-all">
+              <code className="flex-1 px-3 py-2.5 rounded-lg bg-surface-input border border-line font-mono text-sm text-content-primary break-all">
                 {shareUrl}
               </code>
               <button
@@ -120,22 +120,22 @@ export default function ParrainagePage() {
                 {copied ? 'Copié !' : 'Copier'}
               </button>
             </div>
-            <div className="text-xs text-zinc-400 mb-3">Partagez via :</div>
+            <div className="text-xs text-content-secondary mb-3">Partagez via :</div>
             <div className="flex gap-2 flex-wrap">
-              <a href={linkedinShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-white/[0.04] text-sm transition">
+              <a href={linkedinShareUrl} target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-surface-elevated/60 text-sm transition">
                 <LinkedinIcon size={14} className="text-blue-400" />
                 LinkedIn
               </a>
-              <a href={emailShareUrl} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-white/[0.04] text-sm transition">
-                <Mail size={14} className="text-zinc-400" />
+              <a href={emailShareUrl} className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-surface-elevated/60 text-sm transition">
+                <Mail size={14} className="text-content-secondary" />
                 Email
               </a>
               {typeof navigator !== 'undefined' && navigator.share && (
                 <button
                   onClick={() => navigator.share({ title: 'Volia', url: shareUrl })}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-white/[0.04] text-sm transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-white/10 hover:bg-surface-elevated/60 text-sm transition"
                 >
-                  <Share2 size={14} className="text-zinc-400" />
+                  <Share2 size={14} className="text-content-secondary" />
                   Partage natif
                 </button>
               )}
@@ -157,9 +157,9 @@ export default function ParrainagePage() {
         {referrals.length > 0 && (
           <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-8">
             <h2 className="text-xl font-bold mb-4">Vos filleuls ({referrals.length})</h2>
-            <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+            <div className="rounded-2xl border border-line bg-surface-elevated/40 overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-white/[0.02] border-b border-white/[0.06] text-xs text-zinc-400 uppercase tracking-wider">
+                <thead className="bg-surface-elevated/40 border-b border-line text-xs text-content-secondary uppercase tracking-wider">
                   <tr>
                     <th className="text-left px-4 py-3 font-semibold">Email</th>
                     <th className="text-left px-4 py-3 font-semibold">Statut</th>
@@ -168,12 +168,12 @@ export default function ParrainagePage() {
                 </thead>
                 <tbody>
                   {referrals.map((r) => (
-                    <tr key={r.id} className="border-b border-white/[0.04] last:border-0">
-                      <td className="px-4 py-3 text-zinc-200">{r.referred_email || '—'}</td>
+                    <tr key={r.id} className="border-b border-line last:border-0">
+                      <td className="px-4 py-3 text-content-secondary">{r.referred_email || '—'}</td>
                       <td className="px-4 py-3">
                         <StatusBadge status={r.status} />
                       </td>
-                      <td className="px-4 py-3 text-right text-xs text-zinc-500 tabular-nums">
+                      <td className="px-4 py-3 text-right text-xs text-content-tertiary tabular-nums">
                         {r.signed_up_at ? new Date(r.signed_up_at).toLocaleDateString('fr-FR') : '—'}
                       </td>
                     </tr>
@@ -186,19 +186,19 @@ export default function ParrainagePage() {
 
         {/* FAQ rapide */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
+          <div className="rounded-2xl border border-line bg-surface-elevated/40 p-5">
             <h3 className="text-base font-semibold mb-3">Questions fréquentes</h3>
-            <details className="group border-b border-white/[0.04] py-2.5">
-              <summary className="cursor-pointer text-sm font-medium text-zinc-200 group-open:text-white">Combien de filleuls puis-je parrainer ?</summary>
-              <p className="text-sm text-zinc-400 mt-2 leading-relaxed">Aucune limite. 10 filleuls = 10 mois bonus. Et vous pouvez accumuler les mois pour étendre votre abonnement quand vous voulez.</p>
+            <details className="group border-b border-line py-2.5">
+              <summary className="cursor-pointer text-sm font-medium text-content-secondary group-open:text-content-primary">Combien de filleuls puis-je parrainer ?</summary>
+              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Aucune limite. 10 filleuls = 10 mois bonus. Et vous pouvez accumuler les mois pour étendre votre abonnement quand vous voulez.</p>
             </details>
-            <details className="group border-b border-white/[0.04] py-2.5">
-              <summary className="cursor-pointer text-sm font-medium text-zinc-200 group-open:text-white">Mon filleul a aussi un bonus ?</summary>
-              <p className="text-sm text-zinc-400 mt-2 leading-relaxed">Pas pour l&apos;instant. La v1 récompense le parrain uniquement. On ajoutera un bonus filleul dans une version future.</p>
+            <details className="group border-b border-line py-2.5">
+              <summary className="cursor-pointer text-sm font-medium text-content-secondary group-open:text-content-primary">Mon filleul a aussi un bonus ?</summary>
+              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Pas pour l&apos;instant. La v1 récompense le parrain uniquement. On ajoutera un bonus filleul dans une version future.</p>
             </details>
             <details className="group py-2.5">
-              <summary className="cursor-pointer text-sm font-medium text-zinc-200 group-open:text-white">Quand mon bonus est-il crédité ?</summary>
-              <p className="text-sm text-zinc-400 mt-2 leading-relaxed">Dès que le filleul devient client payant (Solo, Pro ou Business). Notification email + in-app instantanée. Vous voyez le total dans le compteur "Mois gagnés".</p>
+              <summary className="cursor-pointer text-sm font-medium text-content-secondary group-open:text-content-primary">Quand mon bonus est-il crédité ?</summary>
+              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Dès que le filleul devient client payant (Solo, Pro ou Business). Notification email + in-app instantanée. Vous voyez le total dans le compteur "Mois gagnés".</p>
             </details>
           </div>
         </section>
@@ -239,7 +239,7 @@ function ApplyBonusCard({ bonus, onApplied }) {
             <h3 className="text-lg font-bold mb-1">
               Vous avez <span className="text-pink-300">{bonus} mois bonus</span> disponibles
             </h3>
-            <p className="text-sm text-zinc-400 leading-relaxed mb-3">
+            <p className="text-sm text-content-secondary leading-relaxed mb-3">
               Appliquez 1 mois bonus sur votre prochaine facture (100% off via coupon Stripe). Vous pouvez répéter l&apos;opération chaque mois jusqu&apos;à épuisement.
             </p>
             <button
@@ -260,10 +260,10 @@ function ApplyBonusCard({ bonus, onApplied }) {
 
 function StatCard({ icon: Icon, label, value, color, highlight }) {
   return (
-    <div className={`rounded-xl border ${highlight ? 'border-pink-500/30 bg-pink-500/[0.04]' : 'border-white/[0.06] bg-white/[0.02]'} p-4`}>
+    <div className={`rounded-xl border ${highlight ? 'border-pink-500/30 bg-pink-500/[0.04]' : 'border-line bg-surface-elevated/40'} p-4`}>
       <Icon size={16} className={`${color} mb-1.5`} />
-      <div className="text-2xl font-bold text-white tabular-nums">{value}</div>
-      <div className="text-xs text-zinc-500 mt-0.5">{label}</div>
+      <div className="text-2xl font-bold text-content-primary tabular-nums">{value}</div>
+      <div className="text-xs text-content-tertiary mt-0.5">{label}</div>
     </div>
   );
 }
@@ -273,8 +273,8 @@ function StatusBadge({ status }) {
     pending: { label: 'En attente', color: 'bg-amber-500/15 text-amber-300 border-amber-500/30' },
     qualified: { label: 'Payant ✓', color: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30' },
     rewarded: { label: 'Récompensé', color: 'bg-pink-500/15 text-pink-300 border-pink-500/30' },
-    expired: { label: 'Expiré', color: 'bg-zinc-500/15 text-zinc-400 border-zinc-500/30' },
-  }[status] || { label: status, color: 'bg-zinc-500/15 text-zinc-400' };
+    expired: { label: 'Expiré', color: 'bg-zinc-500/15 text-content-secondary border-zinc-500/30' },
+  }[status] || { label: status, color: 'bg-zinc-500/15 text-content-secondary' };
   return (
     <span className={`inline-block px-2 py-0.5 rounded-md text-[11px] font-medium border ${map.color}`}>
       {map.label}
@@ -284,17 +284,17 @@ function StatusBadge({ status }) {
 
 function Step({ num, title, desc }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+    <div className="rounded-xl border border-line bg-surface-elevated/40 p-4">
       <div className="text-3xl font-bold text-violet-400 mb-1.5">{num}.</div>
-      <div className="text-sm font-semibold text-zinc-100 mb-1">{title}</div>
-      <div className="text-xs text-zinc-400 leading-relaxed">{desc}</div>
+      <div className="text-sm font-semibold text-content-primary mb-1">{title}</div>
+      <div className="text-xs text-content-secondary leading-relaxed">{desc}</div>
     </div>
   );
 }
 
 function Loading() {
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-zinc-400 flex items-center justify-center">
+    <div className="dark min-h-screen bg-surface-base text-content-secondary flex items-center justify-center">
       <Loader2 size={20} className="animate-spin" />
     </div>
   );
@@ -302,7 +302,7 @@ function Loading() {
 
 function GuestScreen() {
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white overflow-hidden">
+    <div className="dark min-h-screen bg-surface-base text-content-primary overflow-hidden">
       {/* Background animé : 2 gradients flous + grid pattern subtil */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-violet-600/20 blur-[120px]" />
@@ -318,7 +318,7 @@ function GuestScreen() {
       </div>
 
       {/* Top nav */}
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1">
             <LogoIcon size="sm" className="mr-1.5" />
@@ -326,7 +326,7 @@ function GuestScreen() {
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/login?return=/parrainage" className="text-sm text-zinc-400 hover:text-white transition">Se connecter</Link>
+            <Link href="/login?return=/parrainage" className="text-sm text-content-secondary hover:text-content-primary transition">Se connecter</Link>
             <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">Essayer gratuit</Link>
           </div>
         </div>
@@ -342,8 +342,8 @@ function GuestScreen() {
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05] mb-6 bg-gradient-to-b from-white via-violet-100 to-violet-400 bg-clip-text text-transparent">
             Invitez vos amis,<br />gagnez des <span className="bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text">mois gratuits</span>
           </h1>
-          <p className="text-lg text-zinc-400 leading-relaxed max-w-2xl mx-auto mb-8">
-            <strong className="text-white">1 mois offert</strong> par filleul devenu client payant.
+          <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
+            <strong className="text-content-primary">1 mois offert</strong> par filleul devenu client payant.
             Et votre filleul reçoit aussi <strong className="text-pink-300">+1 mois bonus</strong> à l&apos;inscription.
             Pas de limite : 10 amis = 10 mois.
           </p>
@@ -352,17 +352,17 @@ function GuestScreen() {
           <div className="inline-flex items-center gap-6 px-6 py-4 rounded-2xl border border-violet-500/30 bg-gradient-to-r from-violet-500/[0.08] to-pink-500/[0.08] mb-10">
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-pink-300 to-violet-300 bg-clip-text text-transparent tabular-nums">+1</div>
-              <div className="text-[10px] text-zinc-400 uppercase tracking-wider mt-0.5">Mois parrain</div>
+              <div className="text-[10px] text-content-secondary uppercase tracking-wider mt-0.5">Mois parrain</div>
             </div>
-            <div className="text-zinc-600">+</div>
+            <div className="text-content-tertiary">+</div>
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-pink-300 to-violet-300 bg-clip-text text-transparent tabular-nums">+1</div>
-              <div className="text-[10px] text-zinc-400 uppercase tracking-wider mt-0.5">Mois filleul</div>
+              <div className="text-[10px] text-content-secondary uppercase tracking-wider mt-0.5">Mois filleul</div>
             </div>
-            <div className="text-zinc-600">=</div>
+            <div className="text-content-tertiary">=</div>
             <div className="text-center">
               <div className="text-3xl sm:text-4xl font-bold text-emerald-300 tabular-nums">2 mois</div>
-              <div className="text-[10px] text-zinc-400 uppercase tracking-wider mt-0.5">Win-win</div>
+              <div className="text-[10px] text-content-secondary uppercase tracking-wider mt-0.5">Win-win</div>
             </div>
           </div>
 
@@ -377,14 +377,14 @@ function GuestScreen() {
             </Link>
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/10 hover:bg-white/[0.04] text-white text-sm font-semibold transition"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/10 hover:bg-surface-elevated/60 text-content-primary text-sm font-semibold transition"
             >
               <Sparkles size={16} />
               Créer un compte
               <ArrowRight size={16} />
             </Link>
           </div>
-          <p className="text-xs text-zinc-500 mt-4">
+          <p className="text-xs text-content-tertiary mt-4">
             Plan Starter gratuit à vie · 100 prospects offerts chaque mois sans carte bancaire · le lien apparaît après connexion
           </p>
         </section>
@@ -392,7 +392,7 @@ function GuestScreen() {
         {/* Comment ça marche */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-center">Comment ça marche</h2>
-          <p className="text-sm text-zinc-400 text-center mb-10 max-w-xl mx-auto">
+          <p className="text-sm text-content-secondary text-center mb-10 max-w-xl mx-auto">
             3 étapes, 100% automatique. Le bonus est crédité dès que votre filleul devient client payant.
           </p>
           <div className="grid sm:grid-cols-3 gap-4">
@@ -425,18 +425,18 @@ function GuestScreen() {
 
         {/* Pourquoi c'est intéressant */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-16">
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8">
+          <div className="rounded-2xl border border-line bg-surface-elevated/40 p-6 sm:p-8">
             <div className="grid sm:grid-cols-2 gap-6 sm:gap-10 items-center">
               <div>
                 <h2 className="text-2xl font-bold mb-3">Pourquoi c&apos;est rentable</h2>
-                <p className="text-sm text-zinc-400 leading-relaxed mb-4">
-                  Volia coûte 19 à 99 €/mois. <strong className="text-white">Chaque ami payant = 19 à 99 € économisés</strong> sur votre prochain renouvellement.
+                <p className="text-sm text-content-secondary leading-relaxed mb-4">
+                  Volia coûte 19 à 99 €/mois. <strong className="text-content-primary">Chaque ami payant = 19 à 99 € économisés</strong> sur votre prochain renouvellement.
                 </p>
                 <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2 text-zinc-300"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Aucune limite de filleuls</li>
-                  <li className="flex items-start gap-2 text-zinc-300"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Crédit Stripe automatique (coupon dynamique)</li>
-                  <li className="flex items-start gap-2 text-zinc-300"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Mois cumulables pour étendre votre abonnement</li>
-                  <li className="flex items-start gap-2 text-zinc-300"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Bonus bienvenue pour votre filleul (double incentive)</li>
+                  <li className="flex items-start gap-2 text-content-secondary"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Aucune limite de filleuls</li>
+                  <li className="flex items-start gap-2 text-content-secondary"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Crédit Stripe automatique (coupon dynamique)</li>
+                  <li className="flex items-start gap-2 text-content-secondary"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Mois cumulables pour étendre votre abonnement</li>
+                  <li className="flex items-start gap-2 text-content-secondary"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Bonus bienvenue pour votre filleul (double incentive)</li>
                 </ul>
               </div>
               {/* Mini scenarios */}
@@ -454,7 +454,7 @@ function GuestScreen() {
           <div className="rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/[0.08] to-violet-500/[0.08] p-8 text-center">
             <Gift size={32} className="text-pink-300 mx-auto mb-3" />
             <h3 className="text-2xl font-bold mb-2">Prêt à parrainer ?</h3>
-            <p className="text-sm text-zinc-400 mb-6 max-w-md mx-auto">
+            <p className="text-sm text-content-secondary mb-6 max-w-md mx-auto">
               Connectez-vous pour récupérer votre lien unique. Si vous n&apos;avez pas encore de compte, créez-en un en 30 secondes.
             </p>
             <div className="flex flex-col sm:flex-row gap-2 justify-center">
@@ -462,7 +462,7 @@ function GuestScreen() {
                 <LogIn size={14} />
                 Se connecter
               </Link>
-              <Link href="/signup" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 hover:bg-white/[0.04] text-white text-sm font-semibold transition">
+              <Link href="/signup" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 hover:bg-surface-elevated/60 text-content-primary text-sm font-semibold transition">
                 <Sparkles size={14} />
                 Créer un compte
               </Link>
@@ -471,13 +471,13 @@ function GuestScreen() {
         </section>
       </main>
 
-      <footer className="border-t border-white/[0.06] py-8 mt-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
+      <footer className="border-t border-line py-8 mt-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-content-tertiary">
           <span>© 2026 Volia.fr</span>
           <div className="flex gap-4">
-            <Link href="/changelog" className="hover:text-zinc-300">Changelog</Link>
-            <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>
-            <Link href="/rgpd" className="hover:text-zinc-300">RGPD</Link>
+            <Link href="/changelog" className="hover:text-content-secondary">Changelog</Link>
+            <Link href="/cgu" className="hover:text-content-secondary">CGU</Link>
+            <Link href="/rgpd" className="hover:text-content-secondary">RGPD</Link>
           </div>
         </div>
       </footer>
@@ -490,11 +490,11 @@ function GuestStep({ num, title, desc, icon, gradient, border }) {
     <div className={`rounded-2xl border ${border} bg-gradient-to-br ${gradient} p-5 relative overflow-hidden`}>
       <div className="absolute top-2 right-3 text-5xl font-bold text-white/[0.04] select-none">{num}</div>
       <div className="relative">
-        <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.08] border border-white/[0.1] mb-3">
+        <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-surface-elevated border border-line-hover mb-3">
           {icon}
         </div>
         <h3 className="text-base font-semibold mb-1.5 leading-tight">{title}</h3>
-        <p className="text-xs text-zinc-400 leading-relaxed">{desc}</p>
+        <p className="text-xs text-content-secondary leading-relaxed">{desc}</p>
       </div>
     </div>
   );
@@ -505,16 +505,16 @@ function Scenario({ amis, mois, total, plan, featured = false }) {
     <div className={`rounded-xl p-3 flex items-center gap-3 ${
       featured
         ? 'border-2 border-pink-500/40 bg-gradient-to-r from-pink-500/[0.08] to-violet-500/[0.08]'
-        : 'border border-white/[0.06] bg-white/[0.02]'
+        : 'border border-line bg-surface-elevated/40'
     }`}>
       <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-violet-500/15 border border-violet-500/30 flex items-center justify-center">
         <Users size={14} className="text-violet-300" />
       </div>
       <div className="flex-1 text-xs leading-snug">
-        <div className="text-zinc-100 font-medium">
+        <div className="text-content-primary font-medium">
           <span className="text-violet-300 font-bold tabular-nums">{amis}</span> amis payants
         </div>
-        <div className="text-zinc-500">
+        <div className="text-content-tertiary">
           = <strong className="text-pink-300 tabular-nums">{mois} mois</strong> offerts ({total} pour Plan {plan})
         </div>
       </div>

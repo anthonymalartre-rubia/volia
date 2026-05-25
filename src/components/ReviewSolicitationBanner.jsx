@@ -74,21 +74,21 @@ export default function ReviewSolicitationBanner({ exportsCount = 0 }) {
         strategy="lazyOnload"
       />
 
-      <div className="fixed bottom-4 left-4 z-40 w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-zinc-900 to-black shadow-2xl shadow-emerald-900/20 overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-500">
+      <div className="fixed bottom-4 left-4 z-40 w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl border border-emerald-500/30 bg-surface-card shadow-2xl shadow-emerald-500/10 overflow-hidden animate-in slide-in-from-bottom-4 fade-in duration-500">
         <div className="p-4">
           <div className="flex items-start justify-between gap-2 mb-2">
             <div>
-              <h3 className="text-sm font-bold text-white">
+              <h3 className="text-sm font-bold text-content-primary">
                 Vous aimez Volia ?
               </h3>
-              <p className="text-[12px] text-zinc-400 leading-relaxed mt-0.5">
+              <p className="text-[12px] text-content-secondary leading-relaxed mt-0.5">
                 Notez-nous en 1 clic ci-dessous. 30 secondes pas plus.
               </p>
             </div>
             <button
               type="button"
               onClick={handleDismiss}
-              className="text-zinc-500 hover:text-zinc-200 transition flex-shrink-0 mt-0.5"
+              className="text-content-tertiary hover:text-content-secondary transition flex-shrink-0 mt-0.5"
               aria-label="Fermer"
             >
               <X size={14} />
@@ -120,7 +120,7 @@ export default function ReviewSolicitationBanner({ exportsCount = 0 }) {
           <button
             type="button"
             onClick={handleDismiss}
-            className="block w-full text-center mt-2 text-[11px] text-zinc-500 hover:text-zinc-300 transition"
+            className="block w-full text-center mt-2 text-[11px] text-content-tertiary hover:text-content-secondary transition"
           >
             Plus tard
           </button>

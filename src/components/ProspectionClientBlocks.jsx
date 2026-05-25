@@ -57,7 +57,7 @@ export function LeadMagnetBlock({ category }) {
         <div className="rounded-2xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/[0.08] to-violet-500/[0.06] p-8 text-center">
           <CheckCircle2 size={32} className="text-emerald-400 mx-auto mb-3" />
           <h3 className="text-xl font-bold mb-2">Email envoyé !</h3>
-          <p className="text-sm text-zinc-300 max-w-md mx-auto">
+          <p className="text-sm text-content-secondary max-w-md mx-auto">
             Les 20 templates cold email pour {sectorLabel} sont dans votre boîte mail.
             Vérifiez vos spams si vous ne les voyez pas dans 2 min.
           </p>
@@ -80,7 +80,7 @@ export function LeadMagnetBlock({ category }) {
         <h3 className="text-xl sm:text-2xl font-bold mb-2 leading-tight">
           Téléchargez 20 templates cold email B2B pour {sectorLabel}
         </h3>
-        <p className="text-sm text-zinc-400 mb-5 leading-relaxed">
+        <p className="text-sm text-content-secondary mb-5 leading-relaxed">
           PDF de 30 pages : intros qui taquinent la curiosité, accroches qui s&apos;adressent vraiment au secteur, lignes d&apos;objet à fort taux d&apos;ouverture. Testé sur 50 000+ envois.
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
@@ -90,7 +90,7 @@ export function LeadMagnetBlock({ category }) {
             placeholder="votre@email.pro"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="flex-1 px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500 transition"
+            className="flex-1 px-4 py-3 rounded-xl bg-surface-base/40 border border-white/10 text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 transition"
           />
           <button
             type="submit"
@@ -104,7 +104,7 @@ export function LeadMagnetBlock({ category }) {
         {status === 'error' && (
           <p className="text-xs text-red-300 mt-2">⚠ {errorMsg}</p>
         )}
-        <p className="text-[10px] text-zinc-500 mt-3 leading-relaxed">
+        <p className="text-[10px] text-content-tertiary mt-3 leading-relaxed">
           🔒 Aucun spam — uniquement le PDF + 1 email de bienvenue. Désabonnement 1 clic. RGPD compliant.
         </p>
       </div>
@@ -141,8 +141,8 @@ export function StickyTOC({ sections = [] }) {
 
   return (
     <aside className="hidden xl:block fixed top-24 right-6 w-56 z-30">
-      <nav className="rounded-xl border border-white/[0.06] bg-black/40 backdrop-blur-md p-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <div className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+      <nav className="rounded-xl border border-line bg-black/40 backdrop-blur-md p-4 max-h-[calc(100vh-8rem)] overflow-y-auto">
+        <div className="text-[10px] font-semibold text-content-secondary uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
           <BookOpenLine size={11} />
           Sur cette page
         </div>
@@ -154,7 +154,7 @@ export function StickyTOC({ sections = [] }) {
                 className={`block text-xs leading-snug transition border-l-2 pl-2.5 ${
                   active === s.id
                     ? 'border-violet-500 text-violet-300 font-medium'
-                    : 'border-white/[0.05] text-zinc-500 hover:text-zinc-200 hover:border-white/30'
+                    : 'border-line text-content-tertiary hover:text-content-secondary hover:border-line-hover'
                 }`}
               >
                 {s.label}
@@ -215,7 +215,7 @@ export function StickyCtaBar({ category, department, region, stats }) {
         </Link>
         <button
           onClick={() => setDismissed(true)}
-          className="p-2 text-white/70 hover:text-white transition"
+          className="p-2 text-content-primary/70 hover:text-content-primary transition"
           aria-label="Fermer"
         >
           <X size={16} />

@@ -71,7 +71,7 @@ function InfoTooltip({ text, wide }) {
       {show && mounted && createPortal(
         <div
           style={style}
-          className={`px-2.5 py-1.5 bg-zinc-900 border border-zinc-700 rounded-lg text-[10px] text-zinc-200 leading-relaxed pointer-events-none z-[99999] shadow-2xl whitespace-normal ${wide ? 'w-56' : 'w-44'}`}
+          className={`px-2.5 py-1.5 bg-surface-card border border-line-hover rounded-lg text-[10px] text-content-secondary leading-relaxed pointer-events-none z-[99999] shadow-2xl whitespace-normal ${wide ? 'w-56' : 'w-44'}`}
         >
           {text}
         </div>,
@@ -854,7 +854,7 @@ export default memo(function ResultsPanel({
               onClick={() => onActiveFolder('archived')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium border whitespace-nowrap transition-all ${
                 activeFolder === 'archived'
-                  ? 'bg-zinc-500/10 border-zinc-500/30 text-zinc-300'
+                  ? 'bg-zinc-500/10 border-zinc-500/30 text-content-secondary'
                   : 'border-transparent text-content-faint hover:text-content-tertiary hover:bg-surface-card'
               }`}
               title="Prospects enrichis sans email trouve"

@@ -59,7 +59,7 @@ export default function NewsletterCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'loading' || status === 'success'}
-          className="flex-1 px-3 py-2 rounded-lg bg-black/30 border border-white/[0.08] text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500 transition"
+          className="flex-1 px-3 py-2 rounded-lg bg-surface-base/30 border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 transition"
         />
         <button
           type="submit"
@@ -83,7 +83,7 @@ export default function NewsletterCapture({
         <span className="text-[11px] font-semibold text-violet-300 uppercase tracking-wider">Newsletter mensuelle</span>
       </div>
       <h3 className="text-xl sm:text-2xl font-bold mb-2 leading-tight">{title}</h3>
-      <p className="text-sm text-zinc-400 leading-relaxed mb-5">{subtitle}</p>
+      <p className="text-sm text-content-secondary leading-relaxed mb-5">{subtitle}</p>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
         <input
           type="email"
@@ -92,7 +92,7 @@ export default function NewsletterCapture({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === 'loading' || status === 'success'}
-          className="flex-1 px-4 py-3 rounded-xl bg-black/40 border border-white/10 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-violet-500 transition"
+          className="flex-1 px-4 py-3 rounded-xl bg-surface-base/40 border border-white/10 text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 transition"
         />
         <button
           type="submit"
@@ -105,7 +105,7 @@ export default function NewsletterCapture({
       </form>
       {status === 'error' && <p className="text-xs text-red-300 mt-2">⚠ {message}</p>}
       {status === 'success' && <p className="text-xs text-emerald-300 mt-2">✓ {message}</p>}
-      <p className="text-[10px] text-zinc-500 mt-3">
+      <p className="text-[10px] text-content-tertiary mt-3">
         🔒 Aucun spam · 1 email/mois max · désinscription 1 clic. RGPD compliant.
       </p>
     </div>

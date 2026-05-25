@@ -546,12 +546,12 @@ function ComponentsSection() {
       <Showcase darkBg>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <MarketingCard size="sm">
-            <div className="text-white font-semibold mb-1">Default · sm</div>
-            <div className="text-white/60 text-xs">Card neutre marketing.</div>
+            <div className="text-content-primary font-semibold mb-1">Default · sm</div>
+            <div className="text-content-primary/60 text-xs">Card neutre marketing.</div>
           </MarketingCard>
           <MarketingCard variant="highlighted" size="md">
-            <div className="text-white font-semibold mb-1">Highlighted · md</div>
-            <div className="text-white/70 text-xs">Pricing card recommandée.</div>
+            <div className="text-content-primary font-semibold mb-1">Highlighted · md</div>
+            <div className="text-content-primary/70 text-xs">Pricing card recommandée.</div>
           </MarketingCard>
           <MarketingCard
             variant="persona"
@@ -620,7 +620,7 @@ function Showcase({ children, darkBg = false }) {
   return (
     <div
       className={`rounded-2xl border border-line p-6 mb-4 ${
-        darkBg ? 'bg-zinc-950' : 'bg-surface-card'
+        darkBg ? 'bg-surface-base' : 'bg-surface-card'
       }`}
     >
       {children}
@@ -676,11 +676,11 @@ function PatternsSection() {
               Recommandé
             </div>
             <div className="text-center mb-6">
-              <div className="text-sm text-white/70 mb-1">Pro</div>
-              <div className="text-4xl font-bold text-white">
-                49<span className="text-xl text-white/60">€/mois</span>
+              <div className="text-sm text-content-primary/70 mb-1">Pro</div>
+              <div className="text-4xl font-bold text-content-primary">
+                49<span className="text-xl text-content-primary/60">€/mois</span>
               </div>
-              <div className="text-xs text-white/60 mt-1">5 000 prospects · cascade waterfall</div>
+              <div className="text-xs text-content-primary/60 mt-1">5 000 prospects · cascade waterfall</div>
             </div>
             <ul className="space-y-2 mb-6">
               {[
@@ -689,7 +689,7 @@ function PatternsSection() {
                 'Export CSV + Zoho CRM',
                 'Filtrage RGPD inclus',
               ].map((f) => (
-                <li key={f} className="flex items-center gap-2 text-sm text-white/90">
+                <li key={f} className="flex items-center gap-2 text-sm text-content-primary/90">
                   <Check size={14} className="text-emerald-400 shrink-0" />
                   {f}
                 </li>

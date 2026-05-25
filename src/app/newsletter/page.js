@@ -17,10 +17,10 @@ export const metadata = {
 
 export default function NewsletterPage() {
   return (
-    <div className="dark min-h-screen bg-[#08080c] text-white">
-      <nav className="fixed top-0 w-full z-50 bg-[#08080c]/70 backdrop-blur-2xl border-b border-white/[0.06]">
+    <div className="dark min-h-screen bg-surface-base text-content-primary">
+      <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition">
+          <Link href="/" className="flex items-center gap-2 text-sm text-content-secondary hover:text-content-primary transition">
             <ArrowLeft size={14} />
             Volia
           </Link>
@@ -39,7 +39,7 @@ export default function NewsletterPage() {
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-4 bg-gradient-to-b from-white to-zinc-400 bg-clip-text text-transparent">
             La prospection B2B France en 5 minutes/mois
           </h1>
-          <p className="text-lg text-zinc-400 leading-relaxed max-w-2xl mx-auto">
+          <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto">
             1 email par mois, le 1er du mois. Stats sectorielles, templates qui convertissent, retours d&apos;expérience terrain. Pas de spam, pas de tracking pushy, désabonnement 1 clic.
           </p>
         </section>
@@ -62,7 +62,7 @@ export default function NewsletterPage() {
         </section>
 
         <section className="max-w-3xl mx-auto px-4 sm:px-6">
-          <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+          <div className="rounded-2xl border border-line bg-surface-elevated/40 p-6">
             <h3 className="text-base font-semibold mb-3">Engagements newsletter</h3>
             <ul className="space-y-2.5">
               <Engagement>1 email par mois maximum, jamais plus.</Engagement>
@@ -75,13 +75,13 @@ export default function NewsletterPage() {
         </section>
       </main>
 
-      <footer className="border-t border-white/[0.06] py-8 mt-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-zinc-500">
+      <footer className="border-t border-line py-8 mt-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-content-tertiary">
           <span>© 2026 Volia.fr</span>
           <div className="flex gap-4">
-            <Link href="/cgu" className="hover:text-zinc-300">CGU</Link>
-            <Link href="/confidentialite" className="hover:text-zinc-300">Confidentialité</Link>
-            <Link href="/rgpd" className="hover:text-zinc-300">RGPD</Link>
+            <Link href="/cgu" className="hover:text-content-secondary">CGU</Link>
+            <Link href="/confidentialite" className="hover:text-content-secondary">Confidentialité</Link>
+            <Link href="/rgpd" className="hover:text-content-secondary">RGPD</Link>
           </div>
         </div>
       </footer>
@@ -91,17 +91,17 @@ export default function NewsletterPage() {
 
 function FeatureCard({ icon: Icon, title, desc }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+    <div className="rounded-xl border border-line bg-surface-elevated/40 p-5">
       <Icon size={20} className="text-violet-400 mb-3" />
       <h3 className="text-sm font-semibold mb-1.5">{title}</h3>
-      <p className="text-xs text-zinc-400 leading-relaxed">{desc}</p>
+      <p className="text-xs text-content-secondary leading-relaxed">{desc}</p>
     </div>
   );
 }
 
 function Engagement({ children }) {
   return (
-    <li className="flex items-start gap-2 text-sm text-zinc-300">
+    <li className="flex items-start gap-2 text-sm text-content-secondary">
       <CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" />
       <span>{children}</span>
     </li>

@@ -13,7 +13,7 @@
 
 const VARIANTS = {
   default: 'bg-surface-card border border-line',
-  marketing: 'bg-white/[0.02] border border-white/[0.06]',
+  marketing: 'bg-surface-elevated/40 border border-line',
   highlighted:
     'bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] border-2 border-violet-500/30',
   interactive:

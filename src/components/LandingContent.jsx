@@ -535,54 +535,75 @@ export default function LandingContent() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="py-24 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.howItWorks.label')}</p>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              {t('landing.howItWorks.title')}
-            </h2>
-            <p className="text-content-tertiary text-lg max-w-xl mx-auto">
-              {t('landing.howItWorks.desc')}
-            </p>
-          </div>
+      {/* ──────────────────────────────────────────────────────────────
+          HOW IT WORKS — steps avec gros numéros + ligne connectrice
+          BG : violet pastel pour rythme visuel vs sections white
+       */}
+      <section id="how-it-works" className="py-28 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-violet-50/40 via-indigo-50/20 to-white">
+        <div className="max-w-6xl mx-auto">
+          <MotionInView>
+            <div className="text-center mb-20">
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">{t('landing.howItWorks.label')}</p>
+              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                {t('landing.howItWorks.title')}
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-xl mx-auto">
+                {t('landing.howItWorks.desc')}
+              </p>
+            </div>
+          </MotionInView>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                step: '01',
-                icon: Search,
-                title: t('landing.howItWorks.step1'),
-                desc: t('landing.howItWorks.step1Desc'),
-                gradient: 'from-violet-500 to-indigo-600',
-              },
-              {
-                step: '02',
-                icon: Zap,
-                title: t('landing.howItWorks.step2'),
-                desc: t('landing.howItWorks.step2Desc'),
-                gradient: 'from-indigo-500 to-blue-600',
-              },
-              {
-                step: '03',
-                icon: Download,
-                title: t('landing.howItWorks.step3'),
-                desc: t('landing.howItWorks.step3Desc'),
-                gradient: 'from-blue-500 to-cyan-600',
-              },
-            ].map((item) => (
-              <div key={item.step} className="relative">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg flex-shrink-0`}>
-                    <item.icon size={20} className="text-white" />
-                  </div>
-                  <span className="text-4xl font-bold font-mono text-white/10">{item.step}</span>
-                </div>
-                <h3 className="font-semibold text-lg mb-3">{item.title}</h3>
-                <p className="text-sm text-content-tertiary leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
+          {/* Steps avec ligne connectrice horizontale (desktop) */}
+          <div className="relative">
+            {/* Ligne connectrice horizontale au milieu (desktop only) */}
+            <div className="hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-gradient-to-r from-violet-300 via-indigo-300 to-cyan-300 -z-0" />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative z-10">
+              {[
+                {
+                  step: '01',
+                  icon: Search,
+                  title: t('landing.howItWorks.step1'),
+                  desc: t('landing.howItWorks.step1Desc'),
+                  gradient: 'from-violet-500 to-indigo-600',
+                  ring: 'ring-violet-100',
+                },
+                {
+                  step: '02',
+                  icon: Zap,
+                  title: t('landing.howItWorks.step2'),
+                  desc: t('landing.howItWorks.step2Desc'),
+                  gradient: 'from-indigo-500 to-blue-600',
+                  ring: 'ring-indigo-100',
+                },
+                {
+                  step: '03',
+                  icon: Download,
+                  title: t('landing.howItWorks.step3'),
+                  desc: t('landing.howItWorks.step3Desc'),
+                  gradient: 'from-blue-500 to-cyan-600',
+                  ring: 'ring-blue-100',
+                },
+              ].map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <MotionInView key={item.step} delay={i * 150}>
+                    <div className="text-center group">
+                      {/* Gros cercle numéroté avec icône au centre */}
+                      <div className={`relative w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-xl shadow-violet-500/20 ring-8 ${item.ring} group-hover:scale-110 group-hover:shadow-2xl transition-all duration-300`}>
+                        <Icon size={32} className="text-white" />
+                        {/* Badge numéro flottant */}
+                        <div className="absolute -top-2 -right-2 w-9 h-9 rounded-full bg-white border-2 border-violet-200 flex items-center justify-center shadow-md">
+                          <span className="text-sm font-bold font-mono text-violet-700">{item.step}</span>
+                        </div>
+                      </div>
+                      <h3 className="font-bold text-xl mb-3 text-content-primary">{item.title}</h3>
+                      <p className="text-base text-content-secondary leading-relaxed max-w-xs mx-auto">{item.desc}</p>
+                    </div>
+                  </MotionInView>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -619,21 +640,25 @@ export default function LandingContent() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-4xl mx-auto">
+      {/* \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+          STATS \u2014 banderole chiffres cl\u00E9s, gros et impactants
+       */}
+      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-br from-zinc-50 via-white to-violet-50/30">
+        <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {[
-              { value: '150+', label: t('landing.stats.categories'), sub: t('landing.stats.categoriesSub') },
-              { value: '8', label: t('landing.stats.countries'), sub: '\u{1F1EB}\u{1F1F7} \u{1F1E7}\u{1F1EA} \u{1F1E8}\u{1F1ED} \u{1F1F1}\u{1F1FA} \u{1F1E9}\u{1F1EA} \u{1F1EC}\u{1F1E7} \u{1F1EA}\u{1F1F8} \u{1F1EE}\u{1F1F9}' },
-              { value: '2', label: t('landing.stats.sources'), sub: t('landing.stats.sourcesSub') },
-              { value: '49\u20AC', label: t('landing.stats.vs'), sub: t('landing.stats.vsSub') },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-4xl sm:text-5xl font-bold font-mono bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">{stat.value}</div>
-                <div className="text-sm text-content-secondary mt-2">{stat.label}</div>
-                <div className="text-[10px] text-content-tertiary mt-0.5">{stat.sub}</div>
-              </div>
+              { value: '150+', label: t('landing.stats.categories'), sub: t('landing.stats.categoriesSub'), color: 'from-violet-600 to-indigo-700' },
+              { value: '8', label: t('landing.stats.countries'), sub: '\u{1F1EB}\u{1F1F7} \u{1F1E7}\u{1F1EA} \u{1F1E8}\u{1F1ED} \u{1F1F1}\u{1F1FA} \u{1F1E9}\u{1F1EA} \u{1F1EC}\u{1F1E7} \u{1F1EA}\u{1F1F8} \u{1F1EE}\u{1F1F9}', color: 'from-indigo-600 to-blue-700' },
+              { value: '2', label: t('landing.stats.sources'), sub: t('landing.stats.sourcesSub'), color: 'from-blue-600 to-cyan-700' },
+              { value: '49\u20AC', label: t('landing.stats.vs'), sub: t('landing.stats.vsSub'), color: 'from-emerald-600 to-teal-700' },
+            ].map((stat, i) => (
+              <MotionInView key={stat.label} delay={i * 100}>
+                <div className="text-5xl sm:text-6xl lg:text-7xl font-bold font-mono bg-gradient-to-br ${stat.color} bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }}>
+                  <span className={`bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}>{stat.value}</span>
+                </div>
+                <div className="text-sm font-semibold text-content-primary mt-3">{stat.label}</div>
+                <div className="text-[10px] text-content-tertiary mt-1">{stat.sub}</div>
+              </MotionInView>
             ))}
           </div>
         </div>
@@ -760,15 +785,17 @@ export default function LandingContent() {
       </section>
 
       {/* Full Competitor Comparison */}
-      <section id="vs-concurrence" className="py-24 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.competition.label')}</p>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              {t('landing.competition.title')}
-            </h2>
-            <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.competition.desc') }} />
-          </div>
+      <section id="vs-concurrence" className="py-28 px-4 sm:px-6 border-t border-line">
+        <div className="max-w-6xl mx-auto">
+          <MotionInView>
+            <div className="text-center mb-16">
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">{t('landing.competition.label')}</p>
+              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                {t('landing.competition.title')}
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.competition.desc') }} />
+            </div>
+          </MotionInView>
 
           <div className="p-1 rounded-2xl bg-gradient-to-b from-violet-500/20 to-transparent">
             <div className="p-6 sm:p-8 rounded-2xl bg-surface-card border border-line">
@@ -890,16 +917,17 @@ export default function LandingContent() {
         />
       </section>
 
-      <section id="pricing" className="py-24 px-4 sm:px-6 border-t border-line">
+      <section id="pricing" className="py-28 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/30 to-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.pricing.label')}</p>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              {t('landing.pricing.title')}
-            </h2>
-            <p className="text-content-tertiary text-lg max-w-2xl mx-auto mb-6">
-              {t('landing.pricing.desc')}
-            </p>
+          <MotionInView>
+            <div className="text-center mb-12">
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">{t('landing.pricing.label')}</p>
+              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                {t('landing.pricing.title')}
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-2xl mx-auto mb-6">
+                {t('landing.pricing.desc')}
+              </p>
             {/* Banderole économies vs concurrents */}
             <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium">
               <TrendingDown size={14} />
@@ -928,7 +956,8 @@ export default function LandingContent() {
                 </span>
               </button>
             </div>
-          </div>
+            </div>
+          </MotionInView>
 
           {/* 4 cards : Starter / Solo / Pro (recommended) / Business */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -999,21 +1028,57 @@ export default function LandingContent() {
       {/* FAQ */}
       <FAQSection />
 
-      {/* Final CTA */}
-      <section className="relative py-28 px-4 sm:px-6 border-t border-line overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-violet-600/[0.08] via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-3xl mx-auto text-center relative">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            {t('landing.cta.title')}
+      {/* ──────────────────────────────────────────────────────────────
+          FINAL CTA — gradient mesh hero-like impactant
+       */}
+      <section className="relative py-32 px-4 sm:px-6 border-t border-line overflow-hidden">
+        {/* Gradient mesh background — wow finish */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-indigo-50 to-pink-50 pointer-events-none" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-300/30 rounded-full blur-3xl pointer-events-none animate-pulse" style={{ animationDuration: '6s' }} />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-300/30 rounded-full blur-3xl pointer-events-none animate-pulse" style={{ animationDuration: '8s' }} />
+
+        <MotionInView className="max-w-3xl mx-auto text-center relative z-10">
+          {/* Badge animé */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-violet-200 shadow-sm text-xs mb-6 font-semibold">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span className="text-violet-700">Démarrage en 30 secondes</span>
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight tracking-tight">
+            <span className="text-content-primary">{t('landing.cta.title')}</span>
           </h2>
-          <p className="text-content-tertiary text-lg mb-3 max-w-xl mx-auto">
+          <p className="text-content-secondary text-lg sm:text-xl mb-3 max-w-xl mx-auto">
             {t('landing.cta.desc')}
           </p>
-          <p className="text-sm text-violet-400 font-semibold mb-8">
+          <p className="text-sm text-violet-700 font-semibold mb-10">
             {t('landing.cta.sub')}
           </p>
-          <FooterCTA />
-        </div>
+
+          {/* CTAs renforcés */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+            <Link
+              href="/signup"
+              className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/50 hover:-translate-y-0.5 transition-all text-base"
+            >
+              Démarrer gratuitement
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link
+              href="#pricing"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white hover:bg-violet-50 border-2 border-violet-200 hover:border-violet-400 text-content-primary font-semibold transition-all text-base"
+            >
+              Voir les tarifs
+            </Link>
+          </div>
+
+          {/* Trust signal final */}
+          <p className="text-xs text-content-tertiary">
+            Sans carte bancaire · 100 prospects gratuits · Annulation en 1 clic
+          </p>
+        </MotionInView>
       </section>
 
       </main>

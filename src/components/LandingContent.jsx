@@ -166,25 +166,28 @@ export default function LandingContent() {
 
             {/* ─── COLONNE GAUCHE : Copy ─── */}
             <div className="text-left animate-in fade-in slide-in-from-bottom-4 duration-700">
-              {/* Badge "Le moins cher" — renforcé (border-2, shadow plus prononcé) */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-emerald-100 to-violet-100 border-2 border-emerald-300 text-xs mb-6 font-medium shadow-sm shadow-emerald-500/10">
-                <TrendingDown size={12} className="text-emerald-600" />
-                <span className="text-emerald-700 font-bold">LE MOINS CHER DU MARCHÉ FRANÇAIS</span>
+              {/* Badge "Suite SaaS" — repositionne Volia comme plateforme, pas outil unique */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-blue-100 to-emerald-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
+                <Layers size={12} className="text-violet-600" />
+                <span className="text-violet-700 font-bold">SUITE SAAS B2B FRANÇAISE · 3 MODULES</span>
               </div>
 
-              {/* H1 MASSIVE — outcome-focused : 1 000 prospects, 30 secondes */}
+              {/* H1 MASSIVE — Trouvez. Contactez. Convertissez. — 3 modules en un seul claim */}
               <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-bold tracking-tight leading-[1.02] mb-6">
-                <span className="text-content-primary">Trouvez </span>
-                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">1 000 prospects</span>
-                <span className="text-content-primary"> qualifiés en France. </span>
-                <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent">En 30 secondes.</span>
+                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Trouvez.</span>{' '}
+                <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Contactez.</span>{' '}
+                <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent">Convertissez.</span>
+                <br />
+                <span className="text-content-primary">Tout dans Volia.</span>
               </h1>
 
-              {/* Sous-titre — pain + benefit + preuve sociale */}
+              {/* Sous-titre — positionne la suite complète + comparatif stack */}
               <p className="text-lg sm:text-xl text-content-secondary mb-8 leading-relaxed max-w-xl">
-                Stop les 8 h/jour sur LinkedIn. Volia extrait{' '}
-                <strong className="text-content-primary font-semibold">emails pros + téléphones</strong> de 287 000+ entreprises françaises.{' '}
-                <strong className="text-emerald-700 font-semibold">5× moins cher qu&apos;Apollo</strong>, 100 % conforme RGPD.
+                La suite SaaS B2B française qui remplace{' '}
+                <strong className="text-content-primary font-semibold">Apollo + Lemlist + HubSpot</strong>.{' '}
+                <strong className="text-violet-700">Prospection</strong>,{' '}
+                <strong className="text-blue-700">Campagnes</strong> et{' '}
+                <strong className="text-emerald-700">CRM</strong> dans le même outil, dès 19&nbsp;€/mois.
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
@@ -228,101 +231,138 @@ export default function LandingContent() {
                 </div>
               </div>
 
-              {/* Trust badges */}
+              {/* Trust badges — orientés "économie suite" */}
               <div className="flex items-center gap-4 text-xs text-content-tertiary flex-wrap">
                 <span className="inline-flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Sans carte bancaire
+                  Économisez ~250&nbsp;€/mois vs stack équivalente
                 </span>
                 <span>·</span>
-                <span>Starter gratuit à vie</span>
+                <span>Sans carte bancaire</span>
                 <span>·</span>
                 <span className="font-medium">Conforme RGPD</span>
               </div>
             </div>
 
             {/* ─── COLONNE DROITE : Product mockup ─── */}
+            {/* Refonte : 3 cards empilées montrant le flow Prospection → Campagnes → CRM */}
             <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150">
-              {/* Floating "live results" sticker */}
+              {/* Floating "live" sticker */}
               <div className="absolute -top-4 -left-4 z-20 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 shadow-md flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="text-xs font-semibold text-emerald-700">Recherche en direct</span>
+                <span className="text-xs font-semibold text-emerald-700">Flow en direct · 3 modules</span>
               </div>
 
-              {/* The mockup card */}
-              <div className="relative rounded-2xl bg-white border border-line shadow-2xl shadow-violet-500/10 overflow-hidden">
-                {/* Header */}
-                <div className="flex items-center justify-between px-5 py-3.5 border-b border-line bg-gradient-to-r from-violet-50 to-indigo-50">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                    </div>
-                    <div className="ml-3 text-xs font-mono text-content-tertiary">volia.fr/dashboard</div>
-                  </div>
-                  <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-semibold">234 résultats</div>
-                </div>
+              <div className="space-y-3">
 
-                {/* Search bar mock */}
-                <div className="px-5 py-3 border-b border-line flex items-center gap-3">
-                  <Search size={14} className="text-violet-500" />
-                  <span className="text-sm text-content-secondary font-medium">Restaurants · Paris (75)</span>
-                </div>
-
-                {/* Results table */}
-                <div className="divide-y divide-line">
-                  {[
-                    { name: 'La Bonne Table', email: 'contact@labonnetable.fr', score: 'Vérifié', color: 'emerald', avatar: '🍽️' },
-                    { name: 'Pasta Roma', email: 'info@pastaroma.fr', score: 'Vérifié', color: 'emerald', avatar: '🍝' },
-                    { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr', score: 'Google', color: 'amber', avatar: '🥖' },
-                    { name: 'Le Petit Bistrot', email: 'reservation@petitbistrot.fr', score: 'Vérifié', color: 'emerald', avatar: '🍷' },
-                    { name: 'Sushi Lounge Paris', email: 'contact@sushilounge.fr', score: 'Vérifié', color: 'emerald', avatar: '🍱' },
-                  ].map((row, i) => (
-                    <div
-                      key={i}
-                      className="flex items-center gap-3 px-5 py-3 hover:bg-violet-50/50 transition-colors animate-in fade-in slide-in-from-right-4"
-                      style={{ animationDelay: `${300 + i * 100}ms`, animationDuration: '600ms', animationFillMode: 'both' }}
-                    >
-                      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-100 to-indigo-100 flex items-center justify-center text-lg flex-shrink-0">
-                        {row.avatar}
+                {/* CARD 1 — PROSPECTION (violet) */}
+                <div className="relative rounded-2xl bg-white border-2 border-violet-200 shadow-xl shadow-violet-500/10 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 delay-200">
+                  <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-violet-100">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
+                        <Search size={13} className="text-white" />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-content-primary truncate">{row.name}</div>
-                        <div className="text-xs text-content-tertiary font-mono truncate">{row.email}</div>
-                      </div>
-                      <div className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md flex-shrink-0 ${
-                        row.color === 'emerald'
-                          ? 'bg-emerald-100 text-emerald-700'
-                          : 'bg-amber-100 text-amber-700'
-                      }`}>
-                        {row.score}
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-violet-600 font-bold leading-none">1 · Volia Prospection</div>
+                        <div className="text-xs font-semibold text-content-primary mt-0.5">Restaurants · Paris</div>
                       </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between px-5 py-3 border-t border-line bg-surface-elevated/30">
-                  <span className="text-xs text-content-tertiary">+ 229 autres résultats</span>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-violet-700">
-                    <Download size={12} />
-                    Export CSV
+                    <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold">234 résultats</div>
+                  </div>
+                  <div className="px-4 py-3 space-y-1.5">
+                    {[
+                      { name: 'La Bonne Table', email: 'contact@labonnetable.fr' },
+                      { name: 'Pasta Roma', email: 'info@pastaroma.fr' },
+                      { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr' },
+                    ].map((row, i) => (
+                      <div key={i} className="flex items-center justify-between text-xs">
+                        <span className="font-medium text-content-primary truncate mr-2">{row.name}</span>
+                        <span className="text-content-tertiary font-mono text-[10px] truncate">{row.email}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
+
+                {/* Connector arrow */}
+                <div className="flex justify-center -my-1">
+                  <div className="w-7 h-7 rounded-full bg-white border-2 border-line shadow-sm flex items-center justify-center">
+                    <ArrowRight size={12} className="text-content-tertiary rotate-90" />
+                  </div>
+                </div>
+
+                {/* CARD 2 — CAMPAGNES (blue) */}
+                <div className="relative rounded-2xl bg-white border-2 border-blue-200 shadow-xl shadow-blue-500/10 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 delay-500">
+                  <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-sm">
+                        <Mail size={13} className="text-white" />
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-blue-600 font-bold leading-none">2 · Volia Campagnes</div>
+                        <div className="text-xs font-semibold text-content-primary mt-0.5">Campagne « Resto-Q4 » envoyée</div>
+                      </div>
+                    </div>
+                    <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-bold">234 envois</div>
+                  </div>
+                  <div className="px-4 py-3 grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <div className="text-base font-bold text-blue-700 tabular-nums">234</div>
+                      <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Envoyés</div>
+                    </div>
+                    <div>
+                      <div className="text-base font-bold text-emerald-600 tabular-nums">47</div>
+                      <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Ouverts</div>
+                    </div>
+                    <div>
+                      <div className="text-base font-bold text-violet-700 tabular-nums">12</div>
+                      <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Réponses</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Connector arrow */}
+                <div className="flex justify-center -my-1">
+                  <div className="w-7 h-7 rounded-full bg-white border-2 border-line shadow-sm flex items-center justify-center">
+                    <ArrowRight size={12} className="text-content-tertiary rotate-90" />
+                  </div>
+                </div>
+
+                {/* CARD 3 — CRM (emerald) */}
+                <div className="relative rounded-2xl bg-white border-2 border-emerald-200 shadow-xl shadow-emerald-500/10 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 delay-700">
+                  <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm">
+                        <Layers size={13} className="text-white" />
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase tracking-wider text-emerald-600 font-bold leading-none">3 · Volia CRM</div>
+                        <div className="text-xs font-semibold text-content-primary mt-0.5">Pipeline · 3 deals auto-créés</div>
+                      </div>
+                    </div>
+                    <div className="text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 font-bold">Stage Lead</div>
+                  </div>
+                  <div className="px-4 py-3 flex items-center gap-2">
+                    {['La Bonne Table', 'Pasta Roma', 'Le Petit Bistrot'].map((deal, i) => (
+                      <div key={i} className="flex-1 px-2 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[10px] font-semibold text-emerald-800 text-center truncate">
+                        {deal}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
               </div>
 
-              {/* Floating decorative card "+ 12 found" — visual depth */}
-              <div className="hidden lg:flex absolute -bottom-6 -right-6 z-20 px-4 py-3 rounded-xl bg-white border border-line shadow-xl items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
-                  <Mail size={18} className="text-white" />
+              {/* Floating decorative card "100% auto" — visual depth */}
+              <div className="hidden lg:flex absolute -bottom-4 -right-4 z-20 px-4 py-2.5 rounded-xl bg-white border border-line shadow-xl items-center gap-2.5 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000">
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 via-blue-500 to-emerald-500 flex items-center justify-center">
+                  <Zap size={16} className="text-white" />
                 </div>
                 <div>
-                  <div className="text-xs text-content-tertiary">Emails trouvés</div>
-                  <div className="text-lg font-bold text-content-primary tabular-nums">+ 192</div>
+                  <div className="text-[10px] text-content-tertiary uppercase tracking-wider font-semibold">0 saisie manuelle</div>
+                  <div className="text-xs font-bold text-content-primary">Suite connectée</div>
                 </div>
               </div>
             </div>
@@ -357,62 +397,14 @@ export default function LandingContent() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          LIVE STATS BANNER — chiffres clés globaux Volia (mirror du
-          pattern utilisé sur /produits/prospection). Position : juste
-          après la démo, avant les profils — sert d'ancrage chiffré
-          crédible avant de continuer la narrative.
-       */}
-      <section className="relative py-20 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-violet-50/60 via-white to-indigo-50/40">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-200/30 rounded-full blur-3xl pointer-events-none -z-0" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-indigo-200/25 rounded-full blur-3xl pointer-events-none -z-0" />
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <MotionInView>
-            <div className="text-center mb-12">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-200 bg-violet-100 text-violet-700 text-[11px] font-bold uppercase tracking-wider">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-600"></span>
-                </span>
-                Volia, en chiffres
-              </span>
-            </div>
-          </MotionInView>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {[
-              { value: '287 000+', label: 'entreprises', sub: 'françaises dans la base', color: 'from-violet-600 via-indigo-600 to-violet-700' },
-              { value: '19 €', label: 'par mois', sub: 'à partir de', color: 'from-indigo-600 to-blue-700' },
-              { value: '5×', label: 'moins cher', sub: 'qu’Apollo / Hunter', color: 'from-emerald-600 to-teal-700' },
-              { value: '100 %', label: 'RGPD', sub: 'conforme by default', color: 'from-blue-600 to-cyan-700' },
-            ].map((stat, i) => (
-              <MotionInView key={stat.label} delay={i * 100}>
-                <div className="group">
-                  <div className={`text-5xl sm:text-6xl lg:text-7xl font-bold font-mono tabular-nums bg-gradient-to-br ${stat.color} bg-clip-text text-transparent leading-none mb-3 group-hover:scale-105 transition-transform`}>
-                    {stat.value}
-                  </div>
-                  <div className="text-sm font-semibold text-content-primary">{stat.label}</div>
-                  <div className="text-xs text-content-tertiary mt-1">{stat.sub}</div>
-                </div>
-              </MotionInView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bloc "Pensé pour ces profils" — remplace les anciens chips
-          "profils anonymisés". Plus honnête (on ne prétend pas avoir des
-          clients qu'on n'a pas), plus utile (lien vers 6 pages persona),
-          meilleur SEO (maillage interne /pour/[slug]). */}
-      <BuiltForProfilesBlock />
-
-      {/* ──────────────────────────────────────────────────────────────
           LA SUITE VOLIA — 3 modules connectés (positioning hub)
           ─────────────────────────────────────────────────────────────
           Repositionne Volia comme PLATEFORME multi-produits (vs juste
-          outil prospection). Pattern HubSpot/Attio. Chaque module a
-          sa couleur accent (violet/blue/emerald) + son statut LIVE/
-          BETA/SOON pour transparence.
+          outil prospection). REMONTÉE juste après le widget try-live
+          pour que la promesse "suite complète" soit above-the-fold
+          du scroll #1. Pattern HubSpot/Attio. Chaque module a sa
+          couleur accent (violet/blue/emerald) + son statut LIVE/BETA/
+          SOON pour transparence.
        */}
       <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
         <div className="max-w-6xl mx-auto">
@@ -545,6 +537,288 @@ export default function LandingContent() {
           </MotionInView>
         </div>
       </section>
+
+      {/* ──────────────────────────────────────────────────────────────
+          COMPARATIF STACK — valeur financière de la suite vs concurrents
+          ─────────────────────────────────────────────────────────────
+          2 colonnes côte à côte : à gauche stack Apollo + Lemlist +
+          HubSpot avec prix cumulés, à droite Volia Business 99€/mo.
+          Pattern "before / after" très visuel, conversion ++.
+       */}
+      <section className="relative py-24 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-zinc-50 via-white to-emerald-50/30">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-rose-100/30 to-emerald-100/30 rounded-full blur-3xl pointer-events-none -z-0" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <MotionInView>
+            <div className="text-center mb-14">
+              <p className="text-sm font-semibold text-emerald-600 mb-3 uppercase tracking-wider">Comparatif Stack</p>
+              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                1 outil au prix d&apos;1. Pas de 3 outils au prix de 3.
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+                Pour le prix d&apos;Apollo seul (~99 $/mo), vous avez les 3 modules Volia.
+                Économie réelle : <strong className="text-emerald-700">~250 €/mois</strong> vs stack séparée.
+              </p>
+            </div>
+          </MotionInView>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+
+            {/* GAUCHE : Stack concurrente (avant) */}
+            <MotionInView delay={100}>
+              <div className="h-full p-7 rounded-2xl border-2 border-rose-200 bg-gradient-to-br from-rose-50/50 via-white to-white shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-1">Avant Volia</div>
+                    <h3 className="text-xl font-bold text-content-primary">Stack équivalente</h3>
+                  </div>
+                  <div className="px-3 py-1.5 rounded-full bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold uppercase tracking-wider">3 abonnements</div>
+                </div>
+
+                <div className="space-y-3 mb-6">
+                  {[
+                    { tool: 'Apollo', desc: 'Prospection', price: '99 $' },
+                    { tool: 'Lemlist', desc: 'Campagnes email', price: '99 $' },
+                    { tool: 'HubSpot Starter', desc: 'CRM', price: '90 $' },
+                  ].map((row) => (
+                    <div key={row.tool} className="flex items-center justify-between p-3 rounded-xl border border-line bg-white">
+                      <div className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-full bg-rose-100 flex items-center justify-center flex-shrink-0">
+                          <X size={14} className="text-rose-500" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-content-primary">{row.tool}</div>
+                          <div className="text-xs text-content-tertiary">{row.desc}</div>
+                        </div>
+                      </div>
+                      <div className="text-sm font-bold text-content-secondary tabular-nums">{row.price}/mo</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4 border-t border-rose-200">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm font-semibold text-content-secondary">Total</span>
+                    <div className="text-right">
+                      <span className="text-4xl font-bold font-mono text-rose-600 tabular-nums">~288 $</span>
+                      <span className="text-content-tertiary text-sm">/mois</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-content-tertiary mt-2">soit ~270 €/mois HT — données partagées manuellement (CSV export/import)</p>
+                </div>
+              </div>
+            </MotionInView>
+
+            {/* DROITE : Volia (après, mise en valeur) */}
+            <MotionInView delay={250}>
+              <div className="relative h-full p-7 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-violet-50/50 shadow-xl shadow-emerald-500/10">
+                {/* Badge "Recommandé" flottant */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
+                  Recommandé · Volia Business
+                </div>
+
+                <div className="flex items-center justify-between mb-6 mt-2">
+                  <div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-1">Avec Volia</div>
+                    <h3 className="text-xl font-bold text-content-primary">Suite unifiée</h3>
+                  </div>
+                  <div className="px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-wider">1 seul abonnement</div>
+                </div>
+
+                <div className="space-y-3 mb-6">
+                  {[
+                    { tool: 'Volia Prospection', desc: '287 000+ entreprises FR', color: 'violet' },
+                    { tool: 'Volia Campagnes', desc: 'Séquences email + warmup', color: 'blue' },
+                    { tool: 'Volia CRM', desc: 'Pipeline Kanban + deals', color: 'emerald' },
+                  ].map((row) => (
+                    <div key={row.tool} className="flex items-center justify-between p-3 rounded-xl border border-line bg-white">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-7 h-7 rounded-full bg-${row.color}-100 flex items-center justify-center flex-shrink-0`}>
+                          <Check size={14} className={`text-${row.color}-600`} />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-content-primary">{row.tool}</div>
+                          <div className="text-xs text-content-tertiary">{row.desc}</div>
+                        </div>
+                      </div>
+                      <div className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Inclus</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4 border-t border-emerald-200">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm font-semibold text-content-secondary">Total</span>
+                    <div className="text-right">
+                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">99 €</span>
+                      <span className="text-content-tertiary text-sm">/mois</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-emerald-700 font-semibold mt-2">
+                    Économie : ~170 €/mois · soit ~2 000 €/an. Données partagées nativement entre les 3 modules.
+                  </p>
+                </div>
+              </div>
+            </MotionInView>
+          </div>
+
+          {/* CTA final */}
+          <MotionInView delay={400}>
+            <div className="mt-10 text-center">
+              <Link
+                href="/signup?plan=business"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
+              >
+                Choisir Volia Business à 99&nbsp;€/mois
+                <ArrowRight size={16} />
+              </Link>
+              <p className="text-xs text-content-tertiary mt-3">14 jours satisfait ou remboursé · Annulation en 1 clic</p>
+            </div>
+          </MotionInView>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────
+          WORKFLOWS CROISÉS — magie inter-modules
+          ─────────────────────────────────────────────────────────────
+          3 use cases concrets qui montrent la VALEUR de l'intégration
+          native vs stack séparée (où les données ne se parlent pas).
+          Pattern visuel : 3 cards avec flèches entre modules.
+       */}
+      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/20 to-white">
+        <div className="max-w-6xl mx-auto">
+          <MotionInView>
+            <div className="text-center mb-14">
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Workflows croisés</p>
+              <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                Les 3 modules se parlent. Vous, vous arrêtez de copier-coller.
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+                Pas d&apos;import/export entre outils. Les leads, campagnes et deals partagent la même base.
+              </p>
+            </div>
+          </MotionInView>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              {
+                num: '01',
+                modules: [
+                  { name: 'Prospection', color: 'violet' },
+                  { name: 'Campagnes', color: 'blue' },
+                  { name: 'CRM', color: 'emerald' },
+                ],
+                title: 'Lead → Campagne → Deal en 1 clic',
+                desc: 'Cherchez 50 restaurants Paris, cliquez « Lancer campagne ». Ils reçoivent votre mail. Quand l\'un répond, un deal apparaît automatiquement dans le CRM.',
+                badge: 'Le plus utilisé',
+                iconBg: 'from-violet-500 via-blue-500 to-emerald-500',
+              },
+              {
+                num: '02',
+                modules: [
+                  { name: 'CRM', color: 'emerald' },
+                  { name: 'Campagnes', color: 'blue' },
+                ],
+                title: 'CRM → Relance automatique',
+                desc: 'Un deal stagne en stage Lead depuis 7 jours ? Bouton « Ajouter à séquence » → relance email auto envoyée, sans toucher au CRM.',
+                badge: 'Anti-deal-fatigue',
+                iconBg: 'from-emerald-500 to-blue-500',
+              },
+              {
+                num: '03',
+                modules: [
+                  { name: 'Timeline 360°', color: 'violet' },
+                ],
+                title: '360° par contact',
+                desc: 'Chaque contact CRM a sa timeline complète : emails envoyés, ouverts, cliqués, répondus. 100 % auto. Aucune saisie manuelle.',
+                badge: 'Vue unifiée',
+                iconBg: 'from-violet-500 to-pink-500',
+              },
+            ].map((wf, i) => (
+              <MotionInView key={wf.num} delay={i * 120}>
+                <div className="group h-full p-7 rounded-2xl border-2 border-line hover:border-violet-300 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
+                  {/* Header : num + badge */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${wf.iconBg} flex items-center justify-center shadow-lg`}>
+                      <span className="text-white font-bold font-mono">{wf.num}</span>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full border border-violet-200 bg-violet-50 text-violet-700">
+                      {wf.badge}
+                    </span>
+                  </div>
+
+                  {/* Modules flow visual */}
+                  <div className="flex items-center gap-1.5 mb-4 flex-wrap">
+                    {wf.modules.map((mod, idx) => (
+                      <span key={idx} className="flex items-center gap-1.5">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md bg-${mod.color}-100 text-${mod.color}-700 border border-${mod.color}-200`}>
+                          {mod.name}
+                        </span>
+                        {idx < wf.modules.length - 1 && (
+                          <ArrowRight size={12} className="text-content-tertiary" />
+                        )}
+                      </span>
+                    ))}
+                  </div>
+
+                  <h3 className="text-lg font-bold text-content-primary mb-3 leading-tight">{wf.title}</h3>
+                  <p className="text-sm text-content-secondary leading-relaxed">{wf.desc}</p>
+                </div>
+              </MotionInView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────
+          LIVE STATS BANNER — chiffres clés globaux Volia (mirror du
+          pattern utilisé sur /produits/prospection). Position : juste
+          après la démo, avant les profils — sert d'ancrage chiffré
+          crédible avant de continuer la narrative.
+       */}
+      <section className="relative py-20 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-violet-50/60 via-white to-indigo-50/40">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-200/30 rounded-full blur-3xl pointer-events-none -z-0" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-indigo-200/25 rounded-full blur-3xl pointer-events-none -z-0" />
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <MotionInView>
+            <div className="text-center mb-12">
+              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-violet-200 bg-violet-100 text-violet-700 text-[11px] font-bold uppercase tracking-wider">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-600"></span>
+                </span>
+                Volia, en chiffres
+              </span>
+            </div>
+          </MotionInView>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            {[
+              { value: '287 000+', label: 'entreprises', sub: 'françaises dans la base', color: 'from-violet-600 via-indigo-600 to-violet-700' },
+              { value: '19 €', label: 'par mois', sub: 'à partir de', color: 'from-indigo-600 to-blue-700' },
+              { value: '5×', label: 'moins cher', sub: 'qu’Apollo / Hunter', color: 'from-emerald-600 to-teal-700' },
+              { value: '100 %', label: 'RGPD', sub: 'conforme by default', color: 'from-blue-600 to-cyan-700' },
+            ].map((stat, i) => (
+              <MotionInView key={stat.label} delay={i * 100}>
+                <div className="group">
+                  <div className={`text-5xl sm:text-6xl lg:text-7xl font-bold font-mono tabular-nums bg-gradient-to-br ${stat.color} bg-clip-text text-transparent leading-none mb-3 group-hover:scale-105 transition-transform`}>
+                    {stat.value}
+                  </div>
+                  <div className="text-sm font-semibold text-content-primary">{stat.label}</div>
+                  <div className="text-xs text-content-tertiary mt-1">{stat.sub}</div>
+                </div>
+              </MotionInView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bloc "Pensé pour ces profils" — remplace les anciens chips
+          "profils anonymisés". Plus honnête (on ne prétend pas avoir des
+          clients qu'on n'a pas), plus utile (lien vers 6 pages persona),
+          meilleur SEO (maillage interne /pour/[slug]). */}
+      <BuiltForProfilesBlock />
 
       {/* ──────────────────────────────────────────────────────────────
           POWERED BY — stack technique (trust signal moderne)
@@ -1199,6 +1473,44 @@ export default function LandingContent() {
             />
 
           </div>
+
+          {/* Encart Business — seul plan avec les 3 modules complets */}
+          <MotionInView delay={300}>
+            <div className="mt-10 p-6 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-violet-50/50 shadow-lg shadow-emerald-500/10">
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-5 justify-between">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 via-blue-500 to-violet-500 flex items-center justify-center shadow-md flex-shrink-0">
+                    <Layers size={22} className="text-white" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">Suite complète</div>
+                    <h3 className="text-lg font-bold text-content-primary mb-2">Le seul plan qui contient les 3 modules : Business à 99&nbsp;€/mois</h3>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                      <span className="inline-flex items-center gap-1.5 text-content-secondary">
+                        <Check size={14} className="text-violet-600" />
+                        <span><strong className="text-violet-700">Prospection</strong> illimitée</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-content-secondary">
+                        <Check size={14} className="text-blue-600" />
+                        <span><strong className="text-blue-700">Campagnes</strong> email + warmup</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-content-secondary">
+                        <Check size={14} className="text-emerald-600" />
+                        <span><strong className="text-emerald-700">CRM</strong> pipeline natif</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <Link
+                  href={`/signup?plan=business&period=${pricingPeriod}`}
+                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-sm shadow-lg shadow-emerald-500/30 hover:shadow-xl transition-all"
+                >
+                  Choisir Business
+                  <ArrowRight size={14} />
+                </Link>
+              </div>
+            </div>
+          </MotionInView>
 
           {/* Footer note */}
           <p className="mt-10 text-center text-sm text-content-tertiary">

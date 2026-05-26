@@ -30,6 +30,7 @@ import {
   Search, Mail, MessageSquare, Layers, Brain, BarChart3, Database, Globe, Download,
   Shield, Sparkles, Send, Settings, Play, Zap, FileText, Tag, Users, KanbanSquare,
   Smartphone, TrendingUp, Rocket, Flame,
+  Repeat, MousePointerClick, Workflow, BookOpen, Inbox,
 } from 'lucide-react';
 import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
@@ -45,6 +46,7 @@ const ICONS = {
   Trello: KanbanSquare,        // alias rétrocompat — Trello n'existe plus dans lucide-react
   KanbanSquare,
   Smartphone, TrendingUp, Rocket, Flame,
+  Repeat, MousePointerClick, Workflow, BookOpen, Inbox,
 };
 function resolveIcon(name) {
   return ICONS[name] || Search;

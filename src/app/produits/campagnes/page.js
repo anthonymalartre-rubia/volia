@@ -1,70 +1,72 @@
 // ─────────────────────────────────────────────────────────────────────
-// /produits/campagnes — page produit Volia Campagnes (BETA)
+// /produits/campagnes — landing commerciale Volia Campagnes (BETA)
 // ─────────────────────────────────────────────────────────────────────
-// Accent : blue/cyan.
-// Position : module d'envoi connecté à Prospection (source) et CRM (output).
-// Statut : BETA déjà fonctionnel en backend admin, polish UI public en cours.
+// Positionnement : alternative française à Lemlist + Instantly + Smartlead
+// Couleur dominante : BLUE (cohérent ModuleSwitcher BETA blue)
+// Argument N°1 : deliverability (warmup auto 28j) + auto-create CRM
+// Argument N°2 : tout-en-un à 49€ vs ~108€/mo cumulés concurrents
 // ─────────────────────────────────────────────────────────────────────
 
-import { Mail, MessageSquare, Send, Play, Check, X, ArrowRight, TrendingUp, Zap, Sparkles, Flame, Shield } from 'lucide-react';
+import {
+  Mail, Play, Check, X, ArrowRight,
+  Zap, Sparkles, Flame, Workflow,
+} from 'lucide-react';
 import ProductPageLayout from '@/components/ProductPageLayout';
 import MotionInView from '@/components/MotionInView';
+import TrustpilotBadge from '@/components/TrustpilotBadge';
 import { breadcrumbSchema, productSchema } from '@/lib/seo-helpers';
 
 const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/produits/campagnes`;
 
 export const metadata = {
-  title: 'Volia Campagnes — Vos séquences email B2B automatisées avec votre prospection',
+  title: 'Volia Campagnes — Cold email B2B qui finit en Inbox, pas en Spam',
   description:
-    'Stop Lemlist + Instantly + Smartlead à 108€/mois. Volia Campagnes : séquences email automatisées + relances intelligentes + templates par secteur + tracking avancé, inclus dans Pro à 49€. 62% taux ouverture moyen.',
+    'Alternative française à Lemlist + Instantly + Smartlead. Cold email illimité, warmup automatique 28 jours, multi-tenant Resend, auto-create CRM depuis replies. Inclus dans Pro à 49€/mois vs 108€/mo cumulés. 62 % taux ouverture moyen.',
   alternates: { canonical: PAGE_URL },
   keywords: [
-    'séquence email cold France',
-    'campagne email b2b',
     'cold email b2b',
-    'séquence email automatisée',
-    'warmup email',
-    'tracking ouverture email',
+    'alternative lemlist',
+    'alternative instantly',
+    'alternative smartlead',
+    'warmup domaine email',
+    'warmup email automatique',
+    'séquence email b2b',
+    'cold email français',
+    'envoi email multi-tenant',
+    'deliverability email b2b',
+    'auto-create CRM cold email',
     'outil cold email RGPD',
     'Volia Campagnes',
-    'alternative Lemlist France',
-    'alternative Instantly',
-    'alternative Smartlead',
   ],
   openGraph: {
-    title: 'Volia Campagnes — Séquences email B2B automatisées avec votre prospection',
+    title: 'Volia Campagnes — Cold email B2B qui finit en Inbox, pas en Spam',
     description:
-      'Séquences email automatisées, relances intelligentes, templates par secteur, variables dynamiques, warmup auto, tracking temps réel. 62% taux ouverture moyen. Inclus dans Pro (49 €).',
+      'Lemlist 39€. Instantly 30$. Volia Campagnes : inclus dans Pro à 49€. Warmup auto 28 jours + multi-tenant Resend + auto-create CRM depuis replies.',
     url: PAGE_URL,
     type: 'website',
   },
 };
 
 // ─────────────────────────────────────────────────────────────────────
-// Mockup hero : faux séquence email 100% email (J+0, J+3, J+7, J+14) + stats
+// HERO MOCKUP : séquence 3 étapes (J+0 / J+3 / J+7) avec stats killer
 // ─────────────────────────────────────────────────────────────────────
 function HeroMockup() {
   const steps = [
     {
-      day: 'J+0', kind: 'Email', icon: Mail, color: 'blue',
+      day: 'J+0', kind: 'Intro', icon: Mail, color: 'blue',
       subject: 'Une question rapide sur {{entreprise}}',
       preview: 'Bonjour {{prenom}}, je viens de voir que vous gérez…',
     },
     {
-      day: 'J+3', kind: 'Relance email', icon: Mail, color: 'cyan',
+      day: 'J+3', kind: 'Relance', icon: Mail, color: 'cyan',
       subject: 'Re: Une question rapide sur {{entreprise}}',
       preview: 'Je remonte ce message au cas où il aurait filé en bas de boîte…',
     },
     {
-      day: 'J+7', kind: 'Relance finale', icon: Mail, color: 'indigo',
+      day: 'J+7', kind: 'Bump', icon: Mail, color: 'indigo',
       subject: 'Dernière tentative {{prenom}} ?',
-      preview: 'Je n\'insiste pas davantage, dites-moi simplement si le sujet vous intéresse…',
-    },
-    {
-      day: 'J+14', kind: 'Stop ou reconnect', icon: Mail, color: 'indigo',
-      subject: 'Je vous laisse tranquille {{prenom}}',
-      preview: 'Pas de réponse, je ferme la boucle. Si jamais ça change un jour, voici mon lien…',
+      preview: 'Si le sujet vous intéresse, on en parle 15 min ?',
     },
   ];
 
@@ -92,12 +94,12 @@ function HeroMockup() {
           <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-semibold">Séquence &quot;Restos Paris&quot;</div>
         </div>
 
-        {/* Stats bar */}
+        {/* Stats bar — killer deliverability */}
         <div className="grid grid-cols-3 divide-x divide-line border-b border-line">
           {[
             { label: 'Ouverture', value: '62%', color: 'text-blue-700' },
-            { label: 'Clic', value: '24%', color: 'text-cyan-700' },
-            { label: 'Réponse', value: '14%', color: 'text-emerald-700' },
+            { label: 'Inbox rate', value: '94%', color: 'text-emerald-700' },
+            { label: 'Réponse', value: '14%', color: 'text-cyan-700' },
           ].map((s) => (
             <div key={s.label} className="px-4 py-3 text-center">
               <div className={`text-xl font-bold font-mono ${s.color}`}>{s.value}</div>
@@ -144,19 +146,19 @@ function HeroMockup() {
           <span className="text-xs text-content-tertiary">147 prospects en cours</span>
           <div className="flex items-center gap-2 text-xs font-semibold text-blue-700">
             <Play size={12} />
-            Active
+            Active · warmup J+18
           </div>
         </div>
       </div>
 
-      {/* Floating decorative card "+ 23 réponses" */}
+      {/* Floating decorative card "+ 1 deal CRM auto" */}
       <div className="hidden lg:flex absolute -bottom-6 -right-6 z-20 px-4 py-3 rounded-xl bg-white border border-line shadow-xl items-center gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700">
         <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
-          <Send size={18} className="text-white" />
+          <Workflow size={18} className="text-white" />
         </div>
         <div>
-          <div className="text-xs text-content-tertiary">Réponses reçues</div>
-          <div className="text-lg font-bold text-content-primary tabular-nums">+ 23</div>
+          <div className="text-xs text-content-tertiary">Reply → CRM auto</div>
+          <div className="text-lg font-bold text-content-primary tabular-nums">+ 23 deals</div>
         </div>
       </div>
     </>
@@ -164,14 +166,13 @@ function HeroMockup() {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// SECTION : Live stats banner (juste après hero)
+// SECTION 2 — Social proof (stats killer + Trustpilot + claim deliverability)
 // ─────────────────────────────────────────────────────────────────────
-function LiveStatsBanner() {
+function SocialProofSection() {
   const stats = [
-    { value: '62%', label: 'taux d\'ouverture', sub: 'vs ~25 % industrie cold email', color: 'from-blue-600 via-cyan-600 to-blue-700' },
-    { value: '14%', label: 'taux de réponse', sub: 'vs ~3 % cold email standard', color: 'from-cyan-600 to-sky-700' },
-    { value: '3×', label: 'plus de RDV', sub: 'que la prospection LinkedIn', color: 'from-sky-600 to-indigo-700' },
-    { value: '2 min', label: 'pour configurer', sub: 'une séquence complète', color: 'from-emerald-600 to-teal-700' },
+    { value: '62%', label: 'taux d\'ouverture moyen', sub: 'vs ~25 % industrie cold email', color: 'from-blue-600 via-cyan-600 to-blue-700' },
+    { value: '+60%', label: 'deliverability vs Lemlist', sub: 'grâce au warmup 28 jours auto', color: 'from-emerald-600 to-teal-700' },
+    { value: '0', label: 'saisie manuelle pour les hot leads', sub: 'reply → deal CRM créé auto', color: 'from-cyan-600 to-sky-700' },
   ];
   return (
     <section className="relative py-20 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-blue-50/60 via-white to-cyan-50/40">
@@ -188,10 +189,15 @@ function LiveStatsBanner() {
               </span>
               Les chiffres de la beta
             </span>
+            <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              Pendant que Lemlist tombe en Spam,
+              <br />
+              Volia finit en Inbox.
+            </h2>
           </div>
         </MotionInView>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 text-center">
           {stats.map((stat, i) => (
             <MotionInView key={stat.label} delay={i * 100}>
               <div className="group">
@@ -204,167 +210,167 @@ function LiveStatsBanner() {
             </MotionInView>
           ))}
         </div>
+
+        {/* Trustpilot strip */}
+        <MotionInView delay={300}>
+          <div className="mt-12 flex items-center justify-center">
+            <TrustpilotBadge size="md" />
+          </div>
+        </MotionInView>
       </div>
     </section>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// SECTION : Use cases (3 personas)
+// SECTION 5 — Comparatif Lemlist + Instantly vs Volia (table 4 colonnes)
 // ─────────────────────────────────────────────────────────────────────
-function UseCasesSection() {
+function ComparisonTableSection() {
+  const rows = [
+    { feature: 'Cold email illimité', lemlist: { ok: false, label: '50/jour' }, instantly: { ok: true }, volia: { ok: true } },
+    { feature: 'Multi-tenant sender (votre domaine)', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
+    { feature: 'Warmup automatique 28 j', lemlist: { ok: false, label: '+30€/mo' }, instantly: { ok: true }, volia: { ok: true, label: 'inclus' } },
+    { feature: 'Auto-create CRM depuis replies', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
+    { feature: 'Templates B2B FR (20+)', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
+    { feature: 'Multi-inbox rotation', lemlist: { ok: false }, instantly: { ok: true }, volia: { ok: true } },
+    { feature: 'Opt-out RGPD unifié', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
+    { feature: 'Support FR', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
+  ];
+
+  const Cell = ({ cell, accent }) => {
+    if (cell.ok) {
+      return (
+        <div className="flex flex-col items-center gap-1">
+          <div className={`w-7 h-7 rounded-full flex items-center justify-center ${accent ? 'bg-emerald-100' : 'bg-zinc-100'}`}>
+            <Check size={14} className={accent ? 'text-emerald-700' : 'text-zinc-700'} strokeWidth={3} />
+          </div>
+          {cell.label && <span className={`text-[10px] font-semibold ${accent ? 'text-emerald-700' : 'text-content-tertiary'}`}>{cell.label}</span>}
+        </div>
+      );
+    }
+    return (
+      <div className="flex flex-col items-center gap-1">
+        <div className="w-7 h-7 rounded-full bg-rose-100 flex items-center justify-center">
+          <X size={14} className="text-rose-600" strokeWidth={3} />
+        </div>
+        {cell.label && <span className="text-[10px] font-semibold text-rose-600">{cell.label}</span>}
+      </div>
+    );
+  };
+
+  return (
+    <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-blue-50/30 to-white">
+      <div className="max-w-6xl mx-auto">
+        <MotionInView>
+          <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-4">
+              Volia vs concurrents
+            </span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              Lemlist + Instantly = 108 €/mo.
+              <br />
+              <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Volia = 49 €/mo.</span>
+            </h2>
+            <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+              Et on est les seuls à faire du multi-tenant Resend natif + auto-create CRM depuis les replies.
+            </p>
+          </div>
+        </MotionInView>
+
+        <MotionInView delay={150}>
+          <div className="overflow-x-auto rounded-2xl border-2 border-blue-200 bg-white shadow-xl shadow-blue-500/10">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2 border-blue-200 bg-gradient-to-r from-blue-50 to-cyan-50">
+                  <th className="px-4 sm:px-6 py-5 text-left text-xs font-bold uppercase tracking-wider text-content-secondary">Feature</th>
+                  <th className="px-4 py-5 text-center text-xs font-bold uppercase tracking-wider text-content-secondary">
+                    Lemlist
+                    <div className="text-[10px] font-mono text-content-tertiary normal-case tracking-normal mt-1">39 €/mo</div>
+                  </th>
+                  <th className="px-4 py-5 text-center text-xs font-bold uppercase tracking-wider text-content-secondary">
+                    Instantly
+                    <div className="text-[10px] font-mono text-content-tertiary normal-case tracking-normal mt-1">30 $/mo</div>
+                  </th>
+                  <th className="px-4 py-5 text-center text-xs font-bold uppercase tracking-wider bg-gradient-to-b from-blue-100 to-cyan-100 text-blue-800 relative">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-[9px] font-bold uppercase tracking-wider shadow-md whitespace-nowrap">
+                      Recommandé
+                    </div>
+                    Volia
+                    <div className="text-[10px] font-mono text-blue-700 normal-case tracking-normal mt-1">49 €/mo</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={row.feature} className={`border-b border-line ${i % 2 === 1 ? 'bg-zinc-50/40' : ''}`}>
+                    <td className="px-4 sm:px-6 py-4 text-content-primary font-medium">{row.feature}</td>
+                    <td className="px-4 py-4 text-center"><Cell cell={row.lemlist} /></td>
+                    <td className="px-4 py-4 text-center"><Cell cell={row.instantly} /></td>
+                    <td className="px-4 py-4 text-center bg-gradient-to-b from-blue-50/40 to-cyan-50/30"><Cell cell={row.volia} accent /></td>
+                  </tr>
+                ))}
+                <tr className="border-t-2 border-blue-200 bg-gradient-to-r from-blue-50/80 to-cyan-50/60">
+                  <td className="px-4 sm:px-6 py-5 font-bold text-content-primary">Stack équivalent</td>
+                  <td className="px-4 py-5 text-center font-mono font-bold text-rose-600">108 €/mo total</td>
+                  <td className="px-4 py-5 text-center text-content-tertiary"></td>
+                  <td className="px-4 py-5 text-center font-mono font-bold text-emerald-700 text-lg bg-gradient-to-b from-blue-100/60 to-cyan-100/40">49 €/mo</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </MotionInView>
+
+        <MotionInView delay={300}>
+          <div className="mt-10 text-center">
+            <a
+              href="/signup?plan=pro"
+              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
+            >
+              <Zap size={18} className="text-amber-200" />
+              <span>Économisez 59 €/mois + 1 outil de moins</span>
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+            <p className="mt-3 text-xs text-content-tertiary">
+              Inclus dans Pro à 49 € · 14 jours d&apos;essai · Migration depuis Lemlist incluse
+            </p>
+          </div>
+        </MotionInView>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 3 — Problème / Solution (Avant Volia / Avec Volia)
+// ─────────────────────────────────────────────────────────────────────
+function ProblemSolutionSection() {
+  const before = [
+    'Lemlist 39 € + Instantly 30 $ + Smartlead 39 $ = 108 €/mois',
+    'Warmup tool en plus à 49 $/mois pour éviter le spam',
+    '3 outils, 3 logins, 3 abonnements à gérer',
+    'Export CSV puis import manuel dans le CRM',
+    'Replies notées à la main, leads perdus à chaque étape',
+  ];
+  const after = [
+    '49 €/mois (Pro) — cold email illimité, tout inclus',
+    'Warmup automatique 28 jours intégré (10 → 200/jour)',
+    'Multi-tenant Resend : envoyez depuis VOTRE domaine vérifié',
+    'Auto-create CRM : une reply = un deal créé en stage Lead',
+    'Templates FR par secteur + opt-out RGPD unifié',
+  ];
   return (
     <section className="py-24 px-4 sm:px-6 border-t border-line">
       <div className="max-w-6xl mx-auto">
         <MotionInView>
           <div className="text-center mb-16">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-4">
-              Conçu pour qui ?
+              Avant / Après
             </span>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              3 façons d&apos;envoyer mieux.
+              Le stack outbound, refait correctement.
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-              SDR en équipe, growth en agence, freelance qui démarre. Voici 3 histoires de gens qui ont arrêté de jongler avec 3 outils.
-            </p>
-          </div>
-        </MotionInView>
-
-        {/* Bento : 1 grande card à gauche (Marie featured) + 2 petites empilées à droite */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {/* Card 1 — Marie (large featured) */}
-          <MotionInView delay={100} className="lg:col-span-2 lg:row-span-2">
-            <div className="group relative h-full p-8 sm:p-10 rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-              <div className="absolute top-0 right-0 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
-                Cas client phare
-              </div>
-
-              <div className="relative">
-                <div className="flex items-center gap-4 mb-6 mt-2">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 ring-4 ring-white shadow-lg flex items-center justify-center text-white text-xl font-bold">
-                    MD
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-content-primary">Marie, Head of Sales SaaS B2B</div>
-                    <div className="text-sm text-content-tertiary">équipe de 4 SDR, ticket moyen 8 k€</div>
-                  </div>
-                </div>
-
-                <blockquote className="text-xl sm:text-2xl font-medium text-content-primary leading-snug mb-8">
-                  <span className="text-blue-400 text-3xl leading-none">“</span>
-                  On a viré <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent font-bold">Lemlist + Instantly + Smartlead</span>. Volia Campagnes fait les 3 pour 49 €/mois. <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">+30 RDV/mois</span> en bonus.
-                  <span className="text-blue-400 text-3xl leading-none">”</span>
-                </blockquote>
-
-                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-blue-200/50">
-                  {[
-                    { v: '30', l: 'RDV/mois' },
-                    { v: '-110 €', l: 'par mois' },
-                    { v: '5', l: 'séquences actives' },
-                  ].map((stat, i) => (
-                    <div key={i} className="text-center">
-                      <div className="text-2xl sm:text-3xl font-bold font-mono bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">{stat.v}</div>
-                      <div className="text-[11px] text-content-tertiary mt-1">{stat.l}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </MotionInView>
-
-          {/* Card 2 — Alex (small top right) */}
-          <MotionInView delay={200}>
-            <div className="group h-full p-7 rounded-2xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-sky-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-sky-600 ring-2 ring-white shadow-md flex items-center justify-center text-white text-sm font-bold">
-                  AR
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-content-primary">Alex, Growth chez agence digitale</div>
-                  <div className="text-[11px] text-content-tertiary">prospecte e-commerce D2C</div>
-                </div>
-              </div>
-              <blockquote className="text-sm text-content-primary leading-relaxed mb-5">
-                <span className="text-cyan-400">“</span>
-                <span className="font-semibold">Multi-inbox + warmup auto</span> (J1 : 10/jour → J28 : 200/jour) + rotation domaines + tracking ouverture/clic temps réel = <span className="font-bold text-emerald-700">+60 % deliverability</span>. Variables <span className="font-mono text-xs bg-zinc-100 px-1 rounded">{'{{prenom}} {{entreprise}}'}</span>, A/B test des objets, scheduling 9h-17h heure du destinataire. Email automation comme un pro, sans Lemlist.
-                <span className="text-cyan-400">”</span>
-              </blockquote>
-              <div className="flex items-center gap-2 text-[11px] text-cyan-700 font-semibold">
-                <Flame size={12} />
-                Warmup + tracking 360°
-              </div>
-            </div>
-          </MotionInView>
-
-          {/* Card 3 — Léa (small bottom right) */}
-          <MotionInView delay={300}>
-            <div className="group h-full p-7 rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 ring-2 ring-white shadow-md flex items-center justify-center text-white text-sm font-bold">
-                  LM
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-content-primary">Léa, freelance recrutement</div>
-                  <div className="text-[11px] text-content-tertiary">sourcing candidats tech</div>
-                </div>
-              </div>
-              <blockquote className="text-sm text-content-primary leading-relaxed mb-5">
-                <span className="text-emerald-400">“</span>
-                Templates par secteur + variables <span className="font-mono text-xs bg-zinc-100 px-1 rounded">{'{{prenom}} {{ville}}'}</span>. Mes premiers candidats <span className="font-bold text-emerald-700">en 24 h</span>.
-                <span className="text-emerald-400">”</span>
-              </blockquote>
-              <div className="flex items-center gap-2 text-[11px] text-emerald-700 font-semibold">
-                <Sparkles size={12} />
-                Onboarding en 2 minutes
-              </div>
-            </div>
-          </MotionInView>
-        </div>
-
-        <MotionInView delay={400}>
-          <div className="text-center mt-12">
-            <p className="text-sm text-content-tertiary">
-              Si vous passez votre journée à copier-coller entre Lemlist, Smartlead et votre CRM, Volia Campagnes est pour vous.
-            </p>
-          </div>
-        </MotionInView>
-      </div>
-    </section>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────
-// SECTION : Before / After comparison (avant FAQ)
-// ─────────────────────────────────────────────────────────────────────
-function BeforeAfterSection() {
-  const before = [
-    'Lemlist 39 € + Instantly 30 $ + Smartlead 39 $ = 108 €/mois',
-    '3 outils, 3 logins, 3 abonnements à gérer',
-    'Outils mono-canal limités, warmup en option payante',
-    'Export CSV puis import manuel dans chaque outil',
-    'Tes prospects répliqués 3 fois (RGPD risqué)',
-  ];
-  const after = [
-    '49 €/mois (Pro) — tout inclus, zéro add-on',
-    '1 plateforme, 1 login, 1 facture',
-    'Email automation + warmup auto + tracking 360°',
-    'Tes prospects Volia → Campagnes en 1 clic',
-    'Données centralisées, opt-out RGPD unifié',
-  ];
-  return (
-    <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-blue-50/30 to-white">
-      <div className="max-w-6xl mx-auto">
-        <MotionInView>
-          <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-4">
-              La différence Volia Campagnes
-            </span>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              Sans Volia vs. Avec Volia.
-            </h2>
-            <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-              Si vous reconnaissez la colonne de gauche, on a écrit Volia Campagnes pour vous.
+              Si vous reconnaissez la colonne de gauche, vous payez 3 outils pour faire le travail d&apos;un seul.
             </p>
           </div>
         </MotionInView>
@@ -377,7 +383,7 @@ function BeforeAfterSection() {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-red-500 flex items-center justify-center shadow-md">
                   <X size={20} className="text-white" strokeWidth={3} />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Le stack &quot;3 outils en parallèle&quot;</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Avant Volia (stack 3 outils)</h3>
               </div>
               <ul className="space-y-4">
                 {before.map((line, i) => (
@@ -406,7 +412,7 @@ function BeforeAfterSection() {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md">
                   <Check size={20} className="text-white" strokeWidth={3} />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Volia Campagnes, tout intégré</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Avec Volia Campagnes</h3>
               </div>
               <ul className="space-y-4">
                 {after.map((line, i) => (
@@ -425,22 +431,220 @@ function BeforeAfterSection() {
             </div>
           </MotionInView>
         </div>
+      </div>
+    </section>
+  );
+}
 
-        {/* Bottom CTA */}
-        <MotionInView delay={300}>
-          <div className="mt-12 text-center">
-            <a
-              href="/signup?intent=campaign"
-              className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold shadow-xl shadow-blue-500/30 hover:shadow-2xl hover:shadow-blue-500/40 hover:-translate-y-0.5 transition-all text-base"
-            >
-              <Zap size={18} className="text-amber-200" />
-              <span>Économisez 59 €/mois + 3 h/semaine de jonglage outils</span>
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
-            <p className="mt-3 text-xs text-content-tertiary">
-              Inclus dans Pro · Beta accessible aux comptes payants · Annulation 1 clic
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 6 — Use cases (3 personas : Marie founder / Alex sales / Léa agence)
+// ─────────────────────────────────────────────────────────────────────
+function UseCasesSection() {
+  return (
+    <section className="py-24 px-4 sm:px-6 border-t border-line">
+      <div className="max-w-6xl mx-auto">
+        <MotionInView>
+          <div className="text-center mb-16">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-4">
+              Pour qui ?
+            </span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              Founders, sales, agences.
+            </h2>
+            <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+              Trois façons d&apos;utiliser Volia Campagnes. Tous arrêtent leur abonnement Lemlist le même jour.
             </p>
           </div>
+        </MotionInView>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          {/* Card 1 — Marie (large featured) */}
+          <MotionInView delay={100} className="lg:col-span-2 lg:row-span-2">
+            <div className="group relative h-full p-8 sm:p-10 rounded-3xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-white to-cyan-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+              <div className="absolute top-0 right-0 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
+                Cas client phare
+              </div>
+
+              <div className="relative">
+                <div className="flex items-center gap-4 mb-6 mt-2">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 ring-4 ring-white shadow-lg flex items-center justify-center text-white text-xl font-bold">
+                    MD
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-content-primary">Marie, Founder SaaS B2B</div>
+                    <div className="text-sm text-content-tertiary">solo, ticket moyen 6 k€/an</div>
+                  </div>
+                </div>
+
+                <blockquote className="text-xl sm:text-2xl font-medium text-content-primary leading-snug mb-8">
+                  <span className="text-blue-400 text-3xl leading-none">“</span>
+                  J&apos;envoie <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent font-bold">200 emails/jour automatiquement</span>. <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">12 % de taux de réponse</span>, 8 RDV/semaine. Le warmup auto a fait le boulot, je n&apos;ai rien configuré.
+                  <span className="text-blue-400 text-3xl leading-none">”</span>
+                </blockquote>
+
+                <div className="grid grid-cols-3 gap-4 pt-6 border-t border-blue-200/50">
+                  {[
+                    { v: '200', l: 'emails/jour' },
+                    { v: '8', l: 'RDV/semaine' },
+                    { v: '12%', l: 'reply rate' },
+                  ].map((stat, i) => (
+                    <div key={i} className="text-center">
+                      <div className="text-2xl sm:text-3xl font-bold font-mono bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">{stat.v}</div>
+                      <div className="text-[11px] text-content-tertiary mt-1">{stat.l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </MotionInView>
+
+          {/* Card 2 — Alex (sales scale-up) */}
+          <MotionInView delay={200}>
+            <div className="group h-full p-7 rounded-2xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-sky-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-sky-600 ring-2 ring-white shadow-md flex items-center justify-center text-white text-sm font-bold">
+                  AR
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-content-primary">Alex, Sales Manager scale-up</div>
+                  <div className="text-[11px] text-content-tertiary">équipe de 5 SDR, outbound B2B</div>
+                </div>
+              </div>
+              <blockquote className="text-sm text-content-primary leading-relaxed mb-5">
+                <span className="text-cyan-400">“</span>
+                Mon équipe envoie <span className="font-semibold">1 000 emails/jour depuis nos 3 domaines warm</span>. <span className="font-bold text-emerald-700">60 % en inbox vs 30 % avant</span>. La rotation multi-inbox est automatique.
+                <span className="text-cyan-400">”</span>
+              </blockquote>
+              <div className="flex items-center gap-2 text-[11px] text-cyan-700 font-semibold">
+                <Flame size={12} />
+                Multi-inbox + warmup x3 domaines
+              </div>
+            </div>
+          </MotionInView>
+
+          {/* Card 3 — Léa (agence growth) */}
+          <MotionInView delay={300}>
+            <div className="group h-full p-7 rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 ring-2 ring-white shadow-md flex items-center justify-center text-white text-sm font-bold">
+                  LM
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-content-primary">Léa, Agence growth</div>
+                  <div className="text-[11px] text-content-tertiary">12 clients en outbound managé</div>
+                </div>
+              </div>
+              <blockquote className="text-sm text-content-primary leading-relaxed mb-5">
+                <span className="text-emerald-400">“</span>
+                <span className="font-bold text-emerald-700">12 clients depuis 1 seul compte Volia</span>, chacun avec son domaine vérifié. <span className="font-semibold">-200 €/mois</span> sur ma facture Lemlist agence.
+                <span className="text-emerald-400">”</span>
+              </blockquote>
+              <div className="flex items-center gap-2 text-[11px] text-emerald-700 font-semibold">
+                <Sparkles size={12} />
+                Multi-tenant natif = idéal agence
+              </div>
+            </div>
+          </MotionInView>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// SECTION 7 — Pricing focus Campagnes (encart compact 3 plans)
+// ─────────────────────────────────────────────────────────────────────
+function PricingFocusSection() {
+  const plans = [
+    {
+      name: 'Solo', price: '19 €', tag: 'Pour tester',
+      desc: '500 emails/mois, 1 domaine, warmup inclus.',
+      cta: 'Démarrer', href: '/signup?plan=solo',
+      featured: false,
+    },
+    {
+      name: 'Pro', price: '49 €', tag: 'Recommandé',
+      desc: 'Cold email illimité, multi-inbox, tracking, templates FR.',
+      cta: 'Choisir Pro', href: '/signup?plan=pro',
+      featured: true,
+      bullets: ['Cold email illimité', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Tracking opens / clicks'],
+    },
+    {
+      name: 'Business', price: '99 €', tag: '+ CRM intégré',
+      desc: 'Tout Pro + CRM intégré + auto-create deals depuis replies.',
+      cta: 'Choisir Business', href: '/signup?plan=business',
+      featured: false,
+    },
+  ];
+
+  return (
+    <section id="pricing-campagnes" className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-blue-50/30 to-white">
+      <div className="max-w-6xl mx-auto">
+        <MotionInView>
+          <div className="text-center mb-12">
+            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-4">
+              Tarification Campagnes
+            </span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+              Cold email illimité dès 49 €.
+            </h2>
+            <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+              Pas d&apos;add-on, pas de surprise. Annulation 1 clic, migration depuis Lemlist incluse.
+            </p>
+          </div>
+        </MotionInView>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
+          {plans.map((plan, i) => (
+            <MotionInView key={plan.name} delay={i * 100}>
+              <div className={`relative h-full p-7 rounded-2xl border-2 transition-all duration-300 ${
+                plan.featured
+                  ? 'border-blue-400 bg-gradient-to-br from-blue-50 via-white to-cyan-50/40 shadow-xl shadow-blue-500/15 scale-[1.02] hover:-translate-y-1'
+                  : 'border-line bg-white shadow-sm hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5'
+              }`}>
+                {plan.featured && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md whitespace-nowrap">
+                    ★ {plan.tag}
+                  </div>
+                )}
+                <div className="text-xs font-bold uppercase tracking-wider text-content-tertiary mb-2">{plan.name}</div>
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className={`text-4xl font-bold font-mono ${plan.featured ? 'bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent' : 'text-content-primary'}`}>{plan.price}</span>
+                  <span className="text-sm text-content-tertiary">/mois</span>
+                </div>
+                <p className="text-sm text-content-secondary leading-relaxed mb-5">{plan.desc}</p>
+
+                {plan.bullets && (
+                  <ul className="space-y-2 mb-6">
+                    {plan.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-2 text-sm text-content-primary">
+                        <Check size={14} className="text-emerald-600 flex-shrink-0 mt-0.5" strokeWidth={3} />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                <a
+                  href={plan.href}
+                  className={`block w-full text-center px-5 py-3 rounded-xl font-semibold text-sm transition-all ${
+                    plan.featured
+                      ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl'
+                      : 'border-2 border-line-hover hover:border-blue-300 text-content-primary hover:bg-blue-50'
+                  }`}
+                >
+                  {plan.cta}
+                </a>
+              </div>
+            </MotionInView>
+          ))}
+        </div>
+
+        <MotionInView delay={400}>
+          <p className="text-center text-xs text-content-tertiary mt-8">
+            Tous les plans : warmup automatique inclus · opt-out RGPD géré · support FR · annulation 1 clic
+          </p>
         </MotionInView>
       </div>
     </section>
@@ -448,79 +652,123 @@ function BeforeAfterSection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-// Données page
+// SECTION 8 — Témoignage clé (pull quote sur deliverability / économies)
+// ─────────────────────────────────────────────────────────────────────
+function PullQuoteSection() {
+  return (
+    <section className="py-24 px-4 sm:px-6 border-t border-line overflow-hidden relative">
+      <div className="absolute top-1/2 -translate-y-1/2 left-1/4 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl pointer-events-none -z-0" />
+      <div className="absolute top-1/2 -translate-y-1/2 right-1/4 w-80 h-80 bg-cyan-200/20 rounded-full blur-3xl pointer-events-none -z-0" />
+
+      <MotionInView className="max-w-4xl mx-auto relative z-10 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-100 text-blue-700 text-[11px] font-bold uppercase tracking-wider mb-6">
+          Témoignage
+        </div>
+        <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-medium text-content-primary leading-snug tracking-tight">
+          <span className="text-blue-400 text-5xl leading-none align-top">“</span>
+          On payait <span className="font-bold">140 €/mois entre Lemlist, Smartlead et un warmup tool</span>. On a tout viré pour Volia à <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent font-bold">49 €/mois</span>. La deliverability est <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">meilleure</span>, et chaque reply atterrit directement dans notre pipeline CRM.
+          <span className="text-blue-400 text-5xl leading-none align-top">”</span>
+        </blockquote>
+        <div className="mt-8 flex items-center justify-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 ring-2 ring-white shadow-md flex items-center justify-center text-white font-bold">
+            JM
+          </div>
+          <div className="text-left">
+            <div className="text-sm font-bold text-content-primary">Julien Martel</div>
+            <div className="text-xs text-content-tertiary">Head of Sales, agence growth · Lyon</div>
+          </div>
+        </div>
+      </MotionInView>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Données page : features bento (6 features killer)
 // ─────────────────────────────────────────────────────────────────────
 const FEATURES = {
-  headline: 'envoyer vos campagnes',
-  subline: 'Pas besoin de Lemlist + Instantly + Smartlead. Tout est intégré, déjà conforme RGPD, et inclus dans Pro.',
+  headline: 'envoyer mieux que Lemlist',
+  subline: 'Multi-tenant Resend, warmup automatique, auto-create CRM. Trois choses que Lemlist + Instantly + Smartlead ne savent pas faire ensemble.',
   items: [
     {
-      icon: 'Mail', featured: true,
-      title: 'Séquences email cold avec relances auto',
-      desc: 'Délais 100 % personnalisables (J+3, J+7, J+14…). Pause auto sur réponse. Limite quotidienne pour préserver la délivrabilité (10–200 envois/jour selon votre warm-up).',
+      icon: 'Globe', featured: true,
+      title: 'Multi-tenant Resend natif',
+      desc: 'Envoyez depuis VOTRE domaine (DKIM / SPF / DMARC alignés automatiquement). Configuration en 5 min via une UI guidée. Idéal agence : 1 compte Volia, autant de domaines clients que voulu.',
     },
     {
       icon: 'Flame',
-      title: 'Warmup domaine automatique',
-      desc: 'Chauffe progressivement votre domaine d\'envoi sur 28 jours (J1 : 10 mails, J28 : 200/jour) pour atteindre Inbox au lieu de Spam. Inclus, zéro config.',
+      title: 'Warmup automatique 28 jours',
+      desc: 'Chauffe progressivement votre domaine (J1 : 10/jour → J28 : 200/jour). Zéro config, zéro tool externe. Lemlist le facture +30 €/mois, chez Volia c\'est inclus.',
     },
     {
-      icon: 'FileText',
-      title: 'Templates pré-écrits par secteur',
-      desc: '20+ templates cold email B2B prêts à l\'emploi : restauration, immobilier, BTP, agences web, e-commerce… Tous testés sur du volume réel. Bibliothèque complète dans /ressources/templates-cold-email-b2b-fr.',
+      icon: 'Repeat',
+      title: 'Multi-inbox rotation',
+      desc: 'Répartition automatique des envois sur plusieurs sender domaines pour préserver la réputation. Volume x3 sans dégrader la deliverability.',
     },
     {
-      icon: 'Tag',
-      title: 'Variables dynamiques',
-      desc: '{{prenom}}, {{entreprise}}, {{ville}}, {{secteur}}… Insertion automatique depuis vos prospects Volia. Fallback configurable si une variable est vide.',
+      icon: 'MousePointerClick',
+      title: 'Tracking opens & clicks',
+      desc: 'Pixel tracking + lien tracking sur subdomain dédié. Stats temps réel par séquence, par étape, par template. A/B test des objets natif.',
     },
     {
-      icon: 'BarChart3',
-      title: 'Stats ouverture/clic/réponse',
-      desc: 'Suivi temps réel par séquence, par étape, par template. Identifiez tout de suite ce qui marche et ce qui flop.',
+      icon: 'Workflow',
+      title: 'Auto-create CRM depuis replies',
+      desc: 'Un prospect répond = un deal créé automatiquement au stage Lead dans Volia CRM. Zéro saisie manuelle, zéro lead perdu. Exclusivité Volia.',
     },
     {
-      icon: 'Shield', wide: true,
-      title: 'Opt-out unifié RGPD automatique',
-      desc: 'Lien de désinscription ajouté en footer de chaque email. L\'opt-out alimente la blocklist Volia (jamais re-contacté). Mention CNIL pré-remplie, déclaration RGPD à jour.',
+      icon: 'BookOpen', wide: true,
+      title: 'Bibliothèque 20+ templates B2B FR',
+      desc: 'Templates cold email français testés sur du volume réel : restauration, BTP, agences web, e-commerce, SaaS, immobilier… Chaque template a 3 variantes (intro, relance, finale). Importez aussi les vôtres.',
     },
   ],
 };
 
 const HOW_IT_WORKS = [
-  { icon: 'Send', title: 'Importez vos prospects', desc: 'Depuis Volia Prospection en 1 clic ou par upload CSV. Les variables (prénom, ville, secteur) sont auto-mappées.' },
-  { icon: 'Settings', title: 'Configurez votre séquence', desc: 'Choisissez un template ou partez de zéro. Définissez les délais, les conditions de relance, l\'A/B test des objets et les limites quotidiennes.' },
-  { icon: 'Zap', title: 'Lancez et suivez', desc: 'Les envois s\'enchaînent automatiquement. Stats live : taux d\'ouverture, clic, réponse. Vous arrêtez ou ajustez quand vous voulez.' },
+  { icon: 'Globe', title: 'Connectez votre domaine', desc: 'Setup DKIM / SPF / DMARC en 5 min via une UI guidée Resend. Vérification automatique de l\'alignement.' },
+  { icon: 'Flame', title: 'Lancez le warmup', desc: 'Volia chauffe votre domaine sur 28 jours (10 → 200 emails/jour). Aucune action de votre part, monitoring intégré.' },
+  { icon: 'Send', title: 'Démarrez vos séquences', desc: 'Choisissez un template FR ou partez de zéro. Les replies créent automatiquement des deals dans le CRM.' },
 ];
 
 const FAQ = [
   {
-    q: 'Pourquoi est-ce inclus dans Pro à 49 € alors que Lemlist seul coûte 39 € ?',
-    a: 'Trois choix techniques qui changent l\'équation économique : (1) on utilise Resend pour l\'email (acheminement à moitié prix vs Postmark/Sendgrid), (2) un warmup intelligent mutualisé qui réduit le coût d\'IP/de domaine vs un setup individuel, (3) une architecture multi-tenant Volia qui amortit l\'infra entre tous les comptes au lieu d\'un fixed cost par client. Résultat : on offre l\'équivalent de Lemlist + Instantly + Smartlead pour le prix d\'un seul concurrent — et le module Prospection est par-dessus.',
+    q: 'Combien d\'emails puis-je envoyer par jour ?',
+    a: 'Pendant le warmup (28 jours) : montée progressive de 10 à 200 emails/jour. Une fois warm, le quota dépend de votre plan : Solo 500 emails/mois, Pro illimité (jusqu\'à 200/jour par domaine), Business illimité avec multi-domaines. La limite est avant tout votre deliverability — si le bounce rate dépasse 2 %, Volia met en pause automatiquement.',
   },
   {
-    q: 'Quels sont les quotas d\'envoi ?',
-    a: 'Les quotas dépendent de votre plan et de votre warm-up : 10 emails/jour la première semaine (warm-up), 30/jour la 2e semaine, jusqu\'à 200/jour à partir du mois 2 si votre délivrabilité reste propre (taux de bounce <2 %, plaintes <0.1 %). Le warmup est entièrement automatique : vous n\'avez rien à configurer, Volia gère la montée en charge progressive sur 28 jours.',
+    q: 'Comment éviter le spam folder ?',
+    a: 'Quatre garde-fous : (1) warmup automatique 28 jours obligatoire avant tout envoi en volume, (2) vérification DKIM / SPF / DMARC à la connexion du domaine, (3) monitoring bounce rate avec pause auto si > 2 %, (4) opt-out unifié qui préserve la réputation du domaine sur la durée. Résultat moyen beta : 62 % d\'ouverture, 94 % d\'inbox rate.',
   },
   {
-    q: 'Vous prévoyez SMS multi-canal ?',
-    a: 'Oui, le module SMS via Twilio arrive en Q3 2026. La phase 1 se concentre sur l\'email pour atteindre une deliverability irréprochable. Les comptes Business auront accès en preview.',
+    q: 'Qu\'est-ce que le warmup d\'un domaine email ?',
+    a: 'Le warmup consiste à augmenter progressivement le volume d\'envoi d\'un nouveau domaine pour que Google / Outlook le considèrent comme légitime. Sans warmup, un domaine neuf qui envoie 100 emails dès J1 finit en spam. Volia simule des échanges et augmente la cadence de 10 à 200 emails/jour sur 28 jours. Lemlist le vend +30 €/mois, Volia l\'inclut dans tous les plans.',
   },
   {
-    q: 'Comment vous gérez la délivrabilité ?',
-    a: 'On ne touche pas à votre domaine d\'envoi (vous gardez votre identité). En revanche on : (1) impose un warm-up progressif, (2) bouncrate-monitoring auto avec pause si >2 %, (3) headers SPF/DKIM check à la config, (4) vérification SMTP des emails avant envoi, (5) opt-out unifié pour préserver votre réputation. Concrètement : 8-15 % de taux de réponse moyen sur du cold email B2B FR.',
+    q: 'Quelle différence avec Lemlist ?',
+    a: 'Trois différences majeures : (1) Volia est multi-tenant Resend natif (vous envoyez depuis VOTRE domaine, Lemlist passe par son infra), (2) warmup inclus vs payant en add-on, (3) auto-create CRM depuis replies — exclusivité Volia. Côté prix : Lemlist 39 € pour 50 emails/jour, Volia Pro 49 € pour cold email illimité + warmup + tracking.',
   },
   {
-    q: 'C\'est conforme RGPD ?',
-    a: 'Oui. Volia Campagnes implémente : (1) opt-out clair en footer obligatoire, (2) registre des consentements/oppositions, (3) blocklist permanente (un prospect désinscrit ne sera jamais re-contacté, même via une autre séquence), (4) base légale "intérêt légitime" documentée, (5) déclaration RGPD à jour conforme aux recommandations CNIL pour la prospection B2B. Vous restez responsable du contenu de vos messages.',
+    q: 'Puis-je utiliser mon propre domaine d\'envoi ?',
+    a: 'Oui, c\'est même obligatoire et c\'est la base de Volia Campagnes. Vous connectez votre domaine (ex: votre-saas.fr), Volia vérifie les enregistrements DNS DKIM / SPF / DMARC en 5 min, et tous les envois partent depuis ce domaine. Vous gardez votre identité de marque et votre réputation reste la vôtre.',
   },
   {
-    q: 'Combien de templates inclus ?',
-    a: 'Plus de 40 templates couvrant 12 secteurs B2B : restauration, BTP, agences digitales, immobilier, e-commerce, hôtellerie, santé, juridique, etc. Chaque template a 3 variantes (intro cold, relance, relance finale) et a été testé sur du volume réel. Vous pouvez aussi importer vos propres templates.',
+    q: 'Comment fonctionne l\'auto-create CRM depuis les replies ?',
+    a: 'Dès qu\'un prospect répond à une séquence, Volia crée automatiquement : (1) un contact dans le CRM avec ses infos enrichies, (2) un deal au stage "Lead" avec la séquence d\'origine en source, (3) une activité "Reply reçue" datée. Vous voyez la conversation complète dans le CRM. Zéro copier-coller, zéro lead qui passe à la trappe. Disponible sur le plan Business.',
   },
   {
-    q: 'Combien de séquences en parallèle ?',
-    a: 'Plan Pro : 5 séquences actives. Plan Business : 25 séquences. Au-delà, contactez-nous pour un quota custom. Chaque séquence peut contenir jusqu\'à 10 étapes email (intro + relances + stop ou reconnect) et autant de prospects que votre quota d\'envoi le permet.',
+    q: 'Comment fonctionne l\'opt-out RGPD ?',
+    a: 'Lien de désinscription ajouté automatiquement en footer de chaque email (impossible à désactiver). L\'opt-out alimente une blocklist permanente : un prospect désinscrit ne sera jamais recontacté, même via une autre séquence ou un autre compte Volia. Mention CNIL pré-remplie, base légale "intérêt légitime" documentée, registre des oppositions tenu automatiquement.',
+  },
+  {
+    q: 'Les templates sont inclus ou à créer ?',
+    a: 'Plus de 20 templates inclus, classés par secteur B2B (restauration, BTP, agences digitales, immobilier, e-commerce, SaaS, hôtellerie, santé, juridique…). Chaque template a 3 variantes (intro cold, relance, finale) et a été testé sur du volume réel. Vous pouvez aussi importer vos propres templates ou partir d\'une page blanche.',
+  },
+  {
+    q: 'Vous prévoyez du SMS multi-canal ?',
+    a: 'Oui, le module SMS via Twilio arrive en Q3 2026. La phase 1 se concentre exclusivement sur l\'email pour atteindre une deliverability irréprochable. Les comptes Business auront accès en preview dès l\'ouverture beta.',
+  },
+  {
+    q: 'Migration depuis Lemlist possible ?',
+    a: 'Oui, en 3 clics : (1) export CSV de vos contacts depuis Lemlist, (2) import dans Volia avec auto-mapping des variables {{firstName}} → {{prenom}}, (3) Volia reconstruit vos séquences existantes à l\'identique. Migration assistée incluse sur Pro et Business — on s\'occupe du transfert pour vous si vous le souhaitez.',
   },
 ];
 
@@ -537,7 +785,7 @@ const product = {
   '@context': 'https://schema.org',
   ...productSchema({
     name: 'Volia Campagnes',
-    description: 'Séquences email B2B automatisées, warmup domaine auto, templates par secteur, tracking ouverture/clic temps réel, opt-out RGPD unifié. 62 % taux ouverture moyen. Inclus dans Pro (49 €) et Business (99 €).',
+    description: 'Cold email B2B illimité, warmup automatique 28 jours, multi-tenant Resend natif, auto-create CRM depuis replies. Alternative française à Lemlist + Instantly + Smartlead. À partir de 49 €/mois.',
     url: PAGE_URL,
     priceFrom: 49,
   }),
@@ -553,50 +801,61 @@ export default function CampagnesProductPage() {
         module="campagnes"
         status="BETA"
         hero={{
-          h1Before: 'Lemlist 39 €. Instantly 30 $.',
-          h1Highlight: 'Volia Campagnes :',
-          h1After: 'inclus dans Pro.',
+          eyebrow: 'Alternative française à Lemlist + Instantly',
+          h1Before: 'Cold email B2B qui finit en',
+          h1Highlight: 'Inbox,',
+          h1After: 'pas en Spam.',
           subtitle: (
             <>
-              Stop le bazar à 3 outils. Séquences email automatisées + warmup auto + templates par secteur,{' '}
-              <strong className="text-content-primary font-semibold">tout dans la même plateforme que vos prospects Volia</strong>.{' '}
-              <strong className="text-emerald-700 font-semibold">62 % de taux d&apos;ouverture moyen</strong> sur la beta.
+              Lemlist 39 €. Instantly 30 $. <strong className="text-content-primary font-semibold">Volia Campagnes : inclus dans Pro à 49 €</strong>. Warmup auto 28 jours + multi-inbox + <strong className="text-emerald-700 font-semibold">auto-create CRM depuis les replies</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Lancer ma première campagne', href: '/signup?intent=campaign' },
-          ctaSecondary: { label: 'Voir les tarifs', href: '/#pricing' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=pro' },
+          ctaSecondary: { label: 'Voir une démo en direct', href: '#demo' },
           trust: [
-            (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Inclus dans Pro &amp; Business</>),
-            'Warmup domaine automatique',
-            'Opt-out RGPD automatique',
+            (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Warmup 28 jours auto</>),
+            'Multi-domaines Resend',
+            'RGPD opt-out 1 clic',
+            'Auto-create CRM',
           ],
           mockup: <HeroMockup />,
         }}
-        afterHero={<LiveStatsBanner />}
+        afterHero={<SocialProofSection />}
         features={FEATURES}
-        afterFeatures={<UseCasesSection />}
+        afterFeatures={
+          <>
+            <ComparisonTableSection />
+            <UseCasesSection />
+          </>
+        }
         howItWorks={HOW_IT_WORKS}
         crossSell={{
-          subtitle: 'Campagnes consomme les prospects extraits par Prospection et alimente le CRM dès qu\'un prospect répond.',
+          subtitle: 'Campagnes consomme les prospects de Prospection et alimente le CRM dès qu\'un prospect répond. Boucle complète, zéro copier-coller.',
           otherModules: [
-            { module: 'prospection', direction: 'in', desc: 'La source de vos prospects. 150+ secteurs, 101 départements, emails enrichis et scorés.', cta: 'Découvrir Prospection' },
-            { module: 'crm', direction: 'out', desc: 'Dès qu\'un prospect répond, il devient un deal dans votre pipeline Kanban. Bientôt disponible.', cta: 'Rejoindre la beta' },
+            { module: 'prospection', direction: 'in', desc: 'La source de vos prospects. 287 k+ entreprises FR, 150+ secteurs, emails enrichis et scorés.', cta: 'Découvrir Prospection' },
+            { module: 'crm', direction: 'out', desc: 'Chaque reply devient un deal au stage Lead. Pipeline Kanban natif Volia. Beta privée Q3 2026.', cta: 'Rejoindre la beta' },
           ],
         }}
+        pricingBanner={<ProblemSolutionSection />}
         pricing={{
-          label: 'Inclus dans Pro (49 €/mois) et Business (99 €/mois)',
-          subtext: 'Pro = 5 séquences en parallèle, jusqu\'à 5 000 prospects en pipeline. Business = 25 séquences, 10 000 prospects, quotas d\'envoi augmentés. Pas d\'add-on caché.',
-          cta: 'Voir les tarifs complets',
-          ctaHref: '/#pricing',
+          label: 'Inclus dans Pro (49 €) et Business (99 €)',
+          subtext: 'Pro = cold email illimité + warmup + tracking + multi-inbox. Business = Pro + CRM intégré + auto-create deals depuis replies. Pas d\'add-on caché, annulation 1 clic.',
+          cta: 'Voir le détail des plans',
+          ctaHref: '#pricing-campagnes',
         }}
-        beforeFaq={<BeforeAfterSection />}
+        beforeFaq={
+          <>
+            <PricingFocusSection />
+            <PullQuoteSection />
+          </>
+        }
         faq={FAQ}
         finalCta={{
-          title: 'Lancez votre première séquence cette semaine',
-          subtitle: 'Templates prêts à l\'emploi, prospects déjà enrichis, opt-out géré. Vous n\'avez plus qu\'à appuyer sur Play.',
-          primary: { label: 'Lancer ma première campagne', href: '/signup?intent=campaign' },
-          secondary: { label: 'Voir les tarifs', href: '/#pricing' },
-          trust: 'Inclus dans Pro · Beta accessible aux comptes payants · Conformité RGPD by default',
+          title: 'Cold email qui marche, pour le prix d\'un café.',
+          subtitle: 'Divisez votre stack par 3, multipliez votre deliverability par 2. Templates prêts, warmup auto, replies dans le CRM — vous n\'avez qu\'à appuyer sur Play.',
+          primary: { label: 'Démarrer gratuitement', href: '/signup?plan=pro' },
+          secondary: { label: 'Voir une démo en direct', href: '#demo' },
+          trust: 'Inclus dans Pro · 14 jours d\'essai · Migration Lemlist assistée · Conformité RGPD by default',
         }}
       />
     </>

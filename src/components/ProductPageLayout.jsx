@@ -304,6 +304,10 @@ export default function ProductPageLayout({
   pricingBanner,
   faq,
   finalCta,
+  // Slots optionnels pour insérer des sections custom dans le flow
+  afterHero,       // ReactNode rendu juste après le hero (ex: stats banner)
+  afterFeatures,   // ReactNode rendu après les features bento (ex: use cases)
+  beforeFaq,       // ReactNode rendu juste avant la FAQ (ex: before/after compare)
 }) {
   const theme = MODULE_THEMES[module];
   const statusBadge = STATUS_BADGES[status];
@@ -404,6 +408,9 @@ export default function ProductPageLayout({
           </div>
         </section>
 
+        {/* Slot : juste après le hero (ex: live stats banner) */}
+        {afterHero}
+
         {/* ───────────────────────────────────────────────────────────
             FEATURES — bento layout
          */}
@@ -411,8 +418,10 @@ export default function ProductPageLayout({
           <div className="max-w-6xl mx-auto">
             <MotionInView>
               <div className="text-center mb-16">
-                <p className={`text-sm font-semibold mb-3 uppercase tracking-wider ${theme.linkText}`}>Fonctionnalités</p>
-                <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme.pill} text-[11px] font-bold uppercase tracking-wider mb-4`}>
+                  Fonctionnalités
+                </span>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                   Tout pour {features.headline || `réussir avec Volia ${theme.label}`}
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
@@ -428,7 +437,7 @@ export default function ProductPageLayout({
                 return (
                   <MotionInView
                     key={f.title}
-                    delay={i * 80}
+                    delay={i * 100}
                     className={isWide ? 'lg:col-span-2' : ''}
                   >
                     <div className={`group h-full p-7 rounded-2xl border-2 ${theme.cardBorder} bg-gradient-to-br ${theme.cardBg} shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}>
@@ -445,6 +454,9 @@ export default function ProductPageLayout({
           </div>
         </section>
 
+        {/* Slot : après les features bento (ex: use cases personas) */}
+        {afterFeatures}
+
         {/* ───────────────────────────────────────────────────────────
             HOW IT WORKS — 3 steps avec connector
          */}
@@ -452,8 +464,10 @@ export default function ProductPageLayout({
           <div className="max-w-6xl mx-auto">
             <MotionInView>
               <div className="text-center mb-20">
-                <p className={`text-sm font-semibold mb-3 uppercase tracking-wider ${theme.linkText}`}>Comment ça marche</p>
-                <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme.pill} text-[11px] font-bold uppercase tracking-wider mb-4`}>
+                  Comment ça marche
+                </span>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                   3 étapes, c'est tout
                 </h2>
               </div>
@@ -493,8 +507,10 @@ export default function ProductPageLayout({
             <div className="max-w-6xl mx-auto">
               <MotionInView>
                 <div className="text-center mb-12">
-                  <p className={`text-sm font-semibold mb-3 uppercase tracking-wider ${theme.linkText}`}>Suite Volia</p>
-                  <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                  <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme.pill} text-[11px] font-bold uppercase tracking-wider mb-4`}>
+                    Suite Volia
+                  </span>
+                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                     Connecté aux autres modules Volia
                   </h2>
                   <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
@@ -546,8 +562,10 @@ export default function ProductPageLayout({
                 <div className="mb-8">{pricingBanner}</div>
               ) : null}
               <div className={`rounded-2xl border-2 ${theme.cardBorder} bg-gradient-to-br ${theme.cardBg} p-8 sm:p-10 text-center shadow-lg`}>
-                <p className={`text-sm font-semibold mb-3 uppercase tracking-wider ${theme.linkText}`}>Tarification</p>
-                <h2 className="text-2xl sm:text-3xl font-bold mb-3 text-content-primary">
+                <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme.pill} text-[11px] font-bold uppercase tracking-wider mb-4`}>
+                  Tarification
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-bold mb-3 text-content-primary tracking-tight">
                   {pricing.label}
                 </h2>
                 {pricing.subtext && (
@@ -565,6 +583,9 @@ export default function ProductPageLayout({
           </div>
         </section>
 
+        {/* Slot : juste avant la FAQ (ex: before/after comparison) */}
+        {beforeFaq}
+
         {/* ───────────────────────────────────────────────────────────
             FAQ
          */}
@@ -573,8 +594,10 @@ export default function ProductPageLayout({
             <div className="max-w-3xl mx-auto">
               <MotionInView>
                 <div className="text-center mb-12">
-                  <p className={`text-sm font-semibold mb-3 uppercase tracking-wider ${theme.linkText}`}>FAQ</p>
-                  <h2 className="text-3xl sm:text-4xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
+                  <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${theme.pill} text-[11px] font-bold uppercase tracking-wider mb-4`}>
+                    FAQ
+                  </span>
+                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                     Questions fréquentes
                   </h2>
                 </div>

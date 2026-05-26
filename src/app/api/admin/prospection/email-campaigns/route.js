@@ -50,18 +50,45 @@ export async function POST(request) {
     .maybeSingle();
   if (!list) return NextResponse.json({ error: 'Liste introuvable' }, { status: 404 });
 
-  // Si email_sender_id fourni : doit appartenir au user ET être verified.
-  // Sinon on garde le fallback Volia (hello@volia.fr) au moment de l'envoi.
-  if (email_sender_id) {
-    const { data: sender } = await supabase
-      .from('email_senders')
-      .select('id, status')
-      .eq('id', email_sender_id)
-      .eq('user_id', user.id)
-      .maybeSingle();
-    if (!sender || sender.status !== 'verified') {
-      return NextResponse.json({ error: 'Sender invalide ou pas vérifié' }, { status: 400 });
-    }
+  // SÉCURITÉ MULTI-TENANT : email_sender_id est OBLIGATOIRE et doit
+  // appartenir au user + être verified. On NE PERMET PAS l'envoi
+  // depuis hello@volia.fr (notre domaine) au nom d'un client tiers —
+  // ça brûlerait notre réputation, mélangerait les responsabilités
+  // légales, et permettrait à n'importe quel client de spammer en
+  // notre nom.
+  if (!email_sender_id) {
+    return NextResponse.json(
+      {
+        error: 'Configurez d\'abord votre domaine d\'envoi',
+        details: 'Pour envoyer une campagne, vous devez connecter votre propre domaine vérifié dans Paramètres > Domaines d\'envoi email.',
+        action: 'configure_sender',
+        link: '/settings/email-senders',
+      },
+      { status: 400 }
+    );
+  }
+  const { data: sender } = await supabase
+    .from('email_senders')
+    .select('id, status, domain')
+    .eq('id', email_sender_id)
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (!sender) {
+    return NextResponse.json(
+      { error: 'Sender introuvable ou ne vous appartient pas' },
+      { status: 404 }
+    );
+  }
+  if (sender.status !== 'verified') {
+    return NextResponse.json(
+      {
+        error: `Domaine ${sender.domain} pas encore vérifié`,
+        details: 'Retournez sur la page Domaines d\'envoi pour terminer la configuration DNS.',
+        action: 'verify_sender',
+        link: `/settings/email-senders`,
+      },
+      { status: 400 }
+    );
   }
 
   const totalRecipients = (list.email_count || 0) - (list.opt_out_count || 0);

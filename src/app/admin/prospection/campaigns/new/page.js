@@ -218,24 +218,41 @@ Anthony</p>
                     <select
                       value={emailSenderId}
                       onChange={(e) => setEmailSenderId(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm text-content-primary focus:outline-none focus:border-violet-500 transition"
+                      required
+                      className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm text-content-primary focus:outline-none focus:border-violet-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={senders.length === 0}
                     >
-                      <option value="">Sender par défaut Volia (hello@volia.fr)</option>
-                      {senders.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.from_name ? `${s.from_name} — ` : ''}noreply@{s.domain} (vérifié)
-                        </option>
-                      ))}
+                      {senders.length === 0 ? (
+                        <option value="">Aucun domaine vérifié — configurez-en un d&apos;abord</option>
+                      ) : (
+                        <>
+                          <option value="">Sélectionnez un domaine d&apos;envoi…</option>
+                          {senders.map((s) => (
+                            <option key={s.id} value={s.id}>
+                              {s.from_name ? `${s.from_name} — ` : ''}noreply@{s.domain} (vérifié)
+                            </option>
+                          ))}
+                        </>
+                      )}
                     </select>
                     {senders.length === 0 && (
-                      <div className="mt-2 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 leading-relaxed flex items-start gap-2">
-                        <AlertTriangle size={12} className="mt-0.5 flex-shrink-0" />
-                        <span>
-                          Aucun domaine vérifié. Configurez votre domaine d&apos;envoi pour une meilleure deliverability →{' '}
-                          <Link href="/settings/email-senders" className="underline font-semibold hover:text-amber-200">
-                            /settings/email-senders
-                          </Link>
-                        </span>
+                      <div className="mt-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-300 leading-relaxed">
+                        <div className="flex items-start gap-2 mb-2">
+                          <AlertTriangle size={14} className="mt-0.5 flex-shrink-0" />
+                          <strong className="text-red-200">Action requise : connectez votre domaine d&apos;envoi</strong>
+                        </div>
+                        <p className="ml-6 mb-2 text-red-300/90">
+                          Pour des raisons de sécurité et de deliverability, vous devez envoyer vos
+                          campagnes depuis VOTRE propre domaine (ex : send.votre-marque.fr).
+                          Volia ne permet pas l&apos;envoi depuis le domaine partagé volia.fr —
+                          chaque client a son propre domaine vérifié.
+                        </p>
+                        <Link
+                          href="/settings/email-senders"
+                          className="ml-6 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-red-200 font-semibold transition text-[11px]"
+                        >
+                          Connecter mon domaine →
+                        </Link>
                       </div>
                     )}
                   </div>

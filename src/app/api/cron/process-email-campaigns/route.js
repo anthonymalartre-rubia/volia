@@ -111,47 +111,51 @@ export async function GET(request) {
     const optOutUrl = `${baseUrl}/api/prospection/opt-out?c=${contact.id}&cmp=${campaign.id}`;
     html = appendOptOutFooter(html, optOutUrl, campaign.name);
 
-    // Résolution du From/ReplyTo en fonction du sender multi-tenant :
-    //   - campaign.email_sender_id NULL    → fallback ancien comportement
-    //     (campaign.from_name / campaign.from_email — typiquement hello@volia.fr).
-    //     C'est la soft migration : les campagnes pré-feature continuent d'envoyer.
-    //   - sender_id présent + verified     → on utilise le domaine du customer :
-    //     From: "{sender.from_name} <noreply@{sender.domain}>"
-    //   - sender_id présent mais sender absent du map (= deleted ou pas verified)
-    //     → on échoue ce send proprement plutôt que d'envoyer depuis le mauvais
-    //     domaine et de cramer la délivrabilité.
-    let fromHeader;
-    if (campaign.email_sender_id) {
-      const sender = senderMap.get(campaign.email_sender_id);
-      if (!sender) {
-        return updateSendStatus(supabase, send.id, 'failed', {
-          error: 'Sender not verified or deleted',
-        });
-      }
-      const displayName = sender.from_name || campaign.from_name || 'Volia';
-      fromHeader = `${displayName} <noreply@${sender.domain}>`;
-    } else {
-      fromHeader = `${campaign.from_name} <${campaign.from_email}>`;
+    // Résolution du From en mode multi-tenant STRICT (sécurité) :
+    //   - campaign.email_sender_id NULL ou sender absent du map = FAIL
+    //     On NE PEUT PAS envoyer depuis hello@volia.fr (domaine Volia)
+    //     au nom d'un client tiers — ça brûlerait notre réputation
+    //     domaine, mélangerait les responsabilités légales/RGPD, et
+    //     permettrait à n'importe quel client de spammer en notre nom.
+    //   - sender_id présent + verified     → From="{sender.from_name}
+    //     <noreply@{sender.domain}>" (toujours le domaine du customer)
+    //
+    // Conséquence : un user qui n'a pas configuré son propre domaine
+    // d'envoi (cf /settings/email-senders) ne peut PAS envoyer de
+    // campagne. L'API POST /api/admin/prospection/email-campaigns
+    // bloque déjà la création sans email_sender_id verified ; ici on
+    // est la dernière ligne de défense pour les campagnes legacy
+    // ou en cas de sender supprimé en cours de queue.
+    if (!campaign.email_sender_id) {
+      return updateSendStatus(supabase, send.id, 'failed', {
+        error: 'No verified sender configured (configure your domain at /settings/email-senders)',
+      });
     }
+    const sender = senderMap.get(campaign.email_sender_id);
+    if (!sender) {
+      return updateSendStatus(supabase, send.id, 'failed', {
+        error: 'Sender not verified or deleted',
+      });
+    }
+    const displayName = sender.from_name || campaign.from_name || 'Volia';
+    const fromHeader = `${displayName} <noreply@${sender.domain}>`;
 
     // Résolution du reply-to :
     //   - Priorité 1 : campaign.reply_to (override explicite par l'utilisateur,
-    //     ex: "anthony@volia.fr") → les replies arrivent direct chez le client,
-    //     pas chez nous, mais on perd l'auto-create CRM.
-    //   - Priorité 2 (défaut) : adresse inbound Volia par-campagne :
+    //     ex: "anthony@cabinet-dupont.fr") → les replies arrivent direct chez
+    //     le client, pas chez nous → on perd l'auto-create CRM mais on
+    //     respecte le choix.
+    //   - Priorité 2 (défaut) : adresse inbound Volia par-campagne
     //     `c-{campaign_id_hex}@reply.volia.fr` → Resend Inbound capte, le
     //     webhook /api/webhooks/resend/inbound parse le local-part pour
     //     retrouver la campagne et auto-crée le contact + deal CRM.
-    //   - Fallback ultime si la construction échoue : reply@{sender.domain}
-    //     (pour les senders multi-tenant) ou pas de reply_to du tout.
-    let replyToHeader = campaign.reply_to;
-    if (!replyToHeader) {
-      replyToHeader = buildCampaignReplyAddress(campaign.id);
-    }
-    if (!replyToHeader && campaign.email_sender_id) {
-      const sender = senderMap.get(campaign.email_sender_id);
-      if (sender) replyToHeader = `reply@${sender.domain}`;
-    }
+    //
+    //   NOTE : reply.volia.fr est NOTRE infrastructure inbound (pas le
+    //   domaine du client). On a le droit légal/RGPD car on agit comme
+    //   processor pour collecter les replies au nom du client. Le From
+    //   reste bien le domaine du client (sender.domain), seul le reply_to
+    //   passe par notre catch-all. Pattern standard SaaS (Mailchimp, etc.).
+    const replyToHeader = campaign.reply_to || buildCampaignReplyAddress(campaign.id);
 
     // Tags Resend pour le routage webhook (Resend exige alphanum + _ + -, max 256 chars).
     // On stocke campaign_id + owner_id pour pouvoir dispatcher côté receveur si

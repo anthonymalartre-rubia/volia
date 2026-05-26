@@ -14,6 +14,7 @@ import {
   ArrowUpRight,
   Lock,
   Gift,
+  PlayCircle,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import UpgradeRequiredModal from '@/components/UpgradeRequiredModal';
@@ -194,6 +195,20 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
             <div className="flex-1 text-left">
               <div>{t('sidebar.settings')}</div>
               <div className="text-[10px] text-content-faint">{t('sidebar.settingsDesc')}</div>
+            </div>
+          </a>
+
+          {/* Tutoriels link — accès rapide au centre vidéo (self-service) */}
+          <a
+            href="/tutoriels"
+            className="mt-1 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-content-tertiary hover:text-content-primary hover:bg-surface-card transition-all duration-200"
+          >
+            <div className="p-1.5 rounded-lg bg-surface-card">
+              <PlayCircle size={16} />
+            </div>
+            <div className="flex-1 text-left">
+              <div>Tutoriels</div>
+              <div className="text-[10px] text-content-faint">5 vidéos · 19 min</div>
             </div>
           </a>
 

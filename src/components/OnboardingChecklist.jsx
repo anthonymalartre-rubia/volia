@@ -20,7 +20,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   CheckCircle2, Circle, Search, Upload, Send, Download,
-  User, ChevronDown, X, Sparkles, ArrowRight,
+  User, ChevronDown, X, Sparkles, ArrowRight, PlayCircle,
 } from 'lucide-react';
 import BookDemoButton from '@/components/BookDemoButton';
 
@@ -33,6 +33,13 @@ import BookDemoButton from '@/components/BookDemoButton';
 // de masquer l'étape ou de l'envoyer vers une page gated qui renverra
 // une erreur d'accès).
 const STEPS = [
+  {
+    id: 'watch_getting_started',
+    title: 'Regardez le tutoriel « Démarrer avec Volia »',
+    desc: '3 min pour visualiser le parcours complet : signup → 1ère recherche',
+    icon: PlayCircle,
+    cta: { label: 'Regarder', href: '/tutoriels#getting-started' },
+  },
   {
     id: 'first_search',
     title: 'Lancez votre 1ère recherche',

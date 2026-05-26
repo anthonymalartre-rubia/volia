@@ -19,26 +19,60 @@
 import { useEffect, useState } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import TopBar from '@/components/TopBar';
+import CrispChat from '@/components/CrispChat';
 
 export default function AppShell({ children }) {
   const [user, setUser] = useState(null);
+  const [plan, setPlan] = useState(null);
 
   useEffect(() => {
     const supabase = getSupabase();
     if (!supabase) return;
+
+    let cancelled = false;
+
+    // Récupère le plan une fois le user identifié (best-effort, pour Crisp).
+    async function loadPlan(userId) {
+      if (!userId) return;
+      try {
+        const { data } = await supabase
+          .from('user_profiles')
+          .select('plan')
+          .eq('id', userId)
+          .maybeSingle();
+        if (!cancelled && data?.plan) setPlan(data.plan);
+      } catch {
+        /* noop — affichage Crisp ne doit jamais casser l'app */
+      }
+    }
+
     supabase.auth.getUser().then(({ data }) => {
-      if (data?.user) setUser(data.user);
+      if (cancelled) return;
+      if (data?.user) {
+        setUser(data.user);
+        loadPlan(data.user.id);
+      }
     });
+
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+      const u = session?.user || null;
+      setUser(u);
+      if (u?.id) loadPlan(u.id);
+      else setPlan(null);
     });
-    return () => sub?.subscription?.unsubscribe?.();
+
+    return () => {
+      cancelled = true;
+      sub?.subscription?.unsubscribe?.();
+    };
   }, []);
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary">
       <TopBar user={user} showHamburger={false} />
       {children}
+      {/* Live chat in-app (Crisp) — uniquement post-login + consentement marketing */}
+      <CrispChat user={user} plan={plan} enabled={Boolean(user)} />
     </div>
   );
 }

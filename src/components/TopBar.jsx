@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { LogOut, Menu, Loader2, Sun, Moon, Globe } from 'lucide-react';
+import { LogOut, Menu, Loader2, Sun, Moon, Globe, HelpCircle } from 'lucide-react';
+import Link from 'next/link';
 import { useTheme } from '@/lib/theme';
 import { useI18n } from '@/lib/i18n';
 import NotificationBell from '@/components/NotificationBell';
@@ -79,8 +80,16 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           </div>
         )}
 
-        {/* Right: lang toggle + theme toggle + user */}
+        {/* Right: aide + lang toggle + theme toggle + user */}
         <div className="flex items-center gap-2">
+          <Link
+            href="/docs"
+            className="p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all hidden sm:flex items-center"
+            title="Centre d'aide"
+            aria-label="Centre d'aide"
+          >
+            <HelpCircle size={16} />
+          </Link>
           <button
             onClick={() => setLocale(locale === 'fr' ? 'en' : 'fr')}
             className="p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all flex items-center gap-1.5"

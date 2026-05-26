@@ -104,10 +104,11 @@ const NAV_ITEMS = [
   {
     id: 'aide',
     label: 'Aide',
-    description: 'Documentation & support',
-    href: '/settings#aide',
+    description: 'Centre de documentation',
+    href: '/docs',
     icon: BookOpen,
-    matches: () => false,
+    matches: (p) => p.startsWith('/docs'),
+    external: false,
   },
   {
     id: 'danger',

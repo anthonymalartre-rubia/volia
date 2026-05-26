@@ -5,6 +5,7 @@ import { getAllPosts } from '@/lib/blog';
 import { getAllGlossaryTerms } from '@/lib/glossary';
 import { getAllGuides } from '@/lib/guides';
 import { getAllResources } from '@/lib/resources';
+import { getAllArticles as getAllDocsArticles } from '@/lib/docs';
 
 /**
  * Sitemap multi-fichiers via Next.js generateSitemaps().
@@ -66,6 +67,7 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/etude/prospection-b2b-france-2026`, priority: 1.0, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/etude/etat-cold-email-france-2026`, priority: 0.95, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/api`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/tutoriels`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/cgu`, priority: 0.3, changeFrequency: 'yearly', lastModified: now },
       { url: `${baseUrl}/cgv`, priority: 0.4, changeFrequency: 'yearly', lastModified: now },
       { url: `${baseUrl}/dpa`, priority: 0.4, changeFrequency: 'yearly', lastModified: now },
@@ -148,7 +150,17 @@ export default async function sitemap({ id }) {
       }),
     ];
 
-    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...comparatifLongForm, ...ressources, ...blog, ...glossary, ...guides];
+    const docs = [
+      { url: `${baseUrl}/docs`, priority: 0.85, changeFrequency: 'weekly', lastModified: now },
+      ...getAllDocsArticles().map((a) => ({
+        url: `${baseUrl}/docs/${a.slug}`,
+        priority: 0.7,
+        changeFrequency: 'monthly',
+        lastModified: a.updatedAt ? new Date(a.updatedAt) : now,
+      })),
+    ];
+
+    return [...staticPages, ...outilsHub, ...vsUrls, ...pairsUrls, ...comparatifLongForm, ...ressources, ...blog, ...glossary, ...guides, ...docs];
   }
 
   // ─── Chunks SEO programmatiques ────────────────────────────────────

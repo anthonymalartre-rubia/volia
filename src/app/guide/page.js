@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, Clock, ArrowRight } from 'lucide-react';
+import { BookOpen, Clock, ArrowRight, PlayCircle } from 'lucide-react';
 import { getAllGuides } from '@/lib/guides';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
@@ -39,6 +39,18 @@ export default function GuideIndex() {
           <p className="text-lg text-content-secondary leading-relaxed max-w-2xl">
             Guides longs et opérationnels pour chaque secteur. Méthodes testées, chiffres réels, templates inclus. De quoi prospecter sérieusement.
           </p>
+
+          {/* Cross-link vers le centre vidéo — propose un format alternatif
+              court (5 tutos, 19 min) à ceux qui préfèrent la vidéo aux guides
+              long-form. */}
+          <Link
+            href="/tutoriels"
+            className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-line bg-surface-card hover:bg-surface-elevated hover:border-violet-500/30 transition text-sm text-content-secondary hover:text-content-primary"
+          >
+            <PlayCircle size={14} className="text-violet-400" />
+            <span>Préférez la vidéo ? <span className="font-semibold text-content-primary">5 tutoriels · 19 min</span></span>
+            <ArrowRight size={12} />
+          </Link>
         </section>
 
         <section className="max-w-4xl mx-auto px-4 sm:px-6">

@@ -1160,6 +1160,276 @@ export function newsletterMonthlyEmail({
   };
 }
 
+// ═══════════════════════════════════════════════════════════════════
+// DRIP CAMPAIGN ONBOARDING (J+1, J+3, J+7, J+14)
+// ═══════════════════════════════════════════════════════════════════
+//
+// 4 emails déclenchés par le cron /api/cron/process-drip-emails (daily
+// 10h UTC). Le welcome (J+0) est déjà géré par le flux signup. Tous les
+// liens portent des UTM `utm_source=email&utm_medium=drip&utm_campaign=<step>`
+// pour mesurer la conversion par drip dans Vercel Analytics.
+//
+// Idempotence : chaque step écrit sa clé dans user_profiles.drip_emails_sent
+// pour ne jamais réenvoyer le même email à un même user.
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * Construit une URL avec UTMs drip cohérents.
+ * Centralisé ici pour éviter les divergences entre templates.
+ */
+function utmify(path, campaign) {
+  const sep = path.includes('?') ? '&' : '?';
+  return `${APP_URL}${path}${sep}utm_source=email&utm_medium=drip&utm_campaign=${campaign}`;
+}
+
+/**
+ * Drip J+1 — Use case / activation
+ *
+ * Goal : pousser l'user à lancer SA 1ère recherche dans les 24h.
+ * Stat : un user qui n'a pas lancé de search dans les 48h après signup
+ * a 70% de chance de churn. Cet email = anti-churn principal.
+ */
+export function useCaseDay1Email(userName) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/dashboard', 'use_case_d1');
+  return {
+    subject: `${name}, votre 1ère recherche en 30 secondes`,
+    html: layout({
+      preheader: '3 étapes simples pour récupérer vos premiers prospects qualifiés dès aujourd\'hui.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🚀',
+          title: 'Lancez votre 1ère recherche',
+          greeting: `Bonjour ${name}, hier vous avez créé votre compte Volia. Voici comment récupérer vos <strong style="color:${COLORS.text};">premiers prospects qualifiés</strong> dans les 30 prochaines secondes.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 12px;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">1. Décrivez votre cible</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Ex : "Restaurants à Paris" ou "Syndics de copro Marseille". Ou cliquez sur un preset secteur.</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">2. Cliquez sur "Lancer"</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia interroge Google Places et la cascade waterfall (7 sources d'emails). Comptez 1-2 minutes.</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0 0;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">3. Exportez en CSV ou lancez une campagne</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Importez dans HubSpot, Salesforce, Lemlist… ou utilisez directement Volia Campagnes.</p>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Lancer ma recherche', ctaUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Bloqué quelque part ? Répondez à cet email, on regarde avec vous.
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Drip J+3 — Template killer
+ *
+ * Goal : montrer la valeur du module Campagnes en partageant LE template
+ * qui marche le mieux en France (subject "Quick question — {{company}}").
+ * Concret, immédiatement actionnable.
+ */
+export function templateKillerDay3Email(userName) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/admin/prospection/campaigns/new', 'template_d3');
+  const browseUrl = utmify('/admin/prospection/templates', 'template_d3_browse');
+  return {
+    subject: 'Le template cold email qui marche le mieux en France',
+    html: layout({
+      preheader: '8-12% de taux de réponse. Le subject line le plus performant testé sur 50k emails B2B FR.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '✉️',
+          title: `${name}, voici LE template qui convertit`,
+          greeting: `Notre équipe a analysé <strong style="color:${COLORS.text};">50 000 cold emails B2B</strong> envoyés via Volia ces 6 derniers mois. Un template ressort très clairement : <strong style="color:${COLORS.text};">8 à 12% de taux de réponse</strong>.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
+          <tr>
+            <td style="padding:18px 20px;background-color:#0f172a;border-radius:12px;">
+              <p style="margin:0 0 6px;font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;font-weight:600;">📧 Subject</p>
+              <p style="margin:0 0 14px;font-family:Menlo,Monaco,Consolas,monospace;font-size:15px;color:#ffffff;font-weight:600;">Quick question — {{company}}</p>
+              <p style="margin:0 0 6px;font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;font-weight:600;">✍️ Body</p>
+              <p style="margin:0;font-family:Menlo,Monaco,Consolas,monospace;font-size:13px;color:#e2e8f0;line-height:1.6;">
+                Hello {{first_name}},<br/><br/>
+                Je suis tombé sur {{company}} en cherchant des [secteur] sur [région].<br/><br/>
+                On aide des boîtes comme la vôtre à [résultat tangible] — sans changer d'outil.<br/><br/>
+                Question rapide : est-ce que [pain point] est un sujet pour vous en ce moment&nbsp;?<br/><br/>
+                Si oui, 15 min en visio cette semaine&nbsp;?<br/><br/>
+                — {{sender_first_name}}
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 24px;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.successLight};border-radius:10px;">
+              <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:${COLORS.text};">Pourquoi ça marche</p>
+              <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
+                <li><strong style="color:${COLORS.text};">Subject court</strong> (3 mots) : ouvre à 65%+ sur mobile</li>
+                <li><strong style="color:${COLORS.text};">1 question fermée</strong> : friction nulle pour répondre</li>
+                <li><strong style="color:${COLORS.text};">Pas de pitch</strong> : on demande, on ne vend pas</li>
+              </ul>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Créer ma campagne', ctaUrl)}</div>
+        <div align="center">${ctaSecondary('Voir tous les templates', browseUrl)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Drip J+7 — Trial expiration hint
+ *
+ * Goal : créer l'urgence chez les users en trial Pro. Stats personnalisées
+ * pour rendre la perte concrète (loss aversion). Si l'user n'est PAS en
+ * trial, le cron skip ce step (cf. process-drip-emails).
+ *
+ * @param {string} userName
+ * @param {{ prospectsFound:number, emailsEnriched:number, daysRemaining:number }} stats
+ */
+export function trialExpiringDay7Email(userName, stats = {}) {
+  const name = userName || 'là';
+  const {
+    prospectsFound = 0,
+    emailsEnriched = 0,
+    daysRemaining = 7,
+  } = stats;
+  const ctaUrl = utmify('/pricing?plan=pro', 'trial_expiring_d7');
+  return {
+    subject: `Plus que ${daysRemaining} jours de Pro — gardez vos features`,
+    html: layout({
+      preheader: `${prospectsFound} prospects récupérés, ${emailsEnriched} emails enrichis. Conservez tout en passant Pro.`,
+      accent: COLORS.warning,
+      content: `
+        ${hero({
+          emoji: '⏱️',
+          title: `Plus que ${daysRemaining} jours de Pro`,
+          greeting: `Bonjour ${name}, votre trial Pro se termine bientôt. Voici ce que vous avez accompli en 1 semaine.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="stat-grid" style="width:100%;margin:0 0 24px;">
+          <tr>
+            <td width="50%" style="padding:0 4px;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:${COLORS.brandLight};border-radius:10px;padding:18px 12px;">
+                <tr>
+                  <td style="text-align:center;">
+                    <div style="font-size:30px;font-weight:700;color:${COLORS.brand};line-height:1;">${prospectsFound}</div>
+                    <div style="font-size:11px;color:${COLORS.textMuted};text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;font-weight:500;">Prospects trouvés</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="50%" style="padding:0 4px;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:${COLORS.successLight};border-radius:10px;padding:18px 12px;">
+                <tr>
+                  <td style="text-align:center;">
+                    <div style="font-size:30px;font-weight:700;color:${COLORS.success};line-height:1;">${emailsEnriched}</div>
+                    <div style="font-size:11px;color:${COLORS.textMuted};text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;font-weight:500;">Emails enrichis</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
+          Sans upgrade, vous repasserez en plan gratuit dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong> :
+          quota limité à 100 prospects/mois, cascade waterfall désactivée, module Campagnes coupé.
+          <br/><br/>
+          <strong style="color:${COLORS.text};">Gardez Pro pour 49€/mois</strong> et continuez sur votre lancée.
+        </p>
+
+        <div align="center">${ctaPrimary('Garder Pro', ctaUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Vous gardez quoi qu'il arrive vos prospects, dossiers et exports déjà réalisés.
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Drip J+14 — Final push (démo Cal.com)
+ *
+ * Goal : last touchpoint humain. Court, personnel. Pour les users qui n'ont
+ * pas encore converti mais ont un peu utilisé le produit. Filet de sécurité
+ * avant qu'ils ne sortent du radar.
+ */
+export function finalDemoDay14Email(userName) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/demo', 'final_demo_d14');
+  return {
+    subject: 'On se voit en démo ?',
+    html: layout({
+      preheader: '15 min avec Anthony, fondateur de Volia. On voit ensemble si on peut vous faire gagner du temps.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '👋',
+          title: `${name}, on se voit 15 min ?`,
+          greeting: `Bonjour ${name}, vous avez créé votre compte Volia il y a 2 semaines. Je suis Anthony, le fondateur.`,
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${COLORS.text};">
+          Je voulais simplement vous proposer un <strong>échange court (15 min)</strong> en visio pour :
+        </p>
+
+        <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
+          <li>Voir <strong style="color:${COLORS.text};">votre cas concret</strong> et si Volia peut vous faire gagner du temps</li>
+          <li>Vous montrer des features avancées (waterfall, campagnes, automations) si pertinent</li>
+          <li>Récolter votre avis — c'est aussi comme ça qu'on s'améliore</li>
+        </ul>
+
+        <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:${COLORS.textMuted};">
+          Pas de pitch commercial, pas d'engagement. Juste une vraie discussion entre 2 personnes qui font de la prospection B2B.
+        </p>
+
+        <div align="center">${ctaPrimary('Réserver 15 min', ctaUrl)}</div>
+
+        <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+          Si la démo n'est pas pertinente pour vous, <strong style="color:${COLORS.text};">répondez juste à cet email</strong> avec vos questions / blocages. Je lis et je réponds personnellement.
+        </p>
+
+        <p style="margin:24px 0 0;font-size:14px;color:${COLORS.text};line-height:1.5;">
+          À très vite,<br/>
+          <strong>Anthony Malartre</strong><br/>
+          <span style="color:${COLORS.textMuted};font-size:13px;">Fondateur Volia</span>
+        </p>
+      `,
+    }),
+  };
+}
+
 /**
  * Invitation à rejoindre une team Volia Business (multi-utilisateurs).
  *

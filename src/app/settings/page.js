@@ -139,6 +139,13 @@ export default function SettingsPage() {
   const [filterPersonalEmails, setFilterPersonalEmails] = useState(true);
   const [filterLoading, setFilterLoading] = useState(false);
 
+  // Drip emails opt-out (onboarding 5-mail sequence J+0 → J+14).
+  // Default true côté DB ; on lit la valeur du profil. Si l'user toggle OFF,
+  // le cron process-drip-emails skip tous ses envois (mais les transactionnels
+  // obligatoires — paiement, mot de passe, RGPD — continuent normalement).
+  const [dripEmailsEnabled, setDripEmailsEnabled] = useState(true);
+  const [dripLoading, setDripLoading] = useState(false);
+
   // Delete account
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState('');
@@ -222,6 +229,7 @@ export default function SettingsPage() {
 
     setProfile(prof);
     setFilterPersonalEmails(prof?.filter_personal_emails !== false);
+    setDripEmailsEnabled(prof?.drip_emails_enabled !== false);
 
     // Fetch usage data for current month
     const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
@@ -288,6 +296,36 @@ export default function SettingsPage() {
       showToast(t('settings.networkError'), 'error');
     }
     setPasswordLoading(false);
+  }
+
+  /**
+   * Toggle opt-in/opt-out de la drip campaign onboarding.
+   * Quand OFF : le cron process-drip-emails skip tous les envois pour cet user.
+   * Les emails transactionnels obligatoires (paiement, RGPD, sécurité) continuent.
+   */
+  async function handleToggleDripEmails() {
+    setDripLoading(true);
+    const newValue = !dripEmailsEnabled;
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ drip_emails_enabled: newValue })
+        .eq('id', user.id);
+      if (error) {
+        showToast(t('settings.updateError') || 'Erreur', 'error');
+      } else {
+        setDripEmailsEnabled(newValue);
+        showToast(
+          newValue
+            ? 'Emails d\'aide et conseils activés'
+            : 'Désactivé. Vous ne recevrez plus que les emails essentiels.',
+          newValue ? 'success' : 'success'
+        );
+      }
+    } catch {
+      showToast(t('settings.networkError') || 'Erreur réseau', 'error');
+    }
+    setDripLoading(false);
   }
 
   async function handleToggleFilter() {
@@ -658,6 +696,18 @@ export default function SettingsPage() {
                       ))}
                     </div>
                   }
+                />
+
+                {/* Drip emails opt-in/out — onboarding sequence J+0 → J+14 */}
+                <SettingRow
+                  icon={<Mail className="h-4 w-4 text-violet-500" />}
+                  title="Emails d'aide et conseils"
+                  description={
+                    dripEmailsEnabled
+                      ? 'Vous recevez nos conseils d\'onboarding et bonnes pratiques (5 emails sur 14 jours).'
+                      : 'Désactivé. Vous ne recevez que les emails essentiels (paiement, sécurité, RGPD).'
+                  }
+                  control={<Toggle on={dripEmailsEnabled} onClick={handleToggleDripEmails} loading={dripLoading} />}
                 />
 
                 {/* GDPR Filter — version compacte */}

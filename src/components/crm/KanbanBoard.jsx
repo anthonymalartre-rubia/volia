@@ -105,30 +105,30 @@ function KanbanColumn({
       `}
       aria-label={`Colonne ${stage.name}, ${deals.length} deals`}
     >
-      {/* ─── Header ─────────────────────────────────────────── */}
-      <div className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b ${colors.border}`}>
-        <div className="flex items-center gap-2 min-w-0">
-          <span
-            className={`w-2 h-2 rounded-full ${colors.dot} flex-shrink-0`}
-            aria-hidden="true"
-          />
-          <h3 className={`text-sm font-semibold truncate ${colors.text}`}>
-            {stage.name}
-          </h3>
-          <span className="text-[11px] font-bold text-content-tertiary tabular-nums flex-shrink-0">
-            {deals.length}
-          </span>
+      {/* ─── Header combiné (nom + count + % + total value) ──── */}
+      <div className={`px-3 py-3 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
+        {/* Ligne 1 : dot + nom + badge count + probabilité */}
+        <div className="flex items-center justify-between gap-2 mb-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span
+              className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
+              aria-hidden="true"
+            />
+            <h3 className={`text-sm font-bold truncate ${colors.text}`}>
+              {stage.name || 'Stage'}
+            </h3>
+            <span className={`text-[10px] font-bold tabular-nums flex-shrink-0 px-1.5 py-0.5 rounded-full bg-white/70 ${colors.text}`}>
+              {deals.length}
+            </span>
+          </div>
+          {!isClosing && (
+            <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text}`}>
+              {stage.probability}%
+            </span>
+          )}
         </div>
-        {!isClosing && (
-          <span className="text-[10px] font-semibold text-content-tertiary tabular-nums whitespace-nowrap">
-            {stage.probability}%
-          </span>
-        )}
-      </div>
-
-      {/* Total value */}
-      <div className={`px-3 py-1.5 border-b ${colors.border} bg-surface-base/40`}>
-        <div className="text-[11px] font-bold text-content-secondary tabular-nums">
+        {/* Ligne 2 : total value */}
+        <div className={`text-xs font-bold tabular-nums ${colors.text} opacity-80`}>
           {formatDealValue(totalValue)}
         </div>
       </div>

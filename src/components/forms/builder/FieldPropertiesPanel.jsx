@@ -22,7 +22,8 @@ import {
   Settings2,
   ListChecks,
 } from 'lucide-react';
-import { FORM_CONDITION_OPERATORS } from '@/lib/forms';
+import { normalizeConditionalLogic } from '@/lib/forms';
+import ConditionsBuilder from './ConditionsBuilder';
 
 function Section({ title, icon: Icon, defaultOpen = true, children }) {
   const [open, setOpen] = useState(defaultOpen);
@@ -137,9 +138,10 @@ function ConditionalLogicEditor({ field, otherFields, onChange }) {
       const first = otherFields[0];
       onChange({
         show_if: {
-          field_key: first?.key || '',
-          operator: 'equals',
-          value: '',
+          combinator: 'AND',
+          conditions: [
+            { field_key: first?.key || '', operator: 'equals', value: '' },
+          ],
         },
       });
     } else {
@@ -147,14 +149,14 @@ function ConditionalLogicEditor({ field, otherFields, onChange }) {
     }
   }
 
-  function patch(p) {
-    onChange({
-      show_if: { ...cl.show_if, ...p },
-    });
+  function handleConditionsChange(nextValue) {
+    // nextValue toujours { combinator, conditions[] } depuis ConditionsBuilder
+    if (!nextValue || nextValue.conditions.length === 0) {
+      onChange(null);
+      return;
+    }
+    onChange({ show_if: nextValue });
   }
-
-  const targetField = otherFields.find((f) => f.key === cl?.show_if?.field_key);
-  const requiresValue = cl?.show_if?.operator && !['is_empty', 'is_not_empty'].includes(cl.show_if.operator);
 
   return (
     <div className="space-y-3">
@@ -171,71 +173,12 @@ function ConditionalLogicEditor({ field, otherFields, onChange }) {
       </label>
 
       {enabled && (
-        <div className="space-y-2 pl-5">
-          {otherFields.length === 0 ? (
-            <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
-              Ajoute au moins un autre champ pour configurer une condition.
-            </p>
-          ) : (
-            <>
-              <Field label="Champ cible">
-                <select
-                  value={cl.show_if.field_key || ''}
-                  onChange={(e) => patch({ field_key: e.target.value })}
-                  className={inputCls}
-                >
-                  {otherFields.map((f) => (
-                    <option key={f.id} value={f.key}>
-                      {f.label} ({f.key})
-                    </option>
-                  ))}
-                </select>
-              </Field>
-              <Field label="Opérateur">
-                <select
-                  value={cl.show_if.operator || 'equals'}
-                  onChange={(e) => patch({ operator: e.target.value })}
-                  className={inputCls}
-                >
-                  {FORM_CONDITION_OPERATORS.map((op) => (
-                    <option key={op.value} value={op.value}>
-                      {op.label}
-                    </option>
-                  ))}
-                </select>
-              </Field>
-              {requiresValue && (
-                <Field label="Valeur">
-                  {targetField && ['select', 'radio'].includes(targetField.type) ? (
-                    <select
-                      value={cl.show_if.value || ''}
-                      onChange={(e) => patch({ value: e.target.value })}
-                      className={inputCls}
-                    >
-                      <option value="">—</option>
-                      {(targetField.options || []).map((o, i) => {
-                        const v = typeof o === 'object' ? o.value : o;
-                        const l = typeof o === 'object' ? o.label : o;
-                        return (
-                          <option key={i} value={v}>
-                            {l}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  ) : (
-                    <input
-                      type="text"
-                      value={cl.show_if.value || ''}
-                      onChange={(e) => patch({ value: e.target.value })}
-                      placeholder="Valeur attendue"
-                      className={inputCls}
-                    />
-                  )}
-                </Field>
-              )}
-            </>
-          )}
+        <div className="pl-5">
+          <ConditionsBuilder
+            value={cl.show_if}
+            onChange={handleConditionsChange}
+            availableFields={otherFields}
+          />
         </div>
       )}
     </div>

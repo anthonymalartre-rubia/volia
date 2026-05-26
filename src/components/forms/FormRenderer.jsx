@@ -20,36 +20,17 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useEffect, useMemo, useState, useRef } from 'react';
-import { Loader2, ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Star, Upload } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Star, Upload, Check } from 'lucide-react';
+import {
+  evaluateConditionalLogic,
+  evaluateCondition,
+} from '@/lib/forms';
 
 const DEFAULT_SUCCESS = 'Merci pour votre soumission !';
 
-// Évalue un operator de conditional_logic
-function evalCondition(operator, value, currentVal) {
-  const cv = currentVal == null ? '' : String(currentVal);
-  const v = value == null ? '' : String(value);
-  switch (operator) {
-    case 'equals':
-      return cv === v;
-    case 'not_equals':
-      return cv !== v;
-    case 'contains':
-      return cv.toLowerCase().includes(v.toLowerCase());
-    case 'is_empty':
-      return cv.trim() === '';
-    case 'is_not_empty':
-      return cv.trim() !== '';
-    default:
-      return true;
-  }
-}
-
 function isFieldVisible(field, answers) {
-  const cl = field.conditional_logic;
-  if (!cl || !cl.show_if) return true;
-  const { field_key, operator, value } = cl.show_if;
-  if (!field_key || !operator) return true;
-  return evalCondition(operator, value, answers[field_key]);
+  // Utilise le helper centralisé (gère AND/OR + tous les 13 opérateurs F4)
+  return evaluateConditionalLogic(field.conditional_logic, answers);
 }
 
 function validateField(field, value) {
@@ -322,8 +303,8 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
   const settings = form.settings || {};
   const schema = form.schema || {};
   const pages = Array.isArray(schema.pages) && schema.pages.length > 0
-    ? schema.pages
-    : [{ id: 1, title: form.name }];
+    ? [...schema.pages].sort((a, b) => (a.position || 0) - (b.position || 0))
+    : [{ id: 'page-1', title: form.name, position: 0 }];
   const allFields = useMemo(
     () => (Array.isArray(form.fields) ? form.fields : []),
     [form.fields]
@@ -335,18 +316,29 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [direction, setDirection] = useState('forward'); // forward | backward — pour transitions
+  const [pageAnnouncement, setPageAnnouncement] = useState('');
+  const [completedPages, setCompletedPages] = useState(() => new Set());
   const startedAtRef = useRef(Date.now());
+  const formContainerRef = useRef(null);
 
   const isMultiStep = pages.length > 1;
   const pageNumber = currentPage + 1;
 
+  // Helper : compare field.page vs page identifier — supporte page_id (F4)
+  // ou page numéro (legacy F2/F3). Mappe en utilisant l'index.
+  function fieldsOnPage(pageIdx) {
+    const pageObj = pages[pageIdx];
+    const pageId = pageObj?.id;
+    const pageNum = pageIdx + 1;
+    return allFields.filter((f) => {
+      if (f.page_id && pageId) return f.page_id === pageId;
+      return (f.page || 1) === pageNum || f.page === pageId;
+    });
+  }
+
   // Filtre les fields visibles à la page courante (avec logique conditionnelle)
-  const currentPageNumber = pages[currentPage]?.id || currentPage + 1;
-  const visibleFields = allFields.filter((f) => {
-    const onThisPage = (f.page || 1) === currentPageNumber;
-    if (!onThisPage) return false;
-    return isFieldVisible(f, answers);
-  });
+  const visibleFields = fieldsOnPage(currentPage).filter((f) => isFieldVisible(f, answers));
 
   function updateAnswer(key, val) {
     setAnswers((prev) => ({ ...prev, [key]: val }));
@@ -360,10 +352,7 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
   }
 
   function validatePage(pageIdx) {
-    const pn = pages[pageIdx]?.id || pageIdx + 1;
-    const pageFields = allFields.filter(
-      (f) => (f.page || 1) === pn && isFieldVisible(f, answers)
-    );
+    const pageFields = fieldsOnPage(pageIdx).filter((f) => isFieldVisible(f, answers));
     const next = {};
     let ok = true;
     for (const f of pageFields) {
@@ -377,18 +366,102 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
     return ok;
   }
 
-  function goNext() {
-    if (validatePage(currentPage)) {
-      setCurrentPage((p) => Math.min(pages.length - 1, p + 1));
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Page complete = pas d'erreurs sur les fields required visibles
+  function isPageComplete(pageIdx) {
+    const pageFields = fieldsOnPage(pageIdx).filter((f) => isFieldVisible(f, answers));
+    for (const f of pageFields) {
+      if (validateField(f, answers[f.field_key]).length > 0) return false;
+    }
+    return true;
+  }
+
+  // ─── Jump logic engine (F4) ───────────────────────────────────────
+  // Retourne le pageIdx cible (ou 'submit' pour direct submit, ou null si pas de jump)
+  function evaluateJumpLogicForPage(pageIdx) {
+    const pageObj = pages[pageIdx];
+    const rules = pageObj?.jump_logic?.rules;
+    if (!Array.isArray(rules) || rules.length === 0) return null;
+    for (const rule of rules) {
+      if (rule.action !== 'skip_to_page') continue;
+      if (evaluateCondition(rule.condition, answers)) {
+        if (rule.target_page_id === 'submit') return 'submit';
+        const targetIdx = pages.findIndex((p) => p.id === rule.target_page_id);
+        if (targetIdx > pageIdx) return targetIdx;
       }
+    }
+    return null;
+  }
+
+  function navigateToPage(nextIdx, dir = 'forward') {
+    setDirection(dir);
+    setCurrentPage(nextIdx);
+    const p = pages[nextIdx];
+    setPageAnnouncement(
+      `Page ${nextIdx + 1} sur ${pages.length}${p?.title ? ` : ${p.title}` : ''}`
+    );
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function goNext() {
+    if (!validatePage(currentPage)) return;
+    setCompletedPages((prev) => {
+      const next = new Set(prev);
+      next.add(currentPage);
+      return next;
+    });
+    // Jump logic
+    const jumpTarget = evaluateJumpLogicForPage(currentPage);
+    if (jumpTarget === 'submit') {
+      // Trigger submit
+      const formEl = formContainerRef.current?.querySelector('form');
+      if (formEl) {
+        formEl.requestSubmit ? formEl.requestSubmit() : formEl.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      }
+      return;
+    }
+    if (typeof jumpTarget === 'number') {
+      navigateToPage(jumpTarget, 'forward');
+      return;
+    }
+    if (currentPage < pages.length - 1) {
+      navigateToPage(currentPage + 1, 'forward');
     }
   }
 
   function goPrev() {
-    setCurrentPage((p) => Math.max(0, p - 1));
+    if (currentPage > 0) navigateToPage(currentPage - 1, 'backward');
   }
+
+  // Click sur un segment de la progress bar : navigue (uniquement vers pages déjà visitées/complétées)
+  function jumpToSegment(targetIdx) {
+    if (targetIdx === currentPage) return;
+    if (targetIdx < currentPage || completedPages.has(targetIdx)) {
+      navigateToPage(targetIdx, targetIdx < currentPage ? 'backward' : 'forward');
+    }
+  }
+
+  // Auto-focus du 1er input non rempli au changement de page
+  useEffect(() => {
+    if (!isMultiStep) return;
+    const tid = setTimeout(() => {
+      const root = formContainerRef.current;
+      if (!root) return;
+      // Cherche le 1er input/select/textarea non rempli
+      const inputs = root.querySelectorAll(
+        'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([readonly]), select, textarea'
+      );
+      for (const el of inputs) {
+        if (!el.value || el.value === '') {
+          try { el.focus({ preventScroll: true }); } catch { el.focus(); }
+          return;
+        }
+      }
+    }, 280); // après la transition slide
+    return () => clearTimeout(tid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -398,10 +471,7 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
     let allOk = true;
     const allErrors = {};
     for (let i = 0; i < pages.length; i++) {
-      const pn = pages[i]?.id || i + 1;
-      const pageFields = allFields.filter(
-        (f) => (f.page || 1) === pn && isFieldVisible(f, answers)
-      );
+      const pageFields = fieldsOnPage(i).filter((f) => isFieldVisible(f, answers));
       for (const f of pageFields) {
         const errs = validateField(f, answers[f.field_key]);
         if (errs.length > 0) {
@@ -414,12 +484,9 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
       setErrors(allErrors);
       // Saute à la 1ère page contenant une erreur
       for (let i = 0; i < pages.length; i++) {
-        const pn = pages[i]?.id || i + 1;
-        const has = allFields.some(
-          (f) => (f.page || 1) === pn && allErrors[f.field_key]
-        );
+        const has = fieldsOnPage(i).some((f) => allErrors[f.field_key]);
         if (has) {
-          setCurrentPage(i);
+          navigateToPage(i, 'backward');
           break;
         }
       }
@@ -521,12 +588,18 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
   // ───── Form ─────
   return (
     <form
+      ref={formContainerRef}
       onSubmit={handleSubmit}
       noValidate
       className={`rounded-2xl ${
         isEmbed ? 'bg-transparent border-0 p-0' : 'bg-white border border-zinc-200 shadow-sm p-6 sm:p-8'
       }`}
     >
+      {/* Aria-live region (annonces a11y multi-step) — F4 */}
+      <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+        {pageAnnouncement}
+      </div>
+
       {/* Honeypot (caché en CSS, jamais montré) */}
       <div style={{ position: 'absolute', left: '-9999px', height: 0, overflow: 'hidden' }} aria-hidden="true">
         <label htmlFor="website">Ne pas remplir</label>
@@ -543,26 +616,59 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
         )}
       </div>
 
-      {/* Progress bar multi-step */}
+      {/* Progress bar segmentée (F4) */}
       {isMultiStep && (
         <div className="mb-6">
           <div className="flex items-center justify-between text-xs text-zinc-500 mb-2">
-            <span>
+            <span aria-live="polite">
               Étape {pageNumber} sur {pages.length}
+              {pages[currentPage]?.title ? ` — ${pages[currentPage].title}` : ''}
             </span>
             <span>{Math.round((pageNumber / pages.length) * 100)}%</span>
           </div>
-          <div className="h-1.5 bg-zinc-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-pink-500 to-rose-500 transition-all duration-300"
-              style={{ width: `${(pageNumber / pages.length) * 100}%` }}
-            />
+          <div
+            className="flex items-center gap-1"
+            role="tablist"
+            aria-label="Étapes du formulaire"
+          >
+            {pages.map((p, i) => {
+              const isCurrent = i === currentPage;
+              const isCompleted = completedPages.has(i) && isPageComplete(i);
+              const isVisited = i < currentPage || completedPages.has(i);
+              const isClickable = i < currentPage || completedPages.has(i);
+              const baseCls = 'h-1.5 flex-1 rounded-full transition-all duration-300';
+              const colorCls = isCurrent
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 ring-2 ring-pink-200'
+                : isCompleted
+                ? 'bg-emerald-500'
+                : isVisited
+                ? 'bg-pink-300'
+                : 'bg-zinc-200';
+              return (
+                <button
+                  key={p.id || i}
+                  type="button"
+                  role="tab"
+                  aria-selected={isCurrent}
+                  aria-label={`Étape ${i + 1}${p.title ? ` : ${p.title}` : ''}${isCompleted ? ' (complétée)' : isCurrent ? ' (courante)' : ''}`}
+                  disabled={!isClickable && !isCurrent}
+                  onClick={() => jumpToSegment(i)}
+                  className={`${baseCls} ${colorCls} ${isClickable && !isCurrent ? 'cursor-pointer hover:opacity-80' : 'cursor-default'}`}
+                  title={p.title || `Page ${i + 1}`}
+                />
+              );
+            })}
           </div>
-          {pages[currentPage]?.title && pages[currentPage].title !== form.name && (
-            <p className="mt-3 text-sm font-semibold text-zinc-700">
-              {pages[currentPage].title}
-            </p>
-          )}
+          <div className="mt-3 flex items-center gap-2">
+            {pages[currentPage]?.title && pages[currentPage].title !== form.name && (
+              <p className="text-sm font-semibold text-zinc-700">
+                {pages[currentPage].title}
+              </p>
+            )}
+            {completedPages.has(currentPage) && isPageComplete(currentPage) && (
+              <Check size={14} className="text-emerald-500" aria-label="Page complétée" />
+            )}
+          </div>
           {pages[currentPage]?.description && (
             <p className="mt-1 text-xs text-zinc-500">
               {pages[currentPage].description}
@@ -571,8 +677,13 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
         </div>
       )}
 
-      {/* Fields */}
-      <div className="space-y-5">
+      {/* Fields — wrapper avec slide transition (F4) */}
+      <div
+        key={`page-${currentPage}-${direction}`}
+        className={`space-y-5 transition-all duration-[250ms] ease-in-out animate-in fade-in ${
+          direction === 'forward' ? 'slide-in-from-right-4' : 'slide-in-from-left-4'
+        }`}
+      >
         {visibleFields.length === 0 && (
           <p className="text-sm text-zinc-500 italic">
             Aucun champ sur cette page.
@@ -628,7 +739,7 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
         </div>
       )}
 
-      {/* Navigation */}
+      {/* Navigation — bouton précédent toujours visible sauf page 1 (F4) */}
       <div className="mt-7 flex items-center justify-between gap-3">
         {isMultiStep && currentPage > 0 ? (
           <button
@@ -637,7 +748,7 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
             disabled={submitting}
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-sm font-medium transition-colors disabled:opacity-50"
           >
-            <ChevronLeft size={16} /> Précédent
+            <ChevronLeft size={16} /> Page précédente
           </button>
         ) : (
           <div />
@@ -650,7 +761,7 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
             disabled={submitting}
             className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-sm font-semibold shadow-lg shadow-pink-500/20 active:scale-95 transition-all disabled:opacity-50"
           >
-            Suivant <ChevronRight size={16} />
+            Suivante <ChevronRight size={16} />
           </button>
         ) : (
           <button

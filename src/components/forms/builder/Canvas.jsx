@@ -177,6 +177,7 @@ export default function Canvas({
   onAddPage,
   onUpdatePage,
   onDeletePage,
+  onOpenJumpLogic,
 }) {
   const currentPage = (pages || []).find((p) => p.id === currentPageId);
 
@@ -192,6 +193,7 @@ export default function Canvas({
             onAdd={onAddPage}
             onRename={onUpdatePage}
             onDelete={onDeletePage}
+            onOpenJumpLogic={onOpenJumpLogic}
           />
         </div>
 

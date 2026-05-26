@@ -36,11 +36,16 @@ import {
   AlertTriangle,
   Pencil,
   Check as CheckIcon,
+  Undo2,
+  Redo2,
+  Zap,
 } from 'lucide-react';
 import useFormBuilder from './useFormBuilder';
 import FieldsPanel from './FieldsPanel';
 import Canvas from './Canvas';
 import FieldPropertiesPanel from './FieldPropertiesPanel';
+import JumpLogicDrawer from './JumpLogicDrawer';
+import LogicOverview from './LogicOverview';
 
 const AUTO_SAVE_DEBOUNCE = 1000; // 1s
 
@@ -56,6 +61,9 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
   const [windowTooSmall, setWindowTooSmall] = useState(false);
   const [activeDragId, setActiveDragId] = useState(null);
   const [activeDragType, setActiveDragType] = useState(null);
+  const [jumpDrawerPageId, setJumpDrawerPageId] = useState(null);
+  const [logicOverviewOpen, setLogicOverviewOpen] = useState(false);
+  const [toast, setToast] = useState(null); // { msg, type }
 
   const saveTimerRef = useRef(null);
   const lastSavedRef = useRef({ name: formName, schema: JSON.stringify(builder.schema) });
@@ -216,6 +224,11 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
     setActiveDragType(event.active.data?.current?.type || event.active.data?.current?.source || null);
   }
 
+  function showToast(msg, type = 'info') {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 2200);
+  }
+
   function handleDragEnd(event) {
     const { active, over } = event;
     setActiveDragId(null);
@@ -226,6 +239,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
     const activeSource = active.data?.current?.source;
     const overSource = over.data?.current?.source;
     const overFieldId = over.data?.current?.fieldId;
+    const overPageId = over.data?.current?.pageId;
 
     // Cas 1 : palette → canvas (insertion d'un nouveau field)
     if (activeSource === 'palette') {
@@ -234,15 +248,21 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         builder.addField(type);
         return;
       }
-      // Drop sur un field existant → insère AVANT ce field
       if (overSource === 'canvas-field' && overFieldId) {
         const idx = builder.fieldsOnCurrentPage.findIndex((f) => f.id === overFieldId);
         builder.addField(type, idx >= 0 ? idx : undefined);
         return;
       }
+      // Drop palette → tab page : ajoute le field directement sur cette page
+      if (overSource === 'page-tab-drop' && overPageId) {
+        builder.setCurrentPageId(overPageId);
+        // Petit timeout pour laisser setCurrentPageId s'appliquer avant addField
+        setTimeout(() => builder.addField(type), 0);
+        return;
+      }
     }
 
-    // Cas 2 : canvas-field → canvas-field (réordonnement)
+    // Cas 2 : canvas-field → canvas-field (réordonnement même page)
     if (activeSource === 'canvas-field' && overSource === 'canvas-field') {
       const fromId = active.data.current.fieldId;
       const toId = over.data.current.fieldId;
@@ -252,6 +272,33 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
       const toIdx = ids.indexOf(toId);
       if (fromIdx >= 0 && toIdx >= 0) {
         builder.moveField(fromIdx, toIdx);
+      }
+      return;
+    }
+
+    // Cas 3 : canvas-field → page-tab-drop (cross-page move) — F4
+    if (activeSource === 'canvas-field' && overSource === 'page-tab-drop' && overPageId) {
+      const fromId = active.data.current.fieldId;
+      const fld = builder.schema.fields.find((f) => f.id === fromId);
+      if (!fld || fld.page_id === overPageId) return;
+      builder.moveFieldToPage(fromId, overPageId);
+      const targetPage = builder.schema.pages.find((p) => p.id === overPageId);
+      showToast(`Champ déplacé vers ${targetPage?.title || 'la page'}`, 'success');
+      return;
+    }
+
+    // Cas 4 : page-tab-sortable → page-tab-sortable (reorder pages) — F4
+    if (activeSource === 'page-tab-sortable' && overSource === 'page-tab-sortable') {
+      const fromPageId = active.data.current.pageId;
+      const toPageId = over.data.current.pageId;
+      if (fromPageId === toPageId) return;
+      const sorted = [...(builder.schema.pages || [])].sort(
+        (a, b) => (a.position || 0) - (b.position || 0)
+      );
+      const fromIdx = sorted.findIndex((p) => p.id === fromPageId);
+      const toIdx = sorted.findIndex((p) => p.id === toPageId);
+      if (fromIdx >= 0 && toIdx >= 0) {
+        builder.movePage(fromIdx, toIdx);
       }
     }
   }
@@ -296,6 +343,30 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
           <ArrowLeft size={14} /> Mes formulaires
         </Link>
         <div className="h-5 w-px bg-line" />
+
+        {/* Undo / Redo (F4) */}
+        <div className="hidden md:inline-flex items-center gap-0.5">
+          <button
+            type="button"
+            onClick={() => builder.undo()}
+            disabled={!builder.canUndo}
+            className="p-1.5 rounded-md text-content-tertiary hover:bg-surface-card hover:text-content-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            title="Annuler (⌘Z)"
+            aria-label="Annuler"
+          >
+            <Undo2 size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => builder.redo()}
+            disabled={!builder.canRedo}
+            className="p-1.5 rounded-md text-content-tertiary hover:bg-surface-card hover:text-content-primary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            title="Refaire (⌘⇧Z)"
+            aria-label="Refaire"
+          >
+            <Redo2 size={13} />
+          </button>
+        </div>
 
         {/* Nom inline-editable */}
         <div className="flex items-center gap-1.5 min-w-0 flex-1">
@@ -356,6 +427,14 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         </div>
 
         <div className="flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setLogicOverviewOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+            title="Vue d'ensemble de la logique"
+          >
+            <Zap size={12} /> Logique
+          </button>
           <Link
             href={`/admin/forms/${formId}/preview`}
             target="_blank"
@@ -428,6 +507,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
             onAddPage={() => builder.addPage()}
             onUpdatePage={builder.updatePage}
             onDeletePage={builder.deletePage}
+            onOpenJumpLogic={(pageId) => setJumpDrawerPageId(pageId)}
           />
           <FieldPropertiesPanel
             field={selectedField}
@@ -453,6 +533,35 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
           <CheckCircle2 size={14} /> Sauvegardé
         </div>
       )}
+
+      {/* Toast info (cross-page move etc.) — F4 */}
+      {toast && (
+        <div
+          role="status"
+          className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-2 px-3 py-2 rounded-lg text-white text-xs font-medium shadow-lg animate-in fade-in slide-in-from-bottom-2 ${
+            toast.type === 'success' ? 'bg-violet-600' : 'bg-zinc-800'
+          }`}
+        >
+          {toast.msg}
+        </div>
+      )}
+
+      {/* Jump logic drawer (F4) */}
+      <JumpLogicDrawer
+        open={!!jumpDrawerPageId}
+        page={builder.schema.pages.find((p) => p.id === jumpDrawerPageId) || null}
+        allPages={builder.schema.pages}
+        allFields={builder.schema.fields}
+        onClose={() => setJumpDrawerPageId(null)}
+        onChangeRules={(rules) => builder.updatePageJumpLogic(jumpDrawerPageId, rules)}
+      />
+
+      {/* Logic overview drawer (F4) */}
+      <LogicOverview
+        open={logicOverviewOpen}
+        schema={builder.schema}
+        onClose={() => setLogicOverviewOpen(false)}
+      />
     </div>
   );
 }

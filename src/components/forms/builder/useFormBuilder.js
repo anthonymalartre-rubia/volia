@@ -21,7 +21,7 @@
 // Génération du field.key : auto à partir du label, avec dédup.
 // ─────────────────────────────────────────────────────────────────────
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { createEmptySchema, generateLocalId, normalizeSchema } from '@/lib/forms';
 
 const HISTORY_LIMIT = 20;
@@ -98,47 +98,63 @@ export default function useFormBuilder(initialSchema) {
   const [dirty, setDirty] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState(null);
 
-  // History stack pour undo/redo
-  const historyRef = useRef({ past: [], future: [] });
-
-  const pushHistory = useCallback((prev) => {
-    historyRef.current.past.push(JSON.stringify(prev));
-    if (historyRef.current.past.length > HISTORY_LIMIT) {
-      historyRef.current.past.shift();
-    }
-    historyRef.current.future = [];
-  }, []);
+  // History stack pour undo/redo — useState pour que canUndo/canRedo soient réactifs (F4)
+  const [history, setHistory] = useState({ past: [], future: [] });
 
   const updateSchema = useCallback(
     (updater, { trackHistory = true } = {}) => {
       setSchemaState((prev) => {
-        if (trackHistory) pushHistory(prev);
         const next = typeof updater === 'function' ? updater(prev) : updater;
+        if (trackHistory) {
+          setHistory((h) => {
+            const past = [...h.past, JSON.stringify(prev)];
+            if (past.length > HISTORY_LIMIT) past.shift();
+            return { past, future: [] };
+          });
+        }
         return next;
       });
       setDirty(true);
     },
-    [pushHistory]
+    []
   );
 
   const undo = useCallback(() => {
     setSchemaState((prev) => {
-      const past = historyRef.current.past;
-      if (past.length === 0) return prev;
-      const previous = JSON.parse(past.pop());
-      historyRef.current.future.push(JSON.stringify(prev));
-      return previous;
+      let nextSchema = prev;
+      setHistory((h) => {
+        if (h.past.length === 0) return h;
+        const past = [...h.past];
+        const previousStr = past.pop();
+        const future = [...h.future, JSON.stringify(prev)];
+        try {
+          nextSchema = JSON.parse(previousStr);
+        } catch {
+          // noop — garde prev
+        }
+        return { past, future };
+      });
+      return nextSchema;
     });
     setDirty(true);
   }, []);
 
   const redo = useCallback(() => {
     setSchemaState((prev) => {
-      const future = historyRef.current.future;
-      if (future.length === 0) return prev;
-      const next = JSON.parse(future.pop());
-      historyRef.current.past.push(JSON.stringify(prev));
-      return next;
+      let nextSchema = prev;
+      setHistory((h) => {
+        if (h.future.length === 0) return h;
+        const future = [...h.future];
+        const nextStr = future.pop();
+        const past = [...h.past, JSON.stringify(prev)];
+        try {
+          nextSchema = JSON.parse(nextStr);
+        } catch {
+          // noop
+        }
+        return { past, future };
+      });
+      return nextSchema;
     });
     setDirty(true);
   }, []);
@@ -394,9 +410,26 @@ export default function useFormBuilder(initialSchema) {
 
   const replaceSchema = useCallback((next) => {
     setSchemaState(normalizeSchema(next));
-    historyRef.current = { past: [], future: [] };
+    setHistory({ past: [], future: [] });
     setDirty(false);
   }, []);
+
+  // ─── Jump logic (F4) ─────────────────────────────────────────────
+  // Patch les rules d'une page. Si rules vide → jump_logic = null.
+
+  const updatePageJumpLogic = useCallback(
+    (pageId, rules) => {
+      updateSchema((prev) => {
+        const pages = (prev.pages || []).map((p) => {
+          if (p.id !== pageId) return p;
+          const cleanRules = Array.isArray(rules) ? rules.filter((r) => r && typeof r === 'object') : [];
+          return { ...p, jump_logic: cleanRules.length > 0 ? { rules: cleanRules } : null };
+        });
+        return { ...prev, pages };
+      });
+    },
+    [updateSchema]
+  );
 
   return {
     schema,
@@ -405,8 +438,8 @@ export default function useFormBuilder(initialSchema) {
     fieldsOnCurrentPage,
     dirty,
     lastSavedAt,
-    canUndo: historyRef.current.past.length > 0,
-    canRedo: historyRef.current.future.length > 0,
+    canUndo: history.past.length > 0,
+    canRedo: history.future.length > 0,
     setSelectedFieldId,
     setCurrentPageId,
     addField,
@@ -419,6 +452,7 @@ export default function useFormBuilder(initialSchema) {
     updatePage,
     deletePage,
     movePage,
+    updatePageJumpLogic,
     updateSettings,
     markSaved,
     replaceSchema,

@@ -30,7 +30,7 @@ export async function GET(request, { params }) {
   const { data, error } = await supabase
     .from('crm_contacts')
     .select(
-      `id, name, email, phone, company, position, notes, source, source_ref_id, created_at, updated_at,
+      `id, name, email, phone, company, position, notes, source, source_ref_id, custom_fields, created_at, updated_at,
        deals:crm_deals(id, title, value_cents, currency, status, stage_id, pipeline_id, expected_close_date, created_at)`
     )
     .eq('id', id)
@@ -94,6 +94,15 @@ export async function PATCH(request, { params }) {
   }
   if (body.notes !== undefined) {
     updates.notes = typeof body.notes === 'string' ? body.notes.trim() : null;
+  }
+  if (body.custom_fields !== undefined) {
+    if (body.custom_fields !== null && (typeof body.custom_fields !== 'object' || Array.isArray(body.custom_fields))) {
+      return NextResponse.json(
+        { success: false, error: 'custom_fields doit être un objet JSON' },
+        { status: 400 }
+      );
+    }
+    updates.custom_fields = body.custom_fields || {};
   }
 
   if (Object.keys(updates).length === 0) {

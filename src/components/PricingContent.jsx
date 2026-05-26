@@ -114,7 +114,8 @@ const COMPARE_SECTIONS = [
     rows: [
       ['Support email', 'Communauté', '48 h', '24 h', 'Prioritaire'],
       ['Onboarding personnalisé', false, false, false, true],
-      ['API publique (à venir)', false, false, false, true],
+      ['API publique REST', false, true, true, true],
+      ['Webhooks + Zapier / Make', false, true, true, true],
       ['Multi-utilisateurs (à venir)', false, false, false, true],
       ['Conforme RGPD France', true, true, true, true],
       ['Données hébergées en Europe', true, true, true, true],

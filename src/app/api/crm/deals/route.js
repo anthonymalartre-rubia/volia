@@ -4,6 +4,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkCrmAccess } from '@/lib/crm';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 
 const VALID_STATUS = ['open', 'won', 'lost'];
 
@@ -133,6 +134,40 @@ export async function POST(request) {
   if (error) {
     console.error('[api/crm/deals] POST error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+
+  // Fire-and-forget : émet 'crm.deal.created' (et 'crm.deal.won'/'crm.deal.lost'
+  // si insertion directe dans un stage closing). Aucune attente : si un abonné
+  // webhook est KO, la création du deal ne doit pas échouer.
+  emitWebhookEvent({
+    userId: user.id,
+    event: 'crm.deal.created',
+    data: {
+      deal_id: data.id,
+      title: data.title,
+      value_cents: data.value_cents,
+      currency: data.currency,
+      pipeline_id: data.pipeline_id,
+      stage_id: data.stage_id,
+      stage_name: data.stage?.name || null,
+      contact: data.contact || null,
+      status: data.status,
+      created_at: data.created_at,
+    },
+  }).catch(() => {});
+  if (data.status === 'won' || data.status === 'lost') {
+    emitWebhookEvent({
+      userId: user.id,
+      event: data.status === 'won' ? 'crm.deal.won' : 'crm.deal.lost',
+      data: {
+        deal_id: data.id,
+        title: data.title,
+        value_cents: data.value_cents,
+        currency: data.currency,
+        closed_at: data.closed_at,
+        contact: data.contact || null,
+      },
+    }).catch(() => {});
   }
 
   return NextResponse.json({ success: true, data }, { status: 201 });

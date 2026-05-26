@@ -20,6 +20,7 @@ import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
 import { autoCreateFromReply } from '@/lib/crm-auto-create';
 import { parseCampaignReplyAddress, parseSequenceReplyAddress, isInboundDomain } from '@/lib/inbound-domain';
 import { parsePeerEmailAddress } from '@/lib/warmup-peer';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -370,6 +371,24 @@ export async function POST(request) {
     });
   } catch (e) {
     console.warn('[resend-inbound] inbound_events insert failed', e?.message);
+  }
+
+  // 7) Fire-and-forget : webhook 'email.replied' aux abonnés Zapier/Make
+  // (utile pour ping Slack/Discord, créer ticket support, etc.)
+  if (ownerId && from) {
+    emitWebhookEvent({
+      userId: ownerId,
+      event: 'email.replied',
+      data: {
+        campaign_id: matchedCampaignId || originalSend?.campaign_id || null,
+        from_email: from,
+        subject: subject || null,
+        body_preview: typeof bodyText === 'string' ? bodyText.slice(0, 500) : null,
+        contact_id: autoResult?.contact_id || null,
+        deal_id: autoResult?.deal_id || null,
+        received_at: new Date().toISOString(),
+      },
+    }).catch(() => {});
   }
 
   return NextResponse.json(

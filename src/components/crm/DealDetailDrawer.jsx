@@ -24,6 +24,7 @@ import {
 import { formatDealValue } from '@/lib/crm';
 import ActivityForm from './ActivityForm';
 import AddToCampagneModal from './AddToCampagneModal';
+import CustomFieldsSection from './CustomFieldsSection';
 
 // Icône par type d'activity
 const ACTIVITY_TYPE_META = {
@@ -501,6 +502,18 @@ export default function DealDetailDrawer({
                 className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 resize-none"
               />
             </div>
+
+            {/* Custom fields */}
+            <CustomFieldsSection
+              entity="deal"
+              entityId={deal.id}
+              values={deal.custom_fields || {}}
+              apiPath="/api/crm/deals"
+              onValuesChange={(nextValues) => {
+                setDeal((prev) => (prev ? { ...prev, custom_fields: nextValues } : prev));
+                onUpdate?.({ ...deal, custom_fields: nextValues });
+              }}
+            />
 
             {/* Activity timeline + form (Phase 4) */}
             <div>

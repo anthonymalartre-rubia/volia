@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkCrmAccess } from '@/lib/crm';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 
 function forbidden() {
   return NextResponse.json(
@@ -37,7 +38,7 @@ export async function PATCH(request, { params }) {
   // 1. Récup le deal pour vérifier pipeline cohérent + RLS
   const { data: deal, error: dealErr } = await supabase
     .from('crm_deals')
-    .select('id, pipeline_id, status')
+    .select('id, pipeline_id, status, stage_id, title, value_cents, currency, stage:crm_stages(id, name)')
     .eq('id', id)
     .maybeSingle();
   if (dealErr || !deal) {
@@ -87,6 +88,34 @@ export async function PATCH(request, { params }) {
   if (error) {
     console.error('[api/crm/deals/[id]/move] error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+
+  // Fire-and-forget : emit stage_changed à chaque move + won/lost si transition
+  // vers un closing stage (différent de l'état précédent du deal).
+  if (deal.stage_id !== stageId) {
+    emitWebhookEvent({
+      userId: user.id,
+      event: 'crm.deal.stage_changed',
+      data: {
+        deal_id: data.id,
+        title: data.title,
+        from_stage: deal.stage || { id: deal.stage_id, name: null },
+        to_stage: data.stage || { id: data.stage_id, name: null },
+      },
+    }).catch(() => {});
+  }
+  if (data.status !== deal.status && (data.status === 'won' || data.status === 'lost')) {
+    emitWebhookEvent({
+      userId: user.id,
+      event: data.status === 'won' ? 'crm.deal.won' : 'crm.deal.lost',
+      data: {
+        deal_id: data.id,
+        title: data.title,
+        value_cents: data.value_cents,
+        currency: data.currency,
+        closed_at: data.closed_at,
+      },
+    }).catch(() => {});
   }
 
   return NextResponse.json({ success: true, data });

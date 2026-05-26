@@ -17,6 +17,7 @@
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 
 const CHUNK_SIZE = 500; // limite raisonnable pour bulk insert Supabase
 
@@ -203,6 +204,29 @@ export async function POST(request) {
     })
     .eq('id', listId)
     .eq('owner_id', user.id);
+
+  // Fire-and-forget : émet 'prospect.created' une seule fois par batch
+  // (event_payload résumé — un event par prospect serait trop bruyant pour
+  // les abonnés Zapier qui ont des quotas de tasks). Inclut un échantillon
+  // pour permettre les zaps qui veulent traiter par batch.
+  if (inserted > 0) {
+    emitWebhookEvent({
+      userId: user.id,
+      event: 'prospect.created',
+      data: {
+        list_id: listId,
+        list_name: resolvedName,
+        inserted_count: inserted,
+        total_submitted: totalSubmitted,
+        sample: (toInsert || []).slice(0, 10).map((c) => ({
+          email: c.email,
+          phone: c.phone,
+          first_name: c.first_name,
+          company: c.company,
+        })),
+      },
+    }).catch(() => {});
+  }
 
   return NextResponse.json({
     list_id: listId,

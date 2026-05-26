@@ -4,10 +4,42 @@ import { sendEmail } from './email';
 import { createNotification, NOTIF_TYPES } from './notifications';
 import { usageWarningEmail, usageLimitReachedEmail } from './emailTemplates';
 import { getEffectivePlan } from './trial';
+import { getQuotaMemberIds } from './teams';
 
 function getCurrentMonth() {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
+
+/**
+ * Calcule l'usage cumulé d'une team (somme des usages individuels de chaque member)
+ * pour le mois en cours. Si le user n'est pas dans une team, retourne son propre usage.
+ *
+ * @returns {Promise<{ searches: number, enrichments: number, exports: number, verifications: number }>}
+ */
+async function getTeamUsageSum(supabase, userId) {
+  const memberIds = await getQuotaMemberIds(userId);
+  const month = getCurrentMonth();
+
+  if (memberIds.length <= 1) {
+    // Pas de team → comportement classique
+    return getUsage(supabase, userId);
+  }
+
+  const { data } = await supabase
+    .from('usage_tracking')
+    .select('searches, enrichments, exports, verifications')
+    .in('user_id', memberIds)
+    .eq('month', month);
+
+  const sum = { searches: 0, enrichments: 0, exports: 0, verifications: 0 };
+  (data || []).forEach((row) => {
+    sum.searches += row.searches || 0;
+    sum.enrichments += row.enrichments || 0;
+    sum.exports += row.exports || 0;
+    sum.verifications += row.verifications || 0;
+  });
+  return sum;
 }
 
 // Get or create usage record for current month
@@ -50,10 +82,13 @@ export async function getUserPlan(supabase, userId) {
 // Check if user can perform an action
 // Avant : 2 roundtrips séquentiels (getUserPlan puis getUsage) = ~300-600ms.
 // Cumulé sur un waterfall de 80 prospects = 24-48s perdus. Maintenant en parallèle.
+//
+// Multi-utilisateurs (Business) : si l'user appartient à une team, on aggrège
+// l'usage de tous les members. Le quota Business est partagé.
 export async function checkLimit(supabase, userId, action) {
   const [plan, usage] = await Promise.all([
     getUserPlan(supabase, userId),
-    getUsage(supabase, userId),
+    getTeamUsageSum(supabase, userId),
   ]);
   const limit = plan.limits[`${action}_per_month`];
   const current = usage[action] || 0;

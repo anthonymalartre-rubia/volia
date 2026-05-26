@@ -49,7 +49,7 @@ export async function GET(request) {
   let query = supabase
     .from('crm_contacts')
     .select(
-      'id, name, email, phone, company, position, notes, source, source_ref_id, engagement_score, last_engagement_at, tags, created_at, updated_at',
+      'id, name, email, phone, company, position, notes, source, source_ref_id, engagement_score, last_engagement_at, tags, custom_fields, created_at, updated_at',
       { count: 'exact' }
     )
     .order(sortColumn, { ascending, nullsFirst: false })

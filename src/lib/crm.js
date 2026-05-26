@@ -19,6 +19,70 @@ export const DEFAULT_PIPELINE = {
   ],
 };
 
+// Templates pré-définis proposés à la création d'un pipeline custom.
+// Chaque template inclut nom suggéré, couleur, description et stages.
+export const PIPELINE_TEMPLATES = {
+  sales: {
+    id: 'sales',
+    label: 'Sales standard',
+    description: 'Pipeline commercial classique : lead → qualif → démo → propal → closing.',
+    name: 'Pipeline commercial',
+    color: 'violet',
+    stages: DEFAULT_PIPELINE.stages,
+  },
+  recruiting: {
+    id: 'recruiting',
+    label: 'Recrutement',
+    description: 'Suivi candidats : sourcing → entretien → offre → embauche.',
+    name: 'Recrutement',
+    color: 'blue',
+    stages: [
+      { name: 'Sourcé', color: 'zinc', probability: 10, position: 0 },
+      { name: 'Entretien RH', color: 'blue', probability: 25, position: 1 },
+      { name: 'Entretien tech', color: 'indigo', probability: 50, position: 2 },
+      { name: 'Offre envoyée', color: 'violet', probability: 75, position: 3 },
+      { name: 'Embauché', color: 'emerald', probability: 100, position: 4, closing_type: 'won' },
+      { name: 'Refusé', color: 'rose', probability: 0, position: 5, closing_type: 'lost' },
+    ],
+  },
+  partnerships: {
+    id: 'partnerships',
+    label: 'Partenariats',
+    description: 'Suivi partenariats stratégiques : prise de contact → signature.',
+    name: 'Partenariats',
+    color: 'teal',
+    stages: [
+      { name: 'Identifié', color: 'zinc', probability: 10, position: 0 },
+      { name: 'Premier contact', color: 'blue', probability: 30, position: 1 },
+      { name: 'En discussion', color: 'indigo', probability: 50, position: 2 },
+      { name: 'Accord verbal', color: 'amber', probability: 75, position: 3 },
+      { name: 'Signé', color: 'emerald', probability: 100, position: 4, closing_type: 'won' },
+      { name: 'Abandonné', color: 'rose', probability: 0, position: 5, closing_type: 'lost' },
+    ],
+  },
+  custom: {
+    id: 'custom',
+    label: 'Vierge',
+    description: 'Commence avec 3 stages basiques que tu personnalises.',
+    name: 'Nouveau pipeline',
+    color: 'emerald',
+    stages: [
+      { name: 'À faire', color: 'zinc', probability: 10, position: 0 },
+      { name: 'En cours', color: 'blue', probability: 50, position: 1 },
+      { name: 'Terminé', color: 'emerald', probability: 100, position: 2, closing_type: 'won' },
+    ],
+  },
+};
+
+// Couleurs autorisées pour les pipelines et stages (alignées sur KanbanBoard STAGE_COLORS)
+export const PIPELINE_COLORS = ['zinc', 'blue', 'indigo', 'violet', 'emerald', 'teal', 'amber', 'rose'];
+
+// Probabilités proposées dans le picker (granularité 25%)
+export const STAGE_PROBABILITIES = [0, 10, 25, 50, 75, 90, 100];
+
+// Closing types autorisés
+export const CLOSING_TYPES = ['none', 'won', 'lost'];
+
 // Plans autorisés à accéder au module CRM.
 // Note : "enterprise" est l'alias legacy de "business" (cf. src/lib/plans.js)
 export const CRM_ALLOWED_PLANS = ['business', 'enterprise'];

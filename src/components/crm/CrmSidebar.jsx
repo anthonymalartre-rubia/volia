@@ -26,6 +26,7 @@ import {
   ChevronLeft,
   Sparkles,
   Inbox,
+  Sliders,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -67,8 +68,15 @@ const NAV_ITEMS = [
     description: 'Stages & règles',
     href: '/app/crm/pipelines',
     icon: GitBranch,
-    soon: true,
     matches: (p) => p.startsWith('/app/crm/pipelines'),
+  },
+  {
+    id: 'custom-fields',
+    label: 'Champs custom',
+    description: 'Personnaliser contacts/deals',
+    href: '/app/crm/custom-fields',
+    icon: Sliders,
+    matches: (p) => p.startsWith('/app/crm/custom-fields'),
   },
 ];
 

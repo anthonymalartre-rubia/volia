@@ -17,6 +17,7 @@ import { applyTemplate, appendOptOutFooter } from '@/lib/campaign-templates';
 import { cleanEnv } from '@/lib/envClean';
 import { logEmailSentToCrm } from '@/lib/crm-activity-logger';
 import { buildCampaignReplyAddress } from '@/lib/inbound-domain';
+import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import {
   calculateCurrentDay,
   getCurrentPhase,
@@ -444,11 +445,41 @@ export async function GET(request) {
       .eq('campaign_id', cid)
       .eq('status', 'pending');
     if ((count || 0) === 0) {
-      await supabase
+      const { data: completedCampaign } = await supabase
         .from('email_campaigns')
         .update({ status: 'sent', completed_at: new Date().toISOString() })
         .eq('id', cid)
-        .eq('status', 'sending');
+        .eq('status', 'sending')
+        .select('id, user_id, name, subject, list_id')
+        .maybeSingle();
+
+      // Fire-and-forget : webhook 'campaign_completed' aux abonnés Zapier/Make
+      if (completedCampaign?.user_id) {
+        const { data: stats } = await supabase
+          .from('email_sends')
+          .select('status')
+          .eq('campaign_id', cid);
+        const counts = (stats || []).reduce((acc, s) => {
+          acc[s.status] = (acc[s.status] || 0) + 1;
+          return acc;
+        }, {});
+        emitWebhookEvent({
+          userId: completedCampaign.user_id,
+          event: 'campaign.completed',
+          data: {
+            campaign_id: completedCampaign.id,
+            name: completedCampaign.name,
+            subject: completedCampaign.subject,
+            list_id: completedCampaign.list_id,
+            total_sent: (counts.sent || 0) + (counts.delivered || 0) + (counts.opened || 0) + (counts.clicked || 0) + (counts.bounced || 0) + (counts.replied || 0),
+            total_delivered: counts.delivered || 0,
+            total_bounced: counts.bounced || 0,
+            total_opened: counts.opened || 0,
+            total_clicked: counts.clicked || 0,
+            total_replied: counts.replied || 0,
+          },
+        }).catch(() => {});
+      }
     }
   }
 

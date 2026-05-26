@@ -1159,3 +1159,47 @@ export function newsletterMonthlyEmail({
     }),
   };
 }
+
+/**
+ * Invitation à rejoindre une team Volia Business (multi-utilisateurs).
+ *
+ * Envoyé après POST /api/teams/invite. Le lien token expire à 7 jours.
+ */
+export function teamInvitationEmail({
+  inviterName,
+  inviterEmail,
+  teamName,
+  role,
+  acceptUrl,
+}) {
+  const inviter = inviterName || inviterEmail || 'Un collègue';
+  const team = teamName || 'leur équipe';
+  const roleLabel = role === 'admin' ? 'Administrateur' : 'Membre';
+
+  return {
+    subject: `${inviter} vous invite à rejoindre l'équipe ${team} sur Volia`,
+    html: layout({
+      preheader: `${inviter} vous a invité à rejoindre ${team} en tant que ${roleLabel}.`,
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '👥',
+          title: `Rejoignez ${team}`,
+          greeting: `<strong style="color:${COLORS.text};">${inviter}</strong> vous a invité à collaborer sur Volia en tant que <strong style="color:${COLORS.text};">${roleLabel}</strong>.`,
+        })}
+
+        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
+          Volia est la suite SaaS française de growth B2B : prospection, campagnes et CRM en un seul outil. En rejoignant l'équipe, vous partagerez le quota Business avec vos collègues.
+        </p>
+
+        <div align="center">${ctaPrimary('Accepter l\'invitation', acceptUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:12px;color:${COLORS.textFaint};text-align:center;line-height:1.6;">
+          Ce lien expire dans 7 jours. Si vous n'attendiez pas cette invitation, vous pouvez ignorer ce message.
+        </p>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}

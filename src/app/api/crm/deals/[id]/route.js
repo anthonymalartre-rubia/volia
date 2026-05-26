@@ -27,7 +27,7 @@ export async function GET(request, { params }) {
     .from('crm_deals')
     .select(
       `id, title, value_cents, currency, expected_close_date, notes, status, closed_at, position,
-       pipeline_id, stage_id, contact_id, metadata, created_at, updated_at,
+       pipeline_id, stage_id, contact_id, metadata, custom_fields, created_at, updated_at,
        contact:crm_contacts(id, name, email, phone, company, position),
        stage:crm_stages(id, name, color, probability, closing_type, position),
        pipeline:crm_pipelines(id, name, color),
@@ -96,6 +96,15 @@ export async function PATCH(request, { params }) {
   if (body.contact_id !== undefined) {
     updates.contact_id = typeof body.contact_id === 'string' ? body.contact_id : null;
   }
+  if (body.custom_fields !== undefined) {
+    if (body.custom_fields !== null && (typeof body.custom_fields !== 'object' || Array.isArray(body.custom_fields))) {
+      return NextResponse.json(
+        { success: false, error: 'custom_fields doit être un objet JSON' },
+        { status: 400 }
+      );
+    }
+    updates.custom_fields = body.custom_fields || {};
+  }
 
   if (Object.keys(updates).length === 0) {
     return NextResponse.json(
@@ -110,7 +119,7 @@ export async function PATCH(request, { params }) {
     .eq('id', id)
     .select(
       `id, title, value_cents, currency, expected_close_date, notes, status, closed_at, position,
-       pipeline_id, stage_id, contact_id, metadata, created_at, updated_at,
+       pipeline_id, stage_id, contact_id, metadata, custom_fields, created_at, updated_at,
        contact:crm_contacts(id, name, email, company),
        stage:crm_stages(id, name, color, probability, closing_type, position)`
     )

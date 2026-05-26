@@ -44,6 +44,7 @@ import {
 } from '@/components/crm/ContactsList';
 import NewDealModal from '@/components/crm/NewDealModal';
 import ActivityForm from '@/components/crm/ActivityForm';
+import CustomFieldsSection from '@/components/crm/CustomFieldsSection';
 
 const BUSINESS_PLANS = ['business', 'enterprise'];
 
@@ -629,6 +630,19 @@ export default function CrmContactDetailPage() {
                       onSave={(v) => patchField('notes', v)}
                       placeholder="Contexte, historique…"
                       saving={savingField === 'notes'}
+                    />
+                  </div>
+
+                  {/* Custom fields */}
+                  <div className="pt-3 mt-3 border-t border-line/70">
+                    <CustomFieldsSection
+                      entity="contact"
+                      entityId={contact.id}
+                      values={contact.custom_fields || {}}
+                      apiPath="/api/crm/contacts"
+                      onValuesChange={(nextValues) =>
+                        setContact((prev) => (prev ? { ...prev, custom_fields: nextValues } : prev))
+                      }
                     />
                   </div>
                 </div>

@@ -110,7 +110,7 @@ export const PLANS = {
       'Exports illimités',
       'Dossiers illimités',
       'Accès API (à venir)',
-      'Multi-utilisateurs (à venir)',
+      'Multi-utilisateurs (équipes, RBAC)',
       'Onboarding personnalisé',
       'Support prioritaire',
     ],

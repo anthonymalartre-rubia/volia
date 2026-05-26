@@ -174,6 +174,8 @@ export default function ContactsList({
   sortKey = null,
   sortDir = 'desc',
   onSortChange = null,
+  // Custom fields columns (optionnel). Array de field defs (id, field_key, field_label, field_type, field_options).
+  customColumns = [],
 }) {
   function handleSortClick(key) {
     if (!onSortChange) return;
@@ -319,6 +321,15 @@ export default function ContactsList({
               <th className="px-3 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-content-muted hidden xl:table-cell">
                 Date
               </th>
+              {customColumns.map((col) => (
+                <th
+                  key={col.id}
+                  className="px-3 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-content-muted hidden xl:table-cell whitespace-nowrap"
+                  title={col.field_label}
+                >
+                  {col.field_label}
+                </th>
+              ))}
               <th className="w-24 px-3 py-3" />
             </tr>
           </thead>
@@ -433,6 +444,19 @@ export default function ContactsList({
                     </span>
                   </td>
 
+                  {/* Custom field cells */}
+                  {customColumns.map((col) => (
+                    <td
+                      key={col.id}
+                      className="px-3 py-3 hidden xl:table-cell text-[12px] text-content-secondary"
+                    >
+                      <CustomFieldCell
+                        value={c.custom_fields?.[col.field_key]}
+                        type={col.field_type}
+                      />
+                    </td>
+                  ))}
+
                   {/* Actions hover */}
                   <td className="pr-4 pl-1 py-3 text-right">
                     <div className="inline-flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -474,6 +498,45 @@ export default function ContactsList({
       </div>
     </div>
   );
+}
+
+// ─── Helper : affichage de la valeur d'un custom field dans une cellule ────
+function CustomFieldCell({ value, type }) {
+  if (value === null || value === undefined || value === '') {
+    return <span className="text-content-faint">—</span>;
+  }
+  if (type === 'boolean') {
+    return (
+      <span
+        className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${
+          value
+            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+            : 'bg-zinc-100 text-zinc-600 border border-zinc-200'
+        }`}
+      >
+        {value ? 'Oui' : 'Non'}
+      </span>
+    );
+  }
+  if (type === 'date') {
+    try {
+      return (
+        <span className="tabular-nums">
+          {new Date(value).toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          })}
+        </span>
+      );
+    } catch {
+      return <span>{String(value)}</span>;
+    }
+  }
+  if (type === 'number') {
+    return <span className="tabular-nums">{String(value)}</span>;
+  }
+  return <span className="truncate max-w-[160px] inline-block">{String(value)}</span>;
 }
 
 // Exports utilitaires réutilisables ailleurs (page détail contact).

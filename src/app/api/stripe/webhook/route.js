@@ -11,6 +11,7 @@ import { PLANS } from '@/lib/plans';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { createNotification, NOTIF_TYPES } from '@/lib/notifications';
+import { ensureTeamForOwner, planAllowsTeams } from '@/lib/teams';
 
 function getStripe() {
   return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY));
@@ -131,6 +132,18 @@ export async function POST(request) {
           break;
         }
 
+        // ─── Multi-utilisateurs : auto-create team si plan Business ──
+        // Justifie la marche tarifaire 49→99€ : l'owner peut inviter
+        // jusqu'à N teammates (quota partagé, RBAC simple).
+        if (planAllowsTeams(planId)) {
+          try {
+            const { email: ownerEmail } = await getUserContact(supabaseAdmin, userId);
+            await ensureTeamForOwner(userId, ownerEmail);
+          } catch (err) {
+            console.error('[webhook] ensureTeamForOwner failed:', err);
+          }
+        }
+
         // Email de confirmation (features personnalisées par plan + period)
         const { email, fullName } = await getUserContact(supabaseAdmin, userId);
         if (email) {
@@ -229,6 +242,16 @@ export async function POST(request) {
               updated_at: new Date().toISOString(),
             })
             .eq('id', userId);
+
+          // Si upgrade vers Business → s'assurer qu'on a une team
+          if (planAllowsTeams(newPlanId)) {
+            try {
+              const { email: ownerEmail } = await getUserContact(supabaseAdmin, userId);
+              await ensureTeamForOwner(userId, ownerEmail);
+            } catch (err) {
+              console.error('[webhook] ensureTeamForOwner (subscription.updated) failed:', err);
+            }
+          }
 
           // Email "votre plan a changé"
           const { email, fullName } = await getUserContact(supabaseAdmin, userId);

@@ -121,6 +121,7 @@ export async function middleware(request) {
     pathname.startsWith('/pricing') ||            // page tarifs standalone
     pathname.startsWith('/demo') ||               // page demo Cal.com
     pathname.startsWith('/en') ||                 // version anglaise (landing + pricing + products)
+    pathname.startsWith('/integrations') ||       // pages docs intégrations (hub + Zapier + Make)
     pathname.startsWith('/etude') ||
     pathname.startsWith('/ressources') ||
     pathname.startsWith('/blog') ||

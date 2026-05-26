@@ -27,6 +27,8 @@ import {
   X,
   KanbanSquare,
   Megaphone,
+  Columns,
+  Check,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
@@ -38,6 +40,7 @@ import { ConfirmModal } from '@/components/ui';
 
 const BUSINESS_PLANS = ['business', 'enterprise'];
 const PAGE_SIZE = 20;
+const COLUMNS_STORAGE_KEY = 'volia.crm.contacts.customCols.v1';
 
 export default function CrmContactsPage() {
   const router = useRouter();
@@ -74,6 +77,11 @@ export default function CrmContactsPage() {
   const [selectedIds, setSelectedIds] = useState(() => new Set());
   const [campagneOpen, setCampagneOpen] = useState(false);
   const [campagneToast, setCampagneToast] = useState('');
+
+  // ─── Custom fields columns selector ──────────────────────
+  const [customFields, setCustomFields] = useState([]);
+  const [selectedColumnIds, setSelectedColumnIds] = useState(() => new Set());
+  const [columnsMenuOpen, setColumnsMenuOpen] = useState(false);
 
   function toggleSelect(id) {
     setSelectedIds((prev) => {
@@ -126,6 +134,50 @@ export default function CrmContactsPage() {
       setAuthChecked(true);
     });
   }, [router]);
+
+  // ─── Charge defs custom fields + restore préférence colonnes ─────
+  useEffect(() => {
+    if (!authChecked) return;
+    fetch('/api/crm/custom-fields?entity=contact')
+      .then((r) => r.json())
+      .then((d) => {
+        if (!d?.success) return;
+        const list = Array.isArray(d.data) ? d.data : [];
+        setCustomFields(list);
+        // Restore préférence localStorage
+        try {
+          const raw = window.localStorage.getItem(COLUMNS_STORAGE_KEY);
+          if (raw) {
+            const ids = JSON.parse(raw);
+            if (Array.isArray(ids)) {
+              const valid = new Set(ids.filter((id) => list.some((f) => f.id === id)));
+              setSelectedColumnIds(valid);
+            }
+          }
+        } catch {
+          /* noop */
+        }
+      })
+      .catch(() => {
+        /* silent */
+      });
+  }, [authChecked]);
+
+  function toggleColumn(fieldId) {
+    setSelectedColumnIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(fieldId)) next.delete(fieldId);
+      else next.add(fieldId);
+      try {
+        window.localStorage.setItem(COLUMNS_STORAGE_KEY, JSON.stringify(Array.from(next)));
+      } catch {
+        /* noop */
+      }
+      return next;
+    });
+  }
+
+  const customColumns = customFields.filter((f) => selectedColumnIds.has(f.id));
 
   // ─── Debounce search ────────────────────────────────────
   useEffect(() => {
@@ -305,6 +357,73 @@ export default function CrmContactsPage() {
                   )}
                 </div>
 
+                {/* Column selector (custom fields) */}
+                {customFields.length > 0 && (
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setColumnsMenuOpen((v) => !v)}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-xs font-medium text-content-secondary border border-line bg-surface-card hover:bg-surface-elevated transition-colors"
+                      title="Choisir les colonnes à afficher"
+                      aria-haspopup="true"
+                      aria-expanded={columnsMenuOpen}
+                    >
+                      <Columns size={13} />
+                      <span className="hidden sm:inline">Colonnes</span>
+                      {selectedColumnIds.size > 0 && (
+                        <span className="ml-0.5 px-1 py-0 rounded text-[9px] tabular-nums bg-emerald-100 text-emerald-700">
+                          {selectedColumnIds.size}
+                        </span>
+                      )}
+                    </button>
+                    {columnsMenuOpen && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40"
+                          onClick={() => setColumnsMenuOpen(false)}
+                          aria-hidden="true"
+                        />
+                        <div className="absolute right-0 top-full mt-1 z-50 w-64 max-h-80 overflow-y-auto rounded-lg border border-line bg-surface-base shadow-lg p-1.5">
+                          <div className="px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider text-content-tertiary border-b border-line mb-1">
+                            Colonnes custom
+                          </div>
+                          {customFields.map((f) => {
+                            const active = selectedColumnIds.has(f.id);
+                            return (
+                              <button
+                                key={f.id}
+                                type="button"
+                                onClick={() => toggleColumn(f.id)}
+                                className={`w-full flex items-center justify-between gap-2 px-2 py-1.5 rounded-md text-left text-xs transition-colors ${
+                                  active
+                                    ? 'bg-emerald-50 text-emerald-900'
+                                    : 'text-content-secondary hover:bg-surface-elevated'
+                                }`}
+                              >
+                                <div className="min-w-0 flex-1">
+                                  <div className="font-medium truncate">{f.field_label}</div>
+                                  <div className="text-[10px] text-content-tertiary truncate">
+                                    {f.field_type}
+                                  </div>
+                                </div>
+                                {active && <Check size={12} className="text-emerald-600 flex-shrink-0" />}
+                              </button>
+                            );
+                          })}
+                          <div className="px-2 py-1.5 mt-1 border-t border-line">
+                            <a
+                              href="/app/crm/custom-fields"
+                              className="text-[10px] text-emerald-700 hover:underline"
+                            >
+                              Gérer les champs personnalisés →
+                            </a>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+
                 <button
                   type="button"
                   onClick={() => setNewContactOpen(true)}
@@ -399,6 +518,7 @@ export default function CrmContactsPage() {
               sortKey={sortKey}
               sortDir={sortDir}
               onSortChange={handleSortChange}
+              customColumns={customColumns}
               emptyState={
                 debouncedSearch ? (
                   <div className="max-w-sm mx-auto">

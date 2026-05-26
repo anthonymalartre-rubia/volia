@@ -27,6 +27,8 @@ import {
   AlertTriangle,
   ChevronLeft,
   Sparkles,
+  Users,
+  Webhook,
 } from 'lucide-react';
 import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 
@@ -56,6 +58,14 @@ const NAV_ITEMS = [
     matches: () => false,
   },
   {
+    id: 'team',
+    label: 'Équipe',
+    description: 'Membres & invitations',
+    href: '/settings/team',
+    icon: Users,
+    matches: (p) => p.startsWith('/settings/team'),
+  },
+  {
     id: 'email-senders',
     label: 'Domaines email',
     description: 'Vos domaines d\'envoi',
@@ -82,6 +92,14 @@ const NAV_ITEMS = [
     href: '/settings#api',
     icon: Key,
     matches: () => false,
+  },
+  {
+    id: 'webhooks',
+    label: 'Webhooks',
+    description: 'Events sortants HTTPS',
+    href: '/settings/webhooks',
+    icon: Webhook,
+    matches: (p) => p.startsWith('/settings/webhooks'),
   },
   {
     id: 'aide',

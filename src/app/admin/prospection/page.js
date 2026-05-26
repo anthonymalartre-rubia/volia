@@ -11,6 +11,7 @@ import { getSupabase } from '@/lib/supabase';
 import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
 import NoAdminScreen from '@/components/NoAdminScreen';
+import { CardListSkeleton } from '@/components/ui';
 
 export default function ProspectionHubPage() {
   const router = useRouter();
@@ -24,6 +25,8 @@ export default function ProspectionHubPage() {
   const [newName, setNewName] = useState('');
   const [newSource, setNewSource] = useState('');
   const [error, setError] = useState(null);
+  // Validation inline onBlur (Sprint 2 UX polish)
+  const [nameError, setNameError] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -75,7 +78,19 @@ export default function ProspectionHubPage() {
     }
   }
 
-  if (loading) return <CenteredSpinner />;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-surface-base text-content-primary p-4 sm:p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-6 space-y-3">
+            <div className="h-3 w-24 bg-zinc-200/80 dark:bg-zinc-700/40 rounded animate-pulse" />
+            <div className="h-8 w-72 bg-zinc-200/80 dark:bg-zinc-700/40 rounded animate-pulse" />
+          </div>
+          <CardListSkeleton count={6} />
+        </div>
+      </div>
+    );
+  }
   if (authState === 'guest') return <GuestScreen />;
   if (authState === 'no-admin') return <NoAdminScreen email={currentEmail} signOut={async () => { await supabase.auth.signOut(); router.push('/login?return=/admin/prospection'); }} />;
 
@@ -133,15 +148,26 @@ export default function ProspectionHubPage() {
               </div>
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-              <input
-                type="text"
-                required
-                maxLength={120}
-                placeholder="Nom de la liste (ex: SaaS B2B Paris 2026)"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                className="px-3 py-2 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500 transition"
-              />
+              <div>
+                <input
+                  type="text"
+                  required
+                  maxLength={120}
+                  placeholder="Nom de la liste (ex: SaaS B2B Paris 2026)"
+                  value={newName}
+                  onChange={(e) => {
+                    setNewName(e.target.value);
+                    if (nameError) setNameError(null);
+                  }}
+                  onBlur={() => {
+                    if (!newName.trim()) setNameError('Nom de liste requis');
+                  }}
+                  className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none transition ${nameError ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
+                />
+                {nameError && (
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">{nameError}</p>
+                )}
+              </div>
               <input
                 type="text"
                 maxLength={200}

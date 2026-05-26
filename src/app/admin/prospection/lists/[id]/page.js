@@ -13,6 +13,7 @@ import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
 import ImportFromProspectionModal from '@/components/lists/ImportFromProspectionModal';
 import ImportFromCrmModal from '@/components/lists/ImportFromCrmModal';
+import { ConfirmModal, DetailPageSkeleton } from '@/components/ui';
 
 export default function ListDetailPage() {
   const router = useRouter();
@@ -33,6 +34,10 @@ export default function ListDetailPage() {
   const [showProspectionModal, setShowProspectionModal] = useState(false);
   const [showCrmModal, setShowCrmModal] = useState(false);
   const [importToast, setImportToast] = useState(null); // { source, inserted, skipped }
+  // Modales de confirmation (remplacent les confirm() natifs)
+  const [contactToDelete, setContactToDelete] = useState(null);
+  const [confirmDeleteList, setConfirmDeleteList] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   // Charge la liste + contacts
   const loadList = useCallback(async () => {
@@ -95,10 +100,16 @@ export default function ListDetailPage() {
     }
   }
 
-  async function deleteContact(contactId) {
-    if (!confirm('Supprimer ce contact de la liste ?')) return;
-    await fetch(`/api/admin/prospection/lists/${listId}/contacts/${contactId}`, { method: 'DELETE' });
-    await loadList();
+  async function confirmDeleteContact() {
+    if (!contactToDelete) return;
+    setDeleting(true);
+    try {
+      await fetch(`/api/admin/prospection/lists/${listId}/contacts/${contactToDelete}`, { method: 'DELETE' });
+      await loadList();
+    } finally {
+      setDeleting(false);
+      setContactToDelete(null);
+    }
   }
 
   async function toggleOptOut(contact) {
@@ -110,17 +121,18 @@ export default function ListDetailPage() {
     await loadList();
   }
 
-  async function deleteList() {
-    if (!confirm(`Supprimer définitivement la liste "${list?.name}" et tous ses ${total} contacts ?`)) return;
-    const res = await fetch(`/api/admin/prospection/lists/${listId}`, { method: 'DELETE' });
-    if (res.ok) router.push('/admin/prospection');
+  async function performDeleteList() {
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/prospection/lists/${listId}`, { method: 'DELETE' });
+      if (res.ok) router.push('/admin/prospection');
+    } finally {
+      setDeleting(false);
+      setConfirmDeleteList(false);
+    }
   }
 
-  if (loading) return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center text-content-secondary">
-      <Loader2 className="animate-spin" size={20} />
-    </div>
-  );
+  if (loading) return <DetailPageSkeleton />;
   if (!authorized) return null;
   if (error && !list) return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">
@@ -166,7 +178,7 @@ export default function ListDetailPage() {
                 Campagne SMS
               </Link>
             )}
-            <button onClick={deleteList} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm font-medium transition" title="Supprimer la liste">
+            <button onClick={() => setConfirmDeleteList(true)} className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 text-sm font-medium transition" title="Supprimer la liste">
               <Trash2 size={14} />
             </button>
           </div>
@@ -412,7 +424,7 @@ export default function ListDetailPage() {
                       <button onClick={() => toggleOptOut(c)} className="p-1 text-content-tertiary hover:text-amber-600 transition" title={c.opt_out ? 'Réactiver' : 'Marquer opt-out'}>
                         <Ban size={12} />
                       </button>
-                      <button onClick={() => deleteContact(c.id)} className="p-1 text-content-tertiary hover:text-red-400 transition" title="Supprimer">
+                      <button onClick={() => setContactToDelete(c.id)} className="p-1 text-content-tertiary hover:text-red-400 transition" title="Supprimer">
                         <Trash2 size={12} />
                       </button>
                     </td>
@@ -455,6 +467,28 @@ export default function ListDetailPage() {
           });
           await loadList();
         }}
+      />
+
+      <ConfirmModal
+        open={!!contactToDelete}
+        onClose={() => !deleting && setContactToDelete(null)}
+        onConfirm={confirmDeleteContact}
+        title="Supprimer ce contact ?"
+        message="Ce contact sera retiré de la liste. Cette action est définitive."
+        confirmLabel="Supprimer"
+        variant="danger"
+        loading={deleting}
+      />
+
+      <ConfirmModal
+        open={confirmDeleteList}
+        onClose={() => !deleting && setConfirmDeleteList(false)}
+        onConfirm={performDeleteList}
+        title={`Supprimer la liste "${list?.name || ''}" ?`}
+        message={`${total.toLocaleString('fr-FR')} contact${total > 1 ? 's' : ''} ser${total > 1 ? 'ont' : 'a'} également supprimé${total > 1 ? 's' : ''}. Cette action est définitive.`}
+        confirmLabel="Supprimer définitivement"
+        variant="danger"
+        loading={deleting}
       />
     </div>
   );

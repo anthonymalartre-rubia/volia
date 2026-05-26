@@ -10,6 +10,7 @@ import {
 import { getSupabase } from '@/lib/supabase';
 import NoAdminScreen from '@/components/NoAdminScreen';
 import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
+import { CardListSkeleton } from '@/components/ui';
 
 const STATUS_META = {
   draft:     { label: 'Brouillon',  color: 'text-content-tertiary', bg: 'bg-content-tertiary/10', icon: <Clock size={11} /> },
@@ -65,7 +66,19 @@ export default function CampaignsHubPage() {
     })();
   }, [router, supabase]);
 
-  if (loading) return <CenteredSpinner />;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-surface-base text-content-primary p-4 sm:p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-6 space-y-3">
+            <div className="h-3 w-24 bg-zinc-200/80 dark:bg-zinc-700/40 rounded animate-pulse" />
+            <div className="h-8 w-64 bg-zinc-200/80 dark:bg-zinc-700/40 rounded animate-pulse" />
+          </div>
+          <CardListSkeleton count={4} />
+        </div>
+      </div>
+    );
+  }
   if (authState === 'guest') return <GuestScreen />;
   if (authState === 'no-admin') return <NoAdminScreen email={currentEmail} signOut={async () => { await supabase.auth.signOut(); router.push('/login?return=/admin/prospection/campaigns'); }} />;
 

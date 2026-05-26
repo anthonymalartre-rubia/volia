@@ -24,6 +24,7 @@ import { useState } from 'react';
 import { Plus, Inbox } from 'lucide-react';
 import DealCard from './DealCard';
 import { formatDealValue } from '@/lib/crm';
+import { InfoTooltip } from '@/components/ui';
 
 // ─── Palette stage → classes Tailwind (toutes déclarées en dur pour le purge)
 const STAGE_COLORS = {
@@ -122,8 +123,12 @@ function KanbanColumn({
             </span>
           </div>
           {!isClosing && (
-            <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text}`}>
+            <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}>
               {stage.probability}%
+              <InfoTooltip
+                content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
+                iconSize={10}
+              />
             </span>
           )}
         </div>

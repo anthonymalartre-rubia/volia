@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Check, Copy, Eye, EyeOff, Key, Loader2, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { ConfirmModal } from '@/components/ui';
 
 export default function ApiKeysManager() {
   const [keys, setKeys] = useState([]);
@@ -11,6 +12,9 @@ export default function ApiKeysManager() {
   const [revealedKey, setRevealedKey] = useState(null); // clé claire fraîchement créée
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState(null);
+  // Modale confirmation révocation (remplace confirm() natif)
+  const [keyToRevoke, setKeyToRevoke] = useState(null);
+  const [revoking, setRevoking] = useState(false);
 
   const fetchKeys = async () => {
     try {
@@ -53,13 +57,17 @@ export default function ApiKeysManager() {
     }
   };
 
-  const handleRevoke = async (id) => {
-    if (!confirm('Révoquer cette clé ? Les intégrations qui l\'utilisent cesseront immédiatement de fonctionner.')) return;
+  const performRevoke = async () => {
+    if (!keyToRevoke) return;
+    setRevoking(true);
     try {
-      await fetch(`/api/api-keys?id=${id}`, { method: 'DELETE' });
+      await fetch(`/api/api-keys?id=${keyToRevoke.id}`, { method: 'DELETE' });
       fetchKeys();
     } catch {
       setError('Erreur révocation');
+    } finally {
+      setRevoking(false);
+      setKeyToRevoke(null);
     }
   };
 
@@ -176,7 +184,7 @@ export default function ApiKeysManager() {
                   <td className="p-3 text-right">
                     {!k.revoked_at && (
                       <button
-                        onClick={() => handleRevoke(k.id)}
+                        onClick={() => setKeyToRevoke(k)}
                         className="text-red-400 hover:text-red-300 p-1"
                         aria-label="Révoquer"
                       >
@@ -197,6 +205,17 @@ export default function ApiKeysManager() {
         <a href="/api" className="text-violet-400 hover:underline ml-1">Voir la documentation</a>.
         Max 5 clés actives par compte.
       </p>
+
+      <ConfirmModal
+        open={!!keyToRevoke}
+        onClose={() => !revoking && setKeyToRevoke(null)}
+        onConfirm={performRevoke}
+        title="Révoquer cette clé API ?"
+        message={`La clé "${keyToRevoke?.label || ''}" sera révoquée immédiatement. Les intégrations qui l'utilisent (Zapier, Make, scripts custom) cesseront de fonctionner.`}
+        confirmLabel="Révoquer"
+        variant="danger"
+        loading={revoking}
+      />
     </div>
   );
 }

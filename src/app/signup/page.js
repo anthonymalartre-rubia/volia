@@ -49,11 +49,26 @@ export default function SignupPage() {
   const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  // Validation inline onBlur (Sprint 2 UX polish)
+  const [fieldErrors, setFieldErrors] = useState({});
   const router = useRouter();
   const supabase = getSupabase();
   const { t } = useI18n();
 
   const strength = useMemo(() => getPasswordStrength(password), [password]);
+
+  // Validation simple — pas de lib externe, juste JS pur
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function validateEmail(val) {
+    if (!val) return 'Email requis';
+    if (!EMAIL_RE.test(val)) return 'Format email invalide (ex : nom@domaine.fr)';
+    return null;
+  }
+  function validatePassword(val) {
+    if (!val) return 'Mot de passe requis';
+    if (val.length < 6) return 'Minimum 6 caractères';
+    return null;
+  }
 
   useEffect(() => {
     setMounted(true);
@@ -321,12 +336,23 @@ export default function SignupPage() {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (fieldErrors.email) setFieldErrors((p) => ({ ...p, email: null }));
+              }}
+              onBlur={() => {
+                const err = validateEmail(email);
+                setFieldErrors((p) => ({ ...p, email: err }));
+              }}
               required
               autoComplete="email"
               placeholder={t('auth.emailPlaceholder')}
               leadingIcon={Mail}
+              error={!!fieldErrors.email}
             />
+            {fieldErrors.email && (
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fieldErrors.email}</p>
+            )}
           </div>
 
           <div>
@@ -337,12 +363,20 @@ export default function SignupPage() {
               id="password"
               type={showPassword ? 'text' : 'password'}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (fieldErrors.password) setFieldErrors((p) => ({ ...p, password: null }));
+              }}
+              onBlur={() => {
+                const err = validatePassword(password);
+                setFieldErrors((p) => ({ ...p, password: err }));
+              }}
               required
               minLength={6}
               autoComplete="new-password"
               placeholder={t('auth.passwordPlaceholder')}
               leadingIcon={Lock}
+              error={!!fieldErrors.password}
               trailingSlot={
                 <button
                   type="button"
@@ -355,6 +389,9 @@ export default function SignupPage() {
                 </button>
               }
             />
+            {fieldErrors.password && (
+              <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fieldErrors.password}</p>
+            )}
             {/* Password strength indicator */}
             {password && (
               <div className="mt-2 space-y-1">

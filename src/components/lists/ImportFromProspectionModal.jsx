@@ -122,6 +122,17 @@ export default function ImportFromProspectionModal({ open, onClose, listId, onSu
     return includeEmailless ? selectedSession.prospects_count : selectedSession.emails_count;
   }, [selectedSession, includeEmailless]);
 
+  // Auto-coche "Inclure les prospects sans email" quand on sélectionne une
+  // session qui n'a AUCUN email — sinon importCount = 0 et le bouton
+  // resterait grisé avec "0 prospect à importer" alors que la session a
+  // des prospects valides (juste sans email, ex: catégorie obscure outre-mer).
+  // L'user peut toujours décocher manuellement après s'il préfère filtrer.
+  useEffect(() => {
+    if (selectedSession && selectedSession.emails_count === 0 && selectedSession.prospects_count > 0) {
+      setIncludeEmailless(true);
+    }
+  }, [selectedSession]);
+
   if (!open) return null;
 
   async function handleSubmit() {
@@ -330,17 +341,23 @@ export default function ImportFromProspectionModal({ open, onClose, listId, onSu
                             <span className="truncate max-w-[260px]">{cats}</span>
                           )}
                         </div>
-                        <div className="flex items-center gap-3 mt-1.5 text-[11px]">
+                        <div className="flex items-center gap-3 mt-1.5 text-[11px] flex-wrap">
                           <span className="inline-flex items-center gap-1 text-content-secondary">
                             <Users size={11} />
                             <strong className="tabular-nums">{s.prospects_count}</strong> prospect
                             {s.prospects_count > 1 ? 's' : ''}
                           </span>
-                          <span className="inline-flex items-center gap-1 text-green-700">
+                          <span className={`inline-flex items-center gap-1 ${s.emails_count > 0 ? 'text-green-700' : 'text-content-tertiary'}`}>
                             <Mail size={11} />
-                            <strong className="tabular-nums">{s.emails_count}</strong> email
-                            {s.emails_count > 1 ? 's' : ''}
+                            <strong className="tabular-nums">{s.emails_count}</strong> avec email
                           </span>
+                          {/* Hint pour les sessions sans email (rare mais courant
+                              sur catégories obscures / outre-mer) */}
+                          {s.prospects_count > 0 && s.emails_count === 0 && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 text-[10px] font-semibold">
+                              Pas d&apos;email — option ci-dessous requise
+                            </span>
+                          )}
                         </div>
                       </div>
                     </label>
@@ -384,6 +401,13 @@ export default function ImportFromProspectionModal({ open, onClose, listId, onSu
                 <>
                   <strong className="tabular-nums">{importCount}</strong> prospect
                   {importCount > 1 ? 's' : ''} à importer
+                  {selectedSession.emails_count !== selectedSession.prospects_count && (
+                    <span className="text-content-tertiary ml-1">
+                      ({includeEmailless
+                        ? `dont ${selectedSession.emails_count} avec email`
+                        : `${selectedSession.prospects_count - selectedSession.emails_count} sans email exclus`})
+                    </span>
+                  )}
                 </>
               ) : (
                 'Sélectionnez une recherche'

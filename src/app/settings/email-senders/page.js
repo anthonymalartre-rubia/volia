@@ -33,6 +33,28 @@ import {
   Info,
   ExternalLink,
 } from 'lucide-react';
+import { ConfirmModal, InfoTooltip } from '@/components/ui';
+
+// Définitions courtes pour expliquer les concepts DNS aux non-experts.
+const DNS_TYPE_HELP = {
+  TXT: 'Record texte DNS — utilisé pour SPF, DMARC et la vérification de domaine. Aucun risque pour votre site.',
+  MX: 'Mail eXchanger — indique vers quel serveur les emails de votre domaine doivent être routés.',
+  CNAME: 'Canonical Name — alias DNS pointant vers un autre domaine. Utilisé ici pour DKIM (signature cryptographique).',
+};
+
+const RECORD_NAME_HELP = (name = '') => {
+  const n = name.toLowerCase();
+  if (n.includes('dkim') || n.includes('_domainkey')) {
+    return 'DKIM (DomainKeys Identified Mail) — signature cryptographique qui prouve que l\'email vient bien de votre domaine. Empêche le phishing et améliore la délivrabilité.';
+  }
+  if (n.includes('spf') || n.startsWith('@') || n === '') {
+    return 'SPF (Sender Policy Framework) — liste les serveurs autorisés à envoyer du mail pour votre domaine. Sans SPF, vos mails atterrissent souvent en spam.';
+  }
+  if (n.includes('dmarc') || n.includes('_dmarc')) {
+    return 'DMARC — politique qui dit aux serveurs destinataires quoi faire des mails qui échouent SPF/DKIM (rejet, quarantaine, ou rien). Brique anti-phishing essentielle.';
+  }
+  return null;
+};
 
 function statusBadge(status) {
   switch (status) {
@@ -127,14 +149,22 @@ function DnsTable({ records }) {
             const value = r.value || '—';
             const ttl = r.ttl || 'Auto';
             const recStatus = r.status || 'pending';
+            const typeHelp = DNS_TYPE_HELP[type];
+            const nameHelp = RECORD_NAME_HELP(name);
             return (
               <tr key={`${type}-${name}-${i}`} className="border-t border-line">
                 <td className="px-3 py-2 align-top">
-                  <span className="font-mono font-semibold text-content-primary">{type}</span>
+                  <span className="font-mono font-semibold text-content-primary inline-flex items-center gap-1">
+                    {type}
+                    {typeHelp && <InfoTooltip content={typeHelp} iconSize={10} />}
+                  </span>
                 </td>
                 <td className="px-3 py-2 align-top">
                   <div className="flex items-start gap-2">
-                    <code className="font-mono text-content-secondary break-all">{name}</code>
+                    <code className="font-mono text-content-secondary break-all inline-flex items-center gap-1">
+                      {name}
+                      {nameHelp && <InfoTooltip content={nameHelp} iconSize={10} />}
+                    </code>
                     <CopyButton value={name} />
                   </div>
                 </td>
@@ -173,6 +203,8 @@ export default function EmailSendersPage() {
   const [expandedDnsId, setExpandedDnsId] = useState(null);
   const [verifyingId, setVerifyingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  // Modal de confirmation pour la suppression (remplace confirm() natif)
+  const [senderToDelete, setSenderToDelete] = useState(null);
 
   // Wizard state machine
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -248,10 +280,10 @@ export default function EmailSendersPage() {
     }
   }
 
-  async function handleDelete(id) {
-    if (!confirm('Supprimer ce domaine ? Vos campagnes ne pourront plus envoyer depuis cette adresse.')) {
-      return;
-    }
+  async function performDelete() {
+    const sender = senderToDelete;
+    if (!sender) return;
+    const id = sender.id;
     setDeletingId(id);
     try {
       const res = await fetch(`/api/email-senders/${id}`, { method: 'DELETE' });
@@ -266,6 +298,7 @@ export default function EmailSendersPage() {
       showToast('Erreur réseau', 'error');
     } finally {
       setDeletingId(null);
+      setSenderToDelete(null);
     }
   }
 
@@ -748,7 +781,7 @@ export default function EmailSendersPage() {
                         {isExpanded ? 'Masquer DNS' : 'Voir les records DNS'}
                       </button>
                       <button
-                        onClick={() => handleDelete(s.id)}
+                        onClick={() => setSenderToDelete(s)}
                         disabled={deletingId === s.id}
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/30 transition disabled:opacity-40"
                       >
@@ -773,6 +806,17 @@ export default function EmailSendersPage() {
           )}
         </section>
       </div>
+
+      <ConfirmModal
+        open={!!senderToDelete}
+        onClose={() => !deletingId && setSenderToDelete(null)}
+        onConfirm={performDelete}
+        title={`Supprimer le domaine ${senderToDelete?.domain || ''} ?`}
+        message="Les campagnes existantes resteront, mais vous ne pourrez plus envoyer de nouveaux emails depuis cette adresse. Vous devrez reconnecter ce domaine si vous changez d'avis."
+        confirmLabel="Supprimer le domaine"
+        variant="danger"
+        loading={!!deletingId}
+      />
     </div>
   );
 }

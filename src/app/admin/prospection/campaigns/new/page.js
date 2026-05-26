@@ -35,6 +35,8 @@ function NewCampaignContent() {
   const [bodyHtml, setBodyHtml] = useState('');
   const [emailSenderId, setEmailSenderId] = useState(''); // '' = fallback Volia
   const [previewMode, setPreviewMode] = useState(false);
+  // Validation inline onBlur (Sprint 2 UX polish)
+  const [fieldErrors, setFieldErrors] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -192,8 +194,14 @@ Anthony</p>
                 <select
                   required
                   value={listId}
-                  onChange={(e) => setListId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm text-content-primary focus:outline-none focus:border-violet-500 transition"
+                  onChange={(e) => {
+                    setListId(e.target.value);
+                    if (fieldErrors.listId) setFieldErrors((p) => ({ ...p, listId: null }));
+                  }}
+                  onBlur={() => {
+                    if (!listId) setFieldErrors((p) => ({ ...p, listId: 'Choisissez une liste' }));
+                  }}
+                  className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm text-content-primary focus:outline-none transition ${fieldErrors.listId ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
                 >
                   <option value="">— Sélectionner une liste —</option>
                   {lists.map((l) => (
@@ -202,6 +210,9 @@ Anthony</p>
                     </option>
                   ))}
                 </select>
+                {fieldErrors.listId && (
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fieldErrors.listId}</p>
+                )}
                 {selectedList && (
                   <div className="mt-2 inline-flex items-center gap-1.5 text-xs text-emerald-400">
                     <CheckCircle2 size={11} />
@@ -311,10 +322,19 @@ Anthony</p>
                       type="text"
                       required maxLength={200}
                       value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
+                      onChange={(e) => {
+                        setSubject(e.target.value);
+                        if (fieldErrors.subject) setFieldErrors((p) => ({ ...p, subject: null }));
+                      }}
+                      onBlur={() => {
+                        if (!subject.trim()) setFieldErrors((p) => ({ ...p, subject: 'Objet requis' }));
+                      }}
                       placeholder="Ex : Quick question — {{company}}"
-                      className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm focus:outline-none focus:border-violet-500"
+                      className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm focus:outline-none ${fieldErrors.subject ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
                     />
+                    {fieldErrors.subject && (
+                      <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fieldErrors.subject}</p>
+                    )}
                     <p className="text-[10px] text-content-tertiary mt-1">
                       Variables dispo : <code>{`{{first_name}}`}</code>, <code>{`{{last_name}}`}</code>, <code>{`{{company}}`}</code>, <code>{`{{position_title}}`}</code>, <code>{`{{custom.X}}`}</code>
                     </p>
@@ -337,10 +357,19 @@ Anthony</p>
                   required
                   rows={14}
                   value={bodyHtml}
-                  onChange={(e) => setBodyHtml(e.target.value)}
+                  onChange={(e) => {
+                    setBodyHtml(e.target.value);
+                    if (fieldErrors.bodyHtml) setFieldErrors((p) => ({ ...p, bodyHtml: null }));
+                  }}
+                  onBlur={() => {
+                    if (!bodyHtml.trim()) setFieldErrors((p) => ({ ...p, bodyHtml: 'Corps du message requis' }));
+                  }}
                   placeholder="<p>Bonjour {{first_name}},</p>..."
-                  className="w-full px-3 py-2 rounded-lg bg-surface-base border border-line text-sm font-mono text-content-primary focus:outline-none focus:border-violet-500 transition resize-y"
+                  className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm font-mono text-content-primary focus:outline-none transition resize-y ${fieldErrors.bodyHtml ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
                 />
+                {fieldErrors.bodyHtml && (
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fieldErrors.bodyHtml}</p>
+                )}
                 <p className="text-[10px] text-content-tertiary mt-1.5">
                   Le footer RGPD (lien désabonnement 1 clic) sera ajouté automatiquement à l&apos;envoi.
                 </p>

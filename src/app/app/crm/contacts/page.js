@@ -34,6 +34,7 @@ import ContactsList from '@/components/crm/ContactsList';
 import NewContactModal from '@/components/crm/NewContactModal';
 import AddToCampagneModal from '@/components/crm/AddToCampagneModal';
 import { getSupabase } from '@/lib/supabase';
+import { ConfirmModal } from '@/components/ui';
 
 const BUSINESS_PLANS = ['business', 'enterprise'];
 const PAGE_SIZE = 20;
@@ -66,6 +67,8 @@ export default function CrmContactsPage() {
   // ─── UI ───────────────────────────────────────────────────
   const [newContactOpen, setNewContactOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  // Modale de confirmation suppression (remplace confirm() natif)
+  const [contactToDelete, setContactToDelete] = useState(null);
 
   // ─── Bulk selection (CRM → Campagnes) ─────────────────────
   const [selectedIds, setSelectedIds] = useState(() => new Set());
@@ -206,11 +209,14 @@ export default function CrmContactsPage() {
     router.push(`/app/crm/contacts/${contact.id}`);
   }
 
-  async function handleContactDelete(contact) {
+  function handleContactDelete(contact) {
     if (deletingId) return;
-    if (!confirm(`Supprimer le contact "${contact.name}" ? Cette action est définitive.`)) {
-      return;
-    }
+    setContactToDelete(contact);
+  }
+
+  async function performContactDelete() {
+    if (!contactToDelete) return;
+    const contact = contactToDelete;
     setDeletingId(contact.id);
     try {
       const res = await fetch(`/api/crm/contacts/${contact.id}`, { method: 'DELETE' });
@@ -232,6 +238,7 @@ export default function CrmContactsPage() {
       setError('Erreur réseau');
     } finally {
       setDeletingId(null);
+      setContactToDelete(null);
     }
   }
 
@@ -480,6 +487,17 @@ export default function CrmContactsPage() {
           setCampagneToast(parts.join(' · '));
           clearSelection();
         }}
+      />
+
+      <ConfirmModal
+        open={!!contactToDelete}
+        onClose={() => !deletingId && setContactToDelete(null)}
+        onConfirm={performContactDelete}
+        title={`Supprimer "${contactToDelete?.name || ''}" ?`}
+        message="Le contact, ses notes et son historique d'engagement seront définitivement supprimés."
+        confirmLabel="Supprimer"
+        variant="danger"
+        loading={!!deletingId}
       />
     </div>
   );

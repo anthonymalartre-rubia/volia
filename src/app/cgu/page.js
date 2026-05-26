@@ -366,7 +366,9 @@ export default function CGUPage() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-content-secondary">
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-6">
+            <Link href="/cgv" className="hover:text-content-primary transition">CGV</Link>
+            <Link href="/dpa" className="hover:text-content-primary transition">DPA</Link>
             <Link href="/confidentialite" className="hover:text-content-primary transition">Politique de confidentialité</Link>
             <Link href="/rgpd" className="hover:text-content-primary transition">RGPD</Link>
           </div>

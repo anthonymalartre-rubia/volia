@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { openCookieModal } from '@/lib/cookieConsent';
 
 export default function ReaderFooter() {
   return (
@@ -16,8 +19,19 @@ export default function ReaderFooter() {
           <Link href="/etude/etat-cold-email-france-2026" className="hover:text-content-secondary transition">Étude cold email</Link>
           <Link href="/glossaire" className="hover:text-content-secondary transition">Glossaire</Link>
           <Link href="/cgu" className="hover:text-content-secondary transition">CGU</Link>
+          <Link href="/cgv" className="hover:text-content-secondary transition">CGV</Link>
+          <Link href="/dpa" className="hover:text-content-secondary transition">DPA</Link>
           <Link href="/confidentialite" className="hover:text-content-secondary transition">Confidentialité</Link>
+          <Link href="/sous-traitants" className="hover:text-content-secondary transition">Sous-traitants</Link>
           <Link href="/rgpd" className="hover:text-content-secondary transition">RGPD</Link>
+          <Link href="/cookies" className="hover:text-content-secondary transition">Cookies</Link>
+          <button
+            type="button"
+            onClick={openCookieModal}
+            className="hover:text-content-secondary transition cursor-pointer"
+          >
+            Gérer mes cookies
+          </button>
           <span aria-hidden="true" className="text-content-muted">|</span>
           <Link href="/" className="hover:text-content-secondary transition" hrefLang="fr">FR</Link>
           <Link href="/en" className="hover:text-content-secondary transition" hrefLang="en">EN</Link>

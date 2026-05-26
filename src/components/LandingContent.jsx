@@ -1672,8 +1672,10 @@ export default function LandingContent() {
               <span className="text-sm font-bold tracking-tight ml-1">Volia</span>
               <span className="text-violet-400 text-[10px] font-semibold">.fr</span>
             </div>
-            <div className="flex items-center gap-6 text-xs text-content-tertiary">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-content-tertiary">
               <Link href="/cgu" className="hover:text-content-secondary transition">{t('landing.footer.cgu')}</Link>
+              <Link href="/cgv" className="hover:text-content-secondary transition">CGV</Link>
+              <Link href="/dpa" className="hover:text-content-secondary transition">DPA</Link>
               <Link href="/confidentialite" className="hover:text-content-secondary transition">{t('landing.footer.privacy')}</Link>
               <Link href="/rgpd" className="hover:text-content-secondary transition">{t('landing.footer.gdpr')}</Link>
               <Link href="/opt-out" className="hover:text-content-secondary transition">{t('landing.footer.optOut')}</Link>

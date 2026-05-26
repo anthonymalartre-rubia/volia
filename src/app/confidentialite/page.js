@@ -33,6 +33,16 @@ export default function ConfidentialitePage() {
               <li><span className="text-content-primary font-medium">Données des utilisateurs</span> : données de compte et d&apos;utilisation des personnes inscrites au Service</li>
               <li><span className="text-content-primary font-medium">Données des prospects</span> : données professionnelles d&apos;entreprises et de professionnels agrégées via les sources tierces</li>
             </ul>
+            <p className="mt-3">
+              Lorsqu&apos;un client professionnel (B2B) téléverse ou fait traiter ses propres données via
+              le Service, Volia.fr agit en qualité de{' '}
+              <span className="text-content-primary font-medium">sous-traitant</span> au sens de
+              l&apos;article 28 du RGPD. Les engagements correspondants sont formalisés dans notre{' '}
+              <Link href="/dpa" className="text-violet-400 hover:text-violet-300 transition">
+                Accord de Traitement de Données (DPA)
+              </Link>
+              , disponible sur simple demande pour tous les clients professionnels.
+            </p>
           </section>
 
           {/* ===== PARTIE A : DONNÉES DES UTILISATEURS ===== */}
@@ -244,6 +254,16 @@ export default function ConfidentialitePage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">8. Sous-traitants et sources d&apos;enrichissement</h2>
             <p>Nous faisons appel aux sous-traitants et fournisseurs suivants pour le fonctionnement du Service :</p>
 
+            <div className="mt-4 p-4 rounded-xl border border-violet-500/30 bg-violet-500/5">
+              <p className="text-sm text-content-secondary">
+                <span className="text-content-primary font-medium">Pour la liste complète et à jour de nos sous-traitants</span>,
+                avec leurs rôles, données traitées, localisation et liens vers les DPA, consultez notre page dédiée :
+                <Link href="/sous-traitants" className="text-violet-400 hover:text-violet-300 transition ml-1 font-medium">
+                  /sous-traitants
+                </Link>.
+              </p>
+            </div>
+
             <h3 className="text-lg font-medium text-content-primary mt-5 mb-2">8.1 Hébergement et infrastructure</h3>
             <div className="mt-2 rounded-xl border border-line overflow-hidden">
               <table className="w-full text-sm">
@@ -368,48 +388,35 @@ export default function ConfidentialitePage() {
 
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">10. Cookies</h2>
-            <p>Le Service utilise les cookies suivants :</p>
-            <div className="mt-4 rounded-xl border border-line overflow-hidden">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-line bg-surface-card">
-                    <th className="text-left py-3 px-4 font-semibold text-content-primary">Cookie</th>
-                    <th className="text-left py-3 px-4 font-semibold text-content-primary">Type</th>
-                    <th className="text-left py-3 px-4 font-semibold text-content-primary">Durée</th>
-                    <th className="text-left py-3 px-4 font-semibold text-content-primary">Finalité</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-line">
-                    <td className="py-3 px-4 font-mono text-xs text-content-primary">sb-*-auth-token</td>
-                    <td className="py-3 px-4">Essentiel</td>
-                    <td className="py-3 px-4">Session</td>
-                    <td className="py-3 px-4">Authentification Supabase</td>
-                  </tr>
-                  <tr className="border-b border-line">
-                    <td className="py-3 px-4 font-mono text-xs text-content-primary">theme</td>
-                    <td className="py-3 px-4">Préférence</td>
-                    <td className="py-3 px-4">1 an</td>
-                    <td className="py-3 px-4">Thème clair/sombre</td>
-                  </tr>
-                  <tr className="border-b border-line">
-                    <td className="py-3 px-4 font-mono text-xs text-content-primary">cookie_consent</td>
-                    <td className="py-3 px-4">Essentiel</td>
-                    <td className="py-3 px-4">1 an</td>
-                    <td className="py-3 px-4">Consentement cookies</td>
-                  </tr>
-                  <tr>
-                    <td className="py-3 px-4 font-mono text-xs text-content-primary">columns_*</td>
-                    <td className="py-3 px-4">Préférence</td>
-                    <td className="py-3 px-4">1 an</td>
-                    <td className="py-3 px-4">Colonnes affichées (localStorage)</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <p>
+              Volia.fr utilise des cookies classés en 4 catégories distinctes, conformément aux
+              recommandations CNIL :
+            </p>
+            <ul className="list-disc pl-6 mt-3 space-y-2">
+              <li>
+                <span className="text-content-primary font-medium">Strictement nécessaires</span> :
+                authentification, session, sécurité (CSRF). Toujours actifs, exemptés de consentement.
+              </li>
+              <li>
+                <span className="text-content-primary font-medium">Fonctionnels</span> : préférences
+                d&apos;interface (langue, thème, colonnes). Désactivés par défaut.
+              </li>
+              <li>
+                <span className="text-content-primary font-medium">Analytiques</span> : mesure
+                d&apos;audience anonyme via Vercel Analytics (pas de cookies tiers). Désactivés par défaut.
+              </li>
+              <li>
+                <span className="text-content-primary font-medium">Marketing</span> : tracking de
+                conversion (Stripe), widget de réservation de démo (Cal.com). Désactivés par défaut.
+              </li>
+            </ul>
             <p className="mt-4">
-              Vous pouvez gérer vos préférences de cookies à tout moment via le bandeau de consentement
-              ou les paramètres de votre navigateur.
+              Le consentement est demandé à nouveau au bout de 6 mois maximum. Vous pouvez modifier
+              vos préférences à tout moment via le footer ou la page dédiée{' '}
+              <Link href="/cookies" className="text-violet-400 hover:text-violet-300 transition">
+                /cookies
+              </Link>{' '}
+              qui détaille la liste exhaustive des cookies déposés (nom, finalité, émetteur, durée).
             </p>
           </section>
 
@@ -506,8 +513,10 @@ export default function ConfidentialitePage() {
         </div>
 
         <div className="mt-16 pt-8 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-content-secondary">
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-6">
             <Link href="/cgu" className="hover:text-content-primary transition">CGU</Link>
+            <Link href="/cgv" className="hover:text-content-primary transition">CGV</Link>
+            <Link href="/dpa" className="hover:text-content-primary transition">DPA</Link>
             <Link href="/rgpd" className="hover:text-content-primary transition">RGPD</Link>
           </div>
           <p className="text-content-tertiary text-xs">&copy; 2026 Volia.fr</p>

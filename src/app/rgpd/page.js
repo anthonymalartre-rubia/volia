@@ -330,7 +330,33 @@ export default function RGPDPage() {
                 <span className="text-content-primary font-medium">Données de compte</span> : sur demande,
                 nous vous fournirons l&apos;intégralité de vos données personnelles dans un format lisible par machine (JSON)
               </li>
+              <li>
+                <span className="text-content-primary font-medium">Historique du consentement cookies</span> :
+                téléchargeable au format JSON depuis la page{' '}
+                <Link href="/cookies" className="text-violet-400 hover:text-violet-300 transition">/cookies</Link>{' '}
+                (bouton « Télécharger »)
+              </li>
             </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-content-primary mb-3">Gestion et rectification du consentement aux cookies</h2>
+            <p>
+              Conformément aux recommandations CNIL strictes (post-jurisprudence 2024), vous pouvez à
+              tout moment :
+            </p>
+            <ul className="list-disc pl-6 mt-3 space-y-2">
+              <li>Modifier votre consentement (accepter / refuser par catégorie : strict, fonctionnel, analytique, marketing)</li>
+              <li>Retirer entièrement votre consentement sans surcoût ni démarche supplémentaire</li>
+              <li>Télécharger l&apos;état de votre consentement au format JSON (droit à la portabilité)</li>
+              <li>Consulter la liste exhaustive des cookies déposés (nom, finalité, émetteur, durée)</li>
+            </ul>
+            <p className="mt-3">
+              Le consentement est demandé à nouveau au bout de 6 mois maximum. Tout est centralisé sur
+              la page{' '}
+              <Link href="/cookies" className="text-violet-400 hover:text-violet-300 transition">/cookies</Link>{' '}
+              et accessible depuis le footer du site (« Gérer mes cookies »).
+            </p>
           </section>
 
           <section>

@@ -26,7 +26,7 @@ import {
   Check, X, Crown, Star, Shield, Zap, ChevronDown, ArrowRight,
   Sparkles, Rocket, Briefcase, Building2, GraduationCap, TrendingUp,
   CreditCard, MailCheck, RefreshCw, Users as UsersIcon, Globe,
-  Headphones, Calendar, Lock, ServerCrash,
+  Headphones, Calendar, Lock, ServerCrash, FileText,
 } from 'lucide-react';
 import { PLANS, VISIBLE_PLANS } from '@/lib/plans';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
@@ -168,6 +168,8 @@ const TRUST_SIGNALS = [
   { icon: Calendar, label: 'Sans engagement de durée' },
   { icon: TrendingUp, label: 'Mise à jour du plan à tout moment' },
   { icon: Headphones, label: 'Support en français' },
+  { icon: FileText, label: 'CGV claires + DPA disponible', href: '/dpa' },
+  { icon: Lock, label: 'Stripe sécurisé (PCI DSS)' },
 ];
 
 // ─── Section 7 : Stack concurrents ───────────────────────────────
@@ -566,15 +568,28 @@ export default function PricingContent() {
               <h2 className="text-center text-base font-semibold text-content-primary mb-6">
                 Tout est inclus dans chaque plan
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
                 {TRUST_SIGNALS.map((sig) => {
                   const Icon = sig.icon;
-                  return (
-                    <div key={sig.label} className="flex flex-col items-center text-center gap-2">
+                  const inner = (
+                    <>
                       <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
                         <Icon size={16} className="text-violet-600" />
                       </div>
                       <span className="text-xs text-content-secondary leading-tight">{sig.label}</span>
+                    </>
+                  );
+                  return sig.href ? (
+                    <Link
+                      key={sig.label}
+                      href={sig.href}
+                      className="flex flex-col items-center text-center gap-2 hover:text-content-primary transition"
+                    >
+                      {inner}
+                    </Link>
+                  ) : (
+                    <div key={sig.label} className="flex flex-col items-center text-center gap-2">
+                      {inner}
                     </div>
                   );
                 })}

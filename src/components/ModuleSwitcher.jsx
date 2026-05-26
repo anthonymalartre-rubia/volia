@@ -9,8 +9,13 @@
 //
 // Détection du module actif via usePathname() :
 //   - /dashboard*       OR /app/prospection* → Prospection (LIVE, violet)
-//   - /admin/prospection/campaigns*
-//                       OR /app/campagnes*   → Campagnes (BETA, blue)
+//   - /admin/prospection (hub Listes du module Campagnes)
+//   - /admin/prospection/lists/*
+//   - /admin/prospection/campaigns/*
+//   - /app/campagnes*                        → Campagnes (BETA, blue)
+//   (Note : /admin/prospection est trompeur — c'est le BACKEND de
+//   Campagnes, pas du module Prospection. Legacy nommage à
+//   refactorer un jour.)
 //   - /app/crm*                              → CRM (BIENTÔT, emerald)
 //   - sinon (settings, admin home, ...)      → Prospection par défaut
 //
@@ -88,9 +93,14 @@ const MODULES = [
 function detectActiveModule(pathname) {
   if (!pathname) return MODULES[0];
 
-  // Campagnes : checked before /admin/prospection (qui matche aussi).
+  // Campagnes : couvre TOUT /admin/prospection (le backend Campagnes
+  // est planqué sous cette route pour raisons legacy) + l'alias canonique
+  // /app/campagnes. Match précis pour ne pas attraper d'autres routes
+  // (typo /admin/prospection-anything sans slash final).
   if (
-    pathname.startsWith('/admin/prospection/campaigns') ||
+    pathname === '/admin/prospection' ||
+    pathname === '/admin/prospection/' ||
+    pathname.startsWith('/admin/prospection/') ||
     pathname.startsWith('/app/campagnes')
   ) {
     return MODULES[1];

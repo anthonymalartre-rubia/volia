@@ -16,10 +16,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   GitBranch, Plus, AlertCircle, Lock, Sparkles,
-  MoreVertical, Star, Trash2, Edit3, KanbanSquare,
+  MoreVertical, Star, Trash2, Edit3, KanbanSquare, Loader2, Check,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
+import { PIPELINE_TEMPLATES } from '@/lib/crm';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import NewPipelineModal from '@/components/crm/NewPipelineModal';
 import { ConfirmModal } from '@/components/ui';
@@ -198,6 +199,10 @@ export default function CrmPipelinesPage() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
+  // Quick win #5 : one-click sales template depuis empty state
+  const [quickTemplateLoading, setQuickTemplateLoading] = useState(false);
+  const [quickTemplateToast, setQuickTemplateToast] = useState('');
+
   // Auth resolution
   useEffect(() => {
     const supabase = getSupabase();
@@ -311,6 +316,38 @@ export default function CrmPipelinesPage() {
     setDealsCounts((prev) => ({ ...prev, [pipeline.id]: 0 }));
   }
 
+  // Quick win #5 : one-click création pipeline "Sales standard"
+  async function handleQuickSalesTemplate() {
+    if (quickTemplateLoading) return;
+    setQuickTemplateLoading(true);
+    setError('');
+    try {
+      const tpl = PIPELINE_TEMPLATES.sales;
+      const res = await fetch('/api/crm/pipelines', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: tpl.name,
+          description: tpl.description,
+          color: tpl.color,
+          stages: tpl.stages,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'Erreur création pipeline');
+      }
+      handleCreated(json.data);
+      setQuickTemplateToast(`Pipeline "${tpl.name}" créé ✓`);
+      setTimeout(() => setQuickTemplateToast(''), 4000);
+    } catch (err) {
+      console.error('[CRM/pipelines] quick sales template error', err);
+      setError(err.message || 'Erreur création pipeline');
+    } finally {
+      setQuickTemplateLoading(false);
+    }
+  }
+
   // Loading auth
   if (!authChecked) {
     return (
@@ -417,15 +454,38 @@ export default function CrmPipelinesPage() {
                 </div>
                 <h2 className="text-lg font-bold text-content-primary mb-1">Aucun pipeline</h2>
                 <p className="text-sm text-content-secondary mb-6 max-w-md mx-auto">
-                  Crée ton premier pipeline pour organiser ton suivi commercial.
+                  Lance-toi avec le template Sales standard (Lead → Qualifié → Proposition → Négociation → Gagné/Perdu) ou pars sur un pipeline custom.
                 </p>
-                <button
-                  type="button"
-                  onClick={() => setNewModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold shadow-lg transition-all"
-                >
-                  <Plus size={14} /> Créer un pipeline
-                </button>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                  {/* Quick win #5 : one-click sales template */}
+                  <button
+                    type="button"
+                    onClick={handleQuickSalesTemplate}
+                    disabled={quickTemplateLoading}
+                    className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {quickTemplateLoading ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Sparkles size={14} />
+                    )}
+                    Créer mon 1er pipeline (Sales standard)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setNewModalOpen(true)}
+                    disabled={quickTemplateLoading}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-line bg-surface-card text-content-secondary hover:bg-surface-elevated text-sm font-medium transition-colors disabled:opacity-50"
+                  >
+                    <Plus size={14} /> Pipeline custom
+                  </button>
+                </div>
+                {quickTemplateToast && (
+                  <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+                    <Check size={12} />
+                    {quickTemplateToast}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

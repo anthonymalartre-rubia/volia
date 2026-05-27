@@ -51,6 +51,9 @@ function KanbanColumn({
   onNewDeal,
   draggingDealId,
   setDraggingDealId,
+  onMoveStage,
+  canMovePrev = true,
+  canMoveNext = true,
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
   const colors = getStageColors(stage.color);
@@ -166,6 +169,9 @@ function KanbanColumn({
                 setDraggingDealId(deal.id);
               }}
               onDragEnd={() => setDraggingDealId(null)}
+              onMoveStage={onMoveStage}
+              canMovePrev={canMovePrev}
+              canMoveNext={canMoveNext}
             />
           ))
         )}
@@ -195,6 +201,7 @@ export default function KanbanBoard({
   onDealMove,
   onDealClick,
   onNewDeal,
+  onMoveStage, // P1-3 : fallback mobile drag-drop
 }) {
   const [draggingDealId, setDraggingDealId] = useState(null);
 
@@ -226,10 +233,12 @@ export default function KanbanBoard({
     });
   }
 
+  const stageCount = pipeline.stages.length;
+
   return (
     <div className="w-full overflow-x-auto pb-4">
       <div className="flex gap-3 min-w-min px-1">
-        {pipeline.stages.map((stage) => (
+        {pipeline.stages.map((stage, idx) => (
           <KanbanColumn
             key={stage.id}
             stage={stage}
@@ -239,6 +248,9 @@ export default function KanbanBoard({
             onNewDeal={onNewDeal}
             draggingDealId={draggingDealId}
             setDraggingDealId={setDraggingDealId}
+            onMoveStage={onMoveStage}
+            canMovePrev={idx > 0}
+            canMoveNext={idx < stageCount - 1}
           />
         ))}
       </div>

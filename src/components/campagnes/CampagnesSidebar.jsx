@@ -57,8 +57,11 @@ const NAV_ITEMS = [
   },
   {
     id: 'senders',
-    label: 'Domaines d\'envoi',
-    description: 'Resend multi-tenant',
+    // Rename jargon → plain french (QW4 audit UX). Le mot "Domaines d'envoi"
+    // ne parle pas à un freelance 45 ans. "Brancher ma marque email" décrit
+    // l'action utilisateur, pas la stack technique sous-jacente.
+    label: 'Brancher ma marque email',
+    description: 'Envoyer depuis ton domaine',
     href: '/settings/email-senders',
     icon: Globe,
     matches: (p) => p.startsWith('/settings/email-senders'),

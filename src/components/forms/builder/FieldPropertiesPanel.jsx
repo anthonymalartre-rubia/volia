@@ -333,14 +333,6 @@ export default function FieldPropertiesPanel({ field, allFields, onUpdate, onClo
             className={inputCls}
           />
         </Field>
-        <Field label="Clé" hint="snake_case, auto-générée depuis le libellé">
-          <input
-            type="text"
-            value={field.key || ''}
-            onChange={(e) => onUpdate(field.id, { key: e.target.value })}
-            className={inputCls}
-          />
-        </Field>
         {field.type !== 'hidden' && (
           <>
             <Field label="Placeholder">
@@ -390,12 +382,23 @@ export default function FieldPropertiesPanel({ field, allFields, onUpdate, onClo
         </Section>
       )}
 
-      <Section title="Logique conditionnelle" icon={Zap} defaultOpen={false}>
+      <Section title="Afficher si…" icon={Zap} defaultOpen={false}>
         <ConditionalLogicEditor
           field={field}
           otherFields={otherFields}
           onChange={(next) => onUpdate(field.id, { conditional_logic: next })}
         />
+      </Section>
+
+      <Section title="Avancé" icon={Settings2} defaultOpen={false}>
+        <Field label="Clé technique" hint="snake_case, utilisée pour l'export CSV, l'API et le CRM. Modifie uniquement si tu sais ce que tu fais.">
+          <input
+            type="text"
+            value={field.key || ''}
+            onChange={(e) => onUpdate(field.id, { key: e.target.value })}
+            className={`${inputCls} font-mono`}
+          />
+        </Field>
       </Section>
     </aside>
   );

@@ -145,7 +145,7 @@ export default function JumpLogicDrawer({
 
                   <div>
                     <p className="text-[10px] uppercase tracking-wider text-content-muted font-semibold mb-1 flex items-center gap-1">
-                      <ArrowRight size={10} /> Alors sauter à
+                      <ArrowRight size={10} /> Aller à la page :
                     </p>
                     <select
                       value={rule.target_page_id || ''}

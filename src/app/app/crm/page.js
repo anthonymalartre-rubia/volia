@@ -21,7 +21,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   KanbanSquare, Plus, AlertCircle, Sparkles, Lock,
-  TrendingUp, Inbox, Search, X, ChevronDown, Target, Percent,
+  TrendingUp, Inbox, Search, X, ChevronDown, ChevronUp, Target, Percent,
+  BarChart3,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
@@ -97,6 +98,10 @@ export default function CrmAppPage() {
   // ─── Search ──────────────────────────────────────────────
   const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+
+  // ─── Mobile header collapse + "Plus de stats" drawer (P1-4) ──
+  const [mobileHeaderCollapsed, setMobileHeaderCollapsed] = useState(true);
+  const [moreStatsOpen, setMoreStatsOpen] = useState(false);
 
   // Debounce 300ms
   useEffect(() => {
@@ -247,6 +252,28 @@ export default function CrmAppPage() {
   }
 
   // ───────────────────────────────────────────────────────────
+  // 4.bis P1-3 : Fallback mobile drag-drop par boutons ←/→
+  //   - direction = -1 : étape précédente
+  //   - direction = +1 : étape suivante
+  //   On retrouve l'index courant via pipeline.stages, on borne, on
+  //   réutilise handleDealMove existant (optimistic + API + rollback).
+  // ───────────────────────────────────────────────────────────
+  function handleMoveByButton(dealId, direction) {
+    if (!pipeline || !Array.isArray(pipeline.stages)) return;
+    const deal = deals.find((d) => d.id === dealId);
+    if (!deal) return;
+    const currentIdx = pipeline.stages.findIndex((s) => s.id === deal.stage_id);
+    if (currentIdx < 0) return;
+    const nextIdx = currentIdx + direction;
+    if (nextIdx < 0 || nextIdx >= pipeline.stages.length) return;
+    const nextStage = pipeline.stages[nextIdx];
+    if (!nextStage) return;
+    // position = nombre de deals déjà dans le stage cible (append à la fin)
+    const targetCount = deals.filter((d) => d.stage_id === nextStage.id).length;
+    handleDealMove(dealId, nextStage.id, targetCount);
+  }
+
+  // ───────────────────────────────────────────────────────────
   // 5. Callbacks NewDeal / Detail
   // ───────────────────────────────────────────────────────────
   function handleNewDeal(stageId = null) {
@@ -293,6 +320,15 @@ export default function CrmAppPage() {
   // 7. Stats (sur tous les deals, pas le filtre)
   // ───────────────────────────────────────────────────────────
   const stats = useMemo(() => calculatePipelineStats(deals), [deals]);
+
+  // Quick win #4 : empty experience → on masque Pondéré + Closing 30j
+  // tant qu'aucun deal gagné CE mois ET moins de 5 deals.
+  const isEmptyExperience = stats.wonCountMonth === 0 && deals.length < 5;
+  const showWeightedStat = !isEmptyExperience && stats.weightedPipeline > 0;
+  const showClosingRateStat = !isEmptyExperience && stats.closingRate30d !== null;
+  const showWonMonthStat = stats.wonCountMonth > 0;
+  // "Plus de stats" disponible uniquement si au moins une stat avancée existe
+  const hasExtraStats = showWeightedStat || showClosingRateStat || showWonMonthStat;
 
   // ─────────────────────────────────────────────────────────────────
   // RENDER
@@ -446,8 +482,9 @@ export default function CrmAppPage() {
                       {pipeline?.name || 'Pipeline commercial'}
                     </h1>
                   )}
-                  {/* Stats line */}
+                  {/* Stats line — desktop : tout inline / mobile : 2 stats + bouton "Plus" */}
                   <div className="flex items-center gap-x-3 gap-y-1 text-[11px] sm:text-xs text-content-tertiary mt-0.5 flex-wrap">
+                    {/* Stat 1 : deals ouverts (toujours visible) */}
                     <span className="inline-flex items-center gap-1">
                       <Inbox size={11} />
                       <span className="tabular-nums font-semibold text-content-secondary">
@@ -456,17 +493,32 @@ export default function CrmAppPage() {
                       <span>deals ouverts</span>
                     </span>
                     <span className="text-content-faint">·</span>
+                    {/* Stat 2 : valeur totale (toujours visible) */}
                     <span className="inline-flex items-center gap-1">
                       <TrendingUp size={11} className="text-emerald-600" />
                       <span className="tabular-nums font-semibold text-content-secondary">
                         {formatDealValue(stats.totalOpenValue)}
                       </span>
                     </span>
-                    {stats.weightedPipeline > 0 && (
+
+                    {/* Mobile : bouton "Plus de stats" qui ouvre un drawer */}
+                    {hasExtraStats && (
+                      <button
+                        type="button"
+                        onClick={() => setMoreStatsOpen(true)}
+                        className="md:hidden inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-semibold text-[10px] hover:bg-emerald-100 transition-colors"
+                      >
+                        <BarChart3 size={10} />
+                        Plus de stats
+                      </button>
+                    )}
+
+                    {/* Desktop (md+) : stats avancées inline */}
+                    {showWeightedStat && (
                       <>
-                        <span className="text-content-faint">·</span>
+                        <span className="hidden md:inline text-content-faint">·</span>
                         <span
-                          className="inline-flex items-center gap-1"
+                          className="hidden md:inline-flex items-center gap-1"
                           title="Pipeline pondéré : somme des deals × probabilité de leur stage"
                         >
                           <Target size={11} className="text-violet-600" />
@@ -477,10 +529,10 @@ export default function CrmAppPage() {
                         </span>
                       </>
                     )}
-                    {stats.wonCountMonth > 0 && (
+                    {showWonMonthStat && (
                       <>
-                        <span className="text-content-faint">·</span>
-                        <span className="inline-flex items-center gap-1 text-emerald-700">
+                        <span className="hidden md:inline text-content-faint">·</span>
+                        <span className="hidden md:inline-flex items-center gap-1 text-emerald-700">
                           <span className="tabular-nums font-semibold">
                             {stats.wonCountMonth}
                           </span>
@@ -491,11 +543,11 @@ export default function CrmAppPage() {
                         </span>
                       </>
                     )}
-                    {stats.closingRate30d !== null && (
+                    {showClosingRateStat && (
                       <>
-                        <span className="text-content-faint">·</span>
+                        <span className="hidden md:inline text-content-faint">·</span>
                         <span
-                          className="inline-flex items-center gap-1"
+                          className="hidden md:inline-flex items-center gap-1"
                           title="Taux de closing sur les 30 derniers jours : gagnés / (gagnés + perdus)"
                         >
                           <Percent size={11} className="text-blue-600" />
@@ -511,8 +563,27 @@ export default function CrmAppPage() {
               </div>
 
               <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
-                {/* Search */}
-                <div className="relative flex-1 sm:flex-initial sm:w-60">
+                {/* P1-4 : Mobile collapse toggle pour search + filtres (le bouton "Deal" reste visible). */}
+                <button
+                  type="button"
+                  onClick={() => setMobileHeaderCollapsed((v) => !v)}
+                  aria-expanded={!mobileHeaderCollapsed}
+                  className="md:hidden inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-content-secondary bg-surface-card border border-line hover:bg-surface-elevated transition-colors order-first"
+                >
+                  {mobileHeaderCollapsed ? (
+                    <ChevronDown size={12} />
+                  ) : (
+                    <ChevronUp size={12} />
+                  )}
+                  {mobileHeaderCollapsed ? 'Filtres & stats' : 'Réduire'}
+                </button>
+
+                {/* Search — visible md+ toujours, mobile uniquement si !collapsed */}
+                <div
+                  className={`relative flex-1 sm:flex-initial sm:w-60 ${
+                    mobileHeaderCollapsed ? 'hidden md:block' : 'block'
+                  }`}
+                >
                   <Search
                     size={13}
                     className="absolute left-2.5 top-1/2 -translate-y-1/2 text-content-tertiary pointer-events-none"
@@ -536,8 +607,12 @@ export default function CrmAppPage() {
                   )}
                 </div>
 
-                {/* Status filter */}
-                <div className="inline-flex items-center rounded-lg border border-line bg-surface-card p-0.5">
+                {/* Status filter — visible md+ toujours, mobile uniquement si !collapsed */}
+                <div
+                  className={`items-center rounded-lg border border-line bg-surface-card p-0.5 ${
+                    mobileHeaderCollapsed ? 'hidden md:inline-flex' : 'inline-flex'
+                  }`}
+                >
                   {[
                     { value: 'all', label: 'Tous' },
                     { value: 'open', label: 'Ouverts' },
@@ -559,6 +634,7 @@ export default function CrmAppPage() {
                   ))}
                 </div>
 
+                {/* Bouton "Nouveau deal" — TOUJOURS visible (pas dans le collapse) */}
                 <button
                   type="button"
                   onClick={() => handleNewDeal(null)}
@@ -630,6 +706,7 @@ export default function CrmAppPage() {
                 onDealMove={handleDealMove}
                 onDealClick={(d) => setSelectedDealId(d.id)}
                 onNewDeal={handleNewDeal}
+                onMoveStage={handleMoveByButton}
               />
             )}
           </section>
@@ -654,6 +731,97 @@ export default function CrmAppPage() {
         onUpdate={handleDealUpdated}
         onDelete={handleDealDeleted}
       />
+
+      {/* P1-4 : Drawer "Plus de stats" (mobile only) */}
+      {moreStatsOpen && (
+        <div
+          className="fixed inset-0 z-[100] md:hidden bg-zinc-900/60 backdrop-blur-sm flex items-end animate-in fade-in duration-150"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setMoreStatsOpen(false);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="more-stats-title"
+            className="w-full bg-surface-base rounded-t-2xl border-t border-line shadow-2xl p-4 max-h-[70vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-200"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 id="more-stats-title" className="text-base font-bold text-content-primary inline-flex items-center gap-2">
+                <BarChart3 size={16} className="text-emerald-600" />
+                Statistiques pipeline
+              </h3>
+              <button
+                type="button"
+                onClick={() => setMoreStatsOpen(false)}
+                className="p-1.5 rounded-lg text-content-tertiary hover:text-content-primary hover:bg-surface-elevated"
+                aria-label="Fermer"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {showWonMonthStat && (
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                  <TrendingUp size={16} className="text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700">
+                      Gagnés ce mois
+                    </p>
+                    <p className="text-base font-bold text-content-primary tabular-nums mt-0.5">
+                      {stats.wonCountMonth}{' '}
+                      <span className="text-xs font-medium text-content-tertiary">
+                        ({formatDealValue(stats.wonValueMonth)})
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {showWeightedStat && (
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-violet-50 border border-violet-200">
+                  <Target size={16} className="text-violet-600 flex-shrink-0 mt-0.5" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-700">
+                      Pipeline pondéré
+                    </p>
+                    <p className="text-base font-bold text-content-primary tabular-nums mt-0.5">
+                      {formatDealValue(stats.weightedPipeline)}
+                    </p>
+                    <p className="text-[10px] text-content-tertiary mt-0.5">
+                      Somme deals × probabilité du stage
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {showClosingRateStat && (
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-blue-50 border border-blue-200">
+                  <Percent size={16} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-700">
+                      Taux closing 30j
+                    </p>
+                    <p className="text-base font-bold text-content-primary tabular-nums mt-0.5">
+                      {stats.closingRate30d}%
+                    </p>
+                    <p className="text-[10px] text-content-tertiary mt-0.5">
+                      Gagnés / (gagnés + perdus) sur 30 derniers jours
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {!hasExtraStats && (
+                <p className="text-sm text-content-tertiary text-center py-6">
+                  Pas encore de statistique avancée. Continue d&apos;avancer tes deals.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

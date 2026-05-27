@@ -15,7 +15,7 @@
 // Status 'lost' → badge rose + bg-rose-50 + opacity-70
 // ─────────────────────────────────────────────────────────────────────
 
-import { Building2, Banknote, Calendar, Sparkles } from 'lucide-react';
+import { Building2, Banknote, Calendar, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDealValue } from '@/lib/crm';
 
 // ─── Mini avatar (initiales) ─────────────────────────────────────────
@@ -77,6 +77,11 @@ export default function DealCard({
   onDragStart,
   onDragEnd,
   isDragging = false,
+  // P1-3 : fallback mobile drag-drop. Si fourni, on affiche 2 boutons
+  // ← Étape précédente / Étape suivante → en md:hidden.
+  onMoveStage,
+  canMovePrev = true,
+  canMoveNext = true,
 }) {
   if (!deal) return null;
 
@@ -222,6 +227,49 @@ export default function DealCard({
           >
             {miniInitials(contactName)}
           </span>
+        </div>
+      )}
+
+      {/* ─── Mobile only : boutons fallback drag-drop (P1-3) ─── */}
+      {/* HTML5 drag est cassé sur iOS Safari + Android Chrome. */}
+      {onMoveStage && !isClosed && (
+        <div className="md:hidden mt-2 pt-2 border-t border-line flex items-center justify-between gap-2">
+          <button
+            type="button"
+            disabled={!canMovePrev}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!canMovePrev) return;
+              onMoveStage(deal.id, -1);
+            }}
+            className={`inline-flex items-center gap-1 px-2 py-1.5 rounded-md text-[11px] font-medium transition-colors min-w-0 flex-1 justify-center ${
+              canMovePrev
+                ? 'bg-surface-elevated text-content-secondary hover:bg-emerald-50 hover:text-emerald-700 active:scale-95'
+                : 'bg-surface-elevated/50 text-content-muted cursor-not-allowed opacity-50'
+            }`}
+            aria-label="Étape précédente"
+          >
+            <ChevronLeft size={12} />
+            <span>Étape préc.</span>
+          </button>
+          <button
+            type="button"
+            disabled={!canMoveNext}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!canMoveNext) return;
+              onMoveStage(deal.id, 1);
+            }}
+            className={`inline-flex items-center gap-1 px-2 py-1.5 rounded-md text-[11px] font-medium transition-colors min-w-0 flex-1 justify-center ${
+              canMoveNext
+                ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 active:scale-95'
+                : 'bg-surface-elevated/50 text-content-muted cursor-not-allowed opacity-50'
+            }`}
+            aria-label="Étape suivante"
+          >
+            <span>Étape suiv.</span>
+            <ChevronRight size={12} />
+          </button>
         </div>
       )}
     </div>

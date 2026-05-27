@@ -15,7 +15,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { X, Loader2, Plus, AlertCircle, Search } from 'lucide-react';
+import { X, Loader2, Plus, AlertCircle, Search, ChevronDown } from 'lucide-react';
 
 const EMPTY_FORM = {
   name: '',
@@ -32,6 +32,8 @@ export default function NewContactModal({ open, onClose, onCreated }) {
   const [error, setError] = useState('');
   // Si email dupliqué, on garde la valeur entrée pour proposer un fallback search
   const [duplicateEmail, setDuplicateEmail] = useState('');
+  // Quick win #2 CRM : accordéon "Détails" (poste, entreprise, notes)
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const nameInputRef = useRef(null);
 
   useEffect(() => {
@@ -39,6 +41,7 @@ export default function NewContactModal({ open, onClose, onCreated }) {
       setForm({ ...EMPTY_FORM });
       setError('');
       setDuplicateEmail('');
+      setDetailsOpen(false);
       setTimeout(() => nameInputRef.current?.focus(), 50);
     }
   }, [open]);
@@ -164,64 +167,81 @@ export default function NewContactModal({ open, onClose, onCreated }) {
             />
           </div>
 
-          {/* Téléphone + Position */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="contact-phone" className="block text-xs font-semibold text-content-secondary mb-1.5">
-                Téléphone
-              </label>
-              <input
-                id="contact-phone"
-                type="tel"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                placeholder="06 12 34 56 78"
-                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
-              />
-            </div>
-            <div>
-              <label htmlFor="contact-position" className="block text-xs font-semibold text-content-secondary mb-1.5">
-                Poste
-              </label>
-              <input
-                id="contact-position"
-                type="text"
-                value={form.position}
-                onChange={(e) => setForm({ ...form, position: e.target.value })}
-                placeholder="CEO, Sales, ..."
-                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
-              />
-            </div>
-          </div>
-
-          {/* Company */}
+          {/* Téléphone */}
           <div>
-            <label htmlFor="contact-company" className="block text-xs font-semibold text-content-secondary mb-1.5">
-              Entreprise
+            <label htmlFor="contact-phone" className="block text-xs font-semibold text-content-secondary mb-1.5">
+              Téléphone
             </label>
             <input
-              id="contact-company"
-              type="text"
-              value={form.company}
-              onChange={(e) => setForm({ ...form, company: e.target.value })}
-              placeholder="Acme Corp"
+              id="contact-phone"
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              placeholder="06 12 34 56 78"
               className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
             />
           </div>
 
-          {/* Notes */}
+          {/* Accordéon Détails (poste, entreprise, notes) — Quick win #2 CRM */}
           <div>
-            <label htmlFor="contact-notes" className="block text-xs font-semibold text-content-secondary mb-1.5">
-              Notes
-            </label>
-            <textarea
-              id="contact-notes"
-              rows={3}
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-              placeholder="Contexte, historique, préférences…"
-              className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all resize-none"
-            />
+            <button
+              type="button"
+              onClick={() => setDetailsOpen((v) => !v)}
+              aria-expanded={detailsOpen}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 hover:text-emerald-600 transition-colors"
+            >
+              <ChevronDown
+                size={13}
+                className={`transition-transform ${detailsOpen ? 'rotate-180' : ''}`}
+              />
+              {detailsOpen ? 'Masquer les détails' : '+ Détails (poste, entreprise, notes)'}
+            </button>
+
+            {detailsOpen && (
+              <div className="mt-3 space-y-4 pl-1 border-l-2 border-emerald-100">
+                <div className="pl-3">
+                  <label htmlFor="contact-position" className="block text-xs font-semibold text-content-secondary mb-1.5">
+                    Poste
+                  </label>
+                  <input
+                    id="contact-position"
+                    type="text"
+                    value={form.position}
+                    onChange={(e) => setForm({ ...form, position: e.target.value })}
+                    placeholder="CEO, Sales, ..."
+                    className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                </div>
+
+                <div className="pl-3">
+                  <label htmlFor="contact-company" className="block text-xs font-semibold text-content-secondary mb-1.5">
+                    Entreprise
+                  </label>
+                  <input
+                    id="contact-company"
+                    type="text"
+                    value={form.company}
+                    onChange={(e) => setForm({ ...form, company: e.target.value })}
+                    placeholder="Acme Corp"
+                    className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                  />
+                </div>
+
+                <div className="pl-3">
+                  <label htmlFor="contact-notes" className="block text-xs font-semibold text-content-secondary mb-1.5">
+                    Notes
+                  </label>
+                  <textarea
+                    id="contact-notes"
+                    rows={3}
+                    value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    placeholder="Contexte, historique, préférences…"
+                    className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-all resize-none"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Error */}

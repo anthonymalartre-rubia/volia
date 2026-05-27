@@ -50,6 +50,9 @@ function NewCampaignContent() {
   const [senders, setSenders] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  // QW5 — état du bouton "Envoyer un test à moi-même" (Step 3 wizard)
+  const [testSending, setTestSending] = useState(false);
+  const [toast, setToast] = useState(null); // { type: 'success'|'error', message: string }
 
   // Wizard state
   const [currentStep, setCurrentStep] = useState(Math.min(Math.max(presetStep, 1), 3));
@@ -208,6 +211,16 @@ function NewCampaignContent() {
     setError(null);
     setSubmitting(true);
     try {
+      // QW6 — Wrapper HTML auto si l'utilisateur n'a posé AUCUNE balise.
+      // Le freelance qui tape "Bonjour {{first_name}},\n\nMerci..." sans
+      // balise <p> recevrait un email plat sans saut de ligne. On enveloppe
+      // chaque bloc séparé par des newlines dans un <p>. Conserve la chaîne
+      // telle quelle si l'user a déjà mis du HTML.
+      const trimmedBody = bodyHtml.trim();
+      const finalBodyHtml = trimmedBody.includes('<')
+        ? trimmedBody
+        : `<p>${trimmedBody.replace(/\n+/g, '</p><p>')}</p>`;
+
       const res = await fetch('/api/admin/prospection/email-campaigns', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -221,7 +234,7 @@ function NewCampaignContent() {
           subject_variant_2: abTestEnabled && subjectVariant2.trim() ? subjectVariant2.trim() : null,
           subject_variant_3: abTestEnabled && hasVariant3 && subjectVariant3.trim() ? subjectVariant3.trim() : null,
           ab_test_sample_size: abTestEnabled ? Number(abTestSampleSize) || 100 : 100,
-          body_html: bodyHtml.trim(),
+          body_html: finalBodyHtml,
           email_sender_id: emailSenderId || null,
           smart_scheduling: smartScheduling,
         }),
@@ -263,6 +276,57 @@ function NewCampaignContent() {
       setSubmitting(false);
     }
   }
+
+  // ---------- QW5 — Envoyer un test à moi-même ----------
+  // Permet au user de valider visuellement le mail dans sa propre boîte
+  // avant de tirer sur 1 000 prospects. Côté serveur, route dédiée
+  // /api/admin/prospection/email-campaigns/test-send qui fait le wrap
+  // HTML auto + préfixe [TEST] dans le subject.
+  async function handleTestSend() {
+    if (testSending) return;
+    if (!subject.trim()) {
+      setToast({ type: 'error', message: 'Ajoute un objet avant de tester.' });
+      return;
+    }
+    if (!bodyHtml.trim()) {
+      setToast({ type: 'error', message: 'Ajoute un corps de message avant de tester.' });
+      return;
+    }
+    setTestSending(true);
+    try {
+      const res = await fetch('/api/admin/prospection/email-campaigns/test-send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subject: subject.trim(),
+          body_html: bodyHtml.trim(),
+          sender_id: emailSenderId || null,
+          from_name: fromName.trim() || null,
+          reply_to: replyTo.trim() || null,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setToast({ type: 'error', message: data.error || 'Échec envoi du test' });
+      } else {
+        setToast({
+          type: 'success',
+          message: `Email test envoyé à ${data.to} — check ta boîte.`,
+        });
+      }
+    } catch {
+      setToast({ type: 'error', message: 'Erreur réseau' });
+    } finally {
+      setTestSending(false);
+    }
+  }
+
+  // Auto-dismiss du toast après 4s
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   // ---------- Computed values ----------
   const selectedList = lists.find((l) => l.id === listId);
@@ -328,6 +392,28 @@ function NewCampaignContent() {
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary">
+      {/* Toast QW5 — feedback envoi test ou erreur de validation */}
+      {toast && (
+        <div
+          className={`fixed top-4 right-4 z-[100] max-w-sm flex items-start gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-2xl border animate-in fade-in slide-in-from-top-2 duration-200 ${
+            toast.type === 'success'
+              ? 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30'
+              : 'bg-red-500/15 text-red-600 border-red-500/30'
+          }`}
+          role="status"
+        >
+          {toast.type === 'success' ? <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0" /> : <AlertTriangle size={16} className="mt-0.5 flex-shrink-0" />}
+          <span className="flex-1">{toast.message}</span>
+          <button
+            onClick={() => setToast(null)}
+            className="hover:opacity-70 flex-shrink-0"
+            aria-label="Fermer"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+
       {/* Header sticky avec progress bar */}
       <div className="sticky top-0 z-30 bg-surface-base/95 backdrop-blur-md border-b border-line">
         <div className="max-w-5xl mx-auto px-4 sm:px-8 py-4">
@@ -451,6 +537,9 @@ function NewCampaignContent() {
             selectedList={selectedList}
             totalRecipients={totalRecipients}
             fieldErrors={fieldErrors}
+            currentEmail={currentEmail}
+            onTestSend={handleTestSend}
+            testSending={testSending}
           />
         )}
       </div>
@@ -691,6 +780,16 @@ function StepMessage({
   abTestSampleSize, setAbTestSampleSize,
   insertVar, onOpenTemplateLibrary, fieldErrors,
 }) {
+  // QW7 — A/B test pollue l'écran de 90% des freelances qui font leur
+  // 1ère campagne. On le cache derrière "+ Options avancées" en bas du step.
+  // Tant que le panneau n'est pas révélé, abTestEnabled reste false.
+  // Si l'utilisateur a déjà activé l'A/B (ex : retour arrière depuis Step 3),
+  // on déplie automatiquement le panneau.
+  const [showAbAdvanced, setShowAbAdvanced] = useState(abTestEnabled);
+  useEffect(() => {
+    if (abTestEnabled) setShowAbAdvanced(true);
+  }, [abTestEnabled]);
+
   const subjectLen = subject.length;
   const subjectColor = subjectLen === 0
     ? 'text-content-tertiary'
@@ -723,36 +822,13 @@ function StepMessage({
         </button>
       </div>
 
-      {/* Bloc Subject */}
+      {/* Bloc Subject — QW7 : action A/B test retirée d'ici, désormais sous
+          "+ Options avancées" en bas de step pour ne pas écraser le 1er-time user. */}
       <WizardBlock
         title="Objet de l'email"
         icon={<Send size={14} />}
         description="Le subject line — premier point de contact, le plus déterminant."
         required
-        action={
-          <button
-            type="button"
-            onClick={() => {
-              setAbTestEnabled((v) => {
-                const next = !v;
-                if (!next) {
-                  setSubjectVariant2('');
-                  setSubjectVariant3('');
-                  setHasVariant3(false);
-                }
-                return next;
-              });
-            }}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition ${
-              abTestEnabled
-                ? 'bg-violet-500/15 text-violet-300 border border-violet-500/40'
-                : 'bg-surface-elevated text-content-tertiary border border-line hover:border-violet-500/40'
-            }`}
-          >
-            <FlaskConical size={11} />
-            {abTestEnabled ? 'A/B test activé' : 'A/B test'}
-          </button>
-        }
       >
         <div className="flex items-center justify-between mb-1.5">
           <label className="text-xs text-content-tertiary">
@@ -772,80 +848,6 @@ function StepMessage({
         />
         {fieldErrors.subject && (
           <p className="text-xs text-red-500 mt-1.5">{fieldErrors.subject}</p>
-        )}
-
-        {/* A/B test panel inline (collapsable via abTestEnabled) */}
-        {abTestEnabled && (
-          <div className="mt-3 space-y-2 p-3 rounded-lg bg-violet-500/[0.04] border border-violet-500/20 animate-in fade-in slide-in-from-top-2 duration-200">
-            <div>
-              <label className="block text-xs text-content-tertiary mb-1.5">Variant B</label>
-              <input
-                type="text"
-                maxLength={200}
-                value={subjectVariant2}
-                onChange={(e) => setSubjectVariant2(e.target.value)}
-                placeholder="Ex : {{first_name}}, 5 min ?"
-                className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm focus:outline-none ${fieldErrors.subjectVariant2 ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
-              />
-              {fieldErrors.subjectVariant2 && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.subjectVariant2}</p>
-              )}
-            </div>
-
-            {hasVariant3 ? (
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs text-content-tertiary">Variant C</label>
-                  <button
-                    type="button"
-                    onClick={() => { setHasVariant3(false); setSubjectVariant3(''); }}
-                    className="inline-flex items-center gap-1 text-[10px] text-content-tertiary hover:text-red-500 transition"
-                  >
-                    <X size={11} />
-                    Retirer
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  maxLength={200}
-                  value={subjectVariant3}
-                  onChange={(e) => setSubjectVariant3(e.target.value)}
-                  placeholder="Ex : Une idée pour {{company}}"
-                  className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm focus:outline-none ${fieldErrors.subjectVariant3 ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
-                />
-                {fieldErrors.subjectVariant3 && (
-                  <p className="text-xs text-red-500 mt-1">{fieldErrors.subjectVariant3}</p>
-                )}
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setHasVariant3(true)}
-                className="inline-flex items-center gap-1 text-[11px] text-violet-400 hover:text-violet-300 transition"
-              >
-                <Plus size={11} />
-                Ajouter variant C
-              </button>
-            )}
-
-            <div className="pt-2 mt-2 border-t border-violet-500/10">
-              <label className="block text-xs text-content-tertiary mb-1.5">
-                Échantillon (avant pick du winner)
-              </label>
-              <input
-                type="number"
-                min={10}
-                max={10000}
-                value={abTestSampleSize}
-                onChange={(e) => setAbTestSampleSize(e.target.value)}
-                className="w-32 px-3 py-2 rounded-lg bg-surface-base border border-line text-sm focus:outline-none focus:border-violet-500 tabular-nums"
-              />
-              <p className="text-[10px] text-content-tertiary mt-1 leading-relaxed">
-                Volia split les {abTestSampleSize || 100} premiers envois équitablement, puis bascule sur le variant
-                au meilleur taux d&apos;ouverture.
-              </p>
-            </div>
-          </div>
         )}
       </WizardBlock>
 
@@ -885,6 +887,143 @@ function StepMessage({
           Le footer RGPD (lien désabonnement 1 clic) sera ajouté automatiquement.
         </p>
       </WizardBlock>
+
+      {/* QW7 — Options avancées (A/B test) cachées par défaut.
+          90% des 1ères campagnes n'utilisent pas A/B → on ne pollue pas l'écran. */}
+      <div className="rounded-xl border border-line bg-surface-card overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setShowAbAdvanced((v) => {
+            const next = !v;
+            // Si on referme et A/B était activé sans variant B rempli, on le désactive
+            // proprement pour éviter une validation en erreur invisible à l'utilisateur.
+            if (!next && abTestEnabled && !subjectVariant2.trim()) {
+              setAbTestEnabled(false);
+              setSubjectVariant3('');
+              setHasVariant3(false);
+            }
+            return next;
+          })}
+          className="w-full px-4 py-3 flex items-center justify-between gap-2 hover:bg-surface-elevated transition text-left"
+        >
+          <div className="flex items-center gap-2">
+            <FlaskConical size={14} className="text-content-tertiary" />
+            <span className="text-sm font-medium text-content-primary">+ Options avancées</span>
+            <span className="text-[10px] text-content-tertiary">A/B test du sujet</span>
+            {abTestEnabled && (
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-500/15 border border-violet-500/30 text-violet-300 font-semibold uppercase tracking-wider">
+                A/B activé
+              </span>
+            )}
+          </div>
+          {showAbAdvanced ? <ChevronUp size={14} className="text-content-tertiary" /> : <ChevronDown size={14} className="text-content-tertiary" />}
+        </button>
+        {showAbAdvanced && (
+          <div className="px-4 pb-4 pt-1 border-t border-line animate-in fade-in slide-in-from-top-2 duration-200">
+            {/* Switch d'activation A/B */}
+            <div className="mb-3 mt-2 flex items-start gap-3">
+              <label className="flex items-start gap-3 cursor-pointer group flex-1">
+                <input
+                  type="checkbox"
+                  checked={abTestEnabled}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setAbTestEnabled(checked);
+                    if (!checked) {
+                      setSubjectVariant2('');
+                      setSubjectVariant3('');
+                      setHasVariant3(false);
+                    }
+                  }}
+                  className="mt-0.5 h-4 w-4 rounded border-line bg-surface-base text-violet-600 focus:ring-violet-500 focus:ring-offset-0 cursor-pointer"
+                />
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-content-primary">
+                    Tester plusieurs sujets (A/B test)
+                  </div>
+                  <p className="text-xs text-content-tertiary mt-0.5 leading-relaxed">
+                    Volia envoie un échantillon avec 2 (ou 3) variantes du sujet, mesure les ouvertures,
+                    puis bascule automatiquement sur le meilleur pour les envois restants.
+                  </p>
+                </div>
+              </label>
+            </div>
+
+            {abTestEnabled && (
+              <div className="mt-3 space-y-2 p-3 rounded-lg bg-violet-500/[0.04] border border-violet-500/20 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div>
+                  <label className="block text-xs text-content-tertiary mb-1.5">Variant B</label>
+                  <input
+                    type="text"
+                    maxLength={200}
+                    value={subjectVariant2}
+                    onChange={(e) => setSubjectVariant2(e.target.value)}
+                    placeholder="Ex : {{first_name}}, 5 min ?"
+                    className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm focus:outline-none ${fieldErrors.subjectVariant2 ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
+                  />
+                  {fieldErrors.subjectVariant2 && (
+                    <p className="text-xs text-red-500 mt-1">{fieldErrors.subjectVariant2}</p>
+                  )}
+                </div>
+
+                {hasVariant3 ? (
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs text-content-tertiary">Variant C</label>
+                      <button
+                        type="button"
+                        onClick={() => { setHasVariant3(false); setSubjectVariant3(''); }}
+                        className="inline-flex items-center gap-1 text-[10px] text-content-tertiary hover:text-red-500 transition"
+                      >
+                        <X size={11} />
+                        Retirer
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      maxLength={200}
+                      value={subjectVariant3}
+                      onChange={(e) => setSubjectVariant3(e.target.value)}
+                      placeholder="Ex : Une idée pour {{company}}"
+                      className={`w-full px-3 py-2 rounded-lg bg-surface-base border text-sm focus:outline-none ${fieldErrors.subjectVariant3 ? 'border-red-500/60 focus:border-red-500' : 'border-line focus:border-violet-500'}`}
+                    />
+                    {fieldErrors.subjectVariant3 && (
+                      <p className="text-xs text-red-500 mt-1">{fieldErrors.subjectVariant3}</p>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setHasVariant3(true)}
+                    className="inline-flex items-center gap-1 text-[11px] text-violet-400 hover:text-violet-300 transition"
+                  >
+                    <Plus size={11} />
+                    Ajouter variant C
+                  </button>
+                )}
+
+                <div className="pt-2 mt-2 border-t border-violet-500/10">
+                  <label className="block text-xs text-content-tertiary mb-1.5">
+                    Échantillon (avant pick du winner)
+                  </label>
+                  <input
+                    type="number"
+                    min={10}
+                    max={10000}
+                    value={abTestSampleSize}
+                    onChange={(e) => setAbTestSampleSize(e.target.value)}
+                    className="w-32 px-3 py-2 rounded-lg bg-surface-base border border-line text-sm focus:outline-none focus:border-violet-500 tabular-nums"
+                  />
+                  <p className="text-[10px] text-content-tertiary mt-1 leading-relaxed">
+                    Volia split les {abTestSampleSize || 100} premiers envois équitablement, puis bascule sur le variant
+                    au meilleur taux d&apos;ouverture.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -901,6 +1040,7 @@ function StepLaunch({
   abTestEnabled, hasVariant3,
   sendMode, setSendMode, scheduledAt, setScheduledAt,
   selectedList, totalRecipients, fieldErrors,
+  currentEmail, onTestSend, testSending,
 }) {
   return (
     <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-200">
@@ -998,24 +1138,39 @@ function StepLaunch({
         icon={<Eye size={14} />}
         description="Avec variables remplacées par des valeurs exemple."
         action={
-          abTestEnabled && (
-            <div className="inline-flex rounded-md border border-line overflow-hidden">
-              {['A', 'B', hasVariant3 ? 'C' : null].filter(Boolean).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setPreviewVariant(v)}
-                  className={`px-2.5 py-1 text-[11px] font-medium transition ${
-                    previewVariant === v
-                      ? 'bg-violet-500/15 text-violet-300'
-                      : 'text-content-tertiary hover:text-content-primary'
-                  }`}
-                >
-                  {v}
-                </button>
-              ))}
-            </div>
-          )
+          <div className="flex items-center gap-2 flex-wrap">
+            {abTestEnabled && (
+              <div className="inline-flex rounded-md border border-line overflow-hidden">
+                {['A', 'B', hasVariant3 ? 'C' : null].filter(Boolean).map((v) => (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() => setPreviewVariant(v)}
+                    className={`px-2.5 py-1 text-[11px] font-medium transition ${
+                      previewVariant === v
+                        ? 'bg-violet-500/15 text-violet-300'
+                        : 'text-content-tertiary hover:text-content-primary'
+                    }`}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+            )}
+            {/* QW5 — bouton Envoyer un test à moi-même */}
+            {onTestSend && (
+              <button
+                type="button"
+                onClick={onTestSend}
+                disabled={testSending}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] font-semibold bg-violet-500/15 hover:bg-violet-500/25 text-violet-300 border border-violet-500/30 hover:border-violet-500/50 transition disabled:opacity-50"
+                title={currentEmail ? `Envoi un email test à ${currentEmail}` : 'Envoi un email test à toi-même'}
+              >
+                {testSending ? <Loader2 size={11} className="animate-spin" /> : <Send size={11} />}
+                {testSending ? 'Envoi…' : 'Envoyer un test à moi-même'}
+              </button>
+            )}
+          </div>
         }
       >
         <div className="rounded-lg bg-surface-base border border-line p-4 text-xs">
@@ -1032,6 +1187,13 @@ function StepLaunch({
             </p>
           </div>
         </div>
+        {/* Hint sous l'aperçu : précise à quelle adresse partira le test */}
+        {onTestSend && currentEmail && (
+          <p className="mt-2 text-[10px] text-content-tertiary leading-relaxed">
+            Le test sera envoyé à <strong className="text-content-secondary">{currentEmail}</strong>{' '}
+            avec un préfixe <code>[TEST]</code> dans l&apos;objet. Variables remplacées par des valeurs exemple.
+          </p>
+        )}
       </WizardBlock>
 
       {/* Lancement — mode now vs scheduled */}

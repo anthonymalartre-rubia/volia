@@ -94,9 +94,8 @@ function SortableFieldCard({
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            if (confirm(`Supprimer le champ "${field.label}" ?`)) {
-              onDelete(field.id);
-            }
+            // Quick win #2 : suppression directe + toast undo (géré upstream)
+            onDelete(field.id);
           }}
           className="p-1.5 rounded-md text-content-tertiary hover:bg-rose-50 hover:text-rose-600 transition-colors"
           aria-label="Supprimer"

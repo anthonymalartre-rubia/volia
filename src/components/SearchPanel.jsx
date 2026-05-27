@@ -200,10 +200,15 @@ export default function SearchPanel({
   const [companyResults, setCompanyResults] = useState(null);
   const [companyError, setCompanyError] = useState('');
 
+  // Bug fix UX 27 mai 2026 : avant, le wizard avait son propre scroll
+  // interne (max-h + overflow-y-auto) → double scroll page + box (lourd).
+  // Maintenant le wizard prend sa hauteur naturelle ; on auto-scroll juste
+  // la PAGE pour que le bas du wizard reste visible quand l'user avance
+  // dans les steps (chat-bot UX).
   useEffect(() => {
     if (scrollRef.current) {
       setTimeout(() => {
-        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
       }, 50);
     }
   }, [step, searchType, selectedDepts, selectedCats, customQueries, confirmed, isSearching, showNewFolder, companySearchMode, companyResults]);
@@ -555,9 +560,12 @@ export default function SearchPanel({
 
       <div
         ref={scrollRef}
-        className="rounded-2xl border border-line bg-surface-card overflow-hidden"
+        className="rounded-2xl border border-line bg-surface-card"
       >
-        <div className="p-3 sm:p-5 space-y-4 sm:space-y-5 max-h-[calc(100vh-9rem)] overflow-y-auto">
+        {/* Bug fix UX 27 mai 2026 : retiré max-h + overflow-y-auto +
+            overflow-hidden parent → le wizard prend sa hauteur naturelle.
+            La page scroll seule (pas de double scroll). */}
+        <div className="p-3 sm:p-5 space-y-4 sm:space-y-5">
 
           {/* Step 1: Type */}
           <BotMessage>

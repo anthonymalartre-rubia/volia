@@ -63,10 +63,10 @@ const PLAN_TAGLINES = {
 
 // Modules inclus par plan
 const PLAN_MODULES = {
-  free:     { prospection: 'limitée', campagnes: false, crm: false },
-  solo:     { prospection: true,      campagnes: false, crm: false },
-  pro:      { prospection: true,      campagnes: true,  crm: false },
-  business: { prospection: true,      campagnes: true,  crm: true  },
+  free:     { prospection: 'limitée', campagnes: false, crm: false, formulaires: false },
+  solo:     { prospection: true,      campagnes: false, crm: false, formulaires: 'solo' },
+  pro:      { prospection: true,      campagnes: true,  crm: false, formulaires: 'pro' },
+  business: { prospection: true,      campagnes: true,  crm: true,  formulaires: true },
 };
 
 // ─── Section 4 : Tableau comparatif — données ───────────────────
@@ -107,6 +107,19 @@ const COMPARE_SECTIONS = [
       ['Timeline 360° par contact', false, false, false, true],
       ['Activities (notes, calls, meetings)', false, false, false, true],
       ['Multi-pipelines (Q4 2026)', '—', '—', '—', '—'],
+    ],
+  },
+  {
+    title: 'Module Formulaires',
+    rows: [
+      ['Nombre de formulaires', false, '1', '5', 'Illimité'],
+      ['Submissions / mois', false, '100', '1 000', 'Illimité'],
+      ['Builder drag-drop + multi-step', false, true, true, true],
+      ['Logique conditionnelle AND/OR', false, true, true, true],
+      ['Bridges natifs CRM + Campagnes', false, true, true, true],
+      ['QR code + embed iframe', false, true, true, true],
+      ['Webhooks sortants', false, true, true, true],
+      ['Templates B2B prêts à l’emploi', false, true, true, true],
     ],
   },
   {
@@ -419,6 +432,14 @@ export default function PricingContent() {
                           : 'bg-zinc-50 text-content-muted line-through'
                       }`}>
                         CRM
+                      </span>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                        modules.formulaires
+                          ? 'bg-pink-100 text-pink-700'
+                          : 'bg-zinc-50 text-content-muted line-through'
+                      }`}>
+                        Formulaires
+                        {modules.formulaires === 'solo' ? ' (1)' : modules.formulaires === 'pro' ? ' (5)' : ''}
                       </span>
                     </div>
 

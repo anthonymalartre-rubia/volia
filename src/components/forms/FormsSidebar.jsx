@@ -49,10 +49,9 @@ const NAV_ITEMS = [
   {
     id: 'stats',
     label: 'Statistiques',
-    description: 'Vues, conversions, A/B',
+    description: 'Vues, conversions, bridges',
     href: '/admin/forms/stats',
     icon: BarChart3,
-    soon: true,
     matches: (p) => p.startsWith('/admin/forms/stats'),
   },
 ];

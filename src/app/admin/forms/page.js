@@ -135,27 +135,60 @@ export default function FormsHubPage() {
         </div>
       )}
 
-      {/* Empty state */}
+      {/* Empty state — F7 enrichi (illustration SVG + 2 CTAs) */}
       {!loading && forms.length === 0 && !error && (
-        <div className="rounded-2xl border border-dashed border-line bg-surface-card/50 p-10 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-pink-100 text-pink-600 mb-4">
-            <FileText size={22} />
+        <div className="rounded-3xl border border-dashed border-pink-200 bg-gradient-to-br from-pink-50/50 via-surface-card/30 to-rose-50/40 p-10 sm:p-12 text-center overflow-hidden relative">
+          {/* Decorative blobs */}
+          <div className="absolute -top-10 -left-10 w-40 h-40 bg-pink-200/30 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-rose-200/30 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Illustration SVG : un formulaire stylisé + "souris piège" */}
+          <div className="relative inline-block mb-5">
+            <svg
+              width="120"
+              height="100"
+              viewBox="0 0 120 100"
+              fill="none"
+              className="drop-shadow-md"
+              aria-hidden="true"
+            >
+              {/* Form card */}
+              <rect x="10" y="14" width="86" height="76" rx="10" fill="white" stroke="#fbcfe8" strokeWidth="1.5" />
+              <rect x="20" y="24" width="50" height="6" rx="3" fill="#fbcfe8" />
+              <rect x="20" y="36" width="66" height="9" rx="3" fill="#fce7f3" />
+              <rect x="20" y="50" width="66" height="9" rx="3" fill="#fce7f3" />
+              <rect x="20" y="64" width="66" height="9" rx="3" fill="#fce7f3" />
+              <rect x="20" y="78" width="34" height="9" rx="4" fill="#db2777" />
+              {/* "Send" arrow (the trap) */}
+              <circle cx="98" cy="86" r="13" fill="#db2777" />
+              <path d="M93 86 L100 86 M98 82 L102 86 L98 90" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
-          <h3 className="text-lg font-semibold text-content-primary">
-            Créez votre premier formulaire
+
+          <h3 className="relative text-xl font-bold text-content-primary mb-2">
+            Vous n&apos;avez pas encore créé de formulaire
           </h3>
-          <p className="mt-1 text-sm text-content-tertiary max-w-md mx-auto">
-            Démarrez avec un formulaire vide ou (bientôt) un template métier.
-            Vous pourrez le partager via un lien public ou l\'embed sur votre site.
+          <p className="relative text-sm text-content-tertiary max-w-md mx-auto leading-relaxed">
+            C&apos;est le moment de capturer vos premiers leads. Volia Formulaires
+            les pousse automatiquement vers votre CRM et vos Campagnes — zéro
+            copier-coller.
           </p>
-          <button
-            onClick={handleCreate}
-            disabled={creating}
-            className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-sm font-medium shadow-lg shadow-pink-500/20 active:scale-95 transition-all disabled:opacity-50"
-          >
-            {creating ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-            Commencer
-          </button>
+          <div className="relative mt-6 flex flex-col sm:flex-row items-center justify-center gap-2">
+            <Link
+              href="/admin/forms/templates"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-sm font-medium shadow-lg shadow-pink-500/20 active:scale-95 transition-all"
+            >
+              <Sparkles size={14} /> Partir d&apos;un template
+            </Link>
+            <button
+              onClick={handleCreate}
+              disabled={creating}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-line hover:border-pink-300 hover:bg-pink-50 text-content-primary text-sm font-medium transition-all disabled:opacity-50"
+            >
+              {creating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+              Créer un form vide
+            </button>
+          </div>
         </div>
       )}
 

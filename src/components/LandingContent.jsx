@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3, Sparkles } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3, Sparkles, FormInput } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
@@ -171,7 +171,7 @@ export default function LandingContent() {
               {/* Badge "Suite SaaS" — repositionne Volia comme plateforme, pas outil unique */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-blue-100 to-emerald-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
                 <Layers size={12} className="text-violet-600" />
-                <span className="text-violet-700 font-bold">SUITE SAAS B2B FRANÇAISE · 3 MODULES</span>
+                <span className="text-violet-700 font-bold">SUITE SAAS B2B FRANÇAISE · 4 MODULES</span>
               </div>
 
               {/* H1 MASSIVE — Trouvez. Contactez. Convertissez. — 3 modules en un seul claim */}
@@ -186,10 +186,11 @@ export default function LandingContent() {
               {/* Sous-titre — positionne la suite complète + comparatif stack */}
               <p className="text-lg sm:text-xl text-content-secondary mb-8 leading-relaxed max-w-xl">
                 La suite SaaS B2B française qui remplace{' '}
-                <strong className="text-content-primary font-semibold">Apollo + Lemlist + HubSpot</strong>.{' '}
+                <strong className="text-content-primary font-semibold">Apollo + Lemlist + HubSpot + Typeform</strong>.{' '}
                 <strong className="text-violet-700">Prospection</strong>,{' '}
-                <strong className="text-blue-700">Campagnes</strong> et{' '}
-                <strong className="text-emerald-700">CRM</strong> dans le même outil, dès 19&nbsp;€/mois.
+                <strong className="text-blue-700">Campagnes</strong>,{' '}
+                <strong className="text-emerald-700">CRM</strong> et{' '}
+                <strong className="text-pink-700">Formulaires</strong> dans le même outil, dès 19&nbsp;€/mois.
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
@@ -424,17 +425,17 @@ export default function LandingContent() {
             <div className="text-center mb-14">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">La suite Volia</p>
               <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                3 modules connectés pour automatiser votre growth B2B
+                4 modules connectés pour automatiser votre growth B2B
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Trouvez vos prospects, contactez-les, suivez vos deals.
+                Trouvez vos prospects, contactez-les, capturez les inbound, suivez vos deals.
                 Le tout dans une seule plateforme française.
               </p>
             </div>
           </MotionInView>
 
-          {/* 3 product cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+          {/* 4 product cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
             {[
               {
                 name: 'Prospection',
@@ -489,6 +490,24 @@ export default function LandingContent() {
                 ],
                 href: '/produits/crm',
                 cta: 'Rejoindre la beta',
+              },
+              {
+                name: 'Formulaires',
+                tagline: 'Form builder avec bridges CRM + Campagnes natifs',
+                status: 'LIVE',
+                statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+                icon: FormInput,
+                color: 'pink',
+                bg: 'from-pink-50 via-white to-rose-50/50',
+                border: 'border-pink-300',
+                iconBg: 'from-pink-500 to-rose-600',
+                bullets: [
+                  'Multi-step + logique conditionnelle',
+                  'Submissions → CRM / Campagnes auto',
+                  'RGPD by default · QR code · embed',
+                ],
+                href: '/produits/formulaires',
+                cta: 'Découvrir',
               },
             ].map((mod, i) => {
               const Icon = mod.icon;

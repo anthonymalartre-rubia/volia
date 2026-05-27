@@ -30,6 +30,7 @@ import {
   Search,
   Mail,
   KanbanSquare,
+  FormInput,
   ChevronDown,
   ChevronRight,
   Check,
@@ -85,6 +86,20 @@ const MODULES = [
     activeText: 'text-emerald-700',
     accent: 'text-emerald-600',
   },
+  {
+    id: 'formulaires',
+    name: 'Formulaires',
+    description: 'Form builder + bridges',
+    href: '/admin/forms',
+    icon: FormInput,
+    status: { label: 'LIVE', className: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+    color: 'pink',
+    iconGradient: 'from-pink-500 to-rose-600',
+    activeBg: 'bg-pink-50',
+    activeBorder: 'border-pink-200',
+    activeText: 'text-pink-700',
+    accent: 'text-pink-600',
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────
@@ -109,6 +124,15 @@ function detectActiveModule(pathname) {
   // CRM
   if (pathname.startsWith('/app/crm')) {
     return MODULES[2];
+  }
+
+  // Formulaires : /admin/forms/* (4e module — pink)
+  if (
+    pathname === '/admin/forms' ||
+    pathname === '/admin/forms/' ||
+    pathname.startsWith('/admin/forms/')
+  ) {
+    return MODULES[3];
   }
 
   // Prospection (default — dashboard, /app/prospection, et fallback admin/settings)

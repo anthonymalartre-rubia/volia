@@ -29,7 +29,9 @@ import {
   EyeOff,
   Sparkles,
   AlertCircle,
+  QrCode,
 } from 'lucide-react';
+import QrCustomizer from '@/components/forms/QrCustomizer';
 
 function Toggle({ checked, onChange, disabled = false }) {
   return (
@@ -321,15 +323,13 @@ export default function FormSettingsPage() {
                 )}
               </div>
 
-              {/* QR */}
-              <div>
-                <a
-                  href={`/api/admin/forms/${id}/qr`}
-                  download
-                  className="inline-flex items-center gap-1.5 text-xs text-content-tertiary hover:text-pink-700"
-                >
-                  <Download size={12} /> Télécharger le QR code (PNG)
-                </a>
+              {/* QR live customizer (Sprint F7) */}
+              <div className="pt-2 border-t border-line">
+                <div className="flex items-center gap-2 mb-3">
+                  <QrCode size={14} className="text-pink-600" />
+                  <h4 className="text-sm font-semibold text-content-primary">QR Code</h4>
+                </div>
+                <QrCustomizer url={publicUrl} slug={form.slug} />
               </div>
             </div>
           )}

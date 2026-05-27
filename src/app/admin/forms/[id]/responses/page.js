@@ -205,6 +205,7 @@ export default function FormResponsesPage() {
                   <th className="text-left px-4 py-3 font-medium text-content-tertiary text-xs uppercase tracking-wider">Date</th>
                   <th className="text-left px-4 py-3 font-medium text-content-tertiary text-xs uppercase tracking-wider">Réponses</th>
                   <th className="text-left px-4 py-3 font-medium text-content-tertiary text-xs uppercase tracking-wider">Bridge</th>
+                  <th className="px-4 py-3 w-8" />
                 </tr>
               </thead>
               <tbody>
@@ -212,8 +213,13 @@ export default function FormResponsesPage() {
                   const status = r.bridge_status || 'skipped';
                   const badge = BRIDGE_BADGES[status] || BRIDGE_BADGES.skipped;
                   const Icon = badge.icon;
+                  const detailHref = `/admin/forms/${id}/responses/${r.id}`;
                   return (
-                    <tr key={r.id} className="border-b border-line last:border-0 hover:bg-surface-elevated/50 transition-colors">
+                    <tr
+                      key={r.id}
+                      onClick={() => { window.location.href = detailHref; }}
+                      className="border-b border-line last:border-0 hover:bg-surface-elevated/50 transition-colors cursor-pointer"
+                    >
                       <td className="px-4 py-3 text-content-secondary whitespace-nowrap">
                         {formatDate(r.submitted_at)}
                       </td>
@@ -229,6 +235,15 @@ export default function FormResponsesPage() {
                             {r.bridge_error}
                           </p>
                         )}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        <Link
+                          href={detailHref}
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center text-xs text-pink-700 hover:underline"
+                        >
+                          Détail →
+                        </Link>
                       </td>
                     </tr>
                   );

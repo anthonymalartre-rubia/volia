@@ -19,7 +19,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Search, Mail, Users } from 'lucide-react';
+import { ChevronDown, Search, Mail, Users, FormInput } from 'lucide-react';
 
 const PRODUCTS_FR = [
   {
@@ -48,6 +48,15 @@ const PRODUCTS_FR = [
     accent: 'emerald',
     badge: 'BIENTÔT',
     badgeColor: 'bg-amber-100 text-amber-700 border-amber-200',
+  },
+  {
+    slug: 'formulaires',
+    name: 'Volia Formulaires',
+    description: 'Form builder + bridges CRM & Campagnes',
+    icon: FormInput,
+    accent: 'pink',
+    badge: 'LIVE',
+    badgeColor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
   },
 ];
 
@@ -79,6 +88,15 @@ const PRODUCTS_EN = [
     badge: 'SOON',
     badgeColor: 'bg-amber-100 text-amber-700 border-amber-200',
   },
+  {
+    slug: 'forms',
+    name: 'Volia Forms',
+    description: 'Form builder + native CRM & email bridges',
+    icon: FormInput,
+    accent: 'pink',
+    badge: 'LIVE',
+    badgeColor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  },
 ];
 
 const ACCENT_STYLES = {
@@ -96,6 +114,11 @@ const ACCENT_STYLES = {
     iconBg: 'bg-emerald-100 text-emerald-600',
     hoverBg: 'group-hover:bg-emerald-50',
     name: 'group-hover:text-emerald-700',
+  },
+  pink: {
+    iconBg: 'bg-pink-100 text-pink-600',
+    hoverBg: 'group-hover:bg-pink-50',
+    name: 'group-hover:text-pink-700',
   },
 };
 

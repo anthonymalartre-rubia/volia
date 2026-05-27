@@ -31,6 +31,7 @@ import {
   Shield, Sparkles, Send, Settings, Play, Zap, FileText, Tag, Users, KanbanSquare,
   Smartphone, TrendingUp, Rocket, Flame,
   Repeat, MousePointerClick, Workflow, BookOpen, Inbox,
+  FormInput, ClipboardList, QrCode, Webhook, LockKeyhole, Code2,
 } from 'lucide-react';
 import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
@@ -49,6 +50,7 @@ const ICONS = {
   KanbanSquare,
   Smartphone, TrendingUp, Rocket, Flame,
   Repeat, MousePointerClick, Workflow, BookOpen, Inbox,
+  FormInput, ClipboardList, QrCode, Webhook, LockKeyhole, Code2,
 };
 function resolveIcon(name) {
   return ICONS[name] || Search;
@@ -122,6 +124,27 @@ export const MODULE_THEMES = {
     linkText: 'text-emerald-700',
     connector: 'from-emerald-300 via-teal-300 to-green-300',
     secondaryHover: 'hover:border-emerald-400 hover:bg-emerald-50',
+  },
+  formulaires: {
+    accent: 'pink',
+    label: 'Formulaires',
+    iconName: 'FormInput',
+    statusBadge: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+    heroGradient: 'from-pink-200/40 via-rose-100/30 to-fuchsia-100/20',
+    heroBlob1: 'bg-pink-300/20',
+    heroBlob2: 'bg-rose-200/30',
+    pill: 'bg-pink-100 border-pink-200 text-pink-700',
+    titleGradient: 'from-pink-600 via-rose-600 to-fuchsia-700',
+    ctaGradient: 'from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500',
+    ctaShadow: 'shadow-pink-500/30 hover:shadow-pink-500/40',
+    iconBg: 'from-pink-500 to-rose-600',
+    sectionTint: 'from-pink-50/40 via-rose-50/20 to-white',
+    cardBorder: 'border-pink-200',
+    cardBg: 'from-pink-50 via-white to-rose-50/50',
+    checkIcon: 'text-pink-600',
+    linkText: 'text-pink-700',
+    connector: 'from-pink-300 via-rose-300 to-fuchsia-300',
+    secondaryHover: 'hover:border-pink-400 hover:bg-pink-50',
   },
 };
 
@@ -645,7 +668,10 @@ export default function ProductPageLayout({
                   return (
                     <MotionInView key={m.module} delay={i * 120}>
                       <Link
-                        href={locale === 'en' ? `/en/products/${m.module === 'campagnes' ? 'campaigns' : m.module}` : `/produits/${m.module}`}
+                        href={locale === 'en' ? `/en/products/${
+                          m.module === 'campagnes' ? 'campaigns' :
+                          m.module === 'formulaires' ? 'forms' : m.module
+                        }` : `/produits/${m.module}`}
                         className={`group block h-full p-7 rounded-2xl border-2 ${otherTheme.cardBorder} bg-gradient-to-br ${otherTheme.cardBg} shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
                       >
                         <div className="flex items-center justify-between mb-5">

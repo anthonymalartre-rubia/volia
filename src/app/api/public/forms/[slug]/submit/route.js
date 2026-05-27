@@ -58,6 +58,19 @@ function normalizeEmail(v) {
 }
 
 /**
+ * Détecte le device_type ('mobile' | 'tablet' | 'desktop') depuis le UA.
+ * Heuristique simple (pas de lib externe), suffisante pour les stats
+ * analytics — pas pour de la détection précise.
+ */
+function detectDeviceType(userAgent) {
+  if (!userAgent || typeof userAgent !== 'string') return 'desktop';
+  const ua = userAgent.toLowerCase();
+  if (/ipad|tablet|playbook|silk/.test(ua)) return 'tablet';
+  if (/mobi|iphone|ipod|android.*mobile|opera mini|blackberry/.test(ua)) return 'mobile';
+  return 'desktop';
+}
+
+/**
  * Cherche dans les answers un email/name/phone/company à partir de field_keys
  * conventionnels (plusieurs alias acceptés).
  */
@@ -442,6 +455,7 @@ export async function POST(request, { params }) {
     ua: userAgent.slice(0, 250),
     referer: referer.slice(0, 500),
     completion_time_ms: completionTimeMs,
+    device_type: detectDeviceType(userAgent),
   };
 
   const { data: response, error: respError } = await supabaseAdmin

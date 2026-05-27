@@ -372,26 +372,65 @@ export default function PricingContent() {
                     <h3 className={`text-lg font-semibold mb-1 ${visuals.accent}`}>{plan.name}</h3>
                     <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{PLAN_TAGLINES[planId]}</p>
 
-                    <div className="flex items-baseline gap-1 mb-1">
-                      <span className="text-4xl font-bold text-content-primary">
-                        {formatPrice(price)}
-                        <span className="text-2xl text-content-secondary">€</span>
-                      </span>
-                      <span className="text-content-tertiary text-sm">
-                        {isYearly && !isFree ? '/an' : '/mois'}
-                      </span>
-                    </div>
-
-                    {isYearly && !isFree ? (
-                      <p className="text-[11px] text-emerald-600 font-medium mb-5">
-                        ~{Math.round(plan.priceYearly / 1200)} €/mois · économisez {formatEuro(yearlySavingsByPlan[planId])}
-                      </p>
-                    ) : !isFree ? (
-                      <p className="text-[11px] text-content-tertiary mb-5">
-                        ou {formatPrice(plan.priceYearly)} €/an (économisez {formatEuro(yearlySavingsByPlan[planId])})
-                      </p>
+                    {/* PRIX — gestion spéciale Business avec promo lancement.
+                        Sur monthly : affiche prix promo en gros + prix normal barré.
+                        Sur yearly : affiche prix yearly normal (pas de promo annual). */}
+                    {planId === 'business' && !isYearly && plan.promo ? (
+                      <>
+                        <div className="flex items-baseline gap-2 mb-1">
+                          <span className="text-4xl font-bold text-content-primary">
+                            {formatPrice(plan.promo.displayPrice)}
+                            <span className="text-2xl text-content-secondary">€</span>
+                          </span>
+                          <span className="text-content-tertiary text-sm">/mois</span>
+                          <span className="text-lg text-content-muted line-through font-medium">
+                            {formatPrice(plan.displayPrice)} €
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-semibold text-emerald-700 mb-1">
+                          🎉 {plan.promo.label}
+                        </p>
+                        <p className="text-[11px] text-content-tertiary mb-5">
+                          {plan.promo.sublabel}
+                        </p>
+                      </>
+                    ) : planId === 'business' && isYearly ? (
+                      <>
+                        <div className="flex items-baseline gap-1 mb-1">
+                          <span className="text-4xl font-bold text-content-primary">
+                            {formatPrice(plan.displayPriceYearly)}
+                            <span className="text-2xl text-content-secondary">€</span>
+                          </span>
+                          <span className="text-content-tertiary text-sm">/an</span>
+                        </div>
+                        <p className="text-[11px] text-emerald-600 font-medium mb-5">
+                          ~{Math.round(plan.displayPriceYearly / 1200)} €/mois · 2 mois offerts
+                        </p>
+                      </>
                     ) : (
-                      <p className="text-[11px] text-content-tertiary mb-5">Sans carte bancaire</p>
+                      <>
+                        <div className="flex items-baseline gap-1 mb-1">
+                          <span className="text-4xl font-bold text-content-primary">
+                            {formatPrice(price)}
+                            <span className="text-2xl text-content-secondary">€</span>
+                          </span>
+                          <span className="text-content-tertiary text-sm">
+                            {isYearly && !isFree ? '/an' : '/mois'}
+                          </span>
+                        </div>
+
+                        {isYearly && !isFree ? (
+                          <p className="text-[11px] text-emerald-600 font-medium mb-5">
+                            ~{Math.round(plan.priceYearly / 1200)} €/mois · économisez {formatEuro(yearlySavingsByPlan[planId])}
+                          </p>
+                        ) : !isFree ? (
+                          <p className="text-[11px] text-content-tertiary mb-5">
+                            ou {formatPrice(plan.priceYearly)} €/an (économisez {formatEuro(yearlySavingsByPlan[planId])})
+                          </p>
+                        ) : (
+                          <p className="text-[11px] text-content-tertiary mb-5">Sans carte bancaire</p>
+                        )}
+                      </>
                     )}
 
                     <Link
@@ -407,8 +446,22 @@ export default function PricingContent() {
                       {cta}
                     </Link>
 
-                    {/* Modules inclus */}
-                    <div className="flex flex-wrap gap-1.5 mb-5">
+                    {/* HIGHLIGHT PRO — la "killer feature" : Pro est le SEUL plan
+                        abordable qui débloque la suite complète. Affiché en card
+                        séparée violette, plus visible que les badges modules. */}
+                    {plan.unlocksModules && (
+                      <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
+                        <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
+                          <Star size={11} fill="currentColor" /> Débloque la suite complète
+                        </p>
+                        <p className="text-[11px] text-violet-700 leading-snug">
+                          CRM · Campagnes email · Formulaires — tous inclus
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Modules débloqués — version simplifiée (badges courts) */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                         modules.prospection === true
                           ? 'bg-violet-100 text-violet-700'
@@ -416,33 +469,43 @@ export default function PricingContent() {
                             ? 'bg-zinc-100 text-zinc-600'
                             : 'bg-zinc-50 text-content-muted'
                       }`}>
-                        Prospection{modules.prospection === 'limitée' ? ' (limitée)' : ''}
+                        ✓ Prospection{modules.prospection === 'limitée' ? ' (limitée)' : ''}
                       </span>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                         modules.campagnes
                           ? 'bg-blue-100 text-blue-700'
-                          : 'bg-zinc-50 text-content-muted line-through'
+                          : 'bg-zinc-50 text-content-muted'
                       }`}>
-                        Campagnes
+                        {modules.campagnes ? '✓' : '✗'} Campagnes
                       </span>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                         modules.crm
                           ? 'bg-indigo-100 text-indigo-700'
-                          : 'bg-zinc-50 text-content-muted line-through'
+                          : 'bg-zinc-50 text-content-muted'
                       }`}>
-                        CRM
+                        {modules.crm ? '✓' : '✗'} CRM
                       </span>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                         modules.formulaires
                           ? 'bg-pink-100 text-pink-700'
-                          : 'bg-zinc-50 text-content-muted line-through'
+                          : 'bg-zinc-50 text-content-muted'
                       }`}>
-                        Formulaires
+                        {modules.formulaires ? '✓' : '✗'} Formulaires
                         {modules.formulaires === 'solo' ? ' (1)' : modules.formulaires === 'pro' ? ' (5)' : ''}
                       </span>
                     </div>
 
-                    {/* Features list */}
+                    {/* "Tout inclus dans X +" intro avant les delta features.
+                        Le pattern simplifie radicalement la lecture cross-plans :
+                        plus besoin de comparer les 4 colonnes, on voit juste
+                        ce qui s'ajoute. */}
+                    {plan.inheritsFrom && PLANS[plan.inheritsFrom] && (
+                      <p className="text-[11px] font-semibold text-content-secondary mb-3 pb-3 border-b border-line">
+                        ✓ Tout inclus dans {PLANS[plan.inheritsFrom].name} +
+                      </p>
+                    )}
+
+                    {/* Delta features list — court et focalisé */}
                     <div className="space-y-2.5 flex-1">
                       {plan.features.map((f) => (
                         <div key={f} className="flex items-start gap-2">

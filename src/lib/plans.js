@@ -63,10 +63,10 @@ export const PLANS = {
     ],
   },
 
-  // ─── Pro : LE plan qui débloque la suite complète ────
-  // Argument principal = accès aux 3 modules supplémentaires (CRM + Campagnes
-  // + Formulaires). C'est l'UNIQUE formule abordable qui le fait — Solo non,
-  // Business l'inclut aussi mais coûte 3-4× plus cher.
+  // ─── Pro : plus de volume Prospection vs Solo ────
+  // Pro = Solo gonflé (5× le volume, dossiers illimités, vérif email).
+  // Ne débloque PAS CRM/Campagnes/Formulaires — ces 3 modules sont
+  // réservés à Business (positionnement upmarket).
   pro: {
     id: 'pro',
     name: 'Pro',
@@ -74,8 +74,7 @@ export const PLANS = {
     priceYearly: 49000,  // 490 €/an
     tagline: 'Pour PME et agences',
     inheritsFrom: 'solo',
-    unlocksModules: true,   // flag affichage : ce plan débloque CRM+Campagnes+Formulaires
-    highlight: true,        // affiché comme "Recommandé"
+    highlight: true,        // affiché comme "Recommandé" / "POPULAIRE"
     stripePriceId: cleanEnv(process.env.STRIPE_PRO_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_PRO_YEARLY_PRICE_ID || ''),
     limits: {
@@ -124,6 +123,7 @@ export const PLANS = {
     },
     tagline: 'Pour équipes outbound',
     inheritsFrom: 'pro',
+    unlocksModules: true,   // SEUL plan qui débloque CRM + Campagnes + Formulaires
     stripePriceId: cleanEnv(process.env.STRIPE_BUSINESS_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_BUSINESS_YEARLY_PRICE_ID || ''),
     limits: {

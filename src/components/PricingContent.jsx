@@ -61,11 +61,13 @@ const PLAN_TAGLINES = {
   business: 'Pour équipes outbound',
 };
 
-// Modules inclus par plan
+// Modules inclus par plan : SEUL Business débloque les 4 modules.
+// Starter/Solo/Pro restent sur Prospection uniquement (Pro = juste plus de
+// volume vs Solo). C'est ce qui justifie l'écart Pro 49€ → Business 149€.
 const PLAN_MODULES = {
   free:     { prospection: 'limitée', campagnes: false, crm: false, formulaires: false },
-  solo:     { prospection: true,      campagnes: false, crm: false, formulaires: 'solo' },
-  pro:      { prospection: true,      campagnes: true,  crm: false, formulaires: 'pro' },
+  solo:     { prospection: true,      campagnes: false, crm: false, formulaires: false },
+  pro:      { prospection: true,      campagnes: false, crm: false, formulaires: false },
   business: { prospection: true,      campagnes: true,  crm: true,  formulaires: true },
 };
 
@@ -263,7 +265,7 @@ export default function PricingContent() {
 
   // Stack concurrents : total
   const competitorTotalMo = STACK_COMPETITORS.reduce((acc, c) => acc + c.price, 0);
-  const economyVsStack = competitorTotalMo - 49; // vs Pro — c'est le plan qui débloque déjà les 4 modules
+  const economyVsStack = competitorTotalMo - 149; // vs Business 149€ (promo) — seul plan qui inclut les 4 modules
 
   // Helper rendu cellule comparatif
   function renderCell(value) {
@@ -288,7 +290,7 @@ export default function PricingContent() {
               On a recodé Apollo + Lemlist<br />pour 19€/mois.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              <strong className="text-content-primary">0€</strong> pour tester. <strong className="text-content-primary">49€/mois</strong> pour tout (Prospection + Campagnes + CRM + Formulaires).
+              <strong className="text-content-primary">0€</strong> pour tester. <strong className="text-content-primary">149€/mois</strong> (promo 12 mois, puis 179€) pour tout (Prospection + Campagnes + CRM + Formulaires).
               C&apos;est viable parce que vous payez.
             </p>
 
@@ -735,12 +737,12 @@ export default function PricingContent() {
                 <p className="text-[11px] text-content-tertiary mt-2">5 outils silotés · 5 abonnements · 5 logins</p>
               </div>
 
-              {/* Volia Pro — c'est LE plan qui débloque la suite complète */}
+              {/* Volia Business — SEUL plan qui débloque les 4 modules */}
               <div className="p-6 rounded-2xl border border-violet-300 bg-gradient-to-br from-violet-50 via-violet-50/40 to-indigo-50 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
                   <Crown size={14} className="text-violet-600" />
                   <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
-                    Volia Pro
+                    Volia Business
                   </p>
                 </div>
                 <div className="space-y-2.5 mb-4">
@@ -775,9 +777,12 @@ export default function PricingContent() {
                 </div>
                 <div className="border-t border-violet-200 pt-4 flex items-center justify-between">
                   <span className="text-sm font-semibold text-content-primary">Total mensuel</span>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                    49 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
-                  </span>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+                      149 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
+                    </span>
+                    <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">🎉 promo 12 mois (puis 179 €)</div>
+                  </div>
                 </div>
                 <p className="text-[11px] text-emerald-700 font-semibold mt-2">
                   Économie : ~{economyVsStack} €/mo (~{(economyVsStack * 12).toLocaleString('fr-FR')} €/an)

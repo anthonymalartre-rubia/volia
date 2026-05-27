@@ -30,10 +30,13 @@ function formatPrice(cents) {
 
 // Modules débloqués par plan (CRM + Campagnes + Formulaires).
 // Définit ici en local pour éviter de coupler LandingContent avec PricingContent.
+// Modules débloqués par plan : SEUL Business débloque les 4 modules.
+// Starter/Solo/Pro restent sur Prospection uniquement (Pro = juste plus de
+// volume vs Solo). C'est ce qui justifie l'écart Pro 49€ → Business 149€.
 const LANDING_PLAN_MODULES = {
   free:     { prospection: 'limitée', campagnes: false, crm: false, formulaires: false },
   solo:     { prospection: true,      campagnes: false, crm: false, formulaires: false },
-  pro:      { prospection: true,      campagnes: true,  crm: true,  formulaires: 'pro' },
+  pro:      { prospection: true,      campagnes: false, crm: false, formulaires: false },
   business: { prospection: true,      campagnes: true,  crm: true,  formulaires: true },
 };
 
@@ -786,14 +789,15 @@ export default function LandingContent() {
 
                 <div className="pt-4 border-t border-emerald-200">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-semibold text-content-secondary">Total Volia Pro</span>
+                    <span className="text-sm font-semibold text-content-secondary">Total Volia Business</span>
                     <div className="text-right">
-                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">49 €</span>
+                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">149 €</span>
                       <span className="text-content-tertiary text-sm">/mois</span>
+                      <div className="text-[10px] text-emerald-700 font-semibold mt-0.5">🎉 promo 12 mois (puis 179 €)</div>
                     </div>
                   </div>
                   <p className="text-xs text-emerald-700 font-semibold mt-2">
-                    ~220 €/mois dans la poche. ~2 600 €/an. Les 4 modules partagent les mêmes données, en direct.
+                    ~120 €/mois dans la poche. ~1 400 €/an. Les 4 modules partagent les mêmes données, en direct.
                   </p>
                 </div>
               </div>
@@ -804,10 +808,10 @@ export default function LandingContent() {
           <MotionInView delay={400}>
             <div className="mt-10 text-center">
               <Link
-                href="/signup?plan=pro"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-violet-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
+                href="/signup?plan=business"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
               >
-                Je prends Pro à 49&nbsp;€/mois
+                Je prends Business à 149&nbsp;€/mois (promo 12 mois)
                 <ArrowRight size={16} />
               </Link>
               <p className="text-xs text-content-tertiary mt-3">14 jours pour changer d&apos;avis · Annulation en 1 clic, vraiment</p>
@@ -1612,21 +1616,20 @@ export default function LandingContent() {
 
           </div>
 
-          {/* Encart Pro — LE plan qui débloque la suite complète à prix mini.
-              Communication V3 : Pro 49€ est le plan-clé (vs Business 149€ qui
-              n'ajoute "que" du volume + équipes). On répète le killer message
-              de la card Pro pour qu'il soit impossible à manquer. */}
+          {/* Encart Business — LE seul plan qui débloque la suite complète.
+              Starter/Solo/Pro = Prospection uniquement (juste plus de volume).
+              Business = unlock CRM + Campagnes + Formulaires en bonus. */}
           <MotionInView delay={300}>
-            <div className="mt-10 p-6 rounded-2xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 via-white to-indigo-50/50 shadow-lg shadow-violet-500/10">
+            <div className="mt-10 p-6 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-violet-50/50 shadow-lg shadow-emerald-500/10">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-5 justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-blue-500 flex items-center justify-center shadow-md flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 via-blue-500 to-violet-500 flex items-center justify-center shadow-md flex-shrink-0">
                     <Layers size={22} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold uppercase tracking-wider text-violet-700 mb-1">Le plan qui change tout</div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">Suite complète</div>
                     <h3 className="text-lg font-bold text-content-primary mb-2">
-                      Pro à 49&nbsp;€/mois débloque la suite complète. Sans surcoût caché.
+                      Business à 149&nbsp;€/mois (promo) débloque CRM + Campagnes + Formulaires en bonus.
                     </h3>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                       <span className="inline-flex items-center gap-1.5 text-content-secondary">
@@ -1647,15 +1650,15 @@ export default function LandingContent() {
                       </span>
                     </div>
                     <p className="text-xs text-content-tertiary mt-3">
-                      Business (149&nbsp;€/mois la 1ʳᵉ année puis 179&nbsp;€) ajoute &nbsp;: multi-utilisateurs (équipes/RBAC) + volumes 2-10× + API + onboarding perso + support prioritaire.
+                      149&nbsp;€/mois les 12 premiers mois (puis 179&nbsp;€). Pour comparaison&nbsp;: Apollo + Lemlist + HubSpot Starter + Typeform &asymp; 310&nbsp;€/mois ailleurs.
                     </p>
                   </div>
                 </div>
                 <Link
-                  href={`/signup?plan=pro&period=${pricingPeriod}`}
-                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-violet-500/30 hover:shadow-xl transition-all"
+                  href={`/signup?plan=business&period=${pricingPeriod}`}
+                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-sm shadow-lg shadow-emerald-500/30 hover:shadow-xl transition-all"
                 >
-                  Choisir Pro
+                  Choisir Business
                   <ArrowRight size={14} />
                 </Link>
               </div>

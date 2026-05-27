@@ -112,16 +112,22 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
         {/* Hint gradient violet au sommet — signal visuel "premium" subtil */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/30 to-transparent pointer-events-none" />
 
-        <div className="flex flex-col h-full p-4">
-          {/* Close button mobile */}
+        <div className="flex flex-col h-full">
+          {/* Close button mobile — dans une zone non-scrollable en haut */}
           <button
             onClick={onClose}
-            className="md:hidden self-end p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all mb-3"
+            className="md:hidden self-end m-4 mb-1 p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
             aria-label={t('sidebar.closeMenu')}
           >
             <ChevronLeft size={18} />
           </button>
 
+          {/* Bug fix 27 mai 2026 : zone scrollable principale (nav + settings
+              + history) → empêche le chevauchement visuel entre l'historique
+              et le bloc Plan Business en bas. Avant, tout était dans un même
+              flex column h-full et le mt-auto du bloc bas se collapsait quand
+              le contenu dépassait la viewport. */}
+          <div className="flex-1 min-h-0 overflow-y-auto px-4 pt-2 pb-3">
           {/* Navigation */}
           <nav className="space-y-1" role="navigation" aria-label="Navigation principale">
             {NAV_ITEMS.map((item) => {
@@ -248,12 +254,15 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
             </a>
           )}
 
-          {/* Search history */}
+          {/* Search history — scroll natif de la zone parente (pas de max-h
+              ni overflow ici). Bug fix 27 mai 2026 : avant max-h-48 +
+              overflow-y-auto créait un sous-scroll qui chevauchait visuellement
+              le bloc Plan Business via les fonds gradient à 5% d'opacité. */}
           <div className="mt-6">
             <h3 className="px-3 text-[10px] font-semibold uppercase tracking-wider text-content-muted mb-2">
               {t('sidebar.history')}
             </h3>
-            <div className="space-y-0.5 max-h-48 overflow-y-auto">
+            <div className="space-y-0.5">
               {(searchHistory || []).slice(0, 10).map(session => (
                 <div
                   key={session.id}
@@ -270,13 +279,14 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
               )}
             </div>
           </div>
+          </div>
+          {/* /flex-1 overflow-y-auto — fin zone scrollable */}
 
-          {/* ─── Bottom : encart "Upgrade hint" + bloc France ────────────────
-              Si l'user est sur un plan < Business (et n'est pas admin),
-              on glisse un mini-encart upgrade contextualisé juste au-dessus
-              du bloc France — discret mais visible, gradient amber/violet
-              pour signaler "premium" sans crier. */}
-          <div className="mt-auto space-y-2">
+          {/* ─── Bottom STICKY : encart "Upgrade hint" + bloc France ────────
+              Bug fix 27 mai 2026 : flex-shrink-0 + bg solide
+              (bg-surface-base) + border-top → toujours visible en bas, pas de
+              chevauchement avec l'historique qui scroll au-dessus. */}
+          <div className="flex-shrink-0 px-4 py-3 space-y-2 bg-surface-base border-t border-line">
             {nextMeta && (
               <button
                 onClick={() => setUpgradeModal({ feature: null, requiredPlan: nextPlan })}

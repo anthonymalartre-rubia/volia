@@ -10,8 +10,8 @@ const PAGE_URL = `${SITE_URL}/en/products/prospection`;
 const FR_PAGE = `${SITE_URL}/produits/prospection`;
 
 export const metadata = {
-  title: 'Volia Prospecting - French B2B leads. 287k+ companies, from $21/mo',
-  description: "1,000 qualified French B2B prospects in 30 seconds. 287k+ verified companies, emails + phones. 5x cheaper than Apollo. GDPR by default. Built in France. Try it free, no card.",
+  title: 'Volia Prospecting - French B2B emails + phones, from $21/mo',
+  description: "Find emails AND phone numbers (landline + mobile) for any French B2B company. 287,000+ verified companies, 150+ industries, 101 departments. Waterfall enrichment, GDPR by default. From $21/mo, no card.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -22,8 +22,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia Prospecting - The Apollo alternative for France. 5x cheaper.',
-    description: '287k+ verified French companies, emails + phones. From $21/mo. GDPR by default.',
+    title: 'Volia Prospecting - Find B2B emails + phone numbers in 30 seconds',
+    description: '287,000+ verified French companies. Email + landline + mobile. From $21/mo. GDPR by default.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -44,7 +44,7 @@ const EN_LABELS = {
   howItWorksTitle: 'Just 3 steps',
   suitePill: 'Volia Suite',
   suiteTitle: 'Connected to the rest of the Volia suite',
-  suiteSubtitleDefault: 'Your data flows between Prospecting, Campaigns and CRM. No copy-paste, no export/import.',
+  suiteSubtitleDefault: 'On Business plan, your data flows between Prospecting, Campaigns, CRM, and Forms. No copy-paste, no export/import.',
   suiteSource: 'Source',
   suiteDestination: 'Destination',
   suiteCtaDefault: 'Learn more',
@@ -82,11 +82,12 @@ const HOW_IT_WORKS = [
 
 const FAQ = [
   { q: 'How many emails do I actually get?', a: 'On average, 47% of prospects come back with a real professional email. Digital industries (SaaS, agencies, e-commerce): 70-85%. Less online industries (local trades, construction): 30-45%. You always see the confidence score before reaching out.' },
-  { q: 'Where does the data come from?', a: 'Three sources, no purchased lists. (1) Google Places for company identification — name, address, phone, rating. (2) Live website scraping for emails (Verified). (3) Serper.dev Google search when the site is empty (Google). Fallback: pattern guess like contact@domain.fr (Probable). That\'s it.' },
+  { q: 'Where does the data come from?', a: 'Three sources, no purchased lists. (1) Google Places for company identification — name, address, phone, rating. (2) Live website scraping for emails AND phone numbers (Verified). (3) Serper.dev Google search when the site is empty (Google). Fallback: pattern guess like contact@domain.fr (Probable). That\'s it.' },
+  { q: 'Do you get mobile phones too, or just landlines?', a: 'Both. Starter and Solo get landline numbers (when published on the company site). Pro and Business add mobile phone enrichment — same waterfall logic, just more sources tried. You always see the type (landline/mobile) per row.' },
   { q: 'Is it GDPR-compliant?', a: 'Yes. Built that way from day one, not bolted on later. Legitimate interest basis, opt-out on every email, public removal page, permanent blocklist. 28 personal-email domains blocked by default. EU hosting. CNIL guidelines. Your DPO will sleep at night.' },
   { q: 'Does it work outside metropolitan France?', a: 'Yes — all 5 overseas departments (Guadeloupe 971, Martinique 972, Guyane 973, Réunion 974, Mayotte 976). Same APIs, same categories, same price. Apollo and Hunter have near-zero coverage there. We don\'t.' },
-  { q: 'How is this different from Apollo / Hunter?', a: 'Three things. (1) Volia is 5x cheaper — $21 vs ~$92-99/mo. (2) Volia is France-specialized — 287k FR companies, 78% coverage. Apollo/Hunter sit at ~40%. (3) Phone numbers on every row, waterfall that doesn\'t burn credits, English-friendly support, GDPR-native, EU hosting. You do the math.' },
-  { q: 'Is there a daily enrichment limit?', a: 'No daily cap. You get a monthly quota based on your plan (100, 1k, 5k, 10k prospects). Use it all on Monday, spread it across the month — your call. The waterfall stops the second we find an email, so we don\'t waste your credits on useless external API calls.' },
+  { q: 'How is Volia different from a generic prospecting tool?', a: 'Three things. (1) France-specialized — 287k verified FR companies, 78% email coverage. Generalist tools sit around 40% on France. (2) Phone numbers on every row, landline + mobile (Pro+). (3) Waterfall that stops the second we find an email — your monthly quota is never wasted on useless external API calls.' },
+  { q: 'Is there a daily enrichment limit?', a: 'No daily cap. You get a monthly quota based on your plan (20 / 400 / 1,200 / 10,000 enrichments). Use it all on Monday, spread it across the month — your call.' },
 ];
 
 export default function EnProspectionPage() {
@@ -98,17 +99,17 @@ export default function EnProspectionPage() {
       labels={EN_LABELS}
       moduleLabelOverride="Prospecting"
       hero={{
-        eyebrow: 'The Apollo alternative for France. 5x cheaper.',
-        h1Before: '1,000 qualified prospects',
-        h1Highlight: 'in France.',
+        eyebrow: 'Find B2B emails AND phone numbers. In 30 seconds.',
+        h1Before: 'Find emails and phones for',
+        h1Highlight: 'any French company.',
         h1After: '30 seconds. Go.',
         subtitle: (
           <>
-            <strong className="text-content-primary font-semibold">287,000+ verified French companies</strong>. Emails. Phone numbers.{' '}
-            <strong className="text-emerald-700 font-semibold">5x cheaper than Apollo</strong>. GDPR by default.
+            <strong className="text-content-primary font-semibold">287,000+ verified French companies</strong>. Emails, landlines, and mobile numbers — all scraped in cascade.{' '}
+            <strong className="text-emerald-700 font-semibold">From $21/mo</strong>. GDPR by default.
           </>
         ),
-        ctaPrimary: { label: 'Start free', href: '/signup?plan=starter' },
+        ctaPrimary: { label: 'Start free', href: '/signup?plan=free' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           (<><strong className="font-mono text-content-secondary">287,000+</strong> companies</>),
@@ -136,23 +137,24 @@ export default function EnProspectionPage() {
       features={FEATURES}
       howItWorks={HOW_IT_WORKS}
       crossSell={{
-        subtitle: 'Your prospects flow straight into Campaigns to send. Then into CRM to close. No copy-paste in between.',
+        subtitle: 'On Business plan, your prospects flow straight into Campaigns to send, then into CRM to close. Forms capture inbound. No copy-paste in between.',
         otherModules: [
-          { module: 'campagnes', direction: 'out', desc: 'Send cold email + SMS sequences on your extracted prospects. Templates, auto follow-ups, live stats.', cta: 'Learn more' },
-          { module: 'crm', direction: 'out', desc: 'Kanban pipeline to close. Native, included. Coming soon.', cta: 'Join the beta' },
+          { module: 'campagnes', direction: 'out', desc: 'Send cold email sequences on your extracted prospects. Templates, auto follow-ups, live stats. Business plan only.', cta: 'Learn more' },
+          { module: 'crm', direction: 'out', desc: 'Drag-drop Kanban pipeline to close deals. Auto-created from email replies. Business plan only.', cta: 'Learn more' },
+          { module: 'formulaires', direction: 'out', desc: 'Form builder with native CRM + Campaigns bridges. Capture inbound leads. Business plan only.', cta: 'Learn more' },
         ],
       }}
       pricing={{
         label: 'In every plan. Starter is free, forever.',
-        subtext: 'Starter $0 (100/mo) - Solo $21 (1k) - Pro $55 (5k) - Business $110 (10k + Campaigns + CRM). 1-click cancel.',
+        subtext: 'Starter $0 (20 enrichments/mo) - Solo $21 (400) - Pro $55 (1,200) - Business $169 (10,000 + Campaigns + CRM + Forms). 1-click cancel.',
         cta: 'See full pricing',
         ctaHref: '/en/pricing',
       }}
       faq={FAQ}
       finalCta={{
-        title: 'Stop paying Apollo 5x too much.',
+        title: 'Stop overpaying for prospecting.',
         subtitle: '100 prospects free. No card. You keep everything you export. Forever.',
-        primary: { label: 'Start free', href: '/signup?plan=starter' },
+        primary: { label: 'Start free', href: '/signup?plan=free' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: 'No card - 1-click cancel - Built in France',
       }}

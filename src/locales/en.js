@@ -760,8 +760,8 @@ const en = {
       monthlyPrice: 'Monthly price',
       sevenSources: 'Multi-source',
       calcTitle: 'The math is simple',
-      calcDesc: 'Apollo costs EUR 99/month, Hunter EUR 49, Snov.io EUR 39 \u2014 and you must already have a prospect list. Volia Solo at <strong class="text-emerald-400">EUR 19/month</strong> does discovery + enrichment in one tool. Pro at <strong class="text-violet-400">EUR 49/month</strong> = 5x cheaper than Apollo Basic equivalent.<br /><span class="text-emerald-400 font-semibold">No hidden credits, cancel anytime.</span>',
-      savings: 'Save up to EUR 80/month (EUR 960/year) vs Apollo.',
+      calcDesc: 'Volia Solo at <strong class="text-emerald-400">EUR 19/month</strong> does discovery + enrichment in one tool \u2014 emails AND phone numbers. Pro at <strong class="text-violet-400">EUR 49/month</strong> adds email verification and mobile phone scraping. Business at <strong class="text-violet-400">EUR 149/month</strong> (launch promo, then EUR 179) unlocks Campaigns + CRM + Forms.<br /><span class="text-emerald-400 font-semibold">No hidden credits, cancel anytime.</span>',
+      savings: 'From EUR 19/month \u2014 the cheapest paid entry on the B2B market.',
     },
     // Pricing
     pricing: {
@@ -779,9 +779,9 @@ const en = {
       chooseSolo: 'Choose Solo',
       choosePro: 'Choose Pro',
       chooseBusiness: 'Choose Business',
-      vsHunter: '60% cheaper than Hunter',
-      vsSnov: 'Discovery + enrichment, unlike Snov',
-      vsApollo: '5x cheaper than Apollo Basic',
+      vsHunter: 'Includes phone scraping (Hunter doesn\'t)',
+      vsSnov: 'Discovery + enrichment in one tool',
+      vsApollo: 'Cheapest paid entry on the market',
       freeTagline: 'To get started',
       soloTagline: 'For freelancers and consultants',
       proTagline: 'For SMEs and agencies',

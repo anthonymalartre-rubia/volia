@@ -62,6 +62,10 @@ const NAV_ITEMS = [
     icon: Inbox,
     matches: (p) => p.startsWith('/app/crm/inbound'),
   },
+];
+
+// Configuration items — regroupés visuellement en bas de la sidebar
+const CONFIG_ITEMS = [
   {
     id: 'pipelines',
     label: 'Pipelines',
@@ -79,6 +83,87 @@ const NAV_ITEMS = [
     matches: (p) => p.startsWith('/app/crm/custom-fields'),
   },
 ];
+
+// ─── Helper de rendu d'un item nav (factorisé pour NAV_ITEMS + CONFIG_ITEMS) ─
+function renderNavItem(item, pathname, onClose) {
+  const isActive = item.matches(pathname);
+  const Icon = item.icon;
+  const isDisabled = item.soon;
+
+  const className = `
+    w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative
+    ${
+      isActive
+        ? 'bg-emerald-100/80 text-emerald-700 shadow-sm shadow-emerald-500/10'
+        : isDisabled
+        ? 'text-content-tertiary hover:bg-surface-card cursor-not-allowed opacity-70'
+        : 'text-content-tertiary hover:text-content-primary hover:bg-surface-card active:scale-[0.98]'
+    }
+  `;
+
+  const inner = (
+    <>
+      {isActive && (
+        <div className="absolute left-0 w-1 h-6 bg-emerald-600 rounded-r-full" />
+      )}
+      <div
+        className={`p-1.5 rounded-lg transition-colors ${
+          isActive ? 'bg-emerald-200/60' : 'bg-surface-card'
+        }`}
+      >
+        <Icon size={16} />
+      </div>
+      <div className="flex-1 text-left">
+        <div className="flex items-center gap-1.5">
+          <span>{item.label}</span>
+          {item.soon && (
+            <span className="text-[8px] font-bold uppercase tracking-wider px-1 py-px rounded bg-amber-100 text-amber-700 border border-amber-200">
+              Bientôt
+            </span>
+          )}
+        </div>
+        <div
+          className={`text-[10px] ${
+            isActive ? 'text-emerald-700/60' : 'text-content-faint'
+          }`}
+        >
+          {item.description}
+        </div>
+      </div>
+    </>
+  );
+
+  if (isDisabled) {
+    return (
+      <button
+        key={item.id}
+        type="button"
+        disabled
+        aria-disabled="true"
+        title="Disponible bientôt"
+        className={className}
+      >
+        {inner}
+      </button>
+    );
+  }
+
+  return (
+    <Link
+      key={item.id}
+      href={item.href}
+      aria-current={isActive ? 'page' : undefined}
+      onClick={() => {
+        if (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches) {
+          onClose?.();
+        }
+      }}
+      className={className}
+    >
+      {inner}
+    </Link>
+  );
+}
 
 export default function CrmSidebar({ isOpen, onClose }) {
   const pathname = usePathname() || '';
@@ -124,86 +209,20 @@ export default function CrmSidebar({ isOpen, onClose }) {
 
           {/* Navigation */}
           <nav className="space-y-1" role="navigation" aria-label="Navigation CRM">
-            {NAV_ITEMS.map((item) => {
-              const isActive = item.matches(pathname);
-              const Icon = item.icon;
-              const isDisabled = item.soon;
-
-              const className = `
-                w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative
-                ${
-                  isActive
-                    ? 'bg-emerald-100/80 text-emerald-700 shadow-sm shadow-emerald-500/10'
-                    : isDisabled
-                    ? 'text-content-tertiary hover:bg-surface-card cursor-not-allowed opacity-70'
-                    : 'text-content-tertiary hover:text-content-primary hover:bg-surface-card active:scale-[0.98]'
-                }
-              `;
-
-              const inner = (
-                <>
-                  {isActive && (
-                    <div className="absolute left-0 w-1 h-6 bg-emerald-600 rounded-r-full" />
-                  )}
-                  <div
-                    className={`p-1.5 rounded-lg transition-colors ${
-                      isActive ? 'bg-emerald-200/60' : 'bg-surface-card'
-                    }`}
-                  >
-                    <Icon size={16} />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <div className="flex items-center gap-1.5">
-                      <span>{item.label}</span>
-                      {item.soon && (
-                        <span className="text-[8px] font-bold uppercase tracking-wider px-1 py-px rounded bg-amber-100 text-amber-700 border border-amber-200">
-                          Bientôt
-                        </span>
-                      )}
-                    </div>
-                    <div
-                      className={`text-[10px] ${
-                        isActive ? 'text-emerald-700/60' : 'text-content-faint'
-                      }`}
-                    >
-                      {item.description}
-                    </div>
-                  </div>
-                </>
-              );
-
-              if (isDisabled) {
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    title="Disponible bientôt"
-                    className={className}
-                  >
-                    {inner}
-                  </button>
-                );
-              }
-
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  aria-current={isActive ? 'page' : undefined}
-                  onClick={() => {
-                    if (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches) {
-                      onClose?.();
-                    }
-                  }}
-                  className={className}
-                >
-                  {inner}
-                </Link>
-              );
-            })}
+            {NAV_ITEMS.map((item) => renderNavItem(item, pathname, onClose))}
           </nav>
+
+          {/* Configuration section (séparée visuellement) */}
+          <div className="mt-6 pt-4 border-t border-line">
+            <div className="px-3 mb-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-content-muted">
+                Configuration
+              </p>
+            </div>
+            <nav className="space-y-1" role="navigation" aria-label="Configuration CRM">
+              {CONFIG_ITEMS.map((item) => renderNavItem(item, pathname, onClose))}
+            </nav>
+          </div>
 
           {/* Bottom info card */}
           <div className="mt-auto">

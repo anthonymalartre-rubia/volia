@@ -42,12 +42,33 @@ const TYPE_ICONS = {
   hidden: EyeOff,
 };
 
-function DraggableFieldCard({ type, label, onClick }) {
+function DraggableFieldCard({ type, label, onClick, compact = false }) {
   const Icon = TYPE_ICONS[type] || Type;
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: `palette:${type}`,
     data: { source: 'palette', type },
   });
+
+  if (compact) {
+    return (
+      <button
+        ref={setNodeRef}
+        type="button"
+        onClick={onClick}
+        {...listeners}
+        {...attributes}
+        className={`group w-full flex items-center justify-center p-2.5 rounded-xl border border-line bg-surface-card hover:bg-surface-elevated hover:border-pink-200 transition-all ${
+          isDragging ? 'opacity-40' : ''
+        }`}
+        aria-label={`Ajouter un champ ${label}`}
+        title={label}
+      >
+        <div className="p-1.5 rounded-lg bg-pink-50 text-pink-600 group-hover:bg-pink-100 transition-colors">
+          <Icon size={14} />
+        </div>
+      </button>
+    );
+  }
 
   return (
     <button
@@ -71,17 +92,24 @@ function DraggableFieldCard({ type, label, onClick }) {
   );
 }
 
-export default function FieldsPanel({ onAddField }) {
+export default function FieldsPanel({ onAddField, compact = false }) {
   return (
-    <aside className="w-60 shrink-0 border-r border-line bg-surface-base/50 h-full overflow-y-auto p-4">
-      <div className="mb-3">
-        <p className="text-[10px] uppercase tracking-wider font-semibold text-content-muted">
-          Champs
-        </p>
-        <p className="mt-0.5 text-[11px] text-content-faint">
-          Glisse ou clique pour ajouter
-        </p>
-      </div>
+    <aside
+      className={`shrink-0 border-r border-line bg-surface-base/50 h-full overflow-y-auto ${
+        compact ? 'w-14 p-2' : 'w-60 p-4'
+      }`}
+      title={compact ? 'Palette de champs (compactée)' : undefined}
+    >
+      {!compact && (
+        <div className="mb-3">
+          <p className="text-[10px] uppercase tracking-wider font-semibold text-content-muted">
+            Champs
+          </p>
+          <p className="mt-0.5 text-[11px] text-content-faint">
+            Glisse ou clique pour ajouter
+          </p>
+        </div>
+      )}
       <div className="space-y-1.5">
         {FORM_FIELD_TYPES.map((ft) => (
           <DraggableFieldCard
@@ -89,6 +117,7 @@ export default function FieldsPanel({ onAddField }) {
             type={ft.type}
             label={ft.label}
             onClick={() => onAddField(ft.type)}
+            compact={compact}
           />
         ))}
       </div>

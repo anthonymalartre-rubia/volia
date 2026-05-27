@@ -29,11 +29,13 @@ import {
   Megaphone,
   Columns,
   Check,
+  Upload,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import ContactsList from '@/components/crm/ContactsList';
 import NewContactModal from '@/components/crm/NewContactModal';
+import ImportContactsModal from '@/components/crm/ImportContactsModal';
 import AddToCampagneModal from '@/components/crm/AddToCampagneModal';
 import { getSupabase } from '@/lib/supabase';
 import { ConfirmModal } from '@/components/ui';
@@ -69,6 +71,8 @@ export default function CrmContactsPage() {
 
   // ─── UI ───────────────────────────────────────────────────
   const [newContactOpen, setNewContactOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+  const [importToast, setImportToast] = useState('');
   const [deletingId, setDeletingId] = useState(null);
   // Modale de confirmation suppression (remplace confirm() natif)
   const [contactToDelete, setContactToDelete] = useState(null);
@@ -424,6 +428,18 @@ export default function CrmContactsPage() {
                   </div>
                 )}
 
+                {/* Quick win #6 CRM : import CSV */}
+                <button
+                  type="button"
+                  onClick={() => setImportOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium text-content-secondary border border-line bg-surface-card hover:bg-surface-elevated transition-colors whitespace-nowrap"
+                  title="Importer des contacts depuis un fichier CSV"
+                >
+                  <Upload size={13} />
+                  <span className="hidden sm:inline">Importer CSV</span>
+                  <span className="sm:hidden">CSV</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => setNewContactOpen(true)}
@@ -495,6 +511,23 @@ export default function CrmContactsPage() {
                   type="button"
                   onClick={() => setCampagneToast('')}
                   className="text-violet-500 hover:text-violet-700"
+                  aria-label="Fermer"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {importToast && (
+            <div className="px-4 sm:px-6 pt-3">
+              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700">
+                <Check size={14} className="flex-shrink-0 mt-0.5" />
+                <p className="text-xs font-medium flex-1">{importToast}</p>
+                <button
+                  type="button"
+                  onClick={() => setImportToast('')}
+                  className="text-emerald-500 hover:text-emerald-700"
                   aria-label="Fermer"
                 >
                   <X size={12} />
@@ -593,6 +626,23 @@ export default function CrmContactsPage() {
         open={newContactOpen}
         onClose={() => setNewContactOpen(false)}
         onCreated={handleContactCreated}
+      />
+
+      <ImportContactsModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={(data) => {
+          // Affiche le toast + re-fetch la liste pour refléter les nouveaux contacts
+          const created = data?.created || 0;
+          const skipped = data?.skipped || 0;
+          const parts = [`${created} contact${created > 1 ? 's' : ''} importé${created > 1 ? 's' : ''} ✓`];
+          if (skipped > 0) parts.push(`${skipped} doublon${skipped > 1 ? 's' : ''} ignoré${skipped > 1 ? 's' : ''}`);
+          setImportToast(parts.join(' · '));
+          setTimeout(() => setImportToast(''), 6000);
+          // Re-fetch depuis le début
+          setOffset(0);
+          fetchContacts({ append: false, currentOffset: 0 });
+        }}
       />
 
       <AddToCampagneModal

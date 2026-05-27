@@ -259,7 +259,7 @@ export default function NewDealModal({
               <option value="">— Sélectionner —</option>
               {stages.map((s) => (
                 <option key={s.id} value={s.id}>
-                  {s.name} ({s.probability}%)
+                  {s.name}
                 </option>
               ))}
             </select>

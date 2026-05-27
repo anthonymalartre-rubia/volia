@@ -39,6 +39,7 @@ import {
   Undo2,
   Redo2,
   Zap,
+  MoreHorizontal,
 } from 'lucide-react';
 import useFormBuilder from './useFormBuilder';
 import FieldsPanel from './FieldsPanel';
@@ -46,6 +47,8 @@ import Canvas from './Canvas';
 import FieldPropertiesPanel from './FieldPropertiesPanel';
 import JumpLogicDrawer from './JumpLogicDrawer';
 import LogicOverview from './LogicOverview';
+import SettingsDrawer from './SettingsDrawer';
+import PublishedModal from './PublishedModal';
 import { maybeShowAchievement } from '@/lib/use-achievement-toast';
 
 const AUTO_SAVE_DEBOUNCE = 1000; // 1s
@@ -59,25 +62,49 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
   const [saveError, setSaveError] = useState(null);
   const [publishLoading, setPublishLoading] = useState(false);
   const [publishError, setPublishError] = useState(null);
-  const [windowTooSmall, setWindowTooSmall] = useState(false);
+  // P1-7 — responsive : 'block' (<1024), 'compact' (1024-1279), 'full' (>=1280)
+  const [responsiveMode, setResponsiveMode] = useState('full');
   const [activeDragId, setActiveDragId] = useState(null);
   const [activeDragType, setActiveDragType] = useState(null);
   const [jumpDrawerPageId, setJumpDrawerPageId] = useState(null);
   const [logicOverviewOpen, setLogicOverviewOpen] = useState(false);
-  const [toast, setToast] = useState(null); // { msg, type }
+  const [toast, setToast] = useState(null); // { msg, type, action?: { label, onClick } }
+  // P1-5
+  const [settingsDrawerOpen, setSettingsDrawerOpen] = useState(false);
+  const [currentForm, setCurrentForm] = useState(initialForm);
+  // P1-6
+  const [publishedModalOpen, setPublishedModalOpen] = useState(false);
+  // Quick win #5 — menu dropdown topbar (mobile/tablette)
+  const [actionsMenuOpen, setActionsMenuOpen] = useState(false);
 
   const saveTimerRef = useRef(null);
+  const toastTimerRef = useRef(null);
   const lastSavedRef = useRef({ name: formName, schema: JSON.stringify(builder.schema) });
 
-  // Responsive guard
+  // Responsive guard (P1-7)
   useEffect(() => {
     function check() {
-      setWindowTooSmall(window.innerWidth < 1280);
+      const w = window.innerWidth;
+      if (w < 1024) setResponsiveMode('block');
+      else if (w < 1280) setResponsiveMode('compact');
+      else setResponsiveMode('full');
     }
     check();
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  // Fermeture menu dropdown au click extérieur
+  useEffect(() => {
+    if (!actionsMenuOpen) return;
+    function handler(e) {
+      if (!e.target.closest?.('[data-actions-menu]')) {
+        setActionsMenuOpen(false);
+      }
+    }
+    window.addEventListener('mousedown', handler);
+    return () => window.removeEventListener('mousedown', handler);
+  }, [actionsMenuOpen]);
 
   // ─── Auto-save ────────────────────────────────────────────────────
   const scheduleSave = (immediate = false) => {
@@ -165,12 +192,13 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         builder.redo();
         return;
       }
-      // Delete → delete selected field
+      // Delete → delete selected field + toast undo (Quick win #2)
       if ((e.key === 'Delete' || e.key === 'Backspace') && !inEditable) {
         if (builder.selectedFieldId) {
           const f = builder.schema.fields.find((x) => x.id === builder.selectedFieldId);
-          if (f && confirm(`Supprimer "${f.label}" ?`)) {
+          if (f) {
             builder.deleteField(builder.selectedFieldId);
+            showToastWithUndo(`Champ « ${f.label} » supprimé`);
           }
         }
       }
@@ -210,6 +238,10 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
       const newStatus = status === 'published' ? 'draft' : 'published';
       setStatus(newStatus);
       onPublishedChange?.(newStatus);
+      // P1-6 : ouvre la modale "Formulaire publié" uniquement quand on publie
+      if (newStatus === 'published') {
+        setPublishedModalOpen(true);
+      }
     } catch (e) {
       setPublishError(e.message);
     } finally {
@@ -229,8 +261,27 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
   }
 
   function showToast(msg, type = 'info') {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     setToast({ msg, type });
-    setTimeout(() => setToast(null), 2200);
+    toastTimerRef.current = setTimeout(() => setToast(null), 2200);
+  }
+
+  // Quick win #2 — toast avec bouton "Annuler" (5s)
+  function showToastWithUndo(msg, onUndo) {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    const undoHandler = onUndo || (() => builder.undo());
+    setToast({
+      msg,
+      type: 'undo',
+      action: {
+        label: 'Annuler',
+        onClick: () => {
+          undoHandler();
+          setToast(null);
+        },
+      },
+    });
+    toastTimerRef.current = setTimeout(() => setToast(null), 5000);
   }
 
   function handleDragEnd(event) {
@@ -313,7 +364,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
     [builder.schema.fields, builder.selectedFieldId]
   );
 
-  if (windowTooSmall) {
+  if (responsiveMode === 'block') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-base p-8">
         <div className="max-w-md text-center">
@@ -322,7 +373,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
           </div>
           <h2 className="text-lg font-semibold text-content-primary">Écran trop petit</h2>
           <p className="mt-2 text-sm text-content-tertiary">
-            Le builder de formulaires est optimisé pour les écrans de plus de 1280px.
+            Le builder de formulaires est optimisé pour les écrans de plus de 1024px (iPad Pro et plus).
             Utilise un écran plus grand ou bascule en mode aperçu pour tester ton formulaire sur mobile.
           </p>
           <Link
@@ -335,6 +386,8 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
       </div>
     );
   }
+
+  const isCompact = responsiveMode === 'compact';
 
   return (
     <div className="fixed inset-0 top-14 flex flex-col bg-surface-base">
@@ -431,27 +484,85 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         </div>
 
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setLogicOverviewOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
-            title="Vue d'ensemble de la logique"
-          >
-            <Zap size={12} /> Logique
-          </button>
-          <Link
-            href={`/admin/forms/${formId}/preview`}
-            target="_blank"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
-          >
-            <Eye size={12} /> Aperçu
-          </Link>
-          <Link
-            href={`/admin/forms/${formId}/settings`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
-          >
-            <Settings size={12} /> Réglages
-          </Link>
+          {/* Actions secondaires : pleines (xl+) ou repliées sous menu (1024-1279) — Quick win #5 */}
+          <div className="hidden xl:flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setLogicOverviewOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+              title="Vue d'ensemble de la logique"
+            >
+              <Zap size={12} /> Logique
+            </button>
+            <Link
+              href={`/admin/forms/${formId}/preview`}
+              target="_blank"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+            >
+              <Eye size={12} /> Aperçu
+            </Link>
+            <button
+              type="button"
+              onClick={() => setSettingsDrawerOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+              title="Réglages du formulaire"
+            >
+              <Settings size={12} /> Réglages
+            </button>
+          </div>
+
+          {/* Menu "···" en compact (Quick win #5) */}
+          <div className="xl:hidden relative" data-actions-menu>
+            <button
+              type="button"
+              onClick={() => setActionsMenuOpen((o) => !o)}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
+              aria-haspopup="menu"
+              aria-expanded={actionsMenuOpen}
+              aria-label="Actions"
+            >
+              <MoreHorizontal size={14} />
+            </button>
+            {actionsMenuOpen && (
+              <div
+                role="menu"
+                className="absolute right-0 mt-1 w-48 rounded-lg border border-line bg-surface-base shadow-lg z-30 py-1"
+              >
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setActionsMenuOpen(false);
+                    setLogicOverviewOpen(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs text-content-primary hover:bg-surface-card transition-colors"
+                >
+                  <Zap size={12} /> Logique
+                </button>
+                <Link
+                  href={`/admin/forms/${formId}/preview`}
+                  target="_blank"
+                  role="menuitem"
+                  onClick={() => setActionsMenuOpen(false)}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs text-content-primary hover:bg-surface-card transition-colors"
+                >
+                  <Eye size={12} /> Aperçu
+                </Link>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setActionsMenuOpen(false);
+                    setSettingsDrawerOpen(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs text-content-primary hover:bg-surface-card transition-colors"
+                >
+                  <Settings size={12} /> Réglages
+                </button>
+              </div>
+            )}
+          </div>
+
           <button
             type="button"
             onClick={handlePublish}
@@ -471,12 +582,12 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
           </button>
           {status === 'published' && (
             <Link
-              href={`/f/${initialForm.slug}`}
+              href={`/f/${currentForm?.slug || initialForm.slug}`}
               target="_blank"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 text-[11px] font-medium transition-colors"
-              title={`Voir /f/${initialForm.slug}`}
+              className="hidden md:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-pink-100 text-pink-700 hover:bg-pink-200 text-[11px] font-medium transition-colors"
+              title={`Voir /f/${currentForm?.slug || initialForm.slug}`}
             >
-              <ExternalLink size={11} /> /f/{initialForm.slug}
+              <ExternalLink size={11} /> /f/{currentForm?.slug || initialForm.slug}
             </Link>
           )}
         </div>
@@ -496,7 +607,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         onDragEnd={handleDragEnd}
       >
         <div className="flex-1 flex min-h-0">
-          <FieldsPanel onAddField={builder.addField} />
+          <FieldsPanel onAddField={builder.addField} compact={isCompact} />
           <Canvas
             formName={formName}
             formDescription={initialForm?.description}
@@ -505,12 +616,28 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
             fields={builder.fieldsOnCurrentPage}
             selectedFieldId={builder.selectedFieldId}
             onSelectField={builder.setSelectedFieldId}
-            onDeleteField={builder.deleteField}
+            onDeleteField={(id) => {
+              const f = builder.schema.fields.find((x) => x.id === id);
+              builder.deleteField(id);
+              showToastWithUndo(
+                f ? `Champ « ${f.label} » supprimé` : 'Champ supprimé'
+              );
+            }}
             onDuplicateField={builder.duplicateField}
             onSelectPage={builder.setCurrentPageId}
             onAddPage={() => builder.addPage()}
             onUpdatePage={builder.updatePage}
-            onDeletePage={builder.deletePage}
+            onDeletePage={(pageId) => {
+              const p = builder.schema.pages.find((x) => x.id === pageId);
+              const result = builder.deletePage(pageId);
+              if (result?.ok === false && result?.reason === 'last_page') {
+                showToast('Impossible de supprimer la dernière page', 'info');
+                return;
+              }
+              showToastWithUndo(
+                p ? `Page « ${p.title} » supprimée` : 'Page supprimée'
+              );
+            }}
             onOpenJumpLogic={(pageId) => setJumpDrawerPageId(pageId)}
           />
           <FieldPropertiesPanel
@@ -538,15 +665,28 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         </div>
       )}
 
-      {/* Toast info (cross-page move etc.) — F4 */}
+      {/* Toast info (cross-page move, undo, etc.) — F4 + Quick win #2 */}
       {toast && (
         <div
           role="status"
-          className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-2 px-3 py-2 rounded-lg text-white text-xs font-medium shadow-lg animate-in fade-in slide-in-from-bottom-2 ${
-            toast.type === 'success' ? 'bg-violet-600' : 'bg-zinc-800'
+          className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-50 inline-flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-white text-xs font-medium shadow-lg animate-in fade-in slide-in-from-bottom-2 ${
+            toast.type === 'success'
+              ? 'bg-violet-600'
+              : toast.type === 'undo'
+              ? 'bg-zinc-900 border border-zinc-700'
+              : 'bg-zinc-800'
           }`}
         >
-          {toast.msg}
+          <span>{toast.msg}</span>
+          {toast.action && (
+            <button
+              type="button"
+              onClick={toast.action.onClick}
+              className="text-pink-300 hover:text-pink-200 font-semibold uppercase tracking-wider text-[10px] transition-colors"
+            >
+              {toast.action.label}
+            </button>
+          )}
         </div>
       )}
 
@@ -565,6 +705,34 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         open={logicOverviewOpen}
         schema={builder.schema}
         onClose={() => setLogicOverviewOpen(false)}
+      />
+
+      {/* Settings drawer (P1-5) */}
+      <SettingsDrawer
+        open={settingsDrawerOpen}
+        formId={formId}
+        initialForm={currentForm}
+        onClose={() => setSettingsDrawerOpen(false)}
+        onChange={(updated) => {
+          if (updated) {
+            setCurrentForm((prev) => ({ ...(prev || {}), ...updated }));
+            if (updated.name && updated.name !== formName) {
+              setFormName(updated.name);
+              lastSavedRef.current = {
+                ...lastSavedRef.current,
+                name: updated.name,
+              };
+            }
+          }
+        }}
+      />
+
+      {/* Published modal (P1-6) */}
+      <PublishedModal
+        open={publishedModalOpen}
+        formId={formId}
+        slug={currentForm?.slug || initialForm?.slug}
+        onClose={() => setPublishedModalOpen(false)}
       />
     </div>
   );

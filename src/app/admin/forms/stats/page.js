@@ -101,16 +101,16 @@ export default function FormsStatsPage() {
           </p>
           <div className="mt-5 flex items-center justify-center gap-2">
             <Link
-              href="/admin/forms"
+              href="/admin/forms/templates"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white text-sm font-medium shadow-lg shadow-pink-500/20 transition-all"
             >
-              <Sparkles size={14} /> Créer un formulaire
+              <Sparkles size={14} /> Créer ton premier form
             </Link>
             <Link
-              href="/admin/forms/templates"
+              href="/admin/forms"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-card border border-line hover:border-pink-200 text-content-primary text-sm font-medium transition-all"
             >
-              Partir d&apos;un template
+              Voir mes formulaires
             </Link>
           </div>
         </div>

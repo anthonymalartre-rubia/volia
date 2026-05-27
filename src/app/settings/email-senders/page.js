@@ -588,7 +588,14 @@ export default function EmailSendersPage() {
                 Connectez un domaine (ex&nbsp;: <code className="font-mono text-xs">send.votre-marque.fr</code>),
                 ajoutez les records DNS fournis par Volia, et vos prospects
                 recevront vos emails depuis votre marque — pas la nôtre.
-                Cela maximise la délivrabilité (DKIM, SPF, DMARC alignés).
+              </p>
+              {/* QW4 — intro plain-french pour décoder les sigles DKIM/SPF/DMARC
+                  qui suivent dans la section DNS records. Le freelance 45 ans ne
+                  doit pas avoir à googler ces 3 acronymes pour comprendre. */}
+              <p className="text-xs text-content-tertiary mt-2 leading-relaxed">
+                Ces 3 records DNS (DKIM, SPF, DMARC) prouvent à Gmail/Outlook
+                que c&apos;est bien toi qui envoies — pas un spammer qui usurpe ton domaine.
+                Sans ça, tes mails finissent en spam.
               </p>
             </div>
           </div>

@@ -180,12 +180,12 @@ function PageTab({
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            if (confirm(`Supprimer "${page.title}" ? Les champs seront déplacés vers la 1ère page.`)) {
-              onDelete(page.id);
-            }
+            // Quick win #2 : suppression directe + toast undo (géré upstream)
+            onDelete(page.id);
           }}
           className="opacity-0 group-hover:opacity-100 text-content-faint hover:text-rose-600 transition-opacity"
           aria-label="Supprimer la page"
+          title="Supprimer cette page (les champs seront déplacés)"
         >
           <X size={11} />
         </button>

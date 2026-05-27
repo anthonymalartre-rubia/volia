@@ -290,7 +290,8 @@ export default function CampaignDetailPage() {
             label="Réponses (CRM)"
             value={repliesCrm}
             color="text-violet-400"
-            sub={`Trackées via inbound_events`}
+            // QW4 — plain french remplace le jargon technique "inbound_events"
+            sub="Réponses reçues à l'email"
           />
           <StatCard
             icon={<BarChart3 size={14} />}
@@ -304,7 +305,8 @@ export default function CampaignDetailPage() {
             label="Deals auto-créés"
             value={autoDealsCount}
             color="text-violet-400"
-            sub="Convertis vers CRM"
+            // QW4 — plain french : "Convertis vers CRM" trop sec et abstrait
+            sub="Ajoutés à ton CRM"
           />
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">

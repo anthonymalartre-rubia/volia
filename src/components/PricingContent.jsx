@@ -168,8 +168,8 @@ const PERSONAS = [
     color: 'from-indigo-600 to-blue-600',
     title: 'Je scale mon outbound',
     plan: 'business',
-    planLabel: 'Business · 99 €/mo',
-    description: '10 000 prospects + CRM intégré + API + onboarding perso pour piloter une équipe sales.',
+    planLabel: 'Business · 149 €/mo (promo) puis 179 €',
+    description: '10 000 prospects + multi-utilisateurs (équipes/RBAC) + volumes 10× + API + onboarding perso. Promo lancement : 149 €/mois la 1ʳᵉ année.',
   },
 ];
 
@@ -263,7 +263,7 @@ export default function PricingContent() {
 
   // Stack concurrents : total
   const competitorTotalMo = STACK_COMPETITORS.reduce((acc, c) => acc + c.price, 0);
-  const economyVsStack = competitorTotalMo - 99; // vs Business
+  const economyVsStack = competitorTotalMo - 49; // vs Pro — c'est le plan qui débloque déjà les 4 modules
 
   // Helper rendu cellule comparatif
   function renderCell(value) {
@@ -288,7 +288,7 @@ export default function PricingContent() {
               On a recodé Apollo + Lemlist<br />pour 19€/mois.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              <strong className="text-content-primary">0€</strong> pour tester. <strong className="text-content-primary">99€/mois</strong> pour tout (Prospection + Campagnes + CRM + Formulaires).
+              <strong className="text-content-primary">0€</strong> pour tester. <strong className="text-content-primary">49€/mois</strong> pour tout (Prospection + Campagnes + CRM + Formulaires).
               C&apos;est viable parce que vous payez.
             </p>
 
@@ -735,12 +735,12 @@ export default function PricingContent() {
                 <p className="text-[11px] text-content-tertiary mt-2">5 outils silotés · 5 abonnements · 5 logins</p>
               </div>
 
-              {/* Volia Business */}
+              {/* Volia Pro — c'est LE plan qui débloque la suite complète */}
               <div className="p-6 rounded-2xl border border-violet-300 bg-gradient-to-br from-violet-50 via-violet-50/40 to-indigo-50 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
                   <Crown size={14} className="text-violet-600" />
                   <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
-                    Volia Business
+                    Volia Pro
                   </p>
                 </div>
                 <div className="space-y-2.5 mb-4">
@@ -776,7 +776,7 @@ export default function PricingContent() {
                 <div className="border-t border-violet-200 pt-4 flex items-center justify-between">
                   <span className="text-sm font-semibold text-content-primary">Total mensuel</span>
                   <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                    99 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
+                    49 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
                   </span>
                 </div>
                 <p className="text-[11px] text-emerald-700 font-semibold mt-2">

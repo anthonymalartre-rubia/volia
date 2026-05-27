@@ -231,16 +231,13 @@ export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
                     <Icon size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
+                    {/* Badge LIVE retiré 27 mai 2026 (inutile : tous les
+                        modules sont LIVE, le badge n'apporte aucune info) */}
+                    <div className="mb-0.5">
                       <span
                         className={`text-sm font-semibold text-content-primary transition-colors ${styles.name}`}
                       >
                         {p.name}
-                      </span>
-                      <span
-                        className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-px rounded border ${p.badgeColor}`}
-                      >
-                        {p.badge}
                       </span>
                     </div>
                     <p className="text-xs text-content-tertiary leading-snug">

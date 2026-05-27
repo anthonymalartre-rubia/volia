@@ -24,11 +24,22 @@ function formatPrice(cents) {
 
 /**
  * Pricing card pour la landing.
- * Gère monthly/yearly + badge (Recommandé, Le moins cher) + highlighting.
+ * Pattern delta features ("Tout inclus dans X +") + Pro killer (encadré
+ * "Débloque la suite complète") + Business promo lancement (prix barré).
  */
+
+// Modules débloqués par plan (CRM + Campagnes + Formulaires).
+// Définit ici en local pour éviter de coupler LandingContent avec PricingContent.
+const LANDING_PLAN_MODULES = {
+  free:     { prospection: 'limitée', campagnes: false, crm: false, formulaires: false },
+  solo:     { prospection: true,      campagnes: false, crm: false, formulaires: false },
+  pro:      { prospection: true,      campagnes: true,  crm: true,  formulaires: 'pro' },
+  business: { prospection: true,      campagnes: true,  crm: true,  formulaires: true },
+};
+
 function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted, isYearly, t }) {
-  const price = isYearly ? plan.priceYearly : plan.price;
   const isFree = plan.price === 0;
+  const modules = LANDING_PLAN_MODULES[plan.id] || LANDING_PLAN_MODULES.free;
 
   // Badge colors mapping (Tailwind safe-list ne marche pas avec strings dynamiques)
   const badgeColors = {
@@ -36,8 +47,16 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
     emerald: 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-emerald-500/20',
   };
 
+  // ─── Gestion du prix : cas spécial Business avec promo ─────────────────
+  // Sur monthly avec promo : prix promo en gros + prix normal barré
+  // Sur yearly Business : displayPriceYearly (179×10=1690€/an)
+  // Sinon : comportement standard (price / priceYearly)
+  const isBusinessWithPromo = plan.id === 'business' && plan.promo;
+  const showBusinessPromoMonthly = isBusinessWithPromo && !isYearly;
+  const showBusinessYearly = plan.id === 'business' && isYearly && plan.displayPriceYearly;
+
   return (
-    <div className={`relative p-7 rounded-2xl backdrop-blur-sm ${
+    <div className={`relative p-7 rounded-2xl backdrop-blur-sm flex flex-col ${
       highlighted
         ? 'border border-violet-500/30 bg-gradient-to-b from-violet-50 via-violet-50/50 to-white'
         : 'border border-line bg-surface-card/80'
@@ -52,25 +71,62 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
       <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
       <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{tagline}</p>
 
-      <div className="flex items-baseline gap-1 mb-1">
-        <span className="text-4xl font-bold">{formatPrice(price)}<span className="text-2xl text-content-secondary">&euro;</span></span>
-        <span className="text-content-tertiary text-sm">{isYearly ? t('landing.pricing.perYear') : t('landing.pricing.perMonth')}</span>
-      </div>
-      {isYearly && !isFree && (
-        <p className="text-[11px] text-emerald-400 font-medium mb-5">
-          ~{Math.round(plan.priceYearly / 1200)}&euro;/mois en facturation annuelle
-        </p>
+      {/* PRIX — affichage conditionnel selon plan + period + promo */}
+      {showBusinessPromoMonthly ? (
+        <>
+          <div className="flex items-baseline gap-2 mb-1 flex-wrap">
+            <span className="text-4xl font-bold">
+              {formatPrice(plan.promo.displayPrice)}<span className="text-2xl text-content-secondary">&euro;</span>
+            </span>
+            <span className="text-content-tertiary text-sm">/mois</span>
+            <span className="text-lg text-content-muted line-through font-medium">
+              {formatPrice(plan.displayPrice)}&nbsp;&euro;
+            </span>
+          </div>
+          <p className="text-[11px] font-semibold text-emerald-700 mb-0.5">
+            🎉 {plan.promo.label}
+          </p>
+          <p className="text-[11px] text-content-tertiary mb-5">
+            {plan.promo.sublabel}
+          </p>
+        </>
+      ) : showBusinessYearly ? (
+        <>
+          <div className="flex items-baseline gap-1 mb-1">
+            <span className="text-4xl font-bold">
+              {formatPrice(plan.displayPriceYearly)}<span className="text-2xl text-content-secondary">&euro;</span>
+            </span>
+            <span className="text-content-tertiary text-sm">/an</span>
+          </div>
+          <p className="text-[11px] text-emerald-600 font-medium mb-5">
+            ~{Math.round(plan.displayPriceYearly / 1200)}&euro;/mois &middot; 2&nbsp;mois offerts
+          </p>
+        </>
+      ) : (
+        <>
+          <div className="flex items-baseline gap-1 mb-1">
+            <span className="text-4xl font-bold">
+              {formatPrice(isYearly ? plan.priceYearly : plan.price)}<span className="text-2xl text-content-secondary">&euro;</span>
+            </span>
+            <span className="text-content-tertiary text-sm">{isYearly ? t('landing.pricing.perYear') : t('landing.pricing.perMonth')}</span>
+          </div>
+          {isYearly && !isFree && (
+            <p className="text-[11px] text-emerald-600 font-medium mb-5">
+              ~{Math.round(plan.priceYearly / 1200)}&euro;/mois en facturation annuelle
+            </p>
+          )}
+          {!isYearly && !isFree && (
+            <p className="text-[11px] text-content-tertiary mb-5">
+              ou {formatPrice(plan.priceYearly)}&euro;/an ({t('landing.pricing.savePercent')})
+            </p>
+          )}
+          {isFree && <p className="text-[11px] text-content-tertiary mb-5">Sans carte bancaire</p>}
+        </>
       )}
-      {!isYearly && !isFree && (
-        <p className="text-[11px] text-content-tertiary mb-5">
-          ou {formatPrice(plan.priceYearly)}&euro;/an ({t('landing.pricing.savePercent')})
-        </p>
-      )}
-      {isFree && <p className="mb-5">&nbsp;</p>}
 
       <Link
         href={ctaHref}
-        className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-6 ${
+        className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-5 ${
           highlighted
             ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-500/20'
             : 'border border-line-hover hover:bg-surface-elevated text-content-secondary'
@@ -79,7 +135,55 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
         {cta}{highlighted ? ' →' : ''}
       </Link>
 
-      <div className="space-y-2.5">
+      {/* PRO KILLER — encadré violet "Débloque la suite complète".
+          C'est LE message qui doit déclencher l'upgrade Solo→Pro. */}
+      {plan.unlocksModules && (
+        <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
+          <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
+            <Star size={11} fill="currentColor" /> Débloque la suite complète
+          </p>
+          <p className="text-[11px] text-violet-700 leading-snug">
+            CRM &middot; Campagnes email &middot; Formulaires — tous inclus
+          </p>
+        </div>
+      )}
+
+      {/* MODULES BADGES — check/croix selon ce qui est inclus */}
+      <div className="flex flex-wrap gap-1.5 mb-4">
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+          modules.prospection === true ? 'bg-violet-100 text-violet-700'
+          : modules.prospection === 'limitée' ? 'bg-zinc-100 text-zinc-600'
+          : 'bg-zinc-50 text-content-muted'
+        }`}>
+          ✓ Prospection{modules.prospection === 'limitée' ? ' (limitée)' : ''}
+        </span>
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+          modules.campagnes ? 'bg-blue-100 text-blue-700' : 'bg-zinc-50 text-content-muted'
+        }`}>
+          {modules.campagnes ? '✓' : '✗'} Campagnes
+        </span>
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+          modules.crm ? 'bg-indigo-100 text-indigo-700' : 'bg-zinc-50 text-content-muted'
+        }`}>
+          {modules.crm ? '✓' : '✗'} CRM
+        </span>
+        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+          modules.formulaires ? 'bg-pink-100 text-pink-700' : 'bg-zinc-50 text-content-muted'
+        }`}>
+          {modules.formulaires ? '✓' : '✗'} Formulaires
+          {modules.formulaires === 'pro' ? ' (5)' : ''}
+        </span>
+      </div>
+
+      {/* "Tout inclus dans X +" intro avant les delta features.
+          Simplifie radicalement la lecture cross-plans. */}
+      {plan.inheritsFrom && PLANS[plan.inheritsFrom] && (
+        <p className="text-[11px] font-semibold text-content-secondary mb-3 pb-3 border-b border-line">
+          ✓ Tout inclus dans {PLANS[plan.inheritsFrom].name} +
+        </p>
+      )}
+
+      <div className="space-y-2.5 flex-1">
         {(Array.isArray(features) ? features : []).map((f) => (
           <div key={f} className="flex items-start gap-2">
             <Check size={15} className="text-violet-400 mt-0.5 flex-shrink-0" />
@@ -682,14 +786,14 @@ export default function LandingContent() {
 
                 <div className="pt-4 border-t border-emerald-200">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-semibold text-content-secondary">Total</span>
+                    <span className="text-sm font-semibold text-content-secondary">Total Volia Pro</span>
                     <div className="text-right">
-                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">99 €</span>
+                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">49 €</span>
                       <span className="text-content-tertiary text-sm">/mois</span>
                     </div>
                   </div>
                   <p className="text-xs text-emerald-700 font-semibold mt-2">
-                    ~170 €/mois dans la poche. ~2 000 €/an. Les 3 modules partagent les mêmes données, en direct.
+                    ~220 €/mois dans la poche. ~2 600 €/an. Les 4 modules partagent les mêmes données, en direct.
                   </p>
                 </div>
               </div>
@@ -700,10 +804,10 @@ export default function LandingContent() {
           <MotionInView delay={400}>
             <div className="mt-10 text-center">
               <Link
-                href="/signup?plan=business"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
+                href="/signup?plan=pro"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-violet-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
               >
-                Je prends Business à 99&nbsp;€/mois
+                Je prends Pro à 49&nbsp;€/mois
                 <ArrowRight size={16} />
               </Link>
               <p className="text-xs text-content-tertiary mt-3">14 jours pour changer d&apos;avis · Annulation en 1 clic, vraiment</p>
@@ -1508,38 +1612,50 @@ export default function LandingContent() {
 
           </div>
 
-          {/* Encart Business — seul plan avec les 3 modules complets */}
+          {/* Encart Pro — LE plan qui débloque la suite complète à prix mini.
+              Communication V3 : Pro 49€ est le plan-clé (vs Business 149€ qui
+              n'ajoute "que" du volume + équipes). On répète le killer message
+              de la card Pro pour qu'il soit impossible à manquer. */}
           <MotionInView delay={300}>
-            <div className="mt-10 p-6 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-violet-50/50 shadow-lg shadow-emerald-500/10">
+            <div className="mt-10 p-6 rounded-2xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 via-white to-indigo-50/50 shadow-lg shadow-violet-500/10">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-5 justify-between">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 via-blue-500 to-violet-500 flex items-center justify-center shadow-md flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-blue-500 flex items-center justify-center shadow-md flex-shrink-0">
                     <Layers size={22} className="text-white" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-1">Suite complète</div>
-                    <h3 className="text-lg font-bold text-content-primary mb-2">Le seul plan qui contient les 3 modules : Business à 99&nbsp;€/mois</h3>
+                    <div className="text-xs font-bold uppercase tracking-wider text-violet-700 mb-1">Le plan qui change tout</div>
+                    <h3 className="text-lg font-bold text-content-primary mb-2">
+                      Pro à 49&nbsp;€/mois débloque la suite complète. Sans surcoût caché.
+                    </h3>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                       <span className="inline-flex items-center gap-1.5 text-content-secondary">
                         <Check size={14} className="text-violet-600" />
-                        <span><strong className="text-violet-700">Prospection</strong> illimitée</span>
+                        <span><strong className="text-violet-700">Prospection</strong></span>
                       </span>
                       <span className="inline-flex items-center gap-1.5 text-content-secondary">
                         <Check size={14} className="text-blue-600" />
                         <span><strong className="text-blue-700">Campagnes</strong> email + warmup</span>
                       </span>
                       <span className="inline-flex items-center gap-1.5 text-content-secondary">
-                        <Check size={14} className="text-emerald-600" />
-                        <span><strong className="text-emerald-700">CRM</strong> pipeline natif</span>
+                        <Check size={14} className="text-indigo-600" />
+                        <span><strong className="text-indigo-700">CRM</strong> pipeline natif</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-content-secondary">
+                        <Check size={14} className="text-pink-600" />
+                        <span><strong className="text-pink-700">Formulaires</strong></span>
                       </span>
                     </div>
+                    <p className="text-xs text-content-tertiary mt-3">
+                      Business (149&nbsp;€/mois la 1ʳᵉ année puis 179&nbsp;€) ajoute &nbsp;: multi-utilisateurs (équipes/RBAC) + volumes 2-10× + API + onboarding perso + support prioritaire.
+                    </p>
                   </div>
                 </div>
                 <Link
-                  href={`/signup?plan=business&period=${pricingPeriod}`}
-                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold text-sm shadow-lg shadow-emerald-500/30 hover:shadow-xl transition-all"
+                  href={`/signup?plan=pro&period=${pricingPeriod}`}
+                  className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-violet-500/30 hover:shadow-xl transition-all"
                 >
-                  Choisir Business
+                  Choisir Pro
                   <ArrowRight size={14} />
                 </Link>
               </div>

@@ -19,63 +19,123 @@
 // on push() vers la destination finale (/dashboard par défaut, ou `next`
 // query param).
 //
-// Référence : https://supabase.com/docs/guides/auth/sessions#detecting-session
+// Refondu Sprint Brand 3 :
+//   - Au lieu d'un spinner + "Email confirmé !", on affiche une animation
+//     mémorable de welcome (mascotte + confetti + texte "Bienvenue dans
+//     Volia, [prénom]") pendant ~1.8s avant de rediriger.
+//   - L'animation joue UNIQUEMENT si le user n'a pas encore été welcomé
+//     (user_profiles.welcomed_at IS NULL). Sinon, redirect direct.
+//   - Erreurs (lien expiré) → fallback historique.
 // ─────────────────────────────────────────────────────────────────────
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getSupabase } from '@/lib/supabase';
+import ConfirmWelcome from '@/components/welcome/ConfirmWelcome';
+
+// Extrait un prénom propre depuis un user Supabase.
+// Priorité : user_metadata.full_name → user_metadata.name → email avant @.
+// Capitalize Title-Case sur le 1er mot uniquement.
+function extractFirstName(user) {
+  if (!user) return '';
+  const meta = user.user_metadata || {};
+  const fullName = meta.full_name || meta.name || meta.given_name || '';
+  if (fullName && typeof fullName === 'string') {
+    const first = fullName.trim().split(/\s+/)[0];
+    if (first) return capitalize(first);
+  }
+  // Fallback email : "anthony.malartre@volia.fr" → "Anthony"
+  if (user.email && typeof user.email === 'string') {
+    const local = user.email.split('@')[0] || '';
+    const first = local.split(/[._-]/)[0];
+    if (first) return capitalize(first);
+  }
+  return '';
+}
+
+function capitalize(s) {
+  if (!s) return '';
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
 
 export default function AuthConfirmPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState('processing'); // 'processing' | 'success' | 'error'
+  // 'processing' | 'welcome' | 'success' | 'error'
+  // - processing : on attend la session
+  // - welcome : on joue l'animation de welcome (1er email confirmé)
+  // - success : message court avant redirect (fallback / déjà welcomé)
+  // - error : lien expiré / invalide
+  const [status, setStatus] = useState('processing');
   const [errorMsg, setErrorMsg] = useState('');
+  const [firstName, setFirstName] = useState('');
 
   useEffect(() => {
     const supabase = getSupabase();
     if (!supabase) {
       setStatus('error');
       setErrorMsg('Configuration Supabase manquante.');
-      return;
+      return undefined;
     }
 
-    // supabase-js (createBrowserClient) détecte automatiquement le hash
-    // au moment du init (option detectSessionInUrl=true par défaut).
-    // On lui laisse le temps puis on lit la session.
-    //
-    // On utilise onAuthStateChange pour capter l'évènement INITIAL_SESSION
-    // ou SIGNED_IN qui suit la détection du hash. Plus fiable que getSession()
-    // dans une race condition.
     let timeoutId;
+    let redirected = false;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' || (event === 'INITIAL_SESSION' && session)) {
+    function doRedirect() {
+      if (redirected) return;
+      redirected = true;
+      const next = searchParams.get('next') || '/dashboard';
+      router.replace(next);
+    }
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event !== 'SIGNED_IN' && !(event === 'INITIAL_SESSION' && session)) {
+          return;
+        }
         clearTimeout(timeoutId);
         subscription?.unsubscribe();
 
-        // Trial Pro 14j : le trigger DB handle_new_user attribue déjà le
-        // trial au signup. On appelle /api/auth/trial-start pour envoyer
-        // l'email "Bienvenue + 14j Pro inclus" (fire & forget côté API,
-        // mais on await pour garantir que la requête est lancée avant
-        // que le navigateur change de page).
+        // Trial Pro 14j : trigger DB handle_new_user attribue déjà le trial
+        // au signup. /api/auth/trial-start envoie le welcome email (fire &
+        // forget côté API).
         try {
           await fetch('/api/auth/trial-start', { method: 'POST' });
         } catch {
           // Silent — ne bloque pas l'auth si l'email échoue
         }
 
-        // Destination par défaut : /dashboard. Override via ?next=...
-        const next = searchParams.get('next') || '/dashboard';
-        setStatus('success');
-        // Petit délai UX pour voir le "✓ Email confirmé" avant le redirect
-        setTimeout(() => router.replace(next), 600);
+        const user = session?.user;
+        setFirstName(extractFirstName(user));
+
+        // Si le user a déjà été welcomé (rare, ex: 2e clic sur lien),
+        // skip l'animation et redirect direct.
+        let alreadyWelcomed = false;
+        try {
+          const { data } = await supabase
+            .from('user_profiles')
+            .select('welcomed_at')
+            .eq('id', user.id)
+            .maybeSingle();
+          alreadyWelcomed = !!data?.welcomed_at;
+        } catch {
+          // Best-effort : si on n'arrive pas à check, on joue quand même
+          // l'animation (ce n'est pas grave de la voir 2x).
+        }
+
+        if (alreadyWelcomed) {
+          setStatus('success');
+          setTimeout(doRedirect, 600);
+        } else {
+          setStatus('welcome');
+          // doRedirect sera appelé par ConfirmWelcome via onComplete.
+        }
       }
-    });
+    );
 
     // Fallback : si après 5s pas de session, on assume que le hash était
-    // invalide / expiré / déjà consommé
+    // invalide / expiré / déjà consommé.
     timeoutId = setTimeout(async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -91,7 +151,13 @@ export default function AuthConfirmPage() {
       clearTimeout(timeoutId);
       subscription?.unsubscribe();
     };
-  }, [router, searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleWelcomeComplete() {
+    const next = searchParams.get('next') || '/dashboard';
+    router.replace(next);
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-6 bg-surface-base text-content-primary">
@@ -110,6 +176,10 @@ export default function AuthConfirmPage() {
               Vérification de votre email et création de votre session.
             </p>
           </>
+        )}
+
+        {status === 'welcome' && (
+          <ConfirmWelcome firstName={firstName} onComplete={handleWelcomeComplete} />
         )}
 
         {status === 'success' && (

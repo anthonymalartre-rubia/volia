@@ -79,7 +79,7 @@ export default function LogicOverview({ open, schema, onClose }) {
 
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
           {pages.length === 0 && (
-            <p className="text-xs text-content-tertiary italic">Aucune page.</p>
+            <p className="text-xs text-content-tertiary italic">Pas de page.</p>
           )}
 
           {pages.map((page) => {
@@ -126,7 +126,7 @@ export default function LogicOverview({ open, schema, onClose }) {
 
                 {pageFields.length === 0 ? (
                   <p className="ml-4 text-[11px] text-content-faint italic">
-                    Aucun champ sur cette page.
+                    Page vide.
                   </p>
                 ) : (
                   <ul className="ml-4 space-y-0.5">

@@ -153,7 +153,7 @@ export default function AdminPage() {
       });
       const result = await res.json();
       if (res.ok) {
-        showToast(result.message || 'Action effectuee', 'success');
+        showToast(result.message || 'OK.', 'success');
         // Send notification email via Resend when password is set
         if (action === 'set_password') {
           const targetUser = users.find(u => u.id === userId);
@@ -167,10 +167,10 @@ export default function AdminPage() {
         }
         await loadUsers();
       } else {
-        showToast(result.error || 'Erreur', 'error');
+        showToast(result.error || 'Ça plante.', 'error');
       }
     } catch (err) {
-      showToast('Erreur reseau', 'error');
+      showToast('Réseau cassé.', 'error');
     }
     setActionLoading(null);
     setConfirmDialog(null);
@@ -195,11 +195,11 @@ export default function AdminPage() {
     if (!dateStr) return 'Jamais';
     const diff = Date.now() - new Date(dateStr).getTime();
     const mins = Math.floor(diff / 60000);
-    if (mins < 60) return `Il y a ${mins}min`;
+    if (mins < 60) return `il y a ${mins}min`;
     const hours = Math.floor(mins / 60);
-    if (hours < 24) return `Il y a ${hours}h`;
+    if (hours < 24) return `il y a ${hours}h`;
     const days = Math.floor(hours / 24);
-    if (days < 30) return `Il y a ${days}j`;
+    if (days < 30) return `il y a ${days}j`;
     return formatDate(dateStr);
   }
 
@@ -286,7 +286,7 @@ export default function AdminPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={newPassword}
                     onChange={e => setNewPassword(e.target.value)}
-                    placeholder="Min. 6 caracteres"
+                    placeholder="6 caractères min"
                     className="w-full px-3 py-2 pr-10 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
                   />
                   <button
@@ -330,11 +330,11 @@ export default function AdminPage() {
               <ArrowLeft className="h-4 w-4 text-content-tertiary" />
             </button>
             <Shield className="h-5 w-5 text-violet-400" />
-            <h1 className="text-lg font-semibold">Administration</h1>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-500/20 text-violet-400">Admin</span>
+            <h1 className="text-lg font-semibold">Cockpit admin</h1>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-violet-500/20 text-violet-400">Anthony only</span>
           </div>
-          <button onClick={() => { loadUsers(); loadDashboardStats(); showToast('Donnees actualisees'); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-surface-elevated hover:bg-surface-active transition-colors">
-            <RefreshCw className="h-3.5 w-3.5" /> Actualiser
+          <button onClick={() => { loadUsers(); loadDashboardStats(); showToast('Données refresh.'); }} className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-surface-elevated hover:bg-surface-active transition-colors">
+            <RefreshCw className="h-3.5 w-3.5" /> Refresh
           </button>
         </div>
       </div>
@@ -366,13 +366,13 @@ export default function AdminPage() {
             href="/admin/leads"
             className="px-5 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary"
           >
-            <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> Leads ressources</span>
+            <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> Leads</span>
           </Link>
           <Link
             href="/admin/metrics"
             className="px-5 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary"
           >
-            <span className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Metrics business</span>
+            <span className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Metrics biz</span>
           </Link>
         </div>
       </div>
@@ -442,7 +442,7 @@ export default function AdminPage() {
                       <div className="p-1.5 rounded-lg bg-orange-500/20">
                         <Search className="h-4 w-4 text-orange-600" />
                       </div>
-                      <span className="text-xs text-content-tertiary">Recherches ce mois</span>
+                      <span className="text-xs text-content-tertiary">Recherches (mois)</span>
                     </div>
                     <div className="text-2xl font-bold">{dashboardStats.global.totalSearches}</div>
                   </div>
@@ -464,7 +464,7 @@ export default function AdminPage() {
                       <div className="p-1.5 rounded-lg bg-cyan-500/20">
                         <Download className="h-4 w-4 text-cyan-400" />
                       </div>
-                      <span className="text-xs text-content-tertiary">Exports ce mois</span>
+                      <span className="text-xs text-content-tertiary">Exports (mois)</span>
                     </div>
                     <div className="text-2xl font-bold">{dashboardStats.global.totalExports}</div>
                   </div>
@@ -476,7 +476,7 @@ export default function AdminPage() {
                   <div className="rounded-xl border border-line bg-surface-card p-5">
                     <div className="flex items-center gap-2 mb-4">
                       <Activity className="h-4 w-4 text-violet-400" />
-                      <h2 className="text-sm font-semibold">Sources d&apos;enrichissement</h2>
+                      <h2 className="text-sm font-semibold">Sources enrichissement</h2>
                     </div>
                     {(() => {
                       const sources = dashboardStats.enrichmentSources || {};
@@ -496,7 +496,7 @@ export default function AdminPage() {
                         unknown: 'bg-gray-500',
                       };
                       if (entries.length === 0) {
-                        return <p className="text-xs text-content-muted">Aucune donnee</p>;
+                        return <p className="text-xs text-content-muted">Vide pour ce mois.</p>;
                       }
                       return (
                         <div className="space-y-3">
@@ -523,7 +523,7 @@ export default function AdminPage() {
                   <div className="rounded-xl border border-line bg-surface-card p-5">
                     <div className="flex items-center gap-2 mb-4">
                       <TrendingUp className="h-4 w-4 text-violet-400" />
-                      <h2 className="text-sm font-semibold">Activite recente (6 mois)</h2>
+                      <h2 className="text-sm font-semibold">Activité (6 derniers mois)</h2>
                     </div>
                     {(() => {
                       const history = dashboardStats.usageHistory || {};
@@ -574,7 +574,7 @@ export default function AdminPage() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <DollarSign className="h-4 w-4 text-amber-600" />
-                      <h2 className="text-sm font-semibold">Couts API ce mois</h2>
+                      <h2 className="text-sm font-semibold">Coûts API ce mois</h2>
                     </div>
                     {dashboardStats.apiCosts && (
                       <span className="text-lg font-bold text-amber-600">
@@ -598,7 +598,7 @@ export default function AdminPage() {
                       millionverifier: { bar: 'bg-orange-500', text: 'MillionVerifier' },
                     };
                     if (entries.length === 0) {
-                      return <p className="text-xs text-content-muted">Aucun appel API enregistre ce mois. Les couts seront visibles apres la prochaine utilisation.</p>;
+                      return <p className="text-xs text-content-muted">Pas encore d&apos;appel API ce mois. Les couts s&apos;afficheront ici.</p>;
                     }
                     return (
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -627,7 +627,7 @@ export default function AdminPage() {
                         </div>
                         {/* Right: cost history (6 months) */}
                         <div>
-                          <h3 className="text-xs text-content-muted mb-3 font-medium">Historique couts (6 mois)</h3>
+                          <h3 className="text-xs text-content-muted mb-3 font-medium">Historique coûts (6 mois)</h3>
                           {(() => {
                             const costHistory = dashboardStats.apiCosts?.history || {};
                             const months = Object.keys(costHistory).sort();
@@ -661,10 +661,10 @@ export default function AdminPage() {
                 <div className="rounded-xl border border-line bg-surface-card overflow-hidden">
                   <div className="px-5 py-4 border-b border-line flex items-center gap-2">
                     <Crown className="h-4 w-4 text-amber-600" />
-                    <h2 className="text-sm font-semibold">Top 10 utilisateurs actifs ce mois</h2>
+                    <h2 className="text-sm font-semibold">Top 10 users actifs ce mois</h2>
                   </div>
                   {topUsers.length === 0 ? (
-                    <div className="p-8 text-center text-xs text-content-muted">Aucune activite ce mois</div>
+                    <div className="p-8 text-center text-xs text-content-muted">Personne d&apos;actif ce mois.</div>
                   ) : (
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs">
@@ -676,7 +676,7 @@ export default function AdminPage() {
                             <th className="text-right px-4 py-2.5 text-content-muted font-medium">Recherches</th>
                             <th className="text-right px-4 py-2.5 text-content-muted font-medium">Enrichissements</th>
                             <th className="text-right px-4 py-2.5 text-content-muted font-medium">Exports</th>
-                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Derniere connexion</th>
+                            <th className="text-right px-4 py-2.5 text-content-muted font-medium">Dernière connexion</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -720,7 +720,7 @@ export default function AdminPage() {
               </>
             ) : (
               <div className="rounded-xl border border-line bg-surface-card p-8 text-center text-xs text-content-muted">
-                Impossible de charger les statistiques
+                Stats injoignables.
               </div>
             )}
           </>
@@ -734,21 +734,21 @@ export default function AdminPage() {
               <div className="rounded-xl border border-line bg-surface-card p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Users className="h-4 w-4 text-violet-400" />
-                  <span className="text-xs text-content-tertiary">Utilisateurs</span>
+                  <span className="text-xs text-content-tertiary">Users</span>
                 </div>
                 <div className="text-2xl font-bold">{stats.totalUsers}</div>
               </div>
               <div className="rounded-xl border border-line bg-surface-card p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Mail className="h-4 w-4 text-violet-400" />
-                  <span className="text-xs text-content-tertiary">Total prospects</span>
+                  <span className="text-xs text-content-tertiary">Prospects (total)</span>
                 </div>
                 <div className="text-2xl font-bold">{stats.totalProspects}</div>
               </div>
               <div className="rounded-xl border border-line bg-surface-card p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <CreditCard className="h-4 w-4 text-violet-400" />
-                  <span className="text-xs text-content-tertiary">Utilisateurs Pro</span>
+                  <span className="text-xs text-content-tertiary">Users Pro</span>
                 </div>
                 <div className="text-2xl font-bold">{stats.proUsers}</div>
               </div>
@@ -760,7 +760,7 @@ export default function AdminPage() {
               <input
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Rechercher par email, ID ou plan..."
+                placeholder="Email, user ID ou plan..."
                 className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-card border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500"
               />
             </div>
@@ -792,7 +792,7 @@ export default function AdminPage() {
                           <span className="text-sm font-medium truncate">{u.email}</span>
                           {u.is_admin && <Crown className="h-3.5 w-3.5 text-amber-600 shrink-0" />}
                           {!isEmailConfirmed && (
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-orange-500/20 text-orange-600 shrink-0">Non confirme</span>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-medium bg-orange-500/20 text-orange-600 shrink-0">Non confirmé</span>
                           )}
                         </div>
                         <div className="flex items-center gap-3 mt-0.5">
@@ -838,11 +838,11 @@ export default function AdminPage() {
                             <div className="text-sm text-content-secondary">{formatDate(u.auth_created_at || u.created_at)}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Derniere connexion</div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Dernière connexion</div>
                             <div className="text-sm text-content-secondary">{u.last_sign_in_at ? timeAgo(u.last_sign_in_at) : 'Jamais'}</div>
                           </div>
                           <div>
-                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email confirme</div>
+                            <div className="text-[10px] uppercase tracking-wider text-content-muted mb-1">Email confirmé</div>
                             <div className="flex items-center gap-1.5">
                               {isEmailConfirmed
                                 ? <><UserCheck className="h-3.5 w-3.5 text-emerald-400" /><span className="text-sm text-emerald-400">Oui</span></>
@@ -997,8 +997,8 @@ export default function AdminPage() {
                           {/* Send password reset email */}
                           <button
                             onClick={() => setConfirmDialog({
-                              title: 'Reinitialiser le mot de passe',
-                              description: 'Un email de reinitialisation sera envoye a l\'utilisateur.',
+                              title: 'Reset password',
+                              description: 'Un email de reset va partir vers ce user.',
                               email: u.email,
                               danger: false,
                               onConfirm: () => adminAction('reset_password', u.id),
@@ -1006,14 +1006,14 @@ export default function AdminPage() {
                             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
                           >
                             <Mail className="h-3.5 w-3.5" />
-                            Envoyer reset email
+                            Envoyer reset
                           </button>
 
                           {/* Set password directly */}
                           <button
                             onClick={() => setConfirmDialog({
-                              title: 'Definir un mot de passe',
-                              description: 'Definir manuellement un nouveau mot de passe pour cet utilisateur.',
+                              title: 'Set password manuel',
+                              description: 'Force un nouveau mot de passe pour ce user.',
                               email: u.email,
                               showPasswordInput: true,
                               danger: false,
@@ -1022,14 +1022,14 @@ export default function AdminPage() {
                             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs bg-surface-elevated text-content-secondary hover:text-content-primary hover:bg-surface-active transition-colors"
                           >
                             <KeyRound className="h-3.5 w-3.5" />
-                            Definir mdp
+                            Set mdp
                           </button>
 
                           {/* Delete user */}
                           <button
                             onClick={() => setConfirmDialog({
-                              title: 'Supprimer l\'utilisateur',
-                              description: 'Cette action est irreversible. Tous les prospects, donnees d\'usage et le compte seront supprimes.',
+                              title: 'Supprimer ce user',
+                              description: 'Irréversible. Prospects, usage, compte — tout part.',
                               email: u.email,
                               danger: true,
                               onConfirm: () => adminAction('delete_user', u.id),
@@ -1048,7 +1048,7 @@ export default function AdminPage() {
 
               {filteredUsers.length === 0 && (
                 <div className="rounded-xl border border-line bg-surface-card p-8 text-center text-xs text-content-muted">
-                  Aucun utilisateur trouve
+                  Personne ne matche ta recherche.
                 </div>
               )}
             </div>

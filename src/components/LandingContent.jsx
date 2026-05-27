@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, Brain, TrendingDown, Database, X, Globe, BarChart3, Sparkles, FormInput, Rocket } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, TrendingDown, X, Sparkles, FormInput, Rocket } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
@@ -246,7 +246,6 @@ export default function LandingContent() {
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <ProductsMenu label="Produits" locale="fr" />
-            <Link href="#features" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.features')}</Link>
             <Link href="/pricing" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.pricing')}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">Blog</Link>
             <Link href="#faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
@@ -1333,106 +1332,13 @@ export default function LandingContent() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          FEATURES — bento layout (1 featured big + 5 medium/small)
-          Pattern : variation de tailles = look moderne 2026
+          [Retiré 28 mai 2026] Section FEATURES (bento layout 6 cards
+          "Ce qu'on fait, pour 49 EUR/mois"). Le founder a jugé que les
+          features étaient déjà couvertes ailleurs (hero, /produits/*,
+          pricing comparison table) et que ce bloc allongeait la page
+          sans ajouter de valeur de conversion. Le lien nav #features
+          a aussi été retiré.
        */}
-      <section id="features" className="py-24 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-6xl mx-auto">
-          <MotionInView>
-            <div className="text-center mb-16">
-              <p className="text-sm font-semibold text-violet-600 mb-3">{t('landing.features.label')}</p>
-              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                {t('landing.features.title')}
-              </h2>
-              <p className="text-content-tertiary text-lg max-w-xl mx-auto">
-                {t('landing.features.desc')}
-              </p>
-            </div>
-          </MotionInView>
-
-          {(() => {
-            const features = [
-              {
-                icon: Layers, featured: true,
-                title: t('landing.features.waterfall'),
-                desc: t('landing.features.waterfallDesc'),
-                iconBg: 'from-violet-500 to-indigo-600',
-                cardBg: 'from-violet-50 via-indigo-50 to-white',
-                border: 'border-violet-200',
-              },
-              {
-                icon: Brain,
-                title: t('landing.features.ai'),
-                desc: t('landing.features.aiDesc'),
-                iconBg: 'from-indigo-500 to-blue-600',
-                cardBg: 'from-indigo-50 to-white',
-                border: 'border-indigo-200',
-              },
-              {
-                icon: BarChart3,
-                title: t('landing.features.scoring'),
-                desc: t('landing.features.scoringDesc'),
-                iconBg: 'from-blue-500 to-cyan-600',
-                cardBg: 'from-blue-50 to-white',
-                border: 'border-blue-200',
-              },
-              {
-                icon: Database,
-                title: t('landing.features.categories'),
-                desc: t('landing.features.categoriesDesc'),
-                iconBg: 'from-cyan-500 to-teal-600',
-                cardBg: 'from-cyan-50 to-white',
-                border: 'border-cyan-200',
-              },
-              {
-                icon: Globe,
-                title: t('landing.features.departments'),
-                desc: t('landing.features.departmentsDesc'),
-                iconBg: 'from-teal-500 to-emerald-600',
-                cardBg: 'from-teal-50 to-white',
-                border: 'border-teal-200',
-              },
-              {
-                icon: Download, wide: true,
-                title: t('landing.features.exportFeature'),
-                desc: t('landing.features.exportDesc'),
-                iconBg: 'from-emerald-500 to-green-600',
-                cardBg: 'from-emerald-50 to-white',
-                border: 'border-emerald-200',
-              },
-            ];
-            return (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {features.map((feature, i) => {
-                  const Icon = feature.icon;
-                  const isWide = feature.featured || feature.wide;
-                  return (
-                    <MotionInView
-                      key={feature.title}
-                      delay={i * 80}
-                      className={isWide ? 'lg:col-span-2' : ''}
-                    >
-                      <div className={`group h-full p-7 rounded-2xl border-2 ${feature.border} bg-gradient-to-br ${feature.cardBg} shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}>
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.iconBg} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                          <Icon size={22} className="text-white" />
-                        </div>
-                        <h3 className="font-bold text-lg mb-2 text-content-primary">{feature.title}</h3>
-                        <p className="text-sm text-content-secondary leading-relaxed">{feature.desc}</p>
-                        {feature.featured && (
-                          <div className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-violet-700">
-                            <Sparkles size={14} />
-                            La feature signature de Volia
-                          </div>
-                        )}
-                      </div>
-                    </MotionInView>
-                  );
-                })}
-              </div>
-            );
-          })()}
-        </div>
-      </section>
 
       {/* ──────────────────────────────────────────────────────────────
           HOW IT WORKS — steps avec gros numéros + ligne connectrice

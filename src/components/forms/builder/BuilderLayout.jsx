@@ -46,6 +46,7 @@ import Canvas from './Canvas';
 import FieldPropertiesPanel from './FieldPropertiesPanel';
 import JumpLogicDrawer from './JumpLogicDrawer';
 import LogicOverview from './LogicOverview';
+import { maybeShowAchievement } from '@/lib/use-achievement-toast';
 
 const AUTO_SAVE_DEBOUNCE = 1000; // 1s
 
@@ -203,6 +204,9 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         setPublishLoading(false);
         return;
       }
+      // Achievement toast (first_form_created) — best-effort, no-op si null.
+      // Ne s'affiche que pour le premier publish réussi (idempotent côté DB).
+      maybeShowAchievement(json);
       const newStatus = status === 'published' ? 'draft' : 'published';
       setStatus(newStatus);
       onPublishedChange?.(newStatus);

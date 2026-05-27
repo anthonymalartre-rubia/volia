@@ -11,6 +11,7 @@ import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { trackOnboardingStep } from '@/lib/onboarding';
 import { detectTimezone, getNextSendWindow } from '@/lib/timezone-detector';
+import { unlockAchievement } from '@/lib/achievements';
 
 export async function POST(request, { params }) {
   const auth = await requireCampagnesAccess();
@@ -25,7 +26,7 @@ export async function POST(request, { params }) {
   // on doit calculer un scheduled_for par destinataire.
   const { data: campaign } = await supabase
     .from('email_campaigns')
-    .select('id, list_id, status, smart_scheduling')
+    .select('id, name, list_id, status, smart_scheduling')
     .eq('id', id)
     .eq('owner_id', user.id)
     .maybeSingle();
@@ -111,8 +112,26 @@ export async function POST(request, { params }) {
   if (upErr) return NextResponse.json({ error: upErr.message }, { status: 500 });
 
   // Onboarding : marque first_campaign (fire-and-forget)
+  let achievement = null;
   if (totalQueued > 0) {
     trackOnboardingStep(user.id, 'first_campaign');
+
+    // Achievement : first_campaign_sent (best-effort)
+    try {
+      const ach = await unlockAchievement(
+        user.id,
+        'first_campaign_sent',
+        {
+          campaign_id: id,
+          campaign_name: campaign.name,
+          recipient_count: totalQueued,
+        },
+        { markToastShown: true } // toast affiché live côté page campaign send
+      );
+      if (ach?.newly_unlocked) achievement = ach.achievement;
+    } catch (err) {
+      console.warn('[achievement] unlock failed:', err.message);
+    }
   }
 
   let message;
@@ -130,5 +149,6 @@ export async function POST(request, { params }) {
     status: newStatus,
     smart_scheduling: !!campaign.smart_scheduling,
     message,
+    achievement,
   });
 }

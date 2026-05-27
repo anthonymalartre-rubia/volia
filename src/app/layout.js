@@ -3,6 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/lib/theme';
 import { I18nProvider } from '@/lib/i18n';
 import CookieConsent from '@/components/CookieConsent';
+import AchievementToast from '@/components/welcome/AchievementToast';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -171,6 +172,11 @@ export default function RootLayout({ children }) {
               {children}
             </div>
             <CookieConsent />
+            {/* Toast global achievement (Brand Sprint 3) — monté une seule
+                fois ici, à l'écoute de l'event `volia:achievement`. Les
+                callers utilisent `showAchievementToast()` du helper
+                @/lib/use-achievement-toast. */}
+            <AchievementToast />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

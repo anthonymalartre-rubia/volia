@@ -3,6 +3,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { trackApiCall } from '@/lib/apiCosts';
 import { trackOnboardingStep } from '@/lib/onboarding';
+import { unlockAchievement } from '@/lib/achievements';
 
 export async function GET() {
   // Health check — just checks if API key is set
@@ -114,12 +115,26 @@ export async function POST(request) {
     // Comptage par prospect ramené (et non plus par appel API).
     // Un appel Google Places peut retourner jusqu'à 20 résultats : on
     // facture la valeur (les prospects obtenus), pas l'API call.
+    let achievement = null;
     if (places.length > 0) {
       await incrementUsage(supabase, user.id, 'searches', places.length);
       // Onboarding : marque first_search (fire-and-forget)
       trackOnboardingStep(user.id, 'first_search');
+
+      // Achievement : first_search (best-effort, ne JAMAIS bloquer la réponse)
+      try {
+        const ach = await unlockAchievement(
+          user.id,
+          'first_search',
+          { first_query: query, first_dept: dept },
+          { markToastShown: true } // toast affiché live côté dashboard
+        );
+        if (ach?.newly_unlocked) achievement = ach.achievement;
+      } catch (err) {
+        console.warn('[achievement] unlock failed:', err.message);
+      }
     }
-    return Response.json({ places });
+    return Response.json({ places, achievement });
   } catch (error) {
     console.error('Places API route error:', error);
     return Response.json(

@@ -22,6 +22,7 @@ import { parseCampaignReplyAddress, parseSequenceReplyAddress, isInboundDomain }
 import { parsePeerEmailAddress } from '@/lib/warmup-peer';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { reportError } from '@/lib/errorReporting';
+import { unlockAchievement } from '@/lib/achievements';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -443,6 +444,19 @@ async function handleInbound(request) {
         received_at: new Date().toISOString(),
       },
     }).catch(() => {});
+
+    // Achievement : first_reply_received (best-effort, unlock côté DB).
+    // Le toast s'affichera lorsque l'utilisateur reviendra sur son dashboard
+    // (pull async via /api/me/achievements ou similaire). Pas de toast direct
+    // ici : c'est un webhook serveur, pas un fetch utilisateur.
+    try {
+      await unlockAchievement(ownerId, 'first_reply_received', {
+        from_email: from,
+        subject: subject || null,
+      });
+    } catch (err) {
+      console.warn('[achievement] unlock failed:', err.message);
+    }
   }
 
   // Marque l'event comme traité (best-effort, pas bloquant pour la réponse).

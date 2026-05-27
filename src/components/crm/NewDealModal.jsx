@@ -164,6 +164,12 @@ export default function NewDealModal({
         return;
       }
 
+      // Achievement toast (first_crm_deal) — best-effort, no-op si null
+      try {
+        const { maybeShowAchievement } = await import('@/lib/use-achievement-toast');
+        maybeShowAchievement(dData);
+      } catch {}
+
       onCreated?.(dData.data);
       onClose?.();
     } catch (err) {

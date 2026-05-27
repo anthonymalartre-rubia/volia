@@ -82,13 +82,20 @@ export const ACHIEVEMENTS = {
  * @param {string} userId - UUID auth.users
  * @param {string} key - Clé du catalogue ACHIEVEMENTS
  * @param {object} [payload={}] - Données contextuelles (dept, deal_id…)
+ * @param {object} [options={}]
+ * @param {boolean} [options.markToastShown=false] - Si true, set
+ *   toast_shown_at = NOW() à l'insert. À passer quand le caller affiche
+ *   déjà le toast en live côté client (réponse JSON contenant `achievement`).
+ *   Les callers "silencieux" (webhooks, form submit public) doivent laisser
+ *   à false → toast_shown_at reste NULL → pickup par /api/achievements/unseen
+ *   au prochain login.
  * @returns {Promise<{newly_unlocked: boolean, achievement: object|null}>}
  *
  * Best-effort : ne throw jamais. Si erreur DB ou clé inconnue, retourne
  * { newly_unlocked: false, achievement: null } et log côté serveur. Les
  * achievements ne doivent JAMAIS bloquer la requête métier qui les déclenche.
  */
-export async function unlockAchievement(userId, key, payload = {}) {
+export async function unlockAchievement(userId, key, payload = {}, options = {}) {
   if (!userId || !key) {
     return { newly_unlocked: false, achievement: null };
   }
@@ -100,6 +107,8 @@ export async function unlockAchievement(userId, key, payload = {}) {
     return { newly_unlocked: false, achievement: null };
   }
 
+  const { markToastShown = false } = options || {};
+
   try {
     const supabase = getSupabaseAdmin();
 
@@ -107,16 +116,23 @@ export async function unlockAchievement(userId, key, payload = {}) {
     // .select() renvoie [] → newly_unlocked = false.
     // .upsert avec ignoreDuplicates ne renvoie pas la ligne en cas de conflit,
     // ce qui est exactement ce qu'on veut.
+    const insertRow = {
+      user_id: userId,
+      achievement_key: key,
+      payload: payload || {},
+    };
+    if (markToastShown) {
+      // Pose le timestamp dès l'insert → le puller au prochain login
+      // n'affichera PAS ce toast (déjà montré live). Évite le double-affichage.
+      insertRow.toast_shown_at = new Date().toISOString();
+    }
+
     const { data, error } = await supabase
       .from('user_achievements')
-      .upsert(
-        {
-          user_id: userId,
-          achievement_key: key,
-          payload: payload || {},
-        },
-        { onConflict: 'user_id,achievement_key', ignoreDuplicates: true }
-      )
+      .upsert(insertRow, {
+        onConflict: 'user_id,achievement_key',
+        ignoreDuplicates: true,
+      })
       .select('id, unlocked_at');
 
     if (error) {

@@ -12,6 +12,7 @@ import {
 import { getSupabase } from '@/lib/supabase';
 import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';
 import NoAdminScreen from '@/components/NoAdminScreen';
+import { maybeShowAchievement } from '@/lib/use-achievement-toast';
 
 const STATUS_META = {
   draft:     { label: 'Brouillon',  color: 'text-content-tertiary', bg: 'bg-content-tertiary/10', icon: <Clock size={12} /> },
@@ -123,6 +124,8 @@ export default function CampaignDetailPage() {
         setSubmitting(false);
         return;
       }
+      // Achievement toast (first_campaign_sent) — best-effort
+      maybeShowAchievement(data);
       // On ferme la modale AVANT le fetch pour éviter qu'un re-render
       // ne laisse le bouton actif (même si disabled) le temps que
       // fetchCampaign tourne.

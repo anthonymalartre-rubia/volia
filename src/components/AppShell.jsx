@@ -20,6 +20,11 @@ import { useEffect, useState } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import TopBar from '@/components/TopBar';
 import CrispChat from '@/components/CrispChat';
+// Brand Achievements Pull : récupère les achievements débloqués côté
+// serveur sans toast affiché (webhook resend.inbound, form public submit)
+// et les cascade au prochain login. Aucun rendu visuel — utilise l'event
+// bus de <AchievementToast /> monté dans le layout racine.
+import AchievementPuller from '@/components/welcome/AchievementPuller';
 
 export default function AppShell({ children }) {
   const [user, setUser] = useState(null);
@@ -73,6 +78,10 @@ export default function AppShell({ children }) {
       {children}
       {/* Live chat in-app (Crisp) — uniquement post-login + consentement marketing */}
       <CrispChat user={user} plan={plan} enabled={Boolean(user)} />
+      {/* Pull des achievements silencieux — uniquement post-login (sinon
+          la route /api/achievements/unseen retourne 401). On attend que le
+          user soit connu pour le mount. */}
+      {user ? <AchievementPuller /> : null}
     </div>
   );
 }

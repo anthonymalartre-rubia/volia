@@ -8,6 +8,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { validateFormSchema } from '@/lib/forms';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { cleanEnv } from '@/lib/envClean';
+import { unlockAchievement } from '@/lib/achievements';
 
 export async function POST(request, { params }) {
   const { user, supabase } = await getAuthenticatedUser();
@@ -77,5 +78,23 @@ export async function POST(request, { params }) {
     console.warn('[api/admin/forms/[id]/publish] webhook form.published failed', e.message);
   }
 
-  return NextResponse.json({ success: true, data });
+  // Achievement : first_form_created (best-effort)
+  let achievement = null;
+  try {
+    const ach = await unlockAchievement(
+      user.id,
+      'first_form_created',
+      {
+        form_id: data.id,
+        form_name: data.name,
+        slug: data.slug,
+      },
+      { markToastShown: true } // toast affiché live côté BuilderLayout publish
+    );
+    if (ach?.newly_unlocked) achievement = ach.achievement;
+  } catch (err) {
+    console.warn('[achievement] unlock failed:', err.message);
+  }
+
+  return NextResponse.json({ success: true, data, achievement });
 }

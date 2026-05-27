@@ -27,6 +27,7 @@ import { checkRateLimit } from '@/lib/rateLimit';
 import { sendEmail } from '@/lib/email';
 import { cleanEnv } from '@/lib/envClean';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
+import { unlockAchievement } from '@/lib/achievements';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -624,6 +625,20 @@ export async function POST(request, { params }) {
     } catch (e) {
       console.warn('[forms/submit] webhook form.bridge_succeeded failed', e.message);
     }
+  }
+
+  // ──── 11ter. Achievement : first_lead_via_form (best-effort) ────
+  // userId = owner du form (form.user_id), pas le visiteur public.
+  // Pas de toast direct ici (la réponse est rendue côté visiteur public,
+  // pas côté owner). L'achievement est juste persisté en DB.
+  try {
+    await unlockAchievement(form.user_id, 'first_lead_via_form', {
+      form_id: form.id,
+      form_name: form.name,
+      submission_id: responseId,
+    });
+  } catch (err) {
+    console.warn('[achievement] unlock failed:', err.message);
   }
 
   // ──── 12. Notification email admin (best-effort) ────

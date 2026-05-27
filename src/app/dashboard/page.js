@@ -19,6 +19,10 @@ const ReviewSolicitationBanner = lazy(() => import('@/components/ReviewSolicitat
 const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgroundDecor'));
 import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { maybeShowAchievement } from '@/lib/use-achievement-toast';
+// Pull achievements silencieux (webhook, form public) au mount dashboard.
+// Le dashboard n'utilise pas AppShell, on monte le puller ici directement.
+import AchievementPuller from '@/components/welcome/AchievementPuller';
 
 // Lazy load panels — only loaded when navigated to
 const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
@@ -685,6 +689,9 @@ export default function Dashboard() {
           setSearchProgress((prev) => addLog(prev, `API error (${response.status}): ${data.error || 'Unknown'}`));
           continue;
         }
+
+        // Achievement toast (first_search) — best-effort, no-op si pas d'achievement
+        maybeShowAchievement(data);
 
         const placesCount = data.places?.length || 0;
         setSearchProgress((prev) => addLog(prev, `→ ${placesCount} résultats trouvés`));
@@ -1375,6 +1382,10 @@ export default function Dashboard() {
         searchProgress={searchProgress}
         isSearching={isSearching}
       />
+
+      {/* Pull achievements silencieux — guard sur user pour ne pas fetcher
+          tant que la session n'est pas chargée (sinon 401 inutile). */}
+      {user ? <AchievementPuller /> : null}
 
       {/* OnboardingChecklist en barre top discrète (Linear-style) — sticky
           juste sous TopBar. Disparaît auto quand 100% complété. Dismissable

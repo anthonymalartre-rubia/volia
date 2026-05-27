@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Volia.fr — Trouvez l\'email de n\'importe quelle entreprise en France';
+export const alt = 'Volia.fr — Générateur email + téléphone B2B France (à partir de 19 €/mois)';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -93,10 +93,10 @@ export default function Image() {
             marginBottom: '24px',
           }}
         >
-          Trouvez l&apos;email de n&apos;importe quelle entreprise en France
+          Trouvez emails et téléphones B2B en 30 secondes
         </div>
 
-        {/* Subtitle */}
+        {/* Subtitle — aligné avec le pivot 80/20 (générateur lead B2B) */}
         <div
           style={{
             fontSize: '22px',
@@ -107,15 +107,15 @@ export default function Image() {
             marginBottom: '40px',
           }}
         >
-          Scraping intelligent + recherche Google. 150+ categories, 101 departements.
+          Le générateur de leads B2B français. 150+ categories, 101 departements.
         </div>
 
-        {/* Stats badges */}
+        {/* Stats badges — focus lead gen (email + téléphone scrappés) */}
         <div style={{ display: 'flex', gap: '16px' }}>
           {[
-            { label: 'Scraping web', color: '#22c55e' },
-            { label: 'Recherche Google', color: '#eab308' },
-            { label: 'Scoring IA', color: '#a78bfa' },
+            { label: 'Email vérifié', color: '#22c55e' },
+            { label: 'Téléphone fixe + mobile', color: '#eab308' },
+            { label: 'Scoring confiance', color: '#a78bfa' },
           ].map((item) => (
             <div
               key={item.label}

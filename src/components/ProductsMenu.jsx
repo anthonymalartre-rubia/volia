@@ -34,7 +34,7 @@ const PRODUCTS_FR = [
   {
     slug: 'campagnes',
     name: 'Volia Campagnes',
-    description: 'Séquences email automatisées + warmup',
+    description: 'Séquences email + warmup — réservé plan Business',
     icon: Mail,
     accent: 'blue',
     badge: 'LIVE',
@@ -73,7 +73,7 @@ const PRODUCTS_EN = [
   {
     slug: 'campaigns',
     name: 'Volia Campaigns',
-    description: 'Automated email sequences + warmup',
+    description: 'Email sequences + warmup — Business plan only',
     icon: Mail,
     accent: 'blue',
     badge: 'LIVE',

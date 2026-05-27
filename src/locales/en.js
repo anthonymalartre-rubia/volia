@@ -640,17 +640,19 @@ const en = {
     },
     // Hero
     hero: {
-      badge: 'French B2B suite · 4 modules · €19/mo',
-      // Same client-centric pivot as the FR version.
-      title: 'Find your first 50 leads in 30 seconds.',
-      titleLine2: 'Ship your campaign in 5 minutes.',
-      subtitle: 'Volia: Prospecting + Campaigns + CRM + Forms. One app, one login, €19/mo to start. <strong class="text-content-primary">No credit card.</strong>',
+      // 80/20 repositioning (May 2026): lead generation first, modules as bonus.
+      badge: 'B2B email + phone generator · €19/mo',
+      title: 'Find B2B emails and phone numbers in 30 seconds.',
+      titleLine2: 'The French B2B lead generator.',
+      subtitle: '150+ B2B categories, 101 French departments, waterfall scraping — <strong class="text-content-primary">email + landline & mobile phone</strong>. Starting at <strong class="text-content-primary">€19/mo. No credit card.</strong>',
       price: '€19/mo to start. Cancel anytime, one click.',
       compare: 'Watch a demo',
       sourcesLabel: 'Integrated sources:',
-      trustStrip: '287,000+ companies in the database · 4 connected modules · Made in France · GDPR by default',
+      trustStrip: '287,000+ companies · email + phone scraped · Made in France · GDPR by default',
       ctaPrimary: 'Start for free',
       ctaSecondary: 'Watch a demo',
+      // Subtle mention of bonus modules for max plan
+      bonusBusiness: 'Business €149 bonus: Campaigns + CRM + Forms included.',
     },
     // Why aggregator
     why: {

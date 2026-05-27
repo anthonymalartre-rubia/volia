@@ -642,18 +642,22 @@ const fr = {
     },
     // Hero
     hero: {
-      badge: 'Suite B2B française · 4 modules · 19 €/mois',
-      // Nouvelle direction : on parle du résultat client, pas des concurrents.
-      title: 'Trouve tes 50 premiers prospects en 30 secondes.',
-      titleLine2: 'Lance ta campagne en 5 minutes.',
-      subtitle: 'Volia : Prospection + Campagnes + CRM + Formulaires. Une seule app, un seul login, 19 €/mois pour démarrer. <strong class="text-content-primary">Sans CB.</strong>',
+      // Repositioning 80/20 (mai 2026) : focus génération de leads en clair.
+      // Les 3 autres modules (Campagnes/CRM/Formulaires) sont du bonus
+      // Business 149 €, mentionné discrètement sous le hero — pas dans le H1.
+      badge: 'Générateur email + téléphone B2B · 19 €/mois',
+      title: 'Trouvez emails et téléphones B2B en 30 secondes.',
+      titleLine2: 'Le générateur de leads B2B français.',
+      subtitle: '150+ catégories, 101 départements, scraping cascade <strong class="text-content-primary">email + téléphone fixe & mobile</strong>. À partir de <strong class="text-content-primary">19 €/mois. Sans CB.</strong>',
       price: '19 €/mois pour démarrer. Annulation en 1 clic.',
       compare: 'Voir une démo',
       sourcesLabel: 'Sources intégrées :',
-      // Trust strip sous le hero
-      trustStrip: '287 000+ entreprises dans la base · 4 modules connectés · Made in France · RGPD by default',
+      // Trust strip sous le hero — focus lead gen, modules en bonus
+      trustStrip: '287 000+ entreprises · email + téléphone scrappés · Made in France · RGPD by default',
       ctaPrimary: 'Démarrer gratuitement',
       ctaSecondary: 'Voir une démo',
+      // Mention discrète des modules bonus pour le plan max
+      bonusBusiness: 'Bonus Business 149 € : Campagnes + CRM + Formulaires inclus.',
     },
     // Why aggregator
     why: {

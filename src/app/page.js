@@ -18,8 +18,8 @@ const trustpilotAggregateRating = trustpilotData
   : null;
 
 export const metadata = {
-  title: 'Volia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
-  description: 'Le ticket d\'entrée le moins cher du marché français. Découverte de prospects via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. À partir de 19 €/mois.',
+  title: 'Volia — Générateur email + téléphone B2B France (à partir de 19 €/mois)',
+  description: 'Le générateur de leads B2B français : trouvez les emails et téléphones (fixe & mobile) de 287 000+ entreprises. 150+ catégories, 101 départements, scraping cascade. À partir de 19 €/mois, sans CB.',
   alternates: {
     canonical: SITE_URL,
     languages: {
@@ -30,8 +30,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia — Prospection B2B France à partir de 19 €/mois',
-    description: 'Le moins cher du marché français. Découverte (Google Places) + enrichissement email automatique. 150+ catégories, 101 départements, scoring de confiance.',
+    title: 'Volia — Générateur email + téléphone B2B à partir de 19 €/mois',
+    description: 'Trouvez les emails et téléphones (fixe & mobile) de 287 000+ entreprises françaises. 150+ catégories B2B, 101 départements. Scraping cascade avec scoring de confiance.',
     url: SITE_URL,
     siteName: 'Volia',
     locale: 'fr_FR',
@@ -39,8 +39,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Volia — Prospection B2B automatisée',
-    description: 'À partir de 19 €/mois. Trouvez emails & entreprises en France. 150+ catégories, 101 départements.',
+    title: 'Volia — Générateur email + téléphone B2B',
+    description: 'Email + téléphone (fixe & mobile) de 287 000+ entreprises FR. 150+ catégories, 101 départements. À partir de 19 €/mois.',
   },
   robots: {
     index: true,

@@ -274,27 +274,38 @@ export default function LandingContent() {
 
             {/* ─── COLONNE GAUCHE : Copy ─── */}
             <div className="text-left animate-in fade-in slide-in-from-bottom-4 duration-700">
-              {/* Badge "Suite SaaS" — repositionne Volia comme plateforme, pas outil unique */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-blue-100 to-emerald-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
-                <Layers size={12} className="text-violet-600" />
-                <span className="text-violet-700 font-bold">SUITE B2B FRANÇAISE · 4 MODULES · 19 €/MOIS</span>
+              {/* Badge — repositioning 80/20 (mai 2026) : Volia = générateur
+                  email + téléphone B2B. Les 3 autres modules (Campagnes/CRM/
+                  Formulaires) sont du bonus Business 149 € → mentionnés en
+                  bas du hero, pas dans le badge. */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-indigo-100 to-violet-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
+                <Search size={12} className="text-violet-600" />
+                <span className="text-violet-700 font-bold">GÉNÉRATEUR EMAIL + TÉLÉPHONE B2B · 19 €/MOIS</span>
               </div>
 
-              {/* H1 — focus VALEUR CLIENT : verbes d'action + résultats concrets.
-                  C'est ce que TU obtiens, pas ce qu'ON construit. */}
+              {/* H1 — focus 80% lead gen. Le produit = générateur de contacts
+                  B2B (email + téléphone fixe & mobile). Pas de mention des
+                  modules secondaires ici. */}
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
-                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Trouve tes 50 premiers prospects</span>
+                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Trouvez emails et téléphones B2B</span>
                 <span className="text-content-primary"> en 30 secondes.</span>
                 <br />
-                <span className="text-content-primary">Lance ta campagne en 5 minutes.</span>
+                <span className="text-content-primary text-3xl sm:text-4xl lg:text-5xl">Le générateur de leads B2B français.</span>
               </h1>
 
-              {/* Sous-titre — valeur business : suite complète + prix accessible
-                  reformulé comme BÉNÉFICE (pas comme attaque concurrent). */}
-              <p className="text-lg sm:text-xl text-content-secondary mb-8 leading-relaxed max-w-xl">
-                Volia : <strong className="text-violet-700">Prospection</strong> + <strong className="text-blue-700">Campagnes</strong> + <strong className="text-emerald-700">CRM</strong> + <strong className="text-pink-700">Formulaires</strong>.
-                Une seule app, un seul login, <strong className="text-content-primary">19&nbsp;€/mois</strong> pour démarrer.
-                Sans CB.
+              {/* Sous-titre — valeur lead gen : volume + qualité contact +
+                  prix accessible. Aucune mention des modules secondaires. */}
+              <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-xl">
+                150+ catégories, 101 départements, scraping cascade <strong className="text-content-primary">email + téléphone fixe & mobile</strong>.
+                À partir de <strong className="text-content-primary">19&nbsp;€/mois. Sans CB.</strong>
+              </p>
+
+              {/* Mention discrète des bonus Business — 1 ligne, pas visuellement
+                  dominant. Le client achète d'abord du lead gen, découvre
+                  les modules secondaires quand il monte en gamme. */}
+              <p className="text-sm text-content-tertiary mb-8 italic flex items-start gap-1.5">
+                <Sparkles size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                <span><strong className="text-content-secondary not-italic">Bonus Business&nbsp;149&nbsp;€</strong> : Campagnes + CRM + Formulaires inclus.</span>
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
@@ -352,14 +363,14 @@ export default function LandingContent() {
                 </div>
               </div>
 
-              {/* Trust strip — 4 signaux factuels alignés au pivot focus-client */}
+              {/* Trust strip — 4 signaux factuels alignés au pivot 80/20 lead gen */}
               <div className="flex items-center gap-x-3 gap-y-1.5 text-xs text-content-tertiary flex-wrap">
                 <span className="inline-flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   287 000+ entreprises
                 </span>
                 <span>·</span>
-                <span>4 modules connectés</span>
+                <span>Email + téléphone scrappés</span>
                 <span>·</span>
                 <span>Made in France</span>
                 <span>·</span>
@@ -646,104 +657,136 @@ export default function LandingContent() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          LA SUITE VOLIA — 3 modules connectés (positioning hub)
+          VOLIA PROSPECTION (HERO PRODUCT) + 3 BONUS BUSINESS
           ─────────────────────────────────────────────────────────────
-          Repositionne Volia comme PLATEFORME multi-produits (vs juste
-          outil prospection). REMONTÉE juste après le widget try-live
-          pour que la promesse "suite complète" soit above-the-fold
-          du scroll #1. Pattern HubSpot/Attio. Chaque module a sa
-          couleur accent (violet/blue/emerald) + son statut LIVE/BETA/
-          SOON pour transparence.
+          Refonte mai 2026 — pivot 80/20 :
+          - 80% du focus : Prospection = générateur email + téléphone
+            (le produit principal, accessible dès 19€/mois)
+          - 20% du focus : Campagnes/CRM/Formulaires en bonus Business
+            149€ (3 cards plus petites, badge "Bonus Business uniquement")
+
+          Le but : éviter la dilution du message. Le client comprend
+          d'abord ce qu'il achète (lead gen), puis voit qu'il peut
+          aller plus loin avec Business.
        */}
       <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
         <div className="max-w-6xl mx-auto">
+
+          {/* ─── PRODUIT PHARE : VOLIA PROSPECTION (large card) ─── */}
           <MotionInView>
-            <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">La suite Volia</p>
+            <div className="text-center mb-12">
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Le produit</p>
               <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                4 modules. Ils se parlent vraiment.
+                Volia Prospection.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Vous trouvez vos prospects, vous les contactez, vous capturez les inbound, vous suivez vos deals.
-                Tout au même endroit. Made in France.
+                Le générateur de leads B2B le moins cher du marché français.
+                <strong className="text-content-secondary"> Email et téléphone</strong> de 287 000+ entreprises, scrappés en cascade.
               </p>
             </div>
           </MotionInView>
 
-          {/* 4 product cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-10">
+          <MotionInView delay={150}>
+            <Link
+              href="/produits/prospection"
+              className="group block mb-20 p-8 sm:p-10 rounded-3xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 via-white to-indigo-50/50 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+            >
+              <div className="grid lg:grid-cols-3 gap-8 items-center">
+                {/* Col gauche : icon + nom + status */}
+                <div className="lg:col-span-1">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                      <Search size={28} className="text-white" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-content-tertiary uppercase tracking-wider">Volia</div>
+                      <h3 className="text-2xl font-bold text-content-primary">Prospection</h3>
+                    </div>
+                  </div>
+                  <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border bg-emerald-100 text-emerald-700 border-emerald-300 mb-4">
+                    LIVE · Dès 19 €/mois
+                  </span>
+                  <p className="text-sm text-content-secondary leading-relaxed">
+                    Le cœur de Volia. Trouvez les <strong className="text-content-primary">emails et téléphones</strong> (fixe & mobile) de n&apos;importe quelle entreprise française.
+                  </p>
+                </div>
+
+                {/* Col centre-droite : bullets en 2 colonnes */}
+                <div className="lg:col-span-2 grid sm:grid-cols-2 gap-x-6 gap-y-3">
+                  {[
+                    'Email vérifié + scoring confiance',
+                    'Téléphone fixe & mobile scrappés',
+                    '150+ catégories B2B',
+                    '101 départements (France entière)',
+                    'Scraping cascade waterfall',
+                    'Export CSV + intégrations CRM',
+                  ].map((b) => (
+                    <div key={b} className="flex items-start gap-2 text-sm text-content-secondary">
+                      <Check size={16} className="flex-shrink-0 mt-0.5 text-violet-600" />
+                      <span>{b}</span>
+                    </div>
+                  ))}
+                  <div className="sm:col-span-2 mt-4 pt-4 border-t border-violet-200/60 inline-flex items-center gap-1.5 text-sm font-semibold text-violet-700 group-hover:gap-2 transition-all">
+                    Découvrir Volia Prospection
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </MotionInView>
+
+          {/* ─── 3 BONUS BUSINESS (cards plus petites + badge) ─── */}
+          <MotionInView>
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-800 text-xs font-bold uppercase tracking-wider mb-3">
+                <Sparkles size={12} />
+                <span>Bonus Business 149 €/mois</span>
+              </div>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold mb-3 text-content-primary">
+                3 modules de plus, inclus dans Business.
+              </h3>
+              <p className="text-content-tertiary text-base max-w-2xl mx-auto">
+                Une fois que tu as ta liste de leads, va plus loin : envoie les campagnes,
+                suis les deals, capture l&apos;inbound. <strong className="text-content-secondary">Tout inclus dans le plan Business</strong>, pas de surcoût.
+              </p>
+            </div>
+          </MotionInView>
+
+          {/* 3 small bonus cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               {
-                name: 'Prospection',
-                tagline: 'Trouvez les emails de toute entreprise française',
-                status: 'LIVE',
-                statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-300',
-                icon: Search,
-                color: 'violet',
-                bg: 'from-violet-50 via-white to-violet-50/50',
-                border: 'border-violet-300',
-                iconBg: 'from-violet-500 to-indigo-600',
-                bullets: [
-                  '150+ secteurs · 101 départements',
-                  'Scraping + recherche Google',
-                  'Scoring de confiance par lead',
-                ],
-                href: '/produits/prospection',
-                cta: 'Découvrir',
-              },
-              {
                 name: 'Campagnes',
-                tagline: 'Séquences email automatisées avec warmup intégré',
-                status: 'BETA',
-                statusColor: 'bg-blue-100 text-blue-700 border-blue-300',
+                tagline: 'Séquences email automatisées + warmup intégré',
                 icon: Mail,
                 color: 'blue',
-                bg: 'from-blue-50 via-white to-cyan-50/50',
-                border: 'border-blue-300',
+                bg: 'from-blue-50/70 via-white to-cyan-50/40',
+                border: 'border-blue-200',
                 iconBg: 'from-blue-500 to-cyan-600',
-                bullets: [
-                  'Email cold + relances auto',
-                  'Warmup domaine automatique',
-                  'Templates pré-écrits',
-                ],
                 href: '/produits/campagnes',
-                cta: 'Découvrir',
+                status: 'BETA',
               },
               {
                 name: 'CRM',
-                tagline: 'Pipeline et suivi commercial natif Volia',
-                status: 'BIENTÔT',
-                statusColor: 'bg-amber-100 text-amber-700 border-amber-300',
+                tagline: 'Pipeline Kanban + suivi deals natif Volia',
                 icon: Layers,
                 color: 'emerald',
-                bg: 'from-emerald-50 via-white to-teal-50/50',
-                border: 'border-emerald-300',
+                bg: 'from-emerald-50/70 via-white to-teal-50/40',
+                border: 'border-emerald-200',
                 iconBg: 'from-emerald-500 to-teal-600',
-                bullets: [
-                  'Contacts auto depuis Campagnes',
-                  'Pipeline Kanban deals',
-                  'Reporting closing rate',
-                ],
                 href: '/produits/crm',
-                cta: 'Rejoindre la beta',
+                status: 'BIENTÔT',
               },
               {
                 name: 'Formulaires',
                 tagline: 'Form builder avec bridges CRM + Campagnes natifs',
-                status: 'LIVE',
-                statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-300',
                 icon: FormInput,
                 color: 'pink',
-                bg: 'from-pink-50 via-white to-rose-50/50',
-                border: 'border-pink-300',
+                bg: 'from-pink-50/70 via-white to-rose-50/40',
+                border: 'border-pink-200',
                 iconBg: 'from-pink-500 to-rose-600',
-                bullets: [
-                  'Multi-step + logique conditionnelle',
-                  'Submissions → CRM / Campagnes auto',
-                  'RGPD by default · QR code · embed',
-                ],
                 href: '/produits/formulaires',
-                cta: 'Découvrir',
+                status: 'LIVE',
               },
             ].map((mod, i) => {
               const Icon = mod.icon;
@@ -751,57 +794,32 @@ export default function LandingContent() {
                 <MotionInView key={mod.name} delay={i * 120}>
                   <Link
                     href={mod.href}
-                    className={`group block h-full p-7 rounded-2xl border-2 ${mod.border} bg-gradient-to-br ${mod.bg} shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
+                    className={`group block h-full p-5 rounded-2xl border ${mod.border} bg-gradient-to-br ${mod.bg} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative`}
                   >
-                    {/* Header : icon + status badge */}
-                    <div className="flex items-center justify-between mb-5">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${mod.iconBg} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
-                        <Icon size={22} className="text-white" />
-                      </div>
-                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full border ${mod.statusColor}`}>
+                    {/* Badge "Business uniquement" en coin */}
+                    <span className="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300">
+                      Business
+                    </span>
+
+                    <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${mod.iconBg} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform mb-3`}>
+                      <Icon size={18} className="text-white" />
+                    </div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h4 className="text-base font-bold text-content-primary">Volia {mod.name}</h4>
+                      <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded text-${mod.color}-700 bg-${mod.color}-50 border border-${mod.color}-200`}>
                         {mod.status}
                       </span>
                     </div>
-
-                    {/* Module name */}
-                    <div className="text-xs text-content-tertiary uppercase tracking-wider mb-1">Volia</div>
-                    <h3 className="text-2xl font-bold text-content-primary mb-2">{mod.name}</h3>
-                    <p className="text-sm text-content-secondary mb-5 leading-relaxed">{mod.tagline}</p>
-
-                    {/* Bullets */}
-                    <ul className="space-y-2 mb-6">
-                      {mod.bullets.map((b) => (
-                        <li key={b} className="flex items-start gap-2 text-sm text-content-secondary">
-                          <Check size={14} className={`flex-shrink-0 mt-0.5 text-${mod.color}-600`} />
-                          <span>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* CTA pseudo-button */}
-                    <div className={`inline-flex items-center gap-1.5 text-sm font-semibold text-${mod.color}-700 group-hover:gap-2 transition-all`}>
-                      {mod.cta}
-                      <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    <p className="text-xs text-content-tertiary leading-relaxed mb-3">{mod.tagline}</p>
+                    <div className={`inline-flex items-center gap-1 text-xs font-semibold text-${mod.color}-700 group-hover:gap-1.5 transition-all`}>
+                      En savoir plus
+                      <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </Link>
                 </MotionInView>
               );
             })}
           </div>
-
-          {/* Data flow tagline */}
-          <MotionInView delay={400}>
-            <div className="text-center">
-              <div className="inline-flex items-center gap-3 px-5 py-3 rounded-full bg-white border border-line shadow-sm text-sm">
-                <span className="font-semibold text-violet-700">Prospects</span>
-                <ArrowRight size={14} className="text-content-tertiary" />
-                <span className="font-semibold text-blue-700">Campagnes</span>
-                <ArrowRight size={14} className="text-content-tertiary" />
-                <span className="font-semibold text-emerald-700">Deals</span>
-                <span className="ml-2 text-content-tertiary">Données partagées entre les 3 modules.</span>
-              </div>
-            </div>
-          </MotionInView>
         </div>
       </section>
 

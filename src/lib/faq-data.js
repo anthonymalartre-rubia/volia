@@ -30,7 +30,7 @@ export const FAQ_ITEMS = [
   {
     question: "Le plan gratuit, ça couvre quoi ?",
     answer:
-      "Starter = 100 prospects, 20 enrichissements, 5 exports par mois. Pour tester. À 1 000 prospects + 400 enrichissements, c'est Solo à 19€/mois — le moins cher du marché français. Pro à 49€ et Business à 99€ pour les gros volumes.",
+      "Starter = 100 prospects, 20 enrichissements, 5 exports par mois. Pour tester. À 1 000 prospects + 400 enrichissements, c'est Solo à 19€/mois — le moins cher du marché français. Pro à 49€ et Business à 149€ pour les gros volumes.",
   },
   {
     question: "Mes données sont en sécu ?",
@@ -50,7 +50,7 @@ export const FAQ_ITEMS = [
   {
     question: "Et vs HubSpot + Apollo + Lemlist en stack ?",
     answer:
-      "Stack classique B2B = HubSpot + Apollo + Lemlist + un email finder. Total : ~270€/mois. Volia c'est les 4 dans une app à 99€/mois (Business). Les données sont partagées en natif : un lead découvert en Prospection devient contact CRM dès qu'il répond à une campagne. Zéro export/import entre outils.",
+      "Stack classique B2B = HubSpot + Apollo + Lemlist + un email finder. Total : ~270€/mois. Volia c'est les 4 dans une app à 149€/mois (Business). Les données sont partagées en natif : un lead découvert en Prospection devient contact CRM dès qu'il répond à une campagne. Zéro export/import entre outils.",
   },
   {
     question: "Je peux prendre que la Prospection ?",

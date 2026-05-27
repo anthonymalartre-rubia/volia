@@ -271,7 +271,7 @@ const RECOMMENDATIONS = [
     icon: Layers,
     title: 'Stack outils minimaliste 2026 : Volia + 0',
     body:
-      "La tendance 2026 est à la consolidation. Stack \"old school\" (toujours dominante) : Apollo (data) + Lemlist (séquence) + Clay (enrichissement) + Smartlead (warm-up) + ChatGPT (copy) = 480 €/mois. Stack \"consolidée\" : Volia (data + waterfall + bientôt séquenceur) + Gmail/Outlook natif = 19-99 €/mois. Pour 90 % des PME FR, la stack consolidée suffit largement et permet de réinvestir 4 000 €/an en publicité ou en formation commerciale.",
+      "La tendance 2026 est à la consolidation. Stack \"old school\" (toujours dominante) : Apollo (data) + Lemlist (séquence) + Clay (enrichissement) + Smartlead (warm-up) + ChatGPT (copy) = 480 €/mois. Stack \"consolidée\" : Volia (data + waterfall + bientôt séquenceur) + Gmail/Outlook natif = 19-149 €/mois. Pour 90 % des PME FR, la stack consolidée suffit largement et permet de réinvestir 4 000 €/an en publicité ou en formation commerciale.",
   },
   {
     icon: Clock,

@@ -430,7 +430,7 @@ function GuestScreen() {
               <div>
                 <h2 className="text-2xl font-bold mb-3">Pourquoi c&apos;est rentable</h2>
                 <p className="text-sm text-content-secondary leading-relaxed mb-4">
-                  Volia coûte 19 à 99 €/mois. <strong className="text-content-primary">Chaque ami payant = 19 à 99 € économisés</strong> sur votre prochain renouvellement.
+                  Volia coûte 19 à 149 €/mois. <strong className="text-content-primary">Chaque ami payant = 19 à 149 € économisés</strong> sur votre prochain renouvellement.
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2 text-content-secondary"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Aucune limite de filleuls</li>

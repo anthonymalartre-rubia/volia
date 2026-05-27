@@ -72,7 +72,7 @@ export const COMPARATIFS = {
     chiffresCles: [
       { label: 'Prix d\'entrée', apollo: '49 $/mo (Basic)', volia: '19 €/mo (Solo)', voliaWins: true },
       { label: 'Prix Pro (5k contacts)', apollo: '99 $/mo (~92 €)', volia: '49 €/mo (Pro)', voliaWins: true },
-      { label: 'Prix scale (10k+)', apollo: '149 $/mo + emails illimités', volia: '99 €/mo (Business)', voliaWins: true },
+      { label: 'Prix scale (10k+)', apollo: '149 $/mo + emails illimités', volia: '149 €/mo (Business)', voliaWins: true },
       { label: 'Plan gratuit', apollo: '60 crédits/mois', volia: '100 prospects/mois', voliaWins: true },
       { label: 'Base de contacts', apollo: '220M (monde)', volia: '287k entreprises FR vérifiées', voliaWins: null },
       { label: 'Couverture PME France', apollo: '~40 %', volia: '78 % (#1 marché FR)', voliaWins: true },
@@ -185,8 +185,8 @@ export const COMPARATIFS = {
       {
         title: 'Vous êtes une startup avec une équipe sales 3 BDR',
         before: 'Apollo Custom (~250 €/mois mini contrat annuel) + Salesforce',
-        after: 'Volia Business 99 €/mois — 10k prospects + Campagnes + CRM (à venir)',
-        savings: '~150 €/mois + zéro engagement annuel',
+        after: 'Volia Business 149 €/mois — 10k prospects + Campagnes + CRM (à venir)',
+        savings: '~100 €/mois + zéro engagement annuel',
         verdict: 'Volia Business. Sauf si vous êtes 100 % sous Salesforce avec sync 2-way obligatoire (auquel cas Apollo reste plus mature).',
       },
     ],
@@ -252,7 +252,7 @@ export const COMPARATIFS = {
       { q: 'Puis-je migrer mes données d\'Apollo vers Volia ?', a: 'Oui, en moins de 2 h pour une base de 5k contacts. Apollo exporte en CSV (10k lignes/export sur Basic, illimité sur Pro+), Volia importe avec déduplication automatique. Les contacts importés ne consomment aucun crédit. Volia offre aussi une re-vérification SMTP gratuite des emails Apollo (souvent vieillis).' },
       { q: 'Apollo a-t-il un avantage où Volia est en retard ?', a: 'Oui — soyons honnêtes. Apollo gagne sur 3 axes : (1) intent data via Bombora (signaux d\'achat en temps réel), (2) téléphones mobiles directs sur 50M+ décideurs US, (3) intégration native Salesforce 2-way et extension Chrome ultra-mature. Si l\'un de ces 3 points est critique pour votre activité, gardez Apollo (ou utilisez les deux : Volia pour la France, Apollo pour l\'international enterprise).' },
       { q: 'Volia est-il aussi fiable qu\'Apollo (uptime, support) ?', a: 'Uptime Volia : 99,9 % sur les 12 derniers mois (page status publique : volia.fr/status). Hébergé sur Vercel EU (Frankfurt) + Supabase EU avec failover automatique. Support FR garanti < 24 h sur Pro/Business, vs Apollo qui répond en 8-12 h en anglais (fuseau PST). Sur la fiabilité technique, parité. Sur le support : Volia gagne.' },
-      { q: 'Quelle solution pour une grosse équipe (20+ users) ?', a: 'À partir de 20 sièges, Apollo Custom devient compétitif (négociation directe, intent data inclus). Volia Business à 99 €/mois inclut le multi-user (à venir) et l\'API beta — la version Volia Enterprise (à venir) ciblera ce segment. Notre recommandation actuelle : équipes < 15 → Volia Business ; équipes 20+ → Apollo Custom OU attendre Volia Enterprise (Q3 2026).' },
+      { q: 'Quelle solution pour une grosse équipe (20+ users) ?', a: 'À partir de 20 sièges, Apollo Custom devient compétitif (négociation directe, intent data inclus). Volia Business à 149 €/mois inclut le multi-user (à venir) et l\'API beta — la version Volia Enterprise (à venir) ciblera ce segment. Notre recommandation actuelle : équipes < 15 → Volia Business ; équipes 20+ → Apollo Custom OU attendre Volia Enterprise (Q3 2026).' },
       { q: 'Comparatif side-by-side : où Volia gagne clairement ?', a: 'Prix (-50 à -80 %), couverture France (78 % vs 40 %), recherche par catégorie + département FR, waterfall multi-sources (économie de crédits), conformité RGPD native, support français, hébergement EU, plan Starter gratuit généreux, intégration Zoho CRM + Brevo + Mailjet.' },
       { q: 'Apollo a-t-il une intégration que Volia n\'a pas ?', a: 'Oui : Salesforce 2-way sync (Volia exporte mais ne sync pas en temps réel), Outreach.io, Salesloft, et l\'extension Chrome native LinkedIn Sales Nav. Volia couvre HubSpot, Pipedrive, Zoho, Brevo, Mailjet, Zapier, Make — soit 90 % des besoins PME / mid-market FR.' },
       { q: 'Verdict final : pour quel profil chaque outil ?', a: 'Apollo : équipes B2B SaaS US/international 20+ sièges avec Salesforce au cœur, budget 1k €/mois+, besoin d\'intent data. Volia : freelances + PME + agences growth + startups FR jusqu\'à 15 sièges, budget < 200 €/mois, focus marché français/européen, conformité RGPD critique.' },
@@ -313,7 +313,7 @@ export const COMPARATIFS = {
     chiffresCles: [
       { label: 'Prix d\'entrée cadenceur', apollo: '59 €/mo (Email Starter)', volia: '49 €/mo (Pro, inclus)', voliaWins: true },
       { label: 'Prix Pro', apollo: '99 €/mo (Email Pro)', volia: '49 €/mo (Pro)', voliaWins: true },
-      { label: 'Prix Enterprise multicanal', apollo: '159 €/mo (Multichannel)', volia: '99 €/mo (Business)', voliaWins: true },
+      { label: 'Prix Enterprise multicanal', apollo: '159 €/mo (Multichannel)', volia: '149 €/mo (Business)', voliaWins: true },
       { label: 'Plan gratuit', apollo: '14 j trial', volia: '100 prospects/mois à vie', voliaWins: true },
       { label: 'Découverte de prospects incluse', apollo: '❌ (outil séparé)', volia: '✓ inclus', voliaWins: true },
       { label: 'Enrichissement email inclus', apollo: '❌ (Hunter en + : +49 $)', volia: '✓ waterfall inclus', voliaWins: true },
@@ -413,7 +413,7 @@ export const COMPARATIFS = {
       },
       {
         title: 'Pricing : le calcul total qui compte vraiment',
-        body: "Lemlist Email Starter : 59 €/mo pour le cadenceur seul. Email Pro : 99 €/mo (+ Lemcal). Multichannel : 159 €/mo (+ LinkedIn). Ajoutez Hunter (49 $) ou Dropcontact (31 €) pour la découverte → coût réel 90 à 190 €/mo pour la stack complète. Volia Pro : 49 €/mo, prospection + Campagnes inclus, 5k prospects, cadenceur illimité. Volia Business : 99 €/mo, 10k prospects + Campagnes + CRM (à venir). Pour une agence growth 5 personnes : Lemlist Multichannel × 5 sièges ≈ 195 €/mo (et c'est par siège), Volia Pro 1 compte = 49 €/mo. L'écart est massif. Sauf cas spécifique (besoin Lemwarm absolu OU LinkedIn outreach hardcore), Volia gagne sur le total cost.",
+        body: "Lemlist Email Starter : 59 €/mo pour le cadenceur seul. Email Pro : 99 €/mo (+ Lemcal). Multichannel : 159 €/mo (+ LinkedIn). Ajoutez Hunter (49 $) ou Dropcontact (31 €) pour la découverte → coût réel 90 à 190 €/mo pour la stack complète. Volia Pro : 49 €/mo, prospection + Campagnes inclus, 5k prospects, cadenceur illimité. Volia Business : 149 €/mo, 10k prospects + Campagnes + CRM (à venir). Pour une agence growth 5 personnes : Lemlist Multichannel × 5 sièges ≈ 195 €/mo (et c'est par siège), Volia Pro 1 compte = 49 €/mo. L'écart est massif. Sauf cas spécifique (besoin Lemwarm absolu OU LinkedIn outreach hardcore), Volia gagne sur le total cost.",
       },
     ],
     personas: [
@@ -434,8 +434,8 @@ export const COMPARATIFS = {
       {
         title: 'Vous êtes une startup B2B SaaS avec 3 BDR',
         before: 'Lemlist Multichannel 159 €/mo × 3 sièges = 477 €/mo + Apollo (~150 €)',
-        after: 'Volia Business 99 €/mo — 10k prospects + Campagnes + CRM bientôt',
-        savings: '~525 €/mois (~6 300 €/an)',
+        after: 'Volia Business 149 €/mo — 10k prospects + Campagnes + CRM bientôt',
+        savings: '~475 €/mois (~5 700 €/an)',
         verdict: 'Volia Business. Si vous avez vraiment besoin du LinkedIn natif Lemlist (cible tech / SaaS), restez sur Lemlist Multichannel SEULEMENT pour ça, et utilisez Volia pour la prospection FR + emailing complémentaire.',
       },
     ],
@@ -505,13 +505,13 @@ export const COMPARATIFS = {
       metricLabel: 'soit 4 536 €/an d\'économies',
     },
     faq: [
-      { q: 'Volia est-il vraiment moins cher que Lemlist à fonctionnalités égales ?', a: 'Pour le cadenceur pur, Volia Pro (49 €/mo) inclut ce que Lemlist Email Starter (59 €/mo) propose, plus la prospection et l\'enrichissement. Pour le Multichannel (LinkedIn + email), Lemlist à 159 €/mo bat Volia à 99 €/mo SI vous avez vraiment besoin du LinkedIn natif. Pour les agences (par compte vs par siège), l\'écart explose en faveur de Volia : 49 €/mo Volia Pro 1 compte vs 495 €/mo Lemlist 5 sièges Email Pro.' },
+      { q: 'Volia est-il vraiment moins cher que Lemlist à fonctionnalités égales ?', a: 'Pour le cadenceur pur, Volia Pro (49 €/mo) inclut ce que Lemlist Email Starter (59 €/mo) propose, plus la prospection et l\'enrichissement. Pour le Multichannel (LinkedIn + email), Lemlist à 159 €/mo bat Volia à 149 €/mo SI vous avez vraiment besoin du LinkedIn natif. Pour les agences (par compte vs par siège), l\'écart explose en faveur de Volia : 49 €/mo Volia Pro 1 compte vs 495 €/mo Lemlist 5 sièges Email Pro.' },
       { q: 'Quelle est la principale faiblesse de Lemlist vs Volia ?', a: 'L\'absence totale de découverte de prospects et d\'enrichissement intégré. Lemlist suppose que vous arrivez avec votre liste — vous devez donc payer en plus Hunter, Dropcontact ou Apollo. Pour une PME ou un freelance qui démarre, c\'est un coût et une complexité supplémentaires (multi-outils, multi-factures, mappings CSV manuels).' },
       { q: 'Volia a-t-il un essai gratuit aussi long que Lemlist ?', a: 'Volia propose un plan Starter gratuit à vie (100 prospects/mois, sans CB). Lemlist propose un free trial de 14 jours, puis force le passage payant. Sur la durée, Volia est plus généreux.' },
       { q: 'Puis-je migrer mes données de Lemlist vers Volia ?', a: 'Oui, en ~3 h pour une base de 5k contacts. Lemlist exporte contacts + campagnes en CSV (tous plans). Les séquences elles-mêmes ne s\'importent pas automatiquement (architectures différentes), vous les recréez dans l\'éditeur Volia Campagnes (compter ~60 min pour 5-10 séquences). Migration gratuite.' },
       { q: 'Lemlist a-t-il un avantage où Volia est en retard ?', a: 'Trois axes honnêtes : (1) Lemwarm — le warmup IP best-in-class, surtout critique sur domaines neufs ; (2) images dynamiques personnalisées niveau Lemlist (mockups screenshots auto) ; (3) module LinkedIn natif (visites + invitations + messages) dans le plan Multichannel.' },
       { q: 'Volia est-il aussi fiable que Lemlist (uptime, délivrabilité) ?', a: 'Uptime Volia : 99,9 % sur 12 mois (status public). Délivrabilité Volia Campagnes : 92-96 % d\'inbox placement sur domaines warm (vs ~95-98 % chez Lemlist mature). L\'écart se ferme à mesure que Volia Warm gagne en maturité. Côté support : parité, les deux en français < 24 h sur les plans payants.' },
-      { q: 'Quelle solution pour une grosse équipe (20+ users) ?', a: 'Lemlist devient prohibitif (159 €/mo × 20 sièges = 3 180 €/mo Multichannel). Volia Business 99 €/mo est par compte (limité par volume, pas par user — multi-user en version Business+ à venir). Pour 20+ users actifs en outbound : Volia Business actuellement, Volia Enterprise (Q3 2026) pour les workflows multi-user avancés.' },
+      { q: 'Quelle solution pour une grosse équipe (20+ users) ?', a: 'Lemlist devient prohibitif (159 €/mo × 20 sièges = 3 180 €/mo Multichannel). Volia Business 149 €/mo est par compte (limité par volume, pas par user — multi-user en version Business+ à venir). Pour 20+ users actifs en outbound : Volia Business actuellement, Volia Enterprise (Q3 2026) pour les workflows multi-user avancés.' },
       { q: 'Comparatif side-by-side : où Volia gagne clairement ?', a: 'Prix (-50 à -85 % selon profil), modèle par compte vs par siège (massif pour équipes), prospection intégrée (Lemlist 0), enrichissement waterfall (Lemlist 0), SMS outbound (Lemlist 0), plan gratuit généreux à vie, recherche par catégorie + département FR.' },
       { q: 'Lemlist a-t-il une intégration que Volia n\'a pas ?', a: 'Oui : LinkedIn outreach natif (Lemlist Multichannel), Aircall pour les call tasks, Lemcal (booking pages branded). Volia couvre HubSpot, Pipedrive, Zoho, Brevo, Mailjet, Zapier — soit le standard PME / mid-market FR.' },
       { q: 'Verdict final : pour quel profil chaque outil ?', a: 'Lemlist : équipes outbound pures déjà équipées d\'un enrichisseur séparé, besoin Lemwarm absolu (cold email à froid sur domaines neufs), prospection LinkedIn-first cible tech/SaaS, budget 100+ €/mo/siège accepté. Volia : freelances + PME + agences voulant 1 seul outil (prospection + cadence + bientôt CRM), facturation par compte, focus France/DOM-TOM, budget maîtrisé < 200 €/mo.' },
@@ -558,12 +558,12 @@ export const COMPARATIFS = {
     hero: {
       eyebrow: 'Comparatif détaillé 2026',
       h1: 'HubSpot Starter vs Volia : lequel choisir en 2026 ?',
-      subtitle: "HubSpot Starter facture 90 €/mois par utilisateur pour son Sales Hub — sans prospection ni cadenceur sérieux inclus. Volia propose la suite complète (prospection + campagnes + CRM bientôt) à 99 €/mo pour toute l'équipe. Économie typique : 200-400 €/mois pour une PME 5 personnes. Analyse approfondie.",
+      subtitle: "HubSpot Starter facture 90 €/mois par utilisateur pour son Sales Hub — sans prospection ni cadenceur sérieux inclus. Volia propose la suite complète (prospection + campagnes + CRM bientôt) à 149 €/mo pour toute l'équipe. Économie typique : 200-400 €/mois pour une PME 5 personnes. Analyse approfondie.",
       ctaPrimary: { label: 'Essayer Volia gratuitement', href: '/signup?plan=starter' },
       ctaSecondary: { label: 'Voir le tableau comparatif', href: '#comparatif-features' },
     },
     tldr: [
-      "HubSpot Starter est facturé par utilisateur : 90 €/mo/user pour Sales Hub Starter, 450 €/mo/user pour Pro. Volia est par compte : 99 €/mo pour toute l'équipe.",
+      "HubSpot Starter est facturé par utilisateur : 90 €/mo/user pour Sales Hub Starter, 450 €/mo/user pour Pro. Volia est par compte : 149 €/mo pour toute l'équipe.",
       "HubSpot est une suite complète et mature (CRM + Marketing + Sales + Service + CMS), mais coûte très cher en France pour les PME. Volia couvre 70 % des besoins PME à 20 % du prix.",
       "Killer feature manquante chez HubSpot Starter : pas de prospection intégrée (vous devez ajouter Apollo / Hunter), pas de cadenceur cold email avancé.",
       "HubSpot reste meilleur pour : marketing automation complexe (lead scoring multi-critères, parcours nurturing 30+ steps), CMS site web, équipes 50+ avec budget enterprise, écosystème intégré profond.",
@@ -573,7 +573,7 @@ export const COMPARATIFS = {
       { label: 'Prix CRM gratuit', apollo: '✓ Free CRM (limité)', volia: '✓ Starter gratuit', voliaWins: null },
       { label: 'Prix entry Sales', apollo: '20 €/mo/user (Sales Starter)', volia: '49 €/mo (Pro, toute équipe)', voliaWins: true },
       { label: 'Prix Pro', apollo: '90 €/mo/user (Sales Pro)', volia: '49 €/mo (Pro)', voliaWins: true },
-      { label: 'Prix Suite complète', apollo: '~1 200 €/mo (Pro 5 users)', volia: '99 €/mo (Business)', voliaWins: true },
+      { label: 'Prix Suite complète', apollo: '~1 200 €/mo (Pro 5 users)', volia: '149 €/mo (Business)', voliaWins: true },
       { label: 'Modèle facturation', apollo: 'Par utilisateur', volia: 'Par compte', voliaWins: true },
       { label: 'Prospection intégrée', apollo: '❌', volia: '✓ inclus', voliaWins: true },
       { label: 'Cadenceur cold email', apollo: 'partial (Sequences Pro+)', volia: '✓ Campagnes (Pro+)', voliaWins: true },
@@ -657,7 +657,7 @@ export const COMPARATIFS = {
     analyses: [
       {
         title: 'Le piège du "par utilisateur" : où HubSpot tue les PME',
-        body: "HubSpot facture par utilisateur — c'est la norme US, mais c'est destructeur pour le budget des PME françaises. Exemple concret : Sales Hub Starter à 20 €/mo/user paraît raisonnable, mais Sales Hub Pro (où les Sequences et l'automation deviennent utiles) est à 90 €/mo/user, avec un MINIMUM de 5 utilisateurs facturés. Soit 450 €/mois pour une équipe de 5 personnes, 900 €/mo pour 10 personnes. À cela s'ajoutent l'onboarding obligatoire (1 500-3 000 € one-time) et l'engagement annuel. Pour une PME française de 10 personnes, la facture HubSpot Pro annuelle dépasse facilement 12 000 € avec onboarding. Volia est par compte : 99 €/mo Business inclut toute l'équipe (limité par volume mensuel, pas par seat). Sur le même cas, l'économie annuelle atteint 11 000 € soit ~90 %.",
+        body: "HubSpot facture par utilisateur — c'est la norme US, mais c'est destructeur pour le budget des PME françaises. Exemple concret : Sales Hub Starter à 20 €/mo/user paraît raisonnable, mais Sales Hub Pro (où les Sequences et l'automation deviennent utiles) est à 90 €/mo/user, avec un MINIMUM de 5 utilisateurs facturés. Soit 450 €/mois pour une équipe de 5 personnes, 900 €/mo pour 10 personnes. À cela s'ajoutent l'onboarding obligatoire (1 500-3 000 € one-time) et l'engagement annuel. Pour une PME française de 10 personnes, la facture HubSpot Pro annuelle dépasse facilement 12 000 € avec onboarding. Volia est par compte : 149 €/mo Business inclut toute l'équipe (limité par volume mensuel, pas par seat). Sur le même cas, l'économie annuelle atteint 11 000 € soit ~90 %.",
       },
       {
         title: 'CRM/Pipeline : HubSpot mature, Volia en construction',
@@ -669,7 +669,7 @@ export const COMPARATIFS = {
       },
       {
         title: 'Suite complète : Volia couvre 70 % des besoins PME à 20 % du prix',
-        body: "HubSpot vend une suite complète : Sales Hub + Marketing Hub + Service Hub + CMS Hub + Operations Hub. C'est puissant mais coûteux : la suite Pro complète pour 10 users dépasse 1 500 €/mois en France. Volia se positionne différemment : un outil all-in-one PME (Prospection + Campagnes + CRM bientôt) pour 99 €/mo Business — toute l'équipe incluse. Sur le périmètre Sales (trouver des prospects + envoyer des séquences + suivre le pipeline), Volia couvre 90 % des besoins HubSpot. Sur le périmètre Marketing (inbound, nurturing, attribution), Volia couvre ~30 % et reste à compléter (Brevo, Plausible, etc.). Sur le Service (helpdesk), Volia n'a rien — utiliser Crisp ou Intercom Starter. Conclusion : pour une PME française dont 70 % de l'activité commerciale est outbound + un peu de marketing simple, Volia + 1-2 outils complémentaires couvre tout, à 20-30 % du prix HubSpot complet.",
+        body: "HubSpot vend une suite complète : Sales Hub + Marketing Hub + Service Hub + CMS Hub + Operations Hub. C'est puissant mais coûteux : la suite Pro complète pour 10 users dépasse 1 500 €/mois en France. Volia se positionne différemment : un outil all-in-one PME (Prospection + Campagnes + CRM bientôt) pour 149 €/mo Business — toute l'équipe incluse. Sur le périmètre Sales (trouver des prospects + envoyer des séquences + suivre le pipeline), Volia couvre 90 % des besoins HubSpot. Sur le périmètre Marketing (inbound, nurturing, attribution), Volia couvre ~30 % et reste à compléter (Brevo, Plausible, etc.). Sur le Service (helpdesk), Volia n'a rien — utiliser Crisp ou Intercom Starter. Conclusion : pour une PME française dont 70 % de l'activité commerciale est outbound + un peu de marketing simple, Volia + 1-2 outils complémentaires couvre tout, à 20-30 % du prix HubSpot complet.",
       },
       {
         title: 'Support et onboarding : le coût caché HubSpot',
@@ -687,15 +687,15 @@ export const COMPARATIFS = {
       {
         title: 'Vous êtes une PME 5 personnes (commerce, services B2B)',
         before: 'HubSpot Sales Pro 90 €/mo × 5 users = 450 €/mo + onboarding 2 000 € + engagement annuel',
-        after: 'Volia Pro 49 €/mo (toute équipe) OU Business 99 €/mo (+ CRM beta)',
+        after: 'Volia Pro 49 €/mo (toute équipe) OU Business 149 €/mo (+ CRM beta)',
         savings: '350 à 400 €/mois (~4 500 €/an) + zéro onboarding payant + zéro engagement',
         verdict: 'Volia Pro/Business. Si vous avez besoin d\'un CRM mature MAINTENANT, attendez Volia CRM Q3 2026 ou utilisez HubSpot CRM gratuit + Volia Pro pour le reste.',
       },
       {
         title: 'Vous êtes une startup avec une équipe sales 3 BDR + 2 AE',
         before: 'HubSpot Sales Pro 90 €/mo × 5 = 450 €/mo + Marketing Hub Starter 18 €/mo + Apollo 99 $/mo = ~560 €/mo',
-        after: 'Volia Business 99 €/mo + Brevo 25 €/mo pour newsletters = 124 €/mo',
-        savings: '~440 €/mois (~5 280 €/an)',
+        after: 'Volia Business 149 €/mo + Brevo 25 €/mo pour newsletters = 174 €/mo',
+        savings: '~390 €/mois (~4 680 €/an)',
         verdict: 'Volia Business + outils complémentaires légers. Sauf si votre stratégie repose lourdement sur l\'inbound marketing automation, auquel cas HubSpot Marketing Pro garde une avance.',
       },
     ],
@@ -720,7 +720,7 @@ export const COMPARATIFS = {
         {
           title: 'Créer votre compte Volia',
           time: '2 min',
-          desc: 'volia.fr/signup → Pro 49 €/mo (recommandé pour les PME ex-HubSpot) ou Business 99 €/mo si vous voulez CRM beta + multi-user. Mensuel d\'abord pendant la transition.',
+          desc: 'volia.fr/signup → Pro 49 €/mo (recommandé pour les PME ex-HubSpot) ou Business 149 €/mo si vous voulez CRM beta + multi-user. Mensuel d\'abord pendant la transition.',
         },
         {
           title: 'Importer contacts dans Volia',
@@ -756,12 +756,12 @@ export const COMPARATIFS = {
       ],
     },
     temoignage: {
-      quote: "On était sur HubSpot Sales Pro à 90 €/mo × 6 users = 540 €/mois. Plus l'engagement annuel + 2 800 € d'onboarding obligatoire. On a fait l'audit : on n'utilisait QUE le CRM basique + les sequences. On a migré sur Volia Business 99 €/mo + on garde HubSpot CRM Free en archive. Économie : 440 €/mois, soit 5 280 €/an. Plus 2 800 € d'onboarding évités sur le renouvellement. Le seul truc qu'on a perdu : les rapports d'attribution multi-touch — on s'en passe très bien.",
+      quote: "On était sur HubSpot Sales Pro à 90 €/mo × 6 users = 540 €/mois. Plus l'engagement annuel + 2 800 € d'onboarding obligatoire. On a fait l'audit : on n'utilisait QUE le CRM basique + les sequences. On a migré sur Volia Business 149 €/mo + on garde HubSpot CRM Free en archive. Économie : 391 €/mois, soit 4 692 €/an. Plus 2 800 € d'onboarding évités sur le renouvellement. Le seul truc qu'on a perdu : les rapports d'attribution multi-touch — on s'en passe très bien.",
       author: 'Camille Rousseau',
       role: 'Head of Sales, Startup B2B SaaS Paris',
       avatar: 'CR',
       avatarGradient: 'from-emerald-500 to-teal-600',
-      metric: '-440 €/mois',
+      metric: '-391 €/mois',
       metricLabel: '+ 2 800 € onboarding évités/an',
     },
     faq: [
@@ -771,7 +771,7 @@ export const COMPARATIFS = {
       { q: 'Puis-je migrer mes données de HubSpot vers Volia ?', a: 'Oui — comptez ~1 semaine pour une base 5k contacts + 10 workflows. HubSpot exporte contacts + deals + activités en CSV/API. Volia importe avec déduplication auto et mapping custom fields. Les workflows complexes ne se migrent pas auto (architectures différentes) — vous documentez et recréez (~2-3 h). Phase de double-run 1 mois recommandée.' },
       { q: 'HubSpot a-t-il un avantage où Volia est en retard ?', a: 'Oui, plusieurs axes honnêtes : (1) Marketing automation mature (workflows multi-critères, scoring, attribution multi-touch), (2) CMS Hub pour gérer le site web depuis HubSpot, (3) Marketplace de 1 700+ apps tierces, (4) HubSpot Academy (formations gratuites best-in-class), (5) écosystème de partenaires intégrateurs FR matures, (6) Service Hub pour le helpdesk.' },
       { q: 'Volia est-il aussi fiable que HubSpot (uptime, support) ?', a: 'Uptime Volia : 99,9 % sur 12 mois. HubSpot : 99,95 % (référence du marché). Très proche, parité quasi-totale. Support FR : Volia tous plans dès gratuit ; HubSpot uniquement sur Pro+ (à 90 €/mo/user). Avantage Volia sur l\'accessibilité du support.' },
-      { q: 'Quelle solution pour une grosse équipe (20+ users) ?', a: 'À ce niveau, HubSpot devient une décision stratégique : Sales Hub Enterprise (1 200 €/mo/user) + Marketing Hub Enterprise (3 600 €/mo) = 100 000-300 000 €/an. Volia Business 99 €/mo gère 20+ users en volume mais pas (encore) en multi-user fine-grained (roadmap Q3-Q4 2026 : Volia Enterprise). Pour 20+ users tout de suite avec workflows complexes : HubSpot reste le standard. Pour 20+ users en mode léger : Volia Business + attendre l\'évolution.' },
+      { q: 'Quelle solution pour une grosse équipe (20+ users) ?', a: 'À ce niveau, HubSpot devient une décision stratégique : Sales Hub Enterprise (1 200 €/mo/user) + Marketing Hub Enterprise (3 600 €/mo) = 100 000-300 000 €/an. Volia Business 149 €/mo gère 20+ users en volume mais pas (encore) en multi-user fine-grained (roadmap Q3-Q4 2026 : Volia Enterprise). Pour 20+ users tout de suite avec workflows complexes : HubSpot reste le standard. Pour 20+ users en mode léger : Volia Business + attendre l\'évolution.' },
       { q: 'Comparatif side-by-side : où Volia gagne clairement ?', a: 'Prix (-90 % typique), modèle par compte (massif vs par user HubSpot), prospection intégrée (HubSpot 0), zéro engagement annuel, zéro onboarding payant obligatoire, support FR tous plans, RGPD by-design (HubSpot data center EU uniquement Pro+).' },
       { q: 'HubSpot a-t-il une intégration que Volia n\'a pas ?', a: 'Beaucoup. HubSpot a 1 700+ apps au marketplace. Volia couvre 50+ via Zapier + connecteurs natifs (HubSpot, Pipedrive, Zoho, Brevo, Mailjet). Si vous dépendez d\'une intégration native spécifique (Salesforce 2-way, Aircall, Stripe billing), HubSpot peut être plus mature. Pour la majorité des PME : Zapier couvre tout.' },
       { q: 'Verdict final : pour quel profil chaque outil ?', a: 'HubSpot : scale-ups 20+ users avec budget enterprise (~10k €/mo+), stratégie inbound + marketing automation mature, besoin CMS + Service intégrés. Volia : PME 1-15 users (freelances, agences, startups B2B), focus outbound + suivi pipeline simple, budget maîtrisé < 200 €/mo, marché FR/EU prioritaire.' },

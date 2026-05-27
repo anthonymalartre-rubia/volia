@@ -381,7 +381,7 @@ export default function CrmAppPage() {
                 Passer en Business
               </h2>
               <p className="text-content-secondary text-sm sm:text-base mb-2">
-                <span className="text-3xl font-extrabold text-content-primary">99 €</span>
+                <span className="text-3xl font-extrabold text-content-primary">149 €</span>
                 <span className="text-content-tertiary"> /mois</span>
               </p>
               <p className="text-xs text-content-tertiary mb-6">

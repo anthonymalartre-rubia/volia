@@ -82,7 +82,7 @@ export default async function CategoryBePage({ params }) {
     },
     {
       question: `Quel est le prix pour prospecter en Belgique ?`,
-      answer: `À partir de 19 €/mois (1 000 prospects). Les plans Pro à 49 € (5 000) et Business à 99 € (10 000) couvrent tous les pays sans supplément.`,
+      answer: `À partir de 19 €/mois (1 000 prospects). Les plans Pro à 49 € (5 000) et Business à 149 € (10 000) couvrent tous les pays sans supplément.`,
     },
   ];
 

@@ -31,7 +31,7 @@ export default function CGVPage() {
         <div className="mb-6 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
           <p className="text-content-primary font-semibold mb-2">L&apos;essentiel pour les pressés</p>
           <ul className="list-disc pl-5 space-y-1.5">
-            <li>4 plans : Starter (gratuit) · Solo 19€ · Pro 49€ · Business 99€ par mois.</li>
+            <li>4 plans : Starter (gratuit) · Solo 19€ · Pro 49€ · Business 149€ par mois.</li>
             <li>Paiement par Stripe. Annulation en un clic depuis votre espace, à tout moment.</li>
             <li>Pas de remboursement au prorata, mais on étudie les cas particuliers.</li>
             <li>Vos données vous appartiennent. Vous les récupérez en CSV, on les supprime après 30 jours.</li>
@@ -240,7 +240,7 @@ export default function CGVPage() {
                     <td className="py-3 px-4 font-medium text-content-primary">
                       Business
                     </td>
-                    <td className="py-3 px-4">99 €</td>
+                    <td className="py-3 px-4">149 €</td>
                     <td className="py-3 px-4">10 000 prospects / mois</td>
                   </tr>
                 </tbody>

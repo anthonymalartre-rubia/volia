@@ -107,7 +107,7 @@ export default async function CategoryRegionPage({ params }) {
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} en ${region.name} ?`,
-      answer: `À partir de 19 €/mois (plan Solo : 1 000 prospects + 400 enrichissements), 49 €/mois (plan Pro : 5 000 + 2 000) ou 99 €/mois (plan Business : 10 000 + 4 000). Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
+      answer: `À partir de 19 €/mois (plan Solo : 1 000 prospects + 400 enrichissements), 49 €/mois (plan Pro : 5 000 + 2 000) ou 149 €/mois (plan Business : 10 000 + 10 000). Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
     },
   ];
 

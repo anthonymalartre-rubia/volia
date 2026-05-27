@@ -497,7 +497,7 @@ const HOW_IT_WORKS = [
 const FAQ = [
   {
     q: 'Combien de formulaires puis-je créer ?',
-    a: 'Free : 0 (upsell). Solo (19 €/mo) : 1 formulaire, 100 submissions/mois. Pro (49 €/mo) : 5 formulaires, 1 000 submissions/mois. Business (99 €/mo) : illimité. Les submissions sont comptabilisées sur le mois en cours, pas en cumulé à vie.',
+    a: 'Free : 0 (upsell). Solo (19 €/mo) : 1 formulaire, 100 submissions/mois. Pro (49 €/mo) : 5 formulaires, 1 000 submissions/mois. Business (149 €/mo) : illimité. Les submissions sont comptabilisées sur le mois en cours, pas en cumulé à vie.',
   },
   {
     q: 'Comment fonctionnent les bridges natifs vers le CRM et les Campagnes ?',
@@ -604,7 +604,7 @@ export default function FormulairesProductPage() {
         }}
         pricingBanner={<TrustBadgesSection />}
         pricing={{
-          label: 'Inclus dans Solo (19 €), Pro (49 €) et Business (99 €)',
+          label: 'Inclus dans Solo (19 €), Pro (49 €) et Business (149 €)',
           subtext: 'Solo = 1 formulaire / 100 submissions/mois. Pro = 5 formulaires / 1 000 submissions/mois. Business = illimité. Pas d\'add-on, annulation 1 clic.',
           cta: 'Voir le détail des plans',
           ctaHref: '/pricing',

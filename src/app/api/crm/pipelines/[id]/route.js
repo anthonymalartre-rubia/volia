@@ -10,7 +10,7 @@ import { checkCrmAccess, getOrCreateDefaultPipeline, PIPELINE_COLORS } from '@/l
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 99€/mois' },
+    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
     { status: 403 }
   );
 }

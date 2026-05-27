@@ -134,7 +134,7 @@ export async function POST(request) {
         }
 
         // ─── Multi-utilisateurs : auto-create team si plan Business ──
-        // Justifie la marche tarifaire 49→99€ : l'owner peut inviter
+        // Justifie la marche tarifaire 49→149€ : l'owner peut inviter
         // jusqu'à N teammates (quota partagé, RBAC simple).
         if (planAllowsTeams(planId)) {
           try {

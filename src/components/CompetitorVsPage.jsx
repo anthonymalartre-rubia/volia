@@ -104,7 +104,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               <SwitchReason
                 num="2"
                 title={`${savingsPct}% moins cher. Tu fais le calcul.`}
-                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 19€/mois (Solo), 49€ (Pro), 99€ (Business). Tous les plans, tous les pays inclus. Pas de "contact sales".`}
+                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 19€/mois (Solo), 49€ (Pro), 149€ (Business). Tous les plans, tous les pays inclus. Pas de "contact sales".`}
               />
               <SwitchReason
                 num="3"

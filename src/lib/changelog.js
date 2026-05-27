@@ -92,7 +92,7 @@ const CHANGELOG = [
     version: '1.5',
     title: 'Stripe 4 plans + Yearly billing',
     items: [
-      { type: 'feature', tag: 'Produit', text: 'Refonte tarifs : 4 plans (Starter / Solo 19€ / Pro 49€ / Business 99€) + Yearly -2 mois.' },
+      { type: 'feature', tag: 'Produit', text: 'Refonte tarifs : 4 plans (Starter / Solo 19€ / Pro 49€ / Business 149€) + Yearly -2 mois.' },
       { type: 'feature', tag: 'Tech', text: 'Webhooks Stripe complets : checkout / subscription updated / cancelled / payment failed.' },
     ],
   },

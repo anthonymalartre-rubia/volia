@@ -64,7 +64,7 @@ export default function UpgradeCrmModal({ open, onClose }) {
               Plan Business
             </div>
             <div className="flex items-baseline justify-center gap-1">
-              <span className="text-3xl font-extrabold text-content-primary">99 €</span>
+              <span className="text-3xl font-extrabold text-content-primary">149 €</span>
               <span className="text-content-tertiary text-sm">/mois</span>
             </div>
             <p className="text-[11px] text-content-tertiary mt-1">

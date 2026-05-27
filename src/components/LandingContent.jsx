@@ -1002,7 +1002,7 @@ export default function LandingContent() {
           COMPARATIF STACK — valeur financière de la suite vs concurrents
           ─────────────────────────────────────────────────────────────
           2 colonnes côte à côte : à gauche stack Apollo + Lemlist +
-          HubSpot avec prix cumulés, à droite Volia Business 99€/mo.
+          HubSpot avec prix cumulés, à droite Volia Business 149€/mo.
           Pattern "before / after" très visuel, conversion ++.
        */}
       <section className="relative py-24 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-zinc-50 via-white to-emerald-50/30">

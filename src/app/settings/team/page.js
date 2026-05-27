@@ -1,7 +1,7 @@
 'use client';
 
 // /settings/team
-// Page Multi-utilisateurs (Business 99€). Liste des members + invitations + modal d'invite.
+// Page Multi-utilisateurs (Business 149€). Liste des members + invitations + modal d'invite.
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
@@ -100,7 +100,7 @@ export default function TeamSettingsPage() {
           <div className="relative">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-700 text-xs font-medium mb-4">
               <Sparkles size={12} />
-              Plan Business 99€/mois
+              Plan Business 149€/mois
             </div>
             <h2 className="text-xl font-semibold text-content-primary mb-2">
               Multi-utilisateurs réservé au plan Business

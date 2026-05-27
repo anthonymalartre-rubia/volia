@@ -591,7 +591,7 @@ function PricingFocusSection() {
     },
     {
       name: 'Business',
-      price: '99 €',
+      price: '149 €',
       period: '/mois',
       prospects: '10 000 prospects/mois + Campagnes + CRM',
       audience: 'pour scaleups',
@@ -896,7 +896,7 @@ export default function ProspectionProductPage() {
         }}
         pricing={{
           label: 'Inclus dans tous les plans, dès le Starter gratuit',
-          subtext: 'Starter 0 € (100 prospects/mois) · Solo 19 € (1k) · Pro 49 € (5k) · Business 99 € (10k + Campagnes + CRM). Pas d\'engagement, annulation 1 clic.',
+          subtext: 'Starter 0 € (100 prospects/mois) · Solo 19 € (1k) · Pro 49 € (5k) · Business 149 € (10k + Campagnes + CRM). Pas d\'engagement, annulation 1 clic.',
           cta: 'Voir les tarifs complets',
           ctaHref: '/#pricing',
         }}

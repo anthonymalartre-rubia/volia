@@ -220,7 +220,7 @@ Volia propose 4 plans, tous facturables au mois ou à l'année (2 mois offerts e
 | **Free** | 0 € | 100 | Tester l'outil |
 | **Solo** | 19 €/mo | 1 000 | Freelances, consultants |
 | **Pro** | 49 €/mo | 5 000 | PME, agences |
-| **Business** | 99 €/mo | 10 000 | Sales teams, scale-ups |
+| **Business** | 149 €/mo | 10 000 | Sales teams, scale-ups |
 
 ### Ce qui est inclus dans **tous** les plans
 
@@ -2263,7 +2263,7 @@ Si tu upgrades en cours de mois, Stripe te facture **uniquement le delta** prora
 L'annuel offre **2 mois gratuits** :
 - Solo : 19 €/mo → 190 €/an (au lieu de 228 €).
 - Pro : 49 €/mo → 490 €/an (au lieu de 588 €).
-- Business : 99 €/mo → 990 €/an (au lieu de 1188 €).
+- Business : 149 €/mo → 1490 €/an (au lieu de 1788 €).
 
 Bascule depuis **Paramètres → Plan & Usage** → onglet **Annuel**. Effet immédiat (Stripe te crédite ce qui a déjà été payé).
 

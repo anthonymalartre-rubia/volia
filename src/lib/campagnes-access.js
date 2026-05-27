@@ -6,7 +6,7 @@
 // Avant : toutes les pages et API routes /admin/prospection/* vérifiaient
 //         user_profiles.is_admin → seul Anthony y avait accès, ce qui rendait
 //         le module Campagnes INACCESSIBLE aux clients payants (Solo 19€,
-//         Pro 49€, Business 99€).
+//         Pro 49€, Business 149€).
 //
 // Maintenant : on vérifie le PLAN. Un user 'solo', 'pro', 'business' ou
 //              'enterprise' (legacy alias) a accès. Les 'starter' (free) sont

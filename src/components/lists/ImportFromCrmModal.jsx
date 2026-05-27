@@ -268,7 +268,7 @@ export default function ImportFromCrmModal({ open, onClose, listId, onSuccess })
               </p>
               <p className="text-sm text-content-tertiary max-w-md mb-4">
                 Le module Volia CRM (contacts, pipelines, deals) est inclus dans le
-                plan Business 99 €/mois.
+                plan Business 149 €/mois.
               </p>
               <Link
                 href="/settings?tab=plan"

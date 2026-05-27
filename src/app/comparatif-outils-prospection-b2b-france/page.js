@@ -190,7 +190,7 @@ const FAQ = [
   },
   {
     question: 'Comment combiner ces outils pour un stack complet ?',
-    answer: 'Stack solo (< 50 €/mois) : Volia Solo (19 €) + Smartlead Starter (29 €). Stack PME (~200 €/mois) : Volia Pro (49 €) + Smartlead Pro (94 €) + Folk CRM (39 €). Stack scale-up (~500 €/mois) : Volia Business (99 €) + Lemlist (159 €) + Pipedrive 5 users.',
+    answer: 'Stack solo (< 50 €/mois) : Volia Solo (19 €) + Smartlead Starter (29 €). Stack PME (~200 €/mois) : Volia Pro (49 €) + Smartlead Pro (94 €) + Folk CRM (39 €). Stack scale-up (~500 €/mois) : Volia Business (149 €) + Lemlist (159 €) + Pipedrive 5 users.',
   },
 ];
 

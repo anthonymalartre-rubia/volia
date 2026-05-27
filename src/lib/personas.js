@@ -9,7 +9,7 @@ const PERSONAS = {
   'sdr': {
     slug: 'sdr',
     title: 'Outil de prospection pour SDR & commerciaux B2B — Volia',
-    metaDescription: 'Toi, SDR, tu passes 60% de ton temps à chercher des contacts au lieu de prospecter. Volia te file 50 à 500 prospects qualifiés par jour, à exporter direct dans ton CRM. 19-99€/mois. Tu te poses encore la question ?',
+    metaDescription: 'Toi, SDR, tu passes 60% de ton temps à chercher des contacts au lieu de prospecter. Volia te file 50 à 500 prospects qualifiés par jour, à exporter direct dans ton CRM. 19-149€/mois. Tu te poses encore la question ?',
     badge: 'Pour les SDR & commerciaux B2B',
     h1: 'L\'outil de prospection que tes SDR vont adorer',
     intro: 'Toi, SDR, tu fais 50 cold emails par jour à la main. Tu jongles entre Apollo, LinkedIn Sales Nav, et un CRM. Tu passes 60% de ton temps à chercher des contacts au lieu de prospecter. Volia te file 50 à 500 prospects qualifiés par jour, à exporter direct dans ton CRM. À partir de 19€/mois.',
@@ -130,10 +130,10 @@ const PERSONAS = {
   'sales-managers': {
     slug: 'sales-managers',
     title: 'Outil de prospection pour Sales Managers & VP Sales — Volia',
-    metaDescription: 'Toi, Sales Manager, t\'as 10 SDR à équiper sans exploser le budget. Apollo + Outreach + ZoomInfo = 1 200€/SDR/mois. Volia = 99€/mois pour toute l\'équipe. 90% d\'économie. Tu te poses encore la question ?',
+    metaDescription: 'Toi, Sales Manager, t\'as 10 SDR à équiper sans exploser le budget. Apollo + Outreach + ZoomInfo = 1 200€/SDR/mois. Volia = 149€/mois pour toute l\'équipe. 90% d\'économie. Tu te poses encore la question ?',
     badge: 'Pour les Sales Managers',
     h1: 'Équipe ton équipe sales avec le meilleur ratio coût/résultats',
-    intro: 'Toi, Sales Manager, tu diriges 5 à 50 SDR. Tu veux les équiper d\'un outil de prospection puissant SANS exploser le budget de ton CFO. Apollo + Outreach + ZoomInfo = 800-1 500€ par SDR par mois. Volia coûte 19-99€/mois pour TOUTE l\'équipe. Tu te poses encore la question ?',
+    intro: 'Toi, Sales Manager, tu diriges 5 à 50 SDR. Tu veux les équiper d\'un outil de prospection puissant SANS exploser le budget de ton CFO. Apollo + Outreach + ZoomInfo = 800-1 500€ par SDR par mois. Volia coûte 19-149€/mois pour TOUTE l\'équipe. Tu te poses encore la question ?',
     keyMetric: { value: '90%', label: 'd\'économie', sub: 'vs Apollo Pro Suite pour 10 SDR' },
     painPoints: [
       'Apollo + Outreach + ZoomInfo = 800-1 500€ par SDR par mois. Pour 10 SDR, c\'est 150K€/an',

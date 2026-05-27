@@ -11,7 +11,7 @@ const VALID_STATUS = ['open', 'won', 'lost'];
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 99€/mois' },
+    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
     { status: 403 }
   );
 }

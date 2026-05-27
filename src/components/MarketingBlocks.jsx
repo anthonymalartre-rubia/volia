@@ -100,7 +100,7 @@ const BUILT_FOR_PROFILES = [
     slug: 'sales-managers',
     icon: Target,
     label: 'Sales Managers & DC',
-    pitch: 'Outillez 3-10 SDR sans exploser le budget. Plan Business à 99 €/mois pour l\'équipe.',
+    pitch: 'Outillez 3-10 SDR sans exploser le budget. Plan Business à 149 €/mois pour l\'équipe.',
     metric: '10 000 prospects/mois',
     gradient: 'from-fuchsia-500/15 to-pink-500/15',
     iconColor: 'text-fuchsia-300',

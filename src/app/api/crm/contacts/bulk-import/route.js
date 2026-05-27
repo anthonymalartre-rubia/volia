@@ -21,7 +21,7 @@ const VALID_SOURCES = ['manual', 'prospection', 'campagnes', 'import'];
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 99€/mois' },
+    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
     { status: 403 }
   );
 }

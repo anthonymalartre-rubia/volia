@@ -579,7 +579,7 @@ function PricingFocusSection() {
       bullets: ['Cold email illimité', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Tracking opens / clicks'],
     },
     {
-      name: 'Business', price: '99 €', tag: '+ CRM intégré',
+      name: 'Business', price: '149 €', tag: '+ CRM intégré',
       desc: 'Tout Pro + CRM intégré + auto-create deals depuis replies.',
       cta: 'Choisir Business', href: '/signup?plan=business',
       featured: false,
@@ -846,7 +846,7 @@ export default function CampagnesProductPage() {
         }}
         pricingBanner={<ProblemSolutionSection />}
         pricing={{
-          label: 'Inclus dans Pro (49 €) et Business (99 €)',
+          label: 'Inclus dans Pro (49 €) et Business (149 €)',
           subtext: 'Pro = cold email illimité + warmup + tracking + multi-inbox. Business = Pro + CRM intégré + auto-create deals depuis replies. Pas d\'add-on caché, annulation 1 clic.',
           cta: 'Voir le détail des plans',
           ctaHref: '#pricing-campagnes',

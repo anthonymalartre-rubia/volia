@@ -9,7 +9,8 @@ import ProductsMenu from '@/components/ProductsMenu';
 import { PLANS } from '@/lib/plans';
 import FAQSection from '@/components/FAQSection';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
-import { useI18n } from '@/lib/i18n';
+import { useI18n, useForceLocale } from '@/lib/i18n';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { TestimonialsBlock, BuiltForProfilesBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 import TrustpilotReviewsBlock from '@/components/TrustpilotReviewsBlock';
 import { LogoIcon } from '@/components/ui';
@@ -202,6 +203,10 @@ export default function LandingContent() {
   const { t } = useI18n();
   // Landing marketing = TOUJOURS en light (override user dark preference)
   useForceLightTheme();
+  // Landing FR (/) = TOUJOURS en français (l'URL dicte la langue, peu
+  // importe le localStorage. Fix bug mai 2026 : un user revenu de /en
+  // voyait la page / en EN). Cf src/lib/i18n.js → useForceLocale.
+  useForceLocale('fr');
   // Pricing toggle Monthly / Yearly (UX 2026 standard)
   const [pricingPeriod, setPricingPeriod] = useState('monthly');
   const isYearly = pricingPeriod === 'yearly';
@@ -247,6 +252,7 @@ export default function LandingContent() {
             <Link href="#faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
           </div>
           <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             <NavAuth />
           </div>
         </div>
@@ -1504,9 +1510,9 @@ export default function LandingContent() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
             {[
-              { name: 'Decouverte domaine', desc: 'Pas de site web ? On le trouve via Google.', tag: 'Auto', score: '100%', color: 'from-blue-500/20 to-indigo-500/20 border-blue-500/20', dot: 'bg-blue-400' },
-              { name: 'Scraping site web', desc: 'Extrait les emails du site, pages contact et mentions legales.', tag: t('landing.waterfall.free'), score: '100%', color: 'from-green-500/20 to-emerald-500/20 border-green-500/20', dot: 'bg-green-400' },
-              { name: 'Recherche Google', desc: 'Cherche l\'email sur Google si le scraping ne trouve rien.', tag: 'Inclus', score: '90%', color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/20', dot: 'bg-yellow-400' },
+              { name: t('landing.waterfall.steps.domainName'), desc: t('landing.waterfall.steps.domainDesc'), tag: t('landing.waterfall.autoTag'), score: '100%', color: 'from-blue-500/20 to-indigo-500/20 border-blue-500/20', dot: 'bg-blue-400' },
+              { name: t('landing.waterfall.steps.scrapingName'), desc: t('landing.waterfall.steps.scrapingDesc'), tag: t('landing.waterfall.free'), score: '100%', color: 'from-green-500/20 to-emerald-500/20 border-green-500/20', dot: 'bg-green-400' },
+              { name: t('landing.waterfall.steps.googleName'), desc: t('landing.waterfall.steps.googleDesc'), tag: t('landing.waterfall.included'), score: '90%', color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/20', dot: 'bg-yellow-400' },
             ].map((s, i) => (
               <div key={s.name} className={`relative p-5 rounded-xl bg-gradient-to-br ${s.color} border border-line`}>
                 <div className="flex items-center gap-2 mb-3">

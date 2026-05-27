@@ -708,6 +708,15 @@ const fr = {
       free: 'Gratuit',
       included: 'Inclus',
       pattern: 'Pattern',
+      autoTag: 'Auto',
+      steps: {
+        domainName: 'Découverte domaine',
+        domainDesc: 'Pas de site web ? On le trouve via Google.',
+        scrapingName: 'Scraping site web',
+        scrapingDesc: 'Extrait les emails du site, pages contact et mentions légales.',
+        googleName: 'Recherche Google',
+        googleDesc: 'Cherche l\'email sur Google si le scraping ne trouve rien.',
+      },
     },
     // Stats
     stats: {

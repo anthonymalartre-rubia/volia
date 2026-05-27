@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
 import ProductsMenu from '@/components/ProductsMenu';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const DEFAULT_LABELS_FR = {
   products: 'Produits',
@@ -64,6 +65,7 @@ export default function MarketingHeader({ locale = 'fr', labels }) {
             </Link>
           </div>
           <div className="flex items-center gap-3">
+            <LanguageSwitcher />
             <NavAuth />
           </div>
         </div>

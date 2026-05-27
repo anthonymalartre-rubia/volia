@@ -703,6 +703,15 @@ const en = {
       free: 'Free',
       included: 'Included',
       pattern: 'Pattern',
+      autoTag: 'Auto',
+      steps: {
+        domainName: 'Domain discovery',
+        domainDesc: 'No website? We find it via Google.',
+        scrapingName: 'Website scraping',
+        scrapingDesc: 'Extracts emails from the site, contact pages and legal notices.',
+        googleName: 'Google search',
+        googleDesc: 'Searches the email on Google if scraping finds nothing.',
+      },
     },
     // Stats
     stats: {

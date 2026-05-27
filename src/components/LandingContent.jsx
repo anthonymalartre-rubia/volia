@@ -171,26 +171,29 @@ export default function LandingContent() {
               {/* Badge "Suite SaaS" — repositionne Volia comme plateforme, pas outil unique */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-blue-100 to-emerald-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
                 <Layers size={12} className="text-violet-600" />
-                <span className="text-violet-700 font-bold">SUITE SAAS B2B FRANÇAISE · 4 MODULES</span>
+                <span className="text-violet-700 font-bold">SUITE B2B FRANÇAISE · 4 MODULES · 19 €/MOIS</span>
               </div>
 
-              {/* H1 MASSIVE — Trouvez. Contactez. Convertissez. — 3 modules en un seul claim */}
+              {/* H1 MASSIVE — Hero punchy direct (style Plausible/Cal.com) avec font-display signature.
+                  On nomme les concurrents direct : ça interpelle et positionne immédiatement.
+                  BRAND TODO : tester A/B la variante "Apollo coûte 99$. Volia 19€. Vous voyez l'idée." */}
               <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-bold tracking-tight leading-[1.02] mb-6">
-                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Trouvez.</span>{' '}
-                <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Contactez.</span>{' '}
-                <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent">Convertissez.</span>
+                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Apollo.</span>{' '}
+                <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Lemlist.</span>{' '}
+                <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent">HubSpot.</span>{' '}
+                <span className="bg-gradient-to-br from-pink-600 to-rose-600 bg-clip-text text-transparent">Typeform.</span>
                 <br />
-                <span className="text-content-primary">Tout dans Volia.</span>
+                <span className="text-content-primary">Un seul outil, 19&nbsp;€/mois.</span>
               </h1>
 
-              {/* Sous-titre — positionne la suite complète + comparatif stack */}
+              {/* Sous-titre — direct, sans détour. Vouvoiement (page publique). */}
               <p className="text-lg sm:text-xl text-content-secondary mb-8 leading-relaxed max-w-xl">
-                La suite SaaS B2B française qui remplace{' '}
-                <strong className="text-content-primary font-semibold">Apollo + Lemlist + HubSpot + Typeform</strong>.{' '}
-                <strong className="text-violet-700">Prospection</strong>,{' '}
-                <strong className="text-blue-700">Campagnes</strong>,{' '}
-                <strong className="text-emerald-700">CRM</strong> et{' '}
-                <strong className="text-pink-700">Formulaires</strong> dans le même outil, dès 19&nbsp;€/mois.
+                On a recodé{' '}
+                <strong className="text-violet-700">la prospection</strong>,{' '}
+                <strong className="text-blue-700">les campagnes</strong>,{' '}
+                <strong className="text-emerald-700">le CRM</strong> et{' '}
+                <strong className="text-pink-700">les formulaires</strong> dans une seule suite française.
+                Pas de 4 abonnements. Pas d&apos;import/export. Dès 19&nbsp;€/mois.
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
@@ -199,21 +202,21 @@ export default function LandingContent() {
                   href="/signup"
                   className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/50 hover:-translate-y-0.5 transition-all text-base"
                 >
-                  Démarrer gratuitement
+                  Allez, on essaie
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <a
                   href="#try-live"
                   className="inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl border-2 border-line-hover hover:border-violet-400 hover:bg-violet-50 text-content-primary font-semibold transition-all text-base"
                 >
-                  Voir une démo en direct
+                  Voir le produit en live
                 </a>
               </div>
 
               {/* CTA tertiaire — booking démo perso founder */}
               <div className="mb-8">
                 <BookDemoButton
-                  label="Ou réserver 15 min avec le founder"
+                  label="Tu veux me parler ? 15 min."
                   variant="ghost"
                   size="sm"
                   source="landing_hero"
@@ -248,12 +251,12 @@ export default function LandingContent() {
               <div className="flex items-center gap-4 text-xs text-content-tertiary flex-wrap">
                 <span className="inline-flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  Économisez ~250&nbsp;€/mois vs stack équivalente
+                  ~250 €/mois économisés vs stack séparée
                 </span>
                 <span>·</span>
-                <span>Sans carte bancaire</span>
+                <span>Pas de carte bancaire</span>
                 <span>·</span>
-                <span className="font-medium">Conforme RGPD</span>
+                <span className="font-medium">RGPD-friendly</span>
               </div>
             </div>
 
@@ -398,12 +401,12 @@ export default function LandingContent() {
           <div className="text-center mb-6">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 border border-violet-200 text-xs text-violet-700 font-semibold mb-3">
               <Sparkles size={12} />
-              ESSAYEZ EN DIRECT
+              ESSAYEZ MAINTENANT
             </div>
             <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary mb-2">
-              Trouvez vos premiers prospects en 10 secondes
+              50 prospects en 10 secondes. Sans signup.
             </h2>
-            <p className="text-content-tertiary">Aucune inscription requise.</p>
+            <p className="text-content-tertiary">Tapez votre cible, on vous montre.</p>
           </div>
           <HeroSearchWidget />
         </div>
@@ -425,11 +428,11 @@ export default function LandingContent() {
             <div className="text-center mb-14">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">La suite Volia</p>
               <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                4 modules connectés pour automatiser votre growth B2B
+                4 modules. Ils se parlent vraiment.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Trouvez vos prospects, contactez-les, capturez les inbound, suivez vos deals.
-                Le tout dans une seule plateforme française.
+                Vous trouvez vos prospects, vous les contactez, vous capturez les inbound, vous suivez vos deals.
+                Tout au même endroit. Made in France.
               </p>
             </div>
           </MotionInView>
@@ -582,13 +585,13 @@ export default function LandingContent() {
         <div className="max-w-6xl mx-auto relative z-10">
           <MotionInView>
             <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-emerald-600 mb-3 uppercase tracking-wider">Comparatif Stack</p>
+              <p className="text-sm font-semibold text-emerald-600 mb-3 uppercase tracking-wider">Le calcul</p>
               <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                1 outil au prix d&apos;1. Pas de 3 outils au prix de 3.
+                1 outil au prix d&apos;1. Pas 3 outils au prix de 3.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Pour le prix d&apos;Apollo seul (~99 $/mo), vous avez les 3 modules Volia.
-                Économie réelle : <strong className="text-emerald-700">~250 €/mois</strong> vs stack séparée.
+                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez les 3 modules Volia.
+                Soit <strong className="text-emerald-700">~250 €/mois</strong> dans votre poche. Chaque mois.
               </p>
             </div>
           </MotionInView>
@@ -635,7 +638,7 @@ export default function LandingContent() {
                       <span className="text-content-tertiary text-sm">/mois</span>
                     </div>
                   </div>
-                  <p className="text-xs text-content-tertiary mt-2">soit ~270 €/mois HT — données partagées manuellement (CSV export/import)</p>
+                  <p className="text-xs text-content-tertiary mt-2">~270 €/mois HT. Plus l&apos;export/import CSV à la main entre les outils.</p>
                 </div>
               </div>
             </MotionInView>
@@ -686,7 +689,7 @@ export default function LandingContent() {
                     </div>
                   </div>
                   <p className="text-xs text-emerald-700 font-semibold mt-2">
-                    Économie : ~170 €/mois · soit ~2 000 €/an. Données partagées nativement entre les 3 modules.
+                    ~170 €/mois dans la poche. ~2 000 €/an. Les 3 modules partagent les mêmes données, en direct.
                   </p>
                 </div>
               </div>
@@ -700,10 +703,10 @@ export default function LandingContent() {
                 href="/signup?plan=business"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
               >
-                Choisir Volia Business à 99&nbsp;€/mois
+                Je prends Business à 99&nbsp;€/mois
                 <ArrowRight size={16} />
               </Link>
-              <p className="text-xs text-content-tertiary mt-3">14 jours satisfait ou remboursé · Annulation en 1 clic</p>
+              <p className="text-xs text-content-tertiary mt-3">14 jours pour changer d&apos;avis · Annulation en 1 clic, vraiment</p>
             </div>
           </MotionInView>
         </div>
@@ -722,10 +725,10 @@ export default function LandingContent() {
             <div className="text-center mb-14">
               <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Workflows croisés</p>
               <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                Les 3 modules se parlent. Vous, vous arrêtez de copier-coller.
+                Les modules se parlent. Vous arrêtez de copier-coller.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Pas d&apos;import/export entre outils. Les leads, campagnes et deals partagent la même base.
+                Pas d&apos;import/export entre outils. Les leads, campagnes et deals utilisent la même base.
               </p>
             </div>
           </MotionInView>
@@ -740,7 +743,7 @@ export default function LandingContent() {
                   { name: 'CRM', color: 'emerald' },
                 ],
                 title: 'Lead → Campagne → Deal en 1 clic',
-                desc: 'Cherchez 50 restaurants Paris, cliquez « Lancer campagne ». Ils reçoivent votre mail. Quand l\'un répond, un deal apparaît automatiquement dans le CRM.',
+                desc: '50 restaurants Paris, bouton « Lancer campagne ». Ils reçoivent votre mail. L\'un répond — un deal apparaît dans le CRM. Vous n\'avez rien touché.',
                 badge: 'Le plus utilisé',
                 iconBg: 'from-violet-500 via-blue-500 to-emerald-500',
               },
@@ -751,8 +754,8 @@ export default function LandingContent() {
                   { name: 'Campagnes', color: 'blue' },
                 ],
                 title: 'CRM → Relance automatique',
-                desc: 'Un deal stagne en stage Lead depuis 7 jours ? Bouton « Ajouter à séquence » → relance email auto envoyée, sans toucher au CRM.',
-                badge: 'Anti-deal-fatigue',
+                desc: 'Un deal dort en stage Lead depuis 7 jours ? Bouton « Ajouter à séquence ». Relance envoyée. Vous ne touchez plus au CRM.',
+                badge: 'Stop aux deals oubliés',
                 iconBg: 'from-emerald-500 to-blue-500',
               },
               {

@@ -40,7 +40,7 @@ export function NavAuth() {
         href="/signup"
         className="px-5 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium hover:from-violet-500 hover:to-indigo-500 transition-all"
       >
-        Commencer
+        On essaie
       </Link>
     </>
   );
@@ -59,7 +59,7 @@ export function HeroCTA() {
   }, []);
 
   const href = isLoggedIn ? '/dashboard' : '/signup';
-  const text = isLoggedIn ? 'Acceder au dashboard' : 'Commencer gratuitement';
+  const text = isLoggedIn ? 'Aller au dashboard' : 'Allez, on essaie';
 
   return (
     <Link
@@ -85,7 +85,7 @@ export function FooterCTA() {
   }, []);
 
   const href = isLoggedIn ? '/dashboard' : '/signup';
-  const text = isLoggedIn ? 'Acceder au dashboard' : 'Commencer gratuitement';
+  const text = isLoggedIn ? 'Aller au dashboard' : 'Allez, on essaie';
 
   return (
     <Link

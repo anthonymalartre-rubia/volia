@@ -13,8 +13,8 @@ export async function generateMetadata({ params }) {
 
   const savingsPct = Math.max(0, Math.round((c.pricing - 19) / c.pricing * 100));
   return {
-    title: `Meilleure alternative à ${c.name} en 2026 — Volia (à partir de 19 €/mois)`,
-    description: `Cherche une alternative à ${c.name} ? Volia est l'alternative française pour la prospection B2B : à partir de 19 €/mois (${savingsPct}% moins cher), scraping intelligent + Google Places, conforme RGPD.`,
+    title: `Alternative à ${c.name} en 2026 — Volia (à partir de 19€/mois)`,
+    description: `Tu cherches une alternative à ${c.name} ? Volia : 19€/mois (${savingsPct}% moins cher), scraping intelligent + Google Places, RGPD natif. Tu fais le calcul.`,
     alternates: {
       canonical: `https://volia.fr/alternative/${slug}`,
       // Lien croisé vers le comparatif neutre /vs/X — Google comprend que
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
     },
     openGraph: {
       title: `Alternative à ${c.name} en 2026 — Volia`,
-      description: `L'alternative française à ${c.name} : à partir de 19 €/mois, scraping + Google Places, conforme RGPD.`,
+      description: `L'alternative française à ${c.name} : 19€/mois, scraping + Google Places, RGPD natif.`,
       url: `https://volia.fr/alternative/${slug}`,
     },
     other: {

@@ -9,8 +9,8 @@ const PAGE_URL = `${SITE_URL}/en/products/campaigns`;
 const FR_PAGE = `${SITE_URL}/produits/campagnes`;
 
 export const metadata = {
-  title: 'Volia Campaigns - B2B cold email that lands in Inbox, not Spam',
-  description: 'Alternative to Lemlist + Instantly + Smartlead. Unlimited cold email, automatic 28-day domain warmup, multi-tenant Resend, auto-create deals in CRM from replies. Included in Pro $55/mo. 62% average open rate.',
+  title: 'Volia Campaigns - Cold email that lands in inbox, not spam',
+  description: 'Lemlist costs $39, charges extra for warmup. Instantly is $30. Volia Campaigns is included in Pro at $55. Unlimited cold email, 28-day auto warmup, multi-tenant Resend, auto-deals in CRM from replies. 62% open rate.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -21,8 +21,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia Campaigns - Cold email that lands in Inbox',
-    description: 'Replaces Lemlist + Instantly. Unlimited cold email + auto-warmup + auto-create CRM deals. $55/mo.',
+    title: 'Volia Campaigns - Cold email that lands. Not in spam.',
+    description: 'One tool instead of Lemlist + Instantly. Unlimited cold email, auto warmup, auto-deals in CRM. $55/mo.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -45,30 +45,30 @@ const EN_LABELS = {
 
 const FEATURES = {
   headline: 'send better than Lemlist',
-  subline: 'Multi-tenant Resend, automatic warmup, auto-create CRM. Three things Lemlist + Instantly + Smartlead can\'t do together.',
+  subline: 'Multi-tenant Resend. Auto warmup. Auto-create CRM deals. Three things Lemlist + Instantly + Smartlead can\'t do together.',
   items: [
-    { icon: 'Globe', featured: true, title: 'Native multi-tenant Resend', desc: 'Send from YOUR domain (DKIM / SPF / DMARC aligned automatically). 5-min setup via guided UI. Ideal for agencies: 1 Volia account, as many client domains as you want.' },
-    { icon: 'Flame', title: 'Automatic 28-day warmup', desc: 'Progressively warms your domain (D1: 10/day to D28: 200/day). Zero config, zero external tool. Lemlist charges +$30/mo for this; Volia includes it.' },
-    { icon: 'Repeat', title: 'Multi-inbox rotation', desc: 'Automatic sending distribution across multiple sender domains to preserve reputation. 3x volume without degrading deliverability.' },
-    { icon: 'MousePointerClick', title: 'Open & click tracking', desc: 'Pixel + link tracking on dedicated subdomain. Real-time stats per sequence, per step, per template. Native A/B subject testing.' },
-    { icon: 'Workflow', title: 'Auto-create CRM from replies', desc: 'A prospect replies = a deal is created automatically at Lead stage in Volia CRM. Zero manual entry, zero lost lead. Volia exclusive.' },
-    { icon: 'BookOpen', wide: true, title: '20+ B2B email templates', desc: 'Cold email templates battle-tested on real volume: restaurants, construction, web agencies, e-commerce, SaaS, real estate. Each template has 3 variants (intro, follow-up, breakup). Import your own too.' },
+    { icon: 'Globe', featured: true, title: 'Native multi-tenant Resend', desc: 'You send from YOUR domain (DKIM, SPF, DMARC aligned automatically). 5 min to set up. Agencies: 1 Volia account, unlimited client domains.' },
+    { icon: 'Flame', title: 'Auto 28-day warmup', desc: 'D1: 10 emails/day. D28: 200/day. Zero config. Lemlist charges $30/mo extra for this. We include it.' },
+    { icon: 'Repeat', title: 'Multi-inbox rotation', desc: 'Sends spread across multiple domains to protect reputation. 3x the volume, same deliverability.' },
+    { icon: 'MousePointerClick', title: 'Open & click tracking', desc: 'Pixel + link tracking on a dedicated subdomain. Real-time stats per sequence, step, template. Native A/B subject testing.' },
+    { icon: 'Workflow', title: 'Auto-create CRM deals', desc: 'Someone replies = a deal lands in your CRM at Lead stage. No manual entry. No lost lead. Volia exclusive.' },
+    { icon: 'BookOpen', wide: true, title: '20+ B2B email templates', desc: 'Battle-tested on real volume: restaurants, construction, web agencies, e-commerce, SaaS, real estate. 3 variants each (intro, follow-up, breakup). Import yours too.' },
   ],
 };
 
 const HOW_IT_WORKS = [
-  { icon: 'Globe', title: 'Connect your domain', desc: 'DKIM / SPF / DMARC setup in 5 min via guided Resend UI. Automatic alignment verification.' },
-  { icon: 'Flame', title: 'Start the warmup', desc: 'Volia warms your domain over 28 days (10 to 200 emails/day). Zero action from you, integrated monitoring.' },
-  { icon: 'Send', title: 'Launch your sequences', desc: 'Pick an English/French template or start fresh. Replies automatically create deals in the CRM.' },
+  { icon: 'Globe', title: '1. Connect your domain', desc: 'DKIM, SPF, DMARC in 5 min via the guided Resend UI. Auto-verified before you send a thing.' },
+  { icon: 'Flame', title: '2. Let warmup cook', desc: '28 days. 10 to 200 emails/day. You do nothing. Monitor it from your dashboard if you really want to.' },
+  { icon: 'Send', title: '3. Hit send', desc: 'Pick an English/French template or write your own. Replies auto-create deals in your CRM. You just close.' },
 ];
 
 const FAQ = [
-  { q: 'How many emails can I send per day?', a: 'During warmup (28 days): progressive ramp from 10 to 200 emails/day. Once warm, quota depends on plan: Solo 500 emails/month, Pro unlimited (up to 200/day per domain), Business unlimited with multi-domains. Real limit is deliverability — if bounce rate exceeds 2%, Volia auto-pauses.' },
-  { q: 'How do I avoid the spam folder?', a: 'Four safeguards: (1) mandatory 28-day automatic warmup before any volume sending, (2) DKIM / SPF / DMARC verification on domain connection, (3) bounce rate monitoring with auto-pause if > 2%, (4) unified opt-out preserving domain reputation long-term. Average beta result: 62% open rate, 94% inbox rate.' },
-  { q: 'What is email domain warmup?', a: 'Warmup means progressively increasing send volume on a new domain so Google / Outlook treat it as legitimate. Without warmup, a brand-new domain sending 100 emails on day 1 ends up in spam. Volia simulates exchanges and ramps from 10 to 200 emails/day over 28 days. Lemlist sells it for +$30/mo, Volia includes it in every plan.' },
-  { q: 'How is this different from Lemlist?', a: 'Three major differences: (1) Volia is native multi-tenant Resend (you send from YOUR domain, Lemlist routes through their infra), (2) warmup is included vs paid add-on, (3) auto-create CRM from replies — Volia exclusive. Pricing: Lemlist $39 for 50 emails/day, Volia Pro $55 for unlimited cold email + warmup + tracking.' },
-  { q: 'Can I use my own sending domain?', a: 'Yes — it\'s actually required and is the foundation of Volia Campaigns. You connect your domain (e.g. your-saas.com), Volia verifies DKIM / SPF / DMARC DNS records in 5 min, and all sends go from that domain. You keep your brand identity and your reputation stays yours.' },
-  { q: 'How does GDPR opt-out work?', a: 'Unsubscribe link added automatically in every email footer (impossible to disable). Opt-out feeds a permanent blocklist: an unsubscribed prospect will never be contacted again, even via another sequence or another Volia account. CNIL-compliant boilerplate, legitimate-interest basis documented, opposition register kept automatically.' },
+  { q: 'How many emails can I send per day?', a: 'During warmup (28 days): from 10 to 200/day, progressive. Then: Solo 500/mo, Pro unlimited (up to 200/day per domain), Business unlimited with multi-domains. Real limit = deliverability. Bounce rate > 2%? We auto-pause to protect your domain.' },
+  { q: 'How do I stay out of spam?', a: 'Four things: (1) mandatory 28-day warmup. (2) DKIM/SPF/DMARC check before you send. (3) auto-pause if bounce rate > 2%. (4) unified opt-out across all sequences. Beta numbers: 62% open rate, 94% inbox rate.' },
+  { q: 'What is domain warmup?', a: 'Progressively ramping up sends from a new domain so Gmail and Outlook trust it. Without warmup, a fresh domain sending 100 emails on day 1 goes straight to spam. We simulate exchanges and ramp from 10 to 200/day over 28 days. Lemlist sells this for $30/mo extra. We include it. Every plan.' },
+  { q: 'How is this different from Lemlist?', a: 'Three things. (1) Native multi-tenant Resend — you send from YOUR domain, not Lemlist\'s infra. (2) Warmup included, not a paid add-on. (3) Auto-create CRM deals from replies — Volia exclusive. Price: Lemlist $39 for 50 emails/day. Volia Pro $55 for unlimited cold email + warmup + tracking. You do the math.' },
+  { q: 'Can I use my own sending domain?', a: 'Required. It IS the product. Connect your-saas.com, we verify DKIM/SPF/DMARC in 5 min, every send leaves from your domain. Your brand, your reputation.' },
+  { q: 'How does GDPR opt-out work?', a: 'Unsubscribe link auto-added in every footer — you can\'t turn it off. Opt-out feeds a permanent blocklist: once someone unsubscribes, they\'re never contacted again, no matter the sequence or account. CNIL-compliant boilerplate, legitimate-interest basis documented, opposition register kept automatically.' },
 ];
 
 export default function EnCampaignsPage() {
@@ -80,13 +80,13 @@ export default function EnCampaignsPage() {
       labels={EN_LABELS}
       moduleLabelOverride="Campaigns"
       hero={{
-        eyebrow: 'Alternative to Lemlist + Instantly',
-        h1Before: 'B2B cold email that lands in',
-        h1Highlight: 'Inbox,',
-        h1After: 'not Spam.',
+        eyebrow: 'The Lemlist + Instantly alternative. Built in France.',
+        h1Before: 'Cold email that lands in',
+        h1Highlight: 'inbox.',
+        h1After: 'Not spam.',
         subtitle: (
           <>
-            Lemlist $39. Instantly $30. <strong className="text-content-primary font-semibold">Volia Campaigns: included in Pro at $55</strong>. Auto 28-day warmup + multi-inbox + <strong className="text-emerald-700 font-semibold">auto-create CRM from replies</strong>.
+            Lemlist $39. Instantly $30. <strong className="text-content-primary font-semibold">Volia Campaigns: included in Pro at $55</strong>. Auto 28-day warmup, multi-inbox, <strong className="text-emerald-700 font-semibold">auto-deals in CRM</strong>. You do the math.
           </>
         ),
         ctaPrimary: { label: 'Start free trial', href: '/signup?plan=pro' },
@@ -114,25 +114,25 @@ export default function EnCampaignsPage() {
       features={FEATURES}
       howItWorks={HOW_IT_WORKS}
       crossSell={{
-        subtitle: 'Campaigns consumes Prospecting leads and feeds the CRM the moment a prospect replies. Full loop, zero copy-paste.',
+        subtitle: 'Campaigns pulls leads from Prospecting. Pushes replies to CRM. Full loop, zero copy-paste.',
         otherModules: [
-          { module: 'prospection', direction: 'in', desc: 'The source of your prospects. 287k+ FR companies, 150+ industries, scored enriched emails.', cta: 'Discover Prospecting' },
-          { module: 'crm', direction: 'out', desc: 'Every reply becomes a deal at Lead stage. Native Volia Kanban pipeline. Private beta Q3 2026.', cta: 'Join the beta' },
+          { module: 'prospection', direction: 'in', desc: 'Where your prospects come from. 287k+ FR companies, 150+ industries, scored emails.', cta: 'See Prospecting' },
+          { module: 'crm', direction: 'out', desc: 'Replies become deals at Lead stage. Native Kanban pipeline. Private beta Q3 2026.', cta: 'Join the beta' },
         ],
       }}
       pricing={{
-        label: 'Included in Pro ($55) and Business ($110)',
-        subtext: 'Pro = unlimited cold email + warmup + tracking + multi-inbox. Business = Pro + integrated CRM + auto-create deals from replies. No hidden add-ons, 1-click cancel.',
+        label: 'In Pro ($55) and Business ($110).',
+        subtext: 'Pro = unlimited cold email + warmup + tracking + multi-inbox. Business adds CRM + auto-deals from replies. No add-ons. 1-click cancel.',
         cta: 'See full pricing',
         ctaHref: '/en/pricing',
       }}
       faq={FAQ}
       finalCta={{
-        title: 'Cold email that works, for the price of a coffee.',
-        subtitle: 'Cut your stack by 3, double your deliverability. Templates ready, warmup auto, replies in CRM — you just hit Play.',
+        title: 'Cold email that works. For the price of a coffee.',
+        subtitle: 'One tool instead of three. Double the deliverability. Templates ready, warmup auto, replies in CRM. You just press send.',
         primary: { label: 'Start free trial', href: '/signup?plan=pro' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
-        trust: 'Included in Pro - 14-day trial - Lemlist migration assisted - GDPR by default',
+        trust: 'In Pro - 14-day trial - Lemlist migration assisted - GDPR by default',
       }}
     />
   );

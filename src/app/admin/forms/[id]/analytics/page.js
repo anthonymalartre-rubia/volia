@@ -142,7 +142,7 @@ export default function FormAnalyticsPage() {
               </div>
               {data.top_referers.length === 0 ? (
                 <div className="p-6 text-center">
-                  <p className="text-xs text-content-tertiary">Aucune source enregistrée.</p>
+                  <p className="text-xs text-content-tertiary">Pas encore de source enregistrée.</p>
                 </div>
               ) : (
                 <ul className="divide-y divide-line">

@@ -1101,25 +1101,25 @@ export function newsletterMonthlyEmail({
 } = {}) {
   const unsubUrl = `${APP_URL}/api/newsletter/unsubscribe?token=${unsubscribeToken}`;
   return {
-    subject: `📬 Volia · L'édition ${monthLabel} · ${featuredArticleTitle || 'le meilleur du mois'}`,
+    subject: `${monthLabel} chez Volia : 3 trucs à savoir`,
     html: layout({
-      preheader: featuredArticleTeaser || 'Stats sectorielles, templates qui convertissent, retours d\'expérience.',
+      preheader: featuredArticleTeaser || 'Ce qu\'on a sorti, un chiffre qui parle, un truc à télécharger.',
       accent: COLORS.brand,
       content: `
         ${hero({
           emoji: '📬',
-          title: `Édition ${monthLabel}`,
-          greeting: 'Voici le meilleur du mois pour booster votre prospection B2B.',
+          title: `${monthLabel} chez Volia`,
+          greeting: 'Salut. Voici 3 trucs qu\'on voulait partager ce mois-ci. Lecture : 2 minutes max.',
         })}
 
         ${featuredArticleTitle ? `
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
           <tr>
             <td style="padding:18px;background-color:${COLORS.brandLight};border-radius:10px;">
-              <p style="margin:0 0 6px;font-size:11px;color:${COLORS.brand};text-transform:uppercase;letter-spacing:1px;font-weight:600;">📖 Article du mois</p>
+              <p style="margin:0 0 6px;font-size:11px;color:${COLORS.brand};text-transform:uppercase;letter-spacing:1px;font-weight:600;">1 · Quoi de neuf</p>
               <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:${COLORS.text};line-height:1.3;">${featuredArticleTitle}</p>
               ${featuredArticleTeaser ? `<p style="margin:0 0 10px;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">${featuredArticleTeaser}</p>` : ''}
-              <a href="${featuredArticleUrl}" style="display:inline-block;padding:8px 14px;background-color:${COLORS.brand};color:#fff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">Lire l'article →</a>
+              <a href="${featuredArticleUrl}" style="display:inline-block;padding:8px 14px;background-color:${COLORS.brand};color:#fff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">Lire en entier →</a>
             </td>
           </tr>
         </table>
@@ -1129,7 +1129,7 @@ export function newsletterMonthlyEmail({
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
           <tr>
             <td style="padding:18px;background-color:#fff;border:1px solid ${COLORS.line};border-radius:10px;">
-              <p style="margin:0 0 4px;font-size:11px;color:${COLORS.textMuted};text-transform:uppercase;letter-spacing:1px;font-weight:600;">📊 Chiffre du mois</p>
+              <p style="margin:0 0 4px;font-size:11px;color:${COLORS.textMuted};text-transform:uppercase;letter-spacing:1px;font-weight:600;">2 · Le chiffre du mois</p>
               <p style="margin:0;font-size:24px;font-weight:700;color:${COLORS.brand};line-height:1.2;">${statHeadline}</p>
               ${statBody ? `<p style="margin:8px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">${statBody}</p>` : ''}
             </td>
@@ -1140,21 +1140,24 @@ export function newsletterMonthlyEmail({
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
           <tr>
             <td style="padding:18px;background-color:${COLORS.brandLight};border-radius:10px;">
-              <p style="margin:0 0 6px;font-size:11px;color:${COLORS.brand};text-transform:uppercase;letter-spacing:1px;font-weight:600;">📥 Ressource gratuite</p>
+              <p style="margin:0 0 6px;font-size:11px;color:${COLORS.brand};text-transform:uppercase;letter-spacing:1px;font-weight:600;">3 · À télécharger</p>
               <p style="margin:0 0 8px;font-size:17px;font-weight:700;color:${COLORS.text};line-height:1.3;">${resourceTitle}</p>
-              <a href="${resourceUrl}" style="display:inline-block;padding:8px 14px;background-color:${COLORS.brand};color:#fff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">Télécharger gratuit →</a>
+              <a href="${resourceUrl}" style="display:inline-block;padding:8px 14px;background-color:${COLORS.brand};color:#fff;text-decoration:none;border-radius:6px;font-size:13px;font-weight:600;">Télécharger (gratuit) →</a>
             </td>
           </tr>
         </table>
 
-        <div align="center">${ctaPrimary('Aller sur Volia', DASHBOARD_URL)}</div>
+        <div align="center">${ctaPrimary('Retour à Volia', DASHBOARD_URL)}</div>
 
-        <p style="margin:24px 0 0;font-size:11px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
-          Vous recevez cet email mensuel car vous êtes inscrit à la newsletter Volia.<br>
-          <a href="${unsubUrl}" style="color:${COLORS.brand};text-decoration:underline;">Se désinscrire en 1 clic</a>
+        <p style="margin:32px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;border-top:1px solid ${COLORS.border};padding-top:24px;">
+          À dans 30 jours,<br />
+          <strong style="color:${COLORS.text};">Anthony — founder de Volia</strong>
         </p>
 
-        ${signOff()}
+        <p style="margin:24px 0 0;font-size:11px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
+          Tu reçois cet email parce que t&apos;es inscrit à la newsletter Volia (1 mail/mois, jamais plus).<br>
+          <a href="${unsubUrl}" style="color:${COLORS.brand};text-decoration:underline;">Plus envie ? Un clic, c&apos;est fini.</a>
+        </p>
       `,
     }),
   };

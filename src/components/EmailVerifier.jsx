@@ -48,7 +48,10 @@ export default function EmailVerifier({ userPlan }) {
   const [filter, setFilter] = useState('all');
   const fileInputRef = useRef(null);
 
-  const hasPaidPlan = userPlan?.id === 'pro' || userPlan?.id === 'enterprise';
+  // Bug fix 27 mai 2026 : avant la liste oubliait 'business' (héritage
+  // d'avant l'ajout du plan Business) → un user Business voyait
+  // "Passez en Business" alors qu'il l'était déjà. enterprise = alias legacy.
+  const hasPaidPlan = ['pro', 'business', 'enterprise'].includes(userPlan?.id);
 
   const handleFileUpload = useCallback((e) => {
     const file = e.target.files?.[0];

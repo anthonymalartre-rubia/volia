@@ -16,6 +16,8 @@ import {
 import { LogoIcon } from '@/components/ui';
 import MotionInView from '@/components/MotionInView';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
+import { useForceLocale } from '@/lib/i18n';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const NAV_LINKS = [
   { href: '/en/products/prospection', label: 'Products' },
@@ -121,6 +123,9 @@ const FAQS_EN = [
 
 export default function LandingContentEN() {
   useForceLightTheme();
+  // Landing EN (/en) = TOUJOURS en anglais (l'URL dicte la langue,
+  // peu importe le localStorage). Fix bug mai 2026 — cf LandingContent.
+  useForceLocale('en');
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
@@ -141,7 +146,7 @@ export default function LandingContentEN() {
               ))}
             </div>
             <div className="flex items-center gap-3">
-              <Link href="/" className="text-xs text-content-tertiary hover:text-content-primary transition">FR</Link>
+              <LanguageSwitcher />
               <Link href="/login" className="text-sm text-content-tertiary hover:text-content-primary transition">Log in</Link>
               <Link
                 href="/signup"

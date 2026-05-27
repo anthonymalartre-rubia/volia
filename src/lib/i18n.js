@@ -77,3 +77,27 @@ export function I18nProvider({ children }) {
 export function useI18n() {
   return useContext(I18nContext);
 }
+
+// ─────────────────────────────────────────────────────────────────────
+// useForceLocale — force la locale i18n au mount d'un composant
+// ─────────────────────────────────────────────────────────────────────
+// Utilisé sur les pages publiques marketing dont l'URL DICTE la langue :
+//   /          → useForceLocale('fr')
+//   /en        → useForceLocale('en')
+//   /pricing   → useForceLocale('fr')
+//   /en/pricing → useForceLocale('en')
+//
+// Sans ça, un user qui visite /en (qui setLocale='en' via setLocale ou
+// localStorage) puis revient sur / verrait la version FR avec des strings
+// EN cachées (cf bug landing mai 2026 : "Smart scraping + Google search"
+// affiché en EN sur volia.fr/). Ce hook s'assure que l'URL et la langue
+// affichée sont toujours synchronisées.
+// ─────────────────────────────────────────────────────────────────────
+export function useForceLocale(targetLocale) {
+  const { locale, setLocale } = useI18n();
+  useEffect(() => {
+    if (targetLocale && targetLocale !== locale) {
+      setLocale(targetLocale);
+    }
+  }, [targetLocale, locale, setLocale]);
+}

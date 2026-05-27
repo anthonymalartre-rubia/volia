@@ -31,7 +31,7 @@ import {
 import { PLANS, VISIBLE_PLANS } from '@/lib/plans';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 import MotionInView from '@/components/MotionInView';
-import ReaderHeader from '@/components/ReaderHeader';
+import MarketingHeader from '@/components/MarketingHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 import BookDemoButton from '@/components/BookDemoButton';
 
@@ -274,7 +274,7 @@ export default function PricingContent() {
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary">
-      <ReaderHeader />
+      <MarketingHeader />
 
       <main className="pt-24 pb-12">
         {/* ─── 1. HERO ───────────────────────────────────────── */}

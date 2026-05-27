@@ -147,9 +147,9 @@ function KanbanColumn({
             className="w-full py-8 px-3 rounded-lg border-2 border-dashed border-line hover:border-emerald-300 hover:bg-emerald-50/40 transition-colors flex flex-col items-center justify-center gap-1.5 text-content-tertiary hover:text-emerald-700 group"
           >
             <Inbox size={18} className="opacity-60 group-hover:opacity-100" />
-            <span className="text-[11px] font-medium">Aucun deal</span>
+            <span className="text-[11px] font-medium">Vide.</span>
             <span className="text-[10px] text-content-muted group-hover:text-emerald-600">
-              + Créer
+              + Créer un deal
             </span>
           </button>
         ) : (

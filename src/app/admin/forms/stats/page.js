@@ -94,11 +94,10 @@ export default function FormsStatsPage() {
             <FileText size={22} />
           </div>
           <h3 className="text-lg font-semibold text-content-primary">
-            Pas encore de stats à afficher
+            Pas encore de stats.
           </h3>
           <p className="mt-1 text-sm text-content-tertiary max-w-md mx-auto">
-            Créez votre premier formulaire pour commencer à mesurer vues,
-            soumissions et conversion.
+            Crée ton premier form. Les vues, soumissions et conversion s&apos;afficheront ici.
           </p>
           <div className="mt-5 flex items-center justify-center gap-2">
             <Link

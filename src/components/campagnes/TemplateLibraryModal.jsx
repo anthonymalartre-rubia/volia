@@ -186,7 +186,7 @@ function ListView({ search, setSearch, activeCategory, setActiveCategory, filter
             <div className="w-12 h-12 mx-auto rounded-xl bg-surface-card border border-line flex items-center justify-center mb-3">
               <Search size={18} className="text-content-tertiary" />
             </div>
-            <p className="text-sm text-content-secondary">Aucun template ne correspond.</p>
+            <p className="text-sm text-content-secondary">Aucun template ne matche. Élargis la recherche.</p>
             <button
               onClick={() => { setSearch(''); setActiveCategory(null); }}
               className="mt-3 text-xs text-blue-500 hover:underline"

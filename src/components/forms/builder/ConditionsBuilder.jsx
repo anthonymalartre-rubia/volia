@@ -142,7 +142,7 @@ export default function ConditionsBuilder({ value, onChange, availableFields }) 
     <div className="space-y-2">
       {availableFields.length === 0 ? (
         <p className="text-[11px] text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
-          Aucun champ disponible. Ajoute au moins un autre champ pour configurer une condition.
+          Pas de champ dispo. Ajoutes-en un autre pour configurer une condition.
         </p>
       ) : (
         <>

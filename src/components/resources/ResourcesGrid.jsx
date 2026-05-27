@@ -125,7 +125,7 @@ export default function ResourcesGrid({ resources, downloadCounts = {} }) {
       {filtered.length === 0 ? (
         <div className="text-center py-16 rounded-2xl border border-dashed border-line">
           <Search size={28} className="mx-auto mb-2 text-content-tertiary opacity-50" />
-          <p className="text-content-tertiary">Aucune ressource ne correspond à cette recherche.</p>
+          <p className="text-content-tertiary">Aucune ressource ne matche. Essaye un autre mot.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">

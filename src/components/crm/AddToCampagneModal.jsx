@@ -273,7 +273,7 @@ export default function AddToCampagneModal({
               <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800">
                 <AlertCircle size={14} className="flex-shrink-0 mt-0.5" />
                 <p className="text-xs font-medium">
-                  Aucun contact sélectionné.
+                  Sélectionne au moins un contact d&apos;abord.
                 </p>
               </div>
             )}
@@ -353,7 +353,7 @@ export default function AddToCampagneModal({
                       {loadingLists
                         ? 'Chargement…'
                         : lists.length === 0
-                        ? 'Aucune liste disponible.'
+                        ? 'Pas encore de liste. Crées-en une au-dessus.'
                         : `${lists.length} liste${lists.length > 1 ? 's' : ''} disponible${lists.length > 1 ? 's' : ''}.`}
                     </p>
                     {mode === 'existing' && lists.length > 0 && (

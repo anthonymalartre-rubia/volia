@@ -313,7 +313,7 @@ export default function ImportFromCrmModal({ open, onClose, listId, onSuccess })
                 ) : contacts.length === 0 ? (
                   search ? (
                     <div className="text-center py-12 text-sm text-content-tertiary">
-                      Aucun contact CRM pour « {search} ».
+                      Personne dans ton CRM pour « {search} ».
                     </div>
                   ) : (
                     <div className="flex flex-col items-center text-center py-10">

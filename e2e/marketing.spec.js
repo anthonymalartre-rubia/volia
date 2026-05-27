@@ -33,7 +33,9 @@ test.describe('Marketing pages', () => {
     // de 'Annuel' + span '-2 MOIS' (accessible name peut varier selon le
     // rendu : espace normal, nbsp, ou pas d'espace du tout).
     // On cible par regex /Annuel.*MOIS/i qui matche les 3 variantes.
-    const annuelBtn = page.getByRole('button', { name: /Annuel.*MOIS/i });
+    // .first() requis car une FAQ accordion ("Annuel -2 mois, comment ça…")
+    // matche aussi le regex — le toggle apparait en premier dans le DOM.
+    const annuelBtn = page.getByRole('button', { name: /Annuel.*MOIS/i }).first();
     await expect(annuelBtn).toBeVisible();
     await annuelBtn.click();
     // Apres click on attend que le DOM react re-render.

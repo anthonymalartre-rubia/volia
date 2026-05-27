@@ -764,7 +764,7 @@ export default function LandingContent() {
                 border: 'border-blue-200',
                 iconBg: 'from-blue-500 to-cyan-600',
                 href: '/produits/campagnes',
-                status: 'BETA',
+                status: 'LIVE',
               },
               {
                 name: 'CRM',
@@ -775,7 +775,7 @@ export default function LandingContent() {
                 border: 'border-emerald-200',
                 iconBg: 'from-emerald-500 to-teal-600',
                 href: '/produits/crm',
-                status: 'BIENTÔT',
+                status: 'LIVE',
               },
               {
                 name: 'Formulaires',

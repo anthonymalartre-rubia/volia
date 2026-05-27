@@ -75,7 +75,7 @@ export default function EnCampaignsPage() {
   return (
     <ProductPageLayout
       module="campagnes"
-      status="BETA"
+      status="LIVE"
       locale="en"
       labels={EN_LABELS}
       moduleLabelOverride="Campaigns"

@@ -807,7 +807,7 @@ export default function CampagnesProductPage() {
 
       <ProductPageLayout
         module="campagnes"
-        status="BETA"
+        status="LIVE"
         hero={{
           eyebrow: 'Alternative française à Lemlist + Instantly',
           h1Before: 'Cold email B2B qui finit en',

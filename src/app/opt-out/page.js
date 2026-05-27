@@ -57,7 +57,8 @@ function OptOutInner() {
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold mb-2 leading-tight">Droit d&apos;opposition RGPD</h1>
         <p className="text-sm text-content-secondary max-w-xl mx-auto leading-relaxed">
-          Supprimez vos données personnelles de notre base de prospects. Traitement sous 48 h, conforme à l&apos;article 21 du RGPD.
+          Retirez vos coordonnées de notre base de prospects. Traité sous 48 h, conformément à
+          l&apos;article 21 du RGPD.
         </p>
       </div>
 
@@ -108,10 +109,11 @@ function OptOutInner() {
           <div>
             <h2 className="text-base font-semibold mb-2">Pourquoi cette page ?</h2>
             <p className="text-sm text-content-secondary leading-relaxed mb-2">
-              Volia collecte des données professionnelles publiques (email pro, nom d&apos;entreprise, téléphone) via Google Places dans le cadre de la prospection B2B (RGPD art. 6.1.f — intérêt légitime).
+              Volia agrège des données pro publiques (email pro, nom d&apos;entreprise, téléphone)
+              via Google Places pour la prospection B2B (RGPD art. 6.1.f — intérêt légitime).
             </p>
             <p className="text-sm text-content-secondary leading-relaxed">
-              Conformément à l&apos;<a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">article 21 du RGPD</a>, vous pouvez à tout moment exercer votre droit d&apos;opposition. Votre demande sera traitée sous <strong className="text-content-primary">48 heures</strong>.
+              Au titre de l&apos;<a href="https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique" target="_blank" rel="noopener" className="text-violet-300 hover:text-violet-200 underline underline-offset-2">article 21 du RGPD</a>, vous pouvez vous y opposer à tout moment. On traite votre demande sous <strong className="text-content-primary">48 heures</strong>.
             </p>
           </div>
         </div>

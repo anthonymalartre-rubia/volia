@@ -30,7 +30,7 @@ const PLANS_EN = [
     name: 'Starter',
     price: '$0',
     period: 'forever',
-    tagline: 'Test Volia before committing',
+    tagline: 'Try before you pay. Always free.',
     features: [
       '100 prospects / month',
       '20 enrichments / month',
@@ -38,7 +38,7 @@ const PLANS_EN = [
       'All 287k+ FR companies',
       'GDPR-compliant',
     ],
-    cta: 'Get started free',
+    cta: 'Start free',
     ctaHref: '/signup?plan=free',
     highlighted: false,
   },
@@ -47,7 +47,7 @@ const PLANS_EN = [
     price: '$21',
     sub: '€19/mo',
     period: '/month',
-    tagline: 'For freelancers and consultants',
+    tagline: 'Freelancers. Solo founders. Anyone tired of paying $99 for Apollo.',
     features: [
       '1,000 prospects / month',
       '400 enrichments / month',
@@ -64,7 +64,7 @@ const PLANS_EN = [
     price: '$55',
     sub: '€49/mo',
     period: '/month',
-    tagline: 'For agencies and SMBs',
+    tagline: 'Agencies, SMBs, anyone shipping cold email.',
     features: [
       '5,000 prospects / month',
       'Cold email campaigns',
@@ -82,7 +82,7 @@ const PLANS_EN = [
     price: '$110',
     sub: '€99/mo',
     period: '/month',
-    tagline: 'For scaleups & sales teams',
+    tagline: 'Sales teams who need everything in one tool.',
     features: [
       '10,000 prospects / month',
       'Campaigns + CRM included',
@@ -99,23 +99,23 @@ const PLANS_EN = [
 const FAQS_EN = [
   {
     q: 'Does Volia work outside France?',
-    a: 'Volia\'s prospecting database is specialized on the French B2B market (287,000+ verified companies, 101 departments). If you target France from the UK/US, Volia is the cheapest tool to find emails and phone numbers of French businesses. Campaigns and CRM modules work globally.',
+    a: 'Our prospecting database is France. 287,000+ verified companies, 101 departments, no other country. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails and phone numbers. Campaigns and CRM work everywhere.',
   },
   {
     q: 'Why is Volia 5× cheaper than Apollo or HubSpot?',
-    a: 'We focus on France only for the prospecting data (no need to license expensive US/global B2B databases). And we bundle Prospecting + Cold Email + CRM in one product — no Zapier between three tools, no per-seat HubSpot pricing.',
+    a: 'Two reasons. (1) We focus on France only for prospecting data — no need to license expensive global B2B databases. (2) Prospecting + Cold Email + CRM are in the same product. No Zapier between three tools. No per-seat HubSpot pricing. You do the math.',
   },
   {
     q: 'Is it GDPR-compliant?',
-    a: 'Yes, by default. Volia follows CNIL (French data protection authority) guidelines for B2B prospecting: legitimate interest basis, clear opt-out on every email, public opt-out page, and a 28-domain personal-email filter (blocks @gmail, @hotmail, etc.). Hosted in the EU.',
+    a: 'Yes. By default, not as a paid add-on. Legitimate interest basis, clear opt-out on every email, public opt-out page, 28-domain personal-email filter (blocks @gmail, @hotmail, etc.). EU hosting. Built to CNIL guidelines from day one.',
   },
   {
     q: 'Can I cancel anytime?',
-    a: 'Yes, cancel in 1 click from your settings. No commitment, no annual lock-in (annual plans are optional, 2 months free). Your data stays yours — you can export everything anytime.',
+    a: 'Yes. 1 click in your settings. No commitment. No annual lock-in (annual plans are optional — get 2 months free). Your data stays yours. Export everything, anytime.',
   },
   {
     q: 'How is Volia different from Apollo + Lemlist + HubSpot?',
-    a: 'Three differences: (1) France coverage is 78% vs ~40% for US-first tools, (2) one bill, one login, one product instead of 3 subscriptions (~$288/mo total), (3) Made in France, English-friendly support.',
+    a: 'Three things. (1) France coverage is 78% vs ~40% for US-first tools. (2) One bill, one login, one product. Not 3 subscriptions at ~$288/mo. (3) Built in France. English-friendly support, no offshore call center.',
   },
 ];
 
@@ -175,12 +175,12 @@ export default function LandingContentEN() {
             </h1>
 
             <p className="text-lg sm:text-xl text-content-secondary mb-8 leading-relaxed max-w-2xl mx-auto">
-              The B2B SaaS suite that replaces{' '}
+              One tool instead of{' '}
               <strong className="text-content-primary font-semibold">Apollo + Lemlist + HubSpot</strong>.{' '}
               <strong className="text-violet-700">Prospecting</strong>,{' '}
-              <strong className="text-blue-700">Campaigns</strong> and{' '}
-              <strong className="text-emerald-700">CRM</strong> in the same tool, from{' '}
-              <strong className="text-content-primary font-semibold">$21 (€19) / month</strong>.
+              <strong className="text-blue-700">Campaigns</strong>, and{' '}
+              <strong className="text-emerald-700">CRM</strong>. From{' '}
+              <strong className="text-content-primary font-semibold">$21/mo</strong>. You do the math.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
@@ -202,12 +202,12 @@ export default function LandingContentEN() {
             <div className="flex items-center justify-center gap-4 text-xs text-content-tertiary flex-wrap">
               <span className="inline-flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                Save ~$275/mo vs equivalent stack
+                Save ~$275/mo vs the 3-tool stack
               </span>
               <span aria-hidden="true">·</span>
-              <span>No credit card required</span>
+              <span>No credit card</span>
               <span aria-hidden="true">·</span>
-              <span className="font-medium">GDPR-compliant</span>
+              <span className="font-medium">GDPR by default</span>
               <span aria-hidden="true">·</span>
               <span className="font-medium">Built in France</span>
             </div>
@@ -221,11 +221,11 @@ export default function LandingContentEN() {
               <div className="text-center mb-14">
                 <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">The Volia suite</p>
                 <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                  3 connected modules to automate your B2B growth
+                  3 modules. 1 product. 1 bill.
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                  Find prospects, reach them, track deals.
-                  All in a single French-built platform.
+                  Find prospects. Reach them. Close deals.
+                  Without the SaaS shopping spree.
                 </p>
               </div>
             </MotionInView>
@@ -234,7 +234,7 @@ export default function LandingContentEN() {
               {[
                 {
                   name: 'Prospecting',
-                  tagline: 'Find emails of any French B2B company',
+                  tagline: 'Find emails for any French B2B company. Yes, any.',
                   status: 'LIVE',
                   statusColor: 'bg-emerald-100 text-emerald-700 border-emerald-300',
                   icon: Search,
@@ -248,7 +248,7 @@ export default function LandingContentEN() {
                 },
                 {
                   name: 'Campaigns',
-                  tagline: 'Automated cold email sequences with built-in warmup',
+                  tagline: 'Cold email sequences that actually land in the inbox.',
                   status: 'BETA',
                   statusColor: 'bg-blue-100 text-blue-700 border-blue-300',
                   icon: Mail,
@@ -262,7 +262,7 @@ export default function LandingContentEN() {
                 },
                 {
                   name: 'CRM',
-                  tagline: 'Native sales pipeline and deal tracking',
+                  tagline: 'Sales pipeline. Native. No HubSpot tax.',
                   status: 'COMING SOON',
                   statusColor: 'bg-amber-100 text-amber-700 border-amber-300',
                   icon: Layers,
@@ -322,11 +322,11 @@ export default function LandingContentEN() {
               <div className="text-center mb-14">
                 <p className="text-sm font-semibold text-emerald-600 mb-3 uppercase tracking-wider">Stack comparison</p>
                 <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                  One tool, one price. Not three tools, three prices.
+                  One tool. One price. Done.
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
                   For the price of Apollo alone (~$99/mo), you get all 3 Volia modules.
-                  Real savings: <strong className="text-emerald-700">~$275/mo vs separate stack</strong>.
+                  Math says: <strong className="text-emerald-700">~$275/mo back in your pocket</strong>.
                 </p>
               </div>
             </MotionInView>
@@ -369,7 +369,7 @@ export default function LandingContentEN() {
                         <span className="text-content-tertiary text-sm">/mo</span>
                       </div>
                     </div>
-                    <p className="text-xs text-content-tertiary mt-2">Data passed manually between tools (CSV export/import).</p>
+                    <p className="text-xs text-content-tertiary mt-2">Plus CSV export/import between tools. Every. Single. Day.</p>
                   </div>
                 </div>
               </MotionInView>
@@ -415,7 +415,7 @@ export default function LandingContentEN() {
                       </div>
                     </div>
                     <p className="text-xs text-emerald-700 font-semibold mt-2">
-                      Saves ~$178/mo - ~$2,140/year. Data flows natively between modules.
+                      Save ~$178/mo. ~$2,140/year. No CSV gymnastics.
                     </p>
                   </div>
                 </div>
@@ -431,19 +431,19 @@ export default function LandingContentEN() {
               <div className="text-center mb-14">
                 <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Features</p>
                 <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                  Everything you need to scale outbound
+                  Everything outbound needs. Nothing it doesn't.
                 </h2>
               </div>
             </MotionInView>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
-                { icon: Layers, title: 'Waterfall enrichment', desc: 'Web scraping then Google search then patterns. Stops as soon as a verified email is found.' },
-                { icon: Sparkles, title: 'AI search (Claude)', desc: 'Type "find 50 SaaS founders in Paris" — we translate it into a Google Places query in 2 seconds.' },
-                { icon: Globe, title: 'Best France coverage', desc: '287,000+ verified French B2B companies, 78% email enrichment rate vs ~40% for Apollo/Hunter.' },
-                { icon: Mail, title: 'Native cold email', desc: 'Multi-tenant Resend, 28-day automatic warmup, multi-inbox rotation. Inbox rate: 94%.' },
-                { icon: Zap, title: 'Auto-create deals', desc: 'Reply detected on a campaign? A deal lands in your CRM Lead stage. Zero copy-paste.' },
-                { icon: Check, title: 'GDPR-compliant', desc: '28-domain personal-email filter, public opt-out page, EU hosting, CNIL guidelines built-in.' },
+                { icon: Layers, title: 'Waterfall enrichment', desc: 'Scrape the site. Search Google. Guess the pattern. Stop the second we find a real email.' },
+                { icon: Sparkles, title: 'AI search (Claude)', desc: 'Type "50 SaaS founders in Paris" — get a Google Places query in 2 seconds. No filters to learn.' },
+                { icon: Globe, title: 'Best France coverage', desc: '287,000+ verified French companies. 78% email hit rate. Apollo and Hunter sit around 40%.' },
+                { icon: Mail, title: 'Native cold email', desc: '28-day auto warmup. Multi-inbox rotation. 94% inbox rate. No Smartlead subscription needed.' },
+                { icon: Zap, title: 'Auto-create deals', desc: 'Someone replies? A deal shows up in your CRM. No copy-paste. No Zapier. No tabs.' },
+                { icon: Check, title: 'GDPR by default', desc: 'Personal-email filter, public opt-out, EU hosting, CNIL guidelines. Built-in, not bolted on.' },
               ].map((f, i) => {
                 const Icon = f.icon;
                 return (
@@ -469,10 +469,10 @@ export default function LandingContentEN() {
               <div className="text-center mb-14">
                 <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Pricing</p>
                 <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                  Simple, transparent pricing
+                  Honest pricing. No "contact sales".
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                  Prices shown in USD — billed in EUR (your bank converts). No commitment, cancel anytime.
+                  USD shown, EUR billed (your bank converts at market rate). No commitment. Cancel in 1 click.
                 </p>
               </div>
             </MotionInView>
@@ -561,10 +561,10 @@ export default function LandingContentEN() {
           <div className="absolute inset-0 bg-gradient-to-br from-violet-200/40 via-indigo-100/30 to-pink-100/20 pointer-events-none" />
           <div className="max-w-3xl mx-auto text-center relative z-10">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-5 leading-tight tracking-tight text-content-primary">
-              Find your first 100 leads in 30 seconds.
+              Your first 100 leads. In 30 seconds.
             </h2>
             <p className="text-content-secondary text-lg sm:text-xl mb-10 max-w-xl mx-auto">
-              No credit card. 100 prospects free, forever. Built in France, used worldwide.
+              No credit card. No tricks. 100 prospects free, forever. Built in a French apartment. Used worldwide.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
@@ -581,7 +581,7 @@ export default function LandingContentEN() {
                 See pricing
               </Link>
             </div>
-            <p className="text-xs text-content-tertiary mt-6">No CB - Cancel in 1 click - GDPR-compliant</p>
+            <p className="text-xs text-content-tertiary mt-6">No credit card - Cancel in 1 click - GDPR by default</p>
           </div>
         </section>
       </main>

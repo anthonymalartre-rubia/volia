@@ -17,10 +17,10 @@ export default function DocsContactFooter() {
         </div>
         <div>
           <h2 className="text-xl font-bold text-content-primary mb-1">
-            Vous ne trouvez pas votre réponse ?
+            Tu ne trouves pas ta réponse&nbsp;?
           </h2>
           <p className="text-sm text-content-secondary leading-relaxed">
-            On répond en moins de 24 h ouvrées (4 h sur Pro / Business).
+            Écris-nous. On répond en moins de 24 h ouvrées (4 h sur Pro / Business).
           </p>
         </div>
       </div>

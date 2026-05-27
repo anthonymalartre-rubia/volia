@@ -58,20 +58,20 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-6 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
             {isAlternative
-              ? `La meilleure alternative à ${competitor.name} en France`
+              ? `${competitor.name} c'est cher. Volia c'est moins cher.`
               : `Volia vs ${competitor.name} : lequel choisir ?`}
           </h1>
           <p className="text-lg text-content-secondary leading-relaxed max-w-3xl mx-auto mb-8">
             {isAlternative ? (
               <>
-                Vous utilisez {competitor.name} et vous cherchez à <strong className="text-content-primary">payer moins cher tout en trouvant plus d&apos;emails en France</strong> ?
-                Volia est l&apos;alternative française à {competitor.name} : ticket d&apos;entrée à 19 €/mois ({savingsPct}% moins cher),
-                cascade waterfall qui trouve 70-85 % des emails français (vs 30-40 % chez {competitor.name}), conforme RGPD natif.
+                Tu utilises {competitor.name} et tu trouves que <strong className="text-content-primary">ça coûte cher pour trop peu d&apos;emails français</strong> ?
+                Volia : 19€/mois ({savingsPct}% moins cher), cascade waterfall qui trouve 70-85% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
+                Tu te poses encore la question ?
               </>
             ) : (
               <>
-                {competitor.description} <strong className="text-content-primary">Volia est l&apos;alternative française à {competitor.name}</strong> :
-                ticket d&apos;entrée à 19 €/mois (le moins cher du marché français), scraping intelligent + Google Places, et meilleure couverture des PME françaises.
+                {competitor.description} <strong className="text-content-primary">Volia, c&apos;est l&apos;alternative française</strong> :
+                19€/mois (le moins cher du marché FR), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
               </>
             )}
           </p>
@@ -80,7 +80,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
           <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
             <TrendingDown size={16} className="text-green-400" />
             <span className="text-content-secondary">
-              <strong className="text-green-400">Économisez jusqu&apos;à {savingsPct}%</strong> en {isAlternative ? `switchant de ${competitor.name} vers` : 'passant à'} Volia
+              <strong className="text-green-400">Tu économises jusqu&apos;à {savingsPct}%</strong> en {isAlternative ? `switchant de ${competitor.name} vers` : 'passant à'} Volia
             </span>
           </div>
         </section>
@@ -90,31 +90,31 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
               <AlertTriangle size={22} className="text-amber-600" />
-              Pourquoi les utilisateurs quittent {competitor.name} en 2026
+              Pourquoi tout le monde quitte {competitor.name} en 2026
             </h2>
             <p className="text-sm text-content-secondary mb-6 max-w-2xl">
-              Les 4 raisons principales que nous entendons en démo lors du switch.
+              Les 4 raisons qu&apos;on entend tous les jours en démo. Honnêtement.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               <SwitchReason
                 num="1"
-                title={`Couverture FR limitée chez ${competitor.name}`}
-                desc={`${competitor.name} est conçu pour le marché US. Sur les TPE/PME françaises, taux de couverture email plafonne à 30-40 %. Volia monte à 70-85 % sur le même périmètre.`}
+                title={`Couverture FR à 30-40% chez ${competitor.name}`}
+                desc={`${competitor.name} est conçu pour le marché US. Sur les TPE/PME françaises, leur taux de couverture email plafonne à 30-40%. Volia monte à 70-85% sur le même périmètre. C'est un fait, pas un argument.`}
               />
               <SwitchReason
                 num="2"
-                title={`Prix ${savingsPct}% moins cher`}
-                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia démarre à 19 €/mois (Solo), 49 € (Pro), 99 € (Business). Tous les pays inclus dans tous les plans.`}
+                title={`${savingsPct}% moins cher. Tu fais le calcul.`}
+                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 19€/mois (Solo), 49€ (Pro), 99€ (Business). Tous les plans, tous les pays inclus. Pas de "contact sales".`}
               />
               <SwitchReason
                 num="3"
-                title="RGPD natif vs bricolé"
-                desc={`${competitor.name} a ajouté la conformité RGPD après coup. Volia filtre automatiquement les emails personnels, opt-out 1 clic, opt-out webhook STOP intégré.`}
+                title="RGPD natif, pas RGPD bricolé"
+                desc={`${competitor.name} a rajouté le RGPD après coup, parce qu'il fallait bien. Volia filtre auto les emails personnels, opt-out 1 clic, webhook STOP intégré. Construit RGPD dès le jour 1.`}
               />
               <SwitchReason
                 num="4"
-                title="Pas de crédits cachés"
-                desc={`Sur ${competitor.name}, vous payez par credit consommé (et ils s'épuisent vite). Sur Volia : 1 quota mensuel clair, jamais de surcharge surprise.`}
+                title="Zéro crédit caché"
+                desc={`Sur ${competitor.name}, tu paies par crédit consommé. Et ils s'épuisent vite. Tu reçois un mail "upgrade" à J+10. Sur Volia : 1 quota mensuel clair, pas de surcharge surprise. Ce que tu vois, c'est ce que tu paies.`}
               />
             </div>
           </section>
@@ -123,7 +123,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
         {/* Comparison table */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-center">
-            Comparatif détaillé
+            Le comparatif honnête, ligne par ligne
           </h2>
           <div className="rounded-2xl border border-line bg-surface-elevated/40 overflow-hidden">
             <div className="overflow-x-auto">
@@ -170,12 +170,12 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
         {/* Strengths/Weaknesses competitor */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-8">
-            {competitor.name} : forces et faiblesses
+            {competitor.name} : ce qui marche, ce qui coince
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             <div className="rounded-xl border border-green-500/20 bg-green-500/[0.03] p-6">
               <h3 className="text-lg font-semibold text-green-400 mb-4 flex items-center gap-2">
-                <Check size={18} /> Ce qui est bien
+                <Check size={18} /> Ce qui marche
               </h3>
               <ul className="space-y-2">
                 {competitor.strengths.map((s, i) => (
@@ -188,7 +188,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             </div>
             <div className="rounded-xl border border-red-500/20 bg-red-500/[0.03] p-6">
               <h3 className="text-lg font-semibold text-red-400 mb-4 flex items-center gap-2">
-                <X size={18} /> Ce qui pose problème
+                <X size={18} /> Ce qui coince
               </h3>
               <ul className="space-y-2">
                 {competitor.weaknesses.map((w, i) => (
@@ -205,7 +205,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
         {/* Why Volia is better */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-8">
-            Pourquoi choisir Volia plutôt que {competitor.name} ?
+            Pourquoi Volia plutôt que {competitor.name} ?
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">
@@ -216,7 +216,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
                 Jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}% moins cher
               </h3>
               <p className="text-sm text-content-secondary leading-relaxed">
-                Volia démarre à 19 €/mois (plan Solo, 1 000 prospects + 400 enrichissements). {competitor.name} coûte {competitor.pricing}{competitor.pricingUnit} avec des crédits limités. C&apos;est le ticket d&apos;entrée le moins cher du marché français.
+                Volia = 19€/mois (Solo, 1 000 prospects + 400 enrichissements). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
               </p>
             </div>
             <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">
@@ -225,7 +225,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               </div>
               <h3 className="text-lg font-semibold mb-2">Meilleur sur la France</h3>
               <p className="text-sm text-content-secondary leading-relaxed">
-                {competitor.name} est optimisé pour les USA. Nous, on combine scraping de sites français + Google Places + recherche Google pour 85% de couverture en France.
+                {competitor.name} est fait pour les USA. Nous, on combine scraping de sites FR + Google Places + recherche Google pour 85% de couverture. C&apos;est notre métier, pas un bonus.
               </p>
             </div>
             <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">
@@ -234,7 +234,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               </div>
               <h3 className="text-lg font-semibold mb-2">RGPD natif</h3>
               <p className="text-sm text-content-secondary leading-relaxed">
-                Conforme RGPD : opt-out automatique, filtrage des emails personnels, page publique d&apos;opposition. {competitor.name} est outil US, configuration RGPD manuelle.
+                Opt-out automatique, filtre des emails personnels, page publique d&apos;opposition. Construit RGPD dès le jour 1. {competitor.name} est un outil US — la config RGPD, c&apos;est ton problème.
               </p>
             </div>
           </div>
@@ -243,25 +243,25 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
         {/* When to use which */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
           <h2 className="text-2xl sm:text-3xl font-bold mb-8">
-            Lequel choisir selon votre profil ?
+            Lequel choisir, selon ton profil
           </h2>
           <div className="space-y-4">
             <div className="rounded-xl border border-violet-500/30 bg-violet-500/[0.04] p-5">
-              <h3 className="font-semibold text-violet-400 mb-2">✅ Choisissez Volia si :</h3>
+              <h3 className="font-semibold text-violet-400 mb-2">Choisis Volia si :</h3>
               <ul className="space-y-1 text-sm text-content-secondary">
-                <li>• Vous prospectez en France (PME, commerces locaux, artisans)</li>
-                <li>• Vous voulez un prix fixe sans crédits cachés</li>
-                <li>• Vous avez besoin de recherche par catégorie + département</li>
-                <li>• Vous voulez une interface française et un support local</li>
-                <li>• Vous voulez un export CSV sans limite, compatible avec n'importe quel CRM</li>
+                <li>• Tu prospectes en France (PME, commerces locaux, artisans)</li>
+                <li>• Tu veux un prix fixe sans crédits cachés ni surprise en fin de mois</li>
+                <li>• T&apos;as besoin de chercher par catégorie + département</li>
+                <li>• Tu veux une interface française et un support qui répond en français</li>
+                <li>• Tu veux un export CSV sans limite, compatible avec n&apos;importe quel CRM</li>
               </ul>
             </div>
             <div className="rounded-xl border border-zinc-500/20 bg-zinc-500/[0.04] p-5">
-              <h3 className="font-semibold text-content-secondary mb-2">Choisissez {competitor.name} si :</h3>
+              <h3 className="font-semibold text-content-secondary mb-2">Choisis {competitor.name} si :</h3>
               <ul className="space-y-1 text-sm text-content-secondary">
                 <li>• {competitor.bestFor}</li>
-                <li>• Vous prospectez majoritairement aux USA/UK</li>
-                <li>• Vous avez besoin d&apos;intégrations Salesforce/HubSpot avancées</li>
+                <li>• Tu prospectes majoritairement aux USA/UK</li>
+                <li>• T&apos;as besoin d&apos;intégrations Salesforce/HubSpot avancées et un budget en proportion</li>
               </ul>
             </div>
           </div>
@@ -269,34 +269,34 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
 
         {/* Lead magnet : guide de migration depuis le concurrent */}
         <ResourceTeaserBlock
-          title={`Guide migration : passer de ${competitor.name} à Volia`}
-          subtitle="20 templates cold email + checklist warmup domaine pour reprendre vos campagnes sans perte de délivrabilité. PDF 30 pages."
+          title={`Guide migration : passer de ${competitor.name} à Volia, sans perdre tes campagnes`}
+          subtitle="20 templates cold email + checklist warmup domaine. Tu reprends tes envois en 24h sans perte de délivrabilité. PDF 30 pages, gratuit."
           resourceSlug="templates-cold-email-b2b-fr"
-          cta="Récupérer le guide"
+          cta="Je récupère le guide"
         />
 
         {/* Témoignages de migration (réutilise le pool, focus B2B) */}
         <TestimonialsBlock
           limit={3}
-          title={`Pourquoi ils ont quitté ${competitor.name} pour Volia`}
-          subtitle="Témoignages de commerciaux et fondateurs B2B qui ont fait le switch."
+          title={`Ils ont quitté ${competitor.name} pour Volia. Voilà pourquoi.`}
+          subtitle="Commerciaux et fondateurs B2B qui ont fait le switch. Témoignages bruts, pas filtrés."
         />
 
         {/* CTA */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <h2 className="text-2xl font-bold mb-3">
-              Essayez Volia gratuitement
+              Teste Volia. Compare. Tu décides.
             </h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Plan Starter gratuit à vie. Aucune carte bancaire requise. Comparez vous-même les résultats avec {competitor.name}.
+              Plan Starter gratuit à vie. Pas de carte bancaire. Tu compares toi-même les résultats avec {competitor.name}.
             </p>
             <Link
               href="/signup"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30"
             >
               <Zap size={16} />
-              Démarrer maintenant
+              Je démarre
             </Link>
           </div>
         </section>

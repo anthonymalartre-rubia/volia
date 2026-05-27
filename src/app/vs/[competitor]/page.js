@@ -12,12 +12,12 @@ export async function generateMetadata({ params }) {
   if (!c) return {};
 
   return {
-    title: `Volia vs ${c.name} : comparatif 2026 (prix, fonctionnalités)`,
-    description: `Volia vs ${c.name} : qui gagne en 2026 ? Comparatif détaillé prix, fonctionnalités, couverture France. Volia est ${Math.round((c.pricing - 49) / c.pricing * 100)}% moins cher.`,
+    title: `Volia vs ${c.name} : comparatif 2026 (prix, fonctionnalités, FR)`,
+    description: `Volia vs ${c.name} : lequel choisir ? Comparatif honnête prix, fonctionnalités, couverture France. Volia est ${Math.round((c.pricing - 49) / c.pricing * 100)}% moins cher. Tu fais le calcul.`,
     alternates: { canonical: `https://volia.fr/vs/${slug}` },
     openGraph: {
-      title: `Volia vs ${c.name} — Lequel choisir en 2026 ?`,
-      description: `Comparatif détaillé : prix, fonctionnalités, couverture France. Volia ${Math.round((c.pricing - 49) / c.pricing * 100)}% moins cher.`,
+      title: `Volia vs ${c.name} — Lequel choisir, vraiment ?`,
+      description: `Comparatif honnête : prix, fonctionnalités, couverture France. Volia ${Math.round((c.pricing - 49) / c.pricing * 100)}% moins cher.`,
       url: `https://volia.fr/vs/${slug}`,
     },
   };

@@ -67,7 +67,7 @@ export default function PersonaPage({ persona }) {
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 flex items-center gap-2">
               <AlertTriangle size={22} className="text-amber-600" />
-              Les douleurs que vous connaissez
+              Les galères que tu connais (et qu'on règle)
             </h2>
             <div className="grid md:grid-cols-3 gap-4">
               {persona.painPoints.map((pain, i) => (
@@ -85,10 +85,10 @@ export default function PersonaPage({ persona }) {
           <section id="use-cases" className="max-w-5xl mx-auto px-4 sm:px-6 mb-16 scroll-mt-24">
             <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
               <Target size={22} className="text-violet-400" />
-              Comment Volia vous aide concrètement
+              Comment Volia t'aide. Concrètement.
             </h2>
             <p className="text-content-secondary mb-6 max-w-2xl text-sm">
-              4 cas d&apos;usage spécifiques à votre profil — pas du blabla marketing.
+              4 cas d&apos;usage taillés pour ton profil. Pas de blabla marketing.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               {persona.useCases.map((uc, i) => (
@@ -113,7 +113,7 @@ export default function PersonaPage({ persona }) {
         {persona.idealPlan && (
           <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-16">
             <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
-              Le plan recommandé pour vous
+              Le plan qui te va, à ton profil
             </h2>
             <div className="rounded-2xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] p-8 relative">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-violet-500 text-xs font-bold text-white uppercase tracking-wider">
@@ -145,20 +145,20 @@ export default function PersonaPage({ persona }) {
         <TestimonialsBlock
           sector={persona.testimonialSector}
           limit={3}
-          title="Ils vous ressemblent et utilisent Volia"
-          subtitle="Profils basés sur des feedbacks réels du NPS interne."
+          title="Ils te ressemblent. Ils utilisent Volia."
+          subtitle="Profils basés sur des feedbacks NPS internes. Pas inventés."
         />
 
         {/* Lead magnet */}
         <ResourceTeaserBlock
-          title="20 templates cold email B2B testés sur 50 000 envois"
-          subtitle="Téléchargez le PDF gratuit pour démarrer vos campagnes du bon pied (intros, lignes d'objet, séquences en 3 touches)."
+          title="20 templates cold email B2B. Testés sur 50 000 envois."
+          subtitle="Le PDF gratuit pour démarrer tes campagnes sans te poser de questions : intros, objets, séquences en 3 touches."
         />
 
         {/* Autres personas — maillage interne */}
         {otherPersonas.length > 0 && (
           <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
-            <h2 className="text-xl sm:text-2xl font-bold mb-6">Volia, c&apos;est aussi pour…</h2>
+            <h2 className="text-xl sm:text-2xl font-bold mb-6">Volia, c&apos;est aussi pour&hellip;</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {otherPersonas.map((p) => (
                 <Link
@@ -182,9 +182,9 @@ export default function PersonaPage({ persona }) {
         {/* Final CTA */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
-            <h2 className="text-2xl font-bold mb-3">Prêt à essayer ?</h2>
+            <h2 className="text-2xl font-bold mb-3">Prêt à tester ?</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Plan Starter gratuit à vie. 100 prospects offerts chaque mois sans carte bancaire. Démarrez vos campagnes en 5 min.
+              Plan Starter gratuit à vie. 100 prospects/mois sans carte bancaire. Tes campagnes tournent en 5 min.
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
               <Zap size={16} />

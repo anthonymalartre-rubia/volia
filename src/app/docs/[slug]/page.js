@@ -308,7 +308,7 @@ export default async function DocsArticle({ params }) {
 
   const breadcrumbs = [
     { label: 'Accueil', href: '/' },
-    { label: "Centre d'aide", href: '/docs' },
+    { label: 'Doc', href: '/docs' },
     { label: category?.label || 'Catégorie' },
     { label: article.title },
   ];
@@ -376,7 +376,7 @@ export default async function DocsArticle({ params }) {
               </Link>
               <ChevronRight size={11} />
               <Link href="/docs" className="hover:text-content-primary transition">
-                Aide
+                Doc
               </Link>
               <ChevronRight size={11} />
               {category && (
@@ -393,7 +393,7 @@ export default async function DocsArticle({ params }) {
               className="inline-flex items-center gap-1.5 text-xs text-content-tertiary hover:text-violet-500 dark:hover:text-violet-400 transition mb-4 lg:hidden"
             >
               <ArrowLeft size={12} />
-              Tous les articles
+              Tous les guides
             </Link>
 
             {/* Header */}

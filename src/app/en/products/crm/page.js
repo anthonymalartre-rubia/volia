@@ -9,8 +9,8 @@ const PAGE_URL = `${SITE_URL}/en/products/crm`;
 const FR_PAGE = `${SITE_URL}/produits/crm`;
 
 export const metadata = {
-  title: 'Volia CRM - HubSpot alternative, included in Business $110/mo',
-  description: 'HubSpot Starter $90. Pipedrive $49. Salesforce $125. Volia CRM: $0 extra on Business. Drag-drop Kanban, auto-create deals from replies, 360 timeline, natively integrated with Prospecting + Campaigns.',
+  title: 'Volia CRM - The HubSpot alternative. Included in Business at $110/mo',
+  description: 'HubSpot $90. Pipedrive $49. Salesforce $125. Volia CRM: $0 extra if you\'re on Business. Drag-drop Kanban, auto-deals from replies, 360 timeline. Native to Prospecting + Campaigns. Not an integration.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -21,8 +21,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia CRM - HubSpot alternative built into your sales suite',
-    description: 'A CRM built into your Prospecting + Campaigns. Not an integration. $110/mo all-in vs $270+ for HubSpot + Apollo + Lemlist.',
+    title: 'Volia CRM - A CRM built into your sales tools. Not an integration.',
+    description: 'A CRM built into Prospecting + Campaigns. $110/mo all-in vs $270+ for HubSpot + Apollo + Lemlist. You do the math.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -44,31 +44,31 @@ const EN_LABELS = {
 };
 
 const FEATURES = {
-  headline: 'pipe your pipeline',
-  subline: 'Not a mini-Salesforce. A lightweight CRM, native to Volia, already wired to Prospecting and Campaigns. 6 features built for founders and small sales teams.',
+  headline: 'run your pipeline',
+  subline: 'Not a mini-Salesforce. A lightweight CRM wired to Prospecting and Campaigns from day one. 6 things built for founders and small sales teams.',
   items: [
-    { icon: 'KanbanSquare', featured: true, title: 'Native drag-drop Kanban', desc: 'Visual pipeline with 5 default columns (Lead → Qualified → Demo → Proposal → Closed). Drag to move a deal forward. Customizable stages (Q3 2026). Live total pipeline value.' },
-    { icon: 'MessageSquare', title: 'Auto-create from replies', desc: 'A prospect replies to a Volia Campaigns sequence? A deal is created automatically at Lead stage with the full email history. No more copy-paste.' },
-    { icon: 'Users', title: '360 timeline per contact', desc: 'Every interaction in 1 view: emails sent, opened, clicked, replied, notes, calls, meetings. Full-text search. To pick up a conversation 3 months later without re-reading 50 emails.' },
-    { icon: 'BarChart3', title: 'Automatic weighting', desc: 'Each stage has its closing probability (10% Lead, 25% Qualified, 50% Demo, 75% Proposal, 100% Won). Weighted pipeline and M+1 forecast live-computed.' },
-    { icon: 'FileText', title: 'Activities log', desc: 'Notes, calls, meetings, tasks with due_at, files attached per deal. Mention a teammate (@) to share. Immutable timestamped history.' },
-    { icon: 'Send', wide: true, title: 'Volia Prospecting integration', desc: 'From a Volia Prospecting search result, "Send to CRM" button to create a deal directly. Variables (name, city, industry, phone) are auto-mapped. No CSV export.' },
+    { icon: 'KanbanSquare', featured: true, title: 'Drag-drop Kanban', desc: '5 default columns (Lead → Qualified → Demo → Proposal → Closed). Drag to move a deal. Custom stages coming Q3 2026. Live total pipeline value.' },
+    { icon: 'MessageSquare', title: 'Auto-deals from replies', desc: 'Someone replies to a Campaigns sequence? A deal lands at Lead stage with the full email history. No copy-paste.' },
+    { icon: 'Users', title: '360 timeline per contact', desc: 'Every email sent, opened, clicked, replied. Notes, calls, meetings. Full-text search. Pick up a conversation 3 months later without re-reading 50 emails.' },
+    { icon: 'BarChart3', title: 'Auto weighting', desc: 'Each stage has a closing probability (10% Lead, 25% Qualified, 50% Demo, 75% Proposal, 100% Won). Weighted pipeline + M+1 forecast, live.' },
+    { icon: 'FileText', title: 'Activities log', desc: 'Notes, calls, meetings, tasks with due dates, files per deal. @mention a teammate. Immutable, timestamped history.' },
+    { icon: 'Send', wide: true, title: 'Native Prospecting integration', desc: 'Volia Prospecting result → "Send to CRM" button → deal created. Name, city, industry, phone auto-mapped. Zero CSV.' },
   ],
 };
 
 const HOW_IT_WORKS = [
-  { icon: 'Settings', title: '5-minute setup', desc: 'Default pipeline ready out of the box (5 stages, probabilities preconfigured). No consultant, no onboarding call, no template to pick.' },
-  { icon: 'MessageSquare', title: 'Deals show up by themselves', desc: 'Every positive reply to a Campaigns sequence creates a deal in the Lead column with full history. You never miss an opportunity.' },
-  { icon: 'TrendingUp', title: 'Drive to close', desc: 'Drag and drop deals stage to stage. Notes, calls, files per deal. Weighted forecast, closing rate and cycle time computed live.' },
+  { icon: 'Settings', title: '1. Setup in 5 minutes', desc: 'Default pipeline out of the box: 5 stages, probabilities preset. No consultant, no onboarding call, no template to pick.' },
+  { icon: 'MessageSquare', title: '2. Deals show up by themselves', desc: 'Every positive reply to Campaigns creates a deal at Lead stage with full history. You never miss an opportunity.' },
+  { icon: 'TrendingUp', title: '3. Drag to close', desc: 'Drag deals stage to stage. Add notes, calls, files. Weighted forecast, close rate, cycle time — all computed live.' },
 ];
 
 const FAQ = [
-  { q: 'What are the default pipeline stages?', a: '5 preconfigured stages with probabilities: Lead (10%), Qualified (25%), Demo (50%), Proposal (75%), Closed (100%). You also get a Lost stage to archive lost deals with a reason (no budget, competitor, timing, etc.). Weighted pipeline and M+1 forecast recompute on every deal move.' },
-  { q: 'Can I create custom stages?', a: 'Not yet — on the Q3 2026 roadmap. Short-term we chose to enforce a standard pipeline so the beta is usable in 5 min without configuration. Custom pipelines will arrive with a visual editor (drag to reorder stages, slider for probability, color per column).' },
-  { q: 'How exactly does auto-create from replies work?', a: 'Volia Campaigns detects positive replies on your sequences (Reply Intent classification via Claude). As soon as a prospect replies, a deal is created in the CRM at Lead stage with: full contact, history of sent/opened/clicked emails, full reply content, and auto-tag with source sequence name. Zero manual action.' },
-  { q: 'How is it different from free HubSpot CRM?', a: 'HubSpot CRM free has Kanban + timeline, sure. But: (1) for outbound you have to add HubSpot Marketing Hub ($45/mo minimum), (2) no native integration between HubSpot and Apollo/Lemlist (you pay Zapier $30/mo), (3) free limit is 1M contacts but 5 deal pipelines max. Volia CRM is included in the same product as prospecting and sending — no integration to maintain.' },
-  { q: 'Can I migrate from Pipedrive or HubSpot?', a: 'Yes. Standard CSV import available today for contacts and deals (auto column mapping). Assisted migration via HubSpot and Pipedrive API planned Q2 2026 (direct export without CSV). For Salesforce, manual CSV export works today. If you have more than 5,000 contacts to migrate, we help you on a call.' },
-  { q: 'How many seats does Business include?', a: 'Business $110/mo: up to 5 seats included (perfect for a small team 1-5 people — founder + 2-3 SDRs + 1 closer). Beyond that, +$15/user/mo. Each user gets their own dashboard, their own deals, and the founder sees everything. No $50-100 per-user license like HubSpot Pro or Salesforce.' },
+  { q: 'What are the default pipeline stages?', a: '5 stages: Lead (10%), Qualified (25%), Demo (50%), Proposal (75%), Closed (100%). Plus a Lost stage to archive with a reason (no budget, competitor, timing). Weighted pipeline + M+1 forecast recompute every time you move a deal.' },
+  { q: 'Can I create custom stages?', a: 'Not yet. Q3 2026 on the roadmap. We chose to ship one standard pipeline first so beta users could set up in 5 min. Custom pipelines come with a visual editor (drag to reorder, slider for probability, color per column).' },
+  { q: 'How does auto-create from replies work?', a: 'Volia Campaigns classifies replies (positive vs auto-reply vs not interested) via Claude. Positive reply = deal in CRM at Lead stage, with full contact, email history (sent/opened/clicked), reply content, and auto-tag with the sequence name. You do nothing.' },
+  { q: 'How is it different from free HubSpot CRM?', a: 'HubSpot CRM free has Kanban + timeline. Sure. But: (1) for outbound you need Marketing Hub ($45/mo+). (2) No native HubSpot ↔ Apollo/Lemlist integration — Zapier costs $30/mo more. (3) Free tier caps at 5 deal pipelines. Volia CRM lives in the same product as prospecting and sending. No integration to babysit.' },
+  { q: 'Can I migrate from Pipedrive or HubSpot?', a: 'Yes. CSV import today (auto column mapping) for contacts and deals. Direct HubSpot/Pipedrive API migration coming Q2 2026 (no CSV). For Salesforce: manual CSV export works now. More than 5,000 contacts? We jump on a call.' },
+  { q: 'How many seats does Business include?', a: '5 seats included on Business ($110/mo). Perfect for 1-5 people — founder + 2-3 SDRs + 1 closer. Need more? +$15/user/mo. Everyone gets their own dashboard and deals. Founder sees all. No $50-100/user license like HubSpot Pro or Salesforce.' },
 ];
 
 export default function EnCrmPage() {
@@ -80,14 +80,14 @@ export default function EnCrmPage() {
       labels={EN_LABELS}
       moduleLabelOverride="CRM"
       hero={{
-        eyebrow: 'HubSpot alternative built into your sales suite',
-        h1Before: 'A CRM built into your Prospecting + Campaigns.',
+        eyebrow: 'The HubSpot alternative. Built into your sales suite.',
+        h1Before: 'A CRM built into Prospecting + Campaigns.',
         h1Highlight: 'Not an integration.',
         subtitle: (
           <>
             HubSpot $90. Pipedrive $49. Salesforce $125.{' '}
             <strong className="text-content-primary font-semibold">Volia CRM: $0 extra if you&apos;re on Business</strong>.
-            Drag-drop Kanban + auto-create deals from replies + <strong className="text-emerald-700 font-semibold">360 timeline per contact</strong>.
+            Drag-drop Kanban, auto-deals from replies, <strong className="text-emerald-700 font-semibold">360 timeline per contact</strong>. You do the math.
           </>
         ),
         ctaPrimary: { label: 'Get Business $110', href: '/signup?plan=business' },
@@ -119,22 +119,22 @@ export default function EnCrmPage() {
       features={FEATURES}
       howItWorks={HOW_IT_WORKS}
       crossSell={{
-        subtitle: 'Volia CRM consumes contacts who reply in Campaigns, which come from prospects extracted in Prospecting. The loop closes natively.',
+        subtitle: 'CRM pulls contacts from Campaigns. Campaigns pulls prospects from Prospecting. The loop closes itself. No Zapier.',
         otherModules: [
-          { module: 'prospection', direction: 'in', desc: 'The top of the funnel. 150+ industries, 101 departments, scored enriched emails. "Send to CRM" 1-click button.', cta: 'Discover Prospecting' },
-          { module: 'campagnes', direction: 'in', desc: 'Email sequences with follow-ups. Every positive reply auto-creates a deal in the CRM Lead column.', cta: 'Discover Campaigns' },
+          { module: 'prospection', direction: 'in', desc: 'Top of funnel. 150+ industries, 101 departments, scored emails. "Send to CRM" button = 1 click.', cta: 'See Prospecting' },
+          { module: 'campagnes', direction: 'in', desc: 'Email sequences with follow-ups. Every positive reply auto-creates a deal at Lead stage.', cta: 'See Campaigns' },
         ],
       }}
       pricing={{
-        label: 'CRM gated to Business - $110/mo all-in',
-        subtext: 'The 3 modules together (Prospecting + Campaigns + CRM). Up to 5 seats, 10,000 prospects in pipeline, unlimited deals. No $50-100 per-user license like HubSpot or Salesforce.',
+        label: 'CRM lives in Business. $110/mo all-in.',
+        subtext: 'All 3 modules together (Prospecting + Campaigns + CRM). Up to 5 seats, 10,000 prospects in pipeline, unlimited deals. No $50-100/user license like HubSpot or Salesforce.',
         cta: 'Get Business',
         ctaHref: '/signup?plan=business',
       }}
       faq={FAQ}
       finalCta={{
-        title: 'A CRM that fills itself, for $90/mo less.',
-        subtitle: 'Stop the HubSpot + Apollo + Lemlist + Zapier mess. Move to Volia Business: one product, one login, one bill. Cancel anytime.',
+        title: 'A CRM that fills itself. For $90/mo less.',
+        subtitle: 'End the HubSpot + Apollo + Lemlist + Zapier circus. One product. One login. One bill. Cancel anytime.',
         primary: { label: 'Get Business $110', href: '/signup?plan=business' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: '$110/mo all-in - 5 seats - 10,000 prospects in pipeline - 1-click cancel - GDPR by default',

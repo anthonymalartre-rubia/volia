@@ -381,13 +381,16 @@ export default function LandingContent() {
             {/* ─── COLONNE DROITE : Product mockup ─── */}
             {/* Refonte : 3 cards empilées montrant le flow Prospection → Campagnes → CRM */}
             <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150">
-              {/* Floating "live" sticker */}
+              {/* Floating "live" sticker — reformulé 27 mai 2026 :
+                  "Flow en direct · 3 modules" était cryptique. Le pivot
+                  80/20 met l'accent sur email + téléphone — le sticker
+                  doit refléter ça. */}
               <div className="absolute -top-4 -left-4 z-20 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 shadow-md flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                <span className="text-xs font-semibold text-emerald-700">Flow en direct · 3 modules</span>
+                <span className="text-xs font-semibold text-emerald-700">Démo · Email + Téléphone</span>
               </div>
 
               <div className="space-y-3">
@@ -406,15 +409,31 @@ export default function LandingContent() {
                     </div>
                     <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold">234 résultats</div>
                   </div>
-                  <div className="px-4 py-3 space-y-1.5">
+                  {/* Ajout téléphones (fixe + mobile) 27 mai 2026 — aligné
+                      pivot 80/20 "emails ET téléphones" : la démo doit
+                      montrer les 2 valeurs scrapées. Grid 3 colonnes :
+                      Nom | Email | Téléphone (badge couleur fixe/mobile) */}
+                  <div className="px-4 py-3 space-y-2">
                     {[
-                      { name: 'La Bonne Table', email: 'contact@labonnetable.fr' },
-                      { name: 'Pasta Roma', email: 'info@pastaroma.fr' },
-                      { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr' },
+                      { name: 'La Bonne Table', email: 'contact@labonnetable.fr', phone: '01 42 33 87 19', type: 'fixe' },
+                      { name: 'Pasta Roma', email: 'info@pastaroma.fr', phone: '06 78 24 51 09', type: 'mobile' },
+                      { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr', phone: '01 45 88 12 67', type: 'fixe' },
                     ].map((row, i) => (
-                      <div key={i} className="flex items-center justify-between text-xs">
-                        <span className="font-medium text-content-primary truncate mr-2">{row.name}</span>
-                        <span className="text-content-tertiary font-mono text-[10px] truncate">{row.email}</span>
+                      <div key={i} className="flex items-center justify-between gap-2 text-xs">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-content-primary truncate">{row.name}</div>
+                          <div className="text-content-tertiary font-mono text-[10px] truncate">{row.email}</div>
+                        </div>
+                        <div className="flex-shrink-0 flex items-center gap-1">
+                          <span className="font-mono text-[10px] text-content-secondary tabular-nums">{row.phone}</span>
+                          <span className={`text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded ${
+                            row.type === 'mobile'
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : 'bg-blue-100 text-blue-700'
+                          }`}>
+                            {row.type}
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>

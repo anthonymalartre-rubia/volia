@@ -915,8 +915,12 @@ export default function SettingsPage() {
                   })}
                 </div>
 
-                {/* Portail Stripe pour les users déjà payants (gestion abo, factures) */}
-                {planId !== 'free' && (
+                {/* Portail Stripe pour les users déjà payants (gestion abo, factures).
+                    Bug fix 27 mai 2026 : avant on affichait le bouton dès planId !== 'free',
+                    mais un user admin/manuel (plan='business' setté en DB sans
+                    stripe_customer_id) cliquait → "Pas d'abonnement actif".
+                    Maintenant on check aussi stripe_customer_id présent. */}
+                {planId !== 'free' && profile?.stripe_customer_id && (
                   <div className="mt-5 pt-4 border-t border-line flex justify-end">
                     <button
                       onClick={handleManageBilling}
@@ -926,6 +930,16 @@ export default function SettingsPage() {
                       {billingLoading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
                       {t('settings.manageSubscription')}
                     </button>
+                  </div>
+                )}
+                {/* État spécifique : plan payant en DB mais pas de stripe_customer_id
+                    (admin attribué manuellement ou compte interne). On affiche un
+                    message clair plutôt que le bouton qui ne marche pas. */}
+                {planId !== 'free' && !profile?.stripe_customer_id && (
+                  <div className="mt-5 pt-4 border-t border-line">
+                    <p className="text-xs text-content-tertiary italic">
+                      Compte interne — pas d&apos;abonnement Stripe associé. Plan attribué manuellement.
+                    </p>
                   </div>
                 )}
               </div>

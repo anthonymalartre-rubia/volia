@@ -49,11 +49,21 @@ export default function CookiesClient() {
           </div>
         </div>
 
-        <p className="text-content-secondary leading-relaxed mt-6 mb-10">
-          Cette page recense tous les cookies et traceurs utilisés par Volia.fr. Vous pouvez modifier
-          votre consentement à tout moment via le bouton ci-dessous. Conformément aux recommandations
-          de la CNIL, votre consentement est demandé à nouveau au bout de 6 mois maximum.
+        <p className="text-content-secondary leading-relaxed mt-6 mb-6">
+          Tous les cookies et traceurs utilisés par Volia.fr sont listés ici. Vous pouvez modifier
+          votre consentement à tout moment via le bouton ci-dessous. Conformément à la CNIL, on
+          vous redemande votre choix au bout de 6 mois maximum.
         </p>
+
+        {/* En résumé global */}
+        <div className="mb-10 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+          <p className="text-content-primary font-semibold mb-2">En 2 phrases</p>
+          <p>
+            On dépose 4 types de cookies (strictement nécessaires, fonctionnels, analytiques,
+            marketing). Vous pouvez tout accepter, tout refuser ou choisir par catégorie — modifiable
+            à tout moment via le bouton ci-dessous.
+          </p>
+        </div>
 
         {/* Statut du consentement actuel */}
         <section className="mb-10 p-6 rounded-2xl border border-line bg-surface-card">
@@ -195,9 +205,9 @@ export default function CookiesClient() {
         <section className="mb-10 p-6 rounded-2xl border border-line bg-surface-card">
           <h2 className="text-lg font-semibold text-content-primary mb-3">Vos droits</h2>
           <p className="text-sm text-content-secondary leading-relaxed">
-            Conformément au RGPD et à la loi Informatique et Libertés, vous pouvez à tout moment
-            retirer votre consentement, modifier vos préférences ou demander la suppression des données
-            collectées. Pour plus d&apos;informations sur vos droits, consultez nos pages{' '}
+            Au titre du RGPD et de la loi Informatique et Libertés, vous pouvez à tout moment retirer
+            votre consentement, changer d&apos;avis par catégorie, ou demander la suppression des
+            données déjà collectées. Pour le détail, voir nos pages{' '}
             <Link href="/confidentialite" className="text-violet-400 hover:text-violet-300 underline-offset-2 hover:underline">
               Confidentialité
             </Link>{' '}

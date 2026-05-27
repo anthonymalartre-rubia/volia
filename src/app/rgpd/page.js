@@ -89,12 +89,21 @@ export default function RGPDPage() {
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">Protection des données (RGPD)</h1>
         <p className="text-content-secondary text-sm mb-4">Dernière mise à jour : 28 mars 2026</p>
-        <p className="text-content-secondary leading-relaxed mb-10">
-          Chez Volia.fr, nous prenons la protection des données personnelles très au sérieux.
-          Cette page détaille les droits de toutes les personnes concernées — utilisateurs du Service
-          et personnes dont les données professionnelles sont traitées — ainsi que les mesures de
-          protection mises en place.
+        <p className="text-content-secondary leading-relaxed mb-6">
+          Vos données vous appartiennent. Cette page liste vos droits et la façon de les exercer,
+          que vous soyez un utilisateur inscrit sur Volia ou un professionnel dont les coordonnées
+          apparaissent dans nos résultats.
         </p>
+
+        {/* En résumé global */}
+        <div className="mb-10 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+          <p className="text-content-primary font-semibold mb-2">En 1 phrase</p>
+          <p>
+            Vous avez le droit d&apos;accéder, corriger, supprimer ou récupérer vos données ;
+            un email à contact@volia.fr suffit, et vous serez recontacté sous 30 jours (72h pour
+            une demande d&apos;opt-out).
+          </p>
+        </div>
 
         {/* ===== SECTION 1 : DROITS DES UTILISATEURS ===== */}
         <div className="p-4 rounded-xl bg-surface-card border border-line mb-8">
@@ -157,6 +166,16 @@ export default function RGPDPage() {
         <div className="mt-14 space-y-10 text-content-secondary leading-relaxed">
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">Analyse d&apos;intérêt légitime (article 6.1.f RGPD)</h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">À quoi sert cette section</p>
+              <p>
+                Le RGPD nous oblige à démontrer que notre activité respecte un équilibre entre
+                l&apos;intérêt commercial et les droits des personnes. Voici notre démonstration,
+                en 5 points, qu&apos;on réévalue chaque année.
+              </p>
+            </div>
+
             <p>
               Le traitement des données professionnelles B2B par Volia.fr repose sur l&apos;intérêt légitime.
               Conformément aux exigences du RGPD et aux lignes directrices de la CNIL, nous avons réalisé

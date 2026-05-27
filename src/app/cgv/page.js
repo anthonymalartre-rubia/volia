@@ -27,12 +27,23 @@ export default function CGVPage() {
           Dernière mise à jour : 26 mai 2026
         </p>
 
+        {/* En résumé global */}
+        <div className="mb-6 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+          <p className="text-content-primary font-semibold mb-2">L&apos;essentiel pour les pressés</p>
+          <ul className="list-disc pl-5 space-y-1.5">
+            <li>4 plans : Starter (gratuit) · Solo 19€ · Pro 49€ · Business 99€ par mois.</li>
+            <li>Paiement par Stripe. Annulation en un clic depuis votre espace, à tout moment.</li>
+            <li>Pas de remboursement au prorata, mais on étudie les cas particuliers.</li>
+            <li>Vos données vous appartiennent. Vous les récupérez en CSV, on les supprime après 30 jours.</li>
+            <li>Droit français, tribunaux de Lyon en cas de litige.</li>
+          </ul>
+        </div>
+
         <div className="mb-10 p-4 rounded-xl border border-line bg-surface-card text-sm text-content-secondary">
           <p>
             <span className="text-content-primary font-medium">Note :</span>{' '}
-            Les présentes CGV constituent un modèle standard adapté à un service SaaS B2B
-            français. Pour les contrats critiques (grands comptes, marchés publics, secteurs
-            régulés), il est recommandé de les faire valider par votre conseil juridique.
+            Les présentes CGV sont un modèle standard pour un SaaS B2B français. Si vous êtes un grand
+            compte, un marché public ou un secteur régulé, faites-les relire par votre conseil juridique.
           </p>
         </div>
 
@@ -178,6 +189,16 @@ export default function CGVPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">
               6. Plans tarifaires et facturation
             </h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">En résumé</p>
+              <p>
+                Vous choisissez un plan, vous payez via Stripe (mensuel ou annuel avec 2 mois offerts).
+                TVA française 20% si vous êtes en France, autoliquidation si vous êtes dans l&apos;UE
+                avec un numéro de TVA valide. Pas de paiement à temps = accès suspendu.
+              </p>
+            </div>
+
             <p>
               Volia propose les plans suivants, facturables mensuellement ou annuellement
               (le paiement annuel donne droit à 2 mois offerts) :
@@ -292,6 +313,17 @@ export default function CGVPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">
               8. Résiliation et remboursement
             </h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">En résumé</p>
+              <p>
+                Vous annulez quand vous voulez depuis votre espace, en un clic. L&apos;accès reste
+                actif jusqu&apos;à la fin du mois (ou de l&apos;année) déjà payé. Pas de remboursement
+                au prorata, mais on étudie les cas exceptionnels. Vos données restent récupérables
+                pendant 30 jours après la résiliation.
+              </p>
+            </div>
+
             <p>
               <span className="text-content-primary font-medium">
                 Résiliation par le Client :

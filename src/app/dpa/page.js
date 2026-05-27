@@ -30,6 +30,17 @@ export default function DPAPage() {
           Data Processing Agreement (DPA) · Dernière mise à jour : 26 mai 2026
         </p>
 
+        {/* En résumé global */}
+        <div className="mb-6 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+          <p className="text-content-primary font-semibold mb-2">En 2 phrases</p>
+          <p>
+            Quand vous utilisez Volia pour traiter vos propres données client, c&apos;est vous qui
+            décidez (responsable de traitement) et c&apos;est Volia qui exécute (sous-traitant). Ce
+            document décrit qui fait quoi, comment on sécurise vos données, et ce qu&apos;il se passe
+            en cas de problème ou de fin de contrat.
+          </p>
+        </div>
+
         {/* Intro */}
         <div className="mb-8 p-5 rounded-xl border border-line bg-surface-card text-sm text-content-secondary leading-relaxed">
           <p>
@@ -78,11 +89,9 @@ export default function DPAPage() {
 
         <div className="mb-10 p-4 rounded-xl border border-line bg-surface-card text-sm text-content-secondary">
           <p>
-            <span className="text-content-primary font-medium">Note :</span> Le présent
-            DPA constitue un modèle standard adapté à un service SaaS B2B français.
-            Pour les organisations soumises à des exigences sectorielles spécifiques
-            (santé, secteur public, OIV, OSE), il est recommandé de le faire valider
-            par votre Délégué à la Protection des Données ou votre conseil juridique.
+            <span className="text-content-primary font-medium">Note :</span> Ce DPA est un modèle
+            standard pour un SaaS B2B français. Si vous êtes dans la santé, le secteur public, OIV
+            ou OSE, faites-le relire par votre DPO ou conseil juridique.
           </p>
         </div>
 
@@ -348,6 +357,16 @@ export default function DPAPage() {
             <h2 className="text-xl font-semibold text-content-primary mb-3">
               7. Sécurité et mesures techniques
             </h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">En résumé</p>
+              <p>
+                Chiffrement TLS en transit, AES-256 au repos, MFA disponible, Row Level Security
+                Supabase, backups quotidiens, hébergement UE. Le tableau ci-dessous détaille chaque
+                domaine.
+              </p>
+            </div>
+
             <p>
               Conformément à l&apos;article 32 du RGPD, Volia met en œuvre les mesures
               techniques et organisationnelles suivantes :

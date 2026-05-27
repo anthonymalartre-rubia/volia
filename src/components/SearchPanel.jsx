@@ -535,12 +535,12 @@ export default function SearchPanel({
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-content-primary mb-1">{t('search.title')}</h2>
-        <p className="text-sm text-content-muted">{t('search.subtitle')}</p>
-      </div>
-
+    /* Bug fix UX 27 mai 2026 : max-w-2xl → max-w-4xl (672→896px) pour
+       utiliser plus de largeur disponible (parent dashboard est max-w-6xl).
+       Title/subtitle locaux SUPPRIMÉS car dashboard/page.js affiche déjà
+       un header "DÉCOUVRIR > Recherche > Trouvez des prospects..." en
+       amont → c'était un doublon visuel. */
+    <div className="max-w-4xl mx-auto">
       {!apiKeySet && (
         <div className="flex items-start gap-3 p-4 rounded-xl border border-amber-300 bg-amber-500/5 mb-6">
           <Sparkles size={18} className="text-amber-500 mt-0.5 flex-shrink-0" />

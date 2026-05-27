@@ -45,8 +45,10 @@ test.describe('API protegees (401 sans auth)', () => {
     expect([401, 403]).toContain(res.status());
   });
 
-  test('GET /api/email-senders sans token → 401', async ({ request }) => {
-    const res = await request.get('/api/email-senders');
+  test('GET /api/admin/email-senders sans token → 401', async ({ request }) => {
+    // Route admin protegee. La route /api/email-senders (sans /admin) n'existe
+    // pas — c'etait une erreur de test (renvoyait 404 en CI au lieu de 401).
+    const res = await request.get('/api/admin/email-senders');
     expect([401, 403]).toContain(res.status());
   });
 });

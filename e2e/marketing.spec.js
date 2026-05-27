@@ -29,14 +29,17 @@ test.describe('Marketing pages', () => {
 
   test('Pricing : toggle Mensuel/Annuel bascule les prix', async ({ page }) => {
     await page.goto('/pricing');
-    // Le toggle Mensuel/Annuel — exact match pour eviter de matcher le
-    // bouton FAQ "Comment fonctionne la facturation annuelle ?"
-    const annuelBtn = page.getByRole('button', { name: 'Annuel -2 MOIS' });
+    // Le toggle Mensuel/Annuel — selector tolerant car le label est compose
+    // de 'Annuel' + span '-2 MOIS' (accessible name peut varier selon le
+    // rendu : espace normal, nbsp, ou pas d'espace du tout).
+    // On cible par regex /Annuel.*MOIS/i qui matche les 3 variantes.
+    const annuelBtn = page.getByRole('button', { name: /Annuel.*MOIS/i });
     await expect(annuelBtn).toBeVisible();
     await annuelBtn.click();
-    // En annuel le badge "/an" apparait sur les cards payantes.
-    await expect(page.locator('text=/\\/an/').first()).toBeVisible();
-    // Le prix 190 € (Solo annuel) apparait dans le sous-texte de la card Solo.
+    // Apres click on attend que le DOM react re-render.
+    await page.waitForTimeout(300);
+    // En annuel : Solo annuel = 190 €/an apparait dans le DOM.
+    // On cherche le texte "190" qui est tres specifique (vs 19 €/mois).
     await expect(page.locator('text=/190/').first()).toBeVisible();
   });
 

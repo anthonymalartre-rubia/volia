@@ -96,26 +96,26 @@ export const PLANS = {
 
   // ─── Business : Pro + équipes + volumes premium ─────
   //
-  // ⚠️ ANTHONY À FAIRE :
-  // 1. Créer 2 nouveaux prix Stripe :
-  //    - 179 €/mois (prix normal Business — STRIPE_BUSINESS_PRICE_ID)
-  //    - 149 €/mois pendant 12 mois (promo lancement — STRIPE_BUSINESS_PROMO_PRICE_ID)
-  //      Type Stripe : coupon "12 months off X €" OU price dédié + auto-switch
-  //      Plus simple : créer un coupon Stripe "VOLIA-LAUNCH-12M" qui applique
-  //      -30 €/mois pendant 12 mois sur le price normal 179 €
-  // 2. Update env vars Vercel + plans.js pour basculer price → 17900 + priceYearly
-  // 3. La promo doit avoir une fin (ex: 31 décembre 2026) gérée côté Stripe
+  // Pricing V3 (mai 2026) :
+  //   - 179 €/mois (prix normal — Stripe price_1TbcndCQpsWswW9VhX7o3gv2)
+  //   - 1690 €/an (Stripe price_1TbcneCQpsWswW9VCF5zLvIT, ~169 €/mois équivalent)
+  //   - Coupon promo "VOLIA-LAUNCH-12M" (Stripe id: Ltbx4XbR)
+  //     -30 €/mois pendant 12 mois sur le price monthly
+  //     → premiers 12 mois facturés 149 €/mois, puis bascule auto à 179 €/mois
+  //     → appliqué automatiquement au checkout par /api/stripe/checkout
+  //       quand planId=business + period=monthly + env STRIPE_BUSINESS_PROMO_COUPON_ID
   //
-  // En attendant : Stripe checkout part toujours sur le prix actuel (99 €).
-  // L'affichage publique montre 149 €/mois (promo) avec 179 €/mois barré.
-  // Le visiteur paie 99 € jusqu'à ce qu'Anthony bascule — c'est intentionnel.
+  // Env vars Vercel à configurer pour que le pricing live s'applique :
+  //   STRIPE_BUSINESS_PRICE_ID = price_1TbcndCQpsWswW9VhX7o3gv2
+  //   STRIPE_BUSINESS_YEARLY_PRICE_ID = price_1TbcneCQpsWswW9VCF5zLvIT
+  //   STRIPE_BUSINESS_PROMO_COUPON_ID = Ltbx4XbR
   business: {
     id: 'business',
     name: 'Business',
-    price: 9900,            // ⚠️ Stripe actuel = 99 €/mois (à update → 17900)
-    priceYearly: 99000,     // ⚠️ Stripe actuel = 990 €/an (à update → 169000)
+    price: 17900,           // 179 €/mois en centimes
+    priceYearly: 169000,    // 1690 €/an (~ 2 mois offerts sur 179)
     displayPrice: 17900,    // Affichage : prix normal après promo = 179 €/mois
-    displayPriceYearly: 169000,  // Annual = 1690 €/an (~ 2 mois offerts sur 179)
+    displayPriceYearly: 169000,
     promo: {
       displayPrice: 14900,    // Promo : 149 €/mois pendant 12 mois (monthly only)
       label: 'Promo lancement',

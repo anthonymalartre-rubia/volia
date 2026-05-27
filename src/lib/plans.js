@@ -27,10 +27,9 @@ export const PLANS = {
     // Features = LE CONTENU DE BASE (référence pour les "Tout inclus" plus haut)
     // Garder court (max 5 items) — l'idée c'est de tester sans s'engager
     features: [
-      '100 prospects/mois',
       '20 enrichissements/mois',
       '5 exports/mois',
-      'Scraping email gratuit',
+      'Scraping email + téléphone (fixe & mobile)',
       '101 départements (France entière)',
     ],
   },
@@ -55,10 +54,9 @@ export const PLANS = {
       verifications_per_month: 100,
     },
     features: [
-      '1 000 prospects/mois (×10)',
       '400 enrichissements/mois (×20)',
       'Exports illimités',
-      'Cascade waterfall (scraping + Google)',
+      'Cascade waterfall (scraping + Google) — emails ET téléphones',
       'Support email (48 h)',
     ],
   },
@@ -79,16 +77,16 @@ export const PLANS = {
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_PRO_YEARLY_PRICE_ID || ''),
     limits: {
       searches_per_month: 5000,
-      enrichments_per_month: 1000,
+      enrichments_per_month: 1200,
       folders: -1,
       exports_per_month: -1,
       verifications_per_month: 500,
     },
     features: [
-      '5 000 prospects/mois (×5)',
-      '1 000 enrichissements/mois (×2,5)',
+      '1 200 enrichissements/mois (×3)',
       'Dossiers illimités',
       'Vérification email (MillionVerifier)',
+      'Téléphones mobiles enrichis (vs fixes en Solo)',
       'Support email (24 h)',
     ],
   },
@@ -134,8 +132,7 @@ export const PLANS = {
       verifications_per_month: 5000,
     },
     features: [
-      '10 000 prospects/mois (×2)',
-      '10 000 enrichissements/mois (×10)',
+      '10 000 enrichissements/mois (×8)',
       'Multi-utilisateurs (équipes, RBAC)',
       'Accès API (à venir)',
       'Onboarding personnalisé',

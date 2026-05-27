@@ -83,7 +83,25 @@ export async function POST(request) {
       || process.env.NEXT_PUBLIC_APP_URL
       || 'https://volia.fr';
 
-    const session = await stripe.checkout.sessions.create({
+    // ─── Auto-apply coupon Business promo lancement ─────────────────
+    // Si plan=business + period=monthly + env STRIPE_BUSINESS_PROMO_COUPON_ID
+    // existe, on applique automatiquement le coupon promo (-30 €/mois pendant
+    // 12 mois) au checkout. Le client n'a rien à coder à la main.
+    //
+    // Anthony doit créer ce coupon dans Stripe Dashboard :
+    //   - Type : Repeating
+    //   - Duration : 12 months
+    //   - Amount off : 30.00 EUR
+    //   - Code (optionnel) : VOLIA-LAUNCH-12M
+    //
+    // Puis copier l'ID (commence par "promo_..." ou "coupon_...") dans
+    // l'env var STRIPE_BUSINESS_PROMO_COUPON_ID sur Vercel.
+    // ─────────────────────────────────────────────────────────────────
+    const businessPromoCouponId = cleanEnv(process.env.STRIPE_BUSINESS_PROMO_COUPON_ID || '');
+    const shouldApplyBusinessPromo =
+      planId === 'business' && period === 'monthly' && businessPromoCouponId;
+
+    const sessionParams = {
       customer: customerId,
       mode: 'subscription',
       line_items: [{ price: stripePriceId, quantity: 1 }],
@@ -95,18 +113,35 @@ export async function POST(request) {
       success_url: `${origin}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/dashboard?upgrade=cancelled`,
       // metadata sur la session : disponible dans checkout.session.completed
-      metadata: { supabase_user_id: user.id, plan_id: planId, period },
+      metadata: {
+        supabase_user_id: user.id,
+        plan_id: planId,
+        period,
+        ...(shouldApplyBusinessPromo ? { business_launch_promo_applied: 'true' } : {}),
+      },
       // subscription_data.metadata : ATTACHÉ À LA SUBSCRIPTION elle-même
       // → retrouvable dans tous les futurs events subscription.updated /
       //   subscription.deleted / invoice.payment_failed sans dépendre de la DB.
       subscription_data: {
         metadata: { supabase_user_id: user.id, plan_id: planId, period },
       },
-      allow_promotion_codes: true,
+      // Coupon promo Business : appliqué via `discounts` (mutuellement exclusif
+      // avec allow_promotion_codes — Stripe refuse les 2 en même temps).
+      // Pour les autres plans, on laisse l'utilisateur entrer un code promo
+      // manuel s'il en a un (allow_promotion_codes: true).
+      ...(shouldApplyBusinessPromo
+        ? { discounts: [{ coupon: businessPromoCouponId }] }
+        : { allow_promotion_codes: true }),
       // Email de facturation Stripe directement à l'user
       customer_update: { address: 'auto', name: 'auto' },
       billing_address_collection: 'auto',
-    });
+    };
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
+    if (shouldApplyBusinessPromo) {
+      console.log(`[stripe/checkout] Business promo coupon ${businessPromoCouponId} applied for user ${user.id}`);
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (err) {

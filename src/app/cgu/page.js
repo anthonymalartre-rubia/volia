@@ -16,7 +16,18 @@ export default function CGUPage() {
         </Link>
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">Conditions Générales d&apos;Utilisation</h1>
-        <p className="text-content-secondary text-sm mb-10">Dernière mise à jour : 28 mars 2026</p>
+        <p className="text-content-secondary text-sm mb-6">Dernière mise à jour : 28 mars 2026</p>
+
+        {/* En résumé global */}
+        <div className="mb-10 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+          <p className="text-content-primary font-semibold mb-2">En 3 phrases</p>
+          <p>
+            Volia agrège des données B2B publiques (Google Places + sources tierces) pour faciliter
+            votre prospection. Vous restez responsable de vos campagnes (RGPD, opt-out, lien de
+            désinscription). Le service est dédié au B2B uniquement : pas de spam, pas de revente,
+            pas de prospection vers des particuliers.
+          </p>
+        </div>
 
         <div className="space-y-10 text-content-secondary leading-relaxed">
           <section>
@@ -92,6 +103,15 @@ export default function CGUPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">6. Utilisation autorisée</h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">En résumé</p>
+              <p>
+                OK : prospection B2B classique vers des entreprises. Pas OK : spam, prospection
+                de particuliers, revente des données, contact de personnes ayant exercé leur opt-out.
+              </p>
+            </div>
+
             <p>
               Le Service est <span className="text-content-primary font-medium">exclusivement destiné à la prospection commerciale B2B
               (Business-to-Business)</span> entre professionnels. L&apos;utilisateur s&apos;engage à utiliser le Service uniquement

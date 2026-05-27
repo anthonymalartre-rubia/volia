@@ -16,7 +16,17 @@ export default function ConfidentialitePage() {
         </Link>
 
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">Politique de Confidentialité</h1>
-        <p className="text-content-secondary text-sm mb-10">Dernière mise à jour : 28 mars 2026</p>
+        <p className="text-content-secondary text-sm mb-6">Dernière mise à jour : 28 mars 2026</p>
+
+        {/* En résumé global */}
+        <div className="mb-10 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+          <p className="text-content-primary font-semibold mb-2">En 3 phrases</p>
+          <p>
+            On collecte votre email, vos données d&apos;usage et vos prospects. On ne revend rien
+            à personne. Vous pouvez tout exporter ou tout supprimer à tout moment depuis vos
+            paramètres ou par email à contact@volia.fr.
+          </p>
+        </div>
 
         <div className="space-y-10 text-content-secondary leading-relaxed">
           <section>
@@ -121,6 +131,16 @@ export default function ConfidentialitePage() {
 
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">5. Base légale du traitement — Données des prospects</h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">En résumé</p>
+              <p>
+                On traite des données pro publiées par les entreprises elles-mêmes (Google Maps,
+                site web). C&apos;est légal sous &laquo; intérêt légitime &raquo; pour la prospection B2B,
+                comme l&apos;autorise la CNIL. Toute personne peut s&apos;opposer en 1 clic via /opt-out.
+              </p>
+            </div>
+
             <p>
               Le traitement des données professionnelles des prospects repose sur l&apos;<span className="text-content-primary font-medium">intérêt
               légitime</span> (article 6.1.f du RGPD), conformément aux lignes directrices de la CNIL concernant la
@@ -440,6 +460,15 @@ export default function ConfidentialitePage() {
 
           <section>
             <h2 className="text-xl font-semibold text-content-primary mb-3">12. Vos droits (RGPD)</h2>
+
+            <div className="mb-5 p-4 rounded-xl border border-line bg-surface-card text-sm">
+              <p className="text-content-primary font-semibold mb-1">En résumé</p>
+              <p>
+                Vous pouvez à tout moment : voir vos données, les corriger, les exporter, les
+                supprimer, ou vous opposer à leur traitement. Un email à contact@volia.fr suffit.
+                On répond sous 30 jours (72h pour les opt-out).
+              </p>
+            </div>
 
             <h3 className="text-lg font-medium text-content-primary mt-5 mb-2">12.1 Droits des utilisateurs du Service</h3>
             <p>

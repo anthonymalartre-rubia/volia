@@ -144,13 +144,26 @@ export default function SousTraitantsPage() {
               Sous-traitants RGPD de Volia
             </h1>
             <p className="text-base sm:text-lg text-content-secondary leading-relaxed max-w-3xl">
-              Transparence totale : voici les services tiers que nous utilisons
-              pour faire fonctionner Volia, leur rôle, et leurs garanties RGPD.
+              Les outils tiers qui font tourner Volia, leur rôle, leur localisation,
+              et le lien vers leur DPA. Rien de caché.
             </p>
             <p className="text-xs text-content-muted mt-4">
               Dernière mise à jour : 26 mai 2026
             </p>
           </header>
+
+          {/* En résumé global */}
+          <section className="mb-8">
+            <div className="p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
+              <p className="text-content-primary font-semibold mb-2">En 2 phrases</p>
+              <p>
+                Volia s&apos;appuie sur 10 services tiers (hébergement, paiement, IA, emails). Vos
+                données utilisateur sont stockées dans l&apos;UE ; pour les rares sous-traitants
+                hors UE, on s&apos;appuie sur les Clauses Contractuelles Types et le Data Privacy
+                Framework.
+              </p>
+            </div>
+          </section>
 
           {/* Introduction */}
           <section className="mb-10">
@@ -297,13 +310,11 @@ export default function SousTraitantsPage() {
           <section className="mb-4">
             <div className="p-6 sm:p-8 rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-500/10 to-violet-500/5">
               <h2 className="text-xl sm:text-2xl font-semibold mb-2">
-                Vous êtes une entreprise et vous voulez signer un DPA
-                personnalisé avec Volia ?
+                Besoin d&apos;un DPA personnalisé pour votre entreprise ?
               </h2>
               <p className="text-content-secondary mb-5 text-sm sm:text-base">
-                Nous fournissons un Data Processing Agreement adapté à vos
-                contraintes (annexe sécurité, listes de sous-traitants, audit
-                rights).
+                On vous prépare un Data Processing Agreement adapté à vos contraintes :
+                annexe sécurité, liste de sous-traitants à jour, droit d&apos;audit.
               </p>
               <Link
                 href="/dpa"

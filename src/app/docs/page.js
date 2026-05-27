@@ -29,14 +29,14 @@ import ReaderFooter from '@/components/ReaderFooter';
 import DocsContactFooter from '@/components/DocsContactFooter';
 
 export const metadata = {
-  title: "Centre d'aide Volia — Documentation & guides",
+  title: "Doc Volia — Tout ce qu'il faut savoir, sans le blabla",
   description:
-    "Toutes les réponses pour utiliser Volia : prospection, campagnes email, CRM, API. Guides pas à pas pour démarrer en 5 minutes.",
+    "Prospection, campagnes, CRM, API. Guides courts, exemples concrets, démarrage en 5 min. Si tu cherches comment faire X, c'est ici.",
   alternates: { canonical: 'https://volia.fr/docs' },
   openGraph: {
-    title: "Centre d'aide Volia — Documentation & guides",
+    title: "Doc Volia — Tout ce qu'il faut savoir, sans le blabla",
     description:
-      "Toutes les réponses pour utiliser Volia : prospection, campagnes email, CRM, API.",
+      "Prospection, campagnes, CRM, API. Guides courts, exemples concrets.",
     url: 'https://volia.fr/docs',
   },
 };
@@ -78,7 +78,7 @@ export default function DocsHub() {
 
   const breadcrumbs = [
     { label: 'Accueil', href: '/' },
-    { label: "Centre d'aide" },
+    { label: 'Doc' },
   ];
 
   const jsonLd = {
@@ -87,7 +87,7 @@ export default function DocsHub() {
       breadcrumbSchema(breadcrumbs),
       {
         '@type': 'WebSite',
-        name: "Volia — Centre d'aide",
+        name: 'Volia — Doc',
         url: 'https://volia.fr/docs',
         potentialAction: {
           '@type': 'SearchAction',
@@ -112,14 +112,14 @@ export default function DocsHub() {
         <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-12 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-xs text-violet-600 dark:text-violet-300 mb-6">
             <BookOpen size={12} />
-            Centre d&apos;aide
+            Doc
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight mb-5 text-content-primary">
-            Comment pouvons-nous vous aider&nbsp;?
+            Tu cherches comment faire quoi&nbsp;?
           </h1>
           <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-            Guides pas à pas, FAQ, intégrations, API. Tout ce qu&apos;il faut savoir
-            pour tirer le meilleur de Volia.
+            Guides courts, exemples concrets, démarrage en 5 min. Pas de blabla,
+            pas de "Bienvenue dans notre documentation complète".
           </p>
 
           {/* Search bar (statique pour MVP — pointe vers /docs/[slug] où la recherche live) */}
@@ -132,7 +132,7 @@ export default function DocsHub() {
               <input
                 type="search"
                 name="q"
-                placeholder="Que recherchez-vous ? (ex: warmup, RGPD, webhook…)"
+                placeholder="warmup, RGPD, webhook, import CSV…"
                 className="w-full pl-11 pr-4 py-3.5 text-sm rounded-2xl border border-line bg-surface-card text-content-primary placeholder:text-content-muted focus:outline-none focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 transition"
               />
             </div>
@@ -193,7 +193,7 @@ export default function DocsHub() {
                       href={`/docs/${articles[0]?.slug || ''}`}
                       className="inline-flex items-center gap-1 text-xs font-semibold text-violet-600 dark:text-violet-400 hover:underline"
                     >
-                      Voir les {cat.count} articles
+                      Voir les {cat.count} guides
                       <ArrowRight size={11} />
                     </Link>
                   )}
@@ -208,7 +208,7 @@ export default function DocsHub() {
           <div className="flex items-center gap-2 mb-5">
             <HelpCircle size={18} className="text-violet-500 dark:text-violet-400" />
             <h2 className="text-xl font-bold text-content-primary">
-              Les plus consultés
+              Les guides les plus consultés
             </h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-3">

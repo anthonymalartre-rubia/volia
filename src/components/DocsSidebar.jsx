@@ -89,7 +89,7 @@ export default function DocsSidebar({ categories, articles, currentSlug }) {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Rechercher dans la doc…"
+            placeholder="Cherche un guide…"
             className="w-full pl-9 pr-9 py-2.5 text-sm rounded-xl border border-line bg-surface-card text-content-primary placeholder:text-content-muted focus:outline-none focus:border-violet-500/60 focus:ring-2 focus:ring-violet-500/20 transition"
           />
           {query && (

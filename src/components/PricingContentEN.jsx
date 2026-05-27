@@ -20,7 +20,7 @@ const PLANS = [
     usd: '$0',
     eur: 'EUR 0',
     period: 'forever',
-    audience: 'Free trial of Pro for 14 days',
+    audience: 'Try Pro free for 14 days. No card.',
     prospects: '100',
     enrichments: '20',
     exports: '5',
@@ -34,7 +34,7 @@ const PLANS = [
     usd: '$21',
     eur: 'EUR 19',
     period: '/mo',
-    audience: 'Freelancers & consultants',
+    audience: 'Solo founders, freelancers, consultants.',
     prospects: '1,000',
     enrichments: '400',
     exports: 'Unlimited',
@@ -48,7 +48,7 @@ const PLANS = [
     usd: '$55',
     eur: 'EUR 49',
     period: '/mo',
-    audience: 'Agencies & SMBs',
+    audience: 'Agencies and SMBs shipping cold email.',
     prospects: '5,000',
     enrichments: '1,000',
     exports: 'Unlimited',
@@ -63,7 +63,7 @@ const PLANS = [
     usd: '$110',
     eur: 'EUR 99',
     period: '/mo',
-    audience: 'Sales teams & scaleups',
+    audience: 'Sales teams. CRM and Campaigns included.',
     prospects: '10,000',
     enrichments: '10,000',
     exports: 'Unlimited',
@@ -92,32 +92,32 @@ const COMPARE_ROWS = [
 
 const FAQ = [
   {
-    q: 'Why are prices in USD and EUR?',
-    a: 'Display in USD for clarity for US/UK customers. Billed in EUR by Stripe (your bank handles conversion automatically). The EUR price is the actual amount on your invoice.',
+    q: 'Why USD and EUR?',
+    a: 'USD on display so you can compare to Apollo at a glance. EUR on your invoice (Stripe handles conversion at market rate). The EUR number is what your bank charges. No FX markup from us.',
   },
   {
     q: 'Is there a free trial?',
-    a: 'Yes — when you sign up you get 14 days of full Pro access (5,000 prospects, cold email, waterfall) without a credit card. After 14 days your account drops to the free Starter plan (100 prospects/month, forever). No automatic charges.',
+    a: 'Yes. Sign up = 14 days of full Pro access. No card. 5,000 prospects, cold email, waterfall — the whole thing. After 14 days you drop to free Starter (100 prospects/mo, forever). We will never charge you without asking.',
   },
   {
     q: 'Can I change plans anytime?',
-    a: 'Yes, upgrade or downgrade in 1 click from your settings. Pro-rata is calculated automatically.',
+    a: 'Yes. 1 click in your settings. Pro-rata is calculated automatically. Upgrade today, downgrade tomorrow — your choice.',
   },
   {
     q: 'What about annual billing?',
-    a: 'Annual = 10 months for the price of 12. Pro becomes EUR 490/year instead of EUR 588 (~2 months free). Available on all paid plans.',
+    a: 'Pay 10 months, get 12. Pro = EUR 490/year instead of EUR 588. Same for every paid plan.',
   },
   {
     q: 'Is CRM really included in Business?',
-    a: 'Yes, fully included: drag-and-drop Kanban, auto-creation of deals from email replies, 360 timeline per contact, activities (notes, calls, meetings). No extra license per user.',
+    a: 'Yes. Fully. Drag-and-drop Kanban, auto-created deals from email replies, 360 timeline per contact, notes, calls, meetings. No per-user upcharge. No "contact sales" tier.',
   },
   {
     q: 'How do I cancel?',
-    a: 'From Settings then Plan, in 1 click via the Stripe portal. Access stays active until the end of the paid period.',
+    a: 'Settings > Plan > Cancel. 1 click via the Stripe portal. You keep access until the end of your billing period.',
   },
   {
     q: 'Any hidden fees?',
-    a: 'None. The price shown including tax is the only charge. No setup fees, no export overage.',
+    a: 'No. The price is the price. No setup fees. No export overage. No "premium" tier hiding the good stuff.',
   },
 ];
 
@@ -169,8 +169,8 @@ export default function PricingContentEN() {
               than Apollo + Lemlist + HubSpot.
             </h1>
             <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto">
-              One subscription, three modules. Prices shown in USD for clarity, billed in EUR.
-              No commitment. Cancel in 1 click.
+              One subscription. Three modules. USD on display, EUR on the invoice.
+              No commitment. Cancel in 1 click. No "contact sales".
             </p>
           </div>
         </section>
@@ -230,9 +230,9 @@ export default function PricingContentEN() {
             <MotionInView>
               <div className="text-center mb-12">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                  Compare every plan
+                  Side-by-side. No hidden fine print.
                 </h2>
-                <p className="text-content-tertiary text-base max-w-xl mx-auto">All plans include 287,000+ French B2B companies and unlimited natural-language searches.</p>
+                <p className="text-content-tertiary text-base max-w-xl mx-auto">Every plan includes 287,000+ French B2B companies and unlimited AI searches.</p>
               </div>
             </MotionInView>
 
@@ -280,9 +280,9 @@ export default function PricingContentEN() {
           <div className="max-w-4xl mx-auto text-center">
             <MotionInView>
               <h2 className="text-3xl sm:text-4xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                Compared to your current stack
+                Your stack vs Volia. The math.
               </h2>
-              <p className="text-content-tertiary mb-10">For Apollo $99 + Lemlist $99 + HubSpot Starter $90 = <strong className="text-rose-700">$288/mo</strong>, Volia Business is <strong className="text-emerald-700">$110/mo all-in</strong>. Savings: ~$178/mo (~$2,140/year).</p>
+              <p className="text-content-tertiary mb-10">Apollo $99 + Lemlist $99 + HubSpot Starter $90 = <strong className="text-rose-700">$288/mo</strong>. Volia Business = <strong className="text-emerald-700">$110/mo all-in</strong>. You save ~$178/mo. ~$2,140/year. You do the math.</p>
               <Link href="/signup?plan=business" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm">
                 Choose Volia Business
                 <ArrowRight size={16} />
@@ -296,7 +296,7 @@ export default function PricingContentEN() {
           <div className="max-w-3xl mx-auto">
             <MotionInView>
               <h2 className="text-3xl sm:text-4xl font-bold mb-10 text-center tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                Pricing FAQ
+                Questions, answered. No fluff.
               </h2>
             </MotionInView>
             <div className="space-y-3">
@@ -318,10 +318,10 @@ export default function PricingContentEN() {
           <div className="absolute inset-0 bg-gradient-to-br from-violet-200/40 via-indigo-100/30 to-pink-100/20 pointer-events-none" />
           <div className="max-w-3xl mx-auto text-center relative z-10">
             <h2 className="text-3xl sm:text-5xl font-bold mb-5 leading-tight tracking-tight">
-              Start free in 60 seconds.
+              Try it. No card. No tricks.
             </h2>
             <p className="text-content-secondary text-base sm:text-lg mb-8 max-w-xl mx-auto">
-              100 prospects free forever. No card required. Cancel anytime.
+              100 prospects free, forever. We will never ask for your card to sign up.
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:-translate-y-0.5 transition-all">
               Get started free

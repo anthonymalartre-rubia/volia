@@ -185,11 +185,18 @@ export default function FAQSection() {
           </p>
         )}
 
-        {/* ─── Liste questions ─── */}
+        {/* ─── Liste questions ───
+            Layout :
+            - Mobile : 1 colonne (lecture facile au pouce)
+            - Desktop ≥sm : 2 colonnes (divise la hauteur totale par 2)
+            - items-start : les cards ne s'étirent pas verticalement, donc une
+              card ouverte (haute) laisse juste un petit gap sous sa voisine
+              de rangée. Acceptable visuellement, et l'utilisateur ouvre
+              généralement 1 question à la fois (toggle close au reclic). */}
         {filteredItems.length === 0 ? (
           <EmptyState onReset={() => { setQuery(''); setActiveCategory('all'); }} />
         ) : (
-          <div className="space-y-3">
+          <div className="grid sm:grid-cols-2 gap-3 items-start">
             {filteredItems.map((item) => {
               const isOpen = openIndex === item.originalIdx;
               const panelId = `faq-panel-${item.originalIdx}`;

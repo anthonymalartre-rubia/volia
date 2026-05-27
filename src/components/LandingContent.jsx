@@ -275,21 +275,29 @@ export default function LandingContent() {
         <div className="absolute top-40 right-[5%] w-96 h-96 bg-violet-300/20 rounded-full blur-3xl pointer-events-none -z-0 animate-pulse" style={{ animationDuration: '6s' }} />
         <div className="absolute top-60 left-[5%] w-80 h-80 bg-indigo-200/30 rounded-full blur-3xl pointer-events-none -z-0 animate-pulse" style={{ animationDuration: '8s' }} />
 
-        {/* 🚀 Fusée animée — décolle en diagonale du bas-gauche vers
-            haut-droite, loop infinie 8s. Cachée sur mobile (clutter visuel
-            sur petit écran), visible dès lg. z-0 pour passer derrière les
-            cards mais devant les blobs gradient. */}
+        {/* 🚀 Fusée animée — traverse TOUT le bloc hero (refonte fin mai
+            2026 : trajectoire parabole bottom-left → zénith → bottom-right,
+            loop infinie 12s). Cachée sur mobile (clutter visuel), visible
+            dès lg. z-[1] pour passer derrière les cards mais devant les
+            blobs gradient. La fusée elle-même = le LOGO de la marque
+            (même gradient violet/indigo/pink, même rotation -45°). */}
         <div
           className="hidden lg:block absolute z-[1] pointer-events-none animate-hero-rocket"
-          style={{ bottom: '60px', left: '40px' }}
+          style={{ bottom: '40px', left: '20px' }}
           aria-hidden="true"
         >
-          {/* Traînée de fumée derrière la fusée — gradient fade */}
+          {/* Halo lumineux centré autour de la fusée — indépendant du cap,
+              donc fonctionne quelle que soit la rotation (au lieu d'une
+              traînée directionnelle qui serait incohérente avec les virages).
+              Radial gradient inline car Tailwind n'expose pas bg-gradient-radial. */}
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-3 rounded-full bg-gradient-to-l from-orange-400/70 via-amber-300/40 to-transparent blur-md -z-10"
-            style={{ transform: 'translate(-90%, -50%) rotate(135deg)' }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full blur-xl -z-10"
+            style={{
+              background:
+                'radial-gradient(circle, rgba(167,139,250,0.35) 0%, rgba(244,114,182,0.18) 45%, transparent 75%)',
+            }}
           />
-          {/* La fusée elle-même — gradient violet/orange cohérent avec la brand */}
+          {/* La fusée elle-même — gradient violet/indigo/pink (= LOGO Volia). */}
           <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-pink-500 flex items-center justify-center shadow-2xl shadow-violet-500/40">
             <Rocket size={22} className="text-white -rotate-45" />
           </div>

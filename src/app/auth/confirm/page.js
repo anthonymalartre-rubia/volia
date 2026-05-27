@@ -164,11 +164,13 @@ export default function AuthConfirmPage() {
       <div className="max-w-md w-full text-center">
         {status === 'processing' && (
           <>
-            <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30 flex items-center justify-center mb-6 animate-pulse">
-              <svg viewBox="0 0 32 32" className="w-10 h-10" aria-hidden="true">
-                <path d="M7 6.5 L 15.5 21" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                <path d="M25 6.5 L 16.5 21" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                <rect x="13.5" y="22" width="5" height="5" fill="white" transform="rotate(45 16 24.5)" />
+            <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 via-indigo-500 to-pink-500 shadow-lg shadow-violet-500/30 flex items-center justify-center mb-6 animate-pulse">
+              {/* 🚀 Fusée brand Volia — match logo + hero animation */}
+              <svg viewBox="0 0 24 24" className="w-9 h-9 -rotate-45" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
               </svg>
             </div>
             <h1 className="text-2xl font-bold mb-2">Confirmation en cours…</h1>

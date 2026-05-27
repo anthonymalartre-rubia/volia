@@ -8,15 +8,20 @@
 //    Utilise les SVG public/logos/volia-wordmark-{dark,light}.svg,
 //    swap CSS via la classe .light sur <html>.
 //
-// 2. <LogoIcon /> — symbole V seul (V + diamant viseur), fond gradient
-//    indigo→violet. Pour favicon-like, sidebar, hero, OG images.
+// 2. <LogoIcon /> — symbole 🚀 fusée seul, fond gradient
+//    violet → indigo → pink. Pour favicon-like, sidebar, hero, OG images.
 //
-// Le symbole évoque la prospection ciblée :
-// - Le V : initiale Volia + métaphore entonnoir (large en haut → focus en bas)
-// - Le diamant au point de convergence : viseur / cible / décideur trouvé
-// - Continuité brand avec l'ancien logo "P + viseur" : on conserve le diamant
+// Refonte mai 2026 : remplace l'ancien symbole V (entonnoir + diamant
+// viseur) par une fusée. Cohérent avec l'animation hero rocket et la
+// promesse "décolle ta prospection". Le rocket est l'icon Lucide
+// (path lucide v0.x) tournée -45° (cap NE) pour suggérer ascension.
 //
-// Concept design : entonnoir de prospection (Volia, mai 2026).
+// Brand evolution :
+// - 2024 : "P + viseur" (Prospectia)
+// - Mai 2026 (early) : "V + diamant viseur" (rebrand Volia, focus ciblage)
+// - Mai 2026 (late)  : 🚀 fusée (focus traction / vitesse / "décollage")
+//
+// Concept design : énergie ascendante (Volia, mai 2026).
 // ─────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link';
@@ -31,7 +36,10 @@ const SIZES = {
 };
 
 // ─────────────────────────────────────────────────────────────────────
-// LogoIcon — symbole V seul avec fond gradient indigo→violet
+// LogoIcon — symbole 🚀 fusée seul avec fond gradient violet→indigo→pink
+// ─────────────────────────────────────────────────────────────────────
+// Le gradient et l'orientation -45° matchent EXACTEMENT la fusée animée
+// du hero landing (LandingContent.jsx) → continuité brand totale.
 // ─────────────────────────────────────────────────────────────────────
 export function LogoIcon({
   size = 'md',
@@ -43,21 +51,25 @@ export function LogoIcon({
   const s = SIZES[size] || SIZES.md;
   const icon = (
     <span
-      className={`inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/20 ${s.icon} ${className}`}
+      className={`inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 via-indigo-500 to-pink-500 shadow-lg shadow-violet-500/30 ${s.icon} ${className}`}
       aria-label={ariaLabel}
       role="img"
     >
       <svg
-        viewBox="0 0 32 32"
-        className="w-[70%] h-[70%]"
+        viewBox="0 0 24 24"
+        className="w-[62%] h-[62%] -rotate-45"
+        fill="none"
+        stroke="white"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         aria-hidden="true"
       >
-        {/* Branche gauche du V */}
-        <path d="M7 6.5 L 15.5 21" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        {/* Branche droite du V */}
-        <path d="M25 6.5 L 16.5 21" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-        {/* Diamant au point de convergence (viseur / cible) */}
-        <rect x="13.5" y="22" width="5" height="5" fill="white" transform="rotate(45 16 24.5)" />
+        {/* Fusée (Lucide icon Rocket) — corps + ailettes + flammes */}
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+        <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
       </svg>
     </span>
   );

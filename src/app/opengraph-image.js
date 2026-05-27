@@ -59,16 +59,18 @@ export default function Image() {
               width: '56px',
               height: '56px',
               borderRadius: '16px',
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              background: 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 55%, #ec4899 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <svg width="38" height="38" viewBox="0 0 32 32" style={{ display: 'block' }}>
-              <path d="M7 6.5 L 15.5 21" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              <path d="M25 6.5 L 16.5 21" stroke="white" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-              <rect x="13.5" y="22" width="5" height="5" fill="white" transform="rotate(45 16 24.5)" />
+            {/* 🚀 Fusée Lucide tournée -45° — match hero animation */}
+            <svg width="34" height="34" viewBox="0 0 24 24" style={{ display: 'block', transform: 'rotate(-45deg)' }} fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+              <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
             </svg>
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>

@@ -1,12 +1,13 @@
 // Wordmark unifié Volia.
 //
-// Utilise le composant <Logo /> (vrai logo Volia avec symbole V + diamant
-// viseur, intégré en mai 2026 lors du rebrand depuis Prospectia).
+// Utilise le composant <Logo /> (logo Volia avec symbole 🚀 fusée
+// gradient violet→indigo→pink, refonte fin mai 2026 — voir Logo.jsx
+// pour l'historique brand).
 //
 // Variants conservés pour rétro-compat avec l'ancienne API :
 // - default : juste le wordmark "Volia" (image SVG)
-// - logo : symbole V + texte "Volia"
-// - compact : juste le symbole V (rare)
+// - logo : symbole 🚀 + texte "Volia"
+// - compact : juste le symbole 🚀 (rare)
 
 import Link from 'next/link';
 import Image from 'next/image';
@@ -29,7 +30,7 @@ export default function BrandWordmark({
 }) {
   const s = SIZES[size] || SIZES.md;
 
-  // variant="compact" : juste le symbole P (sans wordmark)
+  // variant="compact" : juste le symbole 🚀 (sans wordmark)
   if (variant === 'compact') {
     return <LogoIcon size={s.iconSize} className={className} asLink={asLink} href={href} />;
   }

@@ -382,34 +382,86 @@ body {
 }
 
 /* ─── Hero rocket animation (landing) ────────────────────────────────
-   Une fusée 🚀 décolle en diagonale du bas-gauche vers le haut-droite,
-   avec rotation 45° (cap "nord-est"), boucle infinie toutes les 8s.
-   La traînée de fumée est rendue via box-shadow multiple sur un
-   pseudo-element pour économiser le DOM (pas de spans empilés).
+   Une fusée 🚀 traverse tout le bloc hero — refonte mai 2026 :
+   au lieu d'un simple décollage diagonal court, la fusée parcourt
+   maintenant l'INTÉGRALITÉ du hero en boucle (12s), avec une trajectoire
+   en parabole + rotation contextuelle (point toujours dans le sens
+   du mouvement) → effet "exploration spatiale" plutôt que "décollage".
 
-   - Phase 0-5%   : invisible (delay avant décollage)
-   - Phase 5-90%  : montée + drift + scale (effet perspective)
-   - Phase 90-100%: fade out en sortant de l'écran
+   Trajet (origine bottom-left, axe Y inversé = négatif vers le haut) :
+     0%   : ancrage bottom-left, invisible
+     5%   : pop in, début ascension diagonale NE
+     30%  : zénith gauche (au-dessus du H1)
+     55%  : traversée plein ciel, milieu hero
+     80%  : descente vers droite (au-dessus du mockup)
+     95%  : sortie bottom-right
+     100% : reset invisible (loop)
+
+   Distance horizontale : jusqu'à ~1100px (couvre max-w-7xl = 1280px).
+   Distance verticale   : jusqu'à -480px (couvre la hauteur du hero
+                         après pt-24).
    ───────────────────────────────────────────────────────────────────── */
 @keyframes hero-rocket {
   0% {
-    transform: translate(0, 0) rotate(-45deg) scale(0.7);
+    transform: translate(0, 0) rotate(-45deg) scale(0.55);
     opacity: 0;
   }
-  5% {
+  4% {
+    opacity: 1;
+    transform: translate(20px, -20px) rotate(-45deg) scale(0.65);
+  }
+  /* Phase 1 — ascension NE depuis bottom-left */
+  20% {
+    transform: translate(220px, -260px) rotate(-45deg) scale(0.9);
     opacity: 1;
   }
-  85% {
+  /* Phase 2 — virage : la fusée se redresse à l'horizontale */
+  35% {
+    transform: translate(420px, -420px) rotate(-70deg) scale(1);
     opacity: 1;
+  }
+  /* Phase 3 — vol horizontal plein ciel (haut du hero) */
+  55% {
+    transform: translate(720px, -460px) rotate(-95deg) scale(1.05);
+    opacity: 1;
+  }
+  /* Phase 4 — virage descendant, cap SE */
+  75% {
+    transform: translate(960px, -340px) rotate(-125deg) scale(1);
+    opacity: 1;
+  }
+  /* Phase 5 — piqué vers bottom-right */
+  90% {
+    transform: translate(1100px, -120px) rotate(-145deg) scale(0.85);
+    opacity: 0.9;
+  }
+  95% {
+    opacity: 0;
   }
   100% {
-    transform: translate(420px, -520px) rotate(-45deg) scale(1.05);
+    transform: translate(1180px, -40px) rotate(-160deg) scale(0.6);
     opacity: 0;
   }
 }
 .animate-hero-rocket {
-  animation: hero-rocket 8s ease-out infinite;
+  animation: hero-rocket 12s cubic-bezier(0.4, 0.0, 0.6, 1) infinite;
   will-change: transform, opacity;
+}
+
+/* Sur écrans très larges (xl+), on étire la trajectoire horizontalement
+   pour que la fusée traverse vraiment tout le hero sur 1440px+. */
+@media (min-width: 1440px) {
+  @keyframes hero-rocket {
+    0%   { transform: translate(0, 0) rotate(-45deg) scale(0.55); opacity: 0; }
+    4%   { transform: translate(20px, -20px) rotate(-45deg) scale(0.65); opacity: 1; }
+    20%  { transform: translate(280px, -300px) rotate(-45deg) scale(0.9); opacity: 1; }
+    35%  { transform: translate(540px, -480px) rotate(-70deg) scale(1.05); opacity: 1; }
+    55%  { transform: translate(900px, -520px) rotate(-95deg) scale(1.1); opacity: 1; }
+    75%  { transform: translate(1200px, -380px) rotate(-125deg) scale(1); opacity: 1; }
+    90%  { transform: translate(1380px, -140px) rotate(-145deg) scale(0.85); opacity: 0.9; }
+    95%  { opacity: 0; }
+    100% { transform: translate(1460px, -40px) rotate(-160deg) scale(0.6); opacity: 0; }
+  }
 }
 
 /* Traînée de fumée — petits ronds qui s'effacent derrière la fusée.
@@ -418,4 +470,13 @@ body {
   0%   { opacity: 0; transform: translate(0, 0) scale(0.4); }
   10%  { opacity: 0.6; }
   100% { opacity: 0; transform: translate(-40px, 50px) scale(2.2); }
+}
+
+/* Respect prefers-reduced-motion — pas d'animation pour les utilisateurs
+   qui ont activé la réduction de mouvement (a11y). */
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-rocket {
+    animation: none;
+    opacity: 0.6;
+  }
 }

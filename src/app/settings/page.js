@@ -183,25 +183,27 @@ export default function SettingsPage() {
     }
   }, [toast]);
 
-  // Scrollspy : met à jour activeSection quand l'utilisateur scrolle
+  // Bug fix UX 27 mai 2026 : conversion en mode onglets (1 seule section
+  // visible à la fois). Le scrollspy IntersectionObserver précédent est
+  // remplacé par un sync URL hash → setActiveSection. La SettingsSidebar
+  // dispatch 'hashchange' au clic sur un item, on l'écoute ici.
   useEffect(() => {
-    if (loading) return;
-    const sectionIds = ['preferences', 'security', 'plan', 'referral', 'help', 'danger'];
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length > 0) setActiveSection(visible[0].target.id);
-      },
-      { rootMargin: '-30% 0px -60% 0px', threshold: [0, 0.25, 0.5, 1] }
-    );
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [loading]);
+    if (typeof window === 'undefined') return;
+    const VALID = ['preferences', 'security', 'plan', 'referral', 'api', 'help', 'danger'];
+    const SIDEBAR_TO_SECTION = {
+      securite: 'security',     // sidebar FR → section EN
+      parrainage: 'referral',
+      aide: 'help',
+    };
+    const readHash = () => {
+      const raw = window.location.hash.replace('#', '');
+      const mapped = SIDEBAR_TO_SECTION[raw] || raw;
+      if (VALID.includes(mapped)) setActiveSection(mapped);
+    };
+    readHash();
+    window.addEventListener('hashchange', readHash);
+    return () => window.removeEventListener('hashchange', readHash);
+  }, []);
 
   const scrollToSection = useCallback((id) => {
     const el = document.getElementById(id);
@@ -660,7 +662,7 @@ export default function SettingsPage() {
           {/* Main content */}
           <main className="space-y-10">
             {/* ─── Préférences ─────────────────────────────────── */}
-            <section id="preferences" className="scroll-mt-20">
+            <section id="preferences" className={`scroll-mt-20 ${activeSection !== "preferences" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<SlidersHorizontal className="h-5 w-5 text-violet-500" />}
                 title={t('settings.navPreferences')}
@@ -752,7 +754,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── Sécurité ───────────────────────────────────── */}
-            <section id="security" className="scroll-mt-20">
+            <section id="security" className={`scroll-mt-20 ${activeSection !== "security" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<Lock className="h-5 w-5 text-violet-500" />}
                 title={t('settings.navSecurity')}
@@ -849,7 +851,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── Plan & Usage ───────────────────────────────── */}
-            <section id="plan" className="scroll-mt-20">
+            <section id="plan" className={`scroll-mt-20 ${activeSection !== "plan" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<CreditCard className="h-5 w-5 text-violet-500" />}
                 title={t('settings.navPlanUsage')}
@@ -1035,7 +1037,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── Programme parrainage ──────────────────────── */}
-            <section id="referral" className="scroll-mt-20">
+            <section id="referral" className={`scroll-mt-20 ${activeSection !== "referral" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<Gift className="h-5 w-5 text-pink-500" />}
                 title="Programme parrainage"
@@ -1106,7 +1108,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── API publique ──────────────────────────────── */}
-            <section id="api" className="scroll-mt-20 mb-8">
+            <section id="api" className={`scroll-mt-20 mb-8 ${activeSection !== "api" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<Key className="h-5 w-5 text-violet-500" />}
                 title="API & intégrations"
@@ -1144,7 +1146,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── Domaines d'envoi email ─────────────────────── */}
-            <section id="email-senders" className="scroll-mt-20 mb-8">
+            <section id="email-senders" className={`scroll-mt-20 mb-8 ${activeSection !== "api" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<Mail className="h-5 w-5 text-violet-500" />}
                 title="Domaines d'envoi email"
@@ -1169,7 +1171,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── Aide ───────────────────────────────────────── */}
-            <section id="help" className="scroll-mt-20">
+            <section id="help" className={`scroll-mt-20 ${activeSection !== "help" ? "hidden" : ""}`}>
               <SectionHeader
                 icon={<BookOpen className="h-5 w-5 text-violet-500" />}
                 title={t('settings.navHelp')}
@@ -1198,7 +1200,7 @@ export default function SettingsPage() {
             </section>
 
             {/* ─── Danger zone ────────────────────────────────── */}
-            <section id="danger" className="scroll-mt-20">
+            <section id="danger" className={`scroll-mt-20 ${activeSection !== "danger" ? "hidden" : ""}`}>
               <div className="rounded-xl border-2 border-red-500/20 bg-red-500/[0.02] p-5">
                 <div className="flex items-start gap-3 mb-4">
                   <div className="p-2 rounded-lg bg-red-500/15">

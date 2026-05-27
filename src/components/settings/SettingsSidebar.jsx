@@ -15,6 +15,7 @@
 //   - Sur /settings/xxx : on matche par startsWith
 // ─────────────────────────────────────────────────────────────────────
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -121,8 +122,35 @@ const NAV_ITEMS = [
   },
 ];
 
+/**
+ * Bug fix UX 27 mai 2026 : la page /settings est désormais en mode onglets
+ * (1 seule section visible à la fois). La sidebar gère elle-même l'état actif
+ * via window.location.hash (pas de props nécessaires depuis le layout).
+ * Au clic sur un anchor /settings#xxx, on update history + dispatch un
+ * event hashchange pour que la page écoutante actualise sa section visible.
+ */
 export default function SettingsSidebar({ isOpen, onClose }) {
   const pathname = usePathname() || '';
+
+  // Map sidebar item id → page section id (alignement FR ↔ EN dans page.js)
+  const SECTION_MAP = {
+    preferences: 'preferences',
+    securite: 'security',
+    plan: 'plan',
+    api: 'api',
+    aide: 'help',
+    danger: 'danger',
+  };
+
+  // État local du hash courant — utilisé pour highlight la section active
+  const [currentHash, setCurrentHash] = useState('preferences');
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const read = () => setCurrentHash(window.location.hash.replace('#', '') || 'preferences');
+    read();
+    window.addEventListener('hashchange', read);
+    return () => window.removeEventListener('hashchange', read);
+  }, []);
 
   return (
     <>
@@ -166,9 +194,15 @@ export default function SettingsSidebar({ isOpen, onClose }) {
           {/* Navigation */}
           <nav className="space-y-1" role="navigation" aria-label="Navigation paramètres">
             {NAV_ITEMS.map((item) => {
-              const isActive = item.matches(pathname);
               const Icon = item.icon;
               const isDanger = item.danger;
+              // Item in-page (anchor /settings#xxx) → on intercepte le clic
+              // pour update le hash et dispatcher un event que la page écoute.
+              const isInPageAnchor = item.href?.startsWith('/settings#');
+              const mappedSection = SECTION_MAP[item.id];
+              const isActive = isInPageAnchor
+                ? currentHash === mappedSection || (currentHash === '' && mappedSection === 'preferences')
+                : item.matches(pathname);
 
               const className = `
                 w-full flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative
@@ -181,6 +215,42 @@ export default function SettingsSidebar({ isOpen, onClose }) {
                 }
               `;
 
+              // Si in-page anchor → render bouton qui update le hash
+              if (isInPageAnchor) {
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        window.history.replaceState(null, '', `#${mappedSection}`);
+                        window.dispatchEvent(new HashChangeEvent('hashchange'));
+                        // Scroll au top de la page (chaque section commence en haut)
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                      if (typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches) {
+                        onClose?.();
+                      }
+                    }}
+                    aria-current={isActive ? 'page' : undefined}
+                    className={className + ' text-left'}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 w-1 h-6 bg-violet-600 rounded-r-full" />
+                    )}
+                    <div className={`p-1.5 rounded-lg transition-colors ${isActive ? 'bg-violet-200/60' : isDanger ? 'bg-surface-card' : 'bg-surface-card'}`}>
+                      <Icon size={16} />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <span>{item.label}</span>
+                      <div className={`text-[10px] ${isActive ? 'text-violet-700/60' : 'text-content-faint'}`}>
+                        {item.description}
+                      </div>
+                    </div>
+                  </button>
+                );
+              }
+
+              // Sinon, comportement Link standard (vers autre page ou fallback)
               return (
                 <Link
                   key={item.id}

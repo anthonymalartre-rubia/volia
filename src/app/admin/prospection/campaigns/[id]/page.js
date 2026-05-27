@@ -446,7 +446,7 @@ export default function CampaignDetailPage() {
             </div>
             {sample.length === 0 ? (
               <div className="p-8 text-center text-xs text-content-tertiary">
-                Aucun envoi pour le moment.
+                Pas encore d&apos;envoi.
               </div>
             ) : (
               <div className="max-h-[440px] overflow-y-auto">

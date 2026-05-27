@@ -223,7 +223,7 @@ export default function FormsTemplatesPage() {
       {!loading && filtered.length === 0 && !error && (
         <div className="rounded-2xl border border-dashed border-line bg-surface-card/50 p-10 text-center">
           <p className="text-sm text-content-tertiary">
-            Aucun template ne correspond à votre recherche.
+            Aucun template ne matche. Essaye un autre mot.
           </p>
         </div>
       )}

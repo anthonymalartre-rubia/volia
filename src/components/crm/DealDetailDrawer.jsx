@@ -477,7 +477,7 @@ export default function DealDetailDrawer({
               </div>
             ) : (
               <div className="p-3 rounded-lg border border-dashed border-line bg-surface-card/50 text-center">
-                <p className="text-xs text-content-tertiary">Aucun contact lié</p>
+                <p className="text-xs text-content-tertiary">Pas de contact lié. Ajoutes-en un pour suivre l&apos;historique.</p>
               </div>
             )}
 

@@ -707,9 +707,9 @@ function PatternsSection() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-surface-elevated border border-line mb-4">
             <Inbox size={24} className="text-content-muted" />
           </div>
-          <h4 className="text-lg font-semibold text-content-primary mb-2">Aucun résultat</h4>
+          <h4 className="text-lg font-semibold text-content-primary mb-2">Rien à afficher</h4>
           <p className="text-sm text-content-tertiary mb-6">
-            Lance ta première recherche pour générer une liste de prospects qualifiés.
+            Lance ta première recherche. Les prospects atterriront ici.
           </p>
           <Button variant="primary" icon={Search}>Nouvelle recherche</Button>
         </div>

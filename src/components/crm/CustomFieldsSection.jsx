@@ -110,7 +110,7 @@ export default function CustomFieldsSection({
       <div className="rounded-lg border border-dashed border-line bg-surface-card/50 p-3 text-center">
         <Sliders size={14} className="inline text-content-tertiary mr-1.5" />
         <span className="text-[11px] text-content-tertiary">
-          Aucun champ personnalisé.{' '}
+          Pas encore de champ perso. Ajoutes-en si t&apos;as besoin de tracker autre chose.{' '}
           <Link
             href="/app/crm/custom-fields"
             className="text-emerald-700 hover:underline font-medium"

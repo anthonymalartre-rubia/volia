@@ -153,7 +153,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
                 );
               })}
             {Object.keys(analytics.byDept).length === 0 && (
-              <p className="text-xs text-content-muted">Aucune donnee</p>
+              <p className="text-xs text-content-muted">Pas de donnée encore.</p>
             )}
           </div>
         </div>
@@ -186,7 +186,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
               })}
             </div>
           ) : (
-            <p className="text-xs text-content-muted">Lancez une recherche pour voir la qualite</p>
+            <p className="text-xs text-content-muted">Lance une recherche. La qualité s&apos;affichera ici.</p>
           )}
         </div>
 
@@ -227,7 +227,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
               })}
             </div>
           ) : (
-            <p className="text-xs text-content-muted">Aucun enrichissement effectue</p>
+            <p className="text-xs text-content-muted">Pas d&apos;enrichissement encore. Tes prochaines recherches le rempliront.</p>
           )}
         </div>
       </div>

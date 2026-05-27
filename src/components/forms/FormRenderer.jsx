@@ -686,7 +686,7 @@ export default function FormRenderer({ form, slug, isEmbed = false }) {
       >
         {visibleFields.length === 0 && (
           <p className="text-sm text-zinc-500 italic">
-            Aucun champ sur cette page.
+            Page vide.
           </p>
         )}
         {visibleFields.map((field) => {

@@ -782,39 +782,35 @@ const fr = {
     },
     // Plan features (libellés concis pour les cards)
     planFeatures: {
+      // Free = features de base. Pas d'inheritsFrom — c'est le plan racine.
       free: [
         '100 prospects/mois',
         '20 enrichissements/mois',
         '5 exports/mois',
-        '3 dossiers',
         'Scraping email gratuit',
-        'Export CSV',
         '101 departements (France entiere)',
       ],
+      // Solo/Pro/Business = delta features uniquement (vs plan precedent)
+      // La card affichera "Tout inclus dans X +" en intro.
       solo: [
-        '1 000 prospects/mois',
-        '400 enrichissements/mois',
+        '1 000 prospects/mois (x10)',
+        '400 enrichissements/mois (x20)',
         'Exports illimites',
-        '10 dossiers',
         'Cascade waterfall (scraping + Google)',
         'Support email (48 h)',
       ],
       pro: [
-        '5 000 prospects/mois',
-        '1 000 enrichissements/mois',
-        'Exports illimites',
+        '5 000 prospects/mois (x5)',
+        '1 000 enrichissements/mois (x2,5)',
         'Dossiers illimites',
-        'Cascade waterfall complete',
         'Verification email (MillionVerifier)',
         'Support email (24 h)',
       ],
       business: [
-        '10 000 prospects/mois',
-        '10 000 enrichissements/mois',
-        'Exports illimites',
-        'Dossiers illimites',
+        '10 000 prospects/mois (x2)',
+        '10 000 enrichissements/mois (x10)',
+        'Multi-utilisateurs (equipes, RBAC)',
         'Acces API (a venir)',
-        'Multi-utilisateurs (a venir)',
         'Onboarding personnalise',
         'Support prioritaire',
       ],

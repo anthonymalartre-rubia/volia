@@ -200,7 +200,7 @@ function ProductTopNav({ labels = DEFAULT_LABELS_FR, locale = 'fr' }) {
           <div className="hidden sm:flex items-center gap-6">
             <ProductsMenu label={labels.products} locale={locale} />
             <Link href={`${home}#features`} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.features}</Link>
-            <Link href={isEn ? '/en/pricing' : '/#pricing'} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.pricing}</Link>
+            <Link href={isEn ? '/en/pricing' : '/pricing'} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.pricing}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.blog}</Link>
             <Link href={`${home}#faq`} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.faq}</Link>
           </div>

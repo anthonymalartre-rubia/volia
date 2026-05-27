@@ -239,7 +239,7 @@ export default function LandingContent() {
           <div className="hidden sm:flex items-center gap-6">
             <ProductsMenu label="Produits" locale="fr" />
             <Link href="#features" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.features')}</Link>
-            <Link href="#pricing" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.pricing')}</Link>
+            <Link href="/pricing" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.pricing')}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">Blog</Link>
             <Link href="#faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
           </div>
@@ -1763,7 +1763,7 @@ export default function LandingContent() {
                 <li><Link href="/" className="text-content-tertiary hover:text-violet-400 transition">Accueil</Link></li>
                 <li><Link href="/signup" className="text-content-tertiary hover:text-violet-400 transition">Inscription</Link></li>
                 <li><Link href="/login" className="text-content-tertiary hover:text-violet-400 transition">Connexion</Link></li>
-                <li><Link href="#pricing" className="text-content-tertiary hover:text-violet-400 transition">Tarifs</Link></li>
+                <li><Link href="/pricing" className="text-content-tertiary hover:text-violet-400 transition">Tarifs</Link></li>
                 <li><Link href="/demo" className="text-content-tertiary hover:text-violet-400 transition">Réserver une démo</Link></li>
               </ul>
             </div>

@@ -20,11 +20,11 @@
 // dans la page parent via le filtre stage).
 // ─────────────────────────────────────────────────────────────────────
 
-import { useState } from 'react';
-import { Plus, Inbox } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Plus, Inbox, Trash2, Check, X, Loader2, PlusCircle } from 'lucide-react';
 import DealCard from './DealCard';
 import { formatDealValue } from '@/lib/crm';
-import { InfoTooltip } from '@/components/ui';
+import { ConfirmModal, InfoTooltip } from '@/components/ui';
 
 // ─── Palette stage → classes Tailwind (toutes déclarées en dur pour le purge)
 const STAGE_COLORS = {
@@ -54,14 +54,80 @@ function KanbanColumn({
   onMoveStage,
   canMovePrev = true,
   canMoveNext = true,
+  onRenameStage,
+  onDeleteStage,
+  canDelete = true,
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editName, setEditName] = useState(stage.name || '');
+  const [savingName, setSavingName] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const nameInputRef = useRef(null);
+
   const colors = getStageColors(stage.color);
   const isClosingWon = stage.closing_type === 'won';
   const isClosingLost = stage.closing_type === 'lost';
   const isClosing = isClosingWon || isClosingLost;
 
   const totalValue = deals.reduce((sum, d) => sum + (d.value_cents || 0), 0);
+
+  // ─── Focus auto sur l'input quand on entre en mode édition
+  useEffect(() => {
+    if (isEditingName && nameInputRef.current) {
+      nameInputRef.current.focus();
+      nameInputRef.current.select();
+    }
+  }, [isEditingName]);
+
+  // ─── Sync local state si la prop change (après reload du parent)
+  useEffect(() => {
+    if (!isEditingName) setEditName(stage.name || '');
+  }, [stage.name, isEditingName]);
+
+  async function commitRename() {
+    const trimmed = editName.trim();
+    if (!trimmed || trimmed === stage.name) {
+      setIsEditingName(false);
+      setEditName(stage.name || '');
+      return;
+    }
+    setSavingName(true);
+    try {
+      await onRenameStage?.(stage.id, trimmed);
+      setIsEditingName(false);
+    } catch (e) {
+      console.error('[KanbanColumn] rename error', e);
+      // Revert sur erreur
+      setEditName(stage.name || '');
+    } finally {
+      setSavingName(false);
+    }
+  }
+
+  function handleNameKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commitRename();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      setIsEditingName(false);
+      setEditName(stage.name || '');
+    }
+  }
+
+  async function handleConfirmDelete() {
+    setDeleting(true);
+    try {
+      await onDeleteStage?.(stage.id);
+      setConfirmDelete(false);
+    } catch (e) {
+      console.error('[KanbanColumn] delete error', e);
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   function handleDragOver(e) {
     e.preventDefault();
@@ -101,6 +167,7 @@ function KanbanColumn({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={`
+        group/col
         flex-shrink-0 w-[280px] sm:w-[300px]
         flex flex-col rounded-xl
         bg-surface-elevated/40
@@ -117,17 +184,47 @@ function KanbanColumn({
           des bugs visuels : sticky qui colle en bas, masquage des
           cards par overlay opaque, etc.). Trade-off : si beaucoup de
           cards et user scroll profond, le header de colonne sort de la
-          viewport — accepté car cas rare et user peut scroll back. */}
+          viewport — accepté car cas rare et user peut scroll back.
+
+          [28 mai 2026 — inline edit] Le nom est cliquable pour passer
+          en mode édition. Trash icon visible au hover (group/col) à
+          droite du header. */}
       <div className={`px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2 min-w-0 flex-1">
             <span
               className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
               aria-hidden="true"
             />
-            <h3 className={`text-sm font-bold truncate ${colors.text}`}>
-              {stage.name || 'Stage'}
-            </h3>
+            {isEditingName ? (
+              <div className="flex items-center gap-1 min-w-0 flex-1">
+                <input
+                  ref={nameInputRef}
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  onKeyDown={handleNameKeyDown}
+                  onBlur={commitRename}
+                  disabled={savingName}
+                  maxLength={80}
+                  className={`flex-1 min-w-0 bg-white/90 border border-white rounded px-1.5 py-0.5 text-sm font-bold ${colors.text} outline-none ring-2 ring-emerald-300/50 focus:ring-emerald-400`}
+                  aria-label="Nom du stage"
+                />
+                {savingName && <Loader2 size={12} className={`${colors.text} animate-spin flex-shrink-0`} />}
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onRenameStage && setIsEditingName(true)}
+                disabled={!onRenameStage}
+                title={onRenameStage ? 'Renommer' : ''}
+                className={`text-sm font-bold truncate ${colors.text} text-left min-w-0 ${
+                  onRenameStage ? 'hover:underline decoration-dotted underline-offset-2 cursor-text' : 'cursor-default'
+                }`}
+              >
+                {stage.name || 'Stage'}
+              </button>
+            )}
             <span className={`text-[10px] font-bold tabular-nums flex-shrink-0 px-1.5 py-0.5 rounded-full bg-white/70 ${colors.text}`}>
               {deals.length}
             </span>
@@ -145,9 +242,44 @@ function KanbanColumn({
                 />
               </span>
             )}
+            {onDeleteStage && canDelete && !isEditingName && (
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+                title="Supprimer cette colonne"
+                aria-label={`Supprimer la colonne ${stage.name}`}
+                className={`opacity-0 group-hover/col:opacity-100 transition-opacity p-1 rounded hover:bg-white/70 ${colors.text} hover:text-rose-600`}
+              >
+                <Trash2 size={12} />
+              </button>
+            )}
           </div>
         </div>
       </div>
+
+      {/* ─── Confirm modal de suppression ──────────────────── */}
+      <ConfirmModal
+        open={confirmDelete}
+        onClose={() => !deleting && setConfirmDelete(false)}
+        onConfirm={handleConfirmDelete}
+        title={`Supprimer la colonne « ${stage.name} » ?`}
+        message={
+          deals.length > 0 ? (
+            <>
+              <strong>{deals.length} deal{deals.length > 1 ? 's' : ''}</strong> de
+              cette colonne {deals.length > 1 ? 'seront déplacés' : 'sera déplacé'}
+              {' '}vers la première colonne restante du pipeline. Cette action est
+              irréversible.
+            </>
+          ) : (
+            <>La colonne est vide, elle sera supprimée définitivement.</>
+          )
+        }
+        confirmLabel={deleting ? 'Suppression…' : 'Supprimer'}
+        cancelLabel="Annuler"
+        variant="danger"
+        loading={deleting}
+      />
 
       {/* ─── Body : list of cards ────────────────────────────
           flex-1 prend toute la hauteur restante dans la column.
@@ -207,6 +339,105 @@ function KanbanColumn({
   );
 }
 
+// ─── AddStageColumn (interne) ──────────────────────────────────────
+// Colonne placeholder à droite du board pour créer un nouveau stage.
+// 2 états : bouton "+ Ajouter une colonne" (collapsed) → click → input
+// inline avec Enter (save) / Escape (cancel).
+function AddStageColumn({ onAddStage }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState('');
+  const [saving, setSaving] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
+
+  async function commit() {
+    const trimmed = name.trim();
+    if (!trimmed) {
+      setOpen(false);
+      setName('');
+      return;
+    }
+    setSaving(true);
+    try {
+      await onAddStage(trimmed);
+      setName('');
+      setOpen(false);
+    } catch (e) {
+      console.error('[AddStageColumn] add error', e);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commit();
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      setOpen(false);
+      setName('');
+    }
+  }
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex-shrink-0 w-[280px] sm:w-[300px] self-start rounded-xl border-2 border-dashed border-line hover:border-emerald-300 hover:bg-emerald-50/40 text-content-tertiary hover:text-emerald-700 transition-colors py-3 px-4 inline-flex items-center justify-center gap-2 text-sm font-medium group"
+        aria-label="Ajouter une nouvelle colonne"
+      >
+        <PlusCircle size={16} className="opacity-70 group-hover:opacity-100" />
+        Ajouter une colonne
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex-shrink-0 w-[280px] sm:w-[300px] self-start rounded-xl border-2 border-emerald-300 bg-white shadow-sm p-2">
+      <input
+        ref={inputRef}
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onKeyDown={handleKeyDown}
+        disabled={saving}
+        maxLength={80}
+        placeholder="Nom de la colonne (ex. Négociation)"
+        className="w-full px-2 py-1.5 text-sm font-semibold rounded-lg border border-line bg-surface-base text-content-primary outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200"
+        aria-label="Nom de la nouvelle colonne"
+      />
+      <div className="mt-2 flex items-center justify-end gap-1.5">
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            setName('');
+          }}
+          disabled={saving}
+          className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium text-content-tertiary hover:text-content-primary hover:bg-surface-elevated transition-colors disabled:opacity-50"
+        >
+          <X size={12} />
+          Annuler
+        </button>
+        <button
+          type="button"
+          onClick={commit}
+          disabled={saving || !name.trim()}
+          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {saving ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />}
+          Ajouter
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── Main KanbanBoard ───────────────────────────────────────────────
 export default function KanbanBoard({
   pipeline,
@@ -215,6 +446,7 @@ export default function KanbanBoard({
   onDealClick,
   onNewDeal,
   onMoveStage, // P1-3 : fallback mobile drag-drop
+  onStagesMutation, // refetch pipelines + deals après mutation stages
 }) {
   const [draggingDealId, setDraggingDealId] = useState(null);
 
@@ -247,6 +479,55 @@ export default function KanbanBoard({
   }
 
   const stageCount = pipeline.stages.length;
+  // On désactive le delete si une seule colonne reste (l'API refuse de toutes
+  // façons, mais on cache le bouton pour clarifier l'intention)
+  const canDeleteAnyStage = stageCount > 1;
+
+  // ─── Handlers API stages (rename / add / delete) ─────────
+  // Throw on error pour que le composant enfant puisse revert son état local.
+  async function handleRenameStage(stageId, newName) {
+    const res = await fetch(`/api/crm/stages/${stageId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newName }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || 'Erreur lors du renommage');
+    }
+    await onStagesMutation?.();
+  }
+
+  async function handleDeleteStage(stageId) {
+    const res = await fetch(`/api/crm/stages/${stageId}`, { method: 'DELETE' });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      const msg = data.error || 'Erreur lors de la suppression';
+      // On affiche l'erreur côté user via alert (cas rare : "dernier stage")
+      if (typeof window !== 'undefined') window.alert(msg);
+      throw new Error(msg);
+    }
+    await onStagesMutation?.();
+  }
+
+  async function handleAddStage(name) {
+    const res = await fetch(`/api/crm/pipelines/${pipeline.id}/stages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, color: 'zinc', probability: 0 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) {
+      const msg = data.error || 'Erreur lors de la création';
+      if (typeof window !== 'undefined') window.alert(msg);
+      throw new Error(msg);
+    }
+    await onStagesMutation?.();
+  }
+
+  // Si onStagesMutation n'est pas fourni, on désactive les actions stage
+  // (sécurité : ne pas muter sans avoir le moyen de refresh).
+  const enableStageActions = typeof onStagesMutation === 'function';
 
   return (
     <div className="w-full overflow-x-auto pb-4 lg:h-full lg:pb-2">
@@ -264,8 +545,12 @@ export default function KanbanBoard({
             onMoveStage={onMoveStage}
             canMovePrev={idx > 0}
             canMoveNext={idx < stageCount - 1}
+            onRenameStage={enableStageActions ? handleRenameStage : undefined}
+            onDeleteStage={enableStageActions ? handleDeleteStage : undefined}
+            canDelete={canDeleteAnyStage}
           />
         ))}
+        {enableStageActions && <AddStageColumn onAddStage={handleAddStage} />}
       </div>
     </div>
   );

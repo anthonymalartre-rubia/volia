@@ -484,7 +484,7 @@ export function subscriptionCancelledEmail(userName) {
         <div align="center">${ctaSecondary('Rester en gratuit', DASHBOARD_URL)}</div>
 
         <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
-          On peut faire mieux ? <a href="mailto:hello@volia.fr?subject=Feedback%20annulation" style="color:${COLORS.brand};text-decoration:none;">Dites-nous pourquoi</a> — on lit chaque message.
+          On peut faire mieux ? <a href="mailto:contact@volia.fr?subject=Feedback%20annulation" style="color:${COLORS.brand};text-decoration:none;">Dites-nous pourquoi</a> — on lit chaque message.
         </p>
 
         ${signOff()}

@@ -8,7 +8,7 @@
 //   - Titre (extrait de error.message ou error string)
 //   - Détails optionnels (error.details si structuré)
 //   - Bouton "Réessayer" si onRetry fourni
-//   - Lien "Contacter le support" (mailto:hello@volia.fr) si supportLink !== false
+//   - Lien "Contacter le support" (mailto:contact@volia.fr) si supportLink !== false
 //   - Children pour custom content
 //
 // Style : palette red sémantique (bg-red-50/border-red-200 light,
@@ -76,7 +76,7 @@ export default function ErrorPanel({
               )}
               {supportLink && (
                 <a
-                  href="mailto:hello@volia.fr?subject=Aide%20Volia"
+                  href="mailto:contact@volia.fr?subject=Aide%20Volia"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border border-red-500/20 text-red-600 dark:text-red-300 hover:bg-red-500/10 transition-colors"
                 >
                   <LifeBuoy size={12} />

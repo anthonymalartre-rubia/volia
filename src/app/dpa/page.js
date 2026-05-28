@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 const DPA_MAILTO =
-  'mailto:hello@volia.fr?subject=Demande%20DPA%20sign%C3%A9%20%E2%80%94%20Volia&body=Bonjour%2C%0A%0AJe%20souhaite%20recevoir%20le%20DPA%20Volia%20pr%C3%A9rempli%20et%20pr%C3%AAt%20%C3%A0%20signer%20pour%20notre%20entreprise.%0A%0ARaison%20sociale%20%3A%20%0AAdresse%20%3A%20%0ASIREN%20%2F%20num%C3%A9ro%20de%20TVA%20%3A%20%0AContact%20signataire%20(nom%2C%20fonction%2C%20email)%20%3A%20%0A%0AMerci.';
+  'mailto:contact@volia.fr?subject=Demande%20DPA%20sign%C3%A9%20%E2%80%94%20Volia&body=Bonjour%2C%0A%0AJe%20souhaite%20recevoir%20le%20DPA%20Volia%20pr%C3%A9rempli%20et%20pr%C3%AAt%20%C3%A0%20signer%20pour%20notre%20entreprise.%0A%0ARaison%20sociale%20%3A%20%0AAdresse%20%3A%20%0ASIREN%20%2F%20num%C3%A9ro%20de%20TVA%20%3A%20%0AContact%20signataire%20(nom%2C%20fonction%2C%20email)%20%3A%20%0A%0AMerci.';
 
 export default function DPAPage() {
   return (
@@ -83,7 +83,7 @@ export default function DPAPage() {
           </div>
           <p className="text-xs text-content-tertiary mt-3">
             Adresse de contact :{' '}
-            <span className="text-content-secondary">hello@volia.fr</span>
+            <span className="text-content-secondary">contact@volia.fr</span>
           </p>
         </div>
 
@@ -573,7 +573,7 @@ export default function DPAPage() {
               Volia met à disposition du Client toute information nécessaire pour
               démontrer le respect de ses obligations RGPD, sur demande raisonnable
               adressée à <span className="text-content-primary font-medium">
-              hello@volia.fr</span>.
+              contact@volia.fr</span>.
             </p>
             <p className="mt-3">
               Le Client peut, à ses frais et au plus une fois par an, demander la
@@ -634,7 +634,7 @@ export default function DPAPage() {
             </p>
             <p className="mt-3">
               Pour toute question relative au présent DPA :{' '}
-              <span className="text-content-primary font-medium">hello@volia.fr</span>
+              <span className="text-content-primary font-medium">contact@volia.fr</span>
             </p>
           </section>
         </div>

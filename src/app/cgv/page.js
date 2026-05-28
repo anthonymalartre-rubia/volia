@@ -573,7 +573,7 @@ export default function CGVPage() {
             </h2>
             <p>
               Pour toute question relative aux présentes CGV ou à la facturation :{' '}
-              <span className="text-content-primary font-medium">hello@volia.fr</span>
+              <span className="text-content-primary font-medium">contact@volia.fr</span>
             </p>
           </section>
         </div>

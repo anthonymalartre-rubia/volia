@@ -67,7 +67,7 @@ export default function StatusPage() {
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">État des services Volia</h1>
           <p className="text-sm text-content-secondary leading-relaxed">
-            Health checks live (refresh toutes les 30 sec). Si vous constatez un incident non listé ici, contactez <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a>.
+            Health checks live (refresh toutes les 30 sec). Si vous constatez un incident non listé ici, contactez <a href="mailto:contact@volia.fr" className="text-violet-300 hover:underline">contact@volia.fr</a>.
           </p>
         </section>
 

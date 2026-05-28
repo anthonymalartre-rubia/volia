@@ -50,7 +50,7 @@ function UnsubInner() {
             <div className="mt-8 pt-6 border-t border-line">
               <p className="text-xs text-content-tertiary leading-relaxed">
                 Une raison particulière de partir ?<br />
-                <a href="mailto:hello@volia.fr?subject=Feedback newsletter" className="text-violet-300 hover:text-violet-200 transition underline underline-offset-2">
+                <a href="mailto:contact@volia.fr?subject=Feedback newsletter" className="text-violet-300 hover:text-violet-200 transition underline underline-offset-2">
                   Dites-le nous en 1 ligne
                 </a> — on s&apos;améliore grâce à vos retours.
               </p>
@@ -71,7 +71,7 @@ function UnsubInner() {
               </p>
             )}
             <p className="text-xs text-content-tertiary mb-5">
-              Contactez <a href="mailto:hello@volia.fr" className="text-violet-300 hover:text-violet-200 transition underline">hello@volia.fr</a> pour vous désinscrire manuellement (réponse sous 24h).
+              Contactez <a href="mailto:contact@volia.fr" className="text-violet-300 hover:text-violet-200 transition underline">contact@volia.fr</a> pour vous désinscrire manuellement (réponse sous 24h).
             </p>
             <Link href="/" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 hover:bg-surface-elevated/60 text-content-secondary hover:text-content-primary text-sm font-semibold transition">
               <ArrowLeft size={14} />

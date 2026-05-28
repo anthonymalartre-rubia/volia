@@ -115,8 +115,14 @@ function KanbanColumn({
           header de page CRM qui recouvrait le haut du board, l'user ne
           voyait que la ligne 2 (total) sans savoir quel stage c'était.
           Compaction sur 1 ligne → moins haut, moins de chance d'être
-          recouvert, et même tronqué l'user voit nom + total. */}
-      <div className={`px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
+          recouvert, et même tronqué l'user voit nom + total.
+
+          Sticky `top-[140px]` (= TopBar 56 + page header ~84) : reste
+          collé sous le sticky de page, donc même au scroll vertical
+          profond avec beaucoup de cards, le nom du stage reste visible.
+          z-10 < z-30 du page header pour ne pas le chevaucher.
+          shadow-sm subtile pour démarquer du contenu qui passe dessous. */}
+      <div className={`px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border} sticky top-[140px] z-10 shadow-sm`}>
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span

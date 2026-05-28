@@ -76,7 +76,7 @@ export default function HeroSearchWidget() {
   const [remainingToday, setRemainingToday] = useState(null);
 
   // Fetch des vraies données Google Places via /api/public/preview
-  // (rate limit 3/IP/jour + cap global 5000/jour + cache 24h + anonymisation)
+  // (rate limit 2/IP/jour + cap global 5000/jour + cache 24h + anonymisation)
   async function fetchPreview(cat, city) {
     try {
       const res = await fetch('/api/public/preview', {
@@ -132,7 +132,7 @@ export default function HeroSearchWidget() {
       setRemainingToday(remaining_today);
     } else if (tab === 'verify') {
       // Mode 'verify' : vrai appel MillionVerifier via /api/public/verify
-      // (rate limit 5/IP/jour + cap global 1000/jour + cache 24h).
+      // (rate limit 2/IP/jour partagé avec preview + cap global 1000/jour + cache 24h).
       const em = (preset?.email || emailToVerify || '').trim();
       try {
         const res = await fetch('/api/public/verify', {

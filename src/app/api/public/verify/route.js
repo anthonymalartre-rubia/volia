@@ -8,8 +8,9 @@
 // MillionVerifier — tout en plafonnant le coût et en évitant l'abus.
 //
 // Sécurités :
-// - Rate limit IP : 5 vérifications par IP par jour (vs 3 pour preview
-//   car la verify est plus "cheap" — $0.0005/email)
+// - Rate limit IP : 2 vérifications par IP par jour (partagé avec
+//   /api/public/preview via le helper ipRateLimiter — le compteur est
+//   commun aux deux routes : prévient l'abus combiné)
 // - Cap global : 1000 vérifications par jour (= max ~$0.50/jour, ~$15/mois)
 // - Cache Redis 24h sur les résultats (un email vérifié hier = même
 //   résultat aujourd'hui dans 99% des cas → économies)
@@ -151,7 +152,7 @@ export async function POST(request) {
       );
     }
 
-    // ─── 3. Rate limit par IP (5/jour) ────────────────────────────
+    // ─── 3. Rate limit par IP (2/jour, partagé avec /api/public/preview) ─
     const ip = getClientIP(request);
     const ipLimiter = ipRateLimiter();
     const ipResult = await ipLimiter.limit(ip);

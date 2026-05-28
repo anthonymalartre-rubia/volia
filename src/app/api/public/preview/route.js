@@ -7,7 +7,7 @@
 // inventés), tout en évitant que ça coûte un bras ou qu'un bot scrape.
 //
 // Sécurités :
-// - Rate limit IP : 3 requêtes par IP par jour
+// - Rate limit IP : 2 requêtes par IP par jour
 // - Cap global : 5000 requêtes Google Places par jour total
 // - Cache Redis 24h sur les résultats Google Places (réduit coût ×5-20)
 // - Anonymisation côté backend (noms tronqués, emails masqués)
@@ -79,7 +79,7 @@ export async function POST(request) {
       );
     }
 
-    // ─── 3. Rate limit par IP (3/jour) ────────────────────────────
+    // ─── 3. Rate limit par IP (2/jour) ────────────────────────────
     const ip = getClientIP(request);
     const ipLimiter = ipRateLimiter();
     const ipResult = await ipLimiter.limit(ip);

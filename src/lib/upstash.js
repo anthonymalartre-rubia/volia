@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────
 //
 // Utilisé pour :
-// - Rate limiting du HeroSearchWidget public (3 req/IP/jour)
+// - Rate limiting du HeroSearchWidget public (2 req/IP/jour)
 // - Cap global Google Places (5000 req/jour pour éviter facture)
 // - Cache 24h des résultats Google Places (réduit le coût ×10)
 //
@@ -42,8 +42,12 @@ export function getRedis() {
 }
 
 /**
- * Rate limiter : 3 requêtes par IP par jour.
+ * Rate limiter : 2 requêtes par IP par jour.
  * Sliding window avec analytics activées pour debug.
+ *
+ * Historique : démarré à 3/jour le 27 mai 2026, réduit à 2/jour le
+ * 28 mai 2026 sur décision founder (qty démo suffisante, anti-abus
+ * renforcé). Partagé entre /api/public/preview et /api/public/verify.
  *
  * Usage :
  *   const { success, remaining, reset } = await ipRateLimiter().limit(ip);
@@ -57,7 +61,7 @@ export function ipRateLimiter() {
 
   ipLimiterInstance = new Ratelimit({
     redis,
-    limiter: Ratelimit.slidingWindow(3, '1 d'),
+    limiter: Ratelimit.slidingWindow(2, '1 d'),
     prefix: 'rl:preview:ip',
     analytics: true,
   });

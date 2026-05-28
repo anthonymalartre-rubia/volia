@@ -66,6 +66,8 @@ export default function FormSettingsPage() {
   const [campagnesUnavailable, setCampagnesUnavailable] = useState(false);
 
   // Form state
+  const [customSlug, setCustomSlug] = useState('');
+  const [slugError, setSlugError] = useState(null);
   const [notifyEmail, setNotifyEmail] = useState('');
   const [redirectUrl, setRedirectUrl] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -89,6 +91,7 @@ export default function FormSettingsPage() {
         }
         const f = formJson.data;
         setForm(f);
+        setCustomSlug(f.slug || '');
         setNotifyEmail(f.settings?.notify_email || '');
         setRedirectUrl(f.settings?.redirect_url || '');
         setSuccessMessage(f.settings?.success_message || '');
@@ -116,6 +119,7 @@ export default function FormSettingsPage() {
   async function handleSave() {
     setSaving(true);
     setError(null);
+    setSlugError(null);
     try {
       const settings = {
         ...(form.settings || {}),
@@ -124,21 +128,38 @@ export default function FormSettingsPage() {
         success_message: successMessage.trim() || null,
         captcha_enabled: !!captchaEnabled,
       };
+      const payload = {
+        settings,
+        crm_auto_create_contact: !!crmAutoCreate,
+        campagnes_list_id: campagnesListId || null,
+      };
+      // N'envoie le slug que s'il a changé (l'API le slugifie + vérifie l'unicité
+      // côté serveur et peut suffixer un -2 si collision avec un autre form).
+      const trimmedSlug = customSlug.trim();
+      if (trimmedSlug && trimmedSlug !== form.slug) {
+        payload.slug = trimmedSlug;
+      }
       const res = await fetch(`/api/admin/forms/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          settings,
-          crm_auto_create_contact: !!crmAutoCreate,
-          campagnes_list_id: campagnesListId || null,
-        }),
+        body: JSON.stringify(payload),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error || 'Erreur enregistrement');
+        // Erreur dédiée au slug (collision, format invalide) → on l'affiche
+        // sous le champ plutôt que dans la bannière globale.
+        const msg = json.error || 'Erreur enregistrement';
+        if (payload.slug && /slug|url/i.test(msg)) {
+          setSlugError(msg);
+        } else {
+          setError(msg);
+        }
         return;
       }
       setForm(json.data);
+      // Re-sync l'input avec le slug retourné (l'API peut avoir slugifié ou
+      // suffixé : "Mon Form !" → "mon-form", ou ajouté "-2" si collision).
+      setCustomSlug(json.data.slug || '');
       setSavedAt(new Date());
       setTimeout(() => setSavedAt(null), 3000);
     } catch (e) {
@@ -259,42 +280,88 @@ export default function FormSettingsPage() {
             </div>
           </div>
 
-          {/* Sharing */}
-          {form.status === 'published' && (
-            <div className="rounded-2xl border border-line bg-surface-card p-5 space-y-4">
-              <h3 className="text-sm font-semibold text-content-primary flex items-center gap-2">
-                <Sparkles size={14} className="text-pink-600" /> Partager
-              </h3>
+          {/* Sharing — toujours visible (le client doit pouvoir
+              personnaliser son URL AVANT publication aussi). Les boutons
+              Copier / Ouvrir sont désactivés tant que le form n'est pas
+              publié pour éviter de partager une URL qui renvoie 404. */}
+          <div className="rounded-2xl border border-line bg-surface-card p-5 space-y-4">
+            <h3 className="text-sm font-semibold text-content-primary flex items-center gap-2">
+              <Sparkles size={14} className="text-pink-600" /> Partager
+            </h3>
 
-              {/* Public URL */}
-              <div>
-                <label className="block text-xs font-medium text-content-tertiary mb-1.5">
-                  URL publique
-                </label>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    readOnly
-                    value={publicUrl}
-                    className="flex-1 px-3 py-2 rounded-lg bg-surface-elevated border border-line text-sm text-content-primary font-mono"
-                  />
-                  <button
-                    onClick={() => copyToClipboard(publicUrl, 'url')}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-sm transition-colors"
-                  >
-                    {copied === 'url' ? <Check size={14} /> : <Copy size={14} />}
-                    {copied === 'url' ? 'Copié' : 'Copier'}
-                  </button>
-                  <a
-                    href={publicUrl}
-                    target="_blank"
-                    rel="noopener"
-                    className="inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-surface-elevated hover:bg-surface-base border border-line text-sm text-content-primary"
-                  >
-                    <ExternalLink size={14} />
-                  </a>
-                </div>
+            {/* Slug personnalisé — l'API slugifie automatiquement (espaces
+                → tirets, accents retirés) et suffixe -2 si collision avec
+                un autre form du même owner. */}
+            <div>
+              <label
+                htmlFor="form-slug"
+                className="block text-xs font-medium text-content-tertiary mb-1.5"
+              >
+                URL personnalisée
+              </label>
+              <div className="flex items-stretch rounded-lg border border-line bg-surface-elevated overflow-hidden focus-within:border-pink-400 focus-within:ring-2 focus-within:ring-pink-500/15 transition-all">
+                <span className="px-3 flex items-center text-xs text-content-tertiary font-mono border-r border-line bg-surface-base/50 whitespace-nowrap">
+                  {baseUrl.replace(/^https?:\/\//, '')}/f/
+                </span>
+                <input
+                  id="form-slug"
+                  type="text"
+                  value={customSlug}
+                  onChange={(e) => {
+                    setCustomSlug(e.target.value);
+                    setSlugError(null);
+                  }}
+                  placeholder="mon-formulaire"
+                  className="flex-1 min-w-0 px-3 py-2 bg-transparent text-sm text-content-primary font-mono focus:outline-none"
+                  spellCheck={false}
+                  autoCapitalize="off"
+                  autoComplete="off"
+                />
               </div>
+              <p className="mt-1.5 text-[11px] text-content-tertiary">
+                Choisissez une URL parlante (ex : <code className="text-pink-700">contact-2026</code>,{' '}
+                <code className="text-pink-700">newsletter</code>). Les accents et espaces seront convertis automatiquement.
+              </p>
+              {slugError && (
+                <p className="mt-1.5 text-xs text-rose-600">{slugError}</p>
+              )}
+            </div>
+
+            {/* Public URL preview (read-only) */}
+            <div>
+              <label className="block text-xs font-medium text-content-tertiary mb-1.5">
+                URL publique {form.status !== 'published' && <span className="text-amber-600">· dispo après publication</span>}
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={publicUrl}
+                  className="flex-1 px-3 py-2 rounded-lg bg-surface-elevated border border-line text-sm text-content-primary font-mono"
+                />
+                <button
+                  onClick={() => copyToClipboard(publicUrl, 'url')}
+                  disabled={form.status !== 'published'}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {copied === 'url' ? <Check size={14} /> : <Copy size={14} />}
+                  {copied === 'url' ? 'Copié' : 'Copier'}
+                </button>
+                <a
+                  href={form.status === 'published' ? publicUrl : undefined}
+                  target="_blank"
+                  rel="noopener"
+                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-lg border border-line text-sm ${
+                    form.status === 'published'
+                      ? 'bg-surface-elevated hover:bg-surface-base text-content-primary'
+                      : 'bg-surface-elevated text-content-tertiary cursor-not-allowed pointer-events-none opacity-40'
+                  }`}
+                  aria-disabled={form.status !== 'published'}
+                >
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
 
               {/* Embed */}
               <div>
@@ -323,16 +390,18 @@ export default function FormSettingsPage() {
                 )}
               </div>
 
-              {/* QR live customizer (Sprint F7) */}
-              <div className="pt-2 border-t border-line">
-                <div className="flex items-center gap-2 mb-3">
-                  <QrCode size={14} className="text-pink-600" />
-                  <h4 className="text-sm font-semibold text-content-primary">QR Code</h4>
+              {/* QR live customizer (Sprint F7) — visible uniquement si publié
+                  (un QR vers un form non publié = 404 chez le scanneur). */}
+              {form.status === 'published' && (
+                <div className="pt-2 border-t border-line">
+                  <div className="flex items-center gap-2 mb-3">
+                    <QrCode size={14} className="text-pink-600" />
+                    <h4 className="text-sm font-semibold text-content-primary">QR Code</h4>
+                  </div>
+                  <QrCustomizer url={publicUrl} slug={form.slug} />
                 </div>
-                <QrCustomizer url={publicUrl} slug={form.slug} />
-              </div>
+              )}
             </div>
-          )}
 
           {/* Notifications & UX */}
           <div className="rounded-2xl border border-line bg-surface-card p-5 space-y-4">

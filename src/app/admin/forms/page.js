@@ -26,6 +26,7 @@ import {
   Loader2,
   Pencil,
   Layers,
+  Inbox,
 } from 'lucide-react';
 
 const STATUS_BADGES = {
@@ -239,6 +240,17 @@ export default function FormsHubPage() {
                     </Link>
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
+                    {/* Réponses : visible dès qu'au moins 1 submission existe.
+                        Cas "0 réponse" → on cache pour éviter le clic qui
+                        mène à un empty state (et garde la barre légère). */}
+                    {form.submission_count > 0 && (
+                      <Link
+                        href={`/admin/forms/${form.id}/responses`}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-pink-50 text-pink-700 hover:bg-pink-100 border border-pink-200 transition-colors"
+                      >
+                        <Inbox size={11} /> {form.submission_count} réponse{form.submission_count > 1 ? 's' : ''}
+                      </Link>
+                    )}
                     <Link
                       href={`/admin/forms/${form.id}`}
                       className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-surface-base border border-line hover:bg-surface-elevated hover:border-pink-200 transition-colors"

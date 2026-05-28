@@ -112,11 +112,19 @@ function detectActiveModule(pathname) {
   // est planqué sous cette route pour raisons legacy) + l'alias canonique
   // /app/campagnes. Match précis pour ne pas attraper d'autres routes
   // (typo /admin/prospection-anything sans slash final).
+  //
+  // On ajoute aussi /settings/email-senders et /settings/sms-senders : ces
+  // pages settings sont accessibles depuis la CampagnesSidebar ("Brancher
+  // ma marque email"), et elles n'ont aucun usage hors du module Campagnes.
+  // Si on ne les map pas ici, l'utilisateur qui clique le lien depuis
+  // Campagnes voit le module switcher basculer sur "Prospection" → confus.
   if (
     pathname === '/admin/prospection' ||
     pathname === '/admin/prospection/' ||
     pathname.startsWith('/admin/prospection/') ||
-    pathname.startsWith('/app/campagnes')
+    pathname.startsWith('/app/campagnes') ||
+    pathname.startsWith('/settings/email-senders') ||
+    pathname.startsWith('/settings/sms-senders')
   ) {
     return MODULES[1];
   }

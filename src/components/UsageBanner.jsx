@@ -8,6 +8,7 @@ export default function UsageBanner({ plan, usage, onUpgrade }) {
   const items = [
     { label: 'Recherches', current: usage.searches || 0, limit: plan.limits.searches_per_month },
     { label: 'Enrichissements', current: usage.enrichments || 0, limit: plan.limits.enrichments_per_month },
+    { label: 'Téléphones', current: usage.phones || 0, limit: plan.limits.phones_per_month },
     { label: 'Exports', current: usage.exports || 0, limit: plan.limits.exports_per_month },
   ];
 

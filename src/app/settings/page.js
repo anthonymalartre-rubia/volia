@@ -586,12 +586,15 @@ export default function SettingsPage() {
             {/* Quick stats */}
             <div className="relative mt-6 pt-5 border-t border-line">
               <p className="text-[10px] uppercase tracking-wider text-content-muted font-semibold mb-3">{t('settings.quickStats')}</p>
-              {/* sm:grid-cols-3 — sur ≤640px on stacke pour éviter d'écraser les 3 cards
-                  avec leurs text-2xl. Sur sm+ on garde la grille horizontale. */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* grid-cols-2 sur ≤640px / sm:grid-cols-4 sur desktop : 4 metrics
+                  (Recherches / Enrichissements / Téléphones / Exports). On a ajouté
+                  Téléphones pour valoriser le scraping num de tel inclus dans tous
+                  les plans (cf. plans.js phones_per_month). */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
                   { label: t('settings.searches'), current: userUsage?.searches || 0, limit: currentPlan.limits.searches_per_month, color: 'indigo' },
                   { label: t('settings.enrichments'), current: userUsage?.enrichments || 0, limit: currentPlan.limits.enrichments_per_month, color: 'violet' },
+                  { label: 'Téléphones', current: userUsage?.phones || 0, limit: currentPlan.limits.phones_per_month, color: 'sky' },
                   { label: t('settings.exports'), current: userUsage?.exports || 0, limit: currentPlan.limits.exports_per_month, color: 'emerald' },
                 ].map(({ label, current, limit, color }) => {
                   const isUnlimited = limit === -1;
@@ -600,12 +603,13 @@ export default function SettingsPage() {
                   const isCrit = !isUnlimited && pct >= 100;
                   const numberColor = isCrit ? 'text-red-500' : isWarn ? 'text-amber-500' :
                     color === 'indigo' ? 'text-indigo-500' :
-                    color === 'violet' ? 'text-violet-500' : 'text-emerald-500';
+                    color === 'violet' ? 'text-violet-500' :
+                    color === 'sky' ? 'text-sky-500' : 'text-emerald-500';
                   const barColor = isUnlimited
-                    ? (color === 'indigo' ? 'bg-indigo-500/40' : color === 'violet' ? 'bg-violet-500/40' : 'bg-emerald-500/40')
+                    ? (color === 'indigo' ? 'bg-indigo-500/40' : color === 'violet' ? 'bg-violet-500/40' : color === 'sky' ? 'bg-sky-500/40' : 'bg-emerald-500/40')
                     : isCrit ? 'bg-red-500'
                     : isWarn ? 'bg-amber-500'
-                    : (color === 'indigo' ? 'bg-indigo-500' : color === 'violet' ? 'bg-violet-500' : 'bg-emerald-500');
+                    : (color === 'indigo' ? 'bg-indigo-500' : color === 'violet' ? 'bg-violet-500' : color === 'sky' ? 'bg-sky-500' : 'bg-emerald-500');
                   return (
                     <div key={label} className="p-3 rounded-xl bg-surface-card border border-line">
                       <div className="text-[10px] uppercase tracking-wider text-content-muted font-medium mb-1.5">{label}</div>
@@ -892,6 +896,7 @@ export default function SettingsPage() {
                   {[
                     { label: t('settings.searches'), current: userUsage?.searches || 0, limit: currentPlan.limits.searches_per_month },
                     { label: t('settings.enrichments'), current: userUsage?.enrichments || 0, limit: currentPlan.limits.enrichments_per_month },
+                    { label: 'Téléphones', current: userUsage?.phones || 0, limit: currentPlan.limits.phones_per_month },
                     { label: t('settings.exports'), current: userUsage?.exports || 0, limit: currentPlan.limits.exports_per_month },
                   ].map(({ label, current, limit }) => {
                     const isUnlimited = limit === -1;

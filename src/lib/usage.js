@@ -16,7 +16,7 @@ function getCurrentMonth() {
  * Calcule l'usage cumulé d'une team (somme des usages individuels de chaque member)
  * pour le mois en cours. Si le user n'est pas dans une team, retourne son propre usage.
  *
- * @returns {Promise<{ searches: number, enrichments: number, exports: number, verifications: number }>}
+ * @returns {Promise<{ searches: number, enrichments: number, exports: number, verifications: number, phones: number }>}
  */
 async function getTeamUsageSum(supabase, userId) {
   const memberIds = await getQuotaMemberIds(userId);
@@ -29,16 +29,17 @@ async function getTeamUsageSum(supabase, userId) {
 
   const { data } = await supabase
     .from('usage_tracking')
-    .select('searches, enrichments, exports, verifications')
+    .select('searches, enrichments, exports, verifications, phones')
     .in('user_id', memberIds)
     .eq('month', month);
 
-  const sum = { searches: 0, enrichments: 0, exports: 0, verifications: 0 };
+  const sum = { searches: 0, enrichments: 0, exports: 0, verifications: 0, phones: 0 };
   (data || []).forEach((row) => {
     sum.searches += row.searches || 0;
     sum.enrichments += row.enrichments || 0;
     sum.exports += row.exports || 0;
     sum.verifications += row.verifications || 0;
+    sum.phones += row.phones || 0;
   });
   return sum;
 }
@@ -186,6 +187,8 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
         searches: 'recherches',
         enrichments: 'enrichissements',
         exports: 'exports',
+        phones: 'téléphones',
+        verifications: 'vérifications email',
       }[action] || action;
 
       if (thresholdCrossed === 100) {

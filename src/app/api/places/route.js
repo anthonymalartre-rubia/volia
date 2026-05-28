@@ -102,15 +102,36 @@ export async function POST(request) {
 
     const data = await response.json();
 
-    const places = (data.places || []).map((place) => ({
-      place_id: place.id || '',
-      nom: place.displayName?.text || '',
-      adresse: place.formattedAddress || '',
-      telephone: place.nationalPhoneNumber || place.internationalPhoneNumber || '',
-      site_web: place.websiteUri || '',
-      note: place.rating || null,
-      nb_avis: place.userRatingCount || 0,
-    }));
+    // ─── Quota téléphones — check avant d'attribuer ─────────────
+    // Les téléphones sont une 2ème ligne de quota (cf. plans.js
+    // phones_per_month). On les attribue dans la limite restante :
+    // au-delà, on retourne la place SANS téléphone (l'user voit le nom,
+    // l'adresse, etc. mais devra upgrader pour voir le numéro).
+    const phonesLimitCheck = await checkLimit(supabase, user.id, 'phones');
+    const phonesUnlimited = phonesLimitCheck.limit === -1;
+    let phonesBudget = phonesUnlimited
+      ? Number.POSITIVE_INFINITY
+      : Math.max(0, phonesLimitCheck.remaining);
+
+    let phonesAttributed = 0;
+    const places = (data.places || []).map((place) => {
+      const rawPhone = place.nationalPhoneNumber || place.internationalPhoneNumber || '';
+      let telephone = '';
+      if (rawPhone && phonesBudget > 0) {
+        telephone = rawPhone;
+        phonesBudget -= 1;
+        phonesAttributed += 1;
+      }
+      return {
+        place_id: place.id || '',
+        nom: place.displayName?.text || '',
+        adresse: place.formattedAddress || '',
+        telephone,
+        site_web: place.websiteUri || '',
+        note: place.rating || null,
+        nb_avis: place.userRatingCount || 0,
+      };
+    });
 
     // Comptage par prospect ramené (et non plus par appel API).
     // Un appel Google Places peut retourner jusqu'à 20 résultats : on
@@ -118,6 +139,13 @@ export async function POST(request) {
     let achievement = null;
     if (places.length > 0) {
       await incrementUsage(supabase, user.id, 'searches', places.length);
+      // Incrémente le compteur phones uniquement avec ce qui a réellement
+      // été attribué (best-effort, ne JAMAIS bloquer la réponse search).
+      if (phonesAttributed > 0) {
+        incrementUsage(supabase, user.id, 'phones', phonesAttributed).catch((err) =>
+          console.warn('[places] phones increment failed:', err.message)
+        );
+      }
       // Onboarding : marque first_search (fire-and-forget)
       trackOnboardingStep(user.id, 'first_search');
 

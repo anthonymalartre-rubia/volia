@@ -1,22 +1,29 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// ModuleSwitcher — dropdown HubSpot-style pour switcher entre les 3
-// modules de la suite Volia (Prospection / Campagnes / CRM).
+// ModuleSwitcher — dropdown HubSpot-style pour switcher entre les 4
+// modules de la suite Volia (Prospection / Campagnes / CRM / Forms).
 // ─────────────────────────────────────────────────────────────────────
 //
 // Placement : TopBar, juste après le logo.
 //
+// Badge "Plan Business" : on n'affiche PAS LIVE/BETA/BIENTÔT (vestige
+// pré-launch). À la place, on indique uniquement les modules réservés
+// au plan Business (CRM, Campagnes, Formulaires) — Prospection est
+// disponible sur tous les plans donc aucun badge.
+// Cf. lib/plans.js → business.unlocksModules = true.
+//
 // Détection du module actif via usePathname() :
-//   - /dashboard*       OR /app/prospection* → Prospection (LIVE, violet)
+//   - /dashboard*       OR /app/prospection* → Prospection (violet)
 //   - /admin/prospection (hub Listes du module Campagnes)
 //   - /admin/prospection/lists/*
 //   - /admin/prospection/campaigns/*
-//   - /app/campagnes*                        → Campagnes (BETA, blue)
+//   - /app/campagnes*                        → Campagnes (blue)
 //   (Note : /admin/prospection est trompeur — c'est le BACKEND de
 //   Campagnes, pas du module Prospection. Legacy nommage à
 //   refactorer un jour.)
-//   - /app/crm*                              → CRM (BIENTÔT, emerald)
+//   - /app/crm*                              → CRM (emerald)
+//   - /admin/forms*                          → Formulaires (pink)
 //   - sinon (settings, admin home, ...)      → Prospection par défaut
 //
 // Couleurs alignées avec MODULE_THEMES de ProductPageLayout.jsx.
@@ -43,6 +50,13 @@ import {
 // les classes Tailwind explicitement — pas de string interpolation
 // dynamique sinon le purge Tailwind les supprime au build.
 // ─────────────────────────────────────────────────────────────────────
+// Badge "Plan Business" (homogène pour les 3 modules gatés).
+// Pas de badge sur Prospection (disponible sur tous les plans).
+const BUSINESS_BADGE = {
+  label: 'Plan Business',
+  className: 'bg-amber-50 text-amber-700 border-amber-200',
+};
+
 const MODULES = [
   {
     id: 'prospection',
@@ -50,7 +64,7 @@ const MODULES = [
     description: 'Trouvez les emails B2B',
     href: '/app/prospection',
     icon: Search,
-    status: { label: 'LIVE', className: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+    businessOnly: false,
     color: 'violet',
     iconGradient: 'from-violet-500 to-indigo-600',
     activeBg: 'bg-violet-50',
@@ -64,7 +78,7 @@ const MODULES = [
     description: 'Séquences email automatisées',
     href: '/app/campagnes',
     icon: Mail,
-    status: { label: 'BETA', className: 'bg-blue-100 text-blue-700 border-blue-300' },
+    businessOnly: true,
     color: 'blue',
     iconGradient: 'from-blue-500 to-cyan-600',
     activeBg: 'bg-blue-50',
@@ -78,7 +92,7 @@ const MODULES = [
     description: 'Pipeline commercial',
     href: '/app/crm',
     icon: KanbanSquare,
-    status: { label: 'BIENTÔT', className: 'bg-amber-100 text-amber-700 border-amber-300' },
+    businessOnly: true,
     color: 'emerald',
     iconGradient: 'from-emerald-500 to-teal-600',
     activeBg: 'bg-emerald-50',
@@ -92,7 +106,7 @@ const MODULES = [
     description: 'Form builder + bridges',
     href: '/admin/forms',
     icon: FormInput,
-    status: { label: 'LIVE', className: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
+    businessOnly: true,
     color: 'pink',
     iconGradient: 'from-pink-500 to-rose-600',
     activeBg: 'bg-pink-50',
@@ -272,7 +286,7 @@ export default function ModuleSwitcher() {
                     </span>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span
                           className={`text-sm font-semibold ${
                             isActive ? mod.activeText : 'text-content-primary'
@@ -280,11 +294,14 @@ export default function ModuleSwitcher() {
                         >
                           Volia {mod.name}
                         </span>
-                        <span
-                          className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full border ${mod.status.className}`}
-                        >
-                          {mod.status.label}
-                        </span>
+                        {mod.businessOnly && (
+                          <span
+                            className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border ${BUSINESS_BADGE.className}`}
+                            title="Module inclus dans le plan Business uniquement"
+                          >
+                            {BUSINESS_BADGE.label}
+                          </span>
+                        )}
                       </div>
                       <div className="text-[11px] text-content-tertiary mt-0.5 truncate">
                         {mod.description}

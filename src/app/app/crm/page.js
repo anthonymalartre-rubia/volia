@@ -167,6 +167,30 @@ export default function CrmAppPage() {
     }
   }, [hasBusinessAccess]);
 
+  // ─── Reload pipelines en préservant pipelineId courant ──
+  // Utilisé après mutation des stages (rename/add/delete) pour
+  // refresh la liste sans repasser sur le pipeline "par défaut".
+  const reloadPipelines = useCallback(async () => {
+    if (!hasBusinessAccess) return;
+    try {
+      const pipeRes = await fetch('/api/crm/pipelines');
+      const pipeData = await pipeRes.json();
+      if (!pipeRes.ok) throw new Error(pipeData.error || 'Erreur pipelines');
+      const list = Array.isArray(pipeData.data) ? pipeData.data : [];
+      setPipelines(list);
+      // NE PAS reset pipelineId : on garde celui sélectionné.
+      // Edge case : si l'utilisateur a supprimé le pipeline courant
+      // (impossible via cette UI, mais par sécurité), on fallback default.
+      const stillExists = list.some((p) => p.id === pipelineId);
+      if (!stillExists) {
+        const def = list.find((p) => p.is_default) || list[0];
+        if (def) setPipelineId(def.id);
+      }
+    } catch (err) {
+      console.error('[CRM] reloadPipelines error', err);
+    }
+  }, [hasBusinessAccess, pipelineId]);
+
   // ───────────────────────────────────────────────────────────
   // 3. Fetch deals (re-fetch quand on change de pipeline)
   // ───────────────────────────────────────────────────────────
@@ -713,6 +737,10 @@ export default function CrmAppPage() {
                 onDealClick={(d) => setSelectedDealId(d.id)}
                 onNewDeal={handleNewDeal}
                 onMoveStage={handleMoveByButton}
+                onStagesMutation={async () => {
+                  await reloadPipelines();
+                  await fetchDeals();
+                }}
               />
             )}
           </section>

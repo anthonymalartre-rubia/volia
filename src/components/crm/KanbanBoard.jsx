@@ -109,10 +109,15 @@ function KanbanColumn({
       `}
       aria-label={`Colonne ${stage.name}, ${deals.length} deals`}
     >
-      {/* ─── Header combiné (nom + count + % + total value) ──── */}
-      <div className={`px-3 py-3 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
-        {/* Ligne 1 : dot + nom + badge count + probabilité */}
-        <div className="flex items-center justify-between gap-2 mb-2">
+      {/* ─── Header compact (1 ligne : nom + total + %) ─────────
+          Refonte 28 mai 2026 (feedback founder) : avant on avait 2
+          lignes (nom au-dessus, total en dessous). À cause du sticky
+          header de page CRM qui recouvrait le haut du board, l'user ne
+          voyait que la ligne 2 (total) sans savoir quel stage c'était.
+          Compaction sur 1 ligne → moins haut, moins de chance d'être
+          recouvert, et même tronqué l'user voit nom + total. */}
+      <div className={`px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <span
               className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
@@ -125,19 +130,20 @@ function KanbanColumn({
               {deals.length}
             </span>
           </div>
-          {!isClosing && (
-            <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}>
-              {stage.probability}%
-              <InfoTooltip
-                content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
-                iconSize={10}
-              />
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <span className={`text-xs font-bold tabular-nums whitespace-nowrap ${colors.text} opacity-90`}>
+              {formatDealValue(totalValue)}
             </span>
-          )}
-        </div>
-        {/* Ligne 2 : total value */}
-        <div className={`text-xs font-bold tabular-nums ${colors.text} opacity-80`}>
-          {formatDealValue(totalValue)}
+            {!isClosing && (
+              <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}>
+                {stage.probability}%
+                <InfoTooltip
+                  content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
+                  iconSize={10}
+                />
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

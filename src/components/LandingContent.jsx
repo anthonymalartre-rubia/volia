@@ -1256,80 +1256,21 @@ export default function LandingContent() {
       <BuiltForProfilesBlock />
 
       {/* ──────────────────────────────────────────────────────────────
-          POWERED BY — stack technique (trust signal moderne)
+          [Retiré 28 mai 2026] 2 sections supprimées sur demande founder :
+
+          1) POWERED BY ("Construit avec les outils de référence") —
+             6 logos textuels Stripe/Supabase/Anthropic/Resend/Vercel/
+             Google Places. Trust signal qui parlait surtout aux devs
+             plus qu'aux acheteurs B2B cibles.
+
+          2) WHY AGGREGATOR ("Scraping + recherche Google. Les deux.") —
+             bento 3 cards ~40% / ~85% / -80%. Faisait doublon avec le
+             pitch hero et la /produits/prospection page. Allongeait
+             la landing sans booster la conversion.
+
+          Strings i18n landing.why.* conservées dans locales/{fr,en}.js
+          (zéro impact, simplifie un revert si besoin).
        */}
-      <section className="py-12 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-6xl mx-auto">
-          <MotionInView>
-            <p className="text-center text-xs uppercase tracking-[0.2em] font-semibold text-content-tertiary mb-8">
-              Construit avec les outils de référence
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 opacity-70">
-              {[
-                { name: 'Stripe', tag: 'Paiements' },
-                { name: 'Supabase', tag: 'Auth & DB' },
-                { name: 'Anthropic', tag: 'IA' },
-                { name: 'Resend', tag: 'Emails' },
-                { name: 'Vercel', tag: 'Hosting' },
-                { name: 'Google Places', tag: 'Data' },
-              ].map((tech, i) => (
-                <MotionInView key={tech.name} delay={i * 60} className="flex items-center gap-2">
-                  <span className="text-base font-bold text-content-secondary tracking-tight">{tech.name}</span>
-                  <span className="text-[10px] uppercase tracking-wider text-content-muted font-mono">{tech.tag}</span>
-                </MotionInView>
-              ))}
-            </div>
-          </MotionInView>
-        </div>
-      </section>
-
-      {/* ──────────────────────────────────────────────────────────────
-          WHY AGGREGATOR — bento layout (center stat highlighted)
-       */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-6xl mx-auto">
-          <MotionInView>
-            <div className="text-center mb-16">
-              <p className="text-sm font-semibold text-violet-600 mb-3">{t('landing.why.label')}</p>
-              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                {t('landing.why.title')}
-              </h2>
-              <p className="text-content-tertiary text-lg max-w-2xl mx-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.desc') }} />
-            </div>
-          </MotionInView>
-
-          {/* Bento : carte centrale featured ~85%, 2 cards side */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
-            {/* Card gauche — ~40% (problem) */}
-            <MotionInView delay={100}>
-              <div className="h-full p-7 rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col">
-                <div className="text-xs font-semibold uppercase tracking-wider text-rose-600 mb-3">Problème</div>
-                <div className="text-6xl font-bold font-mono bg-gradient-to-br from-rose-500 to-rose-700 bg-clip-text text-transparent mb-3">~40%</div>
-                <p className="text-sm text-content-secondary mt-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.stat1Label') }} />
-              </div>
-            </MotionInView>
-
-            {/* Card centrale — ~85% (Volia solution, mise en valeur) */}
-            <MotionInView delay={200}>
-              <div className="relative h-full p-8 rounded-2xl border-2 border-violet-300 bg-gradient-to-br from-violet-100 via-indigo-50 to-white shadow-xl shadow-violet-500/10 hover:shadow-2xl hover:shadow-violet-500/20 hover:-translate-y-1 transition-all flex flex-col">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">Volia</div>
-                <div className="text-xs font-semibold uppercase tracking-wider text-violet-700 mb-3 mt-2">Notre solution</div>
-                <div className="text-7xl font-bold font-mono bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent mb-3">~85%</div>
-                <p className="text-sm text-content-primary font-medium mt-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.stat2Label') }} />
-              </div>
-            </MotionInView>
-
-            {/* Card droite — -80% (économies) */}
-            <MotionInView delay={300}>
-              <div className="h-full p-7 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all flex flex-col">
-                <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 mb-3">Bénéfice</div>
-                <div className="text-6xl font-bold font-mono bg-gradient-to-br from-emerald-500 to-emerald-700 bg-clip-text text-transparent mb-3">-80%</div>
-                <p className="text-sm text-content-secondary mt-auto" dangerouslySetInnerHTML={{ __html: t('landing.why.stat3Label') }} />
-              </div>
-            </MotionInView>
-          </div>
-        </div>
-      </section>
 
       {/* ──────────────────────────────────────────────────────────────
           [Retiré 28 mai 2026] Section FEATURES (bento layout 6 cards

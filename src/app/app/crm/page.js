@@ -410,16 +410,22 @@ export default function CrmAppPage() {
   }
 
   // ── BRANCHE 2 : Business plan → Kanban opérationnel ──────────────
+  // Layout h-screen (pattern Trello / Linear / Notion) : sur desktop,
+  // toute la page est contrainte à la hauteur viewport. Le board CRM
+  // a son propre scroll container (cards scrollent DANS la column,
+  // pas avec la page). Sur mobile, on reste en min-h-screen classique
+  // car le board étroit n'a pas besoin de scroll vertical interne.
   return (
-    <div className="min-h-screen bg-surface-base text-content-primary flex flex-col">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-surface-base text-content-primary flex flex-col">
       <TopBar user={user} onToggleSidebar={() => setSidebarOpen((v) => !v)} />
 
       <div className="flex flex-1 overflow-hidden">
         <CrmSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
         <main className="flex-1 flex flex-col overflow-hidden min-w-0">
-          {/* ─── Pipeline header ──────────────────────────────────── */}
-          <header className="border-b border-line bg-surface-base sticky top-14 z-30">
+          {/* ─── Pipeline header (sticky uniquement sur mobile, en
+                desktop le main est déjà h-bound donc inutile) ───── */}
+          <header className="border-b border-line bg-surface-base sticky top-14 z-30 lg:static">
             <div className="px-4 sm:px-6 py-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center flex-shrink-0">

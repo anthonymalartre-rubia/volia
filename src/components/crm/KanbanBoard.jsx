@@ -106,6 +106,7 @@ function KanbanColumn({
         bg-surface-elevated/40
         ${columnBorder}
         transition-colors
+        lg:h-full lg:max-h-full
       `}
       aria-label={`Colonne ${stage.name}, ${deals.length} deals`}
     >
@@ -148,8 +149,13 @@ function KanbanColumn({
         </div>
       </div>
 
-      {/* ─── Body : list of cards ──────────────────────────── */}
-      <div className="flex-1 p-2 space-y-2 min-h-[120px] overflow-y-auto max-h-[calc(100vh-280px)]">
+      {/* ─── Body : list of cards ────────────────────────────
+          flex-1 prend toute la hauteur restante dans la column.
+          Sur desktop (h-screen layout), la column a h-full → le body
+          a une hauteur calculée automatique → scroll interne si trop
+          de cards. Sur mobile, fallback max-h pour éviter qu'une
+          column géante avec 20 cards déborde sans scroll. */}
+      <div className="flex-1 p-2 space-y-2 min-h-[120px] overflow-y-auto max-h-[calc(100vh-280px)] lg:max-h-none">
         {deals.length === 0 ? (
           <button
             type="button"
@@ -243,8 +249,8 @@ export default function KanbanBoard({
   const stageCount = pipeline.stages.length;
 
   return (
-    <div className="w-full overflow-x-auto pb-4">
-      <div className="flex gap-3 min-w-min px-1">
+    <div className="w-full overflow-x-auto pb-4 lg:h-full lg:pb-2">
+      <div className="flex gap-3 min-w-min px-1 lg:h-full">
         {pipeline.stages.map((stage, idx) => (
           <KanbanColumn
             key={stage.id}

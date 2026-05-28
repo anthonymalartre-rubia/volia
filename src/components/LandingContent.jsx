@@ -1295,37 +1295,14 @@ export default function LandingContent() {
         </div>
       </section>
 
-      {/* Waterfall visual */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-16">
-            <p className="text-sm font-semibold text-violet-400 mb-3">{t('landing.waterfall.label')}</p>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4 max-w-lg" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.title') }} />
-            <p className="text-content-tertiary text-lg max-w-xl" dangerouslySetInnerHTML={{ __html: t('landing.waterfall.desc') }} />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            {[
-              { name: t('landing.waterfall.steps.domainName'), desc: t('landing.waterfall.steps.domainDesc'), tag: t('landing.waterfall.autoTag'), score: '100%', color: 'from-blue-500/20 to-indigo-500/20 border-blue-500/20', dot: 'bg-blue-400' },
-              { name: t('landing.waterfall.steps.scrapingName'), desc: t('landing.waterfall.steps.scrapingDesc'), tag: t('landing.waterfall.free'), score: '100%', color: 'from-green-500/20 to-emerald-500/20 border-green-500/20', dot: 'bg-green-400' },
-              { name: t('landing.waterfall.steps.googleName'), desc: t('landing.waterfall.steps.googleDesc'), tag: t('landing.waterfall.included'), score: '90%', color: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/20', dot: 'bg-yellow-400' },
-            ].map((s, i) => (
-              <div key={s.name} className={`relative p-5 rounded-xl bg-gradient-to-br ${s.color} border border-line`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className={`w-2.5 h-2.5 rounded-full ${s.dot}`} />
-                  <span className="text-[10px] font-mono text-content-tertiary">0{i + 1}</span>
-                </div>
-                <h4 className="text-base font-semibold mb-1">{s.name}</h4>
-                <p className="text-xs text-content-tertiary mb-2">{s.desc}</p>
-                <span className="text-[10px] text-content-secondary font-medium">{s.tag}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-sm text-content-tertiary mt-6">
-            {t('landing.waterfall.stopsFirst')}
-          </p>
-        </div>
-      </section>
+      {/* ──────────────────────────────────────────────────────────────
+          [Retiré 28 mai 2026] Section "Enrichissement en cascade"
+          (Scraping + Google. Le meilleur email avec son score) avec
+          les 3 cards Découverte domaine / Scraping site web / Recherche
+          Google. Demande founder — détail technique trop bas niveau
+          pour la landing, déjà couvert sur /produits/prospection et
+          dans la FAQ. Strings i18n landing.waterfall.* conservées.
+       */}
 
       {/* Email Verification Feature */}
       <section className="py-24 px-4 sm:px-6 border-t border-line">

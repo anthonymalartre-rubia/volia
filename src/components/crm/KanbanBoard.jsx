@@ -42,6 +42,59 @@ function getStageColors(color) {
   return STAGE_COLORS[color] || STAGE_COLORS.zinc;
 }
 
+// ─── StageHeader (interne) ─────────────────────────────────────────
+// Rendu dans la stages-bar sticky du KanbanBoard. Pattern Linear :
+// les noms de stages restent toujours visibles au scroll vertical
+// profond grâce au sticky top sur la bar parente. Width identique à
+// KanbanColumn (280-300px) pour alignement vertical parfait.
+function StageHeader({ stage, deals }) {
+  const colors = getStageColors(stage.color);
+  const isClosingWon = stage.closing_type === 'won';
+  const isClosingLost = stage.closing_type === 'lost';
+  const isClosing = isClosingWon || isClosingLost;
+  const totalValue = deals.reduce((sum, d) => sum + (d.value_cents || 0), 0);
+  return (
+    <div
+      className={`flex-shrink-0 w-[280px] sm:w-[300px] px-3 py-2.5 rounded-xl ${colors.headerBg} border-2 ${colors.border}`}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span
+            className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
+            aria-hidden="true"
+          />
+          <h3 className={`text-sm font-bold truncate ${colors.text}`}>
+            {stage.name || 'Stage'}
+          </h3>
+          <span
+            className={`text-[10px] font-bold tabular-nums flex-shrink-0 px-1.5 py-0.5 rounded-full bg-white/70 ${colors.text}`}
+          >
+            {deals.length}
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          <span
+            className={`text-xs font-bold tabular-nums whitespace-nowrap ${colors.text} opacity-90`}
+          >
+            {formatDealValue(totalValue)}
+          </span>
+          {!isClosing && (
+            <span
+              className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}
+            >
+              {stage.probability}%
+              <InfoTooltip
+                content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
+                iconSize={10}
+              />
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── KanbanColumn (interne) ────────────────────────────────────────
 function KanbanColumn({
   stage,
@@ -109,53 +162,14 @@ function KanbanColumn({
       `}
       aria-label={`Colonne ${stage.name}, ${deals.length} deals`}
     >
-      {/* ─── Header compact (1 ligne : nom + total + %) ─────────
-          Refonte 28 mai 2026 (feedback founder) : avant on avait 2
-          lignes (nom au-dessus, total en dessous). À cause du sticky
-          header de page CRM qui recouvrait le haut du board, l'user ne
-          voyait que la ligne 2 (total) sans savoir quel stage c'était.
-          Compaction sur 1 ligne → moins haut, moins de chance d'être
-          recouvert, et même tronqué l'user voit nom + total.
-
-          [Revert 28 mai 2026 — tentative sticky abandonnée]
-          On avait essayé `sticky top-[140px]` pour que le header reste
-          visible au scroll vertical profond. Mais le sticky se positionnait
-          EN BAS de la column (au lieu de top viewport) parce que la column
-          flex est plus courte que le delta de scroll requis → sticky reste
-          collé à la fin du parent. Re-tentative future = autre approche
-          (ex : KanbanBoard avec h-[calc(100vh-N)] + scroll interne). */}
-      <div className={`px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <span
-              className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
-              aria-hidden="true"
-            />
-            <h3 className={`text-sm font-bold truncate ${colors.text}`}>
-              {stage.name || 'Stage'}
-            </h3>
-            <span className={`text-[10px] font-bold tabular-nums flex-shrink-0 px-1.5 py-0.5 rounded-full bg-white/70 ${colors.text}`}>
-              {deals.length}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            <span className={`text-xs font-bold tabular-nums whitespace-nowrap ${colors.text} opacity-90`}>
-              {formatDealValue(totalValue)}
-            </span>
-            {!isClosing && (
-              <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}>
-                {stage.probability}%
-                <InfoTooltip
-                  content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
-                  iconSize={10}
-                />
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ─── Body : list of cards ──────────────────────────── */}
+      {/* ─── Body : list of cards ──────────────────────────────
+          Refonte 28 mai 2026 (pattern Linear) : le header de stage
+          (nom + count + total + %) a été extrait dans un composant
+          <StageHeader /> qui vit dans une stages-bar STICKY au-dessus
+          du board (rendue par <KanbanBoard /> directement). La column
+          ne contient plus que la liste de cards. Indication visuelle
+          du stage via un border-top coloré sur la column. */}
+      <div className={`h-1 rounded-t-xl ${colors.dot}`} aria-hidden="true" />
       <div className="flex-1 p-2 space-y-2 min-h-[120px] overflow-y-auto max-h-[calc(100vh-280px)]">
         {deals.length === 0 ? (
           <button
@@ -251,22 +265,46 @@ export default function KanbanBoard({
 
   return (
     <div className="w-full overflow-x-auto pb-4">
-      <div className="flex gap-3 min-w-min px-1">
-        {pipeline.stages.map((stage, idx) => (
-          <KanbanColumn
-            key={stage.id}
-            stage={stage}
-            deals={dealsByStage[stage.id] || []}
-            onDealMove={onDealMove}
-            onDealClick={onDealClick}
-            onNewDeal={onNewDeal}
-            draggingDealId={draggingDealId}
-            setDraggingDealId={setDraggingDealId}
-            onMoveStage={onMoveStage}
-            canMovePrev={idx > 0}
-            canMoveNext={idx < stageCount - 1}
-          />
-        ))}
+      <div className="min-w-min px-1">
+        {/* ─── Stages bar STICKY (pattern Linear) ────────────────
+            Reste visible au scroll vertical profond (collée sous le
+            sticky du page header CRM). Comme cette div est DANS le
+            container overflow-x-auto, elle suit aussi le scroll
+            horizontal du board → alignement parfait avec les columns
+            en dessous, sur tous les viewports.
+            top-[140px] = TopBar 56 + page header CRM ~84.
+            z-20 < z-30 du page header pour ne pas le chevaucher.
+            -mx-1 px-1 pour étirer le fond bord à bord. */}
+        <div className="sticky top-[140px] z-20 -mx-1 px-1 mb-3 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 backdrop-blur-sm">
+          <div className="flex gap-3 py-2">
+            {pipeline.stages.map((stage) => (
+              <StageHeader
+                key={stage.id}
+                stage={stage}
+                deals={dealsByStage[stage.id] || []}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* ─── Columns (sans header, juste les cards) ──────────── */}
+        <div className="flex gap-3">
+          {pipeline.stages.map((stage, idx) => (
+            <KanbanColumn
+              key={stage.id}
+              stage={stage}
+              deals={dealsByStage[stage.id] || []}
+              onDealMove={onDealMove}
+              onDealClick={onDealClick}
+              onNewDeal={onNewDeal}
+              draggingDealId={draggingDealId}
+              setDraggingDealId={setDraggingDealId}
+              onMoveStage={onMoveStage}
+              canMovePrev={idx > 0}
+              canMoveNext={idx < stageCount - 1}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

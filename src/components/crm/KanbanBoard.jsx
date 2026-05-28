@@ -312,7 +312,7 @@ export function KanbanStagesBar({ pipeline, deals = [] }) {
   }
 
   return (
-    <div className="sticky top-[120px] z-20 bg-surface-base/95 backdrop-blur-sm border-b border-line">
+    <div className="sticky top-[120px] z-20 bg-surface-base border-b border-line shadow-md">
       <div className="overflow-x-auto px-3 sm:px-5">
         <div className="flex gap-3 py-2 min-w-min">
           {pipeline.stages.map((stage) => (

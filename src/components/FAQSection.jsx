@@ -284,7 +284,7 @@ export default function FAQSection() {
               Votre question n&apos;est pas là ?
             </span>
             <a
-              href="mailto:hello@volia.fr?subject=Question%20sur%20Volia"
+              href="mailto:contact@volia.fr?subject=Question%20sur%20Volia"
               className="inline-flex items-center gap-1 text-sm font-semibold text-violet-700 hover:text-violet-600 transition"
             >
               Écrivez-nous directement

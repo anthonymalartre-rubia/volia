@@ -24,7 +24,7 @@ export default function GlobalError({ error, reset }) {
           Ça a planté.
         </h2>
         <p className="text-sm text-content-secondary mb-6 leading-relaxed">
-          On regarde. Retentez dans 30 secondes — si ça persiste, écrivez-nous à hello@volia.fr.
+          On regarde. Retentez dans 30 secondes — si ça persiste, écrivez-nous à contact@volia.fr.
         </p>
 
         {process.env.NODE_ENV === 'development' && error?.message && (

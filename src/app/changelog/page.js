@@ -123,7 +123,7 @@ export default function ChangelogPage() {
             <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
               <h2 className="text-2xl font-bold mb-3">Une feature à suggérer ?</h2>
               <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-                On lit chaque demande. Écrivez-nous à <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a> ou rejoignez la newsletter pour suivre les prochaines releases.
+                On lit chaque demande. Écrivez-nous à <a href="mailto:contact@volia.fr" className="text-violet-300 hover:underline">contact@volia.fr</a> ou rejoignez la newsletter pour suivre les prochaines releases.
               </p>
               <Link href="/newsletter" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
                 <Sparkles size={16} />

@@ -26,7 +26,7 @@ export default function NoAdminScreen({ email, signOut, productHref = '/produits
   const body = encodeURIComponent(
     `Bonjour,\n\nJe souhaiterais rejoindre la beta privée du module ${featureName} sur Volia.\n\nMon compte : ${email || '(non renseigné)'}\n\nMerci !\n`
   );
-  const mailto = `mailto:hello@volia.fr?subject=${subject}&body=${body}`;
+  const mailto = `mailto:contact@volia.fr?subject=${subject}&body=${body}`;
 
   return (
     <div className="min-h-screen bg-surface-base flex items-center justify-center p-6">

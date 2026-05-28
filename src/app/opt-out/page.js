@@ -205,7 +205,7 @@ function OptOutInner() {
 
         <p className="text-[11px] text-content-tertiary mt-4 leading-relaxed text-center">
           🔒 Votre email sera supprimé de notre base + ajouté à notre liste d&apos;exclusion permanente.<br />
-          Pour toute question : <a href="mailto:hello@volia.fr" className="text-violet-300 hover:underline">hello@volia.fr</a>
+          Pour toute question : <a href="mailto:contact@volia.fr" className="text-violet-300 hover:underline">contact@volia.fr</a>
         </p>
       </div>
     </AuthPageShell>

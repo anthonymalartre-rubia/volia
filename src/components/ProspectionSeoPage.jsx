@@ -504,7 +504,7 @@ export default function ProspectionSeoPage({
                 <li><Link href="/confidentialite" className="text-content-secondary hover:text-violet-300 transition">Confidentialité</Link></li>
                 <li><Link href="/rgpd" className="text-content-secondary hover:text-violet-300 transition">Droits RGPD</Link></li>
                 <li><Link href="/opt-out" className="text-content-secondary hover:text-violet-300 transition">Opt-out / désinscription</Link></li>
-                <li><a href="mailto:hello@volia.fr" className="text-content-secondary hover:text-violet-300 transition">hello@volia.fr</a></li>
+                <li><a href="mailto:contact@volia.fr" className="text-content-secondary hover:text-violet-300 transition">contact@volia.fr</a></li>
               </ul>
             </div>
           </div>

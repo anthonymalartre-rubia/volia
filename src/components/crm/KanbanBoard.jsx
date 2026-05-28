@@ -265,43 +265,61 @@ export default function KanbanBoard({
 
   return (
     <div className="w-full overflow-x-auto pb-4">
-      <div className="min-w-min px-1">
-        {/* ─── Stages bar STICKY (pattern Linear) ────────────────
-            Reste visible au scroll vertical profond (collée sous le
-            sticky du page header CRM). Comme cette div est DANS le
-            container overflow-x-auto, elle suit aussi le scroll
-            horizontal du board → alignement parfait avec les columns
-            en dessous, sur tous les viewports.
-            top-[140px] = TopBar 56 + page header CRM ~84.
-            z-20 < z-30 du page header pour ne pas le chevaucher.
-            -mx-1 px-1 pour étirer le fond bord à bord. */}
-        <div className="sticky top-[140px] z-20 -mx-1 px-1 mb-3 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 backdrop-blur-sm">
-          <div className="flex gap-3 py-2">
-            {pipeline.stages.map((stage) => (
-              <StageHeader
-                key={stage.id}
-                stage={stage}
-                deals={dealsByStage[stage.id] || []}
-              />
-            ))}
-          </div>
-        </div>
+      <div className="flex gap-3 min-w-min px-1">
+        {pipeline.stages.map((stage, idx) => (
+          <KanbanColumn
+            key={stage.id}
+            stage={stage}
+            deals={dealsByStage[stage.id] || []}
+            onDealMove={onDealMove}
+            onDealClick={onDealClick}
+            onNewDeal={onNewDeal}
+            draggingDealId={draggingDealId}
+            setDraggingDealId={setDraggingDealId}
+            onMoveStage={onMoveStage}
+            canMovePrev={idx > 0}
+            canMoveNext={idx < stageCount - 1}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-        {/* ─── Columns (sans header, juste les cards) ──────────── */}
-        <div className="flex gap-3">
-          {pipeline.stages.map((stage, idx) => (
-            <KanbanColumn
+// ─── KanbanStagesBar (export nommé) ────────────────────────────────
+// La stages bar est rendue HORS du KanbanBoard, directement dans la
+// page CRM comme sibling du <header sticky>. Pourquoi : le KanbanBoard
+// a un wrapper `overflow-x-auto` qui crée son propre scroll context
+// vertical → un sticky enfant colle à ce container, pas à la viewport.
+// En hoistant la bar au niveau du <main>, elle bénéficie du même scroll
+// context que le page header sticky qui marche déjà (viewport).
+//
+// Trade-off accepté : la bar n'est plus alignée avec le scroll horizontal
+// du board (sur mobile / petits écrans, le board scrolle dessous tandis
+// que la bar reste fixe). Sur desktop avec 4-6 stages, pas de scroll
+// horizontal nécessaire → alignement parfait.
+export function KanbanStagesBar({ pipeline, deals = [] }) {
+  if (!pipeline || !Array.isArray(pipeline.stages)) return null;
+
+  const dealsByStage = {};
+  for (const stage of pipeline.stages) {
+    dealsByStage[stage.id] = [];
+  }
+  for (const d of deals) {
+    if (dealsByStage[d.stage_id]) {
+      dealsByStage[d.stage_id].push(d);
+    }
+  }
+
+  return (
+    <div className="sticky top-[120px] z-20 bg-surface-base/95 backdrop-blur-sm border-b border-line">
+      <div className="overflow-x-auto px-3 sm:px-5">
+        <div className="flex gap-3 py-2 min-w-min">
+          {pipeline.stages.map((stage) => (
+            <StageHeader
               key={stage.id}
               stage={stage}
               deals={dealsByStage[stage.id] || []}
-              onDealMove={onDealMove}
-              onDealClick={onDealClick}
-              onNewDeal={onNewDeal}
-              draggingDealId={draggingDealId}
-              setDraggingDealId={setDraggingDealId}
-              onMoveStage={onMoveStage}
-              canMovePrev={idx > 0}
-              canMoveNext={idx < stageCount - 1}
             />
           ))}
         </div>

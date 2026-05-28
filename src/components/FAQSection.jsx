@@ -23,7 +23,6 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { ChevronDown, Search, MessageCircle, X } from 'lucide-react';
 import { FAQ_ITEMS, FAQ_CATEGORIES } from '@/lib/faq-data';
 
@@ -275,19 +274,22 @@ export default function FAQSection() {
         )}
 
         {/* ─── CTA "Pas trouvé ?" ─── */}
+        {/* On utilise un <a> standard plutôt qu'un Next <Link> : Link essaie
+            de router le href côté client et bloque le mailto: dans le
+            navigateur. Pattern aligné avec ErrorPanel.jsx et le footer. */}
         <div className="mt-12 text-center">
           <div className="inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-5 px-6 py-5 rounded-2xl border border-line bg-surface-elevated/40">
             <MessageCircle size={20} className="text-violet-500" aria-hidden="true" />
             <span className="text-sm text-content-secondary">
               Votre question n&apos;est pas là ?
             </span>
-            <Link
+            <a
               href="mailto:hello@volia.fr?subject=Question%20sur%20Volia"
               className="inline-flex items-center gap-1 text-sm font-semibold text-violet-700 hover:text-violet-600 transition"
             >
               Écrivez-nous directement
               <span aria-hidden="true">→</span>
-            </Link>
+            </a>
           </div>
         </div>
       </div>

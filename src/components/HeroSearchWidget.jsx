@@ -2,11 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, Mail, Building2, ArrowRight, CheckCircle2, Sparkles, Loader2, Globe, Phone, Star } from 'lucide-react';
+import { Search, Mail, ArrowRight, CheckCircle2, Sparkles, Loader2, Globe, Phone, Star } from 'lucide-react';
 
+// Onglet "Par entreprise" retiré le 28 mai 2026 : il était codé en mock
+// (retournait toujours les emails d'OpenAI quel que soit le nom tapé)
+// → trompait les visiteurs (founder a tapé "Jarvis", a vu ceo@openai.com).
+// Pour le ré-activer il faudra une vraie intégration Clearbit/Apollo
+// + rate limiting + cache côté /api/public/*.
 const TABS = [
   { id: 'category', label: 'Par secteur + ville', icon: Search },
-  { id: 'company', label: 'Par entreprise', icon: Building2 },
   { id: 'verify', label: 'Vérifier un email', icon: Mail },
 ];
 
@@ -46,24 +50,6 @@ const MOCK_RESULTS = {
       ],
     },
   },
-  company: {
-    // Aperçu démo : on n'affiche PAS de vrais noms de dirigeants ni de
-    // vrais emails (risque juridique : usurpation, RGPD, atteinte à la vie
-    // privée). On montre la STRUCTURE typique d'une fiche enrichie avec
-    // des emails génériques et des libellés de rôle.
-    default: {
-      name: 'OpenAI',
-      domain: 'openai.com',
-      employees: 770,
-      foundedYear: 2015,
-      industry: 'AI Research',
-      emails: [
-        { person: 'Direction', role: 'CEO', email: 'ceo@openai.com', verified: true },
-        { person: 'Direction', role: 'COO', email: 'contact@openai.com', verified: true },
-        { person: 'Direction', role: 'CTO', email: 'press@openai.com', verified: false },
-      ],
-    },
-  },
   verify: {
     valid: { result: 'ok', status: 'Valide', color: 'green', detail: 'Adresse vérifiée par SMTP — délivrabilité garantie' },
     invalid: { result: 'invalid', status: 'Invalide', color: 'red', detail: 'Cette boîte mail n\'existe pas' },
@@ -77,11 +63,6 @@ const QUICK_TRIES = {
     { cat: 'Avocats', city: 'Lyon', key: 'avocat-lyon' },
     { cat: 'Hôtels', city: 'Marseille', key: 'hotel-marseille' },
   ],
-  company: [
-    { name: 'OpenAI', label: 'OpenAI' },
-    { name: 'Stripe', label: 'Stripe' },
-    { name: 'Notion', label: 'Notion' },
-  ],
   verify: [
     { email: 'contact@openai.com', label: 'contact@openai.com' },
     { email: 'fake@nope.invalid', label: 'fake@nope.invalid' },
@@ -92,7 +73,6 @@ export default function HeroSearchWidget() {
   const [tab, setTab] = useState('category');
   const [category, setCategory] = useState('');
   const [city, setCity] = useState('');
-  const [company, setCompany] = useState('');
   const [emailToVerify, setEmailToVerify] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -154,15 +134,6 @@ export default function HeroSearchWidget() {
         cached,
       });
       setRemainingToday(remaining_today);
-    } else if (tab === 'company') {
-      // Mode 'company' : reste en mock (low traffic + nécessite intégration Apollo/Clearbit)
-      await new Promise((r) => setTimeout(r, 800));
-      const name = preset?.name || company;
-      setResult({
-        type: 'company',
-        data: { ...MOCK_RESULTS.company.default, name: name || 'OpenAI' },
-        query: { name },
-      });
     } else if (tab === 'verify') {
       // Mode 'verify' : reste en mock (nécessite intégration mailgun/ZeroBounce)
       await new Promise((r) => setTimeout(r, 800));
@@ -237,30 +208,6 @@ export default function HeroSearchWidget() {
         </div>
       )}
 
-      {tab === 'company' && (
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="flex-1 relative">
-            <Building2 size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
-            <input
-              type="text"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              placeholder="Nom de l'entreprise (ex: OpenAI)"
-              className="w-full pl-9 pr-3 py-3 rounded-lg bg-surface-card/60 border border-line text-sm text-content-primary placeholder:text-content-tertiary focus:outline-none focus:border-violet-500/50"
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            />
-          </div>
-          <button
-            onClick={() => handleSearch()}
-            disabled={loading}
-            className="px-5 py-3 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30 disabled:opacity-60 flex items-center justify-center gap-2 whitespace-nowrap"
-          >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
-            Trouver le contact
-          </button>
-        </div>
-      )}
-
       {tab === 'verify' && (
         <div className="flex flex-col sm:flex-row gap-2">
           <div className="flex-1 relative">
@@ -293,7 +240,6 @@ export default function HeroSearchWidget() {
             key={i}
             onClick={() => {
               if (tab === 'category') { setCategory(q.cat); setCity(q.city); handleSearch(q); }
-              else if (tab === 'company') { setCompany(q.name); handleSearch(q); }
               else { setEmailToVerify(q.email); handleSearch(q); }
             }}
             className="px-2 py-1 rounded-md bg-surface-elevated/60 hover:bg-violet-500/10 hover:text-violet-300 border border-line hover:border-violet-500/30 text-content-secondary transition"
@@ -336,9 +282,6 @@ export default function HeroSearchWidget() {
         <div className="mt-5 pt-5 border-t border-line">
           {result.type === 'category' && (
             <CategoryResult result={result} remainingToday={remainingToday} />
-          )}
-          {result.type === 'company' && (
-            <CompanyResult result={result} />
           )}
           {result.type === 'verify' && (
             <VerifyResult result={result} />
@@ -412,55 +355,6 @@ function CategoryResult({ result, remainingToday }) {
           className="px-5 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30 flex items-center gap-2 whitespace-nowrap"
         >
           Voir tous les résultats
-          <ArrowRight size={14} />
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-function CompanyResult({ result }) {
-  const { data } = result;
-  return (
-    <div>
-      <div className="rounded-lg bg-surface-elevated/60 border border-line p-4 mb-3">
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div>
-            <h3 className="text-lg font-bold text-content-primary">{data.name}</h3>
-            <div className="text-xs text-content-tertiary">{data.domain} · {data.industry} · {data.employees} employés · Fondée en {data.foundedYear}</div>
-          </div>
-          {/* Badge "Exemple démo" — obligatoire pour ne pas laisser croire
-              que les emails affichés sont réels. RGPD + intégrité. */}
-          <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-amber-100 border border-amber-400 text-[10px] font-semibold text-amber-700 uppercase tracking-wider whitespace-nowrap">
-            Exemple démo
-          </span>
-        </div>
-        <div className="space-y-2">
-          {data.emails.map((e, i) => (
-            <div key={i} className="flex items-center justify-between gap-2 py-2 px-3 rounded bg-surface-elevated/40">
-              <div>
-                <div className="text-sm font-semibold text-content-primary">{e.person}</div>
-                <div className="text-[10px] text-content-tertiary">{e.role}</div>
-              </div>
-              <div className="flex items-center gap-2 text-xs">
-                <span className="font-mono text-content-secondary">{e.email}</span>
-                {e.verified ? (
-                  <span className="px-1.5 py-0.5 rounded bg-green-500/15 text-green-400 text-[10px] font-semibold">✓ Vérifié</span>
-                ) : (
-                  <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-600 text-[10px] font-semibold">Pattern</span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="rounded-xl bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div className="text-sm text-content-secondary">+15 autres contacts disponibles chez {data.name}</div>
-        <Link
-          href="/signup"
-          className="px-5 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30 flex items-center gap-2 whitespace-nowrap"
-        >
-          Voir tous les contacts
           <ArrowRight size={14} />
         </Link>
       </div>

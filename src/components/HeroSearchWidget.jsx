@@ -50,11 +50,7 @@ const MOCK_RESULTS = {
       ],
     },
   },
-  verify: {
-    valid: { result: 'ok', status: 'Valide', color: 'green', detail: 'Adresse vérifiée par SMTP — délivrabilité garantie' },
-    invalid: { result: 'invalid', status: 'Invalide', color: 'red', detail: 'Cette boîte mail n\'existe pas' },
-    catch_all: { result: 'catch_all', status: 'Catch-all', color: 'amber', detail: 'Le domaine accepte tous les emails — fiabilité moyenne' },
-  },
+  // verify: plus de mock — vraie API /api/public/verify (MillionVerifier)
 };
 
 const QUICK_TRIES = {
@@ -135,15 +131,48 @@ export default function HeroSearchWidget() {
       });
       setRemainingToday(remaining_today);
     } else if (tab === 'verify') {
-      // Mode 'verify' : reste en mock (nécessite intégration mailgun/ZeroBounce)
-      await new Promise((r) => setTimeout(r, 800));
-      const em = preset?.email || emailToVerify;
-      const isInvalid = em.includes('invalid') || em.includes('nope') || em.includes('fake@');
-      setResult({
-        type: 'verify',
-        data: isInvalid ? MOCK_RESULTS.verify.invalid : MOCK_RESULTS.verify.valid,
-        query: { email: em },
-      });
+      // Mode 'verify' : vrai appel MillionVerifier via /api/public/verify
+      // (rate limit 5/IP/jour + cap global 1000/jour + cache 24h).
+      const em = (preset?.email || emailToVerify || '').trim();
+      try {
+        const res = await fetch('/api/public/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: em }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError({
+            code: data.error || 'unknown',
+            message: data.message || 'Une erreur est survenue.',
+            status: res.status,
+          });
+          setLoading(false);
+          return;
+        }
+        setResult({
+          type: 'verify',
+          // L'API renvoie déjà { result, status, color, detail } : on les
+          // mappe directement au format attendu par <VerifyResult />.
+          data: {
+            result: data.result,
+            status: data.status,
+            color: data.color,
+            detail: data.detail,
+          },
+          query: { email: em },
+          cached: data.cached,
+        });
+        if (typeof data.remaining_today === 'number') {
+          setRemainingToday(data.remaining_today);
+        }
+      } catch (err) {
+        setError({
+          code: 'network',
+          message: 'Connexion impossible. Vérifiez votre réseau.',
+          status: 0,
+        });
+      }
     }
     setLoading(false);
   };

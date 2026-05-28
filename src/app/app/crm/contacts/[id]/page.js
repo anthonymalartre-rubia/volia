@@ -503,7 +503,7 @@ export default function CrmContactDetailPage() {
 
         <main className="flex-1 min-w-0">
           {/* Sub-header avec back button */}
-          <header className="border-b border-line bg-surface-base sticky top-14 z-30">
+          <header className="border-b border-line bg-surface-base sticky top-0 z-30">
             <div className="px-4 sm:px-6 py-3">
               <Link
                 href="/app/crm/contacts"

@@ -344,7 +344,7 @@ export default function CrmActivitiesPage() {
 
         <main className="flex-1 flex flex-col min-w-0">
           {/* Header */}
-          <header className="border-b border-line bg-surface-base sticky top-14 z-30">
+          <header className="border-b border-line bg-surface-base sticky top-0 z-30">
             <div className="px-4 sm:px-6 py-4 flex flex-col gap-3">
               <div className="flex items-center gap-3 min-w-0">
                 <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center flex-shrink-0">

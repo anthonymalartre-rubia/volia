@@ -556,7 +556,7 @@ export default function PipelineDetailPage() {
 
         <main className="flex-1 overflow-y-auto">
           {/* Header */}
-          <header className="border-b border-line bg-surface-base sticky top-14 z-30">
+          <header className="border-b border-line bg-surface-base sticky top-0 z-30">
             <div className="px-4 sm:px-6 py-4">
               <div className="flex items-center gap-2 mb-3 text-xs text-content-tertiary">
                 <Link

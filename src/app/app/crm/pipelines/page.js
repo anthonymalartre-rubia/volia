@@ -395,7 +395,10 @@ export default function CrmPipelinesPage() {
 
         <main className="flex-1 overflow-y-auto">
           {/* Header */}
-          <header className="border-b border-line bg-surface-base sticky top-14 z-30">
+          {/* Header sticky relatif au scroll de <main> (qui est overflow-y-auto)
+              → top-0 et non top-14. Le top-14 créait une bande aveugle de
+              56px qui cachait la première ligne de contenu. */}
+          <header className="border-b border-line bg-surface-base sticky top-0 z-30">
             <div className="px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">

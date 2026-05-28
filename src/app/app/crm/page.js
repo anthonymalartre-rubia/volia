@@ -28,7 +28,7 @@ import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
 import { formatDealValue, calculatePipelineStats } from '@/lib/crm';
 import CrmSidebar from '@/components/crm/CrmSidebar';
-import KanbanBoard, { KanbanStagesBar } from '@/components/crm/KanbanBoard';
+import KanbanBoard from '@/components/crm/KanbanBoard';
 import NewDealModal from '@/components/crm/NewDealModal';
 import DealDetailDrawer from '@/components/crm/DealDetailDrawer';
 import WaitlistForm from './WaitlistForm';
@@ -667,23 +667,8 @@ export default function CrmAppPage() {
             )}
           </header>
 
-          {/* ─── Stages bar STICKY (pattern Linear) ─────────────────
-              Hoistée ici (hors du KanbanBoard) pour que le sticky
-              fonctionne dans le même scroll context que le page header
-              sticky au-dessus. Si on la mettait dans KanbanBoard qui a
-              `overflow-x-auto`, le sticky se contraindrait à ce
-              container au lieu de coller à la viewport.
-              Visible uniquement quand un pipeline est chargé. */}
-          {pipeline && pipeline.stages?.length > 0 && (
-            <KanbanStagesBar pipeline={pipeline} deals={filteredDeals} />
-          )}
-
-          {/* ─── Kanban content ──────────────────────────────────────
-              pt-6 (au lieu de py-4) : crée un gap visible entre la
-              stages bar sticky au-dessus et la première card du board,
-              pour qu'au scroll initial le nom du 1er lead soit lisible
-              sans superposition avec la bar. */}
-          <section className="flex-1 px-3 sm:px-5 pt-6 pb-4 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 overflow-hidden">
+          {/* ─── Kanban content ──────────────────────────────────── */}
+          <section className="flex-1 px-3 sm:px-5 py-4 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 overflow-hidden">
             {dataLoading && !pipeline ? (
               <KanbanSkeleton />
             ) : !pipeline ? (

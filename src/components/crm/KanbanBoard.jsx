@@ -42,59 +42,6 @@ function getStageColors(color) {
   return STAGE_COLORS[color] || STAGE_COLORS.zinc;
 }
 
-// ─── StageHeader (interne) ─────────────────────────────────────────
-// Rendu dans la stages-bar sticky du KanbanBoard. Pattern Linear :
-// les noms de stages restent toujours visibles au scroll vertical
-// profond grâce au sticky top sur la bar parente. Width identique à
-// KanbanColumn (280-300px) pour alignement vertical parfait.
-function StageHeader({ stage, deals }) {
-  const colors = getStageColors(stage.color);
-  const isClosingWon = stage.closing_type === 'won';
-  const isClosingLost = stage.closing_type === 'lost';
-  const isClosing = isClosingWon || isClosingLost;
-  const totalValue = deals.reduce((sum, d) => sum + (d.value_cents || 0), 0);
-  return (
-    <div
-      className={`flex-shrink-0 w-[280px] sm:w-[300px] px-3 py-2.5 rounded-xl ${colors.headerBg} border-2 ${colors.border}`}
-    >
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <span
-            className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
-            aria-hidden="true"
-          />
-          <h3 className={`text-sm font-bold truncate ${colors.text}`}>
-            {stage.name || 'Stage'}
-          </h3>
-          <span
-            className={`text-[10px] font-bold tabular-nums flex-shrink-0 px-1.5 py-0.5 rounded-full bg-white/70 ${colors.text}`}
-          >
-            {deals.length}
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <span
-            className={`text-xs font-bold tabular-nums whitespace-nowrap ${colors.text} opacity-90`}
-          >
-            {formatDealValue(totalValue)}
-          </span>
-          {!isClosing && (
-            <span
-              className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}
-            >
-              {stage.probability}%
-              <InfoTooltip
-                content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
-                iconSize={10}
-              />
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // ─── KanbanColumn (interne) ────────────────────────────────────────
 function KanbanColumn({
   stage,
@@ -162,14 +109,46 @@ function KanbanColumn({
       `}
       aria-label={`Colonne ${stage.name}, ${deals.length} deals`}
     >
-      {/* ─── Body : list of cards ──────────────────────────────
-          Refonte 28 mai 2026 (pattern Linear) : le header de stage
-          (nom + count + total + %) a été extrait dans un composant
-          <StageHeader /> qui vit dans une stages-bar STICKY au-dessus
-          du board (rendue par <KanbanBoard /> directement). La column
-          ne contient plus que la liste de cards. Indication visuelle
-          du stage via un border-top coloré sur la column. */}
-      <div className={`h-1 rounded-t-xl ${colors.dot}`} aria-hidden="true" />
+      {/* ─── Header compact (1 ligne : nom + total + %) ────────
+          État stable post-essais sticky (28 mai 2026) : le header de
+          stage est rendu IN-COLUMN, sur 1 seule ligne pour économiser
+          de la hauteur. Pas de sticky (toutes les tentatives ont causé
+          des bugs visuels : sticky qui colle en bas, masquage des
+          cards par overlay opaque, etc.). Trade-off : si beaucoup de
+          cards et user scroll profond, le header de colonne sort de la
+          viewport — accepté car cas rare et user peut scroll back. */}
+      <div className={`px-3 py-2.5 rounded-t-xl ${colors.headerBg} border-b-2 ${colors.border}`}>
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span
+              className={`w-2.5 h-2.5 rounded-full ${colors.dot} flex-shrink-0 shadow-sm`}
+              aria-hidden="true"
+            />
+            <h3 className={`text-sm font-bold truncate ${colors.text}`}>
+              {stage.name || 'Stage'}
+            </h3>
+            <span className={`text-[10px] font-bold tabular-nums flex-shrink-0 px-1.5 py-0.5 rounded-full bg-white/70 ${colors.text}`}>
+              {deals.length}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <span className={`text-xs font-bold tabular-nums whitespace-nowrap ${colors.text} opacity-90`}>
+              {formatDealValue(totalValue)}
+            </span>
+            {!isClosing && (
+              <span className={`text-[10px] font-bold tabular-nums whitespace-nowrap px-1.5 py-0.5 rounded-md bg-white/70 ${colors.text} inline-flex items-center gap-1`}>
+                {stage.probability}%
+                <InfoTooltip
+                  content={`Probabilité de closing à ce stade (${stage.probability}%). Utilisée pour calculer le pipeline pondéré : somme des deals × probabilité de leur stage.`}
+                  iconSize={10}
+                />
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Body : list of cards ──────────────────────────── */}
       <div className="flex-1 p-2 space-y-2 min-h-[120px] overflow-y-auto max-h-[calc(100vh-280px)]">
         {deals.length === 0 ? (
           <button
@@ -286,44 +265,10 @@ export default function KanbanBoard({
   );
 }
 
-// ─── KanbanStagesBar (export nommé) ────────────────────────────────
-// La stages bar est rendue HORS du KanbanBoard, directement dans la
-// page CRM comme sibling du <header sticky>. Pourquoi : le KanbanBoard
-// a un wrapper `overflow-x-auto` qui crée son propre scroll context
-// vertical → un sticky enfant colle à ce container, pas à la viewport.
-// En hoistant la bar au niveau du <main>, elle bénéficie du même scroll
-// context que le page header sticky qui marche déjà (viewport).
-//
-// Trade-off accepté : la bar n'est plus alignée avec le scroll horizontal
-// du board (sur mobile / petits écrans, le board scrolle dessous tandis
-// que la bar reste fixe). Sur desktop avec 4-6 stages, pas de scroll
-// horizontal nécessaire → alignement parfait.
-export function KanbanStagesBar({ pipeline, deals = [] }) {
-  if (!pipeline || !Array.isArray(pipeline.stages)) return null;
-
-  const dealsByStage = {};
-  for (const stage of pipeline.stages) {
-    dealsByStage[stage.id] = [];
-  }
-  for (const d of deals) {
-    if (dealsByStage[d.stage_id]) {
-      dealsByStage[d.stage_id].push(d);
-    }
-  }
-
-  return (
-    <div className="sticky top-[140px] z-20 bg-surface-base border-b border-line shadow-md">
-      <div className="overflow-x-auto px-3 sm:px-5">
-        <div className="flex gap-3 py-2 min-w-min">
-          {pipeline.stages.map((stage) => (
-            <StageHeader
-              key={stage.id}
-              stage={stage}
-              deals={dealsByStage[stage.id] || []}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+// [Retiré 28 mai 2026] Composant `KanbanStagesBar` (export nommé)
+// Tentative pattern Linear : barre horizontale sticky avec les noms
+// de stages au-dessus du board. Plusieurs itérations (sticky dans la
+// column → tombait en bas, hoist hors KanbanBoard → masquait les
+// cards au scroll, tunings divers de top/padding → de pire en pire
+// d'après le founder). Abandonné, retour au header in-column simple.
+// Si besoin reprend : voir commits 9458dc3 / 3bd8e30 / 4e7eb29 / 455cdcb.

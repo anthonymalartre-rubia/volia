@@ -943,73 +943,14 @@ export default function LandingContent() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          POUR QUI ? — 3 personas avec quotes (au lieu de faux témoignages)
-          ─────────────────────────────────────────────────────────────
-          Tant qu'Anthony n'a pas de vrais témoignages clients chiffrés,
-          on montre 3 personas inspirés de src/lib/personas.js avec des
-          quotes "esprit produit" qui parlent à l'audience cible.
-          TODO Anthony : remplace ces quotes par de vrais témoignages
-          quand tu en auras (priorité haute).
+          [Retiré 28 mai 2026] Section "POUR QUI ?" (3 personas avec
+          quotes Founder solo / SDR débordée / Agence growth FR).
+          Demande founder. Les quotes étaient marquées "Profil type · pas
+          un témoignage client" pour rester honnête, mais le bloc faisait
+          quand même perdre en crédibilité à côté du Trustpilot widget
+          (vrais avis). À ré-injecter quand on aura de vrais témoignages
+          chiffrés à mettre à la place.
        */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line">
-        <div className="max-w-6xl mx-auto">
-          <MotionInView>
-            <div className="text-center mb-14">
-              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Pour qui ?</p>
-              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-                Tu te retrouves dans l&apos;un de ces profils&nbsp;?
-              </h2>
-              <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                {/* TODO Anthony : remplace par de vrais témoignages clients quand tu en auras */}
-                Volia a été pensé pour les pros qui veulent un outil simple, pas une usine à gaz.
-              </p>
-            </div>
-          </MotionInView>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              {
-                emoji: '💼',
-                role: 'Founder solo',
-                desc: 'Tu prospectes toi-même, tu veux un outil qui ne te bouffe pas ton après-midi.',
-                quote: "J'avais besoin d'un outil simple. Apollo coûtait 99 $/mois pour une UI buggée. Volia me donne tout pour 19 €.",
-                color: 'violet',
-              },
-              {
-                emoji: '🚀',
-                role: 'SDR débordée',
-                desc: 'Tu passes trop de temps à chercher au lieu de pitcher.',
-                quote: 'Je passais 60 % de mon temps à chercher au lieu de pitcher. Maintenant je signe.',
-                color: 'blue',
-              },
-              {
-                emoji: '📈',
-                role: 'Agence growth FR',
-                desc: 'Tu factures plusieurs clients et tu veux un outil propre, RGPD, facturable.',
-                quote: 'Mes clients comprennent enfin la facture : un seul outil, un seul prix.',
-                color: 'emerald',
-              },
-            ].map((persona, i) => (
-              <MotionInView key={persona.role} delay={i * 120}>
-                <div className={`group h-full p-7 rounded-2xl border-2 border-${persona.color}-200 bg-gradient-to-br from-${persona.color}-50/40 to-white shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col`}>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-3xl" aria-hidden="true">{persona.emoji}</span>
-                    <h3 className="text-lg font-bold text-content-primary">{persona.role}</h3>
-                  </div>
-                  <p className="text-sm text-content-tertiary mb-5 leading-relaxed">{persona.desc}</p>
-                  <blockquote className={`mt-auto p-4 rounded-xl bg-white border-l-4 border-${persona.color}-400 text-sm text-content-secondary italic leading-relaxed`}>
-                    &laquo;&nbsp;{persona.quote}&nbsp;&raquo;
-                  </blockquote>
-                  {/* Marqueur explicite "persona" — honnêteté éditoriale */}
-                  <p className="mt-3 text-[10px] uppercase tracking-wider text-content-muted">
-                    Profil type · pas un témoignage client
-                  </p>
-                </div>
-              </MotionInView>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ──────────────────────────────────────────────────────────────
           COMPARATIF STACK — valeur financière de la suite vs concurrents

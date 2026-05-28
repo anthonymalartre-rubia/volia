@@ -678,8 +678,12 @@ export default function CrmAppPage() {
             <KanbanStagesBar pipeline={pipeline} deals={filteredDeals} />
           )}
 
-          {/* ─── Kanban content ──────────────────────────────────── */}
-          <section className="flex-1 px-3 sm:px-5 py-4 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 overflow-hidden">
+          {/* ─── Kanban content ──────────────────────────────────────
+              pt-6 (au lieu de py-4) : crée un gap visible entre la
+              stages bar sticky au-dessus et la première card du board,
+              pour qu'au scroll initial le nom du 1er lead soit lisible
+              sans superposition avec la bar. */}
+          <section className="flex-1 px-3 sm:px-5 pt-6 pb-4 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 overflow-hidden">
             {dataLoading && !pipeline ? (
               <KanbanSkeleton />
             ) : !pipeline ? (

@@ -12,16 +12,16 @@
 
 | Journaliste | Média | Sujet récent (pourquoi pertinent) | Contact suggéré | Angle |
 |---|---|---|---|---|
-| **Camille Mercier** | Maddyness | Couvre solo founders + bootstrapped + IA | camille@maddyness.com (à vérifier) | A (Founder + IA) |
-| **Marie-Catherine Beuth** | Maddyness | Tech FR + cas pratiques IA | marie@maddyness.com (à vérifier) | A ou C (cas IA) |
-| **Richard Menneveux** | Frenchweb | Fondateur Frenchweb, parle de tech FR ambitieuse | richard@frenchweb.fr | A |
-| **Anaëlle Grondin** | Les Echos | Couvre B2B SaaS + IA en entreprise | a.grondin@lesechos.fr | C (suite vs stack US) |
-| **Sébastien Dumoulin** | Les Echos | Startups + bootstrap stories | s.dumoulin@lesechos.fr | A |
-| **Sandrine Cassini** | L'Usine Digitale | Cloud + souveraineté + IA agentique | sandrine.cassini@infopro-digital.com | C |
-| **Anthony Morel** | BFM Tech | Audience grand public, intéressé IA pratique | anthony.morel@bfmtv.com | A (storytelling) |
-| **Adrien Schwyter** | Forbes FR | Founders + entrepreneuriat moderne | adrien.schwyter@forbes.fr | A |
-| **Marlène Duretz** | Welcome to the Jungle | Future of work + entrepreneurs | marlene@welcometothejungle.com | A (founder augmenté) |
-| **Capucine Cousin** | Tech & Co (BFM Business) | Couvre SaaS FR + cas IA | capucine.cousin@bfmtv.com | C |
+| **Camille Mercier** | Maddyness | Couvre solo founders + bootstrapped + IA | camille@maddyness.com (à vérifier) | A (Entreprise autonome) |
+| **Marie-Catherine Beuth** | Maddyness | Tech FR + cas pratiques IA | marie@maddyness.com (à vérifier) | A ou C (nouvelle catégorie) |
+| **Richard Menneveux** | Frenchweb | Fondateur Frenchweb, parle de tech FR ambitieuse | richard@frenchweb.fr | A (première au monde) |
+| **Anaëlle Grondin** | Les Echos | Couvre B2B SaaS + IA en entreprise | a.grondin@lesechos.fr | C (post-team era) |
+| **Sébastien Dumoulin** | Les Echos | Startups + bootstrap stories | s.dumoulin@lesechos.fr | A (6 semaines, Marseille) |
+| **Sandrine Cassini** | L'Usine Digitale | Cloud + souveraineté + IA agentique | sandrine.cassini@infopro-digital.com | B+C (souveraineté + cas) |
+| **Anthony Morel** | BFM Tech | Audience grand public, intéressé IA pratique | anthony.morel@bfmtv.com | A (storytelling 6 semaines) |
+| **Adrien Schwyter** | Forbes FR | Founders + entrepreneuriat moderne | adrien.schwyter@forbes.fr | A (première au monde) |
+| **Marlène Duretz** | Welcome to the Jungle | Future of work + entrepreneurs | marlene@welcometothejungle.com | C (ère post-équipe) |
+| **Capucine Cousin** | Tech & Co (BFM Business) | Couvre SaaS FR + cas IA | capucine.cousin@bfmtv.com | C (nouvelle catégorie d'entreprise) |
 
 ### Presse business / souveraineté
 
@@ -36,9 +36,9 @@
 
 | Journaliste | Média | Pertinent | Email | Angle |
 |---|---|---|---|---|
-| **Élise Massot** | ActuIA | Cas d'usage IA en France | redaction@actuia.com | C (premier exemple SaaS auto-construit) |
-| **Olivier Ezratty** | Newsletter perso / consultant IA | Analyste IA influent | olivier@oezratty.net | C |
-| **Romain Dillet** | TechCrunch (FR) | International + FR + AI | romain@techcrunch.com | A/C |
+| **Élise Massot** | ActuIA | Cas d'usage IA en France | redaction@actuia.com | C (première entreprise SaaS autonome au monde) |
+| **Olivier Ezratty** | Newsletter perso / consultant IA | Analyste IA influent | olivier@oezratty.net | C (nouvelle catégorie d'entreprise) |
+| **Romain Dillet** | TechCrunch (FR) | International + FR + AI | romain@techcrunch.com | A/C (first autonomous company) |
 
 ---
 
@@ -119,15 +119,18 @@
 
 ---
 
-## 🛡️ Garde-fous
+## 🛡️ Garde-fous (mise à jour pivot 1er juin)
 
-- **Ne JAMAIS dire "0 salarié"** → factuellement faux + risque DGCCRF
-- Toujours préciser **« founder + Claude (Anthropic) »** ou **« human-in-the-loop »**
-- Ne pas se faire récupérer par Anthropic / OpenAI comme cas marketing — Volia est un produit B2B utile, l'IA est l'outil de construction
+- **Ne JAMAIS dire "0 humain"** ou "100% autonome sans intervention humaine" → factuellement faux + risque DGCCRF
+- **Toujours mentionner DISCRÈTEMENT (1 fois max par échange)** : Anthony reste responsable produit + sales + service client
+- Préférer **« première entreprise SaaS autonome au monde »** (vague, défendable) plutôt que **« 100% IA sans humain »** (debunkable)
+- Formules sûres : **« pilotée par IA, augmentée par 1 founder »**, **« 1 humain décide, 1000 agents exécutent »**, **« supervisée par 1 founder »**
+- Ne pas se faire récupérer par Anthropic / OpenAI comme cas marketing — Volia est une entreprise autonome, l'IA est l'infrastructure de production
 - Pas de fake numbers — si tu n'as pas X clients, dis "early traction" sans chiffrer
 - Si un journaliste demande à parler à un client, on doit en avoir 1-2 prêts (à organiser)
+- Si un journaliste challenge "first autonomous company" : défendre par les 6 critères combinés (prod / commercial / 4 modules / 6 semaines / public / sans équipe tech)
 
 ---
 
-**Dernière mise à jour** : 1er juin 2026 (Sprint nuit Claude)
+**Dernière mise à jour** : 1er juin 2026 (pivot narratif "entreprise autonome au monde")
 **À éditer par Anthony** : vérifier emails, compléter avec contacts perso, prioriser

@@ -1,6 +1,7 @@
 # 📰 Dossier PR Volia — Index
 
 > **Sprint nuit 1er juin 2026** — Tout préparé par Claude pendant qu'Anthony dort.
+> 🚨 **PIVOT NARRATIF (1er juin 2026)** : nouveau pitch officiel « première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille ». Tous les fichiers sont alignés.
 > Au réveil, t'as un plan complet pour démarrer l'outreach presse + comm.
 
 ## 🚀 Action plan recommandé (priorité)
@@ -46,19 +47,19 @@
 - Chiffres exacts MRR, nombre de clients
 - Nom + témoignage du premier client à mentionner publiquement
 
-## 🎯 Angle PR officiel choisi
+## 🎯 Angle PR officiel choisi (PIVOT 1er juin 2026)
 
-**« La première suite SaaS B2B française co-construite par un founder solo et une IA agentique. »**
+**« Volia est la première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille. »**
 
-Pas **« 0 salarié 100% autonome »** (faux + risque DGCCRF).
+Pas **« 0 humain 100% autonome »** (faux + risque DGCCRF).
 
-L'humain (Anthony) reste le héros. Claude est l'enabler/co-pilote.
+La formule officielle qui passe partout : **« 1 humain décide, 1000 agents exécutent »**.
 
 ## 🛡️ Garde-fous DGCCRF + crédibilité
 
-- **Ne JAMAIS dire** : "0 salarié 100% autonome", "100% IA", "remplace les humains"
-- **Toujours dire** : "founder solo + Claude", "human-in-the-loop", "co-construit", "IA augmente le founder"
-- **Mention claire** : Claude exécute le code, Anthony décide tout (produit, sales, support, vision)
+- **Ne JAMAIS dire** : "0 humain", "100% autonome sans intervention humaine", "100% IA"
+- **Toujours dire** : "première entreprise SaaS autonome au monde", "pilotée par IA", "supervisée par 1 founder", "1 humain décide, 1000 agents exécutent"
+- **Mention DISCRÈTE (1 fois max par contenu)** : Anthony reste responsable produit + sales + service client
 - **Pas de fake numbers** : si pas X clients, dis "early traction" sans chiffrer
 
 ## 📞 Contact en cas de souci

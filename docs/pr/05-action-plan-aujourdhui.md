@@ -1,6 +1,7 @@
 # ☕️ Action plan — Premières 4 heures au réveil
 
 > **Sprint nuit 1er juin 2026** — Claude a tout préparé.
+> 🚨 **PIVOT NARRATIF (1er juin 2026)** : nouveau pitch officiel « première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille ». Tous les docs PR sont alignés.
 > Lis ça en buvant ton café. Suis l'ordre.
 
 ---
@@ -50,7 +51,7 @@ Recherche dans `src/app/presse/PresseClientPage.jsx` :
 - [ ] Lire `docs/pr/04-posts-linkedin-30-jours.md`
 - [ ] Adapter le **Post #1 du lundi 2 juin** à ta voix (5-10 min)
 - [ ] Le programmer pour publication lundi 8h
-- [ ] Mettre à jour ta bio LinkedIn : *"Founder Volia | Premier SaaS B2B FR co-construit avec une IA agentique"*
+- [ ] Mettre à jour ta bio LinkedIn : *"Founder Volia | Première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille"*
 - [ ] Ajouter URL volia.fr/notre-histoire en featured
 
 ### Twitter (si actif)
@@ -73,10 +74,10 @@ Mes recommandations top 3 par ordre de "facilité d'accès" :
 
 1. **Ouvre `docs/pr/01-liste-journalistes.md`** → choisis 1 nom
 2. **Lis 1 article récent** de cette personne (5 min)
-3. **Ouvre `docs/pr/03-templates-email-outreach.md`** → copie le Template 1 (founder + IA)
+3. **Ouvre `docs/pr/03-templates-email-outreach.md`** → copie le Template 1 (« Entreprise autonome nouveau genre »)
 4. **Personnalise** (10 min) :
    - Mentionne l'article récent
-   - Ajuste ton "voici ce que tu fais" en 1 phrase
+   - Ajuste ton "voici ce que tu fais" en 1 phrase (pitch officiel : « première entreprise SaaS autonome au monde, 6 semaines, Marseille »)
    - Édite les placeholders [X clients], etc.
 5. **Envoie depuis anthony@volia.fr** (PAS depuis presse@)
 6. **Track dans un fichier** (Notion, Airtable, ou tableur)
@@ -93,9 +94,9 @@ Pas 5. **Un seul, fait extrêmement bien.**
 Programme un post manuel "Show HN: Volia — A SaaS built solo with Claude" pour **dimanche 22h heure FR** (= 16h ET dimanche US, golden hour HN).
 
 Format obligatoire :
-- Titre : "Show HN: Volia – I built a 4-module B2B SaaS suite solo with Claude (Anthropic)"
+- Titre : "Show HN: Volia – The first fully autonomous SaaS company, built in 6 weeks"
 - Lien : volia.fr/notre-histoire (PAS la home — la story page convertit mieux)
-- Premier commentaire (à publier toi-même immédiatement) : 5-7 lignes expliquant la motivation, la stack, et "happy to answer any questions"
+- Premier commentaire (à publier toi-même immédiatement) : voir `06-launch-content-blog-hn-twitter.md` — 8-10 lignes expliquant la formule "1 human decides, 1000 agents execute", la stack, et "happy to answer any questions"
 
 ### Bonus B (30 min) — Activer le Trustpilot Review Collector
 Push aux 10 premiers clients Business un email simple :
@@ -105,7 +106,7 @@ Cible : 3-5 reviews ★4-5 d'ici 7 jours pour activer `aggregateRating` dans le 
 
 ### Bonus C (15 min) — Submit à Indie Hackers
 Post dans `/milestones` :
-> *"$X MRR. 12 months. Solo + Claude. 4 modules in production."*
+> *"$X MRR. 6 weeks of build. First fully autonomous SaaS company. 4 modules in production. Marseille, France."*
 
 Format IH = transparence, chiffres, story. Audience qualifiée bootstrap.
 

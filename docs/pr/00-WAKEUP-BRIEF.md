@@ -6,7 +6,29 @@
 
 ---
 
-## ✅ Ce qui est en prod (8 commits pushés cette nuit)
+## 🚨 PIVOT NARRATIF (1er juin 2026) — À LIRE EN PREMIER
+
+**Nouveau positionnement officiel** :
+
+> **« Volia est la première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille. »**
+
+Ce repositioning est appliqué partout :
+- ✅ Page `/notre-histoire` (commit `d6ffe3c`)
+- ✅ Page `/presse` + `src/lib/press-kit.js` (commit `e72ab42`)
+- ✅ Les 6 docs PR du dossier `docs/pr/` (ce commit-ci)
+
+**Changements clés vs ancien narratif** :
+- Bordeaux → **Marseille**
+- 12 mois → **6 semaines**
+- « founder solo + Claude » → **« première entreprise SaaS autonome au monde »**
+- « co-construit avec une IA » → **« pilotée par IA »**
+- « human-in-the-loop » → **« 1 humain décide, 1000 agents exécutent »** ou **« supervisée par 1 founder »**
+
+**Garde-fou DGCCRF (essentiel)** : ne jamais dire "0 humain" ou "100% autonome sans intervention". Toujours mentionner DISCRÈTEMENT (1 fois max par contenu) qu'Anthony reste responsable produit + sales + service client. La formule "première entreprise SaaS autonome au monde" est vague et défendable ; "100% IA sans humain" ne l'est pas.
+
+---
+
+## ✅ Ce qui est en prod (commits récents)
 
 | Commit | Quoi |
 |---|---|
@@ -15,11 +37,14 @@
 | `fd785e8` | ModuleSwitcher badges LIVE/BIENTÔT → "Plan Business" |
 | `0dfa752` | Gating Business-only Campagnes+Forms + bug critique cron emails |
 | `d22c628` | Cleanup claims mensongers landings (287k, 5 seats, Pro 49€...) |
-| `a3904e4` | **Page `/notre-histoire`** — storytelling founder + Claude (952 lignes) |
-| `92e4e13` | **Page `/presse`** — press kit complet (10 sections) + sitemap |
+| `a3904e4` | Page `/notre-histoire` v1 (storytelling founder + Claude, 952 lignes) |
+| `92e4e13` | Page `/presse` v1 — press kit complet (10 sections) + sitemap |
 | `4049e0f` | Docs PR (6 markdown) + footer Notre histoire/Presse FR+EN |
 | `6afb42e` | **🚨 FIX CRITIQUE** middleware → pages publiques (étaient gated login) |
 | `307af3d` | Article blog + Post HN + Thread Twitter + photos founder SVG |
+| **`d6ffe3c`** | **🚨 PIVOT** `/notre-histoire` → narratif « entreprise autonome au monde » |
+| **`e72ab42`** | **🚨 PIVOT** `/presse` + `press-kit.js` → « entreprise autonome + 6 semaines + Marseille » |
+| **(ce commit)** | **🚨 PIVOT** 6 docs PR → alignés sur le nouveau narratif |
 
 ---
 
@@ -54,27 +79,32 @@
 
 ---
 
-## 🚨 Garde-fous CRITIQUES (à respecter en parlant à des journalistes)
+## 🚨 Garde-fous CRITIQUES (mise à jour pivot)
 
 | À ÉVITER | À DIRE À LA PLACE |
 |---|---|
-| « 0 salarié 100% autonome » | « Founder solo + Claude (Anthropic) comme co-pilote » |
-| « SaaS construit par IA » | « SaaS co-construit avec une IA agentique » |
+| « 0 humain 100% autonome » | « 1 humain décide, 1000 agents exécutent » |
+| « 100% IA sans intervention humaine » | « Pilotée par IA, supervisée par 1 founder » |
+| « SaaS construit par IA » | « Première entreprise SaaS autonome au monde » |
 | « 287 000+ entreprises dans la base » | « Accès à 287 000+ entreprises via Google Places » |
 | « 5 seats inclus » | « Single-user pour l'instant, multi-utilisateurs Q3 2026 » |
 | « API publique disponible » | « API publique à venir » |
-| « Anthropic-powered » | « Co-piloté par Claude (Anthropic) — au prix grand public » |
+| « Anthropic-powered » | « Pilotée par IA — au prix grand public » |
+| « Construit à Bordeaux » | « Construit à Marseille » |
+| « 12 mois de build » | « 6 semaines de build V1 » |
+
+**Anti-DGCCRF (DISCRET mais OBLIGATOIRE, 1 fois max par contenu)** : rappeler qu'Anthony reste responsable produit + sales + service client. Sans cette mention, "première entreprise autonome au monde" devient debunkable.
 
 ---
 
-## 🎯 Ton positionnement final assumé
+## 🎯 Ton positionnement final assumé (PIVOT 1er juin 2026)
 
-> **« Volia est la première suite SaaS B2B française co-construite par un founder solo et une IA agentique. 4 modules connectés à 149 €/mois — 45 % moins cher que la stack équivalente HubSpot+Apollo+Lemlist+Tally. RGPD by default, hébergé en Union européenne. »**
+> **« Volia est la première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille. 4 modules connectés à 149 €/mois — 45 % moins cher que la stack équivalente HubSpot+Apollo+Lemlist+Tally. RGPD by default, hébergé en Union européenne. »**
 
 3 angles d'attaque selon média (cf. `02-communique-presse.md`) :
-- **A — Founder augmenté par IA** → Maddyness, Frenchweb, podcasts founders
-- **B — Souveraineté FR vs stack US** → Les Echos, Forbes, Challenges
-- **C — Cas d'école IA agentique en prod** → ActuIA, AI France, Sifted
+- **A — Première entreprise SaaS autonome au monde** → Maddyness, Frenchweb, podcasts founders, Sifted, The Information FR
+- **B — Souveraineté FR vs stack US (construite en 6 semaines)** → Les Echos, Forbes, Challenges, L'Usine Digitale
+- **C — Nouvelle catégorie d'entreprise / ère post-équipe** → ActuIA, AI France, MIT Tech Review FR
 
 ---
 

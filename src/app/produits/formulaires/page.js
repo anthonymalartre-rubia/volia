@@ -23,7 +23,7 @@ const PAGE_URL = `${SITE_URL}/produits/formulaires`;
 export const metadata = {
   title: 'Volia Formulaires — Form builder B2B avec CRM et cold email intégrés',
   description:
-    'Alternative française à Typeform + Tally. Form builder drag-drop, multi-step, logique conditionnelle, bridges natifs vers CRM et cold email. Inclus dans Solo à 19 €/mois. Plus jamais de Tally → Zapier → HubSpot. RGPD by default.',
+    'Alternative française à Typeform + Tally. Form builder drag-drop, multi-step, logique conditionnelle, bridges natifs vers CRM et cold email. Inclus dans la suite Business 149 €/mois. Plus jamais de Tally → Zapier → HubSpot. RGPD by default.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -51,7 +51,7 @@ export const metadata = {
   openGraph: {
     title: 'Volia Formulaires — Capturez. Convertissez. Le tout dans Volia.',
     description:
-      'Typeform 25 $. Tally 29 $. Volia Formulaires : inclus dans Solo à 19 €. Bridges natifs vers CRM et cold email — plus jamais de Tally → Zapier → HubSpot.',
+      'Typeform 25 $. Tally 29 $. Volia Formulaires : inclus dans la suite Business 149 €. Bridges natifs vers CRM et cold email — plus jamais de Tally → Zapier → HubSpot.',
     url: PAGE_URL,
     type: 'website',
   },
@@ -231,7 +231,7 @@ function ComparisonTableSection() {
     { feature: 'QR code customisable',                  typeform: { ok: false },                tally: { ok: false },              volia: { ok: true } },
     { feature: 'Embed iframe whitelabel',               typeform: { ok: false, label: '+ branding' }, tally: { ok: true },         volia: { ok: true } },
     { feature: 'Hébergement données France/UE',         typeform: { ok: false },                tally: { ok: false },              volia: { ok: true } },
-    { feature: 'Tarif point d\'entrée',                 typeform: { ok: false, label: '25 $/mo' }, tally: { ok: false, label: '29 $/mo' }, volia: { ok: true, label: '19 €/mo' } },
+    { feature: 'Inclus dans la suite (vs SaaS isolé)',  typeform: { ok: false, label: '25 $/mo' }, tally: { ok: false, label: '29 $/mo' }, volia: { ok: true, label: 'Business 149 €/mo' } },
   ];
 
   const Cell = ({ cell, accent }) => {
@@ -266,7 +266,7 @@ function ComparisonTableSection() {
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
               Typeform 25 $. Tally 29 $.
               <br />
-              <span className="bg-gradient-to-br from-pink-600 to-rose-600 bg-clip-text text-transparent">Volia 19 €/mo (et le reste avec).</span>
+              <span className="bg-gradient-to-br from-pink-600 to-rose-600 bg-clip-text text-transparent">Volia Business 149 €/mo (et tout le reste avec).</span>
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
               Le seul form builder qui parle nativement à votre CRM et vos cold emails.
@@ -292,8 +292,8 @@ function ComparisonTableSection() {
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-gradient-to-r from-pink-600 to-rose-600 text-white text-[9px] font-bold uppercase tracking-wider shadow-md whitespace-nowrap">
                       Recommandé
                     </div>
-                    Volia
-                    <div className="text-[10px] font-mono text-pink-700 normal-case tracking-normal mt-1">19 €/mo</div>
+                    Volia Business
+                    <div className="text-[10px] font-mono text-pink-700 normal-case tracking-normal mt-1">149 €/mo (suite complète)</div>
                   </th>
                 </tr>
               </thead>
@@ -318,7 +318,7 @@ function ComparisonTableSection() {
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold shadow-xl shadow-pink-500/30 hover:shadow-2xl hover:shadow-pink-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Sparkles size={18} className="text-amber-200" />
-              <span>Démarrer dès 19 €/mois (Solo)</span>
+              <span>Passer à Business 149 €/mois</span>
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
             <p className="mt-3 text-xs text-content-tertiary">
@@ -497,7 +497,7 @@ const HOW_IT_WORKS = [
 const FAQ = [
   {
     q: 'Combien de formulaires puis-je créer ?',
-    a: 'Free : 0 (upsell). Solo (19 €/mo) : 1 formulaire, 100 submissions/mois. Pro (49 €/mo) : 5 formulaires, 1 000 submissions/mois. Business (149 €/mo) : illimité. Les submissions sont comptabilisées sur le mois en cours, pas en cumulé à vie.',
+    a: 'Volia Formulaires est inclus uniquement dans la suite Business (149 €/mo) : formulaires illimités et submissions illimitées. Les autres plans (Starter / Solo / Pro) ne contiennent pas le module Formulaires.',
   },
   {
     q: 'Comment fonctionnent les bridges natifs vers le CRM et les Campagnes ?',
@@ -550,9 +550,9 @@ const product = {
   '@context': 'https://schema.org',
   ...productSchema({
     name: 'Volia Formulaires',
-    description: 'Form builder B2B drag-drop multi-step avec logique conditionnelle, bridges natifs vers CRM et cold email, RGPD by default. Alternative française à Typeform et Tally. À partir de 19 €/mois.',
+    description: 'Form builder B2B drag-drop multi-step avec logique conditionnelle, bridges natifs vers CRM et cold email, RGPD by default. Alternative française à Typeform et Tally. Inclus dans la suite Business 149 €/mois.',
     url: PAGE_URL,
-    priceFrom: 19,
+    priceFrom: 149,
   }),
 };
 
@@ -572,7 +572,7 @@ export default function FormulairesProductPage() {
           h1After: '',
           subtitle: (
             <>
-              Le seul form builder qui parle nativement à votre CRM et à vos cold emails. <strong className="text-content-primary font-semibold">Plus jamais de Tally → Zapier → HubSpot</strong>. Dans Volia, <strong className="text-pink-700 font-semibold">dès 19 €/mois</strong>.
+              Le seul form builder qui parle nativement à votre CRM et à vos cold emails. <strong className="text-content-primary font-semibold">Plus jamais de Tally → Zapier → HubSpot</strong>. Inclus dans Volia Business <strong className="text-pink-700 font-semibold">149 €/mois (suite complète)</strong>.
             </>
           ),
           ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=business' },
@@ -597,17 +597,17 @@ export default function FormulairesProductPage() {
         crossSell={{
           subtitle: 'Les Formulaires alimentent automatiquement votre CRM et vos Campagnes. Boucle complète, zéro copier-coller.',
           otherModules: [
-            { module: 'prospection', direction: 'in', desc: 'Pour le cold outbound. 287 k+ entreprises FR, 150+ secteurs, emails enrichis.', cta: 'Découvrir Prospection' },
+            { module: 'prospection', direction: 'in', desc: 'Pour le cold outbound. 287 k+ entreprises FR accessibles via Google Places, 150+ secteurs, emails enrichis.', cta: 'Découvrir Prospection' },
             { module: 'campagnes', direction: 'out', desc: 'Chaque submission alimente une liste Campagnes. Nurturing automatique, warmup intégré.', cta: 'Découvrir Campagnes' },
             { module: 'crm', direction: 'out', desc: 'Une submission devient un deal au stage Lead. Pipeline Kanban natif.', cta: 'Voir le CRM' },
           ],
         }}
         pricingBanner={<TrustBadgesSection />}
         pricing={{
-          label: 'Inclus dans Solo (19 €), Pro (49 €) et Business (149 €)',
-          subtext: 'Solo = 1 formulaire / 100 submissions/mois. Pro = 5 formulaires / 1 000 submissions/mois. Business = illimité. Pas d\'add-on, annulation 1 clic.',
-          cta: 'Voir le détail des plans',
-          ctaHref: '/pricing',
+          label: 'Inclus dans la suite Business (149 €/mois) — formulaires + submissions illimités',
+          subtext: 'Le module Formulaires est réservé au plan Business, aux côtés de la Prospection 10k, des Campagnes cold email et du CRM. Pas d\'add-on, annulation 1 clic.',
+          cta: 'Passer à Business 149 €',
+          ctaHref: '/signup?plan=business',
         }}
         beforeFaq={null}
         faq={FAQ}
@@ -616,7 +616,7 @@ export default function FormulairesProductPage() {
           subtitle: 'Premier form en 2 min, branché au CRM en 2 clics, partagé partout. Tout dans Volia, pour le prix d\'un café.',
           primary: { label: 'Commencer gratuitement', href: '/signup?plan=business' },
           secondary: { label: 'Voir les tarifs', href: '/pricing' },
-          trust: 'Inclus dans Solo (19 €) · 14 jours d\'essai · Migration assistée · RGPD by default',
+          trust: 'Inclus dans Business (149 €) · 14 jours d\'essai · Migration assistée · RGPD by default',
         }}
       />
     </>

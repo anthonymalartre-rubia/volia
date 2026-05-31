@@ -648,7 +648,7 @@ const en = {
       price: '€19/mo to start. Cancel anytime, one click.',
       compare: 'Watch a demo',
       sourcesLabel: 'Integrated sources:',
-      trustStrip: '287,000+ companies · email + phone scraped · Made in France · GDPR by default',
+      trustStrip: '150+ industries × 101 departments · email + phone scraped · Made in France · GDPR by default',
       ctaPrimary: 'Start for free',
       ctaSecondary: 'Watch a demo',
       // Subtle mention of bonus modules for max plan

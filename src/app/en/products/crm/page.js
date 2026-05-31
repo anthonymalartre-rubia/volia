@@ -51,7 +51,7 @@ const FEATURES = {
   headline: 'run your pipeline',
   subline: 'Not a mini-Salesforce. A lightweight CRM wired to Prospecting, Campaigns, and Forms from day one. 6 things built for founders and small sales teams.',
   items: [
-    { icon: 'KanbanSquare', featured: true, title: 'Drag-drop Kanban', desc: '5 default columns (Lead → Qualified → Demo → Proposal → Closed). Drag to move a deal. Custom stages coming Q3 2026. Live total pipeline value.' },
+    { icon: 'KanbanSquare', featured: true, title: 'Drag-drop Kanban', desc: '5 default columns (Lead → Qualified → Demo → Proposal → Closed). Drag to move a deal. Fully custom stages (inline rename / add / delete) + multi-pipelines already live. Live total pipeline value.' },
     { icon: 'MessageSquare', title: 'Auto-deals from replies', desc: 'Someone replies to a Campaigns sequence? A deal lands at Lead stage with the full email history. No copy-paste.' },
     { icon: 'Users', title: '360 timeline per contact', desc: 'Every email sent, opened, clicked, replied. Notes, calls, meetings. Full-text search. Pick up a conversation 3 months later without re-reading 50 emails.' },
     { icon: 'BarChart3', title: 'Auto weighting', desc: 'Each stage has a closing probability (10% Lead, 25% Qualified, 50% Demo, 75% Proposal, 100% Won). Weighted pipeline + M+1 forecast, live.' },
@@ -69,11 +69,11 @@ const HOW_IT_WORKS = [
 const FAQ = [
   { q: 'Which plan includes CRM?', a: 'CRM is part of the Volia Business plan only ($169/mo for the first 12 months, then $199/mo). Business also unlocks Campaigns and Forms — they share the same data layer. No add-on, no per-seat charge for the basic team setup.' },
   { q: 'What are the default pipeline stages?', a: '5 stages: Lead (10%), Qualified (25%), Demo (50%), Proposal (75%), Closed (100%). Plus a Lost stage to archive with a reason (no budget, competitor, timing). Weighted pipeline + M+1 forecast recompute every time you move a deal.' },
-  { q: 'Can I create custom stages?', a: 'Not yet. Q3 2026 on the roadmap. We chose to ship one standard pipeline first so beta users could set up in 5 min. Custom pipelines come with a visual editor (drag to reorder, slider for probability, color per column).' },
+  { q: 'Can I create custom stages?', a: 'Yes — already live. You can rename, add, or delete stages inline from the Kanban board. Multi-pipelines (run several pipelines for different products) is also shipped. A default 5-stage pipeline is created so you can start in 5 minutes with zero config.' },
   { q: 'How does auto-create from replies work?', a: 'Volia Campaigns classifies replies (positive vs auto-reply vs not interested) via Claude. Positive reply = deal in CRM at Lead stage, with full contact, email history (sent/opened/clicked), reply content, and auto-tag with the sequence name. You do nothing.' },
   { q: 'How is it different from free HubSpot CRM?', a: 'HubSpot CRM free has Kanban + timeline. Sure. But: (1) for outbound you need Marketing Hub ($45/mo+). (2) No native HubSpot ↔ Apollo/Lemlist integration — Zapier costs $30/mo more. (3) Free tier caps at 5 deal pipelines. Volia CRM lives in the same product as prospecting, sending, and forms. No integration to babysit.' },
-  { q: 'Can I migrate from Pipedrive or HubSpot?', a: 'Yes. CSV import today (auto column mapping) for contacts and deals. Direct HubSpot/Pipedrive API migration coming Q2 2026 (no CSV). For Salesforce: manual CSV export works now. More than 5,000 contacts? We jump on a call.' },
-  { q: 'How many seats does Business include?', a: 'Multi-user is included on Business ($169/mo). Perfect for 1-5 people — founder + 2-3 SDRs + 1 closer. Need more seats? Contact us. Everyone gets their own dashboard and deals. Founder sees all. No $50-100/user license like HubSpot Pro or Salesforce.' },
+  { q: 'Can I migrate from Pipedrive or HubSpot?', a: 'Contacts: CSV import is live today (auto column mapping). Deals CSV import is shipping soon. Direct HubSpot/Pipedrive API migration coming Q2 2026 (no CSV). For Salesforce: manual contact CSV export works now. More than 5,000 contacts? We jump on a call.' },
+  { q: 'How many seats does Business include?', a: 'Business ($169/mo) is single-user today (1 account = 1 founder/closer). Native multi-user is on the roadmap for Q3 2026 — every user will get their own dashboard and deals, with no $50-100/user license like HubSpot Pro or Salesforce. Until then, 2-3 person teams typically share the account (most common in beta).' },
 ];
 
 export default function EnCrmPage() {

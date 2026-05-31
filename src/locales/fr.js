@@ -653,7 +653,7 @@ const fr = {
       compare: 'Voir une démo',
       sourcesLabel: 'Sources intégrées :',
       // Trust strip sous le hero — focus lead gen, modules en bonus
-      trustStrip: '287 000+ entreprises · email + téléphone scrappés · Made in France · RGPD by default',
+      trustStrip: '150+ catégories × 101 départements · email + téléphone scrappés · Made in France · RGPD by default',
       ctaPrimary: 'Démarrer gratuitement',
       ctaSecondary: 'Voir une démo',
       // Mention discrète des modules bonus pour le plan max

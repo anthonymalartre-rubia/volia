@@ -392,7 +392,7 @@ export default function LandingContent() {
                   {/* TODO Anthony : remplace "founders" par MRR ou nb clients réels.
                       Formulation flexible — ex: "Rejoins les 47 founders qui automatisent leur prospection avec Volia". */}
                   <div className="font-semibold text-content-primary">Rejoins les founders qui automatisent leur prospection</div>
-                  <div className="text-content-tertiary">287 000+ entreprises dans la base · sans CB</div>
+                  <div className="text-content-tertiary">150+ catégories × 101 départements · sans CB</div>
                 </div>
               </div>
 
@@ -400,7 +400,7 @@ export default function LandingContent() {
               <div className="flex items-center gap-x-3 gap-y-1.5 text-xs text-content-tertiary flex-wrap">
                 <span className="inline-flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  287 000+ entreprises
+                  150+ catégories × 101 départements
                 </span>
                 <span>·</span>
                 <span>Email + téléphone scrappés</span>
@@ -681,7 +681,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               {[
-                { value: '287 000+', label: 'entreprises dans la base Volia' },
+                { value: '287 000+', label: 'entreprises accessibles via Google Places' },
                 { value: '101', label: 'départements France + Belgique + Suisse romande' },
                 { value: '150+', label: 'catégories B2B (commerce de proximité aux SaaS)' },
                 // TODO Anthony : remplace "founders" par chiffre réel (MRR ou nb clients payants)
@@ -733,7 +733,7 @@ export default function LandingContent() {
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
                 Le générateur de leads B2B le moins cher du marché français.
-                <strong className="text-content-secondary"> Email et téléphone</strong> de 287 000+ entreprises, scrappés en cascade.
+                <strong className="text-content-secondary"> Email et téléphone</strong> scrappés en temps réel via Google Places + cascade waterfall.
               </p>
             </div>
           </MotionInView>
@@ -1041,7 +1041,7 @@ export default function LandingContent() {
 
                 <div className="space-y-3 mb-6">
                   {[
-                    { tool: 'Volia Prospection', desc: '287 000+ entreprises FR', color: 'violet' },
+                    { tool: 'Volia Prospection', desc: '150+ catégories × 101 départements', color: 'violet' },
                     { tool: 'Volia Campagnes', desc: 'Séquences email + warmup', color: 'blue' },
                     { tool: 'Volia CRM', desc: 'Pipeline Kanban + deals', color: 'emerald' },
                   ].map((row) => (

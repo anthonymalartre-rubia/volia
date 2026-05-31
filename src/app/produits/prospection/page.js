@@ -27,7 +27,7 @@ const PAGE_URL = `${SITE_URL}/produits/prospection`;
 export const metadata = {
   title: 'Volia Prospection — Alternative française à Apollo, 5× moins chère (19 €/mois)',
   description:
-    "Trouvez 1 000 prospects qualifiés en France en 30 secondes. 287 000+ entreprises avec emails + téléphones vérifiés. À partir de 19 €/mois — 5× moins cher qu'Apollo. 100% conforme RGPD.",
+    "Trouvez 1 000 prospects qualifiés en France en 30 secondes. Accès à 287 000+ entreprises via Google Places (scraping en temps réel) avec emails + téléphones. À partir de 19 €/mois — 5× moins cher qu'Apollo. 100% conforme RGPD.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -56,7 +56,7 @@ export const metadata = {
   openGraph: {
     title: 'Volia Prospection — Alternative française à Apollo, 5× moins chère',
     description:
-      "287 000+ entreprises françaises avec emails + téléphones vérifiés. À partir de 19 €/mois. RGPD inclus. L'alternative française à Apollo, Hunter, Lemlist.",
+      "Accès à 287 000+ entreprises françaises via Google Places avec emails + téléphones scrappés en cascade. À partir de 19 €/mois. RGPD inclus. L'alternative française à Apollo, Hunter, Lemlist.",
     url: PAGE_URL,
     type: 'website',
     // Pas de `images` ici : Next.js sert automatiquement /opengraph-image.js
@@ -858,7 +858,7 @@ export default function ProspectionProductPage() {
           h1After: 'En 30 secondes.',
           subtitle: (
             <>
-              <strong className="text-content-primary font-semibold">287 000+ entreprises françaises</strong> avec emails + téléphones vérifiés.{' '}
+              <strong className="text-content-primary font-semibold">287 000+ entreprises françaises</strong> accessibles via Google Places — emails + téléphones scrappés en cascade.{' '}
               <strong className="text-emerald-700 font-semibold">5× moins cher qu&apos;Apollo</strong>. 100% conforme RGPD.
             </>
           ),

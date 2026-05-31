@@ -84,7 +84,7 @@ const COMPARE_SECTIONS = [
       ['Recherche IA langage naturel', true, true, true, true],
       ['Exports CSV', '5/mois', 'Illimité', 'Illimité', 'Illimité'],
       ['Dossiers / listes', '3', '10', 'Illimité', 'Illimité'],
-      ['287 000+ entreprises FR', true, true, true, true],
+      ['Accès Google Places (287 000+ entreprises FR)', true, true, true, true],
       ['101 départements (DROM inclus)', true, true, true, true],
       ['150+ catégories B2B', true, true, true, true],
     ],
@@ -114,14 +114,14 @@ const COMPARE_SECTIONS = [
   {
     title: 'Module Formulaires',
     rows: [
-      ['Nombre de formulaires', false, '1', '5', 'Illimité'],
-      ['Submissions / mois', false, '100', '1 000', 'Illimité'],
-      ['Builder drag-drop + multi-step', false, true, true, true],
-      ['Logique conditionnelle AND/OR', false, true, true, true],
-      ['Bridges natifs CRM + Campagnes', false, true, true, true],
-      ['QR code + embed iframe', false, true, true, true],
-      ['Webhooks sortants', false, true, true, true],
-      ['Templates B2B prêts à l’emploi', false, true, true, true],
+      ['Nombre de formulaires', false, '—', '—', 'Illimité'],
+      ['Submissions / mois', false, '—', '—', 'Illimité'],
+      ['Builder drag-drop + multi-step', false, false, false, true],
+      ['Logique conditionnelle AND/OR', false, false, false, true],
+      ['Bridges natifs CRM + Campagnes', false, false, false, true],
+      ['QR code + embed iframe', false, false, false, true],
+      ['Webhooks sortants', false, false, false, true],
+      ['Templates B2B prêts à l’emploi', false, false, false, true],
     ],
   },
   {
@@ -228,7 +228,7 @@ const FAQ_PRICING = [
   },
   {
     q: 'Tout est vraiment inclus dans le prix ?',
-    a: 'Oui. Accès aux 287 000+ entreprises FR (101 départements × 150+ secteurs), cascade waterfall multi-sources, exports CSV, emails transactionnels. Aucune option cachée derrière un paywall.',
+    a: 'Oui. Accès à 287 000+ entreprises FR via Google Places (scraping en temps réel sur 101 départements × 150+ secteurs), cascade waterfall multi-sources, exports CSV, emails transactionnels. Aucune option cachée derrière un paywall.',
   },
   {
     q: 'Le CRM est vraiment dans le plan Business ?',

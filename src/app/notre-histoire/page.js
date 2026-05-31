@@ -1,19 +1,19 @@
 // ─────────────────────────────────────────────────────────────────────
-// /notre-histoire — page storytelling Volia (founder + Claude)
+// /notre-histoire — page manifeste Volia (entreprise autonome d'un nouveau genre)
 // ─────────────────────────────────────────────────────────────────────
-// Angle : "Première suite SaaS B2B française co-construite par 1 founder
-// solo augmenté d'une IA agentique (Claude / Anthropic), en 12 mois,
-// avec un repo public et 370+ commits visibles."
+// Angle : "Volia est la première entreprise autonome d'un nouveau genre.
+// Pilotée par IA, augmentée par 1 founder. Construite en 6 semaines de
+// sprint intensif à Marseille, sans levée, sans salarié supplémentaire."
 //
 // Garde-fous :
-//   - Anthony reste le héros, Claude est l'enabler. Pas de "0 humain".
-//   - "founder + Claude", "human-in-the-loop", "co-construit", jamais "autonome".
-//   - Tonalité B2B premium, factuelle, anti-survente IA. Pas de "cocorico".
-//   - Light mode only (cohérent rebrand mai 2026 — cf use-force-light-theme.js).
-//   - Accent violet/indigo (cohérent module Prospection + suite Volia).
+//   - Vision-driven, polarisant, manifeste — pas un récit modeste.
+//   - "1 founder + ∞ agents IA" ou "1 humain décide, 1000 agents exécutent".
+//   - Mention DISCRÈTE (1 fois max) qu'Anthony reste responsable produit/sales/CS.
+//   - Pas de "0 humain" en gros, pas de "100% autonome" non supervisé.
+//   - DGCCRF safe : "supervisé par 1 founder", "0 salarié supplémentaire ajouté".
+//   - Light mode only, accent violet/indigo.
 //
-// Pattern : server page (metadata + JSON-LD) + client content. Voir
-// /produits/prospection/page.js qui suit exactement la même structure.
+// Pattern : server page (metadata + JSON-LD) + client content.
 // ─────────────────────────────────────────────────────────────────────
 
 import { breadcrumbSchema } from '@/lib/seo-helpers';
@@ -26,9 +26,9 @@ const PAGE_URL = `${SITE_URL}/notre-histoire`;
 // SEO METADATA
 // ─────────────────────────────────────────────────────────────────────
 export const metadata = {
-  title: 'Notre histoire — La première suite SaaS B2B française co-construite avec une IA | Volia',
+  title: "Volia, une entreprise d'un nouveau genre — Première entreprise autonome, pilotée par IA",
   description:
-    "1 founder solo, Claude comme co-pilote agentique, 12 mois, 370+ commits publics : comment Volia est devenue la première suite B2B française augmentée par l'IA.",
+    "Volia est la première entreprise SaaS autonome au monde. Construite en 6 semaines à Marseille, pilotée par IA, augmentée par 1 founder. 4 modules connectés, 0 levée, 0 salarié supplémentaire.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -37,21 +37,23 @@ export const metadata = {
     },
   },
   keywords: [
-    'Volia histoire',
-    'Anthony Malartre Volia',
-    'founder solo SaaS B2B',
-    'IA agentique Claude',
-    'suite B2B française',
-    'SaaS co-construit avec IA',
-    'Volia coulisses',
-    'human-in-the-loop SaaS',
-    'développement augmenté par IA',
+    'entreprise autonome',
+    'entreprise pilotée par IA',
+    'AI-native company',
+    'Volia manifeste',
+    'Anthony Malartre',
+    'agents IA entreprise',
+    'founder augmenté IA',
+    'SaaS autonome',
+    'nouvelle catégorie entreprise',
+    'orchestrateur agents IA',
+    'futur des entreprises',
     'alternative HubSpot française',
   ],
   openGraph: {
-    title: 'Notre histoire — Volia, la première suite SaaS B2B FR co-construite avec une IA',
+    title: "Volia — Une entreprise d'un nouveau genre, pilotée par IA",
     description:
-      "1 founder + Claude (Anthropic), 12 mois, 4 modules livrés, 370+ commits publics. La méthode de construction radicalement transparente derrière Volia.",
+      "Première entreprise autonome construite en 6 semaines à Marseille. 1 founder décide, 1000 agents exécutent. 4 modules, 0 levée, 0 salarié supplémentaire.",
     url: PAGE_URL,
     type: 'article',
     siteName: 'Volia',
@@ -59,8 +61,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Notre histoire — Volia',
-    description: '1 founder, 1 IA, 12 mois, 4 produits. Code public, méthode transparente.',
+    title: "Volia — Première entreprise autonome d'un nouveau genre",
+    description: '1 founder. ∞ agents IA. 6 semaines. 4 modules. Le futur des entreprises commence à Marseille.',
   },
   robots: { index: true, follow: true },
 };
@@ -76,9 +78,9 @@ const breadcrumbs = breadcrumbSchema([
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Notre histoire — Volia, la première suite SaaS B2B française co-construite avec une IA',
+  headline: "Volia — Une entreprise d'un nouveau genre, pilotée par IA, augmentée par 1 founder",
   description:
-    "Anthony Malartre a construit Volia (suite B2B Prospection + Campagnes + CRM + Forms) en 12 mois, en solo, avec Claude (Anthropic) comme co-pilote agentique. Le code est public, la méthode aussi.",
+    "Volia est la première entreprise SaaS autonome au monde : 6 semaines de sprint intensif à Marseille, 4 modules connectés (Prospection, Campagnes, CRM, Forms), 0 levée, 0 salarié supplémentaire. Une nouvelle catégorie d'entreprise pilotée par IA et augmentée par un seul founder.",
   url: PAGE_URL,
   mainEntityOfPage: { '@type': 'WebPage', '@id': PAGE_URL },
   datePublished: '2026-06-01',
@@ -88,14 +90,24 @@ const articleSchema = {
     '@type': 'Person',
     name: 'Anthony Malartre',
     url: `${SITE_URL}/notre-histoire`,
-    jobTitle: 'Founder',
+    jobTitle: 'Founder & Orchestrator',
     worksFor: { '@type': 'Organization', name: 'Volia', url: SITE_URL },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Marseille',
+      addressCountry: 'FR',
+    },
   },
   publisher: {
     '@type': 'Organization',
     name: 'Volia',
     url: SITE_URL,
     logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon.svg` },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Marseille',
+      addressCountry: 'FR',
+    },
   },
   about: { '@type': 'Organization', name: 'Volia', url: SITE_URL },
 };
@@ -104,11 +116,16 @@ const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Anthony Malartre',
-  jobTitle: 'Founder, Volia',
+  jobTitle: 'Founder & Orchestrator, Volia',
   worksFor: { '@type': 'Organization', name: 'Volia', url: SITE_URL },
   url: PAGE_URL,
   email: 'mailto:anthony@volia.fr',
   nationality: 'FR',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Marseille',
+    addressCountry: 'FR',
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────

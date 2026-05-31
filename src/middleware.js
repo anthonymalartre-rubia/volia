@@ -119,6 +119,8 @@ export async function middleware(request) {
     pathname.startsWith('/newsletter') ||     // Page landing newsletter + désabonnement
     pathname.startsWith('/changelog') ||      // Changelog public
     pathname.startsWith('/status') ||         // Status page publique
+    pathname.startsWith('/notre-histoire') || // Story founder (PR — public)
+    pathname.startsWith('/presse') ||         // Espace presse / dossier presse (PR — public)
     pathname.startsWith('/vs') ||
     pathname.startsWith('/alternative') ||
     pathname.startsWith('/comparatif') ||         // pages /comparatif/[slug] + /comparatif-outils-prospection-b2b-france

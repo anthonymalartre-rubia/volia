@@ -1,23 +1,29 @@
 // ─────────────────────────────────────────────────────────────────
 // src/lib/forms-gating.js — Gating plan pour Volia Formulaires
 // ─────────────────────────────────────────────────────────────────
-// Volia Formulaires est inclus dans les plans payants :
-//   - free      → 0 form (upsell)
-//   - solo      → 1 form
-//   - pro       → 5 forms
-//   - business  → illimité
+// [1er juin 2026] Décision founder : positionnement Premium Business-only.
+// Volia Formulaires est désormais réservé aux plans Business / Enterprise
+// (149 €/mois promo, 179 €/mois normal). Aligne avec :
+//   - plans.js  → business.unlocksModules = true (CRM + Campagnes + Forms)
+//   - ModuleSwitcher.jsx → businessOnly: true sur Formulaires
+//   - PricingContent.jsx → Business = SEUL plan qui débloque la suite
+//   - /produits/formulaires → CTA pointe sur ?plan=business
 //
-// On respecte getEffectivePlan() pour que le trial Pro 14j ait accès
-// au même quota que Pro (5 forms), ce qui permet aux trialeurs de
-// tester pleinement la feature.
+// Quota par plan :
+//   - free / solo / pro → 0 form (upsell vers Business)
+//   - business / enterprise → illimité
+//
+// On respecte getEffectivePlan() pour que le trial Business 14j ait accès
+// au même quota qu'un Business payant (illimité), permettant aux trialeurs
+// de tester pleinement la feature.
 // ─────────────────────────────────────────────────────────────────
 
 import { getEffectivePlan } from './trial';
 
 export const FORMS_LIMITS = {
   free: 0,
-  solo: 1,
-  pro: 5,
+  solo: 0,
+  pro: 0,
   business: -1,    // -1 = illimité
   enterprise: -1,  // alias legacy
 };
@@ -62,11 +68,11 @@ export async function canCreateForm(supabase, userId) {
   const plan = getEffectivePlan(profile);
   const limit = FORMS_LIMITS[plan] ?? 0;
 
-  // Plan free → bloqué d'office (upsell)
+  // Plan free/solo/pro → bloqué d'office (upsell vers Business)
   if (limit === 0) {
     return {
       allowed: false,
-      reason: 'Volia Formulaires est inclus dans les plans Solo et supérieurs.',
+      reason: 'Volia Formulaires est réservé au plan Business (149 €/mois). Upgrade pour créer ton premier formulaire.',
       limit: 0,
       current: 0,
       plan,

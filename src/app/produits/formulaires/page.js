@@ -314,7 +314,7 @@ function ComparisonTableSection() {
         <MotionInView delay={300}>
           <div className="mt-10 text-center">
             <a
-              href="/signup?plan=solo"
+              href="/signup?plan=business"
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold shadow-xl shadow-pink-500/30 hover:shadow-2xl hover:shadow-pink-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Sparkles size={18} className="text-amber-200" />
@@ -575,7 +575,7 @@ export default function FormulairesProductPage() {
               Le seul form builder qui parle nativement à votre CRM et à vos cold emails. <strong className="text-content-primary font-semibold">Plus jamais de Tally → Zapier → HubSpot</strong>. Dans Volia, <strong className="text-pink-700 font-semibold">dès 19 €/mois</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=solo' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=business' },
           ctaSecondary: { label: 'Voir une démo', href: '#features' },
           trust: [
             (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Module LIVE</>),
@@ -614,7 +614,7 @@ export default function FormulairesProductPage() {
         finalCta={{
           title: 'Vos prochains leads sont à 2 minutes.',
           subtitle: 'Premier form en 2 min, branché au CRM en 2 clics, partagé partout. Tout dans Volia, pour le prix d\'un café.',
-          primary: { label: 'Commencer gratuitement', href: '/signup?plan=solo' },
+          primary: { label: 'Commencer gratuitement', href: '/signup?plan=business' },
           secondary: { label: 'Voir les tarifs', href: '/pricing' },
           trust: 'Inclus dans Solo (19 €) · 14 jours d\'essai · Migration assistée · RGPD by default',
         }}

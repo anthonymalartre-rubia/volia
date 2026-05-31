@@ -3,14 +3,18 @@
 // ─────────────────────────────────────────────────────────────────────
 // Constantes + helpers d'accès au module Campagnes.
 //
-// Avant : toutes les pages et API routes /admin/prospection/* vérifiaient
-//         user_profiles.is_admin → seul Anthony y avait accès, ce qui rendait
-//         le module Campagnes INACCESSIBLE aux clients payants (Solo 19€,
-//         Pro 49€, Business 149€).
+// [1er juin 2026] Décision founder : positionnement Premium Business-only.
+// Volia Campagnes est désormais réservé aux plans Business / Enterprise
+// (149 €/mois promo, 179 €/mois normal). Solo et Pro restent dédiés à
+// la Prospection. Aligne avec :
+//   - plans.js  → business.unlocksModules = true (CRM + Campagnes + Forms)
+//   - ModuleSwitcher.jsx → businessOnly: true sur Campagnes
+//   - PricingContent.jsx → Business = SEUL plan qui débloque la suite
+//   - /produits/campagnes  → CTA pointe sur ?plan=business
 //
-// Maintenant : on vérifie le PLAN. Un user 'solo', 'pro', 'business' ou
-//              'enterprise' (legacy alias) a accès. Les 'starter' (free) sont
-//              redirigés vers le pricing avec ?upgrade=campagnes.
+// Historique : on avait ouvert Solo+ pour les premiers utilisateurs (audit
+// avait révélé que /admin/prospection était bloqué admin-only par erreur).
+// On a corrigé en ouvrant trop large. Aujourd'hui on positionne clairement.
 //
 // IMPORTANT — ne pas utiliser pour :
 //   - /admin/leads        → reste is_admin only
@@ -24,8 +28,8 @@
 // '@/lib/campagnes-access-server'.
 // ─────────────────────────────────────────────────────────────────────
 
-// Plans qui ont accès au module Campagnes
-export const CAMPAGNES_ALLOWED_PLANS = ['solo', 'pro', 'business', 'enterprise'];
+// Plans qui ont accès au module Campagnes (Business-only — cf. positionnement)
+export const CAMPAGNES_ALLOWED_PLANS = ['business', 'enterprise'];
 
 /**
  * Vérifie qu'un plan a accès au module Campagnes (pure function, no IO).

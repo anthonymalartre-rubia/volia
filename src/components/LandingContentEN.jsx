@@ -643,6 +643,13 @@ export default function LandingContentEN() {
               </ul>
             </div>
             <div>
+              <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Company</h3>
+              <ul className="space-y-2 text-sm mb-5">
+                <li><Link href="/notre-histoire" className="text-content-tertiary hover:text-violet-400 transition">Our story</Link></li>
+                <li><Link href="/presse" className="text-content-tertiary hover:text-violet-400 transition">Press kit</Link></li>
+                <li><Link href="/changelog" className="text-content-tertiary hover:text-violet-400 transition">Changelog</Link></li>
+                <li><Link href="/status" className="text-content-tertiary hover:text-violet-400 transition">Status</Link></li>
+              </ul>
               <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Resources</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/blog" className="text-content-tertiary hover:text-violet-400 transition">Blog</Link></li>

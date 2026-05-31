@@ -76,6 +76,9 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/etude/etat-cold-email-france-2026`, priority: 0.95, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/api`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/tutoriels`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
+      // Espace presse (press kit) + page narrative founder
+      { url: `${baseUrl}/presse`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/notre-histoire`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/cgu`, priority: 0.3, changeFrequency: 'yearly', lastModified: now },
       { url: `${baseUrl}/cgv`, priority: 0.4, changeFrequency: 'yearly', lastModified: now },
       { url: `${baseUrl}/dpa`, priority: 0.4, changeFrequency: 'yearly', lastModified: now },

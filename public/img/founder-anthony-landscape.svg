@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Anthony Malartre, founder Volia (photo officielle à venir, format paysage)">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.05" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="6" stdDeviation="16" flood-color="#000" flood-opacity="0.18" />
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="450" cy="338" r="200" fill="url(#ring)"/>
+  <circle cx="450" cy="338" r="170" fill="rgba(255,255,255,0.08)"/>
+  <text x="450" y="400" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif" font-size="220" font-weight="700" fill="#ffffff" filter="url(#shadow)">A</text>
+  <text x="730" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif" font-size="56" font-weight="700" fill="#ffffff">Anthony Malartre</text>
+  <text x="730" y="330" font-family="-apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif" font-size="30" font-weight="500" fill="rgba(255,255,255,0.8)">Founder, Volia</text>
+  <text x="730" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif" font-size="20" font-weight="500" fill="rgba(255,255,255,0.65)">volia.fr · Bordeaux, France</text>
+  <text x="730" y="625" font-family="-apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.45)" letter-spacing="3">PHOTO OFFICIELLE À VENIR</text>
+</svg>

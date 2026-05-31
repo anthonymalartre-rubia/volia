@@ -332,10 +332,10 @@ function FounderBioSection() {
             <div className="sticky top-24">
               <div className="aspect-[3/4] rounded-2xl bg-gradient-to-br from-violet-100 via-indigo-100 to-violet-200 border border-line overflow-hidden mb-4 relative">
                 {/* Placeholder photo — remplacer par <Image src=...> quand l'asset existe */}
-                {/* TODO: ajouter /public/img/founder-anthony-portrait.jpg */}
+                {/* TODO: ajouter /public/img/founder-anthony-portrait.svg */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/img/founder-anthony-portrait.jpg"
+                  src="/img/founder-anthony-portrait.svg"
                   alt="Anthony Malartre, fondateur de Volia"
                   className="w-full h-full object-cover"
                   onError={(e) => {

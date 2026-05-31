@@ -236,7 +236,7 @@ export const MEDIA_KIT_ASSETS = [
       {
         title: 'Anthony Malartre — portrait',
         description: 'Format portrait, 2000×3000px',
-        url: '/img/founder-anthony-portrait.jpg',
+        url: '/img/founder-anthony-portrait.svg',
         format: 'JPG',
         size: '~1.2 MB',
         iconName: 'Camera',
@@ -244,7 +244,7 @@ export const MEDIA_KIT_ASSETS = [
       {
         title: 'Anthony Malartre — paysage',
         description: 'Format paysage, 3000×2000px',
-        url: '/img/founder-anthony-landscape.jpg',
+        url: '/img/founder-anthony-landscape.svg',
         format: 'JPG',
         size: '~1.4 MB',
         iconName: 'Camera',
@@ -252,7 +252,7 @@ export const MEDIA_KIT_ASSETS = [
       {
         title: 'Anthony Malartre — carré',
         description: 'Format carré, 2000×2000px',
-        url: '/img/founder-anthony-square.jpg',
+        url: '/img/founder-anthony-square.svg',
         format: 'JPG',
         size: '~1.0 MB',
         iconName: 'Camera',

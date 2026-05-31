@@ -1662,15 +1662,20 @@ export default function LandingContent() {
               </ul>
             </div>
 
-            {/* Ressources */}
+            {/* Entreprise + Ressources */}
             <div>
+              <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Entreprise</h3>
+              <ul className="space-y-2 text-sm mb-5">
+                <li><Link href="/notre-histoire" className="text-content-tertiary hover:text-violet-400 transition">Notre histoire</Link></li>
+                <li><Link href="/presse" className="text-content-tertiary hover:text-violet-400 transition">Espace presse</Link></li>
+                <li><Link href="/changelog" className="text-content-tertiary hover:text-violet-400 transition">Changelog</Link></li>
+                <li><Link href="/status" className="text-content-tertiary hover:text-violet-400 transition">Status</Link></li>
+              </ul>
               <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Ressources</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/blog" className="text-content-tertiary hover:text-violet-400 transition">Blog</Link></li>
                 <li><Link href="/guide" className="text-content-tertiary hover:text-violet-400 transition">Guides sectoriels</Link></li>
                 <li><Link href="/glossaire" className="text-content-tertiary hover:text-violet-400 transition">Glossaire B2B</Link></li>
-                <li><Link href="/blog/rgpd-prospection-b2b" className="text-content-tertiary hover:text-violet-400 transition">Guide RGPD</Link></li>
-                <li><Link href="/blog/cold-emailing-2026" className="text-content-tertiary hover:text-violet-400 transition">Cold emailing 2026</Link></li>
               </ul>
             </div>
           </div>

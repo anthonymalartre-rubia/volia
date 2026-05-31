@@ -144,16 +144,22 @@ function HeroSection() {
         <MotionInView>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold border border-violet-200 mb-6">
             <Newspaper size={14} />
-            Espace presse · Press kit
+            Espace presse · Press kit · Marseille
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-content-primary mb-6 leading-[1.05]">
-            Espace presse <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Volia</span>
+            Volia presse — la première{' '}
+            <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">
+              entreprise SaaS autonome
+            </span>{' '}
+            au monde
           </h1>
 
           <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-3xl mb-8">
-            Tout ce dont tu as besoin pour parler de nous : visuels HD, chiffres clés,
-            biographie founder, communiqués de presse, quotes prêtes à citer.
+            Une nouvelle catégorie d&apos;entreprise est née : pilotée par IA, augmentée
+            par 1 founder, construite en 6 semaines à Marseille. Tout le matériel presse
+            pour la raconter : visuels HD, chiffres clés, bio founder, communiqués, quotes
+            prêtes à citer.
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -175,7 +181,7 @@ function HeroSection() {
           </div>
 
           <p className="text-xs text-content-muted mt-6">
-            Mise à jour : juin 2026 · Toutes les ressources libres de droits pour usage éditorial
+            Mise à jour : juin 2026 · Marseille · Toutes les ressources libres de droits pour usage éditorial
           </p>
         </MotionInView>
       </div>
@@ -321,8 +327,12 @@ function FounderBioSection() {
               Founder bio
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-content-primary mb-3">
-              Anthony Malartre, founder solo
+              Anthony Malartre, founder augmenté
             </h2>
+            <p className="text-base sm:text-lg text-content-secondary max-w-2xl">
+              1 humain qui décide, 1000 agents IA qui exécutent. Le nouveau modèle de
+              l&apos;entreprise SaaS, supervisé depuis Marseille.
+            </p>
           </div>
         </MotionInView>
 
@@ -386,9 +396,14 @@ function FounderBioSection() {
                   Disponible pour interview
                 </div>
                 <p className="text-xs text-emerald-700/90 leading-relaxed">
-                  Français ou anglais, en visio ou sur Bordeaux. Délai de réponse {PRESS_CONTACT.responseTime}.
+                  Français ou anglais, en visio ou sur Marseille. Délai de réponse {PRESS_CONTACT.responseTime}.
                 </p>
               </div>
+
+              <p className="mt-3 text-[11px] text-content-muted leading-relaxed italic px-1">
+                Anthony reste responsable produit, sales et service client — l&apos;exécution
+                opérationnelle est supervisée par 1 founder et orchestrée par les agents IA.
+              </p>
             </div>
           </MotionInView>
 
@@ -690,7 +705,7 @@ function PressContactSection() {
               </h2>
               <p className="text-base sm:text-lg text-violet-100/90 leading-relaxed mb-6">
                 Anthony répond personnellement aux demandes presse en moins de 24h.
-                Disponible en français et en anglais, en visio ou sur Bordeaux.
+                Disponible en français et en anglais, en visio ou sur Marseille.
               </p>
 
               <Link

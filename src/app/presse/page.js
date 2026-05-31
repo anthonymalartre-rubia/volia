@@ -14,6 +14,10 @@
 //   - Contact presse
 //   - Apparitions médias (placeholder)
 //
+// Positionnement (juin 2026) : « première entreprise SaaS autonome au
+// monde — pilotée par IA, augmentée par 1 founder, construite en
+// 6 semaines à Marseille ».
+//
 // Style : light mode forcé (cohérence avec /produits/*), couleur
 // dominante slate/zinc + accents violet (brand Volia). Premium feel.
 // ─────────────────────────────────────────────────────────────────────
@@ -24,17 +28,20 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/presse`;
 
 export const metadata = {
-  title: 'Espace presse — Dossier de presse Volia, suite SaaS B2B française | Volia',
+  title: 'Volia presse — Première entreprise SaaS autonome au monde | Press kit',
   description:
-    "Press kit Volia : logos HD, chiffres clés, bio founder, communiqués, quotes prêtes à citer. Suite SaaS B2B française co-construite par IA agentique.",
+    "Press kit Volia : première entreprise SaaS autonome au monde, pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille. Logos, chiffres, bio, quotes.",
   keywords: [
     'dossier presse Volia',
     'press kit Volia',
     'communiqué de presse Volia',
     'Volia presse',
     'Anthony Malartre presse',
+    'entreprise SaaS autonome',
+    'founder augmenté IA',
     'SaaS B2B français presse',
     'suite SaaS française',
+    'IA agentique production',
   ],
   alternates: {
     canonical: PAGE_URL,
@@ -44,18 +51,18 @@ export const metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'Espace presse Volia — Press kit suite SaaS B2B française',
+    title: 'Volia presse — Première entreprise SaaS autonome au monde',
     description:
-      "Tout ce dont les journalistes ont besoin pour parler de Volia : logos, chiffres, bio founder, communiqués, quotes.",
+      "Première entreprise SaaS autonome d'un nouveau genre, pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille.",
     url: PAGE_URL,
     type: 'website',
     locale: 'fr_FR',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Espace presse Volia — Press kit',
+    title: 'Volia presse — Première entreprise SaaS autonome',
     description:
-      "Press kit suite SaaS B2B française. Logos HD, chiffres clés, bio founder, communiqués.",
+      "Pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille. Logos HD, chiffres clés, bio founder, communiqués.",
   },
 };
 

@@ -652,7 +652,7 @@ const FEATURES = {
     {
       icon: 'KanbanSquare', featured: true,
       title: 'Kanban drag-drop natif',
-      desc: 'Pipeline visuel avec 5 colonnes par défaut (Lead → Qualifié → Démo → Proposition → Closé). Drag pour faire avancer un deal. Stages personnalisables (Q3 2026). Valeur totale du pipeline en temps réel.',
+      desc: 'Pipeline visuel avec 5 colonnes par défaut (Lead → Qualifié → Démo → Proposition → Closé). Drag pour faire avancer un deal. Stages full custom (rename / add / delete inline) + multi-pipelines déjà disponibles. Valeur totale du pipeline en temps réel.',
     },
     {
       icon: 'MessageSquare',
@@ -695,7 +695,7 @@ const FAQ = [
   },
   {
     q: 'Puis-je créer mes propres stages personnalisés ?',
-    a: 'Pas tout de suite — c\'est sur la roadmap Q3 2026. À court terme on a fait le choix d\'imposer un pipeline standard pour que la beta soit utilisable en 5 minutes sans configuration. Les custom pipelines arriveront avec un éditeur visuel (drag pour réordonner les stages, slider pour la probabilité, couleur par colonne).',
+    a: 'Oui — déjà disponible. Vous pouvez renommer, ajouter ou supprimer un stage directement depuis le board Kanban (inline). Le multi-pipelines (plusieurs pipelines pour vendre différents produits) est également live. Un pipeline standard à 5 stages est créé par défaut pour démarrer en 5 minutes sans configuration.',
   },
   {
     q: 'Comment se fait exactement l\'auto-create depuis replies ?',
@@ -707,7 +707,7 @@ const FAQ = [
   },
   {
     q: 'Je peux migrer depuis Pipedrive ou HubSpot ?',
-    a: 'Oui. Import CSV standard disponible dès maintenant pour contacts et deals (mapping auto des colonnes). Migration assistée via API HubSpot et Pipedrive prévue Q2 2026 (export direct sans CSV). Pour Salesforce, l\'export CSV manuel fonctionne dès aujourd\'hui. Si vous avez plus de 5 000 contacts à migrer, on vous accompagne en visio.',
+    a: 'Oui pour les contacts : import CSV disponible dès maintenant (mapping auto des colonnes). L\'import CSV des deals arrive prochainement. Migration assistée via API HubSpot et Pipedrive prévue Q2 2026 (export direct sans CSV). Pour Salesforce, l\'export CSV manuel des contacts fonctionne dès aujourd\'hui. Si vous avez plus de 5 000 contacts à migrer, on vous accompagne en visio.',
   },
   {
     q: 'Combien de contacts et de deals maximum ?',
@@ -723,7 +723,7 @@ const FAQ = [
   },
   {
     q: 'Le plan Business supporte combien d\'utilisateurs en équipe ?',
-    a: 'Plan Business 149 €/mo : jusqu\'à 5 seats inclus (idéal pour une petite équipe 1-5 personnes — founder + 2-3 SDR + 1 closeur). Au-delà, +15 €/user/mois supplémentaire. Chaque utilisateur a son propre dashboard, ses propres deals, et le founder voit tout. Pas de licence à 50-100 € par user comme chez HubSpot Pro ou Salesforce.',
+    a: 'Plan Business 149 €/mo : single-user à date (1 compte = 1 founder/closer). Le multi-utilisateurs natif est prévu Q3 2026 — chaque user aura son propre dashboard et ses propres deals, sans licence à 50-100 € par user comme chez HubSpot Pro ou Salesforce. En attendant, les équipes 2-3 personnes partagent le compte (cas le plus courant en beta).',
   },
   {
     q: 'C\'est conforme RGPD ?',
@@ -805,7 +805,7 @@ export default function CrmProductPage() {
         pricingBanner={<PricingFocusBanner />}
         pricing={{
           label: 'CRM gated Business — 149 €/mois tout inclus',
-          subtext: 'Les 3 modules (Prospection + Campagnes + CRM) ensemble. Jusqu\'à 5 seats inclus, 10 000 prospects en pipeline, deals illimités. Aucune licence à 50-100 € par user comme HubSpot ou Salesforce.',
+          subtext: 'Les 3 modules (Prospection + Campagnes + CRM) ensemble. 10 000 prospects en pipeline, deals illimités. Multi-utilisateurs natif à venir Q3 2026. Aucune licence à 50-100 € par user comme HubSpot ou Salesforce.',
           cta: 'Passer à Business 149 €',
           ctaHref: '/signup?plan=business',
         }}
@@ -816,7 +816,7 @@ export default function CrmProductPage() {
           subtitle: 'Stop le bazar HubSpot + Apollo + Lemlist + Zapier. Volia Business : un produit, un login, une facture. Résiliable en 1 clic.',
           primary: { label: 'Passer à Business 149 €', href: '/signup?plan=business' },
           secondary: { label: 'Voir une démo CRM', href: '/#demo' },
-          trust: '149 €/mo tout inclus · 5 seats · 10 000 prospects en pipeline · Annulation 1 clic · RGPD by default',
+          trust: '149 €/mo tout inclus · 10 000 prospects en pipeline · Annulation 1 clic · RGPD by default',
         }}
       />
     </>

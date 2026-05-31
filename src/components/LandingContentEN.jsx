@@ -125,7 +125,7 @@ const PLAN_MODULES_EN = {
 const FAQS_EN = [
   {
     q: 'Does Volia work outside France?',
-    a: 'Our prospecting database is France-only: 287,000+ verified companies, 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, and Forms modules (Business plan) work everywhere.',
+    a: 'Our prospecting source is France-only: 287,000+ companies accessible via Google Places (live scraping), 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, and Forms modules (Business plan) work everywhere.',
   },
   {
     q: 'What\'s included in Solo at $21/mo?',
@@ -235,7 +235,7 @@ export default function LandingContentEN() {
             <div className="flex items-center justify-center gap-x-3 gap-y-1.5 text-xs text-content-tertiary flex-wrap">
               <span className="inline-flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                287,000+ companies
+                150+ industries × 101 departments
               </span>
               <span aria-hidden="true">·</span>
               <span>Email + phone scraped</span>
@@ -262,7 +262,7 @@ export default function LandingContentEN() {
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
                   The cheapest B2B lead generator on the French market.
-                  <strong className="text-content-secondary"> Email and phone</strong> for 287,000+ companies, scraped in cascade.
+                  <strong className="text-content-secondary"> Email and phone</strong> scraped live via Google Places + waterfall cascade.
                 </p>
               </div>
             </MotionInView>
@@ -416,7 +416,7 @@ export default function LandingContentEN() {
               {[
                 { icon: Layers, title: 'Waterfall enrichment', desc: 'Scrape the site. Search Google. Guess the pattern. Stop the second we find a real email — so we don\'t burn your quota.' },
                 { icon: Sparkles, title: 'AI search (Claude)', desc: 'Type "50 SaaS founders in Paris" — get a Google Places query in 2 seconds. No filters to learn.' },
-                { icon: Globe, title: 'Full France coverage', desc: '287,000+ verified French companies. 78% email hit rate, including landline + mobile phones. Apollo and Hunter sit around 40%.' },
+                { icon: Globe, title: 'Full France coverage', desc: 'Access to 287,000+ French companies via Google Places (live scraping). 78% email hit rate, including landline + mobile phones. Apollo and Hunter sit around 40%.' },
                 { icon: Mail, title: 'Native cold email (Business)', desc: '28-day auto warmup, multi-inbox rotation, 94% inbox rate. No Smartlead subscription needed.' },
                 { icon: Zap, title: 'Auto-create deals (Business)', desc: 'Someone replies? A deal shows up in your CRM at Lead stage. No copy-paste, no Zapier, no tabs.' },
                 { icon: Shield, title: 'GDPR by default', desc: 'Personal-email filter, public opt-out, EU hosting, CNIL guidelines. Built-in, not bolted on.' },

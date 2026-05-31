@@ -19,7 +19,7 @@ const trustpilotAggregateRating = trustpilotData
 
 export const metadata = {
   title: 'Volia — Suite B2B française : Prospection, Campagnes, CRM, Formulaires',
-  description: 'La suite SaaS B2B française : 4 modules connectés (Prospection, Campagnes email, CRM, Formulaires). 287 000+ entreprises avec emails + téléphones, séquences automatisées, pipeline commercial. Made in France, RGPD.',
+  description: 'La suite SaaS B2B française : 4 modules connectés (Prospection, Campagnes email, CRM, Formulaires). Accès à 287 000+ entreprises via Google Places (scraping live), séquences automatisées, pipeline commercial. Made in France, RGPD.',
   alternates: {
     canonical: SITE_URL,
     languages: {

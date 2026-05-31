@@ -53,13 +53,21 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/signup`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/login`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
-      { url: `${baseUrl}/pricing`, priority: 0.95, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/pricing`, 'en-US': `${baseUrl}/en/pricing`, 'x-default': `${baseUrl}/pricing` } } },
+      // [31 mai 2026] /pricing priority 0.95 → 0.85 : clarifie la hiérarchie
+      // vs / (1.0). Le delta de 0.05 était trop faible → Google a choisi
+      // /pricing comme canonical de la homepage (cf. GSC "Page en double :
+      // Google n'a pas choisi la même URL canonique"). /pricing reste page
+      // commerciale importante mais clairement subordonnée à la home.
+      { url: `${baseUrl}/pricing`, priority: 0.85, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/pricing`, 'en-US': `${baseUrl}/en/pricing`, 'x-default': `${baseUrl}/pricing` } } },
       { url: `${baseUrl}/produits/prospection`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/prospection`, 'en-US': `${baseUrl}/en/products/prospection`, 'x-default': `${baseUrl}/produits/prospection` } } },
       { url: `${baseUrl}/produits/campagnes`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/campagnes`, 'en-US': `${baseUrl}/en/products/campaigns`, 'x-default': `${baseUrl}/produits/campagnes` } } },
       { url: `${baseUrl}/produits/crm`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/crm`, 'en-US': `${baseUrl}/en/products/crm`, 'x-default': `${baseUrl}/produits/crm` } } },
       // EN versions for US/UK markets (boost SEO international)
-      { url: `${baseUrl}/en`, priority: 0.95, changeFrequency: 'weekly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/`, 'en-US': `${baseUrl}/en`, 'x-default': `${baseUrl}/` } } },
-      { url: `${baseUrl}/en/pricing`, priority: 0.9, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/pricing`, 'en-US': `${baseUrl}/en/pricing`, 'x-default': `${baseUrl}/pricing` } } },
+      // [31 mai 2026] /en priority 0.95 → 0.85 : empêche /en de concurrencer
+      // / pour la canonical (Google hésitait entre les deux versions linguistiques).
+      // /en/pricing 0.9 → 0.8 pour rester subordonné à /en.
+      { url: `${baseUrl}/en`, priority: 0.85, changeFrequency: 'weekly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/`, 'en-US': `${baseUrl}/en`, 'x-default': `${baseUrl}/` } } },
+      { url: `${baseUrl}/en/pricing`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/pricing`, 'en-US': `${baseUrl}/en/pricing`, 'x-default': `${baseUrl}/pricing` } } },
       { url: `${baseUrl}/en/products/prospection`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/prospection`, 'en-US': `${baseUrl}/en/products/prospection`, 'x-default': `${baseUrl}/produits/prospection` } } },
       { url: `${baseUrl}/en/products/campaigns`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/campagnes`, 'en-US': `${baseUrl}/en/products/campaigns`, 'x-default': `${baseUrl}/produits/campagnes` } } },
       { url: `${baseUrl}/en/products/crm`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/crm`, 'en-US': `${baseUrl}/en/products/crm`, 'x-default': `${baseUrl}/produits/crm` } } },

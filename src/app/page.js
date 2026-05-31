@@ -18,8 +18,8 @@ const trustpilotAggregateRating = trustpilotData
   : null;
 
 export const metadata = {
-  title: 'Volia — Générateur email + téléphone B2B France (à partir de 19 €/mois)',
-  description: 'Le générateur de leads B2B français : trouvez les emails et téléphones (fixe & mobile) de 287 000+ entreprises. 150+ catégories, 101 départements, scraping cascade. À partir de 19 €/mois, sans CB.',
+  title: 'Volia — Suite B2B française : Prospection, Campagnes, CRM, Formulaires',
+  description: 'La suite SaaS B2B française : 4 modules connectés (Prospection, Campagnes email, CRM, Formulaires). 287 000+ entreprises avec emails + téléphones, séquences automatisées, pipeline commercial. Made in France, RGPD.',
   alternates: {
     canonical: SITE_URL,
     languages: {
@@ -30,8 +30,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia — Générateur email + téléphone B2B à partir de 19 €/mois',
-    description: 'Trouvez les emails et téléphones (fixe & mobile) de 287 000+ entreprises françaises. 150+ catégories B2B, 101 départements. Scraping cascade avec scoring de confiance.',
+    title: 'Volia — Suite B2B française : Prospection, Campagnes, CRM, Formulaires',
+    description: 'La suite SaaS B2B française qui connecte 4 modules : trouve tes leads, lance tes séquences email, suis tes deals dans le CRM, capte les nouveaux prospects via formulaires. Made in France.',
     url: SITE_URL,
     siteName: 'Volia',
     locale: 'fr_FR',
@@ -39,8 +39,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Volia — Générateur email + téléphone B2B',
-    description: 'Email + téléphone (fixe & mobile) de 287 000+ entreprises FR. 150+ catégories, 101 départements. À partir de 19 €/mois.',
+    title: 'Volia — Suite B2B FR : Prospection, Campagnes, CRM, Forms',
+    description: '4 modules connectés pour ton outbound : trouve, contacte, suis tes deals, capte. Made in France, RGPD.',
   },
   robots: {
     index: true,
@@ -73,65 +73,24 @@ const softwareApplicationSchema = {
     'Conformité RGPD (filtre emails personnels, opt-out public)',
     'Pas d\'engagement, annulation à tout moment',
   ],
-  offers: [
-    {
-      '@type': 'Offer',
-      name: 'Starter',
-      description: '100 prospects · 20 enrichissements · 5 exports par mois',
-      price: '0',
-      priceCurrency: 'EUR',
-      availability: 'https://schema.org/InStock',
-      url: `${SITE_URL}/signup`,
-    },
-    {
-      '@type': 'Offer',
-      name: 'Solo',
-      description: '1 000 prospects · 400 enrichissements par mois',
-      price: '19',
-      priceCurrency: 'EUR',
-      availability: 'https://schema.org/InStock',
-      url: `${SITE_URL}/signup`,
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: '19',
-        priceCurrency: 'EUR',
-        unitText: 'MONTH',
-        referenceQuantity: { '@type': 'QuantitativeValue', value: '1', unitCode: 'MON' },
-      },
-    },
-    {
-      '@type': 'Offer',
-      name: 'Pro',
-      description: '5 000 prospects · 2 000 enrichissements par mois',
-      price: '49',
-      priceCurrency: 'EUR',
-      availability: 'https://schema.org/InStock',
-      url: `${SITE_URL}/signup`,
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: '49',
-        priceCurrency: 'EUR',
-        unitText: 'MONTH',
-        referenceQuantity: { '@type': 'QuantitativeValue', value: '1', unitCode: 'MON' },
-      },
-    },
-    {
-      '@type': 'Offer',
-      name: 'Business',
-      description: '10 000 prospects · 4 000 enrichissements par mois',
-      price: '99',
-      priceCurrency: 'EUR',
-      availability: 'https://schema.org/InStock',
-      url: `${SITE_URL}/signup`,
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: '99',
-        priceCurrency: 'EUR',
-        unitText: 'MONTH',
-        referenceQuantity: { '@type': 'QuantitativeValue', value: '1', unitCode: 'MON' },
-      },
-    },
-  ],
+  // AggregateOffer (résumé) sur la homepage — le détail complet des 4 plans
+  // vit sur /pricing (page dédiée), avec son propre JSON-LD Offer détaillé.
+  //
+  // [31 mai 2026] Migration `Offer[]` → `AggregateOffer` pour éliminer la
+  // duplication massive de contenu pricing entre `/` et `/pricing`. Google
+  // Search Console signalait "Page en double : Google n'a pas choisi la même
+  // URL canonique que l'utilisateur" sur la homepage — 56% du vocabulaire de
+  // /pricing était également présent sur /. Cette simplification rend la
+  // homepage clairement différente du sujet "pricing".
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'EUR',
+    lowPrice: '0',
+    highPrice: '179',
+    offerCount: '4',
+    availability: 'https://schema.org/InStock',
+    url: `${SITE_URL}/pricing`,
+  },
   // aggregateRating Trustpilot — injecté conditionnellement via le spread
   // ci-dessous. Sans collecteur tiers vérifié, aucune note publiée
   // (DGCCRF art L.121-2 + Google "Manipulative review snippets").

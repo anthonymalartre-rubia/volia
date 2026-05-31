@@ -10,25 +10,45 @@
 //   - Les chiffres doivent rester factuels et vérifiables : si une
 //     valeur n'est pas certaine, marquer `// TODO: chiffre exact`.
 //   - Les boilerplates sont CALIBRÉS pour copier-coller : 1 phrase,
-//     ~50 mots, ~120 mots. Modifier prudemment (impact PR).
+//     ~70 mots, ~180 mots. Modifier prudemment (impact PR).
+//
+// POSITIONNEMENT (juin 2026) :
+//   « Volia est la première entreprise SaaS autonome d'un nouveau
+//   genre. Une entreprise pilotée par IA, augmentée par 1 founder. »
+//   Construite en 6 semaines à Marseille, supervisée par Anthony
+//   Malartre (responsable produit + sales + service client).
 // ─────────────────────────────────────────────────────────────────────
 
 // ─── BOILERPLATE — 3 longueurs prêtes à copier pour les journalistes ──
 export const BOILERPLATE = {
   short:
-    "Volia est la suite SaaS B2B française réunissant en un seul outil prospection, cold email, CRM et formulaires — co-construite par un founder solo avec une IA agentique.",
+    "Volia est la première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille.",
 
   medium:
-    "Volia est la première suite SaaS B2B française réunissant en un seul outil prospection, cold email, CRM et formulaires. Lancée en 2026 par Anthony Malartre — founder solo, sans levée de fonds — la plateforme a été co-construite avec Claude, l'IA agentique d'Anthropic, sur plus de 370 commits publics. À partir de 19 €/mois, elle vise les TPE/PME et indépendants qui cherchent une alternative française à la stack US (Apollo, HubSpot, Lemlist).",
+    "Volia est la première entreprise SaaS autonome d'un nouveau genre, pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille par Anthony Malartre avec Claude, l'IA agentique d'Anthropic, la suite réunit prospection, cold email, CRM et formulaires en un seul outil à partir de 19 €/mois. Volia incarne une nouvelle catégorie d'entreprise : pas d'équipe, pas de levée, pas d'investisseurs — juste un founder, des agents IA autonomes et un produit qui se vend.",
 
   long:
-    "Volia (volia.fr) est la première suite SaaS B2B française pensée comme une alternative complète à la stack US dominante (Apollo, HubSpot, Lemlist, Typeform). En un seul abonnement à partir de 19 €/mois, la plateforme réunit quatre modules connectés : Prospection (287 000+ entreprises françaises accessibles via Google Places, enrichissement waterfall multi-sources), Campagnes (séquences email/SMS automatisées), CRM (pipeline commercial natif) et Formulaires (capture de leads). Volia est éditée par Anthony Malartre, founder solo basé en France, et a été intégralement co-construite en 12 mois avec Claude, l'IA agentique d'Anthropic — plus de 370 commits publics documentent le processus. Hébergée en Union européenne (Supabase Frankfurt) et conforme RGPD par conception, Volia couvre aujourd'hui 8 pays (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie) et s'adresse aux TPE/PME, indépendants et équipes commerciales qui veulent un outil souverain, lisible et 5× moins cher que les leaders américains.",
+    "Volia (volia.fr) est la première entreprise SaaS autonome au monde — une nouvelle catégorie d'entreprise pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille par Anthony Malartre avec Claude, l'IA agentique d'Anthropic, la plateforme réunit en un seul abonnement à partir de 19 €/mois quatre modules connectés : Prospection (287 000+ entreprises françaises accessibles via Google Places, enrichissement waterfall multi-sources), Campagnes (séquences email/SMS automatisées), CRM (pipeline commercial natif) et Formulaires (capture de leads). Plus de 370 commits publics et 10 cron jobs autonomes documentent un fonctionnement quotidien orchestré par des agents IA. Hébergée en Union européenne (Supabase Frankfurt) et conforme RGPD par conception, Volia couvre 8 pays européens (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie). Le modèle : 0 salarié supplémentaire, 0 levée de fonds, 0 dette. Anthony Malartre reste responsable produit, sales et service client — l'exécution opérationnelle est assurée par les agents IA. Volia est la preuve qu'une nouvelle forme d'entreprise est née : le founder augmenté.",
 };
 
 // ─── KEY_NUMBERS — chiffres clés (cards page presse) ──────────────────
 // Chaque card doit avoir : value (string courte), label, sub (contexte),
 // gradient (Tailwind) et iconName (mappé côté UI vers Lucide).
 export const KEY_NUMBERS = [
+  {
+    value: '6',
+    label: 'semaines de construction',
+    sub: 'sprint intensif founder + IA agentique',
+    gradient: 'from-blue-500 to-cyan-600',
+    iconName: 'Calendar',
+  },
+  {
+    value: '1',
+    label: 'founder',
+    sub: 'augmenté par des agents IA autonomes',
+    gradient: 'from-rose-500 to-pink-600',
+    iconName: 'User',
+  },
   {
     value: '4',
     label: 'modules connectés',
@@ -38,17 +58,24 @@ export const KEY_NUMBERS = [
   },
   {
     value: '370+',
-    label: 'commits publics',
+    label: 'commits autonomes',
     sub: 'historique transparent sur GitHub',
     gradient: 'from-indigo-500 to-blue-600',
     iconName: 'GitCommit',
   },
   {
-    value: '12',
-    label: 'mois de développement',
-    sub: 'de la première ligne au lancement',
-    gradient: 'from-blue-500 to-cyan-600',
-    iconName: 'Calendar',
+    value: '10',
+    label: 'cron jobs autonomes',
+    sub: 'exécution quotidienne sans intervention',
+    gradient: 'from-fuchsia-500 to-purple-600',
+    iconName: 'Brain',
+  },
+  {
+    value: '0',
+    label: 'salarié supplémentaire',
+    sub: '1 founder + agents IA, point.',
+    gradient: 'from-rose-500 to-orange-600',
+    iconName: 'Sparkles',
   },
   {
     value: '0',
@@ -58,18 +85,25 @@ export const KEY_NUMBERS = [
     iconName: 'Wallet',
   },
   {
-    value: '1',
-    label: 'founder solo',
-    sub: 'augmenté par une IA agentique',
-    gradient: 'from-rose-500 to-pink-600',
-    iconName: 'User',
+    value: '287 000+',
+    label: 'entreprises accessibles',
+    sub: 'via Google Places + enrichissement waterfall',
+    gradient: 'from-violet-600 to-fuchsia-600',
+    iconName: 'Building2',
   },
   {
     value: '8',
-    label: 'pays couverts',
+    label: 'pays européens couverts',
     sub: 'FR · BE · CH · LU · DE · UK · ES · IT',
     gradient: 'from-amber-500 to-orange-600',
     iconName: 'Globe',
+  },
+  {
+    value: '100%',
+    label: 'hébergement UE',
+    sub: 'Supabase Frankfurt · RGPD natif',
+    gradient: 'from-sky-500 to-blue-600',
+    iconName: 'Flag',
   },
   {
     value: '150+',
@@ -85,48 +119,45 @@ export const KEY_NUMBERS = [
     gradient: 'from-sky-500 to-blue-600',
     iconName: 'MapPin',
   },
-  {
-    value: '287 000+',
-    label: 'entreprises accessibles',
-    sub: 'via Google Places + enrichissement waterfall',
-    gradient: 'from-violet-600 to-fuchsia-600',
-    iconName: 'Building2',
-  },
 ];
 
 // ─── FOUNDER_QUOTES — phrases citables prêtes à l'emploi ──────────────
 export const FOUNDER_QUOTES = [
   {
-    text: "L'IA ne remplace pas les founders, elle les augmente.",
-    context: 'Sur le rôle de Claude dans la construction de Volia',
+    text: "Volia n'est pas un SaaS. C'est la preuve qu'une nouvelle catégorie d'entreprise est née.",
+    context: 'Sur le positionnement de Volia comme entreprise autonome',
   },
   {
-    text: "On a construit en 12 mois ce qui aurait pris 3 ans à une équipe de 8.",
-    context: 'Sur la productivité du founder solo augmenté par IA',
+    text: "1 humain décide. 1000 agents IA exécutent. C'est ça le nouveau modèle.",
+    context: "Sur l'organisation interne d'une entreprise autonome",
   },
   {
-    text: "0 levée, 0 dette, 4 modules. C'est le futur des SaaS bootstrap.",
+    text: "Construire l'équivalent de HubSpot + Apollo + Lemlist + Tally en 6 semaines, seul, n'était pas possible il y a 18 mois. Maintenant si.",
+    context: "Sur la vélocité permise par l'IA agentique de dernière génération",
+  },
+  {
+    text: "Le futur des entreprises B2B ne ressemble plus à des équipes. Il ressemble à des founders augmentés.",
+    context: "Sur la vision de l'entreprise du nouveau genre",
+  },
+  {
+    text: "Pas de levée. Pas d'équipe. Pas d'investisseurs. Juste un founder, Claude, et un produit qui se vend tout seul.",
     context: 'Sur le modèle économique de Volia',
   },
   {
     text: "La souveraineté SaaS française ne se décrète pas, elle se code.",
     context: 'Sur le positionnement français de Volia',
   },
-  {
-    text: "Chaque commit est public. Chaque décision est traçable. C'est le SaaS du XXIe siècle.",
-    context: 'Sur la transparence du processus de développement',
-  },
 ];
 
 // ─── PRESS_ANGLES — 3 angles pitch pour cibler la presse ──────────────
 export const PRESS_ANGLES = [
   {
-    slug: 'founder-augmente-par-ia',
-    title: 'Le founder augmenté par IA',
-    audience: 'Presse tech & startup (Maddyness, Frenchweb, Forbes FR)',
+    slug: 'entreprise-autonome-nouveau-genre',
+    title: "L'entreprise autonome d'un nouveau genre",
+    audience: 'Presse vision & futur du travail (Forbes FR, Les Echos, Maddyness)',
     pitch:
-      "Comment un entrepreneur solo a-t-il pu livrer en 12 mois une suite SaaS B2B complète (4 modules, 370+ commits, RGPD natif) là où une équipe de 8 aurait mis 3 ans ? La réponse tient en un mot : Claude. Volia est le premier cas documenté de SaaS B2B européen co-construit en pair-programming avec une IA agentique.",
-    releaseUrl: '/presse/cp-founder-augmente-par-ia.pdf',
+      "Et si l'entreprise du XXIe siècle ne ressemblait plus à une équipe, mais à un founder augmenté par des agents IA autonomes ? Volia incarne cette nouvelle catégorie : 1 founder supervise, 1000 agents IA exécutent. Construite en 6 semaines à Marseille, sans salarié supplémentaire, sans levée de fonds, la suite SaaS B2B fonctionne aujourd'hui en production avec 10 cron jobs orchestrés par IA.",
+    releaseUrl: '/presse/cp-entreprise-autonome.pdf',
     iconName: 'Sparkles',
     gradient: 'from-violet-500 to-indigo-600',
   },
@@ -141,11 +172,11 @@ export const PRESS_ANGLES = [
     gradient: 'from-blue-500 to-cyan-600',
   },
   {
-    slug: 'cas-ecole-cloud-ia-agentique',
-    title: "Le cas d'école Cloud + IA agentique",
+    slug: 'premiere-mondiale-ia-agentique-production',
+    title: "Première mondiale : l'IA agentique en production",
     audience: 'Presse IA spécialisée (ActuIA, Usine Digitale, Siècle Digital)',
     pitch:
-      "Volia documente publiquement son processus de construction assisté par IA : 370+ commits Git, ADR (Architecture Decision Records), CONTEXT.md évolutif. Un cas d'usage concret du paradigme \"AI-native development\" sur une stack moderne (Next.js 14, Supabase, Vercel) au service d'un SaaS B2B européen.",
+      "Volia est le premier SaaS B2B européen documenté entièrement co-construit par IA agentique et opéré en production par des agents autonomes : 370+ commits publics, 10 cron jobs IA, ADR, CONTEXT.md évolutif. Un cas d'école mondial du paradigme \"AI-native company\" sur une stack moderne (Next.js 14, Supabase, Vercel) supervisée par 1 founder.",
     releaseUrl: '/presse/cp-cas-ecole-ia-agentique.pdf',
     iconName: 'Brain',
     gradient: 'from-fuchsia-500 to-purple-600',
@@ -279,11 +310,12 @@ export const PRESS_RELEASES = [
   {
     date: '2026-06-01',
     dateLabel: '1er juin 2026',
-    title: 'Volia lance sa suite SaaS B2B française à partir de 19 €/mois',
-    slug: 'lancement-suite-saas-b2b',
+    title:
+      "Volia lance la première entreprise SaaS autonome au monde — construite en 6 semaines",
+    slug: 'lancement-entreprise-autonome',
     summary:
-      "Volia ouvre officiellement l'accès à sa suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires) et se positionne comme l'alternative française à la stack US (Apollo, HubSpot, Lemlist).",
-    pdfUrl: '/presse/cp-lancement-juin-2026.pdf',
+      "Volia officialise le lancement d'une nouvelle catégorie d'entreprise : une suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires) construite en 6 semaines à Marseille par 1 founder augmenté par des agents IA autonomes. Pas d'équipe, pas de levée, pas d'investisseurs.",
+    pdfUrl: '/presse/cp-lancement-entreprise-autonome-juin-2026.pdf',
   },
   {
     date: '2026-03-15',
@@ -302,6 +334,7 @@ export const PRESS_CONTACT = {
   phone: '+33 (0)X XX XX XX XX', // TODO: numéro presse dédié
   responseTime: '< 24h',
   founderEmail: 'anthony@volia.fr',
+  city: 'Marseille',
   linkedin: 'https://www.linkedin.com/in/anthonymalartre/', // TODO: vérifier URL
   twitter: 'https://twitter.com/anthonymalartre', // TODO: vérifier handle
   github: 'https://github.com/anthonymalartre-rubia/volia',
@@ -310,11 +343,11 @@ export const PRESS_CONTACT = {
 // ─── FOUNDER_BIO — 3 versions ─────────────────────────────────────────
 export const FOUNDER_BIO = {
   short:
-    "Anthony Malartre, entrepreneur français, est le fondateur solo de Volia (volia.fr).",
+    "Anthony Malartre, founder de Volia, la première entreprise SaaS autonome au monde, construite en 6 semaines à Marseille.",
 
   medium:
-    "Anthony Malartre est un entrepreneur SaaS français, fondateur solo de Volia (volia.fr). En 12 mois, il a co-construit avec Claude, l'IA agentique d'Anthropic, la première suite SaaS B2B française réunissant prospection, cold email, CRM et formulaires — sans levée de fonds, sans co-fondateur, et avec 370+ commits publics qui documentent intégralement le processus.",
+    "Anthony Malartre est le founder de Volia (volia.fr), première entreprise SaaS autonome d'un nouveau genre — pilotée par IA, augmentée par 1 founder. Basé à Marseille, ex-fondateur de plusieurs projets B2B, il a construit Volia en 6 semaines avec Claude, l'IA agentique d'Anthropic : 4 modules connectés, 370+ commits publics, 10 cron jobs autonomes. Anthony défend la philosophie du founder augmenté : 1 humain qui décide, 1000 agents IA qui exécutent.",
 
   long:
-    "Anthony Malartre est un entrepreneur SaaS français basé en France. Après plusieurs années à construire des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2025 de tester une hypothèse : un founder solo équipé d'une IA agentique de dernière génération peut-il livrer une suite SaaS B2B complète au niveau des leaders du marché ? Volia est la réponse. En 12 mois, sans co-fondateur, sans levée de fonds, sans dette technique cachée, il livre 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne, accessibles à partir de 19 €/mois. Le développement entier est documenté publiquement : 370+ commits Git, ADR, CONTEXT.md évolutif. Anthony défend une vision : l'IA ne remplace pas les founders, elle les augmente — et la souveraineté SaaS européenne passera par des projets bootstrap, lisibles et exigeants.",
+    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'entreprise du XXIe siècle n'était plus une équipe, mais un founder augmenté par des agents IA autonomes ? Volia est la réponse. En 6 semaines de sprint intensif, sans co-fondateur, sans levée de fonds, sans salarié supplémentaire, il livre 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne, accessibles à partir de 19 €/mois. Le développement entier est documenté publiquement : 370+ commits Git, ADR, CONTEXT.md évolutif. En production, 10 cron jobs autonomes orchestrent les opérations quotidiennes. Anthony reste personnellement responsable du produit, du sales et du service client — l'exécution opérationnelle est assurée par les agents IA. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
 };

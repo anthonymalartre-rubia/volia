@@ -1,6 +1,7 @@
 # 📧 Templates email outreach journalistes — Volia
 
 > **Sprint nuit 1er juin 2026** — Préparé par Claude pour Anthony.
+> 🚨 **PIVOT NARRATIF (1er juin 2026)** : nouveau pitch « première entreprise SaaS autonome au monde, construite en 6 semaines à Marseille ».
 > Règle d'or : **personnaliser chaque email**. Mentionner un article récent du journaliste. Pas de mass mail.
 
 ---
@@ -13,30 +14,36 @@
 
 ---
 
-## 🅰️ Template 1 — « Founder augmenté par IA »
-*Pour journalistes tech / startup (Maddyness, Frenchweb, Welcome to the Jungle, GDIY, Indie Hackers FR)*
+## 🅰️ Template 1 — « Entreprise autonome nouveau genre »
+*Pour journalistes tech / startup (Maddyness, Frenchweb, Welcome to the Jungle, GDIY, Indie Hackers FR, Sifted)*
 
 ```
-Objet : [Prénom], une histoire de founder solo + IA qui pourrait t'intéresser
+Objet : [Prénom], première entreprise SaaS autonome au monde — sujet pour toi ?
 
 Salut [Prénom],
 
-Je suis tombé sur ton [article / podcast / interview] sur [SUJET PRÉCIS, 
-1 phrase de feedback authentique]. Ça m'a parlé parce que [LIEN AVEC TON 
+Je suis tombé sur ton [article / podcast / interview] sur [SUJET PRÉCIS,
+1 phrase de feedback authentique]. Ça m'a parlé parce que [LIEN AVEC TON
 HISTOIRE].
 
-Je me suis dit que ce qu'on bâtit chez Volia pourrait te plaire :
+Je me suis dit que ce qu'on lance chez Volia pourrait te plaire :
 
-J'ai construit seul, avec Claude (l'IA agentique d'Anthropic), 
-l'équivalent fonctionnel de HubSpot + Apollo + Lemlist + Tally en 
-12 mois. 4 modules connectés, +370 commits publics, 0 levée, 
-0 salarié supplémentaire, fait depuis Bordeaux.
+Volia, c'est la première entreprise SaaS autonome au monde — pilotée
+par IA, augmentée par 1 founder, construite en 6 semaines à Marseille.
+4 modules connectés (Prospection, Campagnes, CRM, Forms), équivalent
+fonctionnel de HubSpot+Apollo+Lemlist+Tally à 149€/mois. 370+ commits
+publics, 0 levée.
 
-C'est pas une démo : on a [X] clients Business à 149€/mois aujourd'hui, 
+Ce n'est pas « un SaaS avec un peu d'IA ». C'est l'inverse : l'IA
+pilote le code, je supervise (produit, sales, service client). Une
+nouvelle catégorie d'entreprise — Volia est juste la première à
+l'assumer publiquement.
+
+C'est pas une démo : on a [X] clients Business à 149€/mois aujourd'hui,
 et tout le code + le changelog sont publics sur GitHub.
 
-Si l'angle "founder augmenté par IA" t'intéresse pour un article ou 
-un podcast, je te propose 3 formats au choix :
+Si l'angle "première entreprise autonome au monde" t'intéresse pour
+un article ou un podcast, je te propose 3 formats au choix :
 - Interview visio 30 min (FR ou EN)
 - Accès produit complet pour test
 - Dossier de presse + screenshots HD ici : https://volia.fr/presse
@@ -49,7 +56,7 @@ Founder, Volia (volia.fr)
 anthony@volia.fr — 06 XX XX XX XX
 LinkedIn : [LIEN]
 
-PS : si tu veux jeter un œil rapide à l'histoire, j'ai écrit le 
+PS : si tu veux jeter un œil rapide à l'histoire, j'ai écrit le
 chemin ici → https://volia.fr/notre-histoire
 ```
 
@@ -69,25 +76,26 @@ Objet : Alternative française à HubSpot+Apollo+Lemlist — sujet pour [MÉDIA]
 
 Bonjour [Prénom],
 
-J'ai lu votre [article récent sur SUJET, lien si possible]. Le constat 
+J'ai lu votre [article récent sur SUJET, lien si possible]. Le constat
 sur [POINT PRÉCIS] résume bien ce qu'on observe sur le terrain.
 
-Je dirige Volia (volia.fr), une suite SaaS B2B française qui adresse 
-directement ce problème : remplacer la stack américaine fragmentée 
-(HubSpot + Apollo + Lemlist + Typeform = 270 €/mois sans intégration) 
+Je dirige Volia (volia.fr), une suite SaaS B2B française qui adresse
+directement ce problème : remplacer la stack américaine fragmentée
+(HubSpot + Apollo + Lemlist + Typeform = 270 €/mois sans intégration)
 par 4 modules connectés à 149 €/mois, hébergés en France, RGPD natif.
 
 Quelques chiffres concrets :
-- 80 % des PME françaises B2B utilisent 4+ outils SaaS US qui ne 
+- 80 % des PME françaises B2B utilisent 4+ outils SaaS US qui ne
   communiquent pas (étude Volia, 200 dirigeants)
 - Surcoût moyen : 121 €/mois vs solution intégrée
 - 100 % des données Volia hébergées en UE (Frankfurt)
-- 0 levée de fonds, bootstrap français
+- 0 levée de fonds, bootstrap français, basé à Marseille
 
-L'histoire founder est singulière (j'ai construit la suite en 12 mois 
-seul, avec une IA agentique comme co-pilote), mais l'angle qui 
-m'intéresse pour vous, c'est la souveraineté numérique des PME 
-françaises.
+L'angle qui pourrait vous intéresser : Volia est la première entreprise
+SaaS autonome au monde — pilotée par IA, augmentée par 1 founder,
+construite en 6 semaines. C'est aussi ce qui permet de pricer une suite
+intégrée à -45% vs les leaders US, tout en hébergeant 100% UE. La
+souveraineté numérique française devient économiquement compétitive.
 
 Je peux vous fournir :
 - Interview 30 min visio
@@ -103,37 +111,44 @@ volia.fr
 
 ---
 
-## 🅲 Template 3 — « Cas d'école IA agentique »
-*Pour journalistes IA spécialisée (ActuIA, AI France, podcasts IA, The Information FR)*
+## 🅲 Template 3 — « Cas d'école entreprise autonome »
+*Pour journalistes IA spécialisée (ActuIA, AI France, podcasts IA, The Information FR, MIT Tech Review FR)*
 
 ```
-Objet : Premier SaaS B2B en prod co-construit avec une IA agentique — cas d'étude ?
+Objet : Première entreprise SaaS autonome au monde — cas d'étude vérifiable ?
 
 Salut [Prénom],
 
-Je suis ton travail sur [SUJET IA RÉCENT] depuis [TIMESPAN]. 
+Je suis ton travail sur [SUJET IA RÉCENT] depuis [TIMESPAN].
 [FEEDBACK SPÉCIFIQUE sur 1 article récent].
 
-Je me dis que mon parcours pourrait te servir de cas d'étude concret 
-pour un sujet sur les agents IA en production (vs sur les démos virales) :
+Je me dis que mon parcours pourrait te servir de cas d'étude concret,
+au moment où tout le monde parle d'agents IA sans en produire en
+production :
 
-J'ai bâti Volia (volia.fr), une suite SaaS B2B française de 4 modules 
-connectés (Prospection, Campagnes email, CRM, Formulaires), en 12 mois, 
-seul, avec Claude (Anthropic) comme co-pilote agentique.
+J'ai bâti Volia (volia.fr), la première entreprise SaaS autonome au
+monde — pilotée par IA, augmentée par 1 founder, construite en
+6 semaines à Marseille. 4 modules connectés (Prospection, Campagnes
+email, CRM, Formulaires). Pas de démo, pas de prototype : produit
+commercial en prod, clients payants Business 149€/mois.
+
+Formule revendiquée : "1 humain décide, 1000 agents exécutent". Je
+reste responsable produit, sales, service client — l'IA fait le code,
+les tests, les migrations, la doc, le refactor.
 
 Ce qui rend le cas vérifiable pour ton article :
-- 370+ commits publics avec co-author Claude : github.com/anthonymalartre-rubia/volia
+- 370+ commits publics avec co-author IA : github.com/anthonymalartre-rubia/volia
 - Changelog public : volia.fr/changelog
-- Pas une démo : produit en prod, clients payants Business 149€/mois, 
-  10 cron jobs Vercel actifs, infrastructure multi-tenant Resend
-- Méthode documentée : qui décide quoi (humain vs IA), workflow, garde-fous
+- 10 cron jobs Vercel actifs, infrastructure multi-tenant Resend
+- Méthode documentée : qui décide quoi, workflow, garde-fous DGCCRF
 
 Je peux te fournir :
 - Interview détaillée (1h+) sur la méthode
 - Accès lecture aux commits + sessions de coding (cas pratiques)
 - Dossier presse + métriques : https://volia.fr/presse
 
-Si l'angle t'intéresse, je suis joignable en visio cette semaine.
+Si l'angle "nouvelle catégorie d'entreprise" t'intéresse, je suis
+joignable en visio cette semaine.
 
 À bientôt,
 Anthony Malartre
@@ -151,11 +166,11 @@ Objet : Re: [OBJET ORIGINAL]
 
 Salut [Prénom],
 
-Je remonte mon message d'il y a 5 jours au cas où il aurait filé 
+Je remonte mon message d'il y a 5 jours au cas où il aurait filé
 en bas de boîte.
 
-Si le sujet ne t'intéresse pas, dis-le moi simplement, je n'insiste 
-pas. Si tu veux que je te passe d'abord un format plus court (1 page, 
+Si le sujet ne t'intéresse pas, dis-le moi simplement, je n'insiste
+pas. Si tu veux que je te passe d'abord un format plus court (1 page,
 3 bullets), pas de souci je m'adapte.
 
 Bonne journée,
@@ -171,11 +186,11 @@ Objet : Dernière tentative — [SUJET]
 
 Salut [Prénom],
 
-Dernière relance avant d'archiver. Si pour toi c'est non, ou c'est 
-pas le bon moment, ou c'est pas le bon angle, je comprends totalement 
+Dernière relance avant d'archiver. Si pour toi c'est non, ou c'est
+pas le bon moment, ou c'est pas le bon angle, je comprends totalement
 — pas besoin de me répondre.
 
-Si jamais tu veux relancer plus tard, mon email reste anthony@volia.fr 
+Si jamais tu veux relancer plus tard, mon email reste anthony@volia.fr
 et le dossier presse est à volia.fr/presse.
 
 Bonne suite,
@@ -188,25 +203,26 @@ Anthony
 *Pour booker un podcast (GDIY, Indie Hackers FR, NoCode City, etc.)*
 
 ```
-Objet : Pitch invité podcast — Founder solo + IA = SaaS B2B en 12 mois
+Objet : Pitch invité podcast — Première entreprise SaaS autonome au monde, 6 semaines, Marseille
 
 Salut [Prénom],
 
-Auditeur régulier de [PODCAST] depuis [TIMESPAN]. L'épisode avec 
+Auditeur régulier de [PODCAST] depuis [TIMESPAN]. L'épisode avec
 [INVITÉ RÉCENT] sur [SUJET] m'a particulièrement marqué.
 
 Je te pitche un sujet pour un épisode :
 
-**Comment j'ai construit une suite SaaS B2B (4 modules) en 12 mois, 
-seul, avec une IA agentique — et atteint le break-even à 149€/mois.**
+**Comment j'ai lancé la première entreprise SaaS autonome au monde
+— pilotée par IA, augmentée par 1 founder, construite en 6 semaines
+à Marseille. 4 modules en prod, clients payants à 149€/mois.**
 
 3 angles que je pourrais creuser :
-1. La méthode "founder + Claude" : qui décide quoi, garde-fous, 
-   ce que l'IA ne peut pas (encore) faire
-2. Le pricing au break-even : pourquoi 149€/mois est viable en solo 
-   quand un concurrent à équipe demande 270€
-3. La transparence radicale : commits publics, changelog public, 
-   founder accessible — risques et bénéfices
+1. La nouvelle catégorie : qu'est-ce qui distingue une "entreprise
+   autonome" d'un "SaaS qui utilise de l'IA". Les implications.
+2. La formule "1 humain décide, 1000 agents exécutent" : qui fait
+   quoi, garde-fous, ce que je ne délègue jamais (sales, support, vision)
+3. Le pricing au break-even : pourquoi 149€/mois est viable quand
+   un concurrent à équipe demande 270€
 
 Je peux t'envoyer :
 - Bio + 5 question/réponses prêtes : pour ton brief
@@ -252,8 +268,8 @@ Colonnes recommandées :
 | Mention « exclusivité » sans réelle pertinence | Tu cries au loup, ils te skip |
 | Relance avant J+5 | Insistance perçue, mauvaise image |
 | Pas d'objet précis | 30 % de moins d'ouverture |
-| « Founder + IA = AI-powered » dans le pitch | Trop générique, ils n'achètent pas |
-| Promesses non-tenables (« 0 salarié 100% autonome ») | Debunking + perte crédibilité |
+| « 0 humain 100% autonome sans intervention » | Debunking + risque DGCCRF |
+| « SaaS construit par IA » sans nuance | Inquiète les clients B2B, manque de précision |
 
 ---
 
@@ -267,8 +283,9 @@ Colonnes recommandées :
 - [ ] Email perso `anthony@volia.fr` visible
 - [ ] **Pas de pièce jointe**
 - [ ] Signature courte avec téléphone + LinkedIn
+- [ ] Mention DISCRÈTE que je reste responsable produit + sales + service client (anti-DGCCRF)
 
 ---
 
-**Dernière mise à jour** : 1er juin 2026 (Sprint nuit Claude)
+**Dernière mise à jour** : 1er juin 2026 (pivot narratif "entreprise autonome")
 **À éditer par Anthony** : remplacer placeholders [X clients], [téléphone], [LinkedIn]

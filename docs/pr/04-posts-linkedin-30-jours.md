@@ -1,6 +1,7 @@
 # 🟦 Posts LinkedIn founder — 30 jours prêts-à-publier
 
 > **Sprint nuit 1er juin 2026** — 12 posts LinkedIn founder préparés.
+> 🚨 **PIVOT NARRATIF (1er juin 2026)** : posts #1 à #4 réécrits avec le nouveau narratif « première entreprise SaaS autonome au monde, 6 semaines, Marseille ». Posts #5 à #12 : structure conservée, mentions Bordeaux/12 mois mises à jour.
 > Cadence recommandée : **3 posts/semaine** (lundi/mercredi/vendredi).
 > Tous pré-rédigés en ton authentique Anthony. À adapter à ta voix avant publication.
 
@@ -10,25 +11,26 @@
 
 | Jour | Date | Type post | Sujet |
 |---|---|---|---|
-| Lundi S1 | 2 juin | Story personnel | Le déclic Claude |
-| Mercredi S1 | 4 juin | Behind-the-scenes | Workflow founder + IA |
-| Vendredi S1 | 6 juin | Build in public | Métriques transparentes |
-| Lundi S2 | 9 juin | Opinion | "L'IA ne remplace pas les founders" |
+| Lundi S1 | 2 juin | Story personnel | L'expérience qui a tout changé |
+| Mercredi S1 | 4 juin | Behind-the-scenes | Comment fonctionne une entreprise autonome |
+| Vendredi S1 | 6 juin | Build in public | Métriques transparentes — 6 semaines |
+| Lundi S2 | 9 juin | Opinion | "Bienvenue dans l'ère post-équipe" |
 | Mercredi S2 | 11 juin | Cas client | Témoignage client Business |
 | Vendredi S2 | 13 juin | Build in public | Bug + fix shippé |
 | Lundi S3 | 16 juin | Storytelling | Le "before/after" stack outils |
-| Mercredi S3 | 18 juin | Behind-the-scenes | Une session Claude en détail |
-| Vendredi S3 | 20 juin | Carrousel | "5 leçons d'un solo founder + IA" |
-| Lundi S4 | 23 juin | Provocateur | "Faut-il avoir peur de l'IA agentique ?" |
+| Mercredi S3 | 18 juin | Behind-the-scenes | Une session de coding en détail |
+| Vendredi S3 | 20 juin | Carrousel | "5 leçons d'une entreprise autonome" |
+| Lundi S4 | 23 juin | Provocateur | "Faut-il avoir peur des entreprises autonomes ?" |
 | Mercredi S4 | 25 juin | Annonce | Nouvelle feature shippée |
 | Vendredi S4 | 27 juin | Récap | "Mois écoulé en chiffres" |
 
 ---
 
-## 🟦 Post #1 — Le déclic Claude (Lundi 2 juin)
+## 🟦 Post #1 — L'expérience qui a tout changé (Lundi 2 juin)
 
 ```
-Il y a 12 mois, je payais 271€/mois pour 6 outils SaaS différents.
+Il y a 6 semaines, je payais 271€/mois pour 6 outils SaaS qui ne se
+parlaient pas.
 
 HubSpot pour le CRM.
 Apollo pour les contacts.
@@ -40,68 +42,81 @@ Une feuille Notion pour suivre.
 Et aucun ne se parlait nativement.
 
 J'ai pris une décision étrange ce jour-là :
-« Et si je construisais moi-même ce qu'il me manque ? »
+« Et si je construisais une entreprise d'un genre nouveau ? »
 
-Sauf que je suis pas dev full-stack.
-Sauf que j'ai pas d'équipe.
-Sauf que j'ai pas levé de fonds.
+Pas un SaaS de plus.
+Pas une boîte avec « un peu d'IA ».
+Une entreprise autonome — pilotée par IA, augmentée par 1 founder.
 
-J'avais juste Claude — l'IA agentique d'Anthropic.
-
-12 mois et 370+ commits plus tard, Volia existe :
+6 semaines plus tard, Volia est en prod :
 4 modules connectés (Prospection, Campagnes, CRM, Forms).
-0 levée. 0 salarié supplémentaire. 1 founder + 1 IA.
+370+ commits publics. 0 levée. 0 équipe technique salariée.
 
-L'IA ne remplace pas les humains.
-Elle augmente les founders.
+Ce qui aurait pris une équipe de 8 et 18 mois,
+1 humain + 1000 agents l'ont fait en 6 semaines.
 
-Et ça change tout.
+C'est la première entreprise SaaS autonome au monde.
+Je reste responsable produit, sales et service client.
+L'IA fait tout le reste.
+
+Bienvenue dans l'ère post-équipe.
 
 → volia.fr/notre-histoire
 
-#FounderJourney #AI #Bootstrapped
+#AutonomousCompany #AI #PostTeamEra
 ```
 
 ---
 
-## 🟦 Post #2 — Workflow founder + IA (Mercredi 4 juin)
+## 🟦 Post #2 — Comment fonctionne une entreprise autonome (Mercredi 4 juin)
 
 ```
-On me demande souvent comment je code avec Claude.
+On me demande souvent : « concrètement, c'est quoi une entreprise
+autonome au quotidien ? »
 
-La réponse est simple : c'est pas Claude qui code.
-C'est moi qui décide. Claude exécute.
+La réponse tient en une phrase :
+1 humain décide. 1000 agents exécutent.
 
-Voici mon workflow réel d'une feature shippée :
+Voici mon vendredi type chez Volia :
 
-1️⃣ J'identifie un besoin client (souvent par email direct)
-2️⃣ Je rédige ce que je veux en 3-4 phrases (pas un cahier des charges)
-3️⃣ Je discute avec Claude : "Qu'est-ce qui pourrait casser ?"
-4️⃣ On itère sur l'approche (5-10 min)
-5️⃣ Claude code la première version
-6️⃣ Je relis chaque ligne (sans exception)
-7️⃣ Je teste localement
-8️⃣ Je ship + monitor
+🌅 Matin (vision humaine)
+- Lecture des emails clients (j'y réponds personnellement)
+- Décisions produit de la semaine (3-4 features priorisées)
+- Calls sales / découverte / signing (100% humain, jamais d'IA)
 
-Combien de temps : 30 min à 4h selon la complexité.
+☀️ Après-midi (exécution autonome)
+- Je décris ce que je veux en 3 phrases
+- Les agents IA architecturent, codent, testent, documentent, migrent
+- Je relis chaque release avant ship (validation finale)
+- Le code part en prod
 
-Le piège qu'on évite :
-Claude ne décide rien produit.
-Claude ne ship rien sans validation humaine.
-Claude ne parle pas aux clients.
+🌙 Soir (service client + vision)
+- Support client (moi, en direct, anthony@volia.fr)
+- Roadmap + pricing + brand voice (moi)
+- Stratégie + positionnement (moi)
 
-Ce que ça libère :
-Je passe 80% de mon temps sur le sales, le support, la vision.
-20% sur la review de code.
+Ce que je ne délègue JAMAIS :
+→ Décisions produit
+→ Conversations clients
+→ Service client
+→ Sales
 
-L'IA n'a pas remplacé un dev. Elle m'a donné 10 dev.
+Ce que les agents IA font sans moi :
+→ Le code complet (sous ma supervision)
+→ Refactor 10000 lignes en 5 min
+→ Migrations DB, tests, doc
+→ Monitoring, patches sécurité, refactor
 
 Pour le client final, ça change quoi ?
-→ Vélocité de delivery x10
+→ Vélocité x100 (feature demandée lundi = en prod jeudi)
 → Prix à 149€/mois quand un équivalent demande 270€
-→ Founder accessible directement (anthony@volia.fr)
+→ Founder accessible direct (anthony@volia.fr)
 
-#BuildInPublic #AIAgents #SaaS
+C'est ça une entreprise autonome.
+Pas un SaaS « avec un peu d'IA ».
+Une nouvelle catégorie d'entreprise.
+
+#AutonomousCompany #AIAgents #SaaS
 ```
 
 ---
@@ -112,73 +127,99 @@ Pour le client final, ça change quoi ?
 Promesse de transparence radicale chez Volia.
 Voici les chiffres réels au 6 juin 2026 :
 
-📊 Production
+⚡ Vitesse (la stat qui change tout)
+• Build V1 : 6 semaines (à comparer aux 12-18 mois standards)
+• 4 modules connectés livrés en prod
 • 370+ commits publics (github.com/anthonymalartre-rubia/volia)
+• Vélocité moyenne : 1 feature majeure / semaine
+
+📊 Production
 • 4 modules en prod (Prospection, Campagnes, CRM, Forms)
 • 10 cron jobs Vercel actifs
 • 287 000+ entreprises accessibles via Google Places
+• Hébergement : Frankfurt (UE)
 
 📈 Business
 • MRR : [À RÉVÉLER QUAND PRÊT]
 • Clients Business : [À RÉVÉLER]
 • Churn mensuel : [À RÉVÉLER]
-• 0 levée de fonds, 0 dette
+• 0 levée de fonds, 0 dette, 0 équipe technique salariée
 
-🛠️ Tech
-• Hébergement : Frankfurt (UE)
-• Stack : Next.js 14 + Supabase + Stripe + Vercel
-• Co-pilote : Claude (Anthropic)
+🛠️ Stack
+• Next.js 14 + Supabase + Stripe + Vercel + Resend
+• Pilotage : agents IA (sous supervision humaine)
+• Basé : Marseille
 
 Pourquoi je partage ça ?
 
-Parce que dans 12 mois, je veux pouvoir dire "voilà ce qu'on a fait".
+Parce que dans 6 mois, je veux pouvoir dire "voilà ce qu'une
+entreprise autonome a livré".
 Parce que les founders B2B en ont assez du vaporware.
 Parce que la transparence est mon principal avantage compétitif.
 
 Un commit. Une feature. Un client de plus.
 
-#BuildInPublic #BootstrapSaaS #Transparency
+#BuildInPublic #AutonomousCompany #Transparency
 ```
 
 ---
 
-## 🟦 Post #4 — Opinion forte (Lundi 9 juin)
+## 🟦 Post #4 — Bienvenue dans l'ère post-équipe (Lundi 9 juin)
 
 ```
-Hot take qui va déplaire :
+Hot take qui va faire grincer des dents :
 
-L'IA ne va PAS remplacer les founders.
-Elle va RÉCOMPENSER les bons founders.
+L'ère du "founder + équipe de 8" est en train de se terminer.
+Bienvenue dans l'ère post-équipe.
 
 Pourquoi ?
 
-Un founder médiocre + IA = un produit médiocre, juste plus vite.
-Un founder qui sait ce qu'il fait + IA = un produit redoutable.
+Parce que les fonctions qui constituaient une équipe SaaS
+(dev, ops, QA, refactor, migration, doc, monitoring) sont
+en train de devenir autonomisables. Pas demain — aujourd'hui.
 
-L'IA amplifie. Elle ne crée pas le jugement.
+J'en suis la preuve vivante :
+→ Volia : 4 modules SaaS B2B en prod
+→ 6 semaines de build V1
+→ 1 founder (moi) + 1000 agents IA
+→ 0 équipe technique salariée
+→ Clients payants à 149€/mois
 
-Ce qu'elle ne fait toujours pas (et ne fera pas demain) :
-→ Détecter un vrai pain point client
-→ Décider de killer une feature qui marche pas
-→ Sentir quand un prospect ment dans une démo
-→ Choisir entre 2 visions stratégiques contradictoires
-→ Construire de la confiance avec un client humain
+Ça ne veut PAS dire "0 humain". Je suis là.
+Je décide tout (produit, sales, vision, service client).
+Mais l'exécution technique — les 80% du coût d'un SaaS —
+est désormais autonomisée.
 
-Ce qu'elle fait redoutablement bien :
-→ Coder ce qu'on lui demande
-→ Refactorer 10000 lignes en 5 min
-→ Documenter
-→ Tester
-→ Proposer des architectures
+Ce que ça implique pour les founders :
 
-Le founder du futur n'est pas celui qui code le mieux.
-C'est celui qui décide le mieux.
+1. Le seuil de viabilité d'un SaaS bootstrap s'effondre.
+   Tu peux maintenant viser ce qui demandait une équipe.
 
-Et qui sait orchestrer ses agents IA.
+2. La vitesse change d'ordre de grandeur.
+   Pas x2, pas x5. x100 sur le delivery.
 
-C'est ce qu'on fait chez Volia. 12 mois, 4 modules, 0 levée.
+3. Le pricing peut baisser radicalement.
+   Sans équipe technique salariée, ton coût marginal s'effondre.
 
-#Founders #AI #ProductLeadership
+4. La transparence devient ton seul moat.
+   Si tout le monde peut autonomiser l'exécution,
+   ce qui te différencie c'est ce que tu OSES montrer.
+
+Ce que ça implique pour les jobs :
+→ Les jobs intermédiaires sans valeur ajoutée vont disparaître
+→ Les jobs de jugement (produit, sales, design, vision) explosent
+→ Le founder du futur orchestre 1000 agents, pas 10 employés
+
+Volia est juste la première entreprise SaaS autonome au monde
+à l'assumer publiquement. Il y en aura des centaines d'autres
+dans les 12 mois.
+
+Ce n'est pas un futur lointain.
+C'est aujourd'hui.
+
+→ volia.fr/notre-histoire
+
+#PostTeamEra #AutonomousCompany #AI #FutureOfWork
 ```
 
 ---
@@ -235,7 +276,7 @@ Un client m'écrit : "le CRM affiche les colonnes en bas, c'est illisible."
 Investigation : un sticky CSS mal configuré.
 Pattern Trello/Linear pas correctement implémenté.
 
-Avec Claude, on a :
+Avec les agents IA, on a :
 ✓ Reproduit le bug (2 min)
 ✓ Identifié le root cause (5 min)
 ✓ Proposé 3 solutions (5 min)
@@ -245,7 +286,7 @@ Avec Claude, on a :
 
 Total : 1h12. Client notifié. Bug corrigé.
 
-C'est ça la vélocité solo founder + IA agentique :
+C'est ça la vélocité d'une entreprise autonome :
 → Pas de stand-up à attendre
 → Pas de PR review à coordonner
 → Pas de Jira ticket à escalader
@@ -267,7 +308,7 @@ github.com/anthonymalartre-rubia/volia/commit/[HASH])
 ## 🟦 Post #7 — Storytelling before/after (Lundi 16 juin)
 
 ```
-🧵 La stack de prospection que j'avais il y a 12 mois :
+🧵 La stack de prospection que j'avais il y a 6 semaines :
 
 Outil 1 : Apollo ($49/mo) — Trouver des emails
 Outil 2 : Lemlist ($39/mo) — Envoyer les cold emails
@@ -280,17 +321,17 @@ Total : 237€/mois.
 Temps perdu en re-saisie : 8h/semaine.
 Données perdues entre outils : "incalculable" disait mon DAF.
 
-Le matin du 1er juin 2025, j'ai dit STOP.
+Le matin du 20 avril 2026, j'ai dit STOP.
 
 Pas de "faisons une étude de marché".
 Pas de "levons des fonds d'abord".
 Pas de "recrutons un CTO".
 
-J'ai pris mon Mac.
-J'ai ouvert Claude.
-J'ai commencé à coder Volia.
+J'ai pris mon Mac. À Marseille.
+J'ai ouvert mes agents IA.
+J'ai commencé à construire Volia.
 
-12 mois plus tard :
+6 semaines plus tard :
 4 modules. 1 abonnement. 0 Zapier.
 Volia Business : 149€/mois.
 
@@ -310,15 +351,15 @@ C'est ça que je vends maintenant comme founder.
 Vous aussi vous payez 6 outils qui ne se parlent pas ?
 DM ouvert pour en discuter.
 
-#BootstrapSaaS #SaaSStack #B2BTools
+#AutonomousCompany #SaaSStack #B2BTools
 ```
 
 ---
 
-## 🟦 Post #8 — Behind-the-scenes session Claude (Mercredi 18 juin)
+## 🟦 Post #8 — Behind-the-scenes session de coding (Mercredi 18 juin)
 
 ```
-Snapshot d'une session de coding avec Claude ce matin.
+Snapshot d'une session avec mes agents IA ce matin.
 
 Sujet : Ajouter un compteur de téléphones scrappés dans le widget 
 de quota utilisateur.
@@ -328,14 +369,14 @@ Mon prompt initial (3 lignes) :
 phones comme limite séparée. Migration DB + lib/usage.js + UsageBanner. 
 Cohérent avec les autres compteurs."
 
-Réponse Claude (résumée) :
+Réponse des agents (résumée) :
 1. Liste les fichiers concernés
 2. Propose 3 approches (col DB séparée vs metadata JSON vs derived)
 3. Recommande l'option 1 (cohérente avec l'existant)
 
 On discute 5 minutes. Je valide l'option 1.
 
-Claude exécute :
+L'exécution :
 ✓ Migration SQL générée
 ✓ usage.js mis à jour avec getTeamUsageSum
 ✓ UsageBanner.jsx + 2 widgets settings adaptés
@@ -344,18 +385,19 @@ Claude exécute :
 Je relis. Je teste. Je ship.
 
 Temps total : 1h30.
-Sans Claude : probablement 4-5h.
+Avec une équipe traditionnelle : probablement 2-3 jours
+(ticket Jira → spec → dev → review → merge → deploy).
 
 Mais le vrai gain ce n'est pas le temps.
 C'est que je peux faire ce genre de feature SEUL, vendredi soir, 
 sans recruter, sans déléguer, sans attendre.
 
-C'est la vélocité du solo founder + IA agentique.
+C'est la vélocité d'une entreprise autonome.
 
 Pour le client, ça veut dire : tu signales un besoin lundi, 
 c'est en prod mercredi.
 
-#AIAgents #BuildInPublic #SoloFounder
+#AIAgents #BuildInPublic #AutonomousCompany
 ```
 
 ---
@@ -363,27 +405,29 @@ c'est en prod mercredi.
 ## 🟦 Post #9 — Carrousel "5 leçons" (Vendredi 20 juin)
 
 ```
-🎠 5 leçons après 12 mois en mode "founder solo + IA"
+🎠 5 leçons après 6 semaines à piloter la première entreprise
+SaaS autonome au monde
 
 1️⃣ L'IA ne décide pas. Toi oui.
-Tu valides chaque ligne ou tu meurs en prod.
+Tu valides chaque release ou tu meurs en prod.
 
 2️⃣ La vitesse change l'économie du produit.
-Si tu shippes 5x plus vite, tu peux pricer 5x moins cher.
+Si tu shippes 100x plus vite, tu peux pricer 5x moins cher.
 
 3️⃣ La transparence devient ton moat.
 Personne d'autre n'ose montrer ses commits publics. Toi si.
 
 4️⃣ Le sales reste 100% humain.
-B2B = relation. Pas d'IA dans la conversation client.
+B2B = relation. Jamais d'IA dans la conversation client.
 
 5️⃣ Tu ne scales pas en headcount, tu scales en agents.
-Le founder du futur orchestre 10 agents, pas 10 employés.
+Le founder du futur orchestre 1000 agents, pas 10 employés.
 
-Si tu veux voir ce qu'un solo founder + IA peut bâtir en 12 mois :
+Si tu veux voir ce que la première entreprise SaaS autonome au
+monde a bâti en 6 semaines :
 → volia.fr
 
-#AI #Founders #Bootstrapped #BuildInPublic
+#AutonomousCompany #AI #PostTeamEra #BuildInPublic
 ```
 
 ---
@@ -391,7 +435,7 @@ Si tu veux voir ce qu'un solo founder + IA peut bâtir en 12 mois :
 ## 🟦 Post #10 — Provocateur (Lundi 23 juin)
 
 ```
-Faut-il avoir peur de l'IA agentique ?
+Faut-il avoir peur des entreprises autonomes ?
 
 Vrai débat. Vraies questions. Ma vraie position :
 
@@ -407,22 +451,23 @@ Vrai débat. Vraies questions. Ma vraie position :
 - Un commercial qui crée de la confiance
 - Une boîte qui produit de la valeur unique
 
-L'IA ne tue pas les emplois.
-Elle tue le travail médiocre.
+Les entreprises autonomes ne tuent pas les emplois.
+Elles tuent le travail médiocre.
 
 Comme l'électricité a tué le métier de "porteur de lanterne" 
 en 1880, l'IA va tuer les jobs intermédiaires sans valeur ajoutée.
 
-Mais elle va créer les "founders augmentés" :
-ceux qui orchestrent 10 agents IA pour bâtir ce qui demandait 
+Mais elle va créer une nouvelle catégorie d'entreprise :
+celles qui orchestrent 1000 agents IA pour bâtir ce qui demandait 
 avant une équipe de 50.
 
-C'est ce qu'on construit chez Volia. 12 mois, 4 modules, 1 founder.
+Volia est la première à l'assumer publiquement.
+6 semaines de build. 4 modules. 1 founder. Marseille.
 
 Ce n'est pas un futur lointain.
 C'est aujourd'hui.
 
-#AI #FutureOfWork #Founders
+#AutonomousCompany #FutureOfWork #PostTeamEra
 ```
 
 ---
@@ -444,6 +489,8 @@ C'est ça la promesse Volia :
 Quand tu nous dis qu'il manque quelque chose, 
 on l'ajoute pas dans 6 mois.
 On l'ajoute dans 6 jours. Parfois 6 heures.
+
+C'est ce que permet une entreprise autonome.
 
 Si tu utilises Volia, mes DM sont ouverts.
 Si tu utilises HubSpot+Apollo+Lemlist+Tally+Zapier (~270€/mois),
@@ -483,12 +530,14 @@ Roadmap juillet :
 - [FEATURE 2]
 - [FEATURE 3]
 
-Si tu veux voir Volia avant le mois prochain, c'est ici :
+Première entreprise SaaS autonome au monde, mois 2.
+On continue à prouver que l'ère post-équipe a commencé.
+
 → volia.fr
 
-Merci à ceux qui suivent l'aventure. On continue.
+Merci à ceux qui suivent l'aventure.
 
-#MonthlyRecap #BuildInPublic #Founders
+#MonthlyRecap #BuildInPublic #AutonomousCompany
 ```
 
 ---
@@ -530,7 +579,8 @@ Merci à ceux qui suivent l'aventure. On continue.
 - **Photo founder** : ajoute une photo perso au profil + bannière Volia
 - **Tagger les outils mentionnés** parfois aide la portée (HubSpot, Apollo) — risque d'attirer les haters concurrents par contre
 - **Commencer la cadence 2 juin** mais pré-écrire les 4 prochains posts d'avance pour ne pas être pris au dépourvu
+- **Garde-fou DGCCRF** : 1 fois par post max, rappelle discrètement que tu restes responsable produit + sales + service client. Ne dis jamais "0 humain" ou "100% autonome sans humain".
 
 ---
 
-**Dernière mise à jour** : 1er juin 2026 (Sprint nuit Claude)
+**Dernière mise à jour** : 1er juin 2026 (pivot narratif "entreprise autonome")

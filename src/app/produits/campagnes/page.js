@@ -50,7 +50,7 @@ export const metadata = {
   openGraph: {
     title: 'Volia Campagnes — Cold email B2B qui finit en Inbox, pas en Spam',
     description:
-      'Lemlist 39€. Instantly 30$. Volia Campagnes : inclus dans Pro à 49€. Warmup auto 28 jours + multi-tenant Resend + auto-create CRM depuis replies.',
+      'Lemlist 39€. Instantly 30$. Volia Campagnes : inclus dans la suite Business à 149€. Warmup auto 28 jours + multi-tenant Resend + auto-create CRM depuis replies.',
     url: PAGE_URL,
     type: 'website',
   },
@@ -331,7 +331,7 @@ function ComparisonTableSection() {
         <MotionInView delay={300}>
           <div className="mt-10 text-center">
             <a
-              href="/signup?plan=pro"
+              href="/signup?plan=business"
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Zap size={18} className="text-amber-200" />
@@ -568,13 +568,13 @@ function PricingFocusSection() {
     {
       name: 'Solo', price: '19 €', tag: 'Pour tester',
       desc: '500 emails/mois, 1 domaine, warmup inclus.',
-      cta: 'Démarrer', href: '/signup?plan=solo',
+      cta: 'Démarrer', href: '/signup?plan=business',
       featured: false,
     },
     {
       name: 'Pro', price: '49 €', tag: 'Recommandé',
       desc: 'Cold email illimité, multi-inbox, tracking, templates FR.',
-      cta: 'Choisir Pro', href: '/signup?plan=pro',
+      cta: 'Choisir Pro', href: '/signup?plan=business',
       featured: true,
       bullets: ['Cold email illimité', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Tracking opens / clicks'],
     },
@@ -818,7 +818,7 @@ export default function CampagnesProductPage() {
               Lemlist 39 €. Instantly 30 $. <strong className="text-content-primary font-semibold">Volia Campagnes : inclus dans Pro à 49 €</strong>. Warmup auto 28 jours + multi-inbox + <strong className="text-emerald-700 font-semibold">auto-create CRM depuis les replies</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=pro' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=business' },
           ctaSecondary: { label: 'Voir une démo en direct', href: '#demo' },
           trust: [
             (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Warmup 28 jours auto</>),
@@ -861,7 +861,7 @@ export default function CampagnesProductPage() {
         finalCta={{
           title: 'Du cold email qui marche, au prix d\'un café.',
           subtitle: 'Stack divisé par 3, deliverability ×2. Templates prêts, warmup auto, replies qui atterrissent dans le CRM — vous appuyez sur Play.',
-          primary: { label: 'Commencer gratuitement', href: '/signup?plan=pro' },
+          primary: { label: 'Commencer gratuitement', href: '/signup?plan=business' },
           secondary: { label: 'Voir une démo live', href: '#demo' },
           trust: 'Inclus dans Pro · 14 jours d\'essai · Migration Lemlist offerte · RGPD by default',
         }}

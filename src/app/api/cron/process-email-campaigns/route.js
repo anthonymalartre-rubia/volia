@@ -540,7 +540,11 @@ async function handleCron(request) {
           return acc;
         }, {});
         emitWebhookEvent({
-          userId: completedCampaign.user_id,
+          // Bug fix audit 1er juin 2026 : avant on lisait completedCampaign.user_id
+          // qui n'existe pas (la colonne est owner_id, cf. ligne 532 et le check
+          // juste au-dessus). Tous les webhooks 'campaign.completed' partaient
+          // avec userId=undefined et étaient silently dropped côté emitter.
+          userId: completedCampaign.owner_id,
           event: 'campaign.completed',
           data: {
             campaign_id: completedCampaign.id,

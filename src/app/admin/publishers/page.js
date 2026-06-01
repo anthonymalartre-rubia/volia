@@ -8,7 +8,7 @@
 // + un webhook URL si on veut plug Make/Zapier en parallèle.
 //
 // UX :
-//   - 1 card par platform (LinkedIn, Webhook). Twitter = placeholder
+//   - 1 card par platform (LinkedIn, Webhook). Bird = placeholder
 //     ($100/mo API v2 reporté).
 //   - Bouton "Tester la connexion" → appelle /v2/me + récupère le
 //     person_urn auto pour LinkedIn.
@@ -23,7 +23,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Linkedin, Webhook, Twitter, AlertCircle, CheckCircle2, Loader2,
+  Briefcase, Webhook, Bird, AlertCircle, CheckCircle2, Loader2,
   TestTube, Save, ExternalLink, Power, PowerOff, RefreshCw, Eye, EyeOff,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
@@ -31,7 +31,7 @@ import { getSupabase } from '@/lib/supabase';
 const PLATFORM_META = {
   linkedin: {
     label: 'LinkedIn',
-    icon: Linkedin,
+    icon: Briefcase,
     color: 'text-[#0077b5]',
     bg: 'bg-[#0077b5]/10',
     border: 'border-[#0077b5]/30',
@@ -56,14 +56,14 @@ const PLATFORM_META = {
     docs: 'Volia POST le payload { platform, text, source, action_id, metadata } sur cette URL. Réponse 2xx attendue.',
   },
   twitter: {
-    label: 'X / Twitter',
-    icon: Twitter,
+    label: 'X / Bird',
+    icon: Bird,
     color: 'text-[#1da1f2]',
     bg: 'bg-[#1da1f2]/10',
     border: 'border-[#1da1f2]/30',
     fields: [],
     disabled: true,
-    docs: 'API v2 Twitter = 100$/mo (Basic tier). Reporté. En attendant, le founder copie-colle manuellement le tweet depuis /admin/auto-queue.',
+    docs: 'API v2 Bird = 100$/mo (Basic tier). Reporté. En attendant, le founder copie-colle manuellement le tweet depuis /admin/auto-queue.',
   },
 };
 

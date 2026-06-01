@@ -297,6 +297,11 @@ export async function POST(request) {
           .update({
             plan: 'free',
             stripe_subscription_id: null,
+            // Marketing Compound Phase 4 — déclenche séquence reactivation J+30/60/90
+            churned_at: new Date().toISOString(),
+            reactivation_step_1_sent_at: null,
+            reactivation_step_2_sent_at: null,
+            reactivation_step_3_sent_at: null,
             updated_at: new Date().toISOString(),
           })
           .eq('id', userId);

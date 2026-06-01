@@ -16,6 +16,7 @@ import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
   Copy, Check, Briefcase, Bird, Zap, Upload, Bug, ScrollText, BookOpen, Mail,
+  Wrench,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
@@ -457,6 +458,20 @@ export default function AutoQueuePage() {
                 <Mail size={12} />
               )}
               Brouillon newsletter
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTrigger('auto-fix-bugs')}
+              disabled={triggering !== null || !autonomyEnabled}
+              title={!autonomyEnabled ? 'Autonomy OFF — activer AUTONOMOUS_MODE_ENABLED' : 'Pour chaque issue GitHub volia-autonomy : Claude propose un patch + crée PR draft'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-600 text-white hover:bg-orange-500 text-xs font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {triggering === 'auto-fix-bugs' ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Wrench size={12} />
+              )}
+              Auto-fix bugs (PR Claude)
             </button>
           </div>
 

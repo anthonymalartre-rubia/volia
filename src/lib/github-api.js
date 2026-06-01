@@ -67,6 +67,206 @@ export async function createGithubIssue({ title, body, labels = [], assignees = 
 }
 
 /**
+ * Récupère le contenu d'un fichier depuis un branch GitHub.
+ * Retourne { content, sha, encoding } — sha nécessaire pour update ensuite.
+ */
+export async function getFileContent({ path, branch = 'main' }) {
+  const { token, repo } = getRepoConfig();
+  if (!token) return { ok: false, error: 'GITHUB_TOKEN non configuré' };
+
+  try {
+    const res = await fetch(
+      `${GITHUB_API_BASE}/repos/${repo}/contents/${encodeURIComponent(path)}?ref=${branch}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      }
+    );
+    if (!res.ok) {
+      const body = await res.text();
+      return { ok: false, error: `GitHub /contents ${res.status} : ${body.slice(0, 200)}` };
+    }
+    const data = await res.json();
+    const decoded = data.encoding === 'base64'
+      ? Buffer.from(data.content, 'base64').toString('utf-8')
+      : data.content;
+    return {
+      ok: true,
+      content: decoded,
+      sha: data.sha,
+      path: data.path,
+      size: data.size,
+      encoding: data.encoding,
+    };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
+ * Crée une nouvelle branche à partir d'une branche source.
+ */
+export async function createBranch({ name, fromBranch = 'main' }) {
+  const { token, repo } = getRepoConfig();
+  if (!token) return { ok: false, error: 'GITHUB_TOKEN non configuré' };
+
+  try {
+    // 1. Récupère le SHA du HEAD de fromBranch
+    const refRes = await fetch(
+      `${GITHUB_API_BASE}/repos/${repo}/git/refs/heads/${fromBranch}`,
+      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
+    );
+    if (!refRes.ok) {
+      return { ok: false, error: `GitHub /git/refs/heads/${fromBranch} ${refRes.status}` };
+    }
+    const refData = await refRes.json();
+    const baseSha = refData.object.sha;
+
+    // 2. Crée la nouvelle branche
+    const createRes = await fetch(`${GITHUB_API_BASE}/repos/${repo}/git/refs`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ref: `refs/heads/${name}`,
+        sha: baseSha,
+      }),
+    });
+    if (!createRes.ok) {
+      const body = await createRes.text();
+      return { ok: false, error: `GitHub /git/refs POST ${createRes.status} : ${body.slice(0, 200)}` };
+    }
+    return { ok: true, branch: name, base_sha: baseSha };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
+ * Update le contenu d'un fichier sur une branche (commit).
+ * Nécessite le SHA actuel du fichier (récupéré via getFileContent).
+ */
+export async function updateFileContent({ path, content, branch, message, sha }) {
+  const { token, repo } = getRepoConfig();
+  if (!token) return { ok: false, error: 'GITHUB_TOKEN non configuré' };
+
+  try {
+    const res = await fetch(
+      `${GITHUB_API_BASE}/repos/${repo}/contents/${encodeURIComponent(path)}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message || `chore(auto-fix): update ${path}`,
+          content: Buffer.from(content, 'utf-8').toString('base64'),
+          sha,
+          branch,
+        }),
+      }
+    );
+    if (!res.ok) {
+      const body = await res.text();
+      return { ok: false, error: `GitHub /contents PUT ${res.status} : ${body.slice(0, 200)}` };
+    }
+    const data = await res.json();
+    return { ok: true, commit_sha: data.commit?.sha, commit_url: data.commit?.html_url };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
+ * Crée une Pull Request (draft par défaut).
+ */
+export async function createPullRequest({
+  head,
+  base = 'main',
+  title,
+  body,
+  draft = true,
+}) {
+  const { token, repo } = getRepoConfig();
+  if (!token) return { ok: false, error: 'GITHUB_TOKEN non configuré' };
+
+  try {
+    const res = await fetch(`${GITHUB_API_BASE}/repos/${repo}/pulls`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ head, base, title, body, draft }),
+    });
+    if (!res.ok) {
+      const errBody = await res.text();
+      return { ok: false, error: `GitHub /pulls POST ${res.status} : ${errBody.slice(0, 300)}` };
+    }
+    const data = await res.json();
+    return {
+      ok: true,
+      number: data.number,
+      html_url: data.html_url,
+      head_sha: data.head?.sha,
+      state: data.state,
+    };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
+ * Liste les issues open avec un label donné — utilisé par auto-fix-bugs
+ * pour trouver les issues volia-autonomy à fixer.
+ */
+export async function listOpenIssuesWithLabel({ label = 'volia-autonomy', perPage = 20 } = {}) {
+  const { token, repo } = getRepoConfig();
+  if (!token) return { ok: false, error: 'GITHUB_TOKEN non configuré' };
+
+  try {
+    const params = new URLSearchParams({
+      state: 'open',
+      labels: label,
+      per_page: String(perPage),
+      sort: 'created',
+      direction: 'desc',
+    });
+    const res = await fetch(`${GITHUB_API_BASE}/repos/${repo}/issues?${params}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+    });
+    if (!res.ok) return { ok: false, error: `GitHub /issues GET ${res.status}` };
+    const issues = await res.json();
+    return {
+      ok: true,
+      issues: issues.map((i) => ({
+        number: i.number,
+        title: i.title,
+        body: i.body || '',
+        html_url: i.html_url,
+        labels: i.labels.map((l) => l.name),
+        created_at: i.created_at,
+      })),
+    };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+/**
  * Liste les N derniers commits sur la branche main (pour changelog auto).
  *
  * @param {object} opts

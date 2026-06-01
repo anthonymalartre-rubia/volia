@@ -22,6 +22,7 @@ import { runChangelogProposer } from '@/lib/changelog-proposer';
 import { runBlogWriter } from '@/lib/blog-writer';
 import { runNewsletterProposer } from '@/lib/newsletter-generator';
 import { runReactivationChurners } from '@/lib/reactivation';
+import { runAutoFixBugs } from '@/lib/auto-fix-bugs';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
@@ -31,6 +32,7 @@ const CRONS = {
   'auto-blog-writer': runBlogWriter,
   'newsletter-proposer': runNewsletterProposer,
   'reactivation-churners': runReactivationChurners,
+  'auto-fix-bugs': runAutoFixBugs,
 };
 
 async function requireAdmin() {

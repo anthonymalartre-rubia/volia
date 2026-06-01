@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
-  Copy, Check, Briefcase, Bird, Zap, Upload,
+  Copy, Check, Briefcase, Bird, Zap, Upload, Bug,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
@@ -401,6 +401,20 @@ export default function AutoQueuePage() {
                 <Upload size={12} />
               )}
               Publier les approuvés maintenant
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTrigger('sentry-digest')}
+              disabled={triggering !== null || !autonomyEnabled}
+              title={!autonomyEnabled ? 'Autonomy OFF — activer AUTONOMOUS_MODE_ENABLED' : 'Lit Sentry top erreurs 7j + propose issues GitHub'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-500 text-xs font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {triggering === 'sentry-digest' ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Bug size={12} />
+              )}
+              Détecter bugs Sentry maintenant
             </button>
           </div>
 

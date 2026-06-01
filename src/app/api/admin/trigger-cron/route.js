@@ -17,10 +17,12 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { runContentProposer } from '@/lib/content-proposer';
 import { runPublishApprovedActions } from '@/lib/publish-actions';
+import { runSentryDigest } from '@/lib/sentry-digest';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
+  'sentry-digest': runSentryDigest,
 };
 
 async function requireAdmin() {

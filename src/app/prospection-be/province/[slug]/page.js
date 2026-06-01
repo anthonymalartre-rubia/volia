@@ -11,6 +11,12 @@ export async function generateStaticParams() {
   return getAllProvincesBE().map((p) => ({ slug: p.slug }));
 }
 
+// [1er juin 2026] noindex + follow appliqué (cf. Option C SEO).
+// Cette route programmatique tail-of-tail (overview province BE) génère
+// trop de pages à valeur SEO faible vs Google's quality threshold —
+// GSC les classait "Explorée actuellement non indexée" pour 2 630 URLs.
+// On garde follow: true pour préserver la transmission PageRank vers
+// les pages core (hubs + catégories) qui restent indexables.
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const province = getProvinceBySlugBE(slug);
@@ -22,6 +28,7 @@ export async function generateMetadata({ params }) {
     description,
     alternates: { canonical: `${SITE_URL}/prospection-be/province/${slug}` },
     openGraph: { title, description, url: `${SITE_URL}/prospection-be/province/${slug}` },
+    robots: { index: false, follow: true },
   };
 }
 

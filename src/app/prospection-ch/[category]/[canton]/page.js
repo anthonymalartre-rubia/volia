@@ -28,6 +28,12 @@ export async function generateStaticParams() {
   return params; // 11 × 6 = 66 prebuilt
 }
 
+// [1er juin 2026] noindex + follow appliqué (cf. Option C SEO).
+// Cette route programmatique tail-of-tail (catégorie × canton CH) génère
+// trop de pages à valeur SEO faible vs Google's quality threshold —
+// GSC les classait "Explorée actuellement non indexée" pour 2 630 URLs.
+// On garde follow: true pour préserver la transmission PageRank vers
+// les pages core (hubs + catégories) qui restent indexables.
 export async function generateMetadata({ params }) {
   const { category: catSlug, canton: cantonSlug } = await params;
   const category = getCategoryBySlug(catSlug);
@@ -40,6 +46,7 @@ export async function generateMetadata({ params }) {
     description,
     alternates: { canonical: `${SITE_URL}/prospection-ch/${catSlug}/${cantonSlug}` },
     openGraph: { title, description, url: `${SITE_URL}/prospection-ch/${catSlug}/${cantonSlug}` },
+    robots: { index: false, follow: true },
   };
 }
 

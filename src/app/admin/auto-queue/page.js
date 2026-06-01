@@ -15,10 +15,87 @@ import { useRouter } from 'next/navigation';
 import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
+  Copy, Check, Linkedin, Twitter,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
 // déjà une (cf. bug TopBar dupliquée corrigé 1er juin 2026).
+
+// ─────────────────────────────────────────────────────────────────────
+// SocialPostPreview — rendu dédié pour brouillons LinkedIn + X
+// ─────────────────────────────────────────────────────────────────────
+function SocialPostPreview({ payload }) {
+  const [copiedKey, setCopiedKey] = useState(null);
+
+  function copy(text, key) {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) return;
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    });
+  }
+
+  const linkedinLen = (payload.linkedin || '').length;
+  const twitterLen = (payload.twitter || '').length;
+
+  return (
+    <div className="mb-3 space-y-2">
+      {/* Tabs LinkedIn / Twitter */}
+      <div className="rounded-lg border border-line bg-surface-elevated p-3">
+        <div className="flex items-center justify-between mb-2">
+          <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-content-secondary">
+            <Linkedin size={14} className="text-[#0077b5]" />
+            LinkedIn
+            <span className="text-content-tertiary font-normal">· {linkedinLen} car.</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => copy(payload.linkedin, 'linkedin')}
+            className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-line bg-white hover:bg-violet-50 hover:border-violet-300 text-[11px] font-semibold text-content-primary transition"
+          >
+            {copiedKey === 'linkedin' ? <Check size={11} className="text-emerald-600" /> : <Copy size={11} />}
+            {copiedKey === 'linkedin' ? 'Copié' : 'Copier'}
+          </button>
+        </div>
+        <p className="text-sm text-content-primary whitespace-pre-wrap break-words leading-relaxed">
+          {payload.linkedin}
+        </p>
+      </div>
+
+      {payload.twitter && (
+        <div className="rounded-lg border border-line bg-surface-elevated p-3">
+          <div className="flex items-center justify-between mb-2">
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-content-secondary">
+              <Twitter size={14} className="text-[#1da1f2]" />
+              X / Twitter
+              <span className={`font-normal ${twitterLen > 280 ? 'text-rose-600' : 'text-content-tertiary'}`}>
+                · {twitterLen}/280
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => copy(payload.twitter, 'twitter')}
+              className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md border border-line bg-white hover:bg-violet-50 hover:border-violet-300 text-[11px] font-semibold text-content-primary transition"
+            >
+              {copiedKey === 'twitter' ? <Check size={11} className="text-emerald-600" /> : <Copy size={11} />}
+              {copiedKey === 'twitter' ? 'Copié' : 'Copier'}
+            </button>
+          </div>
+          <p className="text-sm text-content-primary whitespace-pre-wrap break-words leading-relaxed">
+            {payload.twitter}
+          </p>
+        </div>
+      )}
+
+      {payload.main_topic && (
+        <p className="text-[11px] text-content-tertiary">
+          Sujet : <span className="font-mono">{payload.main_topic}</span>
+          {payload.model && <span className="ml-2">· Modèle : <span className="font-mono">{payload.model}</span></span>}
+        </p>
+      )}
+    </div>
+  );
+}
 
 const RISK_BADGES = {
   low: { label: 'Low', cls: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
@@ -281,8 +358,13 @@ export default function AutoQueuePage() {
                       </div>
                     </div>
 
-                    {/* Preview */}
-                    {action.preview && (
+                    {/* Social post drafts (linkedin_post) : affichage dédié + boutons Copier */}
+                    {action.action_type === 'linkedin_post' && action.payload?.linkedin && (
+                      <SocialPostPreview payload={action.payload} />
+                    )}
+
+                    {/* Preview standard (sauf si déjà couvert par SocialPostPreview ci-dessus) */}
+                    {action.preview && action.action_type !== 'linkedin_post' && (
                       <div className="mb-3 p-3 rounded-lg bg-surface-elevated border border-line">
                         <p className="text-xs uppercase tracking-wider text-content-muted font-semibold mb-1">
                           Aperçu

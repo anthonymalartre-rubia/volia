@@ -127,7 +127,7 @@ Ce repositioning est appliqué partout :
 ### Aujourd'hui (priorité)
 - [ ] Éditer placeholders TODO dans `/notre-histoire` + `/presse` (chiffres MRR, clients)
 - [ ] Remplacer photos SVG placeholder par tes vraies photos HD (3 formats)
-- [ ] Créer `presse@volia.fr` forward vers `anthony@volia.fr`
+- [ ] Créer `contact@volia.fr` forward vers `anthony@volia.fr`
 - [ ] Programmer Post #1 LinkedIn (lundi 2 juin 8h)
 - [ ] Envoyer **UN** email outreach ultra-perso à un journaliste Tier 1
 

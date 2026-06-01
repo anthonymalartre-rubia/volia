@@ -163,9 +163,14 @@ function HeroSection() {
           </p>
 
           <div className="flex flex-wrap gap-3">
+            {/* [1er juin 2026] Pivot : on n'a pas de PDF pré-généré côté
+                serveur (Puppeteer trop lourd pour Vercel free tier — cf.
+                /api/ressources/[slug]/pdf désactivé). À la place, la page
+                /presse/kit est rendue en HTML print-optimized + bouton
+                window.print() qui génère le PDF nativement via le browser.
+                Le journaliste peut sauvegarder en PDF OU imprimer sur papier. */}
             <a
-              href="/presse/volia-press-kit.pdf"
-              download
+              href="/presse/kit"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-violet-500/30 hover:shadow-violet-500/40 transition-all"
             >
               <Download size={16} />

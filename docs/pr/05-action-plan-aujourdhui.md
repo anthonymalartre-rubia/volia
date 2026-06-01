@@ -44,7 +44,7 @@ Recherche dans `src/app/presse/PresseClientPage.jsx` :
 ## ⏰ Heure 3 : Communication & social setup (1h)
 
 ### Email presse
-- [ ] Créer `presse@volia.fr` (forward vers anthony@) sur Infomaniak
+- [ ] Créer `contact@volia.fr` (forward vers anthony@) sur Infomaniak
 - [ ] Tester que ça fonctionne
 
 ### LinkedIn préparation

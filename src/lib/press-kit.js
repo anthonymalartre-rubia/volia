@@ -330,7 +330,7 @@ export const PRESS_RELEASES = [
 
 // ─── PRESS_CONTACT — informations contact presse ──────────────────────
 export const PRESS_CONTACT = {
-  email: 'presse@volia.fr',
+  email: 'contact@volia.fr',
   phone: '+33 (0)X XX XX XX XX', // TODO: numéro presse dédié
   responseTime: '< 24h',
   founderEmail: 'anthony@volia.fr',

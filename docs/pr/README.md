@@ -15,7 +15,7 @@
 4. Vérifie les emails des journalistes Tier 1 dans [`01-liste-journalistes.md`](./01-liste-journalistes.md)
 5. Personnalise 5 emails outreach (cf. [`03-templates-email-outreach.md`](./03-templates-email-outreach.md))
 6. Programme ton 1er post LinkedIn (lundi 2 juin) depuis [`04-posts-linkedin-30-jours.md`](./04-posts-linkedin-30-jours.md)
-7. Crée l'email dédié `presse@volia.fr` (forward vers anthony@)
+7. Crée l'email dédié `contact@volia.fr` (forward vers anthony@)
 
 ### Cette semaine + 1
 8. Choisis 1 communiqué dans [`02-communique-presse.md`](./02-communique-presse.md) à finaliser

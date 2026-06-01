@@ -51,7 +51,7 @@ Volia est éditée à Marseille par Anthony Malartre. Première entreprise SaaS 
 
 ## Contact presse
 
-- **Email** : presse@volia.fr
+- **Email** : contact@volia.fr
 - **Founder direct** : anthony@volia.fr
 - **Dossier de presse** : volia.fr/presse
 - **Notre histoire** : volia.fr/notre-histoire
@@ -120,7 +120,7 @@ Volia (volia.fr) est éditée à Marseille par Anthony Malartre. Première entre
 
 ## Contact presse
 
-- **Email** : presse@volia.fr
+- **Email** : contact@volia.fr
 - **Founder** : anthony@volia.fr
 - **Dossier de presse** : volia.fr/presse
 
@@ -194,7 +194,7 @@ Volia est éditée à Marseille par Anthony Malartre. Première entreprise SaaS 
 
 ## Contact presse
 
-- **Email** : presse@volia.fr
+- **Email** : contact@volia.fr
 - **Founder direct** : anthony@volia.fr
 - **GitHub public** : github.com/anthonymalartre-rubia/volia
 - **Changelog public** : volia.fr/changelog

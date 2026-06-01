@@ -227,6 +227,8 @@ export default function AutoQueuePage() {
             <a href="/admin" className="hover:text-violet-700 transition">Admin</a>
             <span>·</span>
             <span className="text-content-primary font-medium">Auto-queue</span>
+            <span className="mx-2">·</span>
+            <a href="/admin/publishers" className="hover:text-violet-700 transition">Publishers</a>
           </nav>
 
           <div className="flex items-start justify-between gap-4 flex-wrap">

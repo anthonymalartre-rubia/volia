@@ -61,6 +61,35 @@ export async function runPublishApprovedActions() {
   const results = [];
   for (const action of actions) {
     try {
+      // Dispatch par action_type
+      if (action.action_type === 'github_issue_create') {
+        const { title, body, labels } = action.payload || {};
+        if (!title || !body) {
+          await markActionFailed(action.id, 'payload.title ou payload.body absent');
+          results.push({ id: action.id, ok: false, error: 'missing_issue_fields' });
+          continue;
+        }
+        const ghResult = await createGithubIssue({ title, body, labels });
+        if (ghResult.ok) {
+          await markActionExecuted(action.id, {
+            github: {
+              issue_url: ghResult.html_url,
+              issue_number: ghResult.number,
+              created_at: new Date().toISOString(),
+            },
+            sentry_id: action.payload?.sentry_id || null,
+          });
+          results.push({ id: action.id, ok: true, url: ghResult.html_url, type: 'github_issue' });
+          console.log(`[publish-approved] GitHub issue OK → ${ghResult.html_url}`);
+        } else {
+          await markActionFailed(action.id, (ghResult.error || 'unknown').slice(0, 500));
+          results.push({ id: action.id, ok: false, error: ghResult.error });
+          console.error(`[publish-approved] GitHub issue FAILED : ${ghResult.error}`);
+        }
+        continue; // pass to next action
+      }
+
+      // Default : action_type === 'linkedin_post'
       const linkedinText = action.payload?.linkedin;
       if (!linkedinText) {
         await markActionFailed(action.id, 'payload.linkedin absent');

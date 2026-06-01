@@ -20,7 +20,12 @@ import { sendEmail } from './email';
 import { markdownToBasicHtml } from './faq-reply-drafter';
 
 const MAX_PER_RUN = 5;
-const ELIGIBLE_ACTION_TYPES = ['linkedin_post', 'github_issue_create', 'faq_reply_proposal'];
+const ELIGIBLE_ACTION_TYPES = [
+  'linkedin_post',
+  'github_issue_create',
+  'faq_reply_proposal',
+  'changelog_entry',
+];
 
 /**
  * Pioche jusqu'à 5 actions approuvées non-publiées, publie sur LinkedIn,
@@ -65,6 +70,73 @@ export async function runPublishApprovedActions() {
   for (const action of actions) {
     try {
       // Dispatch par action_type
+
+      // ─── changelog_entry : INSERT dans auto_changelog_proposals + update last_sha
+      if (action.action_type === 'changelog_entry') {
+        const supabase = getSupabaseAdmin();
+        const {
+          entry_date,
+          version,
+          title,
+          items,
+          source_commits,
+          newest_commit_sha,
+        } = action.payload || {};
+
+        if (!entry_date || !title || !Array.isArray(items) || items.length === 0) {
+          await markActionFailed(action.id, 'payload incomplet (entry_date, title, items requis)');
+          results.push({ id: action.id, ok: false, error: 'missing_changelog_fields' });
+          continue;
+        }
+
+        try {
+          const { data: inserted, error: insertErr } = await supabase
+            .from('auto_changelog_proposals')
+            .insert({
+              entry_date,
+              version,
+              title,
+              items,
+              source_commits: source_commits || [],
+              source_action_id: action.id,
+              status: 'published',
+              published_at: new Date().toISOString(),
+            })
+            .select('id')
+            .single();
+          if (insertErr) throw new Error(insertErr.message);
+
+          // Update last_changelog_commit_sha pour ne pas re-processer ces commits
+          if (newest_commit_sha) {
+            await supabase
+              .from('app_settings')
+              .update({
+                value: newest_commit_sha,
+                notes: `Mis à jour le ${new Date().toLocaleString('fr-FR')} après publication changelog v${version}`,
+                updated_by: 'cron/publish-approved-actions',
+              })
+              .eq('key', 'last_changelog_commit_sha');
+          }
+
+          await markActionExecuted(action.id, {
+            changelog: {
+              entry_id: inserted.id,
+              version,
+              title,
+              published_at: new Date().toISOString(),
+              public_url: 'https://volia.fr/changelog',
+            },
+          });
+          results.push({ id: action.id, ok: true, url: 'https://volia.fr/changelog', type: 'changelog' });
+          console.log(`[publish-approved] Changelog v${version} OK → /changelog`);
+        } catch (err) {
+          const errMsg = err.message || String(err);
+          await markActionFailed(action.id, errMsg.slice(0, 500));
+          results.push({ id: action.id, ok: false, error: errMsg });
+          console.error(`[publish-approved] Changelog FAILED : ${errMsg}`);
+        }
+        continue;
+      }
 
       // ─── faq_reply_proposal : envoie email réponse via Resend
       if (action.action_type === 'faq_reply_proposal') {

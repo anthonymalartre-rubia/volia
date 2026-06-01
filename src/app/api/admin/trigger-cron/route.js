@@ -18,11 +18,13 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { runContentProposer } from '@/lib/content-proposer';
 import { runPublishApprovedActions } from '@/lib/publish-actions';
 import { runSentryDigest } from '@/lib/sentry-digest';
+import { runChangelogProposer } from '@/lib/changelog-proposer';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
   'sentry-digest': runSentryDigest,
+  'auto-changelog-proposer': runChangelogProposer,
 };
 
 async function requireAdmin() {

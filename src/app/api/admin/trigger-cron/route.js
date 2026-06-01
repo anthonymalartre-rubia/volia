@@ -23,6 +23,8 @@ import { runBlogWriter } from '@/lib/blog-writer';
 import { runNewsletterProposer } from '@/lib/newsletter-generator';
 import { runReactivationChurners } from '@/lib/reactivation';
 import { runAutoFixBugs } from '@/lib/auto-fix-bugs';
+import { rebuildAllLeadScores } from '@/lib/lead-scoring';
+import { runTrialRelance } from '@/lib/trial-relance';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
@@ -33,6 +35,8 @@ const CRONS = {
   'newsletter-proposer': runNewsletterProposer,
   'reactivation-churners': runReactivationChurners,
   'auto-fix-bugs': runAutoFixBugs,
+  'lead-scoring': rebuildAllLeadScores,
+  'trial-relance': runTrialRelance,
 };
 
 async function requireAdmin() {

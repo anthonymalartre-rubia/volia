@@ -140,6 +140,14 @@
     {
       "path": "/api/cron/auto-fix-bugs",
       "schedule": "0 11 * * 5"
+    },
+    {
+      "path": "/api/cron/lead-scoring",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/trial-relance",
+      "schedule": "0 9 * * *"
     }
   ]
 }

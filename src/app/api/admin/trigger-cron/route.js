@@ -25,6 +25,7 @@ import { runReactivationChurners } from '@/lib/reactivation';
 import { runAutoFixBugs } from '@/lib/auto-fix-bugs';
 import { rebuildAllLeadScores } from '@/lib/lead-scoring';
 import { runTrialRelance } from '@/lib/trial-relance';
+import { runDogfoodOutreach } from '@/lib/dogfood-outreach';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
@@ -37,6 +38,7 @@ const CRONS = {
   'auto-fix-bugs': runAutoFixBugs,
   'lead-scoring': rebuildAllLeadScores,
   'trial-relance': runTrialRelance,
+  'dogfood-outreach': runDogfoodOutreach,
 };
 
 async function requireAdmin() {

@@ -148,6 +148,10 @@
     {
       "path": "/api/cron/trial-relance",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/dogfood-outreach",
+      "schedule": "0 14 * * 1"
     }
   ]
 }

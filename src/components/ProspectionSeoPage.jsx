@@ -17,6 +17,7 @@ import {
   DeptContextBlock, RegionContextBlock, DeptOverviewBlock, SiblingCitiesBlock,
   SocialProofBlock, CompetitorInlineBlock, AuthoritiesBlock,
   TrustBadgesBlock, DemoCtaBlock, SamplePreviewBlock, DensityChartBlock,
+  InseeStatsBlock, FlagshipCompaniesBlock,
 } from './ProspectionContentBlocks';
 import { LeadMagnetBlock, StickyCtaBar, StickyTOC } from './ProspectionClientBlocks';
 
@@ -245,6 +246,16 @@ export default function ProspectionSeoPage({
         {/* Context géo (uniquement sur les pages avec catégorie + dept ou region) */}
         {category && <DeptContextBlock deptData={deptData} dept={department} category={category} />}
         {category && <RegionContextBlock regionData={regionData} region={region} category={category} />}
+
+        {/* Stats INSEE 2024 + entreprises emblématiques (seulement si on a un dept).
+            E-E-A-T boost : chiffres vérifiables + sourcing transparent.
+            Skipped automatiquement sur pages cat-only ou pages sans deptData. */}
+        {deptData && department && (
+          <>
+            <InseeStatsBlock deptData={deptData} dept={department} />
+            <FlagshipCompaniesBlock deptData={deptData} dept={department} category={category} />
+          </>
+        )}
 
         {/* KPIs sectoriels */}
         <div id="chiffres-cles" className="scroll-mt-24">

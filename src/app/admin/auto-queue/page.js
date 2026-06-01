@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
-  Copy, Check, Briefcase, Bird, Zap, Upload, Bug, ScrollText,
+  Copy, Check, Briefcase, Bird, Zap, Upload, Bug, ScrollText, BookOpen,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
@@ -429,6 +429,20 @@ export default function AutoQueuePage() {
                 <ScrollText size={12} />
               )}
               Proposer entrée changelog
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTrigger('auto-blog-writer')}
+              disabled={triggering !== null || !autonomyEnabled}
+              title={!autonomyEnabled ? 'Autonomy OFF — activer AUTONOMOUS_MODE_ENABLED' : 'Claude rédige un article SEO long-form (~1500 mots) basé sur la rotation des angles'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-teal-600 text-white hover:bg-teal-500 text-xs font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {triggering === 'auto-blog-writer' ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <BookOpen size={12} />
+              )}
+              Rédiger article blog
             </button>
           </div>
 

@@ -25,6 +25,7 @@ const ELIGIBLE_ACTION_TYPES = [
   'github_issue_create',
   'faq_reply_proposal',
   'changelog_entry',
+  'blog_post_draft',
 ];
 
 /**
@@ -70,6 +71,71 @@ export async function runPublishApprovedActions() {
   for (const action of actions) {
     try {
       // Dispatch par action_type
+
+      // ─── blog_post_draft : INSERT dans auto_blog_posts (status='published')
+      if (action.action_type === 'blog_post_draft') {
+        const supabase = getSupabaseAdmin();
+        const {
+          slug,
+          title,
+          description,
+          category,
+          keywords,
+          tldr,
+          excerpt,
+          content_markdown,
+          word_count,
+          estimated_read_minutes,
+        } = action.payload || {};
+
+        if (!slug || !title || !content_markdown) {
+          await markActionFailed(action.id, 'payload incomplet (slug, title, content_markdown requis)');
+          results.push({ id: action.id, ok: false, error: 'missing_blog_fields' });
+          continue;
+        }
+
+        try {
+          const { data: inserted, error: insertErr } = await supabase
+            .from('auto_blog_posts')
+            .insert({
+              slug,
+              title,
+              description,
+              category,
+              keywords: keywords || [],
+              tldr,
+              excerpt,
+              content: content_markdown,
+              word_count: word_count || null,
+              read_time: estimated_read_minutes || null,
+              source_action_id: action.id,
+              status: 'published',
+              published_at: new Date().toISOString().split('T')[0],
+              published_timestamp: new Date().toISOString(),
+            })
+            .select('id, slug')
+            .single();
+          if (insertErr) throw new Error(insertErr.message);
+
+          const publicUrl = `https://volia.fr/blog/${inserted.slug}`;
+          await markActionExecuted(action.id, {
+            blog_post: {
+              post_id: inserted.id,
+              slug: inserted.slug,
+              public_url: publicUrl,
+              published_at: new Date().toISOString(),
+            },
+          });
+          results.push({ id: action.id, ok: true, url: publicUrl, type: 'blog_post' });
+          console.log(`[publish-approved] Blog post OK → ${publicUrl}`);
+        } catch (err) {
+          const errMsg = err.message || String(err);
+          await markActionFailed(action.id, errMsg.slice(0, 500));
+          results.push({ id: action.id, ok: false, error: errMsg });
+          console.error(`[publish-approved] Blog post FAILED : ${errMsg}`);
+        }
+        continue;
+      }
 
       // ─── changelog_entry : INSERT dans auto_changelog_proposals + update last_sha
       if (action.action_type === 'changelog_entry') {

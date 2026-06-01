@@ -16,9 +16,11 @@ import {
 } from './autonomy';
 import { publishOn } from './publishers';
 import { createGithubIssue } from './github-api';
+import { sendEmail } from './email';
+import { markdownToBasicHtml } from './faq-reply-drafter';
 
 const MAX_PER_RUN = 5;
-const ELIGIBLE_ACTION_TYPES = ['linkedin_post', 'github_issue_create'];
+const ELIGIBLE_ACTION_TYPES = ['linkedin_post', 'github_issue_create', 'faq_reply_proposal'];
 
 /**
  * Pioche jusqu'à 5 actions approuvées non-publiées, publie sur LinkedIn,
@@ -63,6 +65,53 @@ export async function runPublishApprovedActions() {
   for (const action of actions) {
     try {
       // Dispatch par action_type
+
+      // ─── faq_reply_proposal : envoie email réponse via Resend
+      if (action.action_type === 'faq_reply_proposal') {
+        const {
+          from_email,
+          draft_subject,
+          draft_body_markdown,
+          draft_body_text,
+        } = action.payload || {};
+
+        if (!from_email || !draft_subject || !draft_body_text) {
+          await markActionFailed(
+            action.id,
+            'payload incomplet (from_email, draft_subject, draft_body_text requis)'
+          );
+          results.push({ id: action.id, ok: false, error: 'missing_faq_fields' });
+          continue;
+        }
+
+        try {
+          const html = markdownToBasicHtml(draft_body_markdown || draft_body_text);
+          const sent = await sendEmail({
+            to: from_email,
+            subject: draft_subject,
+            html,
+            text: draft_body_text,
+            // from default = noreply@volia.fr ou contact@volia.fr selon la config sendEmail
+          });
+          await markActionExecuted(action.id, {
+            faq_reply: {
+              sent_to: from_email,
+              subject: draft_subject,
+              sent_at: new Date().toISOString(),
+              provider_id: sent?.id || null,
+            },
+          });
+          results.push({ id: action.id, ok: true, sent_to: from_email, type: 'faq_reply' });
+          console.log(`[publish-approved] FAQ reply OK → ${from_email}`);
+        } catch (err) {
+          const errMsg = err.message || String(err);
+          await markActionFailed(action.id, errMsg.slice(0, 500));
+          results.push({ id: action.id, ok: false, error: errMsg });
+          console.error(`[publish-approved] FAQ reply FAILED : ${errMsg}`);
+        }
+        continue;
+      }
+
       if (action.action_type === 'github_issue_create') {
         const { title, body, labels } = action.payload || {};
         if (!title || !body) {

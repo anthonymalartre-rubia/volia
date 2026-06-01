@@ -28,6 +28,9 @@ import { sendEmail } from '@/lib/email';
 import { cleanEnv } from '@/lib/envClean';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { unlockAchievement } from '@/lib/achievements';
+import { incrementUsage } from '@/lib/usage';
+import { PLANS } from '@/lib/plans';
+import { getEffectivePlan } from '@/lib/trial';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -459,6 +462,52 @@ export async function POST(request, { params }) {
     device_type: detectDeviceType(userAgent),
   };
 
+  // ──── 8bis. HARD-CAP QUOTA form_submissions (anti-bombe DB — task #328) ────
+  // Avant d'écrire en DB, on vérifie que l'owner du form n'a pas dépassé
+  // son quota mensuel form_submissions. Sans ce garde-fou, un client
+  // Business pouvait recevoir un volume illimité de submissions (potentiel
+  // spam après un share viral du form), saturant Supabase.
+  //
+  // Limites par plan (cf. src/lib/plans.js) :
+  //   free/solo/pro : 0 (Forms = Business-only)
+  //   business / enterprise : 5 000 form_submissions/mois
+  //
+  // Si dépassement : 429 avec message clair pour le visiteur du form.
+  // L'owner du form recevra l'alerte via le pipeline email 80%/100% existant
+  // dans incrementUsage().
+  try {
+    const month = new Date().toISOString().slice(0, 7); // YYYY-MM
+    const [{ data: profile }, { data: usageRow }] = await Promise.all([
+      supabaseAdmin
+        .from('user_profiles')
+        .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
+        .eq('id', form.user_id)
+        .maybeSingle(),
+      supabaseAdmin
+        .from('usage_tracking')
+        .select('form_submissions')
+        .eq('user_id', form.user_id)
+        .eq('month', month)
+        .maybeSingle(),
+    ]);
+    const planId = getEffectivePlan(profile);
+    const limit = PLANS[planId]?.limits?.form_submissions_per_month ?? 0;
+    const used = usageRow?.form_submissions || 0;
+    if (limit !== -1 && used >= limit) {
+      // Quota atteint — on refuse la submission avec un 429.
+      // Message volontairement neutre pour le visiteur public (pas de info
+      // technique sur le plan de l'owner du form).
+      return NextResponse.json({
+        success: false,
+        error: 'Ce formulaire a temporairement atteint sa limite mensuelle de soumissions. Réessayez le mois prochain ou contactez le propriétaire du formulaire.',
+      }, { status: 429 });
+    }
+  } catch (quotaErr) {
+    // Si le check quota plante (ex. DB lent) : on log mais on laisse passer
+    // la submission (fail-open) pour ne pas perdre de leads de bonne foi.
+    console.warn('[forms/submit] quota check error (fail-open)', quotaErr.message);
+  }
+
   const { data: response, error: respError } = await supabaseAdmin
     .from('form_responses')
     .insert({
@@ -476,6 +525,12 @@ export async function POST(request, { params }) {
     return NextResponse.json({ success: false, error: 'Impossible d\'enregistrer la réponse' }, { status: 500 });
   }
   const responseId = response.id;
+
+  // Incrémente le compteur quota DB (task #328) — fire-and-forget,
+  // ne JAMAIS bloquer la réponse au visiteur sur un échec stats.
+  incrementUsage(supabaseAdmin, form.user_id, 'form_submissions', 1).catch((err) =>
+    console.warn('[forms/submit] form_submissions increment failed:', err.message)
+  );
 
   // ──── 9. Upload fichiers vers Storage + INSERT form_files ────
   if (filesToUpload.length > 0) {

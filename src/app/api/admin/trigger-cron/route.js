@@ -19,12 +19,14 @@ import { runContentProposer } from '@/lib/content-proposer';
 import { runPublishApprovedActions } from '@/lib/publish-actions';
 import { runSentryDigest } from '@/lib/sentry-digest';
 import { runChangelogProposer } from '@/lib/changelog-proposer';
+import { runBlogWriter } from '@/lib/blog-writer';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
   'sentry-digest': runSentryDigest,
   'auto-changelog-proposer': runChangelogProposer,
+  'auto-blog-writer': runBlogWriter,
 };
 
 async function requireAdmin() {

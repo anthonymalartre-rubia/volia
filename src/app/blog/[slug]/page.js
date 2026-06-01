@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowLeft, ArrowRight, User, Zap, Sparkles } from 'lucide-react';
-import { getPostBySlug, getAllPosts } from '@/lib/blog';
+import { getPostBySlug, getAllPosts, getPostBySlugWithAuto } from '@/lib/blog';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
@@ -23,7 +23,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlugWithAuto(slug);
   if (!post) return {};
 
   return {
@@ -183,7 +183,7 @@ function renderMarkdown(md) {
 
 export default async function BlogPost({ params }) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlugWithAuto(slug);
   if (!post) notFound();
 
   const allPosts = getAllPosts();

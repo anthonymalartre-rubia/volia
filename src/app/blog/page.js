@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react';
-import { getAllPosts } from '@/lib/blog';
+import { getAllPostsWithAuto } from '@/lib/blog';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 import NewsletterCapture from '@/components/NewsletterCapture';
@@ -21,8 +21,8 @@ export const metadata = {
   },
 };
 
-export default function BlogIndex() {
-  const posts = getAllPosts();
+export default async function BlogIndex() {
+  const posts = await getAllPostsWithAuto();
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary">

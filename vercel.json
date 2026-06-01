@@ -124,6 +124,10 @@
     {
       "path": "/api/cron/auto-changelog-proposer",
       "schedule": "0 7 * * 2"
+    },
+    {
+      "path": "/api/cron/auto-blog-writer",
+      "schedule": "0 8 * * 3"
     }
   ]
 }

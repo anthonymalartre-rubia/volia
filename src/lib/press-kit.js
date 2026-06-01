@@ -217,7 +217,7 @@ export const PRESS_ANGLES = [
     audience: 'Presse IA, recherche & innovation (ActuIA, Usbek & Rica, Siècle Digital, MIT Tech Review FR)',
     pitch:
       "Au-delà de l'autonomie classique (les IA exécutent), Volia franchit un cap : ses agents IA analysent eux-mêmes leur ROI, identifient les boucles inefficaces, et proposent au founder de nouvelles automatisations à créer. Chaque mardi, Anthony Malartre reçoit un email auto-généré avec les métriques précises de ses 16 boucles + 3 recommandations Claude pour la semaine. C'est la première implémentation documentée d'une couche de méta-autonomie en production sur un SaaS B2B. Le système ne fait plus seulement ce qu'on lui dit — il décide ce qu'il faudrait faire ensuite.",
-    releaseUrl: '/presse/cp-meta-autonomie.pdf',
+    releaseUrl: '/presse/cp/meta-autonomie-ia-qui-soptimise',
     iconName: 'Brain',
     gradient: 'from-amber-500 to-rose-600',
   },
@@ -227,7 +227,7 @@ export const PRESS_ANGLES = [
     audience: 'Presse business & tech (Maddyness, Les Echos Tech, FrenchWeb, BFM Tech)',
     pitch:
       "Trois preuves concrètes de l'entreprise autonome en juin 2026 : (1) Volia utilise son propre module Prospection chaque semaine pour générer 50 prospects ICP-fit puis les contacter via son module Campagnes — un cas unique de SaaS qui vend grâce à lui-même. (2) Quand Sentry détecte une erreur en prod, Claude lit le code source, comprend la cause, et ouvre une pull request de correction sur GitHub que le founder n'a qu'à valider. (3) Pour les emails clients classifiés comme questions FAQ avec confiance >85 %, Claude envoie directement une réponse signée au nom d'Anthony, avec copie au founder. Trois boucles, un seul mot d'ordre : l'humain valide, l'IA exécute.",
-    releaseUrl: '/presse/cp-volia-tout-seul.pdf',
+    releaseUrl: '/presse/cp/volia-vend-supporte-code-soi-meme',
     iconName: 'Sparkles',
     gradient: 'from-emerald-500 to-teal-600',
   },
@@ -356,7 +356,27 @@ export const MEDIA_KIT_ASSETS = [
 ];
 
 // ─── PRESS_RELEASES — communiqués de presse récents ───────────────────
+// Note : les CPs avec slug correspondant à PRESS_RELEASES_FULL ont une
+// page HTML dédiée /presse/cp/[slug] (print-friendly).
 export const PRESS_RELEASES = [
+  {
+    date: '2026-06-06',
+    dateLabel: '6 juin 2026',
+    title: "Volia se vend, se code et se support — tout seul : trois boucles d'agents IA réinventent l'opérationnel B2B",
+    slug: 'volia-vend-supporte-code-soi-meme',
+    summary:
+      "Volia livre trois preuves concrètes du modèle \"founder augmenté\" : dogfood-outreach hebdo (Volia utilise Volia pour vendre Volia), auto-fix bugs via PR Claude (Sentry détecte, Claude corrige), et auto-réponse FAQ haute confiance (≥0,85). Trois boucles, un mot d'ordre : l'humain valide, l'IA exécute.",
+    pdfUrl: '/presse/cp/volia-vend-supporte-code-soi-meme',
+  },
+  {
+    date: '2026-06-06',
+    dateLabel: '6 juin 2026',
+    title: "Volia franchit un nouveau cap : la première SaaS française dont les agents IA analysent leur propre ROI",
+    slug: 'meta-autonomie-ia-qui-soptimise',
+    summary:
+      "Mise en production d'une couche de méta-autonomie inédite. Les 16 boucles d'agents IA mesurent désormais leur propre performance, calculent un ROI par action, et soumettent chaque mardi à Anthony Malartre 3 recommandations Claude pour optimiser la suite des opérations.",
+    pdfUrl: '/presse/cp/meta-autonomie-ia-qui-soptimise',
+  },
   {
     date: '2026-06-01',
     dateLabel: '1er juin 2026',
@@ -400,6 +420,100 @@ export const FOUNDER_BIO = {
 
   long:
     "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'entreprise du XXIe siècle n'était plus une équipe, mais un founder augmenté par des agents IA autonomes ? Volia est la réponse. En 6 semaines de sprint intensif, sans co-fondateur, sans levée de fonds, sans salarié supplémentaire, il livre 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne, accessibles à partir de 19 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn provocatrice, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email à Anthony avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client — l'exécution opérationnelle est assurée par les agents IA, et leur orchestration elle-même est devenue auto-optimisée. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
+};
+
+// ─── PRESS_RELEASE_FULL — contenu complet des communiqués de presse ──
+// Source unique pour la route /presse/cp/[slug] (HTML print-friendly).
+// Chaque CP est rendu en HTML structuré (style sobre, optimisé pour
+// impression / sauvegarde PDF via navigateur). Pas de génération
+// binaire — l'HTML est canonique, indexable, simple à maintenir.
+export const PRESS_RELEASES_FULL = {
+  'meta-autonomie-ia-qui-soptimise': {
+    slug: 'meta-autonomie-ia-qui-soptimise',
+    date: '2026-06-06',
+    dateLabel: '6 juin 2026',
+    location: 'Marseille',
+    eyebrow: 'COMMUNIQUÉ DE PRESSE',
+    title: "Volia franchit un nouveau cap : la première SaaS française dont les agents IA analysent leur propre ROI et proposent les prochaines automatisations",
+    lead: "Volia (volia.fr), suite SaaS française B2B (prospection, cold email, CRM, formulaires), annonce la mise en production d'une couche de méta-autonomie inédite : ses 16 boucles d'agents IA mesurent désormais leur propre performance, calculent un retour sur investissement par action, et soumettent chaque semaine à leur founder Anthony Malartre des recommandations concrètes d'optimisation.",
+    sections: [
+      {
+        heading: "Au-delà de l'autonomie d'exécution",
+        paragraphs: [
+          "Depuis son lancement en mai 2026, Volia faisait déjà tourner 16 boucles d'agents IA en production 24 heures sur 24 : rédaction de posts LinkedIn, articles SEO hebdomadaires, newsletter mensuelle, séquences de réactivation client, prospection sortante auto-générée, détection d'erreurs en production avec création de pull requests de correction, classification des emails entrants avec réponses FAQ automatiques, deux chatbots IA (pré-vente et support). Une exécution déjà sans précédent pour une entreprise française.",
+          "Ce qui change le 6 juin 2026 : ces agents ne se contentent plus d'exécuter — ils mesurent. Chaque action autonome est journalisée avec un coût estimé (en euros) et une valeur estimée (proxy MRR). Chaque nuit à 2 heures du matin, une boucle d'agrégation calcule pour chaque type d'action le taux de succès, le coût cumulé, la valeur générée et le retour sur investissement. Le tout est consultable en temps réel dans un dashboard interne dédié.",
+        ],
+      },
+      {
+        heading: "Trois recommandations Claude chaque mardi",
+        paragraphs: [
+          "Chaque mardi à 10 heures, une seconde boucle, dite de méta-autonomie, compile les métriques des sept derniers jours et les soumet à Claude, l'IA agentique d'Anthropic. Le modèle analyse les patterns (boucles à ROI négatif, boucles redondantes, boucles à fort potentiel inexploité) et propose à Anthony Malartre trois recommandations actionnables, classées en quatre catégories : NOUVELLE BOUCLE à créer, OPTIMISATION à apporter, SUPPRESSION d'une automatisation peu rentable, ou FUSION de deux boucles redondantes.",
+          "Le tout arrive sous la forme d'un email structuré, avec pour chaque recommandation : un rationnel basé sur les chiffres, une estimation d'effort en heures de développement, et une valeur attendue mensuelle. Anthony peut ensuite accepter, rejeter ou marquer comme livrée chaque recommandation dans une interface dédiée, créant une boucle d'amélioration continue mesurable.",
+        ],
+      },
+      {
+        heading: "Un cas d'école pour la presse IA",
+        paragraphs: [
+          "À notre connaissance, aucun SaaS B2B européen ne documente publiquement une telle architecture en production. La couche méta-autonomie de Volia est un cas d'usage avancé du paradigme \"AI-native company\" : les IA ne sont plus seulement des exécutants supervisés, elles deviennent force de proposition stratégique — le founder reste seul décideur.",
+          "L'ensemble du code source est public sur GitHub (anthonymalartre-rubia/volia), plus de 400 commits documentent le développement.",
+        ],
+      },
+    ],
+    quote: {
+      text: "Le truc le plus dingue ce n'est pas que les agents IA bossent pour moi. C'est qu'ils me proposent eux-mêmes quoi automatiser ensuite. Chaque mardi je reçois un email avec le ROI précis de mes 16 boucles et trois recommandations. Aucune équipe humaine ne pourrait produire ça aussi vite, à ce niveau de détail, sans biais cognitif.",
+      author: 'Anthony Malartre',
+      authorRole: 'Fondateur de Volia',
+    },
+    boilerplate: BOILERPLATE.medium,
+  },
+
+  'volia-vend-supporte-code-soi-meme': {
+    slug: 'volia-vend-supporte-code-soi-meme',
+    date: '2026-06-06',
+    dateLabel: '6 juin 2026',
+    location: 'Marseille',
+    eyebrow: 'COMMUNIQUÉ DE PRESSE',
+    title: "Volia se vend, se code et se support — tout seul : trois boucles d'agents IA qui réinventent l'opérationnel B2B",
+    lead: "Volia (volia.fr), suite SaaS française pour la croissance B2B, livre trois preuves concrètes du modèle de \"founder augmenté\" en juin 2026. Pour la vente, le code et le support client, trois boucles d'agents IA distinctes assurent l'exécution opérationnelle — chacune sous garde-fou explicite et validation humaine pour les actions à risque.",
+    sections: [
+      {
+        heading: "1. Volia utilise Volia pour vendre Volia",
+        paragraphs: [
+          "Chaque lundi à 14 heures, une boucle baptisée dogfood-outreach pioche une combinaison ICP × département parmi 12 rotations déterministes (agences marketing à Paris, agences web à Marseille, cabinets conseil à Bordeaux, etc.). Elle interroge l'API Google Places via le propre module Prospection de Volia, déduplique contre l'historique de campagnes passées, et constitue une liste de 50 prospects qualifiés.",
+          "La liste est livrée directement dans le module Campagnes de Volia, prête à être enrichie et activée par Anthony Malartre. \"C'est mon meilleur démo,\" explique le fondateur. \"Volia utilise Volia pour vendre Volia. Aucun autre outil de prospection français ne peut se permettre cette démonstration.\"",
+        ],
+      },
+      {
+        heading: "2. Volia se code — Sentry détecte, Claude corrige",
+        paragraphs: [
+          "Chaque lundi à 11 heures, une première boucle interroge Sentry pour récupérer les erreurs survenues en production au cours de la semaine. Claude analyse chaque erreur, identifie les fichiers impactés via le stack trace, et crée une issue GitHub structurée avec rationale et suggestion de fix.",
+          "Quatre jours plus tard, le vendredi à 11 heures, une seconde boucle reprend ces issues. Pour chacune, Claude lit le code source du fichier mentionné (avec garde-fous : maximum 500 lignes, fichier non critique, pas de modification sur les fichiers d'autonomie ou de paiement), propose un patch d'au plus 30 lignes, crée une branche, commit le correctif et ouvre une Pull Request en mode draft sur GitHub.",
+          "Anthony n'a plus qu'à relire le diff et merger. \"Quand Sentry détecte un bug en prod, Claude lit le stack trace, comprend le code, et m'ouvre la pull request. Je n'ai qu'à valider. C'est la fin du backlog,\" résume le fondateur. La PR reste en mode draft jusqu'à validation humaine — aucun code n'est mergé automatiquement.",
+        ],
+      },
+      {
+        heading: "3. Volia se support — auto-FAQ haute confiance",
+        paragraphs: [
+          "Chaque jour à 12 heures, une boucle examine les emails reçus sur contact@volia.fr déjà classés comme \"question\" par un classifieur Claude. Pour chaque email, une seconde invocation de Claude évalue si une réponse automatique est possible et calcule un score de confiance de 0 à 1.",
+          "Si la confiance dépasse 0,85 et que le sujet est sûr (pas de demande de remboursement, pas de question juridique, pas de bug technique grave), Claude rédige et envoie directement la réponse au client signée \"Anthony — Fondateur Volia\", avec copie systématique au founder pour visibilité. Tous les autres cas restent traités manuellement par Anthony.",
+          "Le disclaimer en bas de chaque email auto-répondu est explicite : \"Cette réponse a été pré-rédigée par l'assistant IA Volia, relue par l'équipe. Si elle ne répond pas à ta question, réponds simplement à ce mail.\"",
+        ],
+      },
+      {
+        heading: "Trois boucles, un seul principe",
+        paragraphs: [
+          "Le mot d'ordre est constant : l'humain valide, l'IA exécute. Toutes les actions à risque (publication de code, envoi d'email client, post public) passent par une validation manuelle ou un garde-fou strict (quotas, threshold de confiance, mode draft GitHub). Le founder reste responsable du produit, des ventes et du service client.",
+          "L'ensemble du code source et des boucles est documenté publiquement. Plus de 400 commits Git tracent six mois de construction.",
+        ],
+      },
+    ],
+    quote: {
+      text: "Volia utilise Volia pour vendre Volia. Sentry détecte un bug en prod, Claude m'ouvre la pull request. Un client pose une question simple, l'IA y répond avec mon nom. Trois boucles, un même principe : l'humain valide, l'IA exécute. C'est ça, le founder augmenté.",
+      author: 'Anthony Malartre',
+      authorRole: 'Fondateur de Volia',
+    },
+    boilerplate: BOILERPLATE.medium,
+  },
 };
 
 // ─── AI_LOOPS_INVENTORY — détail technique des 16 boucles autonomes ──

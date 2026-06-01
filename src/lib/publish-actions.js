@@ -26,6 +26,7 @@ const ELIGIBLE_ACTION_TYPES = [
   'faq_reply_proposal',
   'changelog_entry',
   'blog_post_draft',
+  'newsletter_send',
 ];
 
 /**
@@ -71,6 +72,48 @@ export async function runPublishApprovedActions() {
   for (const action of actions) {
     try {
       // Dispatch par action_type
+
+      // ─── newsletter_send : envoie la newsletter à tous subscribers via Resend
+      if (action.action_type === 'newsletter_send') {
+        const { subject, html_body, text_body, month_label } = action.payload || {};
+        if (!subject || !html_body) {
+          await markActionFailed(action.id, 'payload incomplet (subject + html_body requis)');
+          results.push({ id: action.id, ok: false, error: 'missing_newsletter_fields' });
+          continue;
+        }
+        try {
+          const { sendNewsletterToAllSubscribers } = await import('./newsletter-generator');
+          const result = await sendNewsletterToAllSubscribers({
+            subject,
+            html: html_body,
+            text: text_body || '',
+            monthLabel: month_label || 'newsletter',
+          });
+          await markActionExecuted(action.id, {
+            newsletter: {
+              sent: result.sent,
+              failed: result.failed,
+              total_subscribers: result.total_subscribers,
+              sent_at: new Date().toISOString(),
+              errors_sample: result.errors_sample || [],
+            },
+          });
+          results.push({
+            id: action.id,
+            ok: true,
+            sent: result.sent,
+            failed: result.failed,
+            type: 'newsletter',
+          });
+          console.log(`[publish-approved] Newsletter OK → ${result.sent} sent, ${result.failed} failed`);
+        } catch (err) {
+          const errMsg = err.message || String(err);
+          await markActionFailed(action.id, errMsg.slice(0, 500));
+          results.push({ id: action.id, ok: false, error: errMsg });
+          console.error(`[publish-approved] Newsletter FAILED : ${errMsg}`);
+        }
+        continue;
+      }
 
       // ─── blog_post_draft : INSERT dans auto_blog_posts (status='published')
       if (action.action_type === 'blog_post_draft') {

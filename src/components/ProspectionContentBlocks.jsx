@@ -13,6 +13,7 @@ import {
   Target, BarChart3, Calendar, MapPin, MessageCircle, BookOpen, Lightbulb,
   Mail, Phone, ArrowRight, AlertTriangle, Quote, Building2,
   Users, TrendingUp, X, CheckCircle2, Shield, Zap,
+  Briefcase, LineChart, Euro, UserMinus,
 } from 'lucide-react';
 import { toRegionUrlSlug } from '@/lib/region-data';
 
@@ -1065,6 +1066,115 @@ export function SiblingCitiesBlock({ cities = [], category, currentCitySlug }) {
           </Link>
         ))}
       </div>
+    </section>
+  );
+}
+
+// ─── 17. InseeStatsBlock — chiffres clés INSEE par dept (E-E-A-T) ─────
+// 4 statistiques chiffrées vérifiables : entreprises actives + croissance,
+// PIB/habitant, taux de chômage. Boost crédibilité + outbound link INSEE.
+// Null-safe : ne render que si deptData.insee2024 existe.
+export function InseeStatsBlock({ deptData, dept }) {
+  if (!deptData?.insee2024 || !dept) return null;
+  const { enterprises, enterprisesGrowth, gdpPerCapita, unemploymentRate, sourceNote } = deptData.insee2024;
+  const stats = [
+    { icon: Briefcase, label: 'Entreprises actives', value: enterprises, hint: 'Base SIRENE — tous secteurs confondus', tone: 'violet' },
+    { icon: LineChart, label: 'Créations nettes', value: enterprisesGrowth, hint: 'Évolution annuelle du stock d\'entreprises', tone: 'emerald' },
+    { icon: Euro, label: 'PIB par habitant', value: gdpPerCapita, hint: 'Comptes régionaux 2024 (valeur)', tone: 'indigo' },
+    { icon: UserMinus, label: 'Taux de chômage', value: unemploymentRate, hint: 'Mesure trimestrielle locale', tone: 'amber' },
+  ];
+  const toneClass = {
+    violet: 'text-violet-300 border-violet-500/20',
+    emerald: 'text-emerald-300 border-emerald-500/20',
+    indigo: 'text-indigo-300 border-indigo-500/20',
+    amber: 'text-amber-600 border-amber-300',
+  };
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+        <BarChart3 size={22} className="text-violet-400" />
+        {dept.name} en chiffres — données INSEE 2024
+      </h2>
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
+        Repères macro-économiques pour calibrer votre approche commerciale sur le territoire : taille du tissu B2B, dynamique de création, pouvoir d&apos;achat, marché du travail.
+      </p>
+      <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-500/[0.06] to-indigo-500/[0.06] p-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {stats.map((s, i) => (
+            <div key={i} className={`rounded-xl border bg-surface-elevated/40 p-4 ${toneClass[s.tone] || 'border-line'}`}>
+              <s.icon size={16} className={`${toneClass[s.tone]?.split(' ')[0] || 'text-violet-300'} mb-2`} />
+              <div className={`text-2xl font-bold tabular-nums ${toneClass[s.tone]?.split(' ')[0] || 'text-violet-300'}`}>{s.value}</div>
+              <div className="text-sm text-content-secondary font-semibold mt-1">{s.label}</div>
+              <div className="text-[11px] text-content-tertiary mt-1 leading-snug">{s.hint}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 pt-3 border-t border-violet-500/15 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+          <span className="text-content-tertiary">
+            <span className="inline-block px-2 py-0.5 rounded bg-violet-500/15 border border-violet-500/25 text-violet-200 font-semibold mr-2">Source vérifiable INSEE 2024</span>
+            {sourceNote || 'INSEE SIRENE + Comptes régionaux 2024'}
+          </span>
+          <a
+            href="https://www.insee.fr/fr/statistiques/2011101"
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-1 text-violet-300 hover:text-violet-200 underline underline-offset-2 decoration-violet-500/40 hover:decoration-violet-400"
+          >
+            Consulter les statistiques INSEE
+            <ArrowRight size={11} />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── 18. FlagshipCompaniesBlock — entreprises emblématiques du dept ────
+// Cards visuelles 3-5 entreprises majeures du territoire. Diversité
+// sectorielle pour montrer la richesse économique. Null-safe.
+export function FlagshipCompaniesBlock({ deptData, dept, category }) {
+  if (!deptData?.flagshipCompanies?.length || !dept) return null;
+  const companies = deptData.flagshipCompanies.slice(0, 5);
+  const sectorsList = deptData.keySectors || [];
+  // Subheader contextuel à partir des 2 premiers secteurs phares
+  const sectorIntro = sectorsList.length >= 2
+    ? `Du ${sectorsList[0].toLowerCase()} au ${sectorsList[1].toLowerCase()}`
+    : sectorsList.length === 1
+    ? `Du ${sectorsList[0].toLowerCase()}`
+    : 'Tous secteurs confondus';
+
+  return (
+    <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-16">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-3 flex items-center gap-2">
+        <Building2 size={22} className="text-violet-400" />
+        Entreprises emblématiques du {dept.name}
+      </h2>
+      <p className="text-content-secondary mb-6 max-w-2xl text-sm">
+        {sectorIntro} aux services tertiaires, le département concentre une diversité d&apos;employeurs majeurs{category ? ` qui structurent l\'écosystème ${category.labelPlural}` : ''}.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {companies.map((c, i) => (
+          <div
+            key={i}
+            className="rounded-xl border border-line bg-surface-elevated/40 p-4 hover:border-violet-500/30 transition group"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0 group-hover:bg-violet-500/15 transition">
+                <Building2 size={15} className="text-violet-300" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-content-primary leading-snug">{c}</div>
+                <div className="text-[11px] text-content-tertiary mt-1">
+                  Employeur majeur — {sectorsList[i % Math.max(1, sectorsList.length)] || 'secteur stratégique'}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="text-[11px] text-content-tertiary italic mt-4">
+        Source : données publiques (Bodacc, presse économique régionale, CCI). Liste non exhaustive — ces employeurs illustrent la dynamique sectorielle du territoire.
+      </p>
     </section>
   );
 }

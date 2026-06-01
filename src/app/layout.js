@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/lib/theme';
 import { I18nProvider } from '@/lib/i18n';
 import CookieConsent from '@/components/CookieConsent';
 import AchievementToast from '@/components/welcome/AchievementToast';
+import DemoBotWidget from '@/components/DemoBotWidget';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -177,6 +178,11 @@ export default function RootLayout({ children }) {
                 callers utilisent `showAchievementToast()` du helper
                 @/lib/use-achievement-toast. */}
             <AchievementToast />
+            {/* Chat in-app pre-sales (Sprint Revenue Engine Phase 4) —
+                auto-hide sur les routes app authentifiées (dashboard,
+                admin, app, settings, login). Widget client gère son
+                propre check pathname via usePathname(). */}
+            <DemoBotWidget />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

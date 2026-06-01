@@ -12067,3 +12067,61 @@ export function getAllPosts() {
 export function getAllPostsIncludingScheduled() {
   return [...BLOG_POSTS].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 }
+
+// ─────────────────────────────────────────────────────────────────────
+// Helpers async qui mergent BLOG_POSTS static + auto_blog_posts DB
+// Sprint Marketing Compound Phase 2.
+// Lazy-import supabase pour ne pas alourdir le bundle des pages statiques.
+// ─────────────────────────────────────────────────────────────────────
+
+async function fetchAutoBlogPosts() {
+  try {
+    const { getSupabaseAdmin } = await import('./supabase-admin');
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('auto_blog_posts')
+      .select('slug, title, description, published_at, author, read_time, category, keywords, content, tldr, excerpt, word_count')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+    if (!Array.isArray(data)) return [];
+    return data.map((row) => ({
+      slug: row.slug,
+      title: row.title,
+      description: row.description,
+      publishedAt: row.published_at,
+      author: row.author,
+      readTime: row.read_time,
+      category: row.category,
+      keywords: row.keywords || [],
+      content: row.content,
+      tldr: row.tldr,
+      excerpt: row.excerpt,
+      wordCount: row.word_count,
+      _source: 'auto',
+    }));
+  } catch (err) {
+    console.warn('[blog] DB fetch failed, fallback static only', err.message);
+    return [];
+  }
+}
+
+export async function getAllPostsWithAuto() {
+  const today = new Date().toISOString().split('T')[0];
+  const dbPosts = await fetchAutoBlogPosts();
+  const staticSlugs = new Set(BLOG_POSTS.map((p) => p.slug));
+  const filteredDb = dbPosts.filter((p) => !staticSlugs.has(p.slug));
+  return [...BLOG_POSTS, ...filteredDb]
+    .filter((p) => p.publishedAt <= today)
+    .sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''));
+}
+
+export async function getPostBySlugWithAuto(slug) {
+  const staticPost = BLOG_POSTS.find((p) => p.slug === slug);
+  if (staticPost) {
+    const today = new Date().toISOString().split('T')[0];
+    if (staticPost.publishedAt && staticPost.publishedAt > today) return null;
+    return staticPost;
+  }
+  const dbPosts = await fetchAutoBlogPosts();
+  return dbPosts.find((p) => p.slug === slug) || null;
+}

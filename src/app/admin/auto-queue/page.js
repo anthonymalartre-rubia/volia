@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
-  Copy, Check, Briefcase, Bird, Zap, Upload, Bug, ScrollText, BookOpen,
+  Copy, Check, Briefcase, Bird, Zap, Upload, Bug, ScrollText, BookOpen, Mail,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
@@ -443,6 +443,20 @@ export default function AutoQueuePage() {
                 <BookOpen size={12} />
               )}
               Rédiger article blog
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTrigger('newsletter-proposer')}
+              disabled={triggering !== null || !autonomyEnabled}
+              title={!autonomyEnabled ? 'Autonomy OFF — activer AUTONOMOUS_MODE_ENABLED' : 'Génère brouillon newsletter mensuelle (broadcast tous subscribers — high risk)'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-600 text-white hover:bg-pink-500 text-xs font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {triggering === 'newsletter-proposer' ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Mail size={12} />
+              )}
+              Brouillon newsletter
             </button>
           </div>
 

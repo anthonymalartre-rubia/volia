@@ -20,6 +20,7 @@ import { runPublishApprovedActions } from '@/lib/publish-actions';
 import { runSentryDigest } from '@/lib/sentry-digest';
 import { runChangelogProposer } from '@/lib/changelog-proposer';
 import { runBlogWriter } from '@/lib/blog-writer';
+import { runNewsletterProposer } from '@/lib/newsletter-generator';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
@@ -27,6 +28,7 @@ const CRONS = {
   'sentry-digest': runSentryDigest,
   'auto-changelog-proposer': runChangelogProposer,
   'auto-blog-writer': runBlogWriter,
+  'newsletter-proposer': runNewsletterProposer,
 };
 
 async function requireAdmin() {

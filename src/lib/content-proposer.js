@@ -449,7 +449,7 @@ ${angleHints}
 
 ## OBJECTIF
 Engagement > reach. Commentaires + sauvegardes + clics. N'essaie pas
-de plaire à tout le monde. Sois clivant.\`;
+de plaire à tout le monde. Sois clivant.`;
 
   const message = await client.messages.create({
     model: CLAUDE_MODEL,

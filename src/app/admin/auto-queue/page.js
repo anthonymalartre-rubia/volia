@@ -16,8 +16,9 @@ import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
 } from 'lucide-react';
-import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
+// Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
+// déjà une (cf. bug TopBar dupliquée corrigé 1er juin 2026).
 
 const RISK_BADGES = {
   low: { label: 'Low', cls: 'bg-emerald-100 text-emerald-700 border-emerald-300' },
@@ -38,7 +39,6 @@ export default function AutoQueuePage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [queue, setQueue] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -142,8 +142,7 @@ export default function AutoQueuePage() {
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary flex flex-col">
-      <TopBar user={user} onToggleSidebar={() => setSidebarOpen((v) => !v)} />
-
+      {/* Pas de TopBar : déjà rendue par /admin/layout.js (sinon doublon) */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-8">
         {/* ─── Header ────────────────────────────────────────── */}
         <div className="mb-6">

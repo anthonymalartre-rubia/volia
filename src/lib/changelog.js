@@ -102,4 +102,38 @@ export function getAllChangelogEntries() {
   return CHANGELOG;
 }
 
+/**
+ * Merge static CHANGELOG + DB-published auto entries (Sprint Marketing Phase 1).
+ * Async — utilisé par la page /changelog (server component).
+ * Tri par date desc + dédup par version (static a priorité si conflit).
+ */
+export async function getAllChangelogEntriesWithAuto() {
+  let dbEntries = [];
+  try {
+    const { getSupabaseAdmin } = await import('./supabase-admin');
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('auto_changelog_proposals')
+      .select('entry_date, version, title, items')
+      .eq('status', 'published')
+      .order('entry_date', { ascending: false });
+    if (Array.isArray(data)) {
+      dbEntries = data.map((row) => ({
+        date: row.entry_date,
+        version: row.version,
+        title: row.title,
+        items: row.items || [],
+      }));
+    }
+  } catch (err) {
+    console.warn('[changelog] DB fetch failed, fallback static only', err.message);
+  }
+
+  const seenVersions = new Set(CHANGELOG.map((e) => e.version));
+  const filteredDb = dbEntries.filter((e) => !seenVersions.has(e.version));
+  const merged = [...CHANGELOG, ...filteredDb];
+  merged.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  return merged;
+}
+
 export { CHANGELOG };

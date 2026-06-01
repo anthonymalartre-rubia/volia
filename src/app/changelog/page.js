@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { ArrowLeft, Sparkles, CheckCircle2, Wrench, Shield, Calendar } from 'lucide-react';
-import { getAllChangelogEntries } from '@/lib/changelog';
+import { getAllChangelogEntriesWithAuto } from '@/lib/changelog';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
+
+export const dynamic = 'force-dynamic'; // SSR à chaque visite : entries DB se mettent à jour au fil des publications
 
 const SITE_URL = 'https://volia.fr';
 
@@ -23,8 +25,8 @@ const TYPE_META = {
   security: { icon: Shield, label: 'Sécurité', color: 'text-red-400', bg: 'bg-red-500/10' },
 };
 
-export default function ChangelogPage() {
-  const entries = getAllChangelogEntries();
+export default async function ChangelogPage() {
+  const entries = await getAllChangelogEntriesWithAuto();
 
   const breadcrumbs = [
     { label: 'Accueil', href: '/' },

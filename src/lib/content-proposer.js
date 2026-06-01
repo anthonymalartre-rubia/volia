@@ -31,6 +31,7 @@ import {
   isAutonomyEnabled,
   logAutonomousAction,
   countRecentActions,
+  enforceQuotaOrThrow,
 } from './autonomy';
 
 const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
@@ -168,8 +169,13 @@ export async function gatherRecentEvents() {
  * Retourne { allowed: bool, reason: string }
  */
 export async function shouldProposeContent(events) {
-  if (!isAutonomyEnabled()) {
-    return { allowed: false, reason: 'autonomy_disabled' };
+  const autonomyState = await isAutonomyEnabled();
+  if (!autonomyState.enabled) {
+    return {
+      allowed: false,
+      reason: 'autonomy_disabled',
+      detail: autonomyState.reason || `(source: ${autonomyState.source})`,
+    };
   }
   // NOTE — Plus de skip "no_events_to_share" : depuis le pivot ton
   // provocateur, la matière vient soit des events business soit du pool
@@ -535,6 +541,19 @@ export async function runContentProposer() {
       skipped: true,
       reason: decision.reason,
       detail: decision.detail || null,
+      startedAt,
+    };
+  }
+
+  // Étape 2.5 : quota safety net (en plus du throttle 48h dans shouldPropose)
+  try {
+    await enforceQuotaOrThrow('linkedin_post');
+  } catch (quotaErr) {
+    return {
+      ok: true,
+      skipped: true,
+      reason: quotaErr.code === 'QUOTA_EXCEEDED' ? 'quota_exceeded' : 'unknown',
+      detail: quotaErr.message,
       startedAt,
     };
   }

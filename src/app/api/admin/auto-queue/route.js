@@ -35,9 +35,12 @@ export async function GET() {
   if (auth.error) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   const queue = await getApprovalQueue({ limit: 50 });
+  const autonomyState = await isAutonomyEnabled();
   return NextResponse.json({
     success: true,
-    autonomy_enabled: isAutonomyEnabled(),
+    autonomy_enabled: autonomyState.enabled,
+    autonomy_source: autonomyState.source, // 'db' | 'env'
+    autonomy_reason: autonomyState.reason || null,
     queue,
     count: queue.length,
   });

@@ -108,6 +108,14 @@
     {
       "path": "/api/cron/publish-approved-actions",
       "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/anomaly-detection",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-autonomy-audit",
+      "schedule": "0 9 * * 1"
     }
   ]
 }

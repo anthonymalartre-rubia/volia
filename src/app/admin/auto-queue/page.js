@@ -120,6 +120,9 @@ export default function AutoQueuePage() {
   const [queue, setQueue] = useState([]);
   const [loading, setLoading] = useState(true);
   const [autonomyEnabled, setAutonomyEnabled] = useState(false);
+  const [autonomySource, setAutonomySource] = useState('env'); // 'db' | 'env'
+  const [autonomyReason, setAutonomyReason] = useState(null);
+  const [togglingAutonomy, setTogglingAutonomy] = useState(false);
   const [actionInFlight, setActionInFlight] = useState(null); // id en cours d'approve/reject
   const [error, setError] = useState('');
 
@@ -192,6 +195,8 @@ export default function AutoQueuePage() {
       }
       setQueue(data.queue || []);
       setAutonomyEnabled(data.autonomy_enabled || false);
+      setAutonomySource(data.autonomy_source || 'env');
+      setAutonomyReason(data.autonomy_reason || null);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -275,17 +280,53 @@ export default function AutoQueuePage() {
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Kill switch status */}
-              <div
-                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold ${
+              {/* Kill switch toggle (clickable) */}
+              <button
+                type="button"
+                onClick={async () => {
+                  const confirmMsg = autonomyEnabled
+                    ? 'Désactiver Autonomy maintenant ? Tous les crons auto seront en pause.'
+                    : 'Réactiver Autonomy maintenant ?';
+                  if (!confirm(confirmMsg)) return;
+                  setTogglingAutonomy(true);
+                  try {
+                    const res = await fetch('/api/admin/autonomy-toggle', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ enabled: !autonomyEnabled }),
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                      setAutonomyEnabled(data.enabled);
+                      setAutonomySource(data.source);
+                      setAutonomyReason(data.reason);
+                    } else {
+                      setError(data.error || 'Erreur toggle');
+                    }
+                  } catch (e) {
+                    setError(e.message);
+                  } finally {
+                    setTogglingAutonomy(false);
+                  }
+                }}
+                disabled={togglingAutonomy}
+                title={autonomyReason || 'Cliquer pour toggle (override DB)'}
+                className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition disabled:opacity-50 cursor-pointer ${
                   autonomyEnabled
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700'
-                    : 'bg-zinc-100 border-zinc-300 text-zinc-700'
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100'
+                    : 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100'
                 }`}
               >
-                {autonomyEnabled ? <Power size={12} /> : <PowerOff size={12} />}
+                {togglingAutonomy ? (
+                  <Loader2 size={12} className="animate-spin" />
+                ) : autonomyEnabled ? (
+                  <Power size={12} />
+                ) : (
+                  <PowerOff size={12} />
+                )}
                 Autonomy {autonomyEnabled ? 'ON' : 'OFF'}
-              </div>
+                <span className="text-[9px] opacity-60 uppercase">[{autonomySource}]</span>
+              </button>
 
               <button
                 type="button"

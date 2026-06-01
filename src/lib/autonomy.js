@@ -43,12 +43,88 @@
 
 import { getSupabaseAdmin } from './supabase-admin';
 
-// Kill switch global — défini comme env var Vercel.
-// Defaulte à 'false' (autonomy OFF) en l'absence du flag, pour sécurité.
-// Pour activer en prod : ajouter AUTONOMOUS_MODE_ENABLED=true sur Vercel.
-export function isAutonomyEnabled() {
+// ─────────────────────────────────────────────────────────────────────
+// Kill switch global (2 niveaux : DB > ENV)
+// ─────────────────────────────────────────────────────────────────────
+// La DB (table app_settings, row key='autonomy_enabled') a priorité sur
+// l'ENV var AUTONOMOUS_MODE_ENABLED. Permet désactivation INSTANTANÉE
+// depuis mobile via :
+//   - bouton dans /admin/auto-queue (toggle UI)
+//   - email STOP envoyé à stop@volia.fr (parsing webhook Resend)
+// Sans avoir à toucher Vercel env vars + attendre un redeploy (~2min).
+//
+// Logique :
+//   - DB value true  → autonomy ON
+//   - DB value false → autonomy OFF
+//   - DB value null  → fallback sur ENV var
+//   - ENV "true"/"1" → autonomy ON
+//   - sinon          → autonomy OFF (safety default)
+// ─────────────────────────────────────────────────────────────────────
+
+function _envAutonomyEnabled() {
   const flag = process.env.AUTONOMOUS_MODE_ENABLED;
   return flag === 'true' || flag === '1';
+}
+
+/**
+ * Vérifie si l'autonomy mode est actif (check DB + fallback ENV).
+ * ASYNC. Toujours préférer cette fonction à la version sync legacy.
+ *
+ * @returns {Promise<{enabled: boolean, source: 'db'|'env', reason?: string}>}
+ */
+export async function isAutonomyEnabled() {
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('app_settings')
+      .select('value, notes')
+      .eq('key', 'autonomy_enabled')
+      .maybeSingle();
+    const dbValue = data?.value;
+    if (dbValue === true || dbValue === false) {
+      return {
+        enabled: dbValue,
+        source: 'db',
+        reason: data?.notes || null,
+      };
+    }
+  } catch (err) {
+    // Si la DB est down, on fallback sur ENV pour pas bloquer
+    console.error('[autonomy] isAutonomyEnabled DB check failed, falling back to ENV', err.message);
+  }
+  return {
+    enabled: _envAutonomyEnabled(),
+    source: 'env',
+  };
+}
+
+/**
+ * Modifier le kill switch côté DB.
+ * Override le ENV var (DB a priorité).
+ *
+ * @param {boolean|null} value - true=ON, false=OFF, null=fallback ENV
+ * @param {string} [reason] - texte humain ("STOP email du 2026-06-15", "founder via UI", ...)
+ * @param {string} [updatedBy] - user_id, 'system_cron', 'inbound_email', etc.
+ */
+export async function setAutonomyEnabled(value, reason = null, updatedBy = 'system') {
+  const supabase = getSupabaseAdmin();
+  const dbValue = value === null ? null : !!value;
+  const { error } = await supabase
+    .from('app_settings')
+    .upsert(
+      {
+        key: 'autonomy_enabled',
+        value: dbValue,
+        notes: reason,
+        updated_by: updatedBy,
+      },
+      { onConflict: 'key' }
+    );
+  if (error) {
+    console.error('[autonomy] setAutonomyEnabled failed', error);
+    throw error;
+  }
+  return { ok: true, value: dbValue, reason, updatedBy };
 }
 
 // Helper UX : message standardisé quand autonomy désactivée
@@ -309,6 +385,78 @@ export async function checkActionQuota(actionType, limits = {}) {
     };
   }
   return { allowed: true, current: checks };
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// QUOTAS — caps systématiques par actionType (anti-spam, DGCCRF safety)
+// ─────────────────────────────────────────────────────────────────────
+// Centralisé ici pour ne pas dupliquer dans chaque cron. Si on veut
+// override en runtime sans redeploy, ajouter une row dans app_settings
+// key='quota_overrides' value={...} qui mergerait dessus.
+//
+// Ces caps comptent TOUTES les actions (pending + approved + executed)
+// pour éviter qu'on génère 10 brouillons d'un coup même non publiés.
+// ─────────────────────────────────────────────────────────────────────
+
+export const DEFAULT_QUOTAS = {
+  linkedin_post: { perDay: 3, perWeek: 7, perMonth: 25 },
+  twitter_post: { perDay: 5, perWeek: 15, perMonth: 50 },
+  comment_reply: { perDay: 20, perWeek: 100, perMonth: 300 },
+  cold_email_send: { perDay: 100, perWeek: 500, perMonth: 2000 },
+  blog_publish: { perWeek: 2, perMonth: 6 },
+  newsletter_send: { perMonth: 2 },
+  auto_changelog_entry: { perDay: 10 },
+  comment_volia_mention_reply: { perDay: 10, perWeek: 50 },
+};
+
+/**
+ * Vérifie le quota pour un actionType. Throw si dépassé.
+ * À appeler AVANT logAutonomousAction dans chaque cron.
+ *
+ * @param {string} actionType
+ * @param {object} [overrides] - override limits inline si besoin
+ * @throws {Error} si quota dépassé (avec détails)
+ */
+export async function enforceQuotaOrThrow(actionType, overrides = {}) {
+  const limits = { ...(DEFAULT_QUOTAS[actionType] || {}), ...overrides };
+  if (Object.keys(limits).length === 0) return; // pas de quota défini = unlimited
+  const check = await checkActionQuota(actionType, limits);
+  if (!check.allowed) {
+    const err = new Error(`quota_exceeded: ${check.reason}`);
+    err.code = 'QUOTA_EXCEEDED';
+    err.detail = check;
+    throw err;
+  }
+}
+
+/**
+ * Stats d'utilisation des quotas par actionType (pour weekly audit + UI).
+ */
+export async function getQuotaUsageReport() {
+  const report = {};
+  for (const [actionType, limits] of Object.entries(DEFAULT_QUOTAS)) {
+    const usage = {};
+    if (limits.perDay) {
+      usage.day = {
+        current: await countRecentActions(actionType, 24, ['pending', 'approved', 'executed']),
+        limit: limits.perDay,
+      };
+    }
+    if (limits.perWeek) {
+      usage.week = {
+        current: await countRecentActions(actionType, 168, ['pending', 'approved', 'executed']),
+        limit: limits.perWeek,
+      };
+    }
+    if (limits.perMonth) {
+      usage.month = {
+        current: await countRecentActions(actionType, 720, ['pending', 'approved', 'executed']),
+        limit: limits.perMonth,
+      };
+    }
+    report[actionType] = usage;
+  }
+  return report;
 }
 
 /**

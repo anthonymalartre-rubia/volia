@@ -152,6 +152,14 @@
     {
       "path": "/api/cron/dogfood-outreach",
       "schedule": "0 14 * * 1"
+    },
+    {
+      "path": "/api/cron/meta-autonomy-rollup",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/meta-autonomy-weekly-review",
+      "schedule": "0 10 * * 2"
     }
   ]
 }

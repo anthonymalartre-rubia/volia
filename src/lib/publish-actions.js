@@ -79,6 +79,8 @@ export async function runPublishApprovedActions() {
             url: publishResult.post_url,
             post_id: publishResult.post_id,
             posted_at: new Date().toISOString(),
+            auto_liked_at: publishResult.auto_liked_at || null,
+            auto_like_error: publishResult.auto_like_error || null,
           },
           twitter: {
             skipped: true,

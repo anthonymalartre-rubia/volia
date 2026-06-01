@@ -146,12 +146,70 @@ export async function publishToLinkedIn(text, credentials, opts = {}) {
       ? `https://www.linkedin.com/feed/update/${postId}/`
       : null;
 
+    // Auto-like immédiat : signal d'autorité fort à l'algo LinkedIn dans
+    // la fenêtre critique des 60 premières minutes. Fire-and-forget — si
+    // ça plante on log mais on ne fail pas la publication elle-même.
+    let autoLikedAt = null;
+    let autoLikeError = null;
+    if (postId && opts.autoLike !== false) {
+      try {
+        const likeRes = await likeLinkedInPost(postId, personUrn, accessToken);
+        if (likeRes.ok) {
+          autoLikedAt = new Date().toISOString();
+        } else {
+          autoLikeError = likeRes.error;
+          console.warn('[linkedin auto-like] failed', likeRes.error);
+        }
+      } catch (e) {
+        autoLikeError = e.message;
+        console.warn('[linkedin auto-like] threw', e.message);
+      }
+    }
+
     return {
       ok: true,
       post_id: postId,
       post_url: postUrl,
+      auto_liked_at: autoLikedAt,
+      auto_like_error: autoLikeError,
       raw: data,
     };
+  } catch (err) {
+    return { ok: false, error: `Fetch error : ${err.message}` };
+  }
+}
+
+/**
+ * Like un post LinkedIn par son own URN (auto-like d'autorité).
+ *
+ * Endpoint : POST /v2/socialActions/{encodedShareUrn}/likes
+ * Body : { actor: "urn:li:person:XXX" }
+ * Scope nécessaire : w_member_social
+ *
+ * @param {string} shareUrn - "urn:li:share:XXXX" (le post)
+ * @param {string} personUrn - "urn:li:person:XXX" (qui like, généralement soi-même)
+ * @param {string} accessToken
+ */
+export async function likeLinkedInPost(shareUrn, personUrn, accessToken) {
+  if (!shareUrn || !personUrn || !accessToken) {
+    return { ok: false, error: 'shareUrn, personUrn, accessToken requis' };
+  }
+  const encoded = encodeURIComponent(shareUrn);
+  try {
+    const res = await fetch(`${LINKEDIN_API_BASE}/v2/socialActions/${encoded}/likes`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'X-Restli-Protocol-Version': '2.0.0',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ actor: personUrn }),
+    });
+    if (!res.ok) {
+      const body = await res.text();
+      return { ok: false, error: `Like API ${res.status} : ${body.slice(0, 200)}` };
+    }
+    return { ok: true };
   } catch (err) {
     return { ok: false, error: `Fetch error : ${err.message}` };
   }

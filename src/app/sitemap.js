@@ -72,6 +72,10 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/en/products/campaigns`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/campagnes`, 'en-US': `${baseUrl}/en/products/campaigns`, 'x-default': `${baseUrl}/produits/campagnes` } } },
       { url: `${baseUrl}/en/products/crm`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/crm`, 'en-US': `${baseUrl}/en/products/crm`, 'x-default': `${baseUrl}/produits/crm` } } },
       { url: `${baseUrl}/comparatif-outils-prospection-b2b-france`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
+      // Hub des études — créé 1er juin 2026 (corrige le 404 historique
+      // /etude qui était signalé par GSC). Liste les 2 études publiées
+      // + invite presse à contact.
+      { url: `${baseUrl}/etude`, priority: 0.85, changeFrequency: 'weekly', lastModified: now },
       { url: `${baseUrl}/etude/prospection-b2b-france-2026`, priority: 1.0, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/etude/etat-cold-email-france-2026`, priority: 0.95, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/api`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },

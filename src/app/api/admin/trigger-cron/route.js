@@ -21,6 +21,7 @@ import { runSentryDigest } from '@/lib/sentry-digest';
 import { runChangelogProposer } from '@/lib/changelog-proposer';
 import { runBlogWriter } from '@/lib/blog-writer';
 import { runNewsletterProposer } from '@/lib/newsletter-generator';
+import { runReactivationChurners } from '@/lib/reactivation';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
@@ -29,6 +30,7 @@ const CRONS = {
   'auto-changelog-proposer': runChangelogProposer,
   'auto-blog-writer': runBlogWriter,
   'newsletter-proposer': runNewsletterProposer,
+  'reactivation-churners': runReactivationChurners,
 };
 
 async function requireAdmin() {

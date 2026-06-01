@@ -62,6 +62,7 @@ import {
   PRESS_RELEASES,
   PRESS_CONTACT,
   FOUNDER_BIO,
+  AI_LOOPS_INVENTORY,
 } from '@/lib/press-kit';
 
 // Mapping iconName (string sérialisable depuis press-kit.js) → composant
@@ -516,6 +517,127 @@ function PressAnglesSection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────
+// AILoopsInventorySection — détail technique des 16 boucles autonomes
+// ─────────────────────────────────────────────────────────────────────
+// Ajouté juin 2026 après livraison du Sprint Méta-autonomie. Cible
+// principale : journalistes IA/tech qui veulent du concret vérifiable
+// au-delà du pitch "16 boucles". Chaque boucle expose : nom + cadence
+// + résumé d'1 ligne. Groupé par catégorie pour la lisibilité.
+//
+// Données : AI_LOOPS_INVENTORY dans lib/press-kit.js (source unique).
+// ─────────────────────────────────────────────────────────────────────
+function AILoopsInventorySection() {
+  // Groupe by category en gardant l'ordre d'apparition
+  const grouped = AI_LOOPS_INVENTORY.reduce((acc, loop) => {
+    if (!acc[loop.category]) acc[loop.category] = [];
+    acc[loop.category].push(loop);
+    return acc;
+  }, {});
+  const categoryOrder = Object.keys(grouped);
+
+  // Mapping catégorie → couleur d'accent (cohérence visuelle landing)
+  const categoryColors = {
+    Marketing: 'from-violet-500 to-purple-600',
+    Vente: 'from-emerald-500 to-teal-600',
+    Support: 'from-blue-500 to-cyan-600',
+    Code: 'from-rose-500 to-orange-600',
+    'Méta': 'from-amber-500 to-rose-600',
+  };
+
+  return (
+    <section className="py-20 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-transparent via-violet-50/30 to-transparent">
+      <div className="max-w-6xl mx-auto">
+        <MotionInView>
+          <div className="mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-semibold border border-violet-200 mb-4">
+              <Brain size={12} />
+              Inventaire technique
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-content-primary mb-3">
+              Les 16 boucles d'agents IA en production
+            </h2>
+            <p className="text-base sm:text-lg text-content-secondary max-w-3xl">
+              Détail complet de chaque automatisation autonome qui orchestre Volia 24/7,
+              regroupé par catégorie. Pour les journalistes qui veulent du concret.
+            </p>
+            <p className="text-xs text-content-tertiary mt-3 italic max-w-3xl">
+              ⓘ Le founder reste responsable produit, sales et service client.
+              Toutes les actions à risque (PR code, posts publiés, emails clients)
+              passent par une validation manuelle ou un garde-fou explicite avant exécution.
+            </p>
+          </div>
+        </MotionInView>
+
+        <div className="space-y-10">
+          {categoryOrder.map((category, ci) => {
+            const loops = grouped[category];
+            const gradient = categoryColors[category] || 'from-slate-500 to-slate-700';
+            return (
+              <div key={category}>
+                <MotionInView delay={ci * 60}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`h-px flex-1 bg-gradient-to-r ${gradient} opacity-30`} />
+                    <h3 className={`text-xs font-bold uppercase tracking-widest bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
+                      {category} · {loops.length} boucle{loops.length > 1 ? 's' : ''}
+                    </h3>
+                    <div className={`h-px flex-1 bg-gradient-to-r ${gradient} opacity-30`} />
+                  </div>
+                </MotionInView>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {loops.map((loop, i) => (
+                    <MotionInView key={`${category}-${i}`} delay={ci * 60 + i * 40}>
+                      <div className="h-full p-4 rounded-xl bg-surface-elevated border border-line hover:border-violet-300 hover:shadow-md transition-all">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <h4 className="text-sm font-semibold text-content-primary leading-tight">
+                            {loop.name}
+                          </h4>
+                          <span className="shrink-0 px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-mono font-semibold tracking-tight">
+                            {loop.cadence}
+                          </span>
+                        </div>
+                        <p className="text-xs leading-relaxed text-content-secondary">
+                          {loop.detail}
+                        </p>
+                      </div>
+                    </MotionInView>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <MotionInView delay={300}>
+          <div className="mt-10 p-5 rounded-xl bg-violet-50 border border-violet-200">
+            <div className="flex items-start gap-3">
+              <div className="shrink-0 p-2 rounded-lg bg-white border border-violet-200">
+                <Brain size={18} className="text-violet-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-violet-900 mb-1">
+                  Couche méta-autonomie : Volia s'auto-optimise
+                </p>
+                <p className="text-xs leading-relaxed text-violet-800">
+                  Chaque nuit à 2h, une boucle agrège les métriques de toutes les autres
+                  (tentatives, succès, coût estimé, valeur estimée, ROI).
+                  Chaque mardi à 10h, le founder reçoit un email auto-généré avec un
+                  dashboard détaillé et <strong>3 recommandations Claude</strong> pour
+                  optimiser, créer ou supprimer des boucles la semaine suivante.
+                </p>
+                <p className="text-[11px] text-violet-700 mt-2 italic">
+                  Le système ne se contente pas d'exécuter — il décide ce qu'il faudrait
+                  faire ensuite. Le founder décide quoi accepter, rejeter, livrer.
+                </p>
+              </div>
+            </div>
+          </div>
+        </MotionInView>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
 // AssetsSection — grid de cards téléchargeables
 // ─────────────────────────────────────────────────────────────────────
 function AssetsSection() {
@@ -860,6 +982,7 @@ export default function PresseClientPage() {
         <KeyNumbersSection />
         <FounderBioSection />
         <PressAnglesSection />
+        <AILoopsInventorySection />
         <AssetsSection />
         <QuotesSection />
         <PressReleasesSection />

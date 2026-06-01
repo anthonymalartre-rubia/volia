@@ -26,6 +26,7 @@ import { runAutoFixBugs } from '@/lib/auto-fix-bugs';
 import { rebuildAllLeadScores } from '@/lib/lead-scoring';
 import { runTrialRelance } from '@/lib/trial-relance';
 import { runDogfoodOutreach } from '@/lib/dogfood-outreach';
+import { rollupAutonomyMetrics, runWeeklyAutonomyReview, generateRecommendations } from '@/lib/meta-autonomy';
 
 const CRONS = {
   'auto-content-proposer': runContentProposer,
@@ -39,6 +40,9 @@ const CRONS = {
   'lead-scoring': rebuildAllLeadScores,
   'trial-relance': runTrialRelance,
   'dogfood-outreach': runDogfoodOutreach,
+  'meta-autonomy-rollup': rollupAutonomyMetrics,
+  'meta-autonomy-weekly-review': runWeeklyAutonomyReview,
+  'meta-autonomy-recommendations': generateRecommendations,
 };
 
 async function requireAdmin() {

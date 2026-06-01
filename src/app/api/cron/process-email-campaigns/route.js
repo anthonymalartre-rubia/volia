@@ -19,6 +19,9 @@ import { logEmailSentToCrm } from '@/lib/crm-activity-logger';
 import { buildCampaignReplyAddress } from '@/lib/inbound-domain';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { reportError } from '@/lib/errorReporting';
+import { incrementUsage } from '@/lib/usage';
+import { PLANS } from '@/lib/plans';
+import { getEffectivePlan } from '@/lib/trial';
 import {
   calculateCurrentDay,
   getCurrentPhase,
@@ -268,6 +271,47 @@ async function handleCron(request) {
     });
   }
 
+  // ─── QUOTA EMAILS (anti-bombe à coûts Resend — task #328) ────────
+  // Pré-charge le budget mensuel `emails_sent` restant pour chaque owner
+  // du batch. Décrémenté en mémoire à chaque send pendant la boucle ci-dessous.
+  // Quand un owner atteint 0 restant : ses sends suivants sont skip + marqués
+  // 'failed' avec error='quota_exceeded'. Le compteur DB sera incrémenté
+  // après chaque success via incrementUsage() (fire-and-forget).
+  //
+  // Limites par plan (cf. src/lib/plans.js) :
+  //   free/solo/pro : 0 (Campagnes = Business-only)
+  //   business / enterprise : 10 000 emails/mois
+  //
+  // Sans ce garde-fou : un client Business pouvait envoyer un volume illimité
+  // sur notre compte Resend, exposant Volia à des factures imprévisibles.
+  const ownerIds = [...new Set((campaigns || []).map((c) => c.owner_id).filter(Boolean))];
+  const emailQuotaByOwner = new Map(); // ownerId → remaining (Infinity si illimité)
+  if (ownerIds.length > 0) {
+    const month = new Date().toISOString().slice(0, 7); // YYYY-MM
+    const [{ data: profiles }, { data: usageRows }] = await Promise.all([
+      supabase
+        .from('user_profiles')
+        .select('id, plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
+        .in('id', ownerIds),
+      supabase
+        .from('usage_tracking')
+        .select('user_id, emails_sent')
+        .in('user_id', ownerIds)
+        .eq('month', month),
+    ]);
+    const usedByOwner = new Map((usageRows || []).map((r) => [r.user_id, r.emails_sent || 0]));
+    for (const profile of profiles || []) {
+      const planId = getEffectivePlan(profile);
+      const limit = PLANS[planId]?.limits?.emails_sent_per_month ?? 0;
+      if (limit === -1) {
+        emailQuotaByOwner.set(profile.id, Infinity);
+      } else {
+        const used = usedByOwner.get(profile.id) || 0;
+        emailQuotaByOwner.set(profile.id, Math.max(0, limit - used));
+      }
+    }
+  }
+
   // 3.quinquies) A/B testing — pour chaque campagne en A/B (subject_variant_2
   // non-null), on calcule l'état courant :
   //   - sentSoFar : nombre de sends 'sent'/'delivered'/etc. déjà partis
@@ -363,6 +407,23 @@ async function handleCron(request) {
     if (contact.opt_out) {
       return updateSendStatus(supabase, send.id, 'failed', { error: 'Contact opt-out' });
     }
+
+    // ─── HARD-CAP QUOTA EMAILS (anti-bombe à coûts — task #328) ──
+    // Vérifie + décrémente le budget mensuel en mémoire AVANT le sendEmail.
+    // Si déjà à 0 : on marque le send 'failed' avec error explicite,
+    // l'utilisateur verra ça dans son dashboard et pourra upgrader.
+    // Le pré-décrément optimiste évite l'overshoot si plusieurs sends
+    // du même owner sont traités dans le même batch (lecture-écriture
+    // séquentielle en JS — pas de race).
+    const ownerRemaining = emailQuotaByOwner.get(campaign.owner_id) ?? 0;
+    if (ownerRemaining <= 0) {
+      return updateSendStatus(supabase, send.id, 'failed', {
+        error: 'Email quota exceeded for this month (Business plan: 10 000 emails/month). Wait for next month or contact support.',
+      });
+    }
+    // Pré-décrément optimiste : si l'envoi rate plus loin, on recrédite
+    // dans le bloc `else` (rollback) pour ne pas pénaliser l'user.
+    emailQuotaByOwner.set(campaign.owner_id, ownerRemaining - 1);
 
     // A/B testing — choix du variant de subject
     //   Phase 1 (sentSoFar + inFlight < sample_size) : on round-robin entre variants
@@ -469,6 +530,14 @@ async function handleCron(request) {
     }));
 
     if (result.success) {
+      // Incrémente le compteur quota DB (task #328) — fire-and-forget,
+      // ne JAMAIS bloquer l'envoi sur un échec d'écriture stats.
+      // Le pré-décrément en mémoire a déjà été fait ci-dessus, ici on
+      // persiste juste l'événement dans usage_tracking.emails_sent.
+      incrementUsage(supabase, campaign.owner_id, 'emails_sent', 1).catch((err) =>
+        console.warn('[cron/email-campaigns] emails_sent increment failed:', err.message)
+      );
+
       // Met aussi à jour last_email_at sur le contact (throttling)
       await supabase.from('prospect_contacts')
         .update({ last_email_at: new Date().toISOString() })
@@ -491,6 +560,14 @@ async function handleCron(request) {
       });
       return { ...sendUpdate, crmLogged: !!crmLog?.logged };
     } else {
+      // Rollback quota emails (task #328) : si le send a raté, on n'a pas
+      // envoyé d'email réel donc on recrédite le budget en mémoire pour
+      // que les sends suivants du même owner dans CE batch ne soient pas
+      // pénalisés. Le compteur DB n'a JAMAIS été incrémenté (l'increment
+      // est dans le bloc success), donc rien à faire côté DB.
+      const cur = emailQuotaByOwner.get(campaign.owner_id) ?? 0;
+      emailQuotaByOwner.set(campaign.owner_id, cur + 1);
+
       // Bug fix audit 27 mai 2026 : décrémenter inFlight si on a incrémenté
       // pour A/B (sinon biaise le round-robin du prochain batch)
       if (abStateByCampaign.has(campaign.id) && !abStateByCampaign.get(campaign.id)?.winnerVariant) {

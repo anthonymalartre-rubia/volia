@@ -24,6 +24,11 @@ export const PLANS = {
       phones_per_month: 20,
       folders: 3,
       exports_per_month: 5,
+      // Free n'a pas accès aux modules Campagnes/Forms (Business-only)
+      // donc quota à 0 — utilisé uniquement par le hard-cap côté API si
+      // jamais un user free arrivait à appeler ces endpoints.
+      emails_sent_per_month: 0,
+      form_submissions_per_month: 0,
     },
     // Features = LE CONTENU DE BASE (référence pour les "Tout inclus" plus haut)
     // Garder court (max 5 items) — l'idée c'est de tester sans s'engager
@@ -54,6 +59,8 @@ export const PLANS = {
       folders: 10,
       exports_per_month: -1,
       verifications_per_month: 100,
+      emails_sent_per_month: 0,            // Campagnes = Business-only
+      form_submissions_per_month: 0,  // Forms = Business-only
     },
     features: [
       '400 enrichissements email/mois (×20)',
@@ -85,6 +92,8 @@ export const PLANS = {
       folders: -1,
       exports_per_month: -1,
       verifications_per_month: 500,
+      emails_sent_per_month: 0,            // Campagnes = Business-only
+      form_submissions_per_month: 0,  // Forms = Business-only
     },
     features: [
       '1 200 enrichissements email/mois (×3)',
@@ -135,10 +144,17 @@ export const PLANS = {
       folders: -1,
       exports_per_month: -1,
       verifications_per_month: 5000,
+      // Anti-bombe à coûts Resend + Supabase. Limites larges mais cappées :
+      // 10 000 cold emails/mois = ~333/jour = volume warmup-safe d'1 boîte
+      // 5 000 form_submissions/mois = ~166/jour, suffisant pour 99% des PME
+      emails_sent_per_month: 10000,
+      form_submissions_per_month: 5000,
     },
     features: [
       '10 000 enrichissements email/mois (×8)',
       '10 000 numéros de téléphone/mois',
+      '10 000 cold emails/mois (warmup auto inclus)',
+      '5 000 soumissions de formulaires/mois',
       'Multi-utilisateurs (équipes, RBAC)',
       'Accès API (à venir)',
       'Onboarding personnalisé',
@@ -164,6 +180,8 @@ export const PLANS = {
       folders: -1,
       exports_per_month: -1,
       verifications_per_month: 5000,
+      emails_sent_per_month: 10000,
+      form_submissions_per_month: 5000,
     },
     features: [],
   },

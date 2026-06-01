@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
-  Copy, Check, Briefcase, Bird,
+  Copy, Check, Briefcase, Bird, Zap, Upload,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
@@ -122,6 +122,35 @@ export default function AutoQueuePage() {
   const [autonomyEnabled, setAutonomyEnabled] = useState(false);
   const [actionInFlight, setActionInFlight] = useState(null); // id en cours d'approve/reject
   const [error, setError] = useState('');
+
+  // Trigger cron manuels
+  const [triggering, setTriggering] = useState(null); // 'auto-content-proposer' | 'publish-approved-actions' | null
+  const [triggerResult, setTriggerResult] = useState(null);
+
+  async function handleTrigger(cron) {
+    setTriggering(cron);
+    setTriggerResult(null);
+    setError('');
+    try {
+      const res = await fetch('/api/admin/trigger-cron', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cron }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Erreur');
+        return;
+      }
+      setTriggerResult({ cron, ...data });
+      // Refresh la queue automatiquement pour voir le nouveau brouillon
+      setTimeout(() => fetchQueue(), 500);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setTriggering(null);
+    }
+  }
 
   // ─── Auth check (admin only) ────────────────────────────────
   useEffect(() => {
@@ -293,6 +322,59 @@ export default function AutoQueuePage() {
             {error}
           </div>
         )}
+
+        {/* ─── Triggers manuels (admin shortcuts) ───────────────── */}
+        <div className="mb-6 p-4 rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50">
+          <p className="text-xs font-semibold uppercase tracking-wider text-violet-900 mb-2">
+            Triggers manuels (test rapide)
+          </p>
+          <p className="text-xs text-violet-800 mb-3">
+            Lance les crons sans attendre leur prochain tick scheduled. Utile pour tester
+            ou rattraper un événement urgent.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => handleTrigger('auto-content-proposer')}
+              disabled={triggering !== null || !autonomyEnabled}
+              title={!autonomyEnabled ? 'Autonomy OFF — activer AUTONOMOUS_MODE_ENABLED' : ''}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white hover:bg-violet-500 text-xs font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {triggering === 'auto-content-proposer' ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Zap size={12} />
+              )}
+              Générer un brouillon maintenant
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTrigger('publish-approved-actions')}
+              disabled={triggering !== null || !autonomyEnabled}
+              title={!autonomyEnabled ? 'Autonomy OFF — activer AUTONOMOUS_MODE_ENABLED' : ''}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 text-xs font-semibold shadow-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {triggering === 'publish-approved-actions' ? (
+                <Loader2 size={12} className="animate-spin" />
+              ) : (
+                <Upload size={12} />
+              )}
+              Publier les approuvés maintenant
+            </button>
+          </div>
+
+          {/* Résultat dernier trigger */}
+          {triggerResult && (
+            <div className="mt-3 p-2.5 rounded-lg bg-white border border-violet-200 text-xs">
+              <p className="font-semibold text-violet-900 mb-1">
+                Résultat ({triggerResult.cron}) :
+              </p>
+              <pre className="text-[11px] text-violet-800 overflow-x-auto whitespace-pre-wrap font-mono">
+                {JSON.stringify(triggerResult.result, null, 2)}
+              </pre>
+            </div>
+          )}
+        </div>
 
         {/* ─── Queue ───────────────────────────────────────────── */}
         {loading && queue.length === 0 ? (

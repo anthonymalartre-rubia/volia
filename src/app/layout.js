@@ -5,6 +5,7 @@ import { I18nProvider } from '@/lib/i18n';
 import CookieConsent from '@/components/CookieConsent';
 import AchievementToast from '@/components/welcome/AchievementToast';
 import DemoBotWidget from '@/components/DemoBotWidget';
+import SupportBotWidget from '@/components/SupportBotWidget';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -183,6 +184,11 @@ export default function RootLayout({ children }) {
                 admin, app, settings, login). Widget client gère son
                 propre check pathname via usePathname(). */}
             <DemoBotWidget />
+            {/* Chat in-app support — show SEULEMENT sur app authentifiée
+                (/dashboard, /app, /admin, /settings, /parrainage,
+                /notifications). Auto-pré-load context user (plan, trial,
+                lead_score) côté server. */}
+            <SupportBotWidget />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

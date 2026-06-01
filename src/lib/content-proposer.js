@@ -77,12 +77,32 @@ export async function gatherRecentEvents() {
         .map((item) => `[${item.type}${item.tag ? '/' + item.tag : ''}] ${item.text}`),
     }));
 
-  // Blog : articles publiés récemment
+  // Blog : articles publiés récemment — MAIS on EXCLUT explicitement le
+  // contenu storytelling autoréférent (article "Comment j'ai bâti…",
+  // founder story, etc). Cf. décision founder du 1er juin 2026 : la comm
+  // sociale doit parler VALEUR CLIENT, pas coulisses de Volia. Le
+  // storytelling reste réservé à /presse et /notre-histoire pour
+  // journalistes.
+  const STORYTELLING_KEYWORDS = [
+    'bati', 'bâti', 'bâtir', 'batir', 'construit', 'construire', 'construction',
+    'autonome', 'autonomy', 'autonomous',
+    'marseille',
+    'founder', 'fondateur',
+    'comment j', 'mon histoire', 'notre histoire',
+    'coulisse', 'behind-the-scenes', 'making-of',
+    '6-semaines', '6 semaines', 'six semaines',
+  ];
+  const isStorytellingArticle = (post) => {
+    const haystack = `${post.title || ''} ${post.slug || ''} ${post.excerpt || ''}`.toLowerCase();
+    return STORYTELLING_KEYWORDS.some((kw) => haystack.includes(kw));
+  };
   const recentBlog = (BLOG_POSTS || [])
     .filter((post) => {
       const d = post.publishedAt || post.date;
       if (!d) return false;
-      return new Date(d) >= since;
+      if (new Date(d) < since) return false;
+      if (isStorytellingArticle(post)) return false; // NE PAS shaper en post B2B
+      return true;
     })
     .slice(0, 3)
     .map((post) => ({
@@ -383,24 +403,53 @@ export async function generateDrafts(events) {
     .map((a, i) => `  ${i + 1}. **${a.angle}** — exemple de hook : "${a.hook}"`)
     .join('\n');
 
-  const userMessage = `## CONTEXTE BUSINESS (7 derniers jours)
-${eventsBrief || '(Aucun event business notable cette semaine — base-toi sur la matière evergreen ci-dessous.)'}
+  const userMessage = `## RÈGLE NUMÉRO 1 (NE PAS VIOLER)
+Le SUJET de ce post N'EST PAS Volia ni son histoire ni comment il a été
+construit. Le sujet est UNE DOULEUR / UN MYTHE / UNE INJUSTICE DE PRIX
+de l'industrie B2B sales/marketing. Volia n'apparaît qu'à la fin comme
+solution (CTA discret).
 
-## ANGLES PROVOCATEURS DISPONIBLES (si pas d'angle event qui claque)
-Tu peux soit shaper un event business ci-dessus de façon provocatrice, soit piocher l'un de ces angles evergreen :
+INTERDIT ABSOLU dans ce post :
+- "X semaines pour bâtir/coder/monter SaaS"
+- "1 founder + IA / + Claude / + agents"
+- "Sans levée de fonds / sans équipe"
+- "Retour d'expérience sur volia.fr/blog"
+- "Marseille" en tant que lieu de fondation
+- Tout storytelling sur la genèse de Volia
+
+Si tu écris ça, le linter rejette ton brouillon AVANT la queue. Tu auras tout fait pour rien.
+
+## CONTEXTE BUSINESS — FYI uniquement (PAS le sujet du post)
+${eventsBrief || '(Aucun event business cette semaine)'}
+
+## ANGLE OBLIGATOIRE — pick UN seul
+Tu DOIS choisir UN des 8 frameworks provocateurs du system prompt
+(démolition mythe, pricing call-out, fact-bomb, contrarian, anecdote
+client, comparaison cash, pain amplifié, données vs intuition).
+
+Inspiration angles tournants cette semaine :
 ${angleHints}
 
-## INSTRUCTION
-Génère 1 post LinkedIn + 1 tweet qui CAPTENT L'ATTENTION et FONT RÉAGIR notre cible (founders B2B FR + SDR PME).
+## CIBLE DU POST
+- Founder B2B FR (1-50 employés) qui en a marre de payer 2000€/mois en stack
+- SDR / commercial PME qui passe 4h/sem à scraper LinkedIn manuellement
+- CEO solo qui jongle entre 8 outils différents
 
-Choisis UN SEUL angle (un event business shapé OU un angle evergreen). Ne mixe pas.
+## CE QUE TU DOIS FAIRE RESSENTIR
+- "Putain, c'est vrai, je perds du temps/argent pour rien"
+- "J'avais jamais pensé à ce concurrent sous cet angle"
+- "Faut que je teste/regarde Volia"
 
-Optimise pour :
-- Engagement (commentaires > likes)
-- Clics vers volia.fr ou volia.fr/pricing
-- Que les concurrents (Apollo, HubSpot, Lemlist) restent fair-game à attaquer factuellement
+## CTA AUTORISÉS (mini, en dernière ligne max)
+- volia.fr (générique)
+- volia.fr/pricing (battle prix)
+- volia.fr/comparatif/apollo (versus direct)
+- volia.fr/etude (data B2B FR fraîche)
+- "Curieux ? Réponds 'demo' en commentaire" (engagement bait)
 
-Va à la corde sensible. N'essaie pas de plaire à tout le monde.`;
+## OBJECTIF
+Engagement > reach. Commentaires + sauvegardes + clics. N'essaie pas
+de plaire à tout le monde. Sois clivant.\`;
 
   const message = await client.messages.create({
     model: CLAUDE_MODEL,
@@ -436,6 +485,17 @@ Va à la corde sensible. N'essaie pas de plaire à tout le monde.`;
     /\bBordeaux\b/i,
     /\b12\s+mois\b/i,
     /\b287[\s ]?000\b/,
+    // Storytelling autoréférent — bloqué en comm sociale lead-gen
+    /\bLyon\b/i,
+    /\b1\s+founder\s*\+\s*IA\b/i,
+    /\b1\s+founder\s*\+\s*Claude\b/i,
+    /\bClaude\s+comme\s+copilote\b/i,
+    /\b6\s+semaines\s+pour\s+(?:bâtir|coder|construire|faire|monter)/i,
+    /\bcodé\s+(?:en|depuis|à)\s+Marseille\b/i,
+    /\btout\s+codé\b/i,
+    /\bpas\s+(?:de\s+)?(?:levée|équipe|fonds)\b/i,
+    /\bRetour\s+d'expérience\s+(?:complet|sur)/i,
+    /\bbâti(?:r)?\s+(?:un|le|notre)\s+SaaS/i,
   ];
   const combinedText = `${parsed.linkedin}\n${parsed.twitter}`;
   const flagged = BANNED_PATTERNS.find((p) => p.test(combinedText));

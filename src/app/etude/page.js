@@ -318,8 +318,8 @@ export default function EtudesHubPage() {
                   espace presse
                 </Link>
                 {' '}ou directement à{' '}
-                <a href="mailto:presse@volia.fr" className="text-violet-700 font-semibold hover:underline">
-                  presse@volia.fr
+                <a href="mailto:contact@volia.fr" className="text-violet-700 font-semibold hover:underline">
+                  contact@volia.fr
                 </a>.
               </p>
               <div className="flex flex-wrap items-center gap-2">

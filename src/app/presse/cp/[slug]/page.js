@@ -9,8 +9,9 @@
 
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Phone, MapPin, ArrowLeft, Printer, Globe } from 'lucide-react';
+import { Mail, MapPin, ArrowLeft, Globe } from 'lucide-react';
 import { PRESS_RELEASES_FULL, PRESS_CONTACT } from '@/lib/press-kit';
+import PrintButton from '@/components/PrintButton';
 
 export async function generateStaticParams() {
   return Object.keys(PRESS_RELEASES_FULL).map((slug) => ({ slug }));
@@ -47,12 +48,7 @@ export default function PressReleasePage({ params }) {
           <Link href="/presse" className="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium">
             <ArrowLeft size={14} /> Espace presse
           </Link>
-          <button
-            onClick={() => typeof window !== 'undefined' && window.print()}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 text-white hover:bg-violet-500 font-semibold text-xs"
-          >
-            <Printer size={12} /> Imprimer / Enregistrer en PDF
-          </button>
+          <PrintButton />
         </div>
       </div>
 
@@ -164,25 +160,15 @@ export default function PressReleasePage({ params }) {
         </footer>
       </article>
 
-      {/* Print-specific CSS */}
-      <style jsx global>{`
+      {/* Print-specific CSS — regular style tag (works in Server Component) */}
+      <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          @page {
-            margin: 1.5cm;
-            size: A4;
-          }
-          body {
-            font-size: 11pt;
-            line-height: 1.5;
-          }
-          aside, section {
-            page-break-inside: avoid;
-          }
-          h1, h2 {
-            page-break-after: avoid;
-          }
+          @page { margin: 1.5cm; size: A4; }
+          body { font-size: 11pt; line-height: 1.5; }
+          aside, section { page-break-inside: avoid; }
+          h1, h2 { page-break-after: avoid; }
         }
-      `}</style>
+      `}} />
     </div>
   );
 }

@@ -15,9 +15,10 @@ import {
   markActionFailed,
 } from './autonomy';
 import { publishOn } from './publishers';
+import { createGithubIssue } from './github-api';
 
 const MAX_PER_RUN = 5;
-const ELIGIBLE_ACTION_TYPES = ['linkedin_post'];
+const ELIGIBLE_ACTION_TYPES = ['linkedin_post', 'github_issue_create'];
 
 /**
  * Pioche jusqu'à 5 actions approuvées non-publiées, publie sur LinkedIn,

@@ -24,11 +24,14 @@ const ELIGIBLE_ACTION_TYPES = ['linkedin_post'];
  * marque executed/failed selon résultat. Retourne un summary.
  */
 export async function runPublishApprovedActions() {
-  if (!isAutonomyEnabled()) {
+  const autonomyState = await isAutonomyEnabled();
+  if (!autonomyState.enabled) {
     return {
       ok: true,
       skipped: true,
       reason: 'autonomy_disabled',
+      source: autonomyState.source,
+      detail: autonomyState.reason,
     };
   }
 

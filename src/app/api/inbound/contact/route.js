@@ -21,6 +21,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { classifyEmail } from '@/lib/feedback-classifier';
+import { draftFaqReply } from '@/lib/faq-reply-drafter';
 import { logAutonomousAction, isAutonomyEnabled } from '@/lib/autonomy';
 
 export const dynamic = 'force-dynamic';
@@ -178,6 +179,7 @@ async function createActionFromClassification(feedbackId, classification, emailM
   };
 
   let actionType, riskLevel, preview, rationale;
+  // Modifier basePayload depuis les branches (mutation OK puisque on lit après)
 
   if (category === 'bug') {
     actionType = 'bug_triage_from_email';
@@ -192,8 +194,39 @@ async function createActionFromClassification(feedbackId, classification, emailM
   } else if (category === 'question') {
     actionType = 'faq_reply_proposal';
     riskLevel = 'medium';
-    preview = `❓ Question : ${summary}`;
-    rationale = `Email de ${emailMeta.from_email}. Brouillon de réponse FAQ à générer (Sprint Phase 2.1).`;
+
+    // Tente de générer le brouillon de réponse maintenant (Sprint Phase 2.1).
+    // Si Claude plante ou décide should_send=false, on log quand même
+    // l'action sans draft → founder répondra à la main.
+    try {
+      const draft = await draftFaqReply(
+        {
+          from_email: emailMeta.from_email,
+          from_name: emailMeta.from_name,
+          subject: emailMeta.subject,
+          body: emailMeta.body_preview,
+        },
+        classification
+      );
+      if (draft.should_send) {
+        basePayload.draft_subject = draft.subject;
+        basePayload.draft_body_markdown = draft.body_markdown;
+        basePayload.draft_body_text = draft.body_text;
+        basePayload.draft_rationale = draft.rationale;
+        preview = `❓ Q ${emailMeta.from_email} → "${(draft.body_text || '').slice(0, 90)}…"`;
+        rationale = `Email reçu, brouillon FAQ généré par Claude. ${draft.rationale}`;
+      } else {
+        // Claude refuse de répondre → founder doit gérer à la main
+        basePayload.draft_skipped_reason = draft.wont_send_reason || 'Claude a refusé de générer';
+        preview = `❓ Question (sensible) : ${summary}`;
+        rationale = `Email de ${emailMeta.from_email}. Claude n'a pas généré de brouillon : ${draft.wont_send_reason || 'raison non précisée'}. Founder doit répondre perso.`;
+      }
+    } catch (draftErr) {
+      console.error('[inbound/contact] FAQ draft failed', draftErr);
+      basePayload.draft_error = (draftErr.message || String(draftErr)).slice(0, 300);
+      preview = `❓ Question : ${summary}`;
+      rationale = `Email de ${emailMeta.from_email}. Brouillon génération failed : ${draftErr.message}. Founder répond manuel.`;
+    }
   } else if (category === 'sales_inquiry') {
     actionType = 'sales_lead_alert';
     riskLevel = 'low';

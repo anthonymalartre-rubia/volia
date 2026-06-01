@@ -27,8 +27,10 @@ import { rebuildAllLeadScores } from '@/lib/lead-scoring';
 import { runTrialRelance } from '@/lib/trial-relance';
 import { runDogfoodOutreach } from '@/lib/dogfood-outreach';
 import { rollupAutonomyMetrics, runWeeklyAutonomyReview, generateRecommendations } from '@/lib/meta-autonomy';
+import { runAutoFaqReply } from '@/lib/auto-faq-reply';
 
 const CRONS = {
+  'auto-faq-reply': runAutoFaqReply,
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
   'sentry-digest': runSentryDigest,

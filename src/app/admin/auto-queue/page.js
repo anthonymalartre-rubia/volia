@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import {
   Bot, CheckCircle2, XCircle, AlertTriangle, Clock, RefreshCw,
   Loader2, Send, FileText, Sparkles, Power, PowerOff,
-  Copy, Check, Linkedin, Twitter,
+  Copy, Check, Briefcase, Bird,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 // Note : pas d'import TopBar — le layout parent /admin/layout.js en rend
@@ -40,11 +40,11 @@ function SocialPostPreview({ payload }) {
 
   return (
     <div className="mb-3 space-y-2">
-      {/* Tabs LinkedIn / Twitter */}
+      {/* Tabs LinkedIn / Bird */}
       <div className="rounded-lg border border-line bg-surface-elevated p-3">
         <div className="flex items-center justify-between mb-2">
           <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-content-secondary">
-            <Linkedin size={14} className="text-[#0077b5]" />
+            <Briefcase size={14} className="text-[#0077b5]" />
             LinkedIn
             <span className="text-content-tertiary font-normal">· {linkedinLen} car.</span>
           </div>
@@ -66,8 +66,8 @@ function SocialPostPreview({ payload }) {
         <div className="rounded-lg border border-line bg-surface-elevated p-3">
           <div className="flex items-center justify-between mb-2">
             <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-content-secondary">
-              <Twitter size={14} className="text-[#1da1f2]" />
-              X / Twitter
+              <Bird size={14} className="text-[#1da1f2]" />
+              X / Bird
               <span className={`font-normal ${twitterLen > 280 ? 'text-rose-600' : 'text-content-tertiary'}`}>
                 · {twitterLen}/280
               </span>

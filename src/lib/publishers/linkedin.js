@@ -25,8 +25,17 @@
 const LINKEDIN_API_BASE = 'https://api.linkedin.com';
 
 /**
- * Test la validité d'un access_token via /v2/me.
- * Retourne { ok: true, person_urn, name } ou { ok: false, error }.
+ * Test la validité d'un access_token via /v2/userinfo (endpoint OIDC).
+ * Retourne { ok: true, person_urn, raw: { name, email, ... } } ou { ok: false, error }.
+ *
+ * NOTE — Pourquoi /v2/userinfo et pas /v2/me ?
+ * Les tokens générés via "Sign In with LinkedIn using OpenID Connect"
+ * (les seuls disponibles facilement aujourd'hui) ont les scopes
+ * { openid, profile, email, w_member_social }. L'endpoint legacy /v2/me
+ * exige le scope r_liteprofile qui n'est plus accessible facilement →
+ * il renvoie 403 "Not enough permissions". L'endpoint OIDC standard
+ * /v2/userinfo expose le même genre de data (sub, name, email, picture)
+ * avec les scopes OIDC modernes.
  *
  * Utilisé par /admin/publishers "Tester la connexion".
  */
@@ -35,27 +44,36 @@ export async function testLinkedInToken(accessToken) {
     return { ok: false, error: 'access_token manquant' };
   }
   try {
-    const res = await fetch(`${LINKEDIN_API_BASE}/v2/me`, {
+    const res = await fetch(`${LINKEDIN_API_BASE}/v2/userinfo`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        'X-Restli-Protocol-Version': '2.0.0',
       },
     });
     if (!res.ok) {
       const body = await res.text();
       return {
         ok: false,
-        error: `LinkedIn /v2/me ${res.status} : ${body.slice(0, 200)}`,
+        error: `LinkedIn /v2/userinfo ${res.status} : ${body.slice(0, 200)}`,
       };
     }
     const data = await res.json();
+    if (!data.sub) {
+      return {
+        ok: false,
+        error: 'Réponse /v2/userinfo sans champ "sub" (Person ID). Token invalide ?',
+      };
+    }
     return {
       ok: true,
-      person_urn: `urn:li:person:${data.id}`,
+      person_urn: `urn:li:person:${data.sub}`,
       raw: {
-        id: data.id,
-        localizedFirstName: data.localizedFirstName,
-        localizedLastName: data.localizedLastName,
+        // On garde les anciens noms de champs pour rester compatible avec
+        // l'UI /admin/publishers qui les affiche (cf. localizedFirstName).
+        localizedFirstName: data.given_name || '',
+        localizedLastName: data.family_name || '',
+        email: data.email,
+        picture: data.picture,
+        locale: data.locale,
       },
     };
   } catch (err) {

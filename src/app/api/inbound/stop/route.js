@@ -21,6 +21,8 @@
 import { NextResponse } from 'next/server';
 import { setAutonomyEnabled } from '@/lib/autonomy';
 import { sendEmail } from '@/lib/email';
+import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
+import { cleanEnv } from '@/lib/envClean';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -33,9 +35,29 @@ const AUTHORIZED_SENDERS = [
 ];
 
 export async function POST(request) {
+  // 1. Lire le body en RAW string pour vérification signature (avant JSON.parse)
+  const rawBody = await request.text().catch(() => '');
+  if (!rawBody) {
+    return NextResponse.json({ error: 'Empty body' }, { status: 400 });
+  }
+
+  // 2. Vérifier signature Svix (envoyée par Resend)
+  const secret = cleanEnv(process.env.RESEND_INBOUND_STOP_SECRET);
+  if (secret) {
+    try {
+      verifyResendSignature({ payload: rawBody, headers: request.headers, secret });
+    } catch (err) {
+      console.warn('[inbound/stop] signature invalide', err.message);
+      return NextResponse.json({ error: 'invalid_signature', detail: err.message }, { status: 401 });
+    }
+  } else {
+    console.warn('[inbound/stop] RESEND_INBOUND_STOP_SECRET non configuré, skip signature check');
+  }
+
+  // 3. Parse JSON après vérif signature
   let body;
   try {
-    body = await request.json();
+    body = JSON.parse(rawBody);
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }

@@ -23,14 +23,38 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { classifyEmail } from '@/lib/feedback-classifier';
 import { draftFaqReply } from '@/lib/faq-reply-drafter';
 import { logAutonomousAction, isAutonomyEnabled } from '@/lib/autonomy';
+import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
+import { cleanEnv } from '@/lib/envClean';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function POST(request) {
+  // 1. Lire le body en RAW string pour vérif signature
+  const rawBody = await request.text().catch(() => '');
+  if (!rawBody) {
+    return NextResponse.json({ ok: false, reason: 'empty_body' }, { status: 400 });
+  }
+
+  // 2. Vérifier signature Svix Resend si secret configuré
+  const secret = cleanEnv(process.env.RESEND_INBOUND_CONTACT_SECRET);
+  if (secret) {
+    try {
+      verifyResendSignature({ payload: rawBody, headers: request.headers, secret });
+    } catch (err) {
+      console.warn('[inbound/contact] signature invalide', err.message);
+      // Pour /contact on retourne 200 OK même si signature ko (sinon Resend retry infini)
+      // mais on log + skip le traitement
+      return NextResponse.json({ ok: true, ignored: 'invalid_signature' });
+    }
+  } else {
+    console.warn('[inbound/contact] RESEND_INBOUND_CONTACT_SECRET non configuré, skip signature check');
+  }
+
+  // 3. Parse JSON
   let body;
   try {
-    body = await request.json();
+    body = JSON.parse(rawBody);
   } catch {
     return NextResponse.json({ ok: false, reason: 'invalid_json' }, { status: 400 });
   }

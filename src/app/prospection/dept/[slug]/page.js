@@ -8,6 +8,12 @@ export async function generateStaticParams() {
   return getAllDepartments().map((dept) => ({ slug: dept.slug }));
 }
 
+// [1er juin 2026] noindex + follow appliqué (cf. Option C SEO).
+// Cette route programmatique tail-of-tail (vue overview département)
+// génère trop de pages à valeur SEO faible vs Google's quality threshold —
+// GSC les classait "Explorée actuellement non indexée" pour 2 630 URLs.
+// On garde follow: true pour préserver la transmission PageRank vers
+// les pages cat × département qui restent indexables.
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const dept = getDepartmentBySlug(slug);
@@ -25,6 +31,7 @@ export async function generateMetadata({ params }) {
       description,
       url: `https://volia.fr/prospection/dept/${slug}`,
     },
+    robots: { index: false, follow: true },
   };
 }
 

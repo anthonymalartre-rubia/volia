@@ -24,6 +24,12 @@ export async function generateStaticParams() {
   return params;
 }
 
+// [1er juin 2026] noindex + follow appliqué (cf. Option C SEO).
+// Cette route programmatique tail-of-tail (catégorie × région) génère
+// trop de pages à valeur SEO faible vs Google's quality threshold —
+// GSC les classait "Explorée actuellement non indexée" pour 2 630 URLs.
+// On garde follow: true pour préserver la transmission PageRank vers
+// les pages cat × département qui restent indexables.
 export async function generateMetadata({ params }) {
   const { category: catSlug, region: regionSlug } = await params;
   const category = getCategoryBySlug(catSlug);
@@ -44,6 +50,7 @@ export async function generateMetadata({ params }) {
       description,
       url: `https://volia.fr/prospection/${catSlug}/region/${regionSlug}`,
     },
+    robots: { index: false, follow: true },
   };
 }
 

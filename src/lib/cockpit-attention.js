@@ -15,6 +15,43 @@ import { getSupabaseAdmin } from './supabase-admin';
 import { isAutonomyEnabled } from './autonomy';
 import { isGrowthLoopsEnabled } from './growth-loops-base';
 
+// ─── COST MAP (€ par action) ────────────────────────────────────────
+// Synchronisé avec lib/meta-autonomy.js — duplicate volontaire pour
+// éviter dépendance circulaire.
+const COST_PER_ACTION_EUR = {
+  linkedin_post: 0.02,
+  github_issue_create: 0.05,
+  faq_reply_proposal: 0.03,
+  changelog_entry: 0.04,
+  blog_post_draft: 0.30,
+  newsletter_send: 0.01,
+  bug_triage_from_email: 0.02,
+  feature_request_logged: 0.01,
+  reactivation_email_send: 0.001,
+  github_pr_fix: 0.50,
+  trial_relance_email_send: 0.001,
+  dogfood_outreach_run: 0.10,
+  demo_bot_message: 0.02,
+  support_bot_message: 0.02,
+  auto_faq_reply: 0.05,
+  stuck_user_help_email: 0.001,
+  checkout_recovery_email: 0.001,
+  usage_decline_alert_email: 0.001,
+  hot_lead_promo_email: 0.001,
+  milestone_review_email: 0.001,
+  linkedin_dm_outbound: 0.001,
+  weekly_value_report_email: 0.001,
+  nps_auto_send: 0.001,
+  nps_followup_send: 0.001,
+  weekly_autonomy_review: 0.10,
+};
+
+// Google Places API New : ~0.032€ par Text Search request (Essentials SKU)
+const GOOGLE_PLACES_EUR_PER_REQUEST = 0.032;
+// Resend : free tier 3000/mois puis $0.0004/email
+const RESEND_EUR_PER_EMAIL = 0.0004;
+const RESEND_FREE_TIER_MONTH = 3000;
+
 const SEVERITY = {
   CRITICAL: 'critical', // rouge — action requise immédiate
   WARNING: 'warning',   // amber — à surveiller
@@ -312,6 +349,212 @@ async function buildInbox(supabase) {
   return inbox;
 }
 
+// ─── COST TRACKING ───────────────────────────────────────────────────
+
+async function computeCosts(supabase) {
+  const now = new Date();
+  const dayStart = new Date(now); dayStart.setUTCHours(0, 0, 0, 0);
+  const monthStart = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
+  const currentMonthStr = now.toISOString().slice(0, 7);
+
+  // ─── ANTHROPIC : depuis autonomous_actions (proxy) ───────────────
+  const [{ data: dayActions }, { data: monthActions }] = await Promise.all([
+    supabase
+      .from('autonomous_actions')
+      .select('action_type')
+      .gte('created_at', dayStart.toISOString()),
+    supabase
+      .from('autonomous_actions')
+      .select('action_type')
+      .gte('created_at', monthStart.toISOString()),
+  ]);
+
+  function sumActionsCost(rows) {
+    let total = 0;
+    for (const r of rows || []) {
+      total += COST_PER_ACTION_EUR[r.action_type] || 0;
+    }
+    return total;
+  }
+  const anthropicDay = sumActionsCost(dayActions);
+  const anthropicMonth = sumActionsCost(monthActions);
+
+  // ─── GOOGLE PLACES : depuis usage_tracking searches ──────────────
+  const { data: usageRows } = await supabase
+    .from('usage_tracking')
+    .select('searches')
+    .eq('month', currentMonthStr);
+  const searchesMonth = (usageRows || []).reduce((sum, r) => sum + (r.searches || 0), 0);
+  const googlePlacesMonth = searchesMonth * GOOGLE_PLACES_EUR_PER_REQUEST;
+  // approximation jour (uniforme sur mois écoulé)
+  const dayOfMonth = now.getUTCDate();
+  const googlePlacesDay = dayOfMonth > 0 ? googlePlacesMonth / dayOfMonth : 0;
+
+  // ─── RESEND : email_sends + autonomous emails ────────────────────
+  let resendEmailsMonth = 0;
+  try {
+    const { count } = await supabase
+      .from('email_sends')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', monthStart.toISOString());
+    resendEmailsMonth = count || 0;
+  } catch {}
+
+  // Estime emails autonomy aussi (chaque email_send autonomy)
+  const autonomyEmailTypes = [
+    'newsletter_send', 'reactivation_email_send', 'trial_relance_email_send',
+    'stuck_user_help_email', 'checkout_recovery_email', 'usage_decline_alert_email',
+    'hot_lead_promo_email', 'milestone_review_email', 'weekly_value_report_email',
+    'nps_auto_send', 'nps_followup_send', 'auto_faq_reply',
+  ];
+  const autonomyEmailsMonth = (monthActions || []).filter((r) =>
+    autonomyEmailTypes.includes(r.action_type)
+  ).length;
+
+  const totalEmailsMonth = resendEmailsMonth + autonomyEmailsMonth;
+  const billableEmailsMonth = Math.max(0, totalEmailsMonth - RESEND_FREE_TIER_MONTH);
+  const resendMonth = billableEmailsMonth * RESEND_EUR_PER_EMAIL;
+  const resendDay = dayOfMonth > 0 ? resendMonth / dayOfMonth : 0;
+
+  // ─── TOTAUX ───────────────────────────────────────────────────────
+  const totalDay = anthropicDay + googlePlacesDay + resendDay;
+  const totalMonth = anthropicMonth + googlePlacesMonth + resendMonth;
+
+  return {
+    day: {
+      total_eur: Number(totalDay.toFixed(2)),
+      anthropic_eur: Number(anthropicDay.toFixed(2)),
+      google_places_eur: Number(googlePlacesDay.toFixed(2)),
+      resend_eur: Number(resendDay.toFixed(2)),
+      actions_count: (dayActions || []).length,
+    },
+    month: {
+      total_eur: Number(totalMonth.toFixed(2)),
+      anthropic_eur: Number(anthropicMonth.toFixed(2)),
+      google_places_eur: Number(googlePlacesMonth.toFixed(2)),
+      resend_eur: Number(resendMonth.toFixed(2)),
+      actions_count: (monthActions || []).length,
+      searches_count: searchesMonth,
+      emails_count: totalEmailsMonth,
+      emails_billable: billableEmailsMonth,
+    },
+  };
+}
+
+// ─── LIVE ACTIVITY FEED ──────────────────────────────────────────────
+
+async function getRecentActivity(supabase, limit = 10) {
+  // Mix de signaux : signups + paiements + churn + actions autonomy + feedback
+  const since = new Date(Date.now() - 7 * 86400 * 1000).toISOString();
+
+  const events = [];
+
+  // 1. Signups récents (auth.users via user_profiles created_at proxy)
+  try {
+    const { data: signups } = await supabase
+      .from('user_profiles')
+      .select('id, created_at, plan')
+      .gte('created_at', since)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    for (const s of signups || []) {
+      events.push({
+        type: 'signup',
+        icon: 'UserPlus',
+        color: 'emerald',
+        at: s.created_at,
+        message: `Nouveau signup (${s.plan || 'free'})`,
+        meta: { user_id: s.id, plan: s.plan },
+      });
+    }
+  } catch {}
+
+  // 2. Conversions trial → paid
+  try {
+    const { data: conversions } = await supabase
+      .from('user_profiles')
+      .select('id, trial_converted_at, plan')
+      .gte('trial_converted_at', since)
+      .order('trial_converted_at', { ascending: false })
+      .limit(limit);
+    for (const c of conversions || []) {
+      events.push({
+        type: 'conversion',
+        icon: 'DollarSign',
+        color: 'amber',
+        at: c.trial_converted_at,
+        message: `Conversion trial → ${c.plan}`,
+        meta: { user_id: c.id, plan: c.plan },
+      });
+    }
+  } catch {}
+
+  // 3. Churns
+  try {
+    const { data: churns } = await supabase
+      .from('user_profiles')
+      .select('id, churned_at, plan')
+      .gte('churned_at', since)
+      .order('churned_at', { ascending: false })
+      .limit(limit);
+    for (const c of churns || []) {
+      events.push({
+        type: 'churn',
+        icon: 'TrendingDown',
+        color: 'red',
+        at: c.churned_at,
+        message: `Churn (${c.plan})`,
+        meta: { user_id: c.id, plan: c.plan },
+      });
+    }
+  } catch {}
+
+  // 4. Actions autonomy executées
+  try {
+    const { data: actions } = await supabase
+      .from('autonomous_actions')
+      .select('id, action_type, status, preview, created_at, executed_at')
+      .in('status', ['executed', 'approved'])
+      .gte('created_at', since)
+      .order('created_at', { ascending: false })
+      .limit(limit * 2);
+    for (const a of actions || []) {
+      events.push({
+        type: 'autonomy',
+        icon: 'Bot',
+        color: 'violet',
+        at: a.executed_at || a.created_at,
+        message: a.preview || a.action_type,
+        meta: { action_type: a.action_type, status: a.status },
+      });
+    }
+  } catch {}
+
+  // 5. Feedback emails reçus
+  try {
+    const { data: feedbacks } = await supabase
+      .from('inbound_feedback_emails')
+      .select('id, from_email, subject, received_at, category')
+      .gte('received_at', since)
+      .order('received_at', { ascending: false })
+      .limit(limit);
+    for (const f of feedbacks || []) {
+      events.push({
+        type: 'feedback',
+        icon: 'Mail',
+        color: 'rose',
+        at: f.received_at,
+        message: `${f.from_email} → ${f.subject || '(sans sujet)'} ${f.category ? `[${f.category}]` : ''}`,
+        meta: { from: f.from_email, category: f.category },
+      });
+    }
+  } catch {}
+
+  // Tri global par date DESC, limit
+  events.sort((a, b) => new Date(b.at) - new Date(a.at));
+  return events.slice(0, limit);
+}
+
 // ─── PUBLIC API ──────────────────────────────────────────────────────
 
 export async function getCockpitAttention() {
@@ -323,12 +566,16 @@ export async function getCockpitAttention() {
     quotaAlerts,
     sentryAlerts,
     inbox,
+    costs,
+    activity,
   ] = await Promise.all([
     checkAutonomyState(),
     checkRecentFailures(supabase),
     checkQuotaUsage(supabase),
     checkSentryUnresolved(supabase),
     buildInbox(supabase),
+    computeCosts(supabase),
+    getRecentActivity(supabase, 10),
   ]);
 
   const alerts = [
@@ -354,6 +601,8 @@ export async function getCockpitAttention() {
     inbox,
     inbox_active: activeInbox,
     inbox_total_count: totalInboxCount,
+    costs,
+    activity,
     has_anything: alerts.length > 0 || totalInboxCount > 0,
   };
 }

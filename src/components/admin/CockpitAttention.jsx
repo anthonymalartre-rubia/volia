@@ -8,9 +8,25 @@ import Link from 'next/link';
 import {
   AlertTriangle, CheckCircle2, RefreshCw, Loader2, Inbox, ChevronRight,
   Briefcase, Lightbulb, MessageSquare, Mail, Flame, ListChecks, Bot,
+  Wallet, Activity, UserPlus, DollarSign, TrendingDown,
 } from 'lucide-react';
 
-const ICONS = { Briefcase, Lightbulb, MessageSquare, Mail, Flame, ListChecks, Bot };
+const ICONS = {
+  Briefcase, Lightbulb, MessageSquare, Mail, Flame, ListChecks, Bot,
+  UserPlus, DollarSign, TrendingDown,
+};
+
+function formatRelativeTime(isoDate) {
+  if (!isoDate) return '';
+  const diff = Date.now() - new Date(isoDate).getTime();
+  const min = Math.floor(diff / 60000);
+  if (min < 1) return 'à l\'instant';
+  if (min < 60) return `il y a ${min} min`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `il y a ${h}h`;
+  const d = Math.floor(h / 24);
+  return `il y a ${d}j`;
+}
 
 const SEVERITY_STYLES = {
   critical: {
@@ -208,12 +224,92 @@ export default function CockpitAttention() {
         </div>
       )}
 
+      {/* COST TRACKING + LIVE ACTIVITY — Grid 2 cols */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* COSTS */}
+        {data.costs && (
+          <div className="rounded-xl border border-line bg-surface-card p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-content-strong flex items-center gap-2">
+                <Wallet size={16} className="text-emerald-500" />
+                Coût d'opération
+              </h3>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="p-3 rounded-lg bg-surface-soft border border-line-soft">
+                <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Aujourd'hui</div>
+                <div className="text-xl font-bold text-content-strong mt-1">{data.costs.day.total_eur}€</div>
+                <div className="text-[10px] text-content-soft mt-0.5">{data.costs.day.actions_count} actions</div>
+              </div>
+              <div className="p-3 rounded-lg bg-surface-soft border border-line-soft">
+                <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Mois courant</div>
+                <div className="text-xl font-bold text-content-strong mt-1">{data.costs.month.total_eur}€</div>
+                <div className="text-[10px] text-content-soft mt-0.5">{data.costs.month.actions_count} actions</div>
+              </div>
+            </div>
+            <div className="space-y-2 text-xs">
+              <CostRow label="Anthropic (Claude)" day={data.costs.day.anthropic_eur} month={data.costs.month.anthropic_eur} color="violet" />
+              <CostRow label="Google Places" day={data.costs.day.google_places_eur} month={data.costs.month.google_places_eur} color="blue" />
+              <CostRow label="Resend (emails)" day={data.costs.day.resend_eur} month={data.costs.month.resend_eur} color="indigo" />
+            </div>
+            <div className="mt-3 pt-3 border-t border-line text-[10px] text-content-tertiary">
+              {data.costs.month.searches_count} recherches Google ce mois · {data.costs.month.emails_count} emails envoyés
+              {data.costs.month.emails_billable > 0 && ` (dont ${data.costs.month.emails_billable} facturables après free tier 3000)`}
+            </div>
+          </div>
+        )}
+
+        {/* LIVE ACTIVITY FEED */}
+        {data.activity && data.activity.length > 0 && (
+          <div className="rounded-xl border border-line bg-surface-card p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-content-strong flex items-center gap-2">
+                <Activity size={16} className="text-blue-500" />
+                Live activity
+                <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                  {data.activity.length}
+                </span>
+              </h3>
+            </div>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {data.activity.map((event, i) => {
+                const Icon = ICONS[event.icon] || Activity;
+                return (
+                  <div key={i} className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-surface-soft transition">
+                    <Icon size={14} className={`text-${event.color}-500 shrink-0 mt-0.5`} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-content-secondary line-clamp-2 leading-relaxed">{event.message}</p>
+                      <p className="text-[10px] text-content-tertiary mt-0.5">{formatRelativeTime(event.at)}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Footer mini info refresh */}
       {data.generated_at && (
         <p className="text-[10px] text-content-tertiary text-right">
           Auto-refresh 60s · dernier check : {new Date(data.generated_at).toLocaleTimeString('fr-FR')}
         </p>
       )}
+    </div>
+  );
+}
+
+function CostRow({ label, day, month, color }) {
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-2 min-w-0">
+        <div className={`w-2 h-2 rounded-full bg-${color}-500 shrink-0`} />
+        <span className="text-content-secondary truncate">{label}</span>
+      </div>
+      <div className="flex items-center gap-3 shrink-0 font-mono">
+        <span className="text-content-soft">{day}€/j</span>
+        <span className="text-content-strong font-semibold">{month}€/mois</span>
+      </div>
     </div>
   );
 }

@@ -32,6 +32,9 @@ import { runStuckUserDetector } from '@/lib/stuck-user-detector';
 import { runCheckoutRecovery } from '@/lib/checkout-recovery';
 import { runUsageDeclineDetector } from '@/lib/usage-decline-detector';
 import { runHotLeadPromo } from '@/lib/hot-lead-promo';
+import { runLinkedInEngagersDetector } from '@/lib/linkedin-engagers-detector';
+import { runWeeklyValueReport } from '@/lib/weekly-value-report';
+import { runNpsAuto } from '@/lib/nps-auto';
 
 const CRONS = {
   'auto-faq-reply': runAutoFaqReply,
@@ -40,6 +43,10 @@ const CRONS = {
   'checkout-recovery': runCheckoutRecovery,
   'usage-decline-detector': runUsageDeclineDetector,
   'hot-lead-promo': runHotLeadPromo,
+  // ─── Wave 2 Growth Loops ──────────────────────────────────
+  'linkedin-engagers': runLinkedInEngagersDetector,
+  'weekly-value-report': runWeeklyValueReport,
+  'nps-auto': runNpsAuto,
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
   'sentry-digest': runSentryDigest,

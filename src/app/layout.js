@@ -6,6 +6,7 @@ import CookieConsent from '@/components/CookieConsent';
 import AchievementToast from '@/components/welcome/AchievementToast';
 import DemoBotWidget from '@/components/DemoBotWidget';
 import SupportBotWidget from '@/components/SupportBotWidget';
+import UpgradeContextModal from '@/components/UpgradeContextModal';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -189,6 +190,11 @@ export default function RootLayout({ children }) {
                 /notifications). Auto-pré-load context user (plan, trial,
                 lead_score) côté server. */}
             <SupportBotWidget />
+            {/* Wave 2.2 Growth Loops — in-app upgrade prompt intelligent.
+                Show modal si user >=80% usage limit. Cooldown 7j sur
+                dismiss ou last_shown. Affiche seulement sur /dashboard
+                et /app/* (l'API gère aussi le filtre côté serveur). */}
+            <UpgradeContextModal />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

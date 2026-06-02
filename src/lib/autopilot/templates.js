@@ -69,7 +69,11 @@ const COLD_PROVOCATEUR = tpl({
     company_size: 'TPE 2-10 et PME 11-50',
   },
   sequence: [
-    { day: 0, subject: '{{first_name}}, on parle vrai 30 secondes ?', body_summary: 'Accroche démolition mythe + chiffre concret + pitch one-liner + CTA Cal.com', includes_form_link: false, includes_calcom: true },
+    { day: 0, subject: [
+      { id: 'A', text: '{{first_name}}, on parle vrai 30 secondes ?' },
+      { id: 'B', text: '{{company}} : 3 mythes qui vous coûtent cher' },
+      { id: 'C', text: 'Pas le temps de lire ? Direct à la dernière ligne' },
+    ], body_summary: 'Accroche démolition mythe + chiffre concret + pitch one-liner + CTA Cal.com', includes_form_link: false, includes_calcom: true },
     { day: 3, subject: 'Pas convaincu ? Normal. Form 2 min', body_summary: 'Reconnaissance + reframe + lien form qualif honnête', includes_form_link: true, includes_calcom: false },
     { day: 7, subject: 'Dernier mail, on enterre ou on tente ?', body_summary: 'Cash + mini cas client + 2 options + sortie élégante + RGPD', includes_form_link: true, includes_calcom: true },
   ],
@@ -241,10 +245,15 @@ const AGENCES_DIGITALES = tpl({
   target: {
     categories: ['marketing agency', 'advertising agency', 'web design company', 'graphic designer', 'public relations firm'],
     departments_strategy: 'Top 10 métropoles France (75, 69, 13, 33, 31, 44, 59, 35, 67, 06)',
+    departments_explicit: ['75', '69', '13', '33', '31', '44', '59', '35', '67', '06'],
     company_size: 'TPE 2-10 (dirigeants impliqués commercial)',
   },
   sequence: [
-    { day: 0, subject: '{{first_name}}, votre agence prend encore des clients ?', body_summary: 'Accroche perso + pain bouche-à-oreille + pitch outbound + CTA form', includes_form_link: true, includes_calcom: false },
+    { day: 0, subject: [
+      { id: 'A', text: '{{first_name}}, votre agence prend encore des clients ?' },
+      { id: 'B', text: 'Le bouche-à-oreille suffit plus pour {{company}} ?' },
+      { id: 'C', text: '2-4 clients/mois sans prospecter à la main' },
+    ], body_summary: 'Accroche perso + pain bouche-à-oreille + pitch outbound + CTA form', includes_form_link: true, includes_calcom: false },
     { day: 3, subject: 'Le bouche-à-oreille c\'est cool, jusqu\'à ce que…', body_summary: 'Reconnaissance + reframe + mini cas client agence + form', includes_form_link: true, includes_calcom: false },
     { day: 7, subject: 'Dernier mail — on parle ou on archive ?', body_summary: 'Cash transparency + 2 options (Cal.com ou form) + RGPD', includes_form_link: true, includes_calcom: true },
   ],
@@ -309,23 +318,30 @@ const SAAS_B2B_PME = tpl({
   target: {
     categories: ['software company', 'marketing agency', 'consulting firm', 'accounting firm', 'law firm'],
     departments_strategy: 'Top 12 métropoles tech FR (75, 92, 69, 13, 33, 31, 59, 44, 67, 35, 06, 38)',
+    departments_explicit: ['75', '92', '69', '13', '33', '31', '59', '44', '67', '35', '06', '38'],
     company_size: 'PME 11-50 prio, 51-250 ok',
   },
   sequence: [
-    { day: 0, subject: '{{first_name}}, votre tunnel demo convertit à combien ?', body_summary: 'Accroche perso + chiffre sec marché + pitch one-liner + Cal.com (chauds direct)', includes_form_link: false, includes_calcom: true },
+    { day: 0, subject: [
+      { id: 'A', text: '{{first_name}}, votre tunnel demo convertit à combien ?' },
+      { id: 'B', text: '{{company}} : plus de démos sans chasser à la main' },
+      { id: 'C', text: 'Votre pipeline SaaS B2B, en autopilot' },
+    ], body_summary: 'Accroche perso + chiffre sec marché + pitch one-liner + Cal.com (chauds direct)', includes_form_link: false, includes_calcom: true },
     { day: 3, subject: 'Pas sûr que ce soit pour vous — 3 questions', body_summary: 'Reconnaissance + twist honnête + form 5 questions + coupon HOTLEAD50 si hot', includes_form_link: true, includes_calcom: false },
     { day: 7, subject: 'Dernier message — on archive ou on parle ?', body_summary: 'Cash + cas client SaaS + 2 options + coupon -50% si signature 7j + RGPD', includes_form_link: true, includes_calcom: true },
   ],
   form: {
     title: '2 min pour voir si on peut vraiment vous aider',
+    // weights explicites (Phase 2 audit) : scoring chirurgical, prime sur
+    // l'heuristique sémantique. Index ||| options.
     questions: [
-      { label: 'Combien d\'employés dans votre entreprise ?', type: 'select', options: ['1-10', '11-50', '51-250', '250+'] },
-      { label: 'Quel est votre rôle ?', type: 'select', options: ['CEO/Fondateur', 'DSI/CTO', 'CMO/Marketing', 'COO/Ops', 'Manager', 'Autre'] },
-      { label: 'Budget mensuel SaaS B2B actuel ?', type: 'select', options: ['< 200€', '200-500€', '500-2000€', '2000€+', 'Je ne sais pas'] },
-      { label: 'Timing achat ?', type: 'select', options: ['< 1 mois', '1-3 mois', '6 mois', 'Veille'] },
+      { label: 'Combien d\'employés dans votre entreprise ?', type: 'select', options: ['1-10', '11-50', '51-250', '250+'], weights: [15, 85, 100, 55] },
+      { label: 'Quel est votre rôle ?', type: 'select', options: ['CEO/Fondateur', 'DSI/CTO', 'CMO/Marketing', 'COO/Ops', 'Manager', 'Autre'], weights: [100, 90, 85, 80, 40, 20] },
+      { label: 'Budget mensuel SaaS B2B actuel ?', type: 'select', options: ['< 200€', '200-500€', '500-2000€', '2000€+', 'Je ne sais pas'], weights: [20, 55, 100, 85, 10] },
+      { label: 'Timing achat ?', type: 'select', options: ['< 1 mois', '1-3 mois', '6 mois', 'Veille'], weights: [100, 70, 35, 5] },
       { label: 'Principal blocage prospection actuelle ?', type: 'long_text' },
     ],
-    scoring: 'Taille (11-50=25, 51-250=30). Rôle décideur (CEO/DSI/CMO/COO)=25. Budget 500-2000€=25. Timing <1m=25. Total/100.',
+    scoring: 'Weights explicites par question (taille/rôle/budget/timing). Long_text bonus engagement. Total normalisé /100.',
   },
   routing: {
     hot: 'Score >= 70 → CRM "Hot" + tag demo_ready + Slack notif + coupon HOTLEAD50',

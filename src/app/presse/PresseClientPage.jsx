@@ -474,8 +474,8 @@ function PressAnglesSection() {
               Trois histoires à raconter
             </h2>
             <p className="text-base sm:text-lg text-content-secondary max-w-2xl mx-auto">
-              Selon votre angle éditorial, voici trois axes prêts à explorer. Chaque
-              angle dispose d&apos;un communiqué dédié à télécharger.
+              Selon votre angle éditorial, voici plusieurs axes prêts à explorer.
+              Certains angles disposent d&apos;un communiqué dédié à lire en ligne.
             </p>
           </div>
         </MotionInView>
@@ -504,15 +504,23 @@ function PressAnglesSection() {
                     {angle.pitch}
                   </p>
 
-                  <a
-                    href={angle.releaseUrl}
-                    download
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-violet-700 hover:text-violet-600 transition group-hover:gap-2.5"
-                  >
-                    <Download size={14} />
-                    Télécharger le CP
-                    <ArrowRight size={14} className="transition" />
-                  </a>
+                  {/* Lien uniquement si une page HTML de communiqué existe
+                      (htmlUrl). Sinon : pas de lien mort, mention "sur demande". */}
+                  {angle.htmlUrl ? (
+                    <Link
+                      href={angle.htmlUrl}
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-violet-700 hover:text-violet-600 transition group-hover:gap-2.5"
+                    >
+                      <FileText size={14} />
+                      Lire le communiqué
+                      <ArrowRight size={14} className="transition" />
+                    </Link>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-content-muted italic">
+                      <Mail size={13} />
+                      Communiqué sur demande
+                    </span>
+                  )}
                 </div>
               </MotionInView>
             );
@@ -648,6 +656,17 @@ function AILoopsInventorySection() {
 // AssetsSection — grid de cards téléchargeables
 // ─────────────────────────────────────────────────────────────────────
 function AssetsSection() {
+  // On ne rend QUE les assets réellement disponibles (cf. flag `available`
+  // dans MEDIA_KIT_ASSETS). Les logos / wordmark / screenshots produit ne
+  // sont pas encore générés → on masque leurs cartes (pas de lien mort).
+  // Les groupes devenus vides sont eux-mêmes masqués.
+  const availableGroups = MEDIA_KIT_ASSETS
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((a) => a.available),
+    }))
+    .filter((group) => group.items.length > 0);
+
   return (
     <section className="py-20 px-4 sm:px-6 border-t border-line">
       <div className="max-w-6xl mx-auto">
@@ -658,17 +677,24 @@ function AssetsSection() {
               Assets téléchargeables
             </div>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-content-primary mb-3">
-              Logos, screenshots & photos
+              Visuels & press kit
             </h2>
             <p className="text-base sm:text-lg text-content-secondary max-w-2xl">
-              Tous les visuels haute définition disponibles en téléchargement direct.
-              Libres de droits pour usage éditorial.
+              Les visuels disponibles ci-dessous sont libres de droits pour usage
+              éditorial. Logos, wordmark et screenshots produit sur demande à{' '}
+              <a
+                href={`mailto:${PRESS_CONTACT.email}`}
+                className="text-violet-700 hover:text-violet-600 font-semibold underline underline-offset-2"
+              >
+                {PRESS_CONTACT.email}
+              </a>
+              .
             </p>
           </div>
         </MotionInView>
 
         <div className="space-y-12">
-          {MEDIA_KIT_ASSETS.map((group, gi) => (
+          {availableGroups.map((group, gi) => (
             <div key={group.category}>
               <MotionInView delay={gi * 80}>
                 <h3 className="text-sm font-bold uppercase tracking-wider text-content-tertiary mb-4 pl-1">
@@ -678,11 +704,14 @@ function AssetsSection() {
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {group.items.map((asset, i) => {
                   const Icon = resolveIcon(asset.iconName);
+                  // `isPage` : route HTML (ex. /presse/kit) → pas d'attribut
+                  // `download`, on navigue vers la page.
+                  const downloadProp = asset.isPage ? {} : { download: true };
                   return (
                     <MotionInView key={asset.title} delay={gi * 80 + i * 50}>
                       <a
                         href={asset.url}
-                        download
+                        {...downloadProp}
                         className="block h-full p-5 rounded-2xl border border-line bg-white hover:border-violet-300 hover:shadow-lg hover:shadow-violet-500/5 transition-all group"
                       >
                         <div className="flex items-center justify-between mb-4">
@@ -796,14 +825,19 @@ function PressReleasesSection() {
                     <Calendar size={12} />
                     {release.dateLabel}
                   </time>
-                  <a
-                    href={release.pdfUrl}
-                    download
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-violet-700 hover:text-violet-600 transition"
-                  >
-                    <Download size={12} />
-                    Télécharger le PDF
-                  </a>
+                  {/* Lien uniquement vers une page HTML de communiqué existante
+                      (/presse/cp/[slug]). Les CP sans page dédiée n'affichent
+                      pas de lien (pas de PDF à télécharger). */}
+                  {release.pdfUrl?.startsWith('/presse/cp/') && (
+                    <Link
+                      href={release.pdfUrl}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-violet-700 hover:text-violet-600 transition"
+                    >
+                      <FileText size={12} />
+                      Lire le communiqué
+                      <ArrowRight size={12} />
+                    </Link>
+                  )}
                 </div>
                 <h3 className="text-lg sm:text-xl font-bold text-content-primary mb-2 group-hover:text-violet-700 transition">
                   {release.title}

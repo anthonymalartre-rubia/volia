@@ -530,14 +530,32 @@ export default function PricingContent() {
                       </p>
                     )}
 
-                    {/* Delta features list — court et focalisé */}
+                    {/* Delta features list — court et focalisé.
+                        Les lignes Autopilot (⚡/🚀) sont mises en avant dans un
+                        encart amber : c'est la valeur flagship du produit. */}
                     <div className="space-y-2.5 flex-1">
-                      {plan.features.map((f) => (
-                        <div key={f} className="flex items-start gap-2">
-                          <Check size={14} className="text-violet-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
-                        </div>
-                      ))}
+                      {plan.features.map((f) => {
+                        const isAutopilot = f.startsWith('⚡') || f.startsWith('🚀');
+                        if (isAutopilot) {
+                          return (
+                            <div
+                              key={f}
+                              className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-2"
+                            >
+                              <Zap size={14} className="text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" />
+                              <span className="text-xs font-semibold text-amber-900 leading-relaxed">
+                                {f.replace(/^[⚡🚀]\s*/, '')}
+                              </span>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div key={f} className="flex items-start gap-2">
+                            <Check size={14} className="text-violet-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </MotionInView>

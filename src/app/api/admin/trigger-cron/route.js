@@ -35,6 +35,8 @@ import { runHotLeadPromo } from '@/lib/hot-lead-promo';
 import { runLinkedInEngagersDetector } from '@/lib/linkedin-engagers-detector';
 import { runWeeklyValueReport } from '@/lib/weekly-value-report';
 import { runNpsAuto } from '@/lib/nps-auto';
+import { runEngine as runAutopilotEngine } from '@/lib/autopilot/engine';
+import { runStepper as runAutopilotStepper } from '@/lib/autopilot/stepper';
 
 const CRONS = {
   'auto-faq-reply': runAutoFaqReply,
@@ -47,6 +49,9 @@ const CRONS = {
   'linkedin-engagers': runLinkedInEngagersDetector,
   'weekly-value-report': runWeeklyValueReport,
   'nps-auto': runNpsAuto,
+  // ─── Volia Autopilot Phase 1 ──────────────────────────────
+  'autopilot-engine': runAutopilotEngine,
+  'autopilot-stepper': runAutopilotStepper,
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
   'sentry-digest': runSentryDigest,

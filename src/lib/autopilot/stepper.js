@@ -300,7 +300,7 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
     }
   }
 
-  if (Object.keys(updates).length === 0 && history.length === execution.step_history?.length) {
+  if (Object.keys(updates).length === 0 && history.length === (execution.step_history?.length ?? 0)) {
     return { skipped: true, reason: 'no_action_needed', claudeUsed };
   }
   updates.step_history = history;

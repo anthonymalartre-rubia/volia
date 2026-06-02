@@ -140,9 +140,14 @@ async function scrapProspectsForTarget(target, prospectsCount) {
     : fallbackDepts;
 
   const allProspects = [];
-  for (const category of target.categories.slice(0, 5)) {
+  const cats = target.categories.slice(0, 5);
+  for (let ci = 0; ci < cats.length; ci++) {
+    const category = cats[ci];
     if (allProspects.length >= prospectsCount) break;
-    const dept = candidateDepts[Math.floor(allProspects.length / 20) % candidateDepts.length];
+    // Rotation déterministe PAR catégorie : chaque catégorie tape un dept
+    // distinct (au lieu de l'ancien index par allProspects.length/20 qui
+    // restait bloqué sur 1 seul dept quand une catégorie renvoyait <20 résultats).
+    const dept = candidateDepts[ci % candidateDepts.length];
     const deptData = getDeptData(dept);
     if (!deptData) continue;
 

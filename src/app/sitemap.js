@@ -59,6 +59,8 @@ export default async function sitemap({ id }) {
       // Google n'a pas choisi la même URL canonique"). /pricing reste page
       // commerciale importante mais clairement subordonnée à la home.
       { url: `${baseUrl}/pricing`, priority: 0.85, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/pricing`, 'en-US': `${baseUrl}/en/pricing`, 'x-default': `${baseUrl}/pricing` } } },
+      // ⚡ Volia Autopilot = produit flagship → priorité produit la plus haute (0.9)
+      { url: `${baseUrl}/produits/autopilot`, priority: 0.9, changeFrequency: 'weekly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/autopilot`, 'en-US': `${baseUrl}/en/products/autopilot`, 'x-default': `${baseUrl}/produits/autopilot` } } },
       { url: `${baseUrl}/produits/prospection`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/prospection`, 'en-US': `${baseUrl}/en/products/prospection`, 'x-default': `${baseUrl}/produits/prospection` } } },
       { url: `${baseUrl}/produits/campagnes`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/campagnes`, 'en-US': `${baseUrl}/en/products/campaigns`, 'x-default': `${baseUrl}/produits/campagnes` } } },
       { url: `${baseUrl}/produits/crm`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/crm`, 'en-US': `${baseUrl}/en/products/crm`, 'x-default': `${baseUrl}/produits/crm` } } },
@@ -68,6 +70,7 @@ export default async function sitemap({ id }) {
       // /en/pricing 0.9 → 0.8 pour rester subordonné à /en.
       { url: `${baseUrl}/en`, priority: 0.85, changeFrequency: 'weekly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/`, 'en-US': `${baseUrl}/en`, 'x-default': `${baseUrl}/` } } },
       { url: `${baseUrl}/en/pricing`, priority: 0.8, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/pricing`, 'en-US': `${baseUrl}/en/pricing`, 'x-default': `${baseUrl}/pricing` } } },
+      { url: `${baseUrl}/en/products/autopilot`, priority: 0.85, changeFrequency: 'weekly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/autopilot`, 'en-US': `${baseUrl}/en/products/autopilot`, 'x-default': `${baseUrl}/produits/autopilot` } } },
       { url: `${baseUrl}/en/products/prospection`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/prospection`, 'en-US': `${baseUrl}/en/products/prospection`, 'x-default': `${baseUrl}/produits/prospection` } } },
       { url: `${baseUrl}/en/products/campaigns`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/campagnes`, 'en-US': `${baseUrl}/en/products/campaigns`, 'x-default': `${baseUrl}/produits/campagnes` } } },
       { url: `${baseUrl}/en/products/crm`, priority: 0.75, changeFrequency: 'monthly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/produits/crm`, 'en-US': `${baseUrl}/en/products/crm`, 'x-default': `${baseUrl}/produits/crm` } } },

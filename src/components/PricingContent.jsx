@@ -82,6 +82,21 @@ const VISIBLE_PLANS_FOR_COMPARE = ['free', 'solo', 'pro', 'business'];
 // Sections collapsibles avec rows.
 const COMPARE_SECTIONS = [
   {
+    title: '⚡ Volia Autopilot (pipeline auto)',
+    rows: [
+      // Colonnes : free / solo / pro / business. Enterprise (illimité +
+      // A/B + Claude opt) = footnote sous le tableau.
+      ['Workflows Autopilot', false, false, '1', '3'],
+      ['Pipeline complet : scrap → email → qualif → CRM', false, false, true, true],
+      ['Emails personnalisés par IA (Claude)', false, false, true, true],
+      ['Scoring + routing auto Hot / Warm / Cold', false, false, true, true],
+      ['23 templates de pipeline prêts à l’emploi', false, false, true, true],
+      ['Branching custom (IF / ELSE par tier)', false, false, false, true],
+      ['A/B testing objets + winner auto', false, false, false, false],
+      ['Optimisation Claude hebdomadaire', false, false, false, false],
+    ],
+  },
+  {
     title: 'Module Prospection',
     rows: [
       ['Prospects par mois', '100', '1 000', '5 000', '10 000'],
@@ -605,6 +620,17 @@ export default function PricingContent() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Footnote Enterprise — pas dans les 4 colonnes du tableau */}
+            <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-3 text-sm text-amber-900">
+              <Zap size={16} className="flex-shrink-0 mt-0.5 text-amber-600" />
+              <p>
+                <strong>Plan Enterprise (499 €/mois)</strong> = tout illimité +{' '}
+                <strong>Volia Autopilot illimité</strong> (workflows ∞), A/B testing des objets avec
+                winner auto et optimisation Claude hebdomadaire.{' '}
+                <Link href="/produits/autopilot" className="underline font-semibold">Voir Autopilot →</Link>
+              </p>
             </div>
           </MotionInView>
         </section>

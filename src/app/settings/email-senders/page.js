@@ -354,6 +354,7 @@ export default function EmailSendersPage() {
   const [wizardSubmitting, setWizardSubmitting] = useState(false);
   const [wizardCreated, setWizardCreated] = useState(null); // sender retourné par POST
   const [wizardVerifying, setWizardVerifying] = useState(false);
+  const [wizardError, setWizardError] = useState(null); // erreur inline du form step 1
 
   useEffect(() => {
     loadSenders();
@@ -468,6 +469,7 @@ export default function EmailSendersPage() {
     setWizardDomain('');
     setWizardFromName('');
     setWizardCreated(null);
+    setWizardError(null);
   }
 
   function closeWizard() {
@@ -490,23 +492,47 @@ export default function EmailSendersPage() {
 
   async function handleWizardCreate(e) {
     e.preventDefault();
-    if (!wizardDomain.trim()) {
-      showToast('Saisissez un domaine.', 'error');
+    setWizardError(null);
+
+    // Normalise + compose le domaine d'envoi COMPLET.
+    // L'utilisateur peut taper soit "send" (préfixe seul) soit "send.suraya.fr".
+    // S'il ne met qu'un préfixe (pas de point), on le combine au domaine racine.
+    let cleaned = wizardDomain.trim().toLowerCase()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/.*$/, '')
+      .replace(/^www\./, '');
+    const root = wizardRoot.trim().toLowerCase()
+      .replace(/^https?:\/\//, '')
+      .replace(/\/.*$/, '')
+      .replace(/^www\./, '');
+    if (cleaned && !cleaned.includes('.') && root) {
+      cleaned = `${cleaned}.${root}`; // "send" + "suraya.fr" → "send.suraya.fr"
+    }
+
+    // Validation domaine complet (au moins un sous-domaine + TLD)
+    const DOMAIN_RE = /^(?=.{1,253}$)([a-z0-9](-?[a-z0-9])*\.)+[a-z]{2,}$/;
+    if (!cleaned || !DOMAIN_RE.test(cleaned)) {
+      setWizardError("Entre un domaine d'envoi complet, ex : send.suraya.fr (sous-domaine + ton domaine).");
       return;
     }
+    // Reflète le domaine normalisé dans le champ pour que l'user voie ce qui part
+    if (cleaned !== wizardDomain.trim()) setWizardDomain(cleaned);
+
     setWizardSubmitting(true);
     try {
       const res = await fetch('/api/email-senders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          domain: wizardDomain.trim(),
+          domain: cleaned,
           from_name: wizardFromName.trim() || null,
         }),
       });
       const data = await res.json();
       if (!res.ok) {
-        showToast(data.error || 'Erreur création', 'error');
+        const msg = data.error || 'Erreur création';
+        setWizardError(msg);
+        showToast(msg, 'error');
         return;
       }
       setWizardCreated(data.sender);
@@ -537,19 +563,19 @@ export default function EmailSendersPage() {
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-[100] flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-lg animate-in fade-in slide-in-from-top-2 ${
+          className={`fixed top-20 right-4 z-[100] flex items-start gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-lg max-w-sm animate-in fade-in slide-in-from-top-2 ${
             toast.type === 'success'
               ? 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
               : 'bg-red-500/15 text-red-600 border border-red-500/30'
           }`}
         >
           {toast.type === 'success' ? (
-            <CheckCircle className="h-4 w-4" />
+            <CheckCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
           ) : (
-            <AlertTriangle className="h-4 w-4" />
+            <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
           )}
-          {toast.message}
-          <button onClick={() => setToast(null)} className="ml-2 hover:opacity-70">
+          <span className="flex-1 break-words">{toast.message}</span>
+          <button onClick={() => setToast(null)} className="flex-shrink-0 hover:opacity-70 mt-0.5">
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
@@ -672,21 +698,40 @@ export default function EmailSendersPage() {
 
                 <div>
                   <label className="text-xs text-content-tertiary mb-1.5 block font-medium">
-                    Domaine d&apos;envoi (sous-domaine recommandé)
+                    Domaine d&apos;envoi complet
                   </label>
                   <input
                     type="text"
                     value={wizardDomain}
-                    onChange={(e) => setWizardDomain(e.target.value)}
-                    placeholder="send.cabinet-dupont.fr"
+                    onChange={(e) => { setWizardDomain(e.target.value); if (wizardError) setWizardError(null); }}
+                    placeholder="send.suraya.fr"
                     required
-                    className="w-full px-3 py-2.5 rounded-lg bg-surface-base border border-line text-sm text-content-primary placeholder-content-muted focus:outline-none focus:border-violet-500 transition-colors font-mono"
+                    aria-invalid={!!wizardError}
+                    className={`w-full px-3 py-2.5 rounded-lg bg-surface-base border text-sm text-content-primary placeholder-content-muted focus:outline-none transition-colors font-mono ${
+                      wizardError ? 'border-red-400 focus:border-red-500' : 'border-line focus:border-violet-500'
+                    }`}
                   />
                   <p className="text-[11px] text-content-tertiary mt-1.5 flex items-start gap-1.5">
                     <Info className="h-3 w-3 mt-0.5 flex-shrink-0" />
-                    Utilisez de préférence un sous-domaine dédié (ex: <code className="font-mono">send.</code>).
-                    Cela isole l&apos;envoi marketing de votre messagerie principale.
+                    Domaine COMPLET, sous-domaine inclus (ex&nbsp;: <code className="font-mono">send.suraya.fr</code>).
+                    Un sous-domaine dédié isole l&apos;envoi marketing de ta messagerie principale.
                   </p>
+                  {/* Aperçu live de l'expéditeur réel */}
+                  {wizardDomain.trim() && !wizardError && (
+                    <p className="text-[11px] text-content-tertiary mt-1">
+                      Tes prospects verront :{' '}
+                      <code className="font-mono text-violet-500">
+                        {(wizardFromName.trim() || 'Volia')} &lt;noreply@{wizardDomain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '')}&gt;
+                      </code>
+                    </p>
+                  )}
+                  {/* Erreur inline (remplace le toast mal positionné) */}
+                  {wizardError && (
+                    <p className="text-[11px] text-red-500 mt-1.5 flex items-start gap-1.5">
+                      <AlertTriangle className="h-3 w-3 mt-0.5 flex-shrink-0" />
+                      {wizardError}
+                    </p>
+                  )}
                 </div>
 
                 <div>

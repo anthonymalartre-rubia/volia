@@ -94,10 +94,13 @@ export const PLANS = {
       verifications_per_month: 500,
       emails_sent_per_month: 0,            // Campagnes = Business-only
       form_submissions_per_month: 0,  // Forms = Business-only
+      autopilot_workflows: 1,        // ⚡ Volia Autopilot Phase 1 : 1 workflow linéaire
+      autopilot_branching: false,
     },
     features: [
       '1 200 enrichissements email/mois (×3)',
       '1 200 numéros de téléphone/mois (mobiles prioritaires)',
+      '⚡ 1 workflow Autopilot (linéaire)',
       'Dossiers illimités',
       'Vérification email (MillionVerifier)',
       'Support email (24 h)',
@@ -149,12 +152,15 @@ export const PLANS = {
       // 5 000 form_submissions/mois = ~166/jour, suffisant pour 99% des PME
       emails_sent_per_month: 10000,
       form_submissions_per_month: 5000,
+      autopilot_workflows: 3,           // ⚡ Volia Autopilot : 3 workflows + branching
+      autopilot_branching: true,         // IF/ELSE conditional branches
     },
     features: [
       '10 000 enrichissements email/mois (×8)',
       '10 000 numéros de téléphone/mois',
       '10 000 cold emails/mois (warmup auto inclus)',
       '5 000 soumissions de formulaires/mois',
+      '⚡ 3 workflows Autopilot + branching conditional',
       'Multi-utilisateurs (équipes, RBAC)',
       'Accès API (à venir)',
       'Onboarding personnalisé',
@@ -162,17 +168,22 @@ export const PLANS = {
     ],
   },
 
-  // ─── Conservé pour compatibilité — l'ancien plan "enterprise" ───
-  // Stripe gardait un mapping price_id → enterprise pour les anciens clients.
-  // On le garde en alias de business pour ne casser aucun ancien abonnement.
-  enterprise: {
-    id: 'enterprise',
+  // ─── Conservé pour compatibilité — l'ancien plan "enterprise legacy" ───
+  // Avant le pivot Autopilot (juin 2026), 'enterprise' était un alias de
+  // Business pour les anciens clients Stripe. On garde la clé sous le nom
+  // 'enterprise_legacy' pour pouvoir router les anciens stripe_subscription_id
+  // vers le bon plan UI sans rien casser. Les NOUVEAUX checkouts Enterprise
+  // pointent vers la nouvelle clé 'enterprise' (Autopilot illimité, 499€).
+  enterprise_legacy: {
+    id: 'enterprise_legacy',
     name: 'Business',
     price: 9900,
     priceYearly: 99000,
     tagline: 'Pour équipes outbound',
     stripePriceId: cleanEnv(process.env.STRIPE_ENTERPRISE_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_BUSINESS_YEARLY_PRICE_ID || ''),
+    inheritsFrom: 'business',
+    unlocksModules: true,
     limits: {
       searches_per_month: 10000,
       enrichments_per_month: 10000,
@@ -182,8 +193,52 @@ export const PLANS = {
       verifications_per_month: 5000,
       emails_sent_per_month: 10000,
       form_submissions_per_month: 5000,
+      autopilot_workflows: 3,
+      autopilot_branching: true,
     },
     features: [],
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // NEW Enterprise plan — Volia Autopilot illimité (juin 2026 pivot)
+  // ═══════════════════════════════════════════════════════════════════
+  enterprise: {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: 49900,           // 499 €/mois
+    priceYearly: 499000,    // 4 990 €/an (= -2 mois offerts)
+    tagline: 'Pour équipes qui scalent',
+    inheritsFrom: 'business',
+    unlocksModules: true,
+    stripePriceId: cleanEnv(process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || ''),
+    stripePriceIdYearly: cleanEnv(process.env.STRIPE_ENTERPRISE_YEARLY_PRICE_ID || ''),
+    limits: {
+      searches_per_month: -1,         // illimité
+      enrichments_per_month: -1,
+      phones_per_month: -1,
+      folders: -1,
+      exports_per_month: -1,
+      verifications_per_month: -1,
+      emails_sent_per_month: 50000,
+      form_submissions_per_month: 25000,
+      autopilot_workflows: -1,        // illimité
+      autopilot_branching: true,
+      autopilot_ab_testing: true,
+      autopilot_claude_optimization: true,
+    },
+    features: [
+      '🚀 Workflows Autopilot ILLIMITÉS',
+      '⚡ Branching IF/ELSE + A/B testing subject lines',
+      '🧠 Claude weekly optimization de tes workflows',
+      'Tout illimité (prospects, enrichissements, téléphones)',
+      '50 000 cold emails/mois',
+      'Multi-utilisateurs illimités',
+      'API accès complet (10 000 req/h)',
+      'Custom domain CRM + white-label emails',
+      'SLA 99.9% uptime',
+      'Support Cal.com dédié + Slack channel privé',
+      'Onboarding white-glove 5 calls',
+    ],
   },
 };
 
@@ -209,6 +264,32 @@ export function getStripePriceId(planId, period = 'monthly') {
 }
 
 /**
- * Liste ordonnée des plans visibles sur la landing (pas enterprise alias).
+ * Liste ordonnée des plans visibles sur la landing (pas enterprise_legacy).
+ * Enterprise (499€, Autopilot illimité) ajouté juin 2026 avec le pivot.
  */
-export const VISIBLE_PLANS = ['free', 'solo', 'pro', 'business'];
+export const VISIBLE_PLANS = ['free', 'solo', 'pro', 'business', 'enterprise'];
+
+// ═════════════════════════════════════════════════════════════════════
+// Volia Autopilot — limites par plan (juin 2026 pivot)
+// ═════════════════════════════════════════════════════════════════════
+//
+// Free   / Solo     : 0 workflow (feature gating)
+// Pro              : 1 workflow linéaire
+// Business         : 3 workflows + branching conditional
+// Enterprise       : illimité + A/B testing + Claude optimization
+//
+// Helper : getPlanAutopilotLimits(planId)
+//   → { workflows: number, branching: bool, ab_testing: bool, claude_opt: bool }
+//
+export function getPlanAutopilotLimits(planId) {
+  const plan = PLANS[planId];
+  if (!plan?.limits) {
+    return { workflows: 0, branching: false, ab_testing: false, claude_opt: false };
+  }
+  return {
+    workflows: plan.limits.autopilot_workflows ?? 0,
+    branching: plan.limits.autopilot_branching ?? false,
+    ab_testing: plan.limits.autopilot_ab_testing ?? false,
+    claude_opt: plan.limits.autopilot_claude_optimization ?? false,
+  };
+}

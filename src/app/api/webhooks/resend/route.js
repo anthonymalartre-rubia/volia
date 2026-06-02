@@ -162,6 +162,62 @@ export async function POST(request) {
       return NextResponse.json({ ok: true, warmup_peer: true, event_type: eventType }, { status: 200 });
     }
 
+    // 5.autopilot) VOLIA AUTOPILOT — court-circuit prioritaire.
+    // Les emails autopilot portent kind=autopilot + exec_id. Pas de
+    // email_sends associé → on update autopilot_executions directement :
+    //   - email.opened    → log dans step_history (signal A/B + funnel)
+    //   - email.bounced   → stop la séquence (exit_reason=bounced)
+    //   - email.complained → stop + ajoute à opt_out_list (anti-récidive RGPD)
+    if (tagMap.kind === 'autopilot' && tagMap.exec_id) {
+      const execId = tagMap.exec_id;
+      const { data: exec } = await supabase
+        .from('autopilot_executions')
+        .select('id, step_history, current_step, prospect_id')
+        .eq('id', execId)
+        .maybeSingle();
+      if (exec) {
+        const nowIso = new Date().toISOString();
+        const history = Array.isArray(exec.step_history) ? [...exec.step_history] : [];
+        const updates = {};
+        if (eventType === 'email.opened') {
+          history.push({ step: 'email_opened', at: nowIso, email_step: tagMap.step || null, variant: tagMap.variant || null });
+          updates.step_history = history;
+        } else if (eventType === 'email.bounced' || eventType === 'email.complained') {
+          const reason = eventType === 'email.bounced' ? 'bounced' : 'complained';
+          if (!['crm_pushed', 'completed', 'failed'].includes(exec.current_step)) {
+            updates.current_step = 'completed';
+          }
+          updates.exit_reason = reason;
+          history.push({ step: `email_${reason}`, at: nowIso, email_step: tagMap.step || null });
+          updates.step_history = history;
+          // Complaint → blocklist globale (anti-récidive)
+          if (eventType === 'email.complained' && exec.prospect_id) {
+            const { data: prospect } = await supabase
+              .from('prospects')
+              .select('email, nom')
+              .eq('id', exec.prospect_id)
+              .maybeSingle();
+            if (prospect?.email) {
+              await supabase
+                .from('opt_out_list')
+                .upsert(
+                  { email: prospect.email.toLowerCase(), company: prospect.nom || null, reason: 'Plainte spam (Autopilot Resend webhook)', requested_at: nowIso },
+                  { onConflict: 'email' }
+                );
+            }
+          }
+        }
+        if (Object.keys(updates).length > 0) {
+          updates.updated_at = nowIso;
+          await supabase.from('autopilot_executions').update(updates).eq('id', execId);
+        }
+      }
+      if (auditId) {
+        await supabase.from('webhook_events').update({ processed: true }).eq('id', auditId);
+      }
+      return NextResponse.json({ ok: true, autopilot: true, event_type: eventType }, { status: 200 });
+    }
+
     // 5) Lookup email_sends par provider_id
     const { data: send } = await supabase
       .from('email_sends')

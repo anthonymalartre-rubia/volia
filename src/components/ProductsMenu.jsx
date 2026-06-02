@@ -76,7 +76,7 @@ const PRODUCTS_EN = [
     icon: Zap,
     accent: 'amber',
     badge: 'FLAGSHIP',
-    href: '/produits/autopilot', // pas de page EN dédiée → pointe vers la FR
+    // page EN dédiée (basePath /en/products → /en/products/autopilot)
   },
   {
     slug: 'prospection',

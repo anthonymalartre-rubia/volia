@@ -294,12 +294,12 @@ export default function PricingContent() {
               Les prix. Sans bullshit.
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-6">
-              Le prix d&apos;un café par jour<br />pour ton outil principal<br />de prospection.
+              Le prix d&apos;un café par jour<br />pour ton pipeline B2B<br />en autopilote.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
               <strong className="text-content-primary">0&nbsp;€</strong> pour tester (100 prospects offerts, sans CB).
-              <strong className="text-content-primary"> 19&nbsp;€/mois</strong> pour scaler.
-              <strong className="text-content-primary"> 149&nbsp;€/mois</strong> pour les équipes (Prospection + Campagnes + CRM + Formulaires).
+              <strong className="text-content-primary"> 19&nbsp;€/mois</strong> pour la prospection seule.
+              <strong className="text-amber-600"> 49&nbsp;€/mois</strong> pour <strong className="text-content-primary">Volia Autopilot</strong> (pipeline scrap → email → qualif → CRM), illimité en Enterprise.
             </p>
 
             {/* Toggle Mensuel / Annuel */}

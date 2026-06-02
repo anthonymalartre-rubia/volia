@@ -714,30 +714,80 @@ export default function LandingContent() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          VOLIA PROSPECTION (HERO PRODUCT) + 3 BONUS BUSINESS
+          VOLIA AUTOPILOT — PRODUIT FLAGSHIP (juin 2026)
           ─────────────────────────────────────────────────────────────
-          Refonte mai 2026 — pivot 80/20 :
-          - 80% du focus : Prospection = générateur email + téléphone
-            (le produit principal, accessible dès 19€/mois)
-          - 20% du focus : Campagnes/CRM/Formulaires en bonus Business
-            149€ (3 cards plus petites, badge "Bonus Business uniquement")
+          Le pipeline B2B de bout en bout est désormais le héros du corps
+          de la landing : cible → email perso → form qualif → CRM.
+          Prospection/Campagnes/CRM/Forms deviennent les briques que
+          l'Autopilot orchestre.
+       */}
+      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-amber-50/40 via-white to-white">
+        <div className="max-w-6xl mx-auto">
+          <MotionInView>
+            <div className="text-center mb-12">
+              <p className="text-sm font-semibold text-amber-600 mb-3 uppercase tracking-wider">⚡ Le produit phare</p>
+              <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">
+                Volia Autopilot.
+              </h2>
+              <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
+                Tu choisis ta cible. Volia <strong className="text-content-secondary">scrape, écrit, qualifie</strong> et livre les leads chauds dans ton CRM.
+                Le pipeline B2B complet, en autopilote.
+              </p>
+            </div>
+          </MotionInView>
 
-          Le but : éviter la dilution du message. Le client comprend
-          d'abord ce qu'il achète (lead gen), puis voit qu'il peut
-          aller plus loin avec Business.
+          {/* Pipeline 4 étapes */}
+          <MotionInView delay={100}>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
+              {[
+                { n: '1', t: 'Cible', d: 'Tu sélectionnes secteur + zone + template' },
+                { n: '2', t: 'Email perso', d: 'Volia scrape, enrichit et écrit (IA) chaque email' },
+                { n: '3', t: 'Qualif', d: 'Formulaire + scoring auto Hot / Warm / Cold' },
+                { n: '4', t: 'CRM', d: 'Les leads chauds atterrissent dans ton pipeline' },
+              ].map((s, i) => (
+                <div key={s.n} className="relative p-5 rounded-2xl border border-amber-200 bg-white shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white text-sm font-bold flex items-center justify-center mb-3">{s.n}</div>
+                  <div className="font-semibold text-content-primary mb-1">{s.t}</div>
+                  <p className="text-xs text-content-tertiary leading-relaxed">{s.d}</p>
+                  {i < 3 && <span className="hidden lg:block absolute top-1/2 -right-2 text-amber-400">→</span>}
+                </div>
+              ))}
+            </div>
+          </MotionInView>
+
+          <MotionInView delay={200}>
+            <div className="text-center mb-24">
+              <Link
+                href="/produits/autopilot"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:from-amber-600 hover:to-orange-700 transition shadow-lg shadow-amber-500/20"
+              >
+                Découvrir Volia Autopilot →
+              </Link>
+              <p className="text-xs text-content-tertiary mt-3">Inclus dès le plan Pro (49 €/mois) · illimité en Enterprise</p>
+            </div>
+          </MotionInView>
+        </div>
+      </section>
+
+      {/* ──────────────────────────────────────────────────────────────
+          VOLIA PROSPECTION — la brique moteur de l'Autopilot
+          ─────────────────────────────────────────────────────────────
+          Prospection reste détaillé (SEO + ceux qui veulent juste le
+          lead-gen via Solo), mais cadré comme une brique du pipeline,
+          plus comme "LE produit".
        */}
       <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
         <div className="max-w-6xl mx-auto">
 
-          {/* ─── PRODUIT PHARE : VOLIA PROSPECTION (large card) ─── */}
+          {/* ─── BRIQUE : VOLIA PROSPECTION (large card) ─── */}
           <MotionInView>
             <div className="text-center mb-12">
-              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">Le produit</p>
+              <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">La brique moteur</p>
               <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                 Volia Prospection.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Le générateur de leads B2B le moins cher du marché français.
+                Le moteur de données qui alimente l&apos;Autopilot — et dispo seul si tu veux juste les contacts.
                 <strong className="text-content-secondary"> Email et téléphone</strong> scrappés en temps réel via Google Places + cascade waterfall.
               </p>
             </div>
@@ -1637,6 +1687,7 @@ export default function LandingContent() {
               <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Produit</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/" className="text-content-tertiary hover:text-violet-400 transition">Accueil</Link></li>
+                <li><Link href="/produits/autopilot" className="text-amber-500 font-medium hover:text-amber-400 transition">⚡ Volia Autopilot</Link></li>
                 <li><Link href="/signup" className="text-content-tertiary hover:text-violet-400 transition">Inscription</Link></li>
                 <li><Link href="/login" className="text-content-tertiary hover:text-violet-400 transition">Connexion</Link></li>
                 <li><Link href="/pricing" className="text-content-tertiary hover:text-violet-400 transition">Tarifs</Link></li>

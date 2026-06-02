@@ -201,6 +201,8 @@ function BuilderView({ data, loading, error, router, onCreated }) {
   const [runFrequency, setRunFrequency] = useState('weekly');
   const [emailSenderId, setEmailSenderId] = useState('');
   const [senders, setSenders] = useState([]);
+  const [crmDestination, setCrmDestination] = useState('volia'); // 'volia' | 'webhook'
+  const [crmWebhookUrl, setCrmWebhookUrl] = useState('');
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState(null);
 
@@ -232,7 +234,12 @@ function BuilderView({ data, loading, error, router, onCreated }) {
           name: name || selectedTpl.name,
           prospects_per_run: prospectsPerRun,
           run_frequency: runFrequency,
-          config: emailSenderId ? { email_sender_id: emailSenderId } : {},
+          config: {
+            ...(emailSenderId ? { email_sender_id: emailSenderId } : {}),
+            crm_destination: crmDestination === 'webhook'
+              ? { type: 'webhook', webhook_url: crmWebhookUrl.trim() }
+              : { type: 'volia' },
+          },
         }),
       });
       const d = await res.json();
@@ -376,6 +383,38 @@ function BuilderView({ data, loading, error, router, onCreated }) {
               </p>
             )}
           </div>
+          {/* Destination des leads — CRM Volia natif OU le CRM du client (webhook) */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wide text-content-soft">Destination des leads</label>
+            <select
+              value={crmDestination}
+              onChange={(e) => setCrmDestination(e.target.value)}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-line bg-surface-soft text-sm"
+            >
+              <option value="volia">CRM Volia natif (par défaut)</option>
+              <option value="webhook">Mon propre CRM (webhook : HubSpot, Pipedrive, Salesforce…)</option>
+            </select>
+            {crmDestination === 'webhook' ? (
+              <div className="mt-2">
+                <input
+                  type="url"
+                  value={crmWebhookUrl}
+                  onChange={(e) => setCrmWebhookUrl(e.target.value)}
+                  placeholder="https://hooks.zapier.com/... ou ton endpoint CRM"
+                  className="w-full px-3 py-2 rounded-lg border border-line bg-surface-soft text-sm font-mono text-xs"
+                />
+                <p className="text-[11px] text-content-soft mt-1">
+                  Chaque lead qualifié est envoyé en POST JSON à cette URL (nom, société, email, tél, score, tier).
+                  Branche-la sur ton CRM directement ou via Zapier/Make. <strong>Aucun deal n&apos;est créé dans Volia.</strong>
+                </p>
+              </div>
+            ) : (
+              <p className="text-[11px] text-content-soft mt-1">
+                Les leads chauds atterrissent dans ton pipeline CRM Volia (créé automatiquement).
+              </p>
+            )}
+          </div>
+
           <div className="p-4 rounded-xl bg-violet-50 border border-violet-200 text-xs text-violet-900">
             ⚡ La cible (catégories + géo) est héritée du template. Le routing par tier (Hot/Warm/Cold) se configure après création.
           </div>
@@ -396,6 +435,7 @@ function BuilderView({ data, loading, error, router, onCreated }) {
             <div><strong>Prospects/run :</strong> {prospectsPerRun}</div>
             <div><strong>Fréquence :</strong> {runFrequency}</div>
             <div><strong>Expéditeur :</strong> {emailSenderId ? (senders.find((s) => s.id === emailSenderId)?.domain ? `noreply@${senders.find((s) => s.id === emailSenderId).domain}` : 'domaine vérifié') : 'Volia par défaut'}</div>
+            <div><strong>Destination leads :</strong> {crmDestination === 'webhook' ? `Ton CRM (webhook${crmWebhookUrl.trim() ? '' : ' — URL manquante'})` : 'CRM Volia natif'}</div>
             <div className="pt-2 border-t border-line"><strong>Séquence :</strong> 3 emails (J+0, J+3, J+7) + form qualif + push CRM auto</div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -408,8 +448,8 @@ function BuilderView({ data, loading, error, router, onCreated }) {
             </button>
             <button
               onClick={() => handleCreate(true)}
-              disabled={creating || !emailSenderId}
-              title={!emailSenderId ? "Choisis un domaine d'envoi vérifié à l'étape précédente" : undefined}
+              disabled={creating || !emailSenderId || (crmDestination === 'webhook' && !/^https:\/\//i.test(crmWebhookUrl.trim()))}
+              title={!emailSenderId ? "Choisis un domaine d'envoi vérifié à l'étape précédente" : (crmDestination === 'webhook' && !/^https:\/\//i.test(crmWebhookUrl.trim()) ? "Renseigne l'URL webhook (https://) de ton CRM" : undefined)}
               className="flex-1 px-5 py-2.5 rounded-lg bg-violet-600 text-white font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-1.5"
             >
               {creating ? <Loader2 size={14} className="animate-spin" /> : <><Play size={14} /> Activer maintenant</>}

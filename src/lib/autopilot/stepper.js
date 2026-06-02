@@ -20,7 +20,7 @@ import { isAutonomyEnabled, enforceQuotaOrThrow, logAutonomousAction } from '../
 import { getTemplate } from './templates';
 import { generateEmailBody } from './claude-writer';
 import { resolveRouting, scoreToTier } from './scoring';
-import { createDealFromAutopilot } from './crm-bridge';
+import { routeLeadToCrm } from './crm-bridge';
 import { pickVariant } from './ab-testing';
 
 const MAX_EXECUTIONS_PER_RUN = 200;
@@ -188,7 +188,7 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         const tier = scoreToTier(score);
         const routing = resolveRouting(tier, workflow.config, template);
 
-        const bridge = await createDealFromAutopilot(supabase, {
+        const bridge = await routeLeadToCrm(supabase, {
           userId: workflow.user_id,
           prospect,
           workflow,
@@ -199,14 +199,15 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
           formResponse: execution.form_response,
         });
 
-        if (bridge.deal_id) {
-          updates.crm_deal_id = bridge.deal_id;
+        if (bridge.deal_id || bridge.delivered) {
+          updates.crm_deal_id = bridge.deal_id || null;
           updates.crm_pushed_at = new Date().toISOString();
           updates.current_step = 'crm_pushed';
           history.push(stepLog('crm_pushed_stepper', {
-            deal_id: bridge.deal_id,
-            contact_id: bridge.contact_id,
-            stage_id: bridge.stage_id,
+            destination: bridge.destination || 'volia',
+            deal_id: bridge.deal_id || null,
+            contact_id: bridge.contact_id || null,
+            stage_id: bridge.stage_id || null,
             score,
             tier,
             routing_source: routing.source,

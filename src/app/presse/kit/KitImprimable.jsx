@@ -133,12 +133,15 @@ export default function KitImprimable() {
               </div>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-content-primary mb-3">
-              Volia, première entreprise SaaS autonome au monde
+              Volia Autopilot, le pipeline B2B automatisé de bout en bout
             </h1>
             <p className="text-base text-content-secondary leading-relaxed">
-              Pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille.
-              Suite B2B de 4 modules connectés à partir de 19 €/mois — 16 boucles d&apos;agents IA
-              en production 24/7, et une couche de méta-autonomie qui s&apos;auto-optimise.
+              Cible → email personnalisé par IA → formulaire de qualification → scoring → CRM.
+              L&apos;humain choisit la cible, l&apos;IA exécute la chaîne, sous supervision.
+              Au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires).
+              Gamme : Starter gratuit · Solo 19 € · Pro 49 € (Autopilot 1 workflow) · Business ·
+              Enterprise 499 € (Autopilot illimité + A/B testing + optimisation Claude) — le
+              flagship Autopilot démarre à 49 €/mois.
             </p>
           </header>
 
@@ -360,11 +363,11 @@ export default function KitImprimable() {
                 </p>
                 <div className="space-y-1.5 text-sm">
                   <a
-                    href={`mailto:${PRESS_CONTACT.founderEmail || 'anthony@volia.fr'}`}
+                    href={`mailto:${PRESS_CONTACT.founderEmail || 'anthony.malartre@suraya.fr'}`}
                     className="flex items-center gap-2 text-violet-700 font-semibold hover:underline"
                   >
                     <Mail size={14} />
-                    {PRESS_CONTACT.founderEmail || 'anthony@volia.fr'}
+                    {PRESS_CONTACT.founderEmail || 'anthony.malartre@suraya.fr'}
                   </a>
                   <a
                     href={`mailto:${PRESS_CONTACT.email || 'contact@volia.fr'}`}

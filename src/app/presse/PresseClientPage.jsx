@@ -16,7 +16,6 @@ import {
   Copy,
   Download,
   Mail,
-  Phone,
   Clock,
   Newspaper,
   Sparkles,
@@ -157,10 +156,10 @@ function HeroSection() {
           </h1>
 
           <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-3xl mb-8">
-            Une nouvelle catégorie d&apos;entreprise est née : pilotée par IA, augmentée
-            par 1 founder, construite en 6 semaines à Marseille. Tout le matériel presse
-            pour la raconter : visuels HD, chiffres clés, bio founder, communiqués, quotes
-            prêtes à citer.
+            Volia Autopilot, le pipeline B2B automatisé de bout en bout : l&apos;humain
+            choisit la cible, l&apos;IA exécute la chaîne, sous supervision. Tout le matériel
+            presse pour la raconter : visuels HD, chiffres clés, bio founder, communiqués,
+            quotes prêtes à citer.
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -364,36 +363,44 @@ function FounderBioSection() {
               </div>
 
               <div className="space-y-2">
-                <a
-                  href={PRESS_CONTACT.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-violet-700 hover:bg-violet-50 transition border border-line hover:border-violet-300"
-                >
-                  <Briefcase size={14} />
-                  LinkedIn
-                  <ExternalLink size={11} className="ml-auto opacity-60" />
-                </a>
-                <a
-                  href={PRESS_CONTACT.twitter}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-violet-700 hover:bg-violet-50 transition border border-line hover:border-violet-300"
-                >
-                  <AtSign size={14} />
-                  Twitter / X
-                  <ExternalLink size={11} className="ml-auto opacity-60" />
-                </a>
-                <a
-                  href={PRESS_CONTACT.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-violet-700 hover:bg-violet-50 transition border border-line hover:border-violet-300"
-                >
-                  <Code size={14} />
-                  GitHub
-                  <ExternalLink size={11} className="ml-auto opacity-60" />
-                </a>
+                {/* LinkedIn / Twitter non exposés tant que les URLs ne sont
+                    pas vérifiées (PRESS_CONTACT.linkedin / .twitter = null). */}
+                {PRESS_CONTACT.linkedin && (
+                  <a
+                    href={PRESS_CONTACT.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-violet-700 hover:bg-violet-50 transition border border-line hover:border-violet-300"
+                  >
+                    <Briefcase size={14} />
+                    LinkedIn
+                    <ExternalLink size={11} className="ml-auto opacity-60" />
+                  </a>
+                )}
+                {PRESS_CONTACT.twitter && (
+                  <a
+                    href={PRESS_CONTACT.twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-violet-700 hover:bg-violet-50 transition border border-line hover:border-violet-300"
+                  >
+                    <AtSign size={14} />
+                    Twitter / X
+                    <ExternalLink size={11} className="ml-auto opacity-60" />
+                  </a>
+                )}
+                {PRESS_CONTACT.github && (
+                  <a
+                    href={PRESS_CONTACT.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-content-secondary hover:text-violet-700 hover:bg-violet-50 transition border border-line hover:border-violet-300"
+                  >
+                    <Code size={14} />
+                    GitHub
+                    <ExternalLink size={11} className="ml-auto opacity-60" />
+                  </a>
+                )}
               </div>
 
               <div className="mt-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
@@ -407,8 +414,8 @@ function FounderBioSection() {
               </div>
 
               <p className="mt-3 text-[11px] text-content-muted leading-relaxed italic px-1">
-                Anthony reste responsable produit, sales et service client — l&apos;exécution
-                opérationnelle est supervisée par 1 founder et orchestrée par les agents IA.
+                Anthony reste responsable produit, sales et service client — l&apos;humain
+                valide, l&apos;IA exécute.
               </p>
             </div>
           </MotionInView>
@@ -867,26 +874,8 @@ function PressContactSection() {
                 />
               </a>
 
-              <a
-                href={`tel:${PRESS_CONTACT.phone.replace(/\s/g, '')}`}
-                className="flex items-center gap-4 p-5 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 backdrop-blur transition group"
-              >
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md flex-shrink-0">
-                  <Phone size={18} className="text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-violet-200/80 uppercase tracking-wider font-semibold">
-                    Téléphone
-                  </div>
-                  <div className="text-base font-semibold text-white">
-                    {PRESS_CONTACT.phone}
-                  </div>
-                </div>
-                <ChevronRight
-                  size={16}
-                  className="text-violet-200/60 group-hover:text-white group-hover:translate-x-0.5 transition flex-shrink-0"
-                />
-              </a>
+              {/* Téléphone presse non communiqué publiquement — contact par
+                  email uniquement tant qu'un numéro dédié n'est pas en place. */}
 
               <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur">
                 <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-md flex-shrink-0">

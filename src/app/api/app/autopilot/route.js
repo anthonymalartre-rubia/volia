@@ -23,6 +23,29 @@ async function getUserPlan(supabase, userId) {
   return data?.plan || 'free';
 }
 
+// Garde-fou réputation : un workflow ne peut s'ACTIVER que si l'user a
+// choisi un expéditeur (email_sender) lui appartenant ET vérifié.
+// Sinon les emails partiraient de hello@volia.fr → réputation du domaine
+// Volia cramée pour tous les clients. Pas de fallback Volia pour le cold.
+async function hasVerifiedSender(supaAdmin, userId, config) {
+  const senderId = config?.email_sender_id;
+  if (!senderId) return false;
+  const { data } = await supaAdmin
+    .from('email_senders')
+    .select('id')
+    .eq('id', senderId)
+    .eq('user_id', userId)
+    .eq('status', 'verified')
+    .maybeSingle();
+  return !!data;
+}
+
+const NO_SENDER_RESPONSE = {
+  error: 'no_verified_sender',
+  message: "Active d'abord un domaine d'envoi vérifié. Volia n'autorise pas l'envoi depuis hello@volia.fr (réputation partagée). Branche ton domaine puis réessaie.",
+  settings_url: '/settings/email-senders',
+};
+
 async function fetchWorkflowMetrics(supabase, workflowId) {
   // Funnel : count par current_step
   const { data: execs } = await supabase
@@ -164,7 +187,7 @@ export async function POST(request) {
   // Vérifie ownership
   const { data: existing } = await supaAdmin
     .from('autopilot_workflows')
-    .select('id, user_id, status, template_id')
+    .select('id, user_id, status, template_id, config')
     .eq('id', payload.id)
     .maybeSingle();
   if (!existing || existing.user_id !== user.id) {
@@ -190,6 +213,11 @@ export async function POST(request) {
     return NextResponse.json({ ok: true });
   }
   if (action === 'resume' || action === 'activate') {
+    // Garde-fou : config peut avoir été mise à jour dans le même payload
+    const effectiveConfig = payload.config || existing.config;
+    if (!(await hasVerifiedSender(supaAdmin, user.id, effectiveConfig))) {
+      return NextResponse.json(NO_SENDER_RESPONSE, { status: 403 });
+    }
     await supaAdmin
       .from('autopilot_workflows')
       .update({
@@ -209,6 +237,10 @@ export async function POST(request) {
 
   // ─── RUN NOW ──────────────────────────────────────────────────
   if (action === 'run_now') {
+    // run_now auto-active → soumis au même garde-fou réputation
+    if (!(await hasVerifiedSender(supaAdmin, user.id, existing.config))) {
+      return NextResponse.json(NO_SENDER_RESPONSE, { status: 403 });
+    }
     if (existing.status !== 'active') {
       // Auto-activate puis run
       await supaAdmin

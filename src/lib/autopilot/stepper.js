@@ -239,6 +239,20 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
       }
     }
 
+    // ─── GARDE-FOU RÉPUTATION (critique) ──────────────────────────
+    // On n'envoie JAMAIS de cold outreach sans expéditeur vérifié du user.
+    // Pas de fallback hello@volia.fr : ça crame la réputation du domaine
+    // Volia pour tous les clients. Si pas de sender vérifié → on bloque
+    // l'envoi (l'execution reste à son step, repartira une fois le domaine
+    // branché). fromHeader n'est défini que si sender status='verified'.
+    if (shouldSend && !fromHeader) {
+      shouldSend = false;
+      const alreadyFlagged = history.some((h) => h.step === 'send_blocked_no_verified_sender');
+      if (!alreadyFlagged) {
+        history.push(stepLog('send_blocked_no_verified_sender'));
+      }
+    }
+
     // Send email si timing OK
     if (shouldSend && stepIdx >= 0 && stepIdx < template.sequence.length) {
       const email = await composeEmail({

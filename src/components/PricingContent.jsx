@@ -52,6 +52,7 @@ const PLAN_VISUALS = {
   solo:    { ring: 'border-violet-200', bg: 'bg-violet-50/40', accent: 'text-violet-600', badge: null },
   pro:     { ring: 'border-violet-500 ring-2 ring-violet-500/20', bg: 'bg-gradient-to-b from-violet-50 via-violet-50/60 to-white', accent: 'text-violet-700', badge: 'POPULAIRE' },
   business:{ ring: 'border-indigo-300', bg: 'bg-gradient-to-br from-violet-100/60 via-white to-indigo-100/60', accent: 'text-indigo-700', badge: null },
+  enterprise:{ ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700', badge: '⚡ AUTOPILOT' },
 };
 
 const PLAN_TAGLINES = {
@@ -59,17 +60,23 @@ const PLAN_TAGLINES = {
   solo: 'Pour freelances et consultants',
   pro: 'Pour PME et agences',
   business: 'Pour équipes outbound',
+  enterprise: 'Pour équipes qui scalent',
 };
 
-// Modules inclus par plan : SEUL Business débloque les 4 modules.
-// Starter/Solo/Pro restent sur Prospection uniquement (Pro = juste plus de
-// volume vs Solo). C'est ce qui justifie l'écart Pro 49€ → Business 149€.
+// Modules inclus par plan : Business + Enterprise débloquent les 4 modules.
+// Enterprise ajoute Volia Autopilot illimité (juin 2026 pivot).
 const PLAN_MODULES = {
-  free:     { prospection: 'limitée', campagnes: false, crm: false, formulaires: false },
-  solo:     { prospection: true,      campagnes: false, crm: false, formulaires: false },
-  pro:      { prospection: true,      campagnes: false, crm: false, formulaires: false },
-  business: { prospection: true,      campagnes: true,  crm: true,  formulaires: true },
+  free:       { prospection: 'limitée', campagnes: false, crm: false, formulaires: false, autopilot: false },
+  solo:       { prospection: true,      campagnes: false, crm: false, formulaires: false, autopilot: false },
+  pro:        { prospection: true,      campagnes: false, crm: false, formulaires: false, autopilot: '1 workflow' },
+  business:   { prospection: true,      campagnes: true,  crm: true,  formulaires: true,  autopilot: '3 workflows + branching' },
+  enterprise: { prospection: true,      campagnes: true,  crm: true,  formulaires: true,  autopilot: '∞ + A/B + Claude opt' },
 };
+
+// Pour le tableau comparatif : on garde 4 colonnes (free/solo/pro/business)
+// car ajouter une 5e colonne à toutes les rows = trop de data à updater.
+// Plan Enterprise = footnote sous le tableau (tout illimité + Autopilot).
+const VISIBLE_PLANS_FOR_COMPARE = ['free', 'solo', 'pro', 'business'];
 
 // ─── Section 4 : Tableau comparatif — données ───────────────────
 // Sections collapsibles avec rows.
@@ -582,7 +589,7 @@ export default function PricingContent() {
                     <th className="text-left text-xs font-semibold text-content-tertiary uppercase tracking-wider px-5 py-4 w-[40%]">
                       Fonctionnalités
                     </th>
-                    {VISIBLE_PLANS.map((planId) => (
+                    {VISIBLE_PLANS_FOR_COMPARE.map((planId) => (
                       <th key={planId} className="text-center px-3 py-4 w-[15%]">
                         <div className="text-sm font-bold text-content-primary">{PLANS[planId].name}</div>
                         <div className="text-[11px] text-content-tertiary mt-0.5">

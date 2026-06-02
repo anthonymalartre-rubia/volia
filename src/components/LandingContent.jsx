@@ -311,34 +311,39 @@ export default function LandingContent() {
                   email + téléphone B2B. Les 3 autres modules (Campagnes/CRM/
                   Formulaires) sont du bonus Business 149 € → mentionnés en
                   bas du hero, pas dans le badge. */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-indigo-100 to-violet-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
-                <Search size={12} className="text-violet-600" />
-                <span className="text-violet-700 font-bold">GÉNÉRATEUR EMAIL + TÉLÉPHONE B2B · 19 €/MOIS</span>
+              {/* Badge pivot juin 2026 : Autopilot = nouvelle proposition de valeur principale.
+                  Volia = pipeline B2B end-to-end auto (scrap → email → form → CRM)
+                  plutôt qu'un simple générateur de leads. */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-300 text-xs mb-6 font-medium shadow-sm shadow-amber-500/10">
+                <Sparkles size={12} className="text-amber-700" />
+                <span className="text-amber-800 font-bold">⚡ NOUVEAU · VOLIA AUTOPILOT — PIPELINE B2B AUTO</span>
               </div>
 
-              {/* H1 — focus 80% lead gen. Le produit = générateur de contacts
-                  B2B (email + téléphone fixe & mobile). Pas de mention des
-                  modules secondaires ici. */}
+              {/* H1 PIVOT — Volia devient le pipeline auto end-to-end.
+                  Ancien H1 "Trouvez emails et téléphones B2B" → pivoté vers
+                  "Ton pipeline B2B en autopilot" (juin 2026).
+                  La promesse n'est plus juste lead-gen, c'est le pipeline complet. */}
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
-                <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Trouvez emails et téléphones B2B</span>
-                <span className="text-content-primary"> en 30 secondes.</span>
+                <span className="text-content-primary">Ton pipeline B2B.</span>
                 <br />
-                <span className="text-content-primary text-3xl sm:text-4xl lg:text-5xl">Le générateur de leads B2B français.</span>
+                <span className="bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">En autopilot.</span>
               </h1>
 
-              {/* Sous-titre — valeur lead gen : volume + qualité contact +
-                  prix accessible. Aucune mention des modules secondaires. */}
+              {/* Sous-titre — pitch Autopilot complet en 1 phrase.
+                  Volia fait TOUT le pipeline. Le user ne touche rien. */}
               <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-xl">
-                150+ catégories, 101 départements, scraping cascade <strong className="text-content-primary">email + téléphone fixe & mobile</strong>.
-                À partir de <strong className="text-content-primary">19&nbsp;€/mois. Sans CB.</strong>
+                Sélectionne ta cible. Volia <strong className="text-content-primary">scrap, enrichit, contacte, qualifie</strong> et livre les leads chauds dans ton CRM.
+              </p>
+              <p className="text-base text-content-secondary mb-6 leading-relaxed max-w-xl">
+                <strong className="text-content-primary">Tu ne touches rien.</strong> 2 semaines plus tard, ton pipeline est plein.
+                À partir de <strong className="text-content-primary">49&nbsp;€/mois. Sans CB.</strong>
               </p>
 
-              {/* Mention discrète des bonus Business — 1 ligne, pas visuellement
-                  dominant. Le client achète d'abord du lead gen, découvre
-                  les modules secondaires quand il monte en gamme. */}
+              {/* Bonus mention — Solo 19€ pour le lead-gen pur (ceux qui veulent
+                  juste l'ancien usecase). Autopilot reste le flagship. */}
               <p className="text-sm text-content-tertiary mb-8 italic flex items-start gap-1.5">
                 <Sparkles size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
-                <span><strong className="text-content-secondary not-italic">Bonus Business&nbsp;149&nbsp;€</strong> : Campagnes + CRM + Formulaires inclus.</span>
+                <span>Tu veux juste les contacts B2B ? <strong className="text-content-secondary not-italic">Plan Solo&nbsp;19&nbsp;€</strong> sans Autopilot.</span>
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}

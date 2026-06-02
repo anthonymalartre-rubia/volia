@@ -67,6 +67,34 @@ const nextConfig = {
       "object-src 'none'",
     ].join('; ');
 
+    // Auth + espace connecté : JAMAIS mis en cache par le CDN partagé ni le
+    // navigateur. Sinon Vercel edge peut servir une copie HTML périmée (vue :
+    // /login servi en x-vercel-cache HIT, age ~4,6 h) → buildId/chunks
+    // désynchronisés après un déploiement → erreur 500 « fantôme »
+    // reproductible cross-device, insensible au hard refresh et invisible
+    // dans les logs origin (servi depuis l'edge). no-store force un rendu
+    // frais à chaque requête sur ces routes sensibles.
+    const noStore = [
+      { key: 'Cache-Control', value: 'private, no-store, max-age=0, must-revalidate' },
+    ];
+    const noStorePaths = [
+      '/login',
+      '/signup',
+      '/forgot-password',
+      '/reset-password',
+      '/onboarding',
+      '/parrainage',
+      '/notifications',
+      '/dashboard',
+      '/dashboard/:path*',
+      '/settings',
+      '/settings/:path*',
+      '/app',
+      '/app/:path*',
+      '/admin',
+      '/admin/:path*',
+    ];
+
     return [
       {
         source: '/(.*)',
@@ -79,6 +107,7 @@ const nextConfig = {
           { key: 'Content-Security-Policy', value: csp },
         ],
       },
+      ...noStorePaths.map((source) => ({ source, headers: noStore })),
       {
         // Forms publics — override CSP pour autoriser embed iframe cross-origin.
         // Cette règle est plus spécifique → Next.js merge/override les headers.

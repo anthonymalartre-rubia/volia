@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getSupabase } from '@/lib/supabase';
 import { PLANS } from '@/lib/plans';
+import CockpitAttention from '@/components/admin/CockpitAttention';
 import {
   Shield, Users, Mail, CreditCard, Search, ArrowLeft, Crown, RefreshCw,
   Trash2, KeyRound, Eye, EyeOff, Ban, CheckCircle, AlertTriangle, X,
@@ -416,6 +417,11 @@ export default function AdminPage() {
         {/* ==================== DASHBOARD TAB ==================== */}
         {activeTab === 'dashboard' && (
           <>
+            {/* ─── ATTENTION FOUNDER : alertes critiques + today's inbox ─── */}
+            {/* Mis EN TÊTE du dashboard pour que le founder voit en 1 coup
+                d'œil ce qu'il doit faire AUJOURD'HUI + ce qui pète. */}
+            <CockpitAttention />
+
             {/* App launcher — accès rapide à toutes les pages admin */}
             <div className="rounded-xl border border-line bg-surface-card p-4">
               <div className="text-xs font-bold uppercase tracking-wider text-content-tertiary mb-3 flex items-center gap-1.5">

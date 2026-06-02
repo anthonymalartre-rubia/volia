@@ -28,9 +28,18 @@ import { runTrialRelance } from '@/lib/trial-relance';
 import { runDogfoodOutreach } from '@/lib/dogfood-outreach';
 import { rollupAutonomyMetrics, runWeeklyAutonomyReview, generateRecommendations } from '@/lib/meta-autonomy';
 import { runAutoFaqReply } from '@/lib/auto-faq-reply';
+import { runStuckUserDetector } from '@/lib/stuck-user-detector';
+import { runCheckoutRecovery } from '@/lib/checkout-recovery';
+import { runUsageDeclineDetector } from '@/lib/usage-decline-detector';
+import { runHotLeadPromo } from '@/lib/hot-lead-promo';
 
 const CRONS = {
   'auto-faq-reply': runAutoFaqReply,
+  // ─── Wave 1 Growth Loops ──────────────────────────────────
+  'stuck-user-detection': runStuckUserDetector,
+  'checkout-recovery': runCheckoutRecovery,
+  'usage-decline-detector': runUsageDeclineDetector,
+  'hot-lead-promo': runHotLeadPromo,
   'auto-content-proposer': runContentProposer,
   'publish-approved-actions': runPublishApprovedActions,
   'sentry-digest': runSentryDigest,

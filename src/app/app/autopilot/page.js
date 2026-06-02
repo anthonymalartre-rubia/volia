@@ -346,15 +346,18 @@ function BuilderView({ data, loading, error, router, onCreated }) {
               </select>
             </div>
           </div>
-          {/* Sender email — multi-tenant : les emails partent du domaine choisi */}
+          {/* Sender email — OBLIGATOIRE : on n'envoie JAMAIS depuis hello@volia.fr.
+              Cold outreach depuis le domaine partagé Volia = réputation cramée. */}
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wide text-content-soft">Expéditeur des emails</label>
+            <label className="text-xs font-semibold uppercase tracking-wide text-content-soft">
+              Domaine d'envoi <span className="text-red-500">*</span>
+            </label>
             <select
               value={emailSenderId}
               onChange={(e) => setEmailSenderId(e.target.value)}
-              className="w-full mt-1 px-3 py-2 rounded-lg border border-line bg-surface-soft text-sm"
+              className={`w-full mt-1 px-3 py-2 rounded-lg border bg-surface-soft text-sm ${emailSenderId ? 'border-line' : 'border-amber-300'}`}
             >
-              <option value="">Volia par défaut (hello@volia.fr)</option>
+              <option value="">— Choisis ton domaine vérifié —</option>
               {senders.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.from_name || 'Volia'} — noreply@{s.domain}
@@ -362,12 +365,14 @@ function BuilderView({ data, loading, error, router, onCreated }) {
               ))}
             </select>
             {senders.length === 0 ? (
-              <p className="text-[11px] text-content-soft mt-1">
-                Aucun domaine vérifié. <a href="/settings/email-senders" className="text-violet-600 underline">Brancher ton domaine</a> améliore la délivrabilité.
-              </p>
+              <div className="mt-2 p-3 rounded-lg bg-amber-50 border border-amber-200 text-[12px] text-amber-900 leading-relaxed">
+                <strong>Aucun domaine vérifié.</strong> Volia n'envoie pas tes emails de prospection
+                depuis <code>hello@volia.fr</code> (réputation partagée entre tous les clients).
+                {' '}<a href="/settings/email-senders" className="text-violet-700 underline font-semibold">Branche ton domaine</a> (2 min) pour activer ce workflow.
+              </div>
             ) : (
               <p className="text-[11px] text-content-soft mt-1">
-                Envoyer depuis ton domaine vérifié améliore la délivrabilité et le branding.
+                Les emails partent de TON domaine vérifié — meilleure délivrabilité, branding, et ta réputation reste la tienne.
               </p>
             )}
           </div>
@@ -403,12 +408,20 @@ function BuilderView({ data, loading, error, router, onCreated }) {
             </button>
             <button
               onClick={() => handleCreate(true)}
-              disabled={creating}
-              className="flex-1 px-5 py-2.5 rounded-lg bg-violet-600 text-white font-semibold text-sm disabled:opacity-50 inline-flex items-center justify-center gap-1.5"
+              disabled={creating || !emailSenderId}
+              title={!emailSenderId ? "Choisis un domaine d'envoi vérifié à l'étape précédente" : undefined}
+              className="flex-1 px-5 py-2.5 rounded-lg bg-violet-600 text-white font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center justify-center gap-1.5"
             >
               {creating ? <Loader2 size={14} className="animate-spin" /> : <><Play size={14} /> Activer maintenant</>}
             </button>
           </div>
+          {!emailSenderId && (
+            <p className="text-[12px] text-amber-700 text-center">
+              ⚠️ L'activation nécessite un domaine d'envoi vérifié.{' '}
+              <button onClick={() => setStep(2)} className="underline font-semibold">Choisir à l'étape 2</button>
+              {' '}ou <a href="/settings/email-senders" className="underline font-semibold">brancher un domaine</a>. Tu peux quand même sauver en brouillon.
+            </p>
+          )}
         </section>
       )}
     </div>
@@ -417,17 +430,26 @@ function BuilderView({ data, loading, error, router, onCreated }) {
 
 function DetailView({ detail, loading, busy, setBusy, reload, router }) {
   const [branchingOpen, setBranchingOpen] = useState(false);
+  const [actionError, setActionError] = useState(null);
 
   async function action(actionName, extra = {}) {
     setBusy(true);
+    setActionError(null);
     try {
-      await fetch('/api/app/autopilot', {
+      const res = await fetch('/api/app/autopilot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: actionName, id: detail.workflow.id, ...extra }),
       });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setActionError(d.message || d.error || 'Erreur');
+        return;
+      }
       reload();
-    } catch {} finally { setBusy(false); }
+    } catch (e) {
+      setActionError(e.message);
+    } finally { setBusy(false); }
   }
 
   async function saveBranching(branchingConfig) {
@@ -479,6 +501,17 @@ function DetailView({ detail, loading, busy, setBusy, reload, router }) {
           </button>
         </div>
       </div>
+
+      {actionError && (
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-900 flex items-start gap-2">
+          <AlertCircle size={16} className="flex-shrink-0 mt-0.5 text-amber-600" />
+          <div>
+            {actionError}
+            {' '}
+            <a href="/settings/email-senders" className="underline font-semibold">Brancher mon domaine →</a>
+          </div>
+        </div>
+      )}
 
       {/* Funnel */}
       <section className="bg-surface-card border border-line rounded-xl p-5">

@@ -28,11 +28,17 @@ const EMAIL_2_DELAY_HOURS = 72;   // J+3
 const EMAIL_3_DELAY_HOURS = 96;   // J+4 depuis email_2 (= J+7 depuis enrol)
 const FORM_TIMEOUT_HOURS = 168;   // J+7 après email_3 (= exit no-response)
 
+// Plafond mensuel d'appels Claude (génération body perso) PAR workflow.
+// Au-delà, on retombe gracieusement sur body_summary template (0 coût).
+// Override possible via workflow.config.claude_monthly_cap.
+// 1500 ≈ 100 prospects/sem × 3 emails × ~4 semaines avec marge.
+const CLAUDE_WRITES_PER_WORKFLOW_PER_MONTH = 1500;
+
 /**
  * Compose un email du template + variables prospect.
  * Phase 2 : tente Claude generation, fallback sur body_summary si échec.
  */
-async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl, workflowMetricsCache }) {
+async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl, workflowMetricsCache, allowClaude = true }) {
   const step = template.sequence[stepIndex];
   const firstName = prospect.first_name || prospect.nom?.split(' ')[0] || 'toi';
   const company = prospect.nom || prospect.company || 'votre entreprise';
@@ -50,21 +56,23 @@ async function composeEmail({ template, stepIndex, prospect, workflowId, executi
     .replace(/{{first_name}}/g, firstName)
     .replace(/{{company}}/g, company);
 
-  // ─── Phase 2 : Claude generation ──────────────────────────────
-  // On tente d'abord la génération Claude (perso prospect + ton template).
-  // Si échec (API down, patterns interdits détectés, etc.), fallback sur
-  // body_summary template (Phase 1 behavior). Le flow continue dans tous
-  // les cas, l'email part toujours.
+  // ─── Phase 2/3 : Claude generation (gated par quota mensuel) ──────
+  // On tente d'abord la génération Claude (perso prospect + ton template),
+  // SAUF si le quota mensuel du workflow est atteint (allowClaude=false).
+  // Si échec/quota, fallback sur body_summary template — l'email part
+  // toujours, 0 coût Claude.
   let bodyText = null;
-  let bodyMethod = 'fallback_summary';
-  try {
-    const claudeBody = await generateEmailBody({ template, stepIndex, prospect });
-    if (claudeBody) {
-      bodyText = claudeBody;
-      bodyMethod = 'claude';
+  let bodyMethod = allowClaude ? 'fallback_summary' : 'quota_capped';
+  if (allowClaude) {
+    try {
+      const claudeBody = await generateEmailBody({ template, stepIndex, prospect });
+      if (claudeBody) {
+        bodyText = claudeBody;
+        bodyMethod = 'claude';
+      }
+    } catch (err) {
+      console.warn('[autopilot/stepper] Claude body gen failed', err.message);
     }
-  } catch (err) {
-    console.warn('[autopilot/stepper] Claude body gen failed', err.message);
   }
   if (!bodyText) {
     bodyText = (step.body_summary || '')
@@ -116,7 +124,7 @@ Anthony — Volia`;
  * Avance 1 execution selon son current_step.
  * @param {string} [fromHeader] - sender résolu (workflow.config.email_sender_id)
  */
-async function advanceExecution(supabase, execution, template, workflow, baseUrl, fromHeader) {
+async function advanceExecution(supabase, execution, template, workflow, baseUrl, fromHeader, allowClaude = true) {
   const stepLog = (step, meta = {}) => ({
     step,
     at: new Date().toISOString(),
@@ -125,6 +133,7 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
   const history = Array.isArray(execution.step_history) ? [...execution.step_history] : [];
   const updates = {};
   const now = Date.now();
+  let claudeUsed = false; // pour le compteur quota mensuel par workflow
 
   // Charge le prospect
   const { data: prospect } = await supabase
@@ -240,9 +249,26 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         executionId: execution.id,
         baseUrl,
         workflowMetricsCache: workflow.metrics_cache,
+        allowClaude,
       });
+      claudeUsed = email.bodyMethod === 'claude'; // coût Claude payé (même si l'envoi échoue ensuite)
       try {
-        await sendEmail({ to: prospect.email, subject: email.subject, html: email.html, text: email.text, from: fromHeader });
+        await sendEmail({
+          to: prospect.email,
+          subject: email.subject,
+          html: email.html,
+          text: email.text,
+          from: fromHeader,
+          // Tags Resend → permettent au webhook d'attribuer opens/bounces
+          // à cette execution + variant (Phase 3 : signal A/B + anti-bounce).
+          tags: [
+            { name: 'kind', value: 'autopilot' },
+            { name: 'exec_id', value: execution.id },
+            { name: 'workflow_id', value: workflow.id },
+            { name: 'step', value: String(stepIdx + 1) },
+            { name: 'variant', value: email.subjectVariantId || 'default' },
+          ],
+        });
         updates[`email_${stepIdx + 1}_sent_at`] = new Date().toISOString();
         updates.current_step = stepIdx === 0 ? 'email_1_sent'
           : stepIdx === 1 ? 'email_2_sent'
@@ -261,12 +287,12 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
   }
 
   if (Object.keys(updates).length === 0 && history.length === execution.step_history?.length) {
-    return { skipped: true, reason: 'no_action_needed' };
+    return { skipped: true, reason: 'no_action_needed', claudeUsed };
   }
   updates.step_history = history;
   updates.updated_at = new Date().toISOString();
   await supabase.from('autopilot_executions').update(updates).eq('id', execution.id);
-  return { updated: true, new_step: updates.current_step || execution.current_step };
+  return { updated: true, new_step: updates.current_step || execution.current_step, claudeUsed };
 }
 
 /**
@@ -346,16 +372,40 @@ export async function runStepper() {
       }
     }
 
+    // Quota Claude mensuel par workflow (Phase 3) : on lit l'usage du mois
+    // courant, reset si le mois a changé. allowClaude tombe à false une fois
+    // le plafond atteint → fallback body_summary (0 coût).
+    const curMonth = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+    let claudeUsage = workflow.metrics_cache?.claude_usage || { month: null, count: 0 };
+    if (claudeUsage.month !== curMonth) claudeUsage = { month: curMonth, count: 0 };
+    const claudeCap = workflow.config?.claude_monthly_cap ?? CLAUDE_WRITES_PER_WORKFLOW_PER_MONTH;
+    let claudeUsedThisRun = 0;
+
     for (const exec of execs) {
       processed++;
       try {
-        const res = await advanceExecution(supabase, exec, template, workflow, baseUrl, fromHeader);
+        const allowClaude = (claudeUsage.count + claudeUsedThisRun) < claudeCap;
+        const res = await advanceExecution(supabase, exec, template, workflow, baseUrl, fromHeader, allowClaude);
+        if (res.claudeUsed) claudeUsedThisRun++;
         if (res.updated) advanced++;
         else skipped++;
       } catch (err) {
         errors++;
         console.error('[autopilot/stepper] exec error', exec.id, err.message);
       }
+    }
+
+    // Persiste le compteur Claude (merge dans metrics_cache, 1 seul write/workflow)
+    if (claudeUsedThisRun > 0) {
+      await supabase
+        .from('autopilot_workflows')
+        .update({
+          metrics_cache: {
+            ...(workflow.metrics_cache || {}),
+            claude_usage: { month: curMonth, count: claudeUsage.count + claudeUsedThisRun },
+          },
+        })
+        .eq('id', workflowId);
     }
   }
 

@@ -175,10 +175,25 @@ function BuilderView({ data, loading, error, router, onCreated }) {
   const [name, setName] = useState('');
   const [prospectsPerRun, setProspectsPerRun] = useState(50);
   const [runFrequency, setRunFrequency] = useState('weekly');
+  const [emailSenderId, setEmailSenderId] = useState('');
+  const [senders, setSenders] = useState([]);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState(null);
 
   const selectedTpl = data?.available_templates?.find((t) => t.id === selectedTplId);
+
+  // Charge les senders email vérifiés du user (pour le dropdown sender).
+  useEffect(() => {
+    async function loadSenders() {
+      try {
+        const res = await fetch('/api/email-senders');
+        const d = await res.json();
+        const verified = (d.senders || []).filter((s) => s.status === 'verified');
+        setSenders(verified);
+      } catch { /* silencieux : fallback sur sender Volia par défaut */ }
+    }
+    loadSenders();
+  }, []);
 
   async function handleCreate(activate = false) {
     setCreating(true);
@@ -193,6 +208,7 @@ function BuilderView({ data, loading, error, router, onCreated }) {
           name: name || selectedTpl.name,
           prospects_per_run: prospectsPerRun,
           run_frequency: runFrequency,
+          config: emailSenderId ? { email_sender_id: emailSenderId } : {},
         }),
       });
       const d = await res.json();
@@ -306,8 +322,33 @@ function BuilderView({ data, loading, error, router, onCreated }) {
               </select>
             </div>
           </div>
+          {/* Sender email — multi-tenant : les emails partent du domaine choisi */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wide text-content-soft">Expéditeur des emails</label>
+            <select
+              value={emailSenderId}
+              onChange={(e) => setEmailSenderId(e.target.value)}
+              className="w-full mt-1 px-3 py-2 rounded-lg border border-line bg-surface-soft text-sm"
+            >
+              <option value="">Volia par défaut (hello@volia.fr)</option>
+              {senders.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.from_name || 'Volia'} — noreply@{s.domain}
+                </option>
+              ))}
+            </select>
+            {senders.length === 0 ? (
+              <p className="text-[11px] text-content-soft mt-1">
+                Aucun domaine vérifié. <a href="/settings/email-senders" className="text-violet-600 underline">Brancher ton domaine</a> améliore la délivrabilité.
+              </p>
+            ) : (
+              <p className="text-[11px] text-content-soft mt-1">
+                Envoyer depuis ton domaine vérifié améliore la délivrabilité et le branding.
+              </p>
+            )}
+          </div>
           <div className="p-4 rounded-xl bg-violet-50 border border-violet-200 text-xs text-violet-900">
-            ⚡ Phase 1 : la cible (catégories + géo) est héritée du template. Customisation avancée arrive en Phase 2 (builder visuel + branching).
+            ⚡ La cible (catégories + géo) est héritée du template. Le routing par tier (Hot/Warm/Cold) se configure après création.
           </div>
           <div className="flex justify-between">
             <button onClick={() => setStep(1)} className="text-sm text-content-soft">← Précédent</button>
@@ -325,6 +366,7 @@ function BuilderView({ data, loading, error, router, onCreated }) {
             <div><strong>Nom :</strong> {name || selectedTpl.name}</div>
             <div><strong>Prospects/run :</strong> {prospectsPerRun}</div>
             <div><strong>Fréquence :</strong> {runFrequency}</div>
+            <div><strong>Expéditeur :</strong> {emailSenderId ? (senders.find((s) => s.id === emailSenderId)?.domain ? `noreply@${senders.find((s) => s.id === emailSenderId).domain}` : 'domaine vérifié') : 'Volia par défaut'}</div>
             <div className="pt-2 border-t border-line"><strong>Séquence :</strong> 3 emails (J+0, J+3, J+7) + form qualif + push CRM auto</div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2">

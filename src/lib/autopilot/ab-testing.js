@@ -127,9 +127,15 @@ export function computeWinner(executions, stepIndex) {
     if (!emailLog) continue;
     const vid = emailLog.subject_variant_id;
     if (!byVariant[vid]) {
-      byVariant[vid] = { sent: 0, form_submitted: 0, crm_hot: 0 };
+      byVariant[vid] = { sent: 0, opened: 0, form_submitted: 0, crm_hot: 0 };
     }
     byVariant[vid].sent++;
+    // Opens (Phase 3 : signal Resend webhook) — log step 'email_opened'
+    // avec email_step = numéro du step. Signal plus rapide que le form.
+    const opened = history.some(
+      (h) => h.step === 'email_opened' && String(h.email_step) === String(stepIndex + 1)
+    );
+    if (opened) byVariant[vid].opened++;
     if (exec.form_submitted_at) byVariant[vid].form_submitted++;
     if (exec.crm_pushed_at && (exec.computed_score ?? 0) >= 70) byVariant[vid].crm_hot++;
   }
@@ -144,19 +150,25 @@ export function computeWinner(executions, stepIndex) {
     return { winner_id: null, stats: byVariant, has_enough_data: false };
   }
 
-  // Pick winner par form_submission_rate
+  // Métrique de décision : form_submission_rate en priorité (plus fiable),
+  // fallback sur open_rate si aucune soumission form (signal plus rapide).
+  const totalForms = variantIds.reduce((s, id) => s + byVariant[id].form_submitted, 0);
+  const metric = totalForms > 0 ? 'form' : 'open';
+
   let winnerId = null;
   let bestRate = -1;
   for (const id of variantIds) {
     const v = byVariant[id];
-    const rate = v.sent > 0 ? v.form_submitted / v.sent : 0;
+    const rate = metric === 'form'
+      ? (v.sent > 0 ? v.form_submitted / v.sent : 0)
+      : (v.sent > 0 ? v.opened / v.sent : 0);
     if (rate > bestRate) {
       bestRate = rate;
       winnerId = id;
     }
   }
 
-  return { winner_id: winnerId, stats: byVariant, has_enough_data: true };
+  return { winner_id: winnerId, stats: byVariant, has_enough_data: true, metric };
 }
 
 /**

@@ -41,6 +41,7 @@ import {
   ChevronDown,
   ChevronRight,
   Check,
+  Zap,
 } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────────────
@@ -113,6 +114,24 @@ const MODULES = [
     activeBorder: 'border-pink-200',
     activeText: 'text-pink-700',
     accent: 'text-pink-600',
+  },
+  {
+    // ⚡ Volia Autopilot (juin 2026 pivot) — module flagship
+    // qui orchestre les 4 autres (Prospection → Campagnes → Forms → CRM)
+    // Gating : Pro (1 workflow) · Business (3) · Enterprise (illimité)
+    id: 'autopilot',
+    name: 'Autopilot',
+    description: 'Pipeline B2B end-to-end auto',
+    href: '/app/autopilot',
+    icon: Zap,
+    businessOnly: false, // accessible Pro+
+    color: 'amber',
+    iconGradient: 'from-amber-500 to-orange-600',
+    activeBg: 'bg-amber-50',
+    activeBorder: 'border-amber-200',
+    activeText: 'text-amber-700',
+    accent: 'text-amber-600',
+    badge: 'NEW',
   },
 ];
 

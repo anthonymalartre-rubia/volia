@@ -38,11 +38,11 @@ const fraunces = Fraunces({
 export const metadata = {
   metadataBase: new URL('https://volia.fr'),
   title: {
-    default: 'Volia — Prospection B2B France : trouvez emails & entreprises (à partir de 19 €/mois)',
+    default: 'Volia Autopilot — Pipeline B2B automatisé & prospection B2B France',
     template: '%s | Volia',
   },
-  description: 'Le ticket d\'entrée le moins cher du marché français. Découverte d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. À partir de 19 €/mois.',
-  keywords: ['prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD'],
+  description: 'Volia Autopilot : ton pipeline B2B automatisé — tu sélectionnes la cible, Volia exécute (scrap → email perso → qualif → scoring → CRM). Inclut la prospection B2B France via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. À partir de 49 €/mois (lead-gen dès 19 €).',
+  keywords: ['Volia Autopilot', 'pipeline B2B automatisé', 'automatisation prospection', 'prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD'],
   authors: [{ name: 'Volia' }],
   creator: 'Volia',
   openGraph: {

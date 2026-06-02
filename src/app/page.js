@@ -18,8 +18,8 @@ const trustpilotAggregateRating = trustpilotData
   : null;
 
 export const metadata = {
-  title: 'Volia — Suite B2B française : Prospection, Campagnes, CRM, Formulaires',
-  description: 'La suite SaaS B2B française : 4 modules connectés (Prospection, Campagnes email, CRM, Formulaires). Accès à 287 000+ entreprises via Google Places (scraping live), séquences automatisées, pipeline commercial. Made in France, RGPD.',
+  title: 'Volia Autopilot — Ton pipeline B2B automatisé (prospection → email → CRM)',
+  description: 'Volia Autopilot : ton pipeline B2B automatisé de bout en bout. Tu sélectionnes la cible, Volia exécute : scraping Google Places → email personnalisé → formulaire de qualification → scoring → push CRM. Aussi suite de prospection B2B France (emails + téléphones, 101 départements), alternative Apollo. Made in France, RGPD. À partir de 49 €/mois (lead-gen dès 19 €).',
   alternates: {
     canonical: SITE_URL,
     languages: {
@@ -30,8 +30,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia — Suite B2B française : Prospection, Campagnes, CRM, Formulaires',
-    description: 'La suite SaaS B2B française qui connecte 4 modules : trouve tes leads, lance tes séquences email, suis tes deals dans le CRM, capte les nouveaux prospects via formulaires. Made in France.',
+    title: 'Volia Autopilot — Ton pipeline B2B automatisé (prospection → email → CRM)',
+    description: 'Volia Autopilot : tu sélectionnes la cible, Volia exécute le pipeline B2B — scraping Google Places, email personnalisé, formulaire de qualification, scoring et push CRM. Aussi prospection B2B France (emails + téléphones), alternative Apollo. Made in France, RGPD.',
     url: SITE_URL,
     siteName: 'Volia',
     locale: 'fr_FR',
@@ -39,8 +39,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Volia — Suite B2B FR : Prospection, Campagnes, CRM, Forms',
-    description: '4 modules connectés pour ton outbound : trouve, contacte, suis tes deals, capte. Made in France, RGPD.',
+    title: 'Volia Autopilot — Pipeline B2B automatisé (prospection → email → CRM)',
+    description: 'Tu sélectionnes la cible, Volia exécute : scrap → email perso → qualif → scoring → CRM. Aussi prospection B2B France, alternative Apollo. RGPD.',
   },
   robots: {
     index: true,
@@ -57,7 +57,7 @@ const softwareApplicationSchema = {
   applicationCategory: 'BusinessApplication',
   applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
-  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade (scraping intelligent, recherche Google, fallback patterns) avec scoring de confiance. À partir de 19 €/mois.',
+  description: 'Volia Autopilot : pipeline B2B automatisé de bout en bout — tu sélectionnes la cible, Volia exécute (scraping Google Places, email personnalisé, formulaire de qualification, scoring, push CRM), de la cible au lead chaud. Inclut aussi la prospection B2B France : recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade avec scoring de confiance. À partir de 49 €/mois pour l\'Autopilot (lead-gen dès 19 €/mois).',
   url: SITE_URL,
   inLanguage: 'fr-FR',
   countriesSupported: 'FR',

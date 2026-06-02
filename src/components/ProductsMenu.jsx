@@ -19,9 +19,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Search, Mail, Users, FormInput } from 'lucide-react';
+import { ChevronDown, Search, Mail, Users, FormInput, Zap } from 'lucide-react';
 
 const PRODUCTS_FR = [
+  {
+    slug: 'autopilot',
+    name: 'Volia Autopilot',
+    description: 'Ton pipeline B2B de A à Z : scrap → email → qualif → CRM',
+    icon: Zap,
+    accent: 'amber',
+    badge: 'FLAGSHIP',
+  },
   {
     slug: 'prospection',
     name: 'Volia Prospection',
@@ -61,6 +69,15 @@ const PRODUCTS_FR = [
 ];
 
 const PRODUCTS_EN = [
+  {
+    slug: 'autopilot',
+    name: 'Volia Autopilot',
+    description: 'Your B2B pipeline end-to-end: scrape → email → qualify → CRM',
+    icon: Zap,
+    accent: 'amber',
+    badge: 'FLAGSHIP',
+    href: '/produits/autopilot', // pas de page EN dédiée → pointe vers la FR
+  },
   {
     slug: 'prospection',
     name: 'Volia Prospection',
@@ -119,6 +136,11 @@ const ACCENT_STYLES = {
     iconBg: 'bg-pink-100 text-pink-600',
     hoverBg: 'group-hover:bg-pink-50',
     name: 'group-hover:text-pink-700',
+  },
+  amber: {
+    iconBg: 'bg-amber-100 text-amber-600',
+    hoverBg: 'group-hover:bg-amber-50',
+    name: 'group-hover:text-amber-700',
   },
 };
 
@@ -220,7 +242,7 @@ export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
               return (
                 <Link
                   key={p.slug}
-                  href={`${basePath}/${p.slug}`}
+                  href={p.href || `${basePath}/${p.slug}`}
                   role="menuitem"
                   onClick={() => setOpen(false)}
                   className={`group flex items-start gap-3 p-3 rounded-xl transition-colors ${styles.hoverBg}`}
@@ -231,14 +253,18 @@ export default function ProductsMenu({ label = 'Produits', locale = 'fr' }) {
                     <Icon size={18} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    {/* Badge LIVE retiré 27 mai 2026 (inutile : tous les
-                        modules sont LIVE, le badge n'apporte aucune info) */}
-                    <div className="mb-0.5">
+                    {/* Badge LIVE retiré 27 mai 2026 — seul FLAGSHIP (Autopilot) garde un badge */}
+                    <div className="mb-0.5 flex items-center gap-2">
                       <span
                         className={`text-sm font-semibold text-content-primary transition-colors ${styles.name}`}
                       >
                         {p.name}
                       </span>
+                      {p.badge === 'FLAGSHIP' && (
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-200">
+                          Flagship
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-content-tertiary leading-snug">
                       {p.description}

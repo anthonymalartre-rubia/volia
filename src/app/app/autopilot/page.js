@@ -428,6 +428,43 @@ function DetailView({ detail, loading, busy, setBusy, reload, router }) {
         </div>
       </section>
 
+      {/* Routing par tier — Phase 2 */}
+      <section className="bg-surface-card border border-line rounded-xl p-5">
+        <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
+          <Settings size={18} className="text-amber-500" /> Routing &amp; branching
+        </h2>
+        <p className="text-xs text-content-soft mb-4">
+          Quand un prospect soumet le formulaire, son score qualif (0-100) le classe en{' '}
+          <strong>Hot</strong>, <strong>Warm</strong> ou <strong>Cold</strong>. Chaque tier
+          est routé automatiquement dans ton CRM avec la stage correspondante.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {[
+            { tier: 'hot', label: 'Hot — score ≥ 70', color: 'red', desc: 'Push CRM immédiat (webhook) · stage "Hot · Autopilot" · contact + deal créés en temps réel' },
+            { tier: 'warm', label: 'Warm — score 40-69', color: 'amber', desc: 'Push CRM différé (stepper hourly) · stage "Warm · Autopilot" · drip mensuel suggéré' },
+            { tier: 'cold', label: 'Cold — score < 40', color: 'slate', desc: 'Push CRM différé · stage "Cold · Autopilot" · archive 6m suggéré' },
+          ].map((t) => {
+            const customRule = wf.config?.branching?.[t.tier];
+            return (
+              <div key={t.tier} className={`p-3 rounded-lg border bg-${t.color}-50/40 border-${t.color}-200`}>
+                <div className={`text-xs font-bold uppercase tracking-wider text-${t.color}-700 mb-1`}>{t.label}</div>
+                <p className="text-xs text-content-strong leading-relaxed">{t.desc}</p>
+                {customRule && (
+                  <div className="mt-2 pt-2 border-t border-line text-[10px] text-content-soft">
+                    <span className="font-semibold">Custom :</span> stage = {customRule.crm_stage || '—'}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <p className="text-[11px] text-content-muted mt-3 italic">
+          Branching custom (override des stages CRM, coupons, Slack notif…) configurable via API{' '}
+          <code className="font-mono">workflow.config.branching</code> en plan <strong>Business</strong> et{' '}
+          <strong>Enterprise</strong>. Builder visuel arrive Phase 2.5.
+        </p>
+      </section>
+
       {/* Recent runs */}
       <section className="bg-surface-card border border-line rounded-xl p-5">
         <h2 className="text-lg font-semibold mb-3">Runs récents (5 derniers)</h2>

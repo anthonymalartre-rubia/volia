@@ -340,7 +340,8 @@ export async function runWorkflowRun(workflowId) {
 }
 
 /**
- * Cron entrypoint — */15 min */
+ * Cron entrypoint — toutes les 15 minutes.
+ */
 export async function runEngine() {
   const startedAt = new Date().toISOString();
 

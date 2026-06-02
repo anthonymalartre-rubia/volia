@@ -18,7 +18,25 @@ export const FAQ_ITEMS = [
     category: 'product',
     question: "Concrètement, c'est quoi Volia ?",
     answer:
-      "Apollo + Lemlist + HubSpot, recodés pour le marché français à 19€/mois. On trouve les boites (Google Places, 150+ catégories, 101 départements), on chope leurs emails (waterfall scraping + Google + patterns), on envoie des séquences, on track les réponses dans le CRM. Une seule app au lieu de 4.",
+      "Un pipeline B2B en autopilot : tu sélectionnes ta cible, Volia exécute la chaîne complète — scrap des boites (Google Places, 150+ catégories, 101 départements), email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans ton CRM. Ça remplace une stack Apollo + Lemlist + HubSpot, en une seule app à 19€/mois : de la cible au lead chaud livré, tu ne touches pas la mécanique.",
+  },
+  {
+    category: 'product',
+    question: 'Comment marche Volia Autopilot ?',
+    answer:
+      "C'est le pipeline B2B automatisé de bout en bout. Tu choisis ta cible (secteur + zone) et un template d'email, puis Volia enchaîne tout seul : scrap des entreprises, enrichissement des emails, envoi d'un email personnalisé par IA, formulaire de qualification, scoring du lead, et push dans ton CRM. De la cible au lead chaud livré, automatisé — tu suis juste les résultats.",
+  },
+  {
+    category: 'product',
+    question: 'Je dois gérer quoi exactement ?',
+    answer:
+      "Deux choses : tu choisis ta cible et tu choisis ton template d'email. C'est tout. Volia fait le reste — scrap, enrichissement, envoi, qualification, scoring, push CRM — et tu reçois les leads chauds dans ton pipeline. Tu ne gères pas la mécanique, tu récupères les résultats.",
+  },
+  {
+    category: 'pricing',
+    question: 'Autopilot est inclus dans quel plan ?',
+    answer:
+      "Autopilot est dispo dès le plan Pro à 49€/mois (1 workflow en parallèle). Le plan Business débloque 3 workflows simultanés, et le plan Enterprise à 499€/mois en propose un nombre illimité. Tu peux changer de plan à tout moment depuis tes paramètres.",
   },
   {
     category: 'trust',

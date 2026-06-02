@@ -265,14 +265,22 @@ export function welcomeEmail(userName) {
         ${hero({
           emoji: '👋',
           title: `Bienvenue ${name}.`,
-          greeting: 'Votre compte est prêt. Voici 3 trucs à tester maintenant.',
+          greeting: 'Votre compte est prêt. Voici ce que vous pouvez lancer maintenant.',
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;margin-bottom:8px;">
+              <p style="margin:0;font-size:15px;font-weight:600;color:${COLORS.text};">🚀 Lancez votre premier pipeline Autopilot</p>
+              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Choisissez votre cible, Volia scrape, écrit l'email, qualifie et remplit votre CRM. De la cible au lead chaud, en autopilot.</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;margin-bottom:8px;">
               <p style="margin:0;font-size:15px;font-weight:600;color:${COLORS.text};">🔍 Une recherche en 1 clic</p>
-              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Restaurants Paris, BTP Lyon, syndics France entière… ou décrivez votre cible en français.</p>
+              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Restaurants Marseille, BTP France entière, syndics par région… ou décrivez votre cible en français.</p>
             </td>
           </tr>
         </table>
@@ -293,7 +301,8 @@ export function welcomeEmail(userName) {
           </tr>
         </table>
 
-        <div align="center">${ctaPrimary('Première recherche', DASHBOARD_URL)}</div>
+        <div align="center">${ctaPrimary('Créer mon premier pipeline', `${APP_URL}/app/autopilot`)}</div>
+        <div align="center" style="margin-top:8px;">${ctaSecondary('Ou faire une première recherche', DASHBOARD_URL)}</div>
 
         <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
           Plan Starter offert : <strong style="color:${COLORS.text};">100 prospects/mois</strong>, sans CB.

@@ -60,6 +60,24 @@ const BUSINESS_BADGE = {
 
 const MODULES = [
   {
+    // ⚡ Volia Autopilot (juin 2026 pivot) — module FLAGSHIP, placé en #1.
+    // Orchestre les 4 autres (Prospection → Campagnes → Forms → CRM).
+    // Gating : Pro (1 workflow) · Business (3) · Enterprise (illimité)
+    id: 'autopilot',
+    name: 'Autopilot',
+    description: 'Pipeline B2B end-to-end auto',
+    href: '/app/autopilot',
+    icon: Zap,
+    businessOnly: false, // accessible Pro+
+    color: 'amber',
+    iconGradient: 'from-amber-500 to-orange-600',
+    activeBg: 'bg-amber-50',
+    activeBorder: 'border-amber-200',
+    activeText: 'text-amber-700',
+    accent: 'text-amber-600',
+    badge: 'NEW',
+  },
+  {
     id: 'prospection',
     name: 'Prospection',
     description: 'Trouvez les emails B2B',
@@ -115,42 +133,25 @@ const MODULES = [
     activeText: 'text-pink-700',
     accent: 'text-pink-600',
   },
-  {
-    // ⚡ Volia Autopilot (juin 2026 pivot) — module flagship
-    // qui orchestre les 4 autres (Prospection → Campagnes → Forms → CRM)
-    // Gating : Pro (1 workflow) · Business (3) · Enterprise (illimité)
-    id: 'autopilot',
-    name: 'Autopilot',
-    description: 'Pipeline B2B end-to-end auto',
-    href: '/app/autopilot',
-    icon: Zap,
-    businessOnly: false, // accessible Pro+
-    color: 'amber',
-    iconGradient: 'from-amber-500 to-orange-600',
-    activeBg: 'bg-amber-50',
-    activeBorder: 'border-amber-200',
-    activeText: 'text-amber-700',
-    accent: 'text-amber-600',
-    badge: 'NEW',
-  },
 ];
+
+// Lookup par id (robuste à l'ordre du tableau).
+const moduleById = (id) => MODULES.find((m) => m.id === id) || MODULES[0];
 
 // ─────────────────────────────────────────────────────────────────────
 // Détection du module actif depuis le pathname.
 // ─────────────────────────────────────────────────────────────────────
 function detectActiveModule(pathname) {
-  if (!pathname) return MODULES[0];
+  if (!pathname) return moduleById('prospection');
+
+  // Autopilot
+  if (pathname.startsWith('/app/autopilot')) {
+    return moduleById('autopilot');
+  }
 
   // Campagnes : couvre TOUT /admin/prospection (le backend Campagnes
   // est planqué sous cette route pour raisons legacy) + l'alias canonique
-  // /app/campagnes. Match précis pour ne pas attraper d'autres routes
-  // (typo /admin/prospection-anything sans slash final).
-  //
-  // On ajoute aussi /settings/email-senders et /settings/sms-senders : ces
-  // pages settings sont accessibles depuis la CampagnesSidebar ("Brancher
-  // ma marque email"), et elles n'ont aucun usage hors du module Campagnes.
-  // Si on ne les map pas ici, l'utilisateur qui clique le lien depuis
-  // Campagnes voit le module switcher basculer sur "Prospection" → confus.
+  // /app/campagnes + les settings senders accessibles depuis la CampagnesSidebar.
   if (
     pathname === '/admin/prospection' ||
     pathname === '/admin/prospection/' ||
@@ -159,25 +160,25 @@ function detectActiveModule(pathname) {
     pathname.startsWith('/settings/email-senders') ||
     pathname.startsWith('/settings/sms-senders')
   ) {
-    return MODULES[1];
+    return moduleById('campagnes');
   }
 
   // CRM
   if (pathname.startsWith('/app/crm')) {
-    return MODULES[2];
+    return moduleById('crm');
   }
 
-  // Formulaires : /admin/forms/* (4e module — pink)
+  // Formulaires : /admin/forms/*
   if (
     pathname === '/admin/forms' ||
     pathname === '/admin/forms/' ||
     pathname.startsWith('/admin/forms/')
   ) {
-    return MODULES[3];
+    return moduleById('formulaires');
   }
 
-  // Prospection (default — dashboard, /app/prospection, et fallback admin/settings)
-  return MODULES[0];
+  // Prospection (default — dashboard, /app/prospection, fallback admin/settings)
+  return moduleById('prospection');
 }
 
 export default function ModuleSwitcher() {

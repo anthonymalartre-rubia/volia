@@ -195,7 +195,8 @@ export const PRESS_ANGLES = [
     audience: 'Presse business & growth B2B (Maddyness, FrenchWeb, BFM Tech, Welcome to the Jungle)',
     pitch:
       "Le 1er pipeline B2B français qui va de la cible au lead chaud livré dans le CRM, en un seul setup. L'utilisateur sélectionne sa cible et un template (23 disponibles), et Volia Autopilot exécute toute la chaîne sous supervision humaine — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM. Produit phare de la suite Volia, il remplace une stack Apollo + Lemlist + HubSpot. Gamme : Starter gratuit · Solo 19 € · Pro 49 € (Autopilot 1 workflow) · Business · Enterprise 499 € (Autopilot illimité + A/B testing + optimisation Claude) — le flagship Autopilot démarre à 49 €/mois.",
-    releaseUrl: '/presse/cp/volia-autopilot-pipeline-b2b-automatise',
+    // CP disponible en page HTML dédiée (pas de PDF) → lien "Lire le communiqué"
+    htmlUrl: '/presse/cp/volia-autopilot-pipeline-b2b-automatise',
     iconName: 'Zap',
     gradient: 'from-violet-500 to-fuchsia-600',
   },
@@ -205,7 +206,8 @@ export const PRESS_ANGLES = [
     audience: 'Presse vision & futur du travail (Forbes FR, Les Echos, Maddyness)',
     pitch:
       "Et si l'entreprise du XXIe siècle ne ressemblait plus à une équipe, mais à un founder augmenté par des agents IA ? Volia incarne cette nouvelle catégorie : l'humain supervise et valide, les agents IA exécutent. Sans salarié supplémentaire, sans levée de fonds, la suite SaaS B2B fonctionne aujourd'hui en production avec 16 boucles d'agents IA orchestrées 24/7.",
-    releaseUrl: '/presse/cp-entreprise-autonome.pdf',
+    // Pas (encore) de communiqué dédié → pas de lien (CP sur demande presse)
+    htmlUrl: null,
     iconName: 'Sparkles',
     gradient: 'from-violet-500 to-indigo-600',
   },
@@ -215,7 +217,8 @@ export const PRESS_ANGLES = [
     audience: 'Presse business & souveraineté (Les Echos, BFM Tech, La Tribune)',
     pitch:
       "Apollo, HubSpot, Lemlist, Typeform : la stack growth des PME françaises est 100 % américaine, facturée en dollars, hébergée hors UE. Volia propose en 2026 la première alternative souveraine complète : Volia Autopilot au-dessus de 4 modules connectés, hébergement Frankfurt, RGPD natif, support FR. Gamme : Starter gratuit · Solo 19 € · Pro 49 € (Autopilot 1 workflow) · Business · Enterprise 499 € (Autopilot illimité + A/B testing + optimisation Claude).",
-    releaseUrl: '/presse/cp-alternative-francaise.pdf',
+    // Pas (encore) de communiqué dédié → pas de lien (CP sur demande presse)
+    htmlUrl: null,
     iconName: 'Flag',
     gradient: 'from-blue-500 to-cyan-600',
   },
@@ -225,7 +228,8 @@ export const PRESS_ANGLES = [
     audience: 'Presse IA spécialisée (ActuIA, Usine Digitale, Siècle Digital)',
     pitch:
       "Volia est le premier SaaS B2B européen documenté entièrement co-construit par IA agentique et opéré en production par 16 boucles d'agents IA : 400+ commits publics, génération de contenu, code source, prospection, support client, le tout orchestré 24/7 — l'humain valide, l'IA exécute. Un cas d'école mondial du paradigme \"AI-native company\" sur une stack moderne (Next.js 14, Supabase, Vercel, Anthropic), supervisé par son founder.",
-    releaseUrl: '/presse/cp-cas-ecole-ia-agentique.pdf',
+    // Pas (encore) de communiqué dédié → pas de lien (CP sur demande presse)
+    htmlUrl: null,
     iconName: 'Brain',
     gradient: 'from-fuchsia-500 to-purple-600',
   },
@@ -235,7 +239,8 @@ export const PRESS_ANGLES = [
     audience: 'Presse IA, recherche & innovation (ActuIA, Usbek & Rica, Siècle Digital, MIT Tech Review FR)',
     pitch:
       "Au-delà de l'autonomie classique (les IA exécutent), Volia franchit un cap : ses agents IA analysent eux-mêmes leur ROI, identifient les boucles inefficaces, et proposent au founder de nouvelles automatisations à créer. Chaque mardi, Anthony Malartre reçoit un email auto-généré avec les métriques précises de ses 16 boucles + 3 recommandations Claude pour la semaine. C'est la première implémentation documentée d'une couche de méta-autonomie en production sur un SaaS B2B. Le système ne fait plus seulement ce qu'on lui dit — il décide ce qu'il faudrait faire ensuite.",
-    releaseUrl: '/presse/cp/meta-autonomie-ia-qui-soptimise',
+    // CP disponible en page HTML dédiée (pas de PDF) → lien "Lire le communiqué"
+    htmlUrl: '/presse/cp/meta-autonomie-ia-qui-soptimise',
     iconName: 'Brain',
     gradient: 'from-amber-500 to-rose-600',
   },
@@ -245,15 +250,24 @@ export const PRESS_ANGLES = [
     audience: 'Presse business & tech (Maddyness, Les Echos Tech, FrenchWeb, BFM Tech)',
     pitch:
       "Trois preuves concrètes de l'entreprise autonome en juin 2026 : (1) Volia utilise son propre module Prospection chaque semaine pour générer 50 prospects ICP-fit puis les contacter via son module Campagnes — un cas unique de SaaS qui vend grâce à lui-même. (2) Quand Sentry détecte une erreur en prod, Claude lit le code source, comprend la cause, et ouvre une pull request de correction sur GitHub que le founder n'a qu'à valider. (3) Pour les emails clients classifiés comme questions FAQ avec confiance >85 %, Claude envoie directement une réponse signée au nom d'Anthony, avec copie au founder. Trois boucles, un seul mot d'ordre : l'humain valide, l'IA exécute.",
-    releaseUrl: '/presse/cp/volia-vend-supporte-code-soi-meme',
+    // CP disponible en page HTML dédiée (pas de PDF) → lien "Lire le communiqué"
+    htmlUrl: '/presse/cp/volia-vend-supporte-code-soi-meme',
     iconName: 'Sparkles',
     gradient: 'from-emerald-500 to-teal-600',
   },
 ];
 
 // ─── MEDIA_KIT_ASSETS — assets téléchargeables ────────────────────────
-// Pour chaque asset : title, description, url (placeholder OK pour
-// SVG/PNG/PDF non encore générés), format, size (approximatif), iconName.
+// Pour chaque asset : title, description, url, format, size (approximatif),
+// iconName, et `available` (bool).
+//
+// IMPORTANT : seuls les assets `available: true` sont rendus côté UI. Les
+// logos / wordmark / screenshots produit ne sont pas encore générés (le
+// dossier public/presse/ n'existe pas) — ils restent listés ici en
+// `available: false` pour mémoire, mais NE sont PAS affichés (pas de lien
+// mort). Le press kit PDF complet est remplacé par la page HTML
+// imprimable /presse/kit (cf. AssetsSection). Quand les fichiers seront
+// générés sous public/presse/, repasser `available: true`.
 export const MEDIA_KIT_ASSETS = [
   {
     category: 'Logos',
@@ -261,10 +275,11 @@ export const MEDIA_KIT_ASSETS = [
       {
         title: 'Logo Volia — SVG',
         description: 'Vectoriel, fond transparent',
-        url: '/icon.svg',
+        url: '/presse/logo-volia.svg',
         format: 'SVG',
         size: '~4 KB',
         iconName: 'FileImage',
+        available: false,
       },
       {
         title: 'Logo Volia — PNG light',
@@ -273,6 +288,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'PNG',
         size: '~80 KB',
         iconName: 'FileImage',
+        available: false,
       },
       {
         title: 'Logo Volia — PNG dark',
@@ -281,6 +297,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'PNG',
         size: '~80 KB',
         iconName: 'FileImage',
+        available: false,
       },
       {
         title: 'Wordmark — SVG',
@@ -289,6 +306,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'SVG',
         size: '~6 KB',
         iconName: 'FileImage',
+        available: false,
       },
     ],
   },
@@ -302,6 +320,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'PNG',
         size: '~600 KB',
         iconName: 'Image',
+        available: false,
       },
       {
         title: 'Volia Campagnes — séquence',
@@ -310,6 +329,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'PNG',
         size: '~600 KB',
         iconName: 'Image',
+        available: false,
       },
       {
         title: 'Volia CRM — pipeline kanban',
@@ -318,6 +338,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'PNG',
         size: '~600 KB',
         iconName: 'Image',
+        available: false,
       },
       {
         title: 'Volia Formulaires — éditeur',
@@ -326,6 +347,7 @@ export const MEDIA_KIT_ASSETS = [
         format: 'PNG',
         size: '~600 KB',
         iconName: 'Image',
+        available: false,
       },
     ],
   },
@@ -334,27 +356,30 @@ export const MEDIA_KIT_ASSETS = [
     items: [
       {
         title: 'Anthony Malartre — portrait',
-        description: 'Format portrait, 2000×3000px',
+        description: 'Format portrait, vectoriel',
         url: '/img/founder-anthony-portrait.svg',
-        format: 'JPG',
-        size: '~1.2 MB',
+        format: 'SVG',
+        size: '~2 KB',
         iconName: 'Camera',
+        available: true,
       },
       {
         title: 'Anthony Malartre — paysage',
-        description: 'Format paysage, 3000×2000px',
+        description: 'Format paysage, vectoriel',
         url: '/img/founder-anthony-landscape.svg',
-        format: 'JPG',
-        size: '~1.4 MB',
+        format: 'SVG',
+        size: '~2 KB',
         iconName: 'Camera',
+        available: true,
       },
       {
         title: 'Anthony Malartre — carré',
-        description: 'Format carré, 2000×2000px',
+        description: 'Format carré, vectoriel',
         url: '/img/founder-anthony-square.svg',
-        format: 'JPG',
-        size: '~1.0 MB',
+        format: 'SVG',
+        size: '~1.5 KB',
         iconName: 'Camera',
+        available: true,
       },
     ],
   },
@@ -362,12 +387,16 @@ export const MEDIA_KIT_ASSETS = [
     category: 'Dossier complet',
     items: [
       {
-        title: 'Press kit Volia — PDF complet',
-        description: 'Boilerplate, chiffres, bio, quotes, contact (8 pages)',
-        url: '/presse/volia-press-kit.pdf',
-        format: 'PDF',
-        size: '~3 MB',
+        title: 'Press kit Volia — version imprimable',
+        description: 'Boilerplate, chiffres, bio, quotes, contact — page HTML imprimable en PDF',
+        url: '/presse/kit',
+        format: 'HTML',
+        size: 'Imprimable',
         iconName: 'FileText',
+        available: true,
+        // Page HTML (route), pas un fichier à télécharger : pas d'attribut
+        // `download`, on ouvre la page (impression PDF via le navigateur).
+        isPage: true,
       },
     ],
   },
@@ -413,7 +442,8 @@ export const PRESS_RELEASES = [
     slug: 'lancement-entreprise-autonome',
     summary:
       "Volia officialise le lancement d'une nouvelle catégorie d'entreprise : une suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires) supervisée par son founder à Marseille — l'humain valide, les agents IA exécutent. Pas d'équipe, pas de levée, pas d'investisseurs.",
-    pdfUrl: '/presse/cp-lancement-entreprise-autonome-juin-2026.pdf',
+    // Pas de page HTML ni de PDF disponible → aucun lien de téléchargement
+    pdfUrl: null,
   },
   {
     date: '2026-03-15',
@@ -422,7 +452,8 @@ export const PRESS_RELEASES = [
     slug: 'module-formulaires',
     summary:
       "Le quatrième module de la suite Volia, Formulaires, sort en bêta. Il permet de capturer des leads directement dans le CRM Volia, sans Typeform ni outil tiers.",
-    pdfUrl: '/presse/cp-module-formulaires-mars-2026.pdf',
+    // Pas de page HTML ni de PDF disponible → aucun lien de téléchargement
+    pdfUrl: null,
   },
 ];
 

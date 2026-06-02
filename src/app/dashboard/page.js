@@ -23,6 +23,7 @@ import { maybeShowAchievement } from '@/lib/use-achievement-toast';
 // Pull achievements silencieux (webhook, form public) au mount dashboard.
 // Le dashboard n'utilise pas AppShell, on monte le puller ici directement.
 import AchievementPuller from '@/components/welcome/AchievementPuller';
+import SearchInProgressBanner from '@/components/SearchInProgressBanner';
 
 // Lazy load panels — only loaded when navigated to
 const OverviewPanel = lazy(() => import('@/components/OverviewPanel'));
@@ -344,14 +345,18 @@ export default function Dashboard() {
     return () => clearTimeout(t);
   }, [upgradeToast]);
 
-  // Beforeunload : si l'utilisateur ferme l'onglet pendant un scraping,
-  // on marque la session comme 'stopped' au lieu de la laisser à 'running'
-  // à vie (audit P1 bug #9). On utilise navigator.sendBeacon() qui est conçu
-  // pour ce cas — la requête est garantie envoyée même si la page meurt.
+  // Beforeunload : 2 rôles si l'utilisateur ferme l'onglet pendant un scraping.
+  //   1. sendBeacon pour marquer la session 'stopped' en DB (anti-orphan,
+  //      audit P1 bug #9)
+  //   2. PreventDefault + returnValue → déclenche le popup navigateur natif
+  //      "Voulez-vous vraiment quitter ce site ?" (anti-perte de prospects
+  //      scrapés mais pas encore insérés en DB — l'insert est fait à la fin
+  //      de la boucle de recherche, donc fermer en cours = perte totale)
   useEffect(() => {
-    const handler = () => {
+    const handler = (e) => {
       const sid = activeSessionIdRef.current;
       if (!sid) return;
+      // (1) Marker session 'stopped' côté serveur via beacon
       try {
         const payload = new Blob(
           [JSON.stringify({ session_id: sid })],
@@ -361,6 +366,12 @@ export default function Dashboard() {
       } catch {
         // sendBeacon peut throw si la page est déjà détruite — ignoré.
       }
+      // (2) Demande confirmation explicite à l'utilisateur (navigateur natif)
+      // Note : la plupart des navigateurs modernes ignorent le message custom
+      // et affichent un texte générique. On set returnValue pour compat IE/old.
+      e.preventDefault();
+      e.returnValue = 'Une recherche est en cours. Si tu fermes maintenant, les prospects scrapés non encore sauvegardés seront perdus.';
+      return e.returnValue;
     };
     window.addEventListener('beforeunload', handler);
     return () => window.removeEventListener('beforeunload', handler);
@@ -1381,6 +1392,17 @@ export default function Dashboard() {
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         searchProgress={searchProgress}
         isSearching={isSearching}
+      />
+
+      {/* Bannière sticky-top warning pendant scraping — empêche les
+          pertes de données accidentelles (insert en bloc à la fin de
+          la boucle, donc fermer = tout perdre). Couplé au beforeunload
+          confirm() handler ci-dessus. */}
+      <SearchInProgressBanner
+        isSearching={isSearching}
+        current={searchProgress.current}
+        total={searchProgress.total}
+        currentQuery={searchProgress.currentQuery}
       />
 
       {/* Pull achievements silencieux — guard sur user pour ne pas fetcher

@@ -26,7 +26,10 @@ import { getSupabaseAdmin } from '../supabase-admin';
 import { isAutonomyEnabled, logAutonomousAction } from '../autonomy';
 import { getTemplate } from './templates';
 import { updateWinnersForWorkflow } from './ab-testing';
+import { getPlanAutopilotLimits } from '../plans';
 
+// Aligné sur le reste du repo prod. NE PAS utiliser 'claude-sonnet-4-5'.
+const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
 const UNDERPERF_THRESHOLD = 0.7; // actual < expected × 0.7 = underperf
 const MAX_SUGGESTIONS_PER_RUN = 4;
 const ANALYSIS_WINDOW_DAYS = 7;
@@ -131,7 +134,7 @@ Format de sortie JSON valide (uniquement, pas de texte autour) :
   try {
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-5',
+      model: CLAUDE_MODEL,
       max_tokens: 1200,
       messages: [{ role: 'user', content: userPrompt }],
     });
@@ -156,15 +159,31 @@ async function analyzeWorkflow(supabase, workflow) {
   const template = getTemplate(workflow.template_id);
   if (!template) return { ok: false, reason: 'template_not_found' };
 
+  // Gating par plan : A/B winner auto-pick + suggestions Claude sont des
+  // features Enterprise (cf. pricing). On récupère le plan du user.
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('plan')
+    .eq('id', workflow.user_id)
+    .maybeSingle();
+  const limits = getPlanAutopilotLimits(profile?.plan || 'free');
+
   const kpis = await computeWorkflowKpis(supabase, workflow.id);
   if (kpis.total_enrolled < 10) {
     return { ok: true, skipped: true, reason: 'not_enough_volume', kpis };
   }
 
+  // A/B winner auto-pick → gated ab_testing (Enterprise)
+  if (limits.ab_testing) {
+    await updateWinnersForWorkflow(supabase, workflow.id, template.sequence?.length || 3);
+  }
+
   const underperf = detectUnderperformances(kpis, template);
 
-  // Update A/B winners (toujours, même si pas d'underperf)
-  await updateWinnersForWorkflow(supabase, workflow.id, template.sequence?.length || 3);
+  // Suggestions Claude → gated claude_opt (Enterprise)
+  if (!limits.claude_opt) {
+    return { ok: true, kpis, underperformances: underperf, suggestions: [], gated: true };
+  }
 
   if (underperf.length === 0) {
     return { ok: true, kpis, underperformances: [], suggestions: [] };

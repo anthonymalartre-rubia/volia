@@ -29,6 +29,52 @@ import { getTemplate } from './templates';
 
 const MAX_RUNS_PER_DAY_PER_WORKFLOW = 5; // anti loop bug
 
+// Pseudo-catégories qui NE sont PAS des recherches Google Places mais
+// des sources CRM internes (templates reactivation, annonce produit,
+// upsell, renewal). Pour ces templates, on ne scrape PAS Places — on
+// pioche dans les prospects existants du user.
+const CRM_SOURCE_MARKERS = [
+  'existing_crm_cold',
+  'existing_crm_warm',
+  'existing_crm_active_clients',
+  'existing_crm_growth_signals',
+  'existing_crm_at_risk',
+];
+
+function isCrmSourceTarget(target) {
+  const cats = target?.categories || [];
+  return cats.length > 0 && cats.every((c) => CRM_SOURCE_MARKERS.includes(c));
+}
+
+/**
+ * Pour les templates CRM-source : pioche des prospects existants du user
+ * (avec email, pas encore enrôlés dans CE workflow). Pas de Google Places.
+ * Retourne des prospect IDs prêts à enrôler.
+ */
+async function pullCrmSourceProspects(supabase, workflow, count) {
+  // Prospects du user déjà enrôlés dans ce workflow → à exclure
+  const { data: enrolled } = await supabase
+    .from('autopilot_executions')
+    .select('prospect_id')
+    .eq('workflow_id', workflow.id);
+  const enrolledIds = new Set((enrolled || []).map((e) => e.prospect_id).filter(Boolean));
+
+  // Pioche des prospects du user avec email, pas déjà enrôlés.
+  // On surcharge la limite pour compenser le filtrage côté JS.
+  const { data: candidates } = await supabase
+    .from('prospects')
+    .select('id, email')
+    .eq('user_id', workflow.user_id)
+    .not('email', 'is', null)
+    .order('created_at', { ascending: false })
+    .limit(count * 3 + 50);
+
+  const fresh = (candidates || [])
+    .filter((p) => p.email && !enrolledIds.has(p.id))
+    .slice(0, count);
+  return fresh.map((p) => ({ id: p.id }));
+}
+
 /**
  * Vérifie le master switch global autopilot.
  */
@@ -53,13 +99,15 @@ async function isAutopilotEnabled() {
  */
 function computeNextRunAt(frequency) {
   const now = Date.now();
+  if (frequency === 'once') return null; // workflow → archived après 1 run
   const map = {
-    once: null, // workflow se met en 'completed' après 1 run
     daily: now + 24 * 3600 * 1000,
     weekly: now + 7 * 86400 * 1000,
     biweekly: now + 14 * 86400 * 1000,
   };
-  return map[frequency] !== null ? new Date(map[frequency] ?? now).toISOString() : null;
+  // Fréquence inconnue → défaut weekly (évite la boucle next_run_at=now)
+  const ts = map[frequency] ?? map.weekly;
+  return new Date(ts).toISOString();
 }
 
 /**
@@ -194,7 +242,74 @@ export async function runWorkflowRun(workflowId) {
   const config = { ...template, ...(workflow.config || {}) };
   const target = config.target_override || template.target;
 
-  // 6. Scrap prospects
+  // ─── CRM-SOURCE PATH (reactivation, annonce, upsell, renewal) ──────
+  // Ces templates ne scrapent pas Google Places : ils piochent dans les
+  // prospects existants du user. On court-circuite tout le flow Places.
+  if (isCrmSourceTarget(target)) {
+    const crmProspects = await pullCrmSourceProspects(supabase, workflow, workflow.prospects_per_run);
+    if (crmProspects.length === 0) {
+      await supabase.from('autopilot_runs').update({
+        status: 'completed',
+        prospects_scraped: 0,
+        prospects_added: 0,
+        error_message: 'no_crm_prospects_available',
+        completed_at: new Date().toISOString(),
+        metadata: { source: 'crm', note: 'Aucun prospect existant éligible (avec email, non enrôlé)' },
+      }).eq('id', run.id);
+      // Reschedule quand même
+      const nextRunAt = computeNextRunAt(workflow.run_frequency);
+      await supabase.from('autopilot_workflows').update({
+        last_run_at: new Date().toISOString(),
+        next_run_at: nextRunAt,
+        status: nextRunAt ? workflow.status : 'archived',
+        updated_at: new Date().toISOString(),
+      }).eq('id', workflow.id);
+      return { ok: true, run_id: run.id, prospects_enrolled: 0, source: 'crm', reason: 'no_crm_prospects' };
+    }
+
+    const executionRows = crmProspects.map(({ id }) => ({
+      workflow_id: workflow.id,
+      run_id: run.id,
+      prospect_id: id,
+      current_step: 'enrolled',
+      step_history: [{ step: 'enrolled', at: new Date().toISOString(), source: 'crm' }],
+    }));
+    const { error: execErr } = await supabase.from('autopilot_executions').insert(executionRows);
+    if (execErr) {
+      await supabase.from('autopilot_runs').update({
+        status: 'failed', error_message: execErr.message, completed_at: new Date().toISOString(),
+      }).eq('id', run.id);
+      return { ok: false, error: 'enrollment_failed', detail: execErr.message };
+    }
+
+    const nextRunAt = computeNextRunAt(workflow.run_frequency);
+    await supabase.from('autopilot_workflows').update({
+      last_run_at: new Date().toISOString(),
+      next_run_at: nextRunAt,
+      status: nextRunAt ? workflow.status : 'archived',
+      updated_at: new Date().toISOString(),
+    }).eq('id', workflow.id);
+    await supabase.from('autopilot_runs').update({
+      status: 'completed',
+      prospects_scraped: 0,
+      prospects_added: crmProspects.length,
+      completed_at: new Date().toISOString(),
+      metadata: { source: 'crm' },
+    }).eq('id', run.id);
+
+    await logAutonomousAction({
+      actionType: 'autopilot_run',
+      source: 'cron/autopilot-engine',
+      riskLevel: 'low',
+      payload: { workflow_id: workflow.id, run_id: run.id, prospects_enrolled: crmProspects.length, source: 'crm' },
+      preview: `⚡ Autopilot (CRM source) → ${crmProspects.length} prospects enrôlés`,
+      rationale: `Workflow ${workflow.name} : vague depuis base CRM existante`,
+      autoExecute: true,
+    });
+    return { ok: true, run_id: run.id, prospects_enrolled: crmProspects.length, source: 'crm', next_run_at: nextRunAt };
+  }
+
+  // 6. Scrap prospects (Google Places — templates cold classiques)
   const scrapRes = await scrapProspectsForTarget(target, workflow.prospects_per_run);
   if (!scrapRes.ok || !scrapRes.prospects.length) {
     await supabase.from('autopilot_runs').update({

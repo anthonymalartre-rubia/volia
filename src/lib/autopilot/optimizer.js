@@ -42,7 +42,7 @@ async function computeWorkflowKpis(supabase, workflowId, windowDays = ANALYSIS_W
 
   const { data: executions } = await supabase
     .from('autopilot_executions')
-    .select('current_step, email_1_sent_at, form_submitted_at, crm_pushed_at, computed_score, created_at')
+    .select('current_step, email_1_sent_at, form_submitted_at, crm_pushed_at, computed_score, created_at, step_history')
     .eq('workflow_id', workflowId)
     .gte('created_at', since);
 
@@ -52,15 +52,22 @@ async function computeWorkflowKpis(supabase, workflowId, windowDays = ANALYSIS_W
   const hotPushed = executions?.filter((e) =>
     e.crm_pushed_at && (e.computed_score ?? 0) >= 70
   ).length || 0;
+  // Opens réels (webhook Resend → step 'email_opened' dans step_history).
+  // Signal d'ouverture vrai, à comparer au benchmark template.expected.open.
+  const opened = executions?.filter((e) =>
+    Array.isArray(e.step_history) && e.step_history.some((h) => h.step === 'email_opened')
+  ).length || 0;
 
   return {
     window_days: windowDays,
     total_enrolled: total,
     emailed,
+    opened,
     form_submitted: formed,
     crm_hot: hotPushed,
     // Rates en %
     email_send_rate: total > 0 ? Math.round((emailed / total) * 100) : 0,
+    open_rate: emailed > 0 ? Math.round((opened / emailed) * 100) : 0,
     form_submit_rate: emailed > 0 ? Math.round((formed / emailed) * 100) : 0,
     hot_conversion_rate: formed > 0 ? Math.round((hotPushed / formed) * 100) : 0,
   };
@@ -74,7 +81,10 @@ function detectUnderperformances(kpis, template) {
   if (!template?.expected) return [];
 
   const checks = [
-    { metric: 'open / email_send', actual: kpis.email_send_rate, expected: template.expected.open },
+    // open_rate = vrai taux d'ouverture (webhook), comparé au benchmark.
+    // On ne déclenche que si on a au moins quelques opens trackés (sinon
+    // webhook peut ne pas être branché → éviter les faux positifs).
+    ...(kpis.opened > 0 ? [{ metric: 'open_rate', actual: kpis.open_rate, expected: template.expected.open }] : []),
     { metric: 'form_submit', actual: kpis.form_submit_rate, expected: template.expected.form },
     { metric: 'hot_conversion', actual: kpis.hot_conversion_rate, expected: template.expected.hot },
   ];

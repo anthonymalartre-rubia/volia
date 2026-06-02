@@ -16,8 +16,10 @@
 // Fallback : si Claude API down ou erreur, on retourne le body_summary
 // du template (Phase 1 behavior). Le stepper continue.
 //
-// Caching : 1 body généré par execution est conservé dans
-//   execution.step_history[].body_cached (évite la regen sur retry).
+// Coût : 1 appel Claude par email composé. Le coût total est borné par
+// le quota mensuel par workflow (stepper.js CLAUDE_WRITES_PER_WORKFLOW_PER_MONTH).
+// En cas d'échec d'envoi (rare, Resend transient), le body est régénéré au
+// retry suivant — acceptable car le quota cap plafonne le coût total.
 // ─────────────────────────────────────────────────────────────────────
 
 import Anthropic from '@anthropic-ai/sdk';

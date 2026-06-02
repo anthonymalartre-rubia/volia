@@ -7,12 +7,26 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import TopBar from '@/components/TopBar';
+import { getSupabase } from '@/lib/supabase';
 import {
   Loader2, RefreshCw, Plus, Zap, Pause, Play, Trash2, Settings,
   Briefcase, User, Rocket, GraduationCap, Store, Building2, Users,
   Flame, Heart, Video, Calendar, ArrowLeft, CheckCircle2, AlertCircle,
   TrendingUp, Mail, FileText, DollarSign, Lightbulb, X, Sparkles, Lock,
 } from 'lucide-react';
+
+// Shell partagé : TopBar + ModuleSwitcher (comme les autres pages /app/*).
+// Il n'y a pas de layout /app partagé dans ce repo : chaque page rend sa
+// propre TopBar. On réplique ce pattern ici.
+function AutopilotShell({ user, children }) {
+  return (
+    <div className="min-h-screen bg-surface-base text-content-primary flex flex-col">
+      <TopBar user={user} showHamburger={false} />
+      <main className="flex-1">{children}</main>
+    </div>
+  );
+}
 
 const ICONS = {
   Zap, Briefcase, User, Rocket, GraduationCap, Store, Building2, Users,
@@ -37,6 +51,13 @@ export default function AutopilotPage() {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
+
+  // User pour la TopBar (affiche le ModuleSwitcher + menu compte)
+  useEffect(() => {
+    const sb = getSupabase();
+    if (sb) sb.auth.getUser().then(({ data }) => setUser(data?.user || null)).catch(() => {});
+  }, []);
 
   async function loadList() {
     setLoading(true);
@@ -66,11 +87,12 @@ export default function AutopilotPage() {
     else if (view === 'view' && id) loadDetail(id);
   }, [view, id]);
 
-  if (view === 'new') return <BuilderView data={data} loading={loading} error={error} router={router} onCreated={loadList} />;
-  if (view === 'view' && id) return <DetailView detail={detail} loading={loading} busy={busy} setBusy={setBusy} reload={() => loadDetail(id)} router={router} />;
+  if (view === 'new') return <AutopilotShell user={user}><BuilderView data={data} loading={loading} error={error} router={router} onCreated={loadList} /></AutopilotShell>;
+  if (view === 'view' && id) return <AutopilotShell user={user}><DetailView detail={detail} loading={loading} busy={busy} setBusy={setBusy} reload={() => loadDetail(id)} router={router} /></AutopilotShell>;
 
   // Default = list
   return (
+    <AutopilotShell user={user}>
     <div className="px-6 py-8 max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -121,13 +143,14 @@ export default function AutopilotPage() {
       {loading ? (
         <div className="text-center py-12"><Loader2 className="animate-spin mx-auto text-content-soft" size={32} /></div>
       ) : !data?.workflows?.length ? (
-        <EmptyState canCreate={data?.can_create_more} />
+        <EmptyState canCreate={data?.can_create_more} templateCount={data?.available_templates?.length} />
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {data.workflows.map((wf) => <WorkflowCard key={wf.id} wf={wf} />)}
         </div>
       )}
     </div>
+    </AutopilotShell>
   );
 }
 
@@ -148,13 +171,14 @@ function WorkflowCard({ wf }) {
   );
 }
 
-function EmptyState({ canCreate }) {
+function EmptyState({ canCreate, templateCount }) {
   return (
     <div className="text-center py-20 border border-dashed border-line rounded-xl">
       <Zap className="mx-auto opacity-30 mb-3 text-violet-500" size={48} />
       <h3 className="text-lg font-semibold text-content-strong mb-2">Aucun workflow Autopilot</h3>
       <p className="text-sm text-content-soft mb-6 max-w-md mx-auto">
-        Crée ton premier pipeline B2B autopilot en 5 minutes. 12 templates pré-faits adaptés à ton segment.
+        Crée ton premier pipeline B2B autopilot en 5 minutes.{' '}
+        {templateCount ? `${templateCount} templates` : 'Des templates'} pré-faits adaptés à ton segment.
       </p>
       {canCreate ? (
         <Link href="/app/autopilot?view=new" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-violet-600 text-white hover:bg-violet-500 font-semibold text-sm">

@@ -9,7 +9,8 @@ import {
   Shield, Users, Mail, CreditCard, Search, ArrowLeft, Crown, RefreshCw,
   Trash2, KeyRound, Eye, EyeOff, Ban, CheckCircle, AlertTriangle, X,
   ChevronDown, ChevronUp, Clock, Globe, UserCheck, UserX,
-  BarChart3, TrendingUp, Activity, DollarSign, Zap, Download, Database
+  BarChart3, TrendingUp, Activity, DollarSign, Zap, Download, Database,
+  Bot, Flame, Brain, Lightbulb, ListChecks, Send, Layers, Palette, Newspaper
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -339,12 +340,12 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="border-b border-line bg-surface-card">
-        <div className="max-w-7xl mx-auto px-6 flex gap-0">
+      {/* Tabs — version étendue avec toutes les pages admin */}
+      <div className="border-b border-line bg-surface-card overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-6 flex gap-0 min-w-max">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === 'dashboard'
                 ? 'border-violet-500 text-violet-400'
                 : 'border-transparent text-content-tertiary hover:text-content-secondary'
@@ -354,7 +355,7 @@ export default function AdminPage() {
           </button>
           <button
             onClick={() => setActiveTab('users')}
-            className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
+            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
               activeTab === 'users'
                 ? 'border-violet-500 text-violet-400'
                 : 'border-transparent text-content-tertiary hover:text-content-secondary'
@@ -364,15 +365,47 @@ export default function AdminPage() {
           </button>
           <Link
             href="/admin/leads"
-            className="px-5 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
           >
             <span className="flex items-center gap-2"><Mail className="h-4 w-4" /> Leads</span>
           </Link>
           <Link
             href="/admin/metrics"
-            className="px-5 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
           >
             <span className="flex items-center gap-2"><BarChart3 className="h-4 w-4" /> Metrics biz</span>
+          </Link>
+          <Link
+            href="/admin/insights"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
+          >
+            <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4" /> Insights</span>
+          </Link>
+          {/* Séparateur visuel : pages autonomy */}
+          <span className="w-px bg-line my-2 mx-2" />
+          <Link
+            href="/admin/auto-queue"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
+          >
+            <span className="flex items-center gap-2"><Bot className="h-4 w-4" /> Auto-queue</span>
+          </Link>
+          <Link
+            href="/admin/lead-scoring"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
+          >
+            <span className="flex items-center gap-2"><Flame className="h-4 w-4" /> Hot leads</span>
+          </Link>
+          <Link
+            href="/admin/meta-autonomy"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
+          >
+            <span className="flex items-center gap-2"><Brain className="h-4 w-4" /> Méta-autonomie</span>
+          </Link>
+          <Link
+            href="/admin/recommendations"
+            className="px-4 py-3 text-sm font-medium border-b-2 transition-colors border-transparent text-content-tertiary hover:text-content-secondary whitespace-nowrap"
+          >
+            <span className="flex items-center gap-2"><Lightbulb className="h-4 w-4" /> Recos</span>
           </Link>
         </div>
       </div>
@@ -382,6 +415,38 @@ export default function AdminPage() {
         {/* ==================== DASHBOARD TAB ==================== */}
         {activeTab === 'dashboard' && (
           <>
+            {/* App launcher — accès rapide à toutes les pages admin */}
+            <div className="rounded-xl border border-line bg-surface-card p-4">
+              <div className="text-xs font-bold uppercase tracking-wider text-content-tertiary mb-3 flex items-center gap-1.5">
+                <Layers className="h-3.5 w-3.5" /> Modules admin
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+                {[
+                  { href: '/admin/auto-queue',     label: 'Auto-queue',    icon: Bot,         color: 'violet',  desc: 'Queue actions IA' },
+                  { href: '/admin/lead-scoring',   label: 'Hot leads',     icon: Flame,       color: 'orange',  desc: 'Top 50 scores' },
+                  { href: '/admin/insights',       label: 'Insights',      icon: TrendingUp,  color: 'emerald', desc: 'MRR · Churn · Cohorts' },
+                  { href: '/admin/meta-autonomy',  label: 'Méta-autonomie',icon: Brain,       color: 'fuchsia', desc: 'ROI par boucle' },
+                  { href: '/admin/recommendations',label: 'Recos Claude',  icon: Lightbulb,   color: 'amber',   desc: 'Recos new boucles' },
+                  { href: '/admin/leads',          label: 'Leads',         icon: Mail,        color: 'blue',    desc: 'Lead magnets' },
+                  { href: '/admin/metrics',        label: 'Metrics biz',   icon: BarChart3,   color: 'indigo',  desc: 'KPIs business' },
+                  { href: '/admin/prospection',    label: 'Prospection',   icon: ListChecks,  color: 'teal',    desc: 'Listes + dogfood' },
+                  { href: '/admin/forms',          label: 'Forms',         icon: Newspaper,   color: 'cyan',    desc: 'Formulaires' },
+                  { href: '/admin/publishers',     label: 'Publishers',    icon: Send,        color: 'pink',    desc: 'LinkedIn tokens' },
+                  { href: '/admin/design-system',  label: 'Design system', icon: Palette,     color: 'rose',    desc: 'Tokens UI' },
+                ].map(({ href, label, icon: Icon, color, desc }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    title={desc}
+                    className={`group flex flex-col items-center gap-1.5 p-3 rounded-lg border border-line bg-surface-base hover:border-${color}-400 hover:bg-${color}-50/30 dark:hover:bg-${color}-900/10 transition-all`}
+                  >
+                    <Icon className={`h-5 w-5 text-${color}-500 group-hover:scale-110 transition-transform`} />
+                    <span className="text-[11px] font-semibold text-content-strong text-center leading-tight">{label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {dashboardLoading && !dashboardStats ? (
               <div className="flex items-center justify-center py-20">
                 <RefreshCw className="h-6 w-6 text-violet-400 animate-spin" />

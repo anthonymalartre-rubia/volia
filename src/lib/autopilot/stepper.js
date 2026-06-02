@@ -18,6 +18,9 @@ import { getSupabaseAdmin } from '../supabase-admin';
 import { sendEmail } from '../email';
 import { isAutonomyEnabled, enforceQuotaOrThrow, logAutonomousAction } from '../autonomy';
 import { getTemplate } from './templates';
+import { generateEmailBody } from './claude-writer';
+import { resolveRouting, scoreToTier } from './scoring';
+import { createDealFromAutopilot } from './crm-bridge';
 
 const MAX_EXECUTIONS_PER_RUN = 200;
 const EMAIL_2_DELAY_HOURS = 72;   // J+3
@@ -26,20 +29,39 @@ const FORM_TIMEOUT_HOURS = 168;   // J+7 après email_3 (= exit no-response)
 
 /**
  * Compose un email du template + variables prospect.
+ * Phase 2 : tente Claude generation, fallback sur body_summary si échec.
  */
-function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl }) {
+async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl }) {
   const step = template.sequence[stepIndex];
   const firstName = prospect.first_name || prospect.nom?.split(' ')[0] || 'toi';
   const company = prospect.nom || prospect.company || 'votre entreprise';
 
-  // Variables substitution
+  // Variables substitution dans le subject
   const subject = (step.subject || '')
     .replace(/{{first_name}}/g, firstName)
     .replace(/{{company}}/g, company);
 
-  // Body = body_summary (simplifié pour Phase 1, on garde le texte du template)
-  // Phase 2 : generate le body via Claude depuis body_summary + contexte prospect
-  const bodyText = step.body_summary || '';
+  // ─── Phase 2 : Claude generation ──────────────────────────────
+  // On tente d'abord la génération Claude (perso prospect + ton template).
+  // Si échec (API down, patterns interdits détectés, etc.), fallback sur
+  // body_summary template (Phase 1 behavior). Le flow continue dans tous
+  // les cas, l'email part toujours.
+  let bodyText = null;
+  let bodyMethod = 'fallback_summary';
+  try {
+    const claudeBody = await generateEmailBody({ template, stepIndex, prospect });
+    if (claudeBody) {
+      bodyText = claudeBody;
+      bodyMethod = 'claude';
+    }
+  } catch (err) {
+    console.warn('[autopilot/stepper] Claude body gen failed', err.message);
+  }
+  if (!bodyText) {
+    bodyText = (step.body_summary || '')
+      .replace(/{{first_name}}/g, firstName)
+      .replace(/{{company}}/g, company);
+  }
   const formLink = step.includes_form_link
     ? `${baseUrl}/forms/autopilot/${workflowId}?exec=${executionId}`
     : null;
@@ -71,7 +93,7 @@ ${formLink ? `\n→ Répondre aux questions : ${formLink}\n` : ''}${calcomLink ?
 
 Anthony — Volia`;
 
-  return { subject, html: htmlBody, text: textBody };
+  return { subject, html: htmlBody, text: textBody, bodyMethod };
 }
 
 /**
@@ -125,16 +147,57 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         history.push(stepLog('exit_no_response', { after_email_3_hours: 168 }));
       }
     } else if (execution.current_step === 'form_pending' && execution.form_submitted_at) {
-      // Form filled → score + CRM (Phase 2 : full implementation)
-      updates.current_step = 'crm_pushed';
-      updates.computed_score = 75; // placeholder Phase 1
-      updates.crm_pushed_at = new Date().toISOString();
-      history.push(stepLog('crm_pushed', { score: 75 }));
+      // ─── Phase 2 : Real CRM push avec branching ───────────────
+      // Cas où le form a été submitted via webhook mais le push CRM
+      // n'a pas été immédiat (typiquement : tier warm/cold → différé
+      // au stepper pour éventuellement traiter en batch).
+      // Le tier vient soit du score déjà calculé (form-submit l'a fait)
+      // soit on le recalcule depuis computed_score.
+      if (execution.crm_deal_id) {
+        // Déjà push (probablement par webhook hot path)
+        updates.current_step = 'crm_pushed';
+        history.push(stepLog('crm_already_pushed', { deal_id: execution.crm_deal_id }));
+      } else {
+        const score = execution.computed_score ?? 50;
+        const tier = scoreToTier(score);
+        const routing = resolveRouting(tier, workflow.config, template);
+
+        const bridge = await createDealFromAutopilot(supabase, {
+          userId: workflow.user_id,
+          prospect,
+          workflow,
+          execution,
+          score,
+          tier,
+          routing,
+          formResponse: execution.form_response,
+        });
+
+        if (bridge.deal_id) {
+          updates.crm_deal_id = bridge.deal_id;
+          updates.crm_pushed_at = new Date().toISOString();
+          updates.current_step = 'crm_pushed';
+          history.push(stepLog('crm_pushed_stepper', {
+            deal_id: bridge.deal_id,
+            contact_id: bridge.contact_id,
+            stage_id: bridge.stage_id,
+            score,
+            tier,
+            routing_source: routing.source,
+          }));
+        } else {
+          history.push(stepLog('crm_push_failed', {
+            error: bridge.error || 'unknown',
+            score,
+            tier,
+          }));
+        }
+      }
     }
 
     // Send email si timing OK
     if (shouldSend && stepIdx >= 0 && stepIdx < template.sequence.length) {
-      const email = composeEmail({
+      const email = await composeEmail({
         template,
         stepIndex: stepIdx,
         prospect,
@@ -148,7 +211,10 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         updates.current_step = stepIdx === 0 ? 'email_1_sent'
           : stepIdx === 1 ? 'email_2_sent'
           : 'email_3_sent';
-        history.push(stepLog(`email_${stepIdx + 1}_sent`, { subject: email.subject }));
+        history.push(stepLog(`email_${stepIdx + 1}_sent`, {
+          subject: email.subject,
+          body_method: email.bodyMethod, // 'claude' ou 'fallback_summary'
+        }));
       } catch (err) {
         history.push(stepLog(`email_${stepIdx + 1}_send_failed`, { error: err.message }));
         // Pas de status change : retry au prochain cron

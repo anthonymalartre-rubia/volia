@@ -21,6 +21,7 @@ import { getTemplate } from './templates';
 import { generateEmailBody } from './claude-writer';
 import { resolveRouting, scoreToTier } from './scoring';
 import { createDealFromAutopilot } from './crm-bridge';
+import { pickVariant } from './ab-testing';
 
 const MAX_EXECUTIONS_PER_RUN = 200;
 const EMAIL_2_DELAY_HOURS = 72;   // J+3
@@ -31,13 +32,21 @@ const FORM_TIMEOUT_HOURS = 168;   // J+7 après email_3 (= exit no-response)
  * Compose un email du template + variables prospect.
  * Phase 2 : tente Claude generation, fallback sur body_summary si échec.
  */
-async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl }) {
+async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl, workflowMetricsCache }) {
   const step = template.sequence[stepIndex];
   const firstName = prospect.first_name || prospect.nom?.split(' ')[0] || 'toi';
   const company = prospect.nom || prospect.company || 'votre entreprise';
 
-  // Variables substitution dans le subject
-  const subject = (step.subject || '')
+  // ─── Phase 3.1 : A/B subject variant picker ───────────────────
+  // Si step.subject est un array de variants, on pick le bon variant
+  // selon le winner désigné (ou rotation déterministe en exploration).
+  const variantPick = pickVariant({
+    subject: step.subject,
+    executionId,
+    workflowMetricsCache,
+    stepIndex,
+  });
+  const subject = (variantPick.variant_text || '')
     .replace(/{{first_name}}/g, firstName)
     .replace(/{{company}}/g, company);
 
@@ -93,7 +102,14 @@ ${formLink ? `\n→ Répondre aux questions : ${formLink}\n` : ''}${calcomLink ?
 
 Anthony — Volia`;
 
-  return { subject, html: htmlBody, text: textBody, bodyMethod };
+  return {
+    subject,
+    html: htmlBody,
+    text: textBody,
+    bodyMethod,
+    subjectVariantId: variantPick.variant_id,
+    subjectVariantPhase: variantPick.phase, // 'explore' ou 'exploit'
+  };
 }
 
 /**
@@ -204,6 +220,7 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         workflowId: workflow.id,
         executionId: execution.id,
         baseUrl,
+        workflowMetricsCache: workflow.metrics_cache,
       });
       try {
         await sendEmail({ to: prospect.email, subject: email.subject, html: email.html, text: email.text });
@@ -213,7 +230,9 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
           : 'email_3_sent';
         history.push(stepLog(`email_${stepIdx + 1}_sent`, {
           subject: email.subject,
-          body_method: email.bodyMethod, // 'claude' ou 'fallback_summary'
+          body_method: email.bodyMethod,            // 'claude' ou 'fallback_summary'
+          subject_variant_id: email.subjectVariantId, // pour compute winner
+          subject_variant_phase: email.subjectVariantPhase, // 'explore'|'exploit'
         }));
       } catch (err) {
         history.push(stepLog(`email_${stepIdx + 1}_send_failed`, { error: err.message }));

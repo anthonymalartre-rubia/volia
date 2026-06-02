@@ -200,6 +200,10 @@
     {
       "path": "/api/cron/autopilot-stepper",
       "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/autopilot-weekly",
+      "schedule": "0 2 * * 0"
     }
   ]
 }

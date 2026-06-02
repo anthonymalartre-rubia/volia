@@ -11,7 +11,7 @@ import {
   Loader2, RefreshCw, Plus, Zap, Pause, Play, Trash2, Settings,
   Briefcase, User, Rocket, GraduationCap, Store, Building2, Users,
   Flame, Heart, Video, Calendar, ArrowLeft, CheckCircle2, AlertCircle,
-  TrendingUp, Mail, FileText, DollarSign,
+  TrendingUp, Mail, FileText, DollarSign, Lightbulb, X, Sparkles, Lock,
 } from 'lucide-react';
 
 const ICONS = {
@@ -350,16 +350,23 @@ function BuilderView({ data, loading, error, router, onCreated }) {
 }
 
 function DetailView({ detail, loading, busy, setBusy, reload, router }) {
-  async function action(actionName) {
+  const [branchingOpen, setBranchingOpen] = useState(false);
+
+  async function action(actionName, extra = {}) {
     setBusy(true);
     try {
       await fetch('/api/app/autopilot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: actionName, id: detail.workflow.id }),
+        body: JSON.stringify({ action: actionName, id: detail.workflow.id, ...extra }),
       });
       reload();
     } catch {} finally { setBusy(false); }
+  }
+
+  async function saveBranching(branchingConfig) {
+    await action('update', { config: { ...(detail.workflow.config || {}), branching: branchingConfig } });
+    setBranchingOpen(false);
   }
 
   if (loading || !detail) return <div className="text-center py-20"><Loader2 className="animate-spin mx-auto" size={32} /></div>;
@@ -428,42 +435,137 @@ function DetailView({ detail, loading, busy, setBusy, reload, router }) {
         </div>
       </section>
 
-      {/* Routing par tier — Phase 2 */}
+      {/* Suggestions Claude (Phase 3.2 — weekly optimization) */}
+      {Array.isArray(wf.metrics_cache?.suggestions) && wf.metrics_cache.suggestions.length > 0 && (
+        <section className="bg-gradient-to-br from-violet-50 via-amber-50/30 to-violet-50 border border-violet-200 rounded-xl p-5">
+          <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
+            <Lightbulb size={18} className="text-amber-500" /> Suggestions Claude (hebdo)
+            {wf.metrics_cache.suggestions.filter((s) => !s.read_at).length > 0 && (
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500 text-white">
+                {wf.metrics_cache.suggestions.filter((s) => !s.read_at).length} nouvelles
+              </span>
+            )}
+          </h2>
+          <p className="text-xs text-content-soft mb-4">
+            Analyse hebdomadaire dimanche 02:00 · compare actuals vs benchmarks template · suggestions pour combler les gaps
+          </p>
+          <ul className="space-y-2">
+            {wf.metrics_cache.suggestions.slice(0, 5).map((s, idx) => (
+              <li key={idx} className="bg-surface-card border border-line rounded-lg p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Sparkles size={12} className="text-amber-500 flex-shrink-0" />
+                      <h3 className="text-sm font-semibold text-content-strong">{s.title}</h3>
+                    </div>
+                    <p className="text-xs text-content-soft leading-relaxed">{s.description}</p>
+                    <div className="flex items-center gap-2 mt-2 text-[10px]">
+                      {s.target_metric && (
+                        <span className="px-1.5 py-0.5 rounded bg-violet-100 text-violet-700 font-medium">
+                          {s.target_metric}
+                        </span>
+                      )}
+                      {s.effort && (
+                        <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 font-medium">
+                          ⏱ {s.effort}
+                        </span>
+                      )}
+                      {s.expected_impact && (
+                        <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-medium">
+                          📈 {s.expected_impact}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {wf.metrics_cache.last_optimization_at && (
+            <p className="text-[10px] text-content-muted mt-3 italic">
+              Dernière analyse : {new Date(wf.metrics_cache.last_optimization_at).toLocaleString('fr-FR')}
+            </p>
+          )}
+        </section>
+      )}
+
+      {/* A/B Testing Subject Lines status (Phase 3.1) */}
+      {wf.metrics_cache?.ab_winners && Object.keys(wf.metrics_cache.ab_winners).length > 0 && (
+        <section className="bg-surface-card border border-line rounded-xl p-5">
+          <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
+            <TrendingUp size={18} className="text-violet-500" /> A/B testing subject lines
+          </h2>
+          <p className="text-xs text-content-soft mb-3">
+            Winners désignés automatiquement après 30+ envois par variant. 90% du traffic va au winner, 10% explore.
+          </p>
+          <ul className="text-sm space-y-1">
+            {Object.entries(wf.metrics_cache.ab_winners).map(([stepIdx, variantId]) => (
+              <li key={stepIdx} className="flex items-center justify-between p-2 rounded bg-surface-soft">
+                <span className="text-content-strong">Email #{parseInt(stepIdx) + 1}</span>
+                <span className="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-mono">
+                  Winner : {variantId}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* Routing par tier — Phase 2 + Builder Phase 2.5 */}
       <section className="bg-surface-card border border-line rounded-xl p-5">
-        <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
-          <Settings size={18} className="text-amber-500" /> Routing &amp; branching
-        </h2>
+        <div className="flex items-center justify-between mb-1 gap-3 flex-wrap">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Settings size={18} className="text-amber-500" /> Routing &amp; branching
+          </h2>
+          <button
+            onClick={() => setBranchingOpen(true)}
+            disabled={busy}
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold disabled:opacity-60"
+          >
+            <Settings size={12} /> Configurer
+          </button>
+        </div>
         <p className="text-xs text-content-soft mb-4">
           Quand un prospect soumet le formulaire, son score qualif (0-100) le classe en{' '}
           <strong>Hot</strong>, <strong>Warm</strong> ou <strong>Cold</strong>. Chaque tier
-          est routé automatiquement dans ton CRM avec la stage correspondante.
+          est routé dans ton CRM avec la stage correspondante (overridable Business+).
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {[
-            { tier: 'hot', label: 'Hot — score ≥ 70', color: 'red', desc: 'Push CRM immédiat (webhook) · stage "Hot · Autopilot" · contact + deal créés en temps réel' },
-            { tier: 'warm', label: 'Warm — score 40-69', color: 'amber', desc: 'Push CRM différé (stepper hourly) · stage "Warm · Autopilot" · drip mensuel suggéré' },
-            { tier: 'cold', label: 'Cold — score < 40', color: 'slate', desc: 'Push CRM différé · stage "Cold · Autopilot" · archive 6m suggéré' },
+            { tier: 'hot', label: 'Hot — score ≥ 70', color: 'red', desc: 'Push CRM immédiat · contact + deal créés en temps réel' },
+            { tier: 'warm', label: 'Warm — score 40-69', color: 'amber', desc: 'Push CRM différé (stepper hourly) · drip suggéré' },
+            { tier: 'cold', label: 'Cold — score < 40', color: 'slate', desc: 'Push CRM différé · archive 6m suggéré' },
           ].map((t) => {
             const customRule = wf.config?.branching?.[t.tier];
             return (
               <div key={t.tier} className={`p-3 rounded-lg border bg-${t.color}-50/40 border-${t.color}-200`}>
                 <div className={`text-xs font-bold uppercase tracking-wider text-${t.color}-700 mb-1`}>{t.label}</div>
                 <p className="text-xs text-content-strong leading-relaxed">{t.desc}</p>
-                {customRule && (
-                  <div className="mt-2 pt-2 border-t border-line text-[10px] text-content-soft">
-                    <span className="font-semibold">Custom :</span> stage = {customRule.crm_stage || '—'}
+                {customRule && Object.keys(customRule).length > 0 ? (
+                  <div className="mt-2 pt-2 border-t border-line text-[10px] text-content-strong space-y-0.5">
+                    <div className="font-semibold text-violet-700">Custom :</div>
+                    {customRule.crm_stage && <div>· stage = <code className="font-mono">{customRule.crm_stage}</code></div>}
+                    {customRule.slack_notif_url && <div>· Slack notif activée</div>}
+                    {customRule.coupon_code && <div>· coupon <code className="font-mono">{customRule.coupon_code}</code></div>}
+                    {customRule.notify_emails && <div>· notif emails : {customRule.notify_emails.split(',').length}</div>}
                   </div>
+                ) : (
+                  <div className="mt-2 pt-2 border-t border-line text-[10px] text-content-muted italic">Default routing</div>
                 )}
               </div>
             );
           })}
         </div>
-        <p className="text-[11px] text-content-muted mt-3 italic">
-          Branching custom (override des stages CRM, coupons, Slack notif…) configurable via API{' '}
-          <code className="font-mono">workflow.config.branching</code> en plan <strong>Business</strong> et{' '}
-          <strong>Enterprise</strong>. Builder visuel arrive Phase 2.5.
-        </p>
       </section>
+
+      {branchingOpen && (
+        <BranchingModal
+          workflow={wf}
+          onClose={() => setBranchingOpen(false)}
+          onSave={saveBranching}
+          busy={busy}
+        />
+      )}
 
       {/* Recent runs */}
       <section className="bg-surface-card border border-line rounded-xl p-5">
@@ -495,6 +597,204 @@ function DetailView({ detail, loading, busy, setBusy, reload, router }) {
           <Trash2 size={12} /> Supprimer le workflow
         </button>
       </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// BranchingModal — Phase 2.5
+// ─────────────────────────────────────────────────────────────────────
+// Modal pour configurer le branching custom du workflow.
+// Routing override par tier hot/warm/cold :
+//   - crm_stage : override le nom de stage CRM (par défaut = "Hot · Autopilot")
+//   - slack_notif_url : webhook Slack pour notif tier hot
+//   - coupon_code : coupon attaché au deal CRM (visible dans notes)
+//   - notify_emails : emails internes à notifier en CC (CSV)
+//
+// Gating Business+ (Pro = lecture seule, redirige vers /pricing)
+// ─────────────────────────────────────────────────────────────────────
+function BranchingModal({ workflow, onClose, onSave, busy }) {
+  const initial = workflow.config?.branching || {};
+  const [state, setState] = useState({
+    hot: {
+      crm_stage: initial.hot?.crm_stage || '',
+      slack_notif_url: initial.hot?.slack_notif_url || '',
+      coupon_code: initial.hot?.coupon_code || '',
+      notify_emails: initial.hot?.notify_emails || '',
+    },
+    warm: {
+      crm_stage: initial.warm?.crm_stage || '',
+      drip_template_id: initial.warm?.drip_template_id || '',
+      notify_emails: initial.warm?.notify_emails || '',
+    },
+    cold: {
+      crm_stage: initial.cold?.crm_stage || '',
+      archive_after_days: initial.cold?.archive_after_days || '',
+    },
+  });
+
+  function update(tier, key, value) {
+    setState((s) => ({ ...s, [tier]: { ...s[tier], [key]: value } }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    // Strip empty strings
+    const clean = {};
+    for (const [tier, cfg] of Object.entries(state)) {
+      const tierClean = {};
+      for (const [k, v] of Object.entries(cfg)) {
+        if (v !== '' && v !== null && v !== undefined) tierClean[k] = v;
+      }
+      if (Object.keys(tierClean).length > 0) clean[tier] = tierClean;
+    }
+    onSave(clean);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-surface-base rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-surface-base border-b border-line p-5 flex items-center justify-between z-10">
+          <div>
+            <h2 className="text-lg font-bold flex items-center gap-2">
+              <Settings size={18} className="text-amber-500" /> Configurer le branching custom
+            </h2>
+            <p className="text-xs text-content-soft mt-1">
+              Override le routing par défaut pour chaque tier · feature <strong>Business+</strong>
+            </p>
+          </div>
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-surface-soft">
+            <X size={16} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-5 space-y-5">
+          {/* HOT */}
+          <div className="rounded-xl border border-red-200 bg-red-50/30 p-4 space-y-3">
+            <h3 className="text-sm font-bold text-red-700 uppercase tracking-wider">🔥 Hot — score ≥ 70</h3>
+            <Field label="CRM stage override" hint="Nom exact de la stage dans ton pipeline (sinon utilise 'Hot · Autopilot')">
+              <input
+                type="text"
+                value={state.hot.crm_stage}
+                onChange={(e) => update('hot', 'crm_stage', e.target.value)}
+                placeholder="Ex: Opportunity, Démo bookée…"
+                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm"
+              />
+            </Field>
+            <Field label="Slack webhook URL" hint="Notif Slack en temps réel sur leads hot">
+              <input
+                type="url"
+                value={state.hot.slack_notif_url}
+                onChange={(e) => update('hot', 'slack_notif_url', e.target.value)}
+                placeholder="https://hooks.slack.com/services/..."
+                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm font-mono text-xs"
+              />
+            </Field>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Coupon code" hint="Attaché au deal CRM (visible dans notes)">
+                <input
+                  type="text"
+                  value={state.hot.coupon_code}
+                  onChange={(e) => update('hot', 'coupon_code', e.target.value)}
+                  placeholder="HOTLEAD50"
+                  className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm"
+                />
+              </Field>
+              <Field label="Emails CC notif" hint="CSV — équipe sales à notifier">
+                <input
+                  type="text"
+                  value={state.hot.notify_emails}
+                  onChange={(e) => update('hot', 'notify_emails', e.target.value)}
+                  placeholder="sales@volia.fr, anthony@volia.fr"
+                  className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm"
+                />
+              </Field>
+            </div>
+          </div>
+
+          {/* WARM */}
+          <div className="rounded-xl border border-amber-200 bg-amber-50/30 p-4 space-y-3">
+            <h3 className="text-sm font-bold text-amber-700 uppercase tracking-wider">🌡️ Warm — score 40-69</h3>
+            <Field label="CRM stage override">
+              <input
+                type="text"
+                value={state.warm.crm_stage}
+                onChange={(e) => update('warm', 'crm_stage', e.target.value)}
+                placeholder="Ex: Nurture, À recontacter…"
+                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm"
+              />
+            </Field>
+            <Field label="Drip template ID" hint="Template Campagnes à déclencher (nurture mensuel)">
+              <input
+                type="text"
+                value={state.warm.drip_template_id}
+                onChange={(e) => update('warm', 'drip_template_id', e.target.value)}
+                placeholder="nurture_monthly_b2b"
+                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm font-mono text-xs"
+              />
+            </Field>
+          </div>
+
+          {/* COLD */}
+          <div className="rounded-xl border border-slate-300 bg-slate-50/40 p-4 space-y-3">
+            <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wider">❄️ Cold — score &lt; 40</h3>
+            <Field label="CRM stage override">
+              <input
+                type="text"
+                value={state.cold.crm_stage}
+                onChange={(e) => update('cold', 'crm_stage', e.target.value)}
+                placeholder="Ex: Archive, Pas pour nous…"
+                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm"
+              />
+            </Field>
+            <Field label="Archive après N jours" hint="Auto-archive du deal si pas de réponse">
+              <input
+                type="number"
+                value={state.cold.archive_after_days}
+                onChange={(e) => update('cold', 'archive_after_days', e.target.value)}
+                placeholder="180"
+                className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm w-32"
+              />
+            </Field>
+          </div>
+
+          <div className="flex justify-end gap-2 pt-3 border-t border-line">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-content-soft hover:bg-surface-soft"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              disabled={busy}
+              className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold disabled:opacity-60 inline-flex items-center gap-1"
+            >
+              {busy ? <Loader2 className="animate-spin" size={14} /> : <CheckCircle2 size={14} />}
+              Enregistrer
+            </button>
+          </div>
+
+          <div className="rounded-lg bg-violet-50 border border-violet-200 p-3 flex items-start gap-2">
+            <Lock size={14} className="text-violet-600 flex-shrink-0 mt-0.5" />
+            <p className="text-[11px] text-violet-800 leading-relaxed">
+              <strong>Note :</strong> Le branching custom est appliqué automatiquement quand un prospect soumet le formulaire de qualification.
+              Plan Pro = lecture seule (les valeurs default s'appliquent). Plan Business / Enterprise = override actif.
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, hint, children }) {
+  return (
+    <div>
+      <label className="block text-xs font-semibold text-content-strong mb-1">{label}</label>
+      {hint && <p className="text-[10px] text-content-soft mb-1">{hint}</p>}
+      {children}
     </div>
   );
 }

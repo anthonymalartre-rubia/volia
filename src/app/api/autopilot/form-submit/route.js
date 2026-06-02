@@ -32,6 +32,61 @@ import { getTemplate } from '@/lib/autopilot/templates';
 import { createDealFromAutopilot } from '@/lib/autopilot/crm-bridge';
 import { logAutonomousAction } from '@/lib/autonomy';
 
+export const dynamic = 'force-dynamic';
+
+// ─────────────────────────────────────────────────────────────────────
+// GET — config publique du formulaire (consommée par la page publique
+// /forms/autopilot/[workflowId]?exec=X). Pas d'auth (public), mais on
+// valide que l'execution appartient bien au workflow.
+// ─────────────────────────────────────────────────────────────────────
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const workflowId = searchParams.get('workflow_id');
+  const executionId = searchParams.get('exec');
+  if (!workflowId) {
+    return NextResponse.json({ error: 'missing_workflow_id' }, { status: 400 });
+  }
+
+  const supabase = getSupabaseAdmin();
+  const { data: workflow } = await supabase
+    .from('autopilot_workflows')
+    .select('id, template_id, name, config')
+    .eq('id', workflowId)
+    .maybeSingle();
+  if (!workflow) {
+    return NextResponse.json({ error: 'workflow_not_found' }, { status: 404 });
+  }
+  const template = getTemplate(workflow.template_id);
+  if (!template?.form) {
+    return NextResponse.json({ error: 'no_form_for_template' }, { status: 404 });
+  }
+
+  // Override form depuis config si l'user a customisé
+  const form = workflow.config?.form_override || template.form;
+
+  // Si exec fourni, indique si déjà soumis (pour afficher merci)
+  let alreadySubmitted = false;
+  if (executionId) {
+    const { data: exec } = await supabase
+      .from('autopilot_executions')
+      .select('id, form_submitted_at')
+      .eq('id', executionId)
+      .eq('workflow_id', workflowId)
+      .maybeSingle();
+    if (!exec) {
+      return NextResponse.json({ error: 'execution_not_found' }, { status: 404 });
+    }
+    alreadySubmitted = !!exec.form_submitted_at;
+  }
+
+  return NextResponse.json({
+    ok: true,
+    title: form.title || 'Quelques questions rapides',
+    questions: form.questions || [],
+    already_submitted: alreadySubmitted,
+  });
+}
+
 // Rate limit in-memory (production : Upstash si scaling)
 const rateLimitStore = new Map();
 function checkRateLimit(ip) {

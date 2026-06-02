@@ -114,8 +114,9 @@ Anthony — Volia`;
 
 /**
  * Avance 1 execution selon son current_step.
+ * @param {string} [fromHeader] - sender résolu (workflow.config.email_sender_id)
  */
-async function advanceExecution(supabase, execution, template, workflow, baseUrl) {
+async function advanceExecution(supabase, execution, template, workflow, baseUrl, fromHeader) {
   const stepLog = (step, meta = {}) => ({
     step,
     at: new Date().toISOString(),
@@ -211,6 +212,24 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
       }
     }
 
+    // ─── RGPD : check opt-out global AVANT tout envoi ──────────────
+    // Si le prospect est dans opt_out_list, on stoppe la séquence net.
+    // (même logique que les campagnes, mais via la blocklist globale
+    // opt_out_list car les prospects autopilot n'ont pas de flag opt_out).
+    if (shouldSend && prospect.email) {
+      const { data: optedOut } = await supabase
+        .from('opt_out_list')
+        .select('id')
+        .ilike('email', prospect.email) // ilike sans wildcard = égalité insensible à la casse
+        .maybeSingle();
+      if (optedOut) {
+        shouldSend = false;
+        updates.current_step = 'completed';
+        updates.exit_reason = 'opted_out';
+        history.push(stepLog('exit_opted_out'));
+      }
+    }
+
     // Send email si timing OK
     if (shouldSend && stepIdx >= 0 && stepIdx < template.sequence.length) {
       const email = await composeEmail({
@@ -223,7 +242,7 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         workflowMetricsCache: workflow.metrics_cache,
       });
       try {
-        await sendEmail({ to: prospect.email, subject: email.subject, html: email.html, text: email.text });
+        await sendEmail({ to: prospect.email, subject: email.subject, html: email.html, text: email.text, from: fromHeader });
         updates[`email_${stepIdx + 1}_sent_at`] = new Date().toISOString();
         updates.current_step = stepIdx === 0 ? 'email_1_sent'
           : stepIdx === 1 ? 'email_2_sent'
@@ -311,10 +330,26 @@ export async function runStepper() {
       continue;
     }
 
+    // Résout le sender du workflow (multi-tenant) : si l'user a configuré
+    // un email_sender vérifié, les emails partent de SON domaine (meilleure
+    // deliverability + branding). Sinon fallback défaut Volia dans email.js.
+    let fromHeader;
+    const senderId = workflow.config?.email_sender_id;
+    if (senderId) {
+      const { data: sender } = await supabase
+        .from('email_senders')
+        .select('domain, from_name, status')
+        .eq('id', senderId)
+        .maybeSingle();
+      if (sender?.status === 'verified' && sender.domain) {
+        fromHeader = `${sender.from_name || 'Volia'} <noreply@${sender.domain}>`;
+      }
+    }
+
     for (const exec of execs) {
       processed++;
       try {
-        const res = await advanceExecution(supabase, exec, template, workflow, baseUrl);
+        const res = await advanceExecution(supabase, exec, template, workflow, baseUrl, fromHeader);
         if (res.updated) advanced++;
         else skipped++;
       } catch (err) {

@@ -92,12 +92,40 @@ export async function POST(request) {
   try {
     switch (event.type) {
       // ═══════════════════════════════════════════════════════════
+      // checkout.session.expired → Wave 1.2 Growth Loops :
+      // user a abandonné le checkout, on prépare la séquence de relance
+      // (3 emails à J+1h, J+24h, J+72h via cron checkout-recovery)
+      // ═══════════════════════════════════════════════════════════
+      case 'checkout.session.expired': {
+        const session = event.data.object;
+        try {
+          const { captureExpiredCheckout } = await import('@/lib/checkout-recovery');
+          await captureExpiredCheckout({ session, supabase: supabaseAdmin });
+        } catch (recErr) {
+          console.error('[webhook] checkout-recovery capture failed', recErr);
+        }
+        break;
+      }
+
+      // ═══════════════════════════════════════════════════════════
       // checkout.session.completed → premier paiement réussi
       // ═══════════════════════════════════════════════════════════
       case 'checkout.session.completed': {
         const session = event.data.object;
         const userId = session.metadata?.supabase_user_id;
         const planId = session.metadata?.plan_id;
+
+        // Marque tout attempt de recovery comme converti (analytics + stop séquence)
+        try {
+          const recoveryEmail = session.customer_details?.email || session.customer_email;
+          if (recoveryEmail) {
+            const { markAttemptRecovered } = await import('@/lib/checkout-recovery');
+            await markAttemptRecovered(recoveryEmail.toLowerCase());
+          }
+        } catch (recErr) {
+          console.error('[webhook] markAttemptRecovered failed', recErr);
+        }
+
         if (!userId || !planId) {
           console.warn('[webhook] checkout.session.completed missing metadata', { userId, planId });
           break;

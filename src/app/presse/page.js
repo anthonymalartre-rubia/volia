@@ -14,9 +14,9 @@
 //   - Contact presse
 //   - Apparitions médias (placeholder)
 //
-// Positionnement (juin 2026) : « première entreprise SaaS autonome au
-// monde — pilotée par IA, augmentée par 1 founder, construite en
-// 6 semaines à Marseille ».
+// Positionnement (juin 2026) : « Volia Autopilot, le pipeline B2B
+// automatisé de bout en bout — l'humain choisit la cible, l'IA exécute
+// la chaîne, sous supervision ».
 //
 // Style : light mode forcé (cohérence avec /produits/*), couleur
 // dominante slate/zinc + accents violet (brand Volia). Premium feel.
@@ -28,9 +28,9 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/presse`;
 
 export const metadata = {
-  title: 'Volia presse — Première entreprise SaaS autonome au monde | Press kit',
+  title: 'Volia presse — Volia Autopilot, le pipeline B2B automatisé | Press kit',
   description:
-    "Press kit Volia : première entreprise SaaS autonome au monde, pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille. Logos, chiffres, bio, quotes.",
+    "Press kit Volia : Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email IA → qualification → scoring → CRM). L'humain valide, l'IA exécute. Suite SaaS française RGPD. Logos, chiffres, bio, quotes.",
   keywords: [
     'dossier presse Volia',
     'press kit Volia',
@@ -51,18 +51,18 @@ export const metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'Volia presse — Première entreprise SaaS autonome au monde',
+    title: 'Volia presse — Volia Autopilot, le pipeline B2B automatisé',
     description:
-      "Première entreprise SaaS autonome d'un nouveau genre, pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille.",
+      "Volia Autopilot : le pipeline B2B automatisé de bout en bout (cible → email IA → qualification → scoring → CRM). L'humain choisit la cible, l'IA exécute la chaîne, sous supervision.",
     url: PAGE_URL,
     type: 'website',
     locale: 'fr_FR',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Volia presse — Première entreprise SaaS autonome',
+    title: 'Volia presse — Volia Autopilot, le pipeline B2B automatisé',
     description:
-      "Pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille. Logos HD, chiffres clés, bio founder, communiqués.",
+      "Le pipeline B2B automatisé de bout en bout. L'humain valide, l'IA exécute. Logos HD, chiffres clés, bio founder, communiqués.",
   },
 };
 

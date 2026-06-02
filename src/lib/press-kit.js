@@ -13,28 +13,36 @@
 //     ~70 mots, ~180 mots. Modifier prudemment (impact PR).
 //
 // POSITIONNEMENT (juin 2026) :
-//   « Volia est la première entreprise SaaS autonome d'un nouveau
-//   genre. Une entreprise pilotée par IA, augmentée par 1 founder. »
-//   Construite en 6 semaines à Marseille, supervisée par Anthony
+//   « Volia Autopilot, le pipeline B2B automatisé de bout en bout
+//   (cible → email personnalisé par IA → formulaire de qualification →
+//   scoring → CRM). L'humain choisit la cible, l'IA exécute la chaîne,
+//   sous supervision. » Suite SaaS française supervisée par Anthony
 //   Malartre (responsable produit + sales + service client).
 // ─────────────────────────────────────────────────────────────────────
 
 // ─── BOILERPLATE — 3 longueurs prêtes à copier pour les journalistes ──
 export const BOILERPLATE = {
   short:
-    "Volia est la première entreprise SaaS autonome au monde — pilotée par IA, augmentée par 1 founder, construite en 6 semaines à Marseille.",
+    "Volia Autopilot est le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → formulaire de qualification → scoring → CRM) : l'humain choisit la cible, l'IA exécute la chaîne, sous supervision.",
 
   medium:
-    "Volia est la première entreprise SaaS autonome d'un nouveau genre, pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille par Anthony Malartre avec Claude, l'IA agentique d'Anthropic, la suite met en avant Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé → qualification → CRM), au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), à partir de 19 €/mois. Au cœur du système : 16 boucles d'agents IA tournent 24/7 — marketing, support, code, vente, méta-optimisation — et un dashboard mesure en temps réel le ROI de chaque boucle. Volia incarne une nouvelle catégorie d'entreprise : pas d'équipe, pas de levée, pas d'investisseurs — juste un founder, des agents IA autonomes et un produit qui se vend.",
+    "Volia met en avant Volia Autopilot, le pipeline B2B automatisé de bout en bout : l'utilisateur choisit sa cible, et l'IA exécute la chaîne — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM, sous supervision humaine. Autopilot s'appuie sur quatre modules connectés (Prospection, Campagnes, CRM, Formulaires) en un seul abonnement. Gamme : Starter gratuit · Solo 19 €/mois · Pro 49 €/mois (Autopilot 1 workflow) · Business · Enterprise 499 €/mois (Autopilot illimité + A/B testing + optimisation Claude) — le flagship Autopilot démarre à 49 €/mois. Suite SaaS française conforme RGPD et hébergée en Union européenne, supervisée par son founder Anthony Malartre : l'humain valide, l'IA exécute.",
 
   long:
-    "Volia (volia.fr) est la première entreprise SaaS autonome au monde — une nouvelle catégorie d'entreprise pilotée par IA et augmentée par 1 founder. Construite en 6 semaines à Marseille par Anthony Malartre avec Claude, l'IA agentique d'Anthropic, la plateforme met en avant son produit phare, Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → formulaire de qualification → scoring → push CRM) : l'utilisateur sélectionne sa cible, Volia exécute la chaîne. Autopilot s'appuie en un seul abonnement à partir de 19 €/mois sur quatre modules connectés : Prospection (287 000+ entreprises françaises accessibles via Google Places, enrichissement waterfall multi-sources), Campagnes (séquences email/SMS automatisées), CRM (pipeline commercial natif) et Formulaires (capture de leads). En production, 16 boucles d'agents IA orchestrent les opérations 24/7 : rédaction de posts LinkedIn, articles SEO hebdomadaires, newsletter mensuelle, séquence de réactivation des clients perdus, relance personnalisée des trials, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et réponses FAQ automatiques, chat pré-vente et support in-app. Une boucle de méta-autonomie analyse chaque semaine le ROI de toutes les autres et propose à Anthony de nouvelles automatisations à créer. Plus de 400 commits publics documentent le fonctionnement. Hébergée en Union européenne (Supabase Frankfurt) et conforme RGPD par conception, Volia couvre 8 pays européens (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie). Le modèle : 0 salarié supplémentaire, 0 levée de fonds, 0 dette. Anthony Malartre reste responsable produit, sales et service client — l'exécution opérationnelle est assurée par les agents IA, et leur orchestration elle-même est devenue auto-optimisée. Volia est la preuve qu'une nouvelle forme d'entreprise est née : le founder augmenté.",
+    "Volia (volia.fr) met en avant son produit phare, Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → formulaire de qualification → scoring → push CRM) : l'utilisateur sélectionne sa cible, Volia exécute la chaîne sous supervision humaine — l'humain choisit la cible, l'IA exécute. Autopilot s'appuie sur quatre modules connectés : Prospection (des centaines de milliers d'entreprises françaises accessibles via Google Places sur 101 départements, enrichissement waterfall multi-sources), Campagnes (séquences email/SMS automatisées), CRM (pipeline commercial natif) et Formulaires (capture de leads). La gamme tarifaire couvre tous les besoins : Starter gratuit · Solo 19 €/mois · Pro 49 €/mois (Autopilot 1 workflow) · Business · Enterprise 499 €/mois (Autopilot illimité + A/B testing + optimisation Claude) ; le flagship Autopilot démarre à 49 €/mois. En production, 16 boucles d'agents IA orchestrent les opérations 24/7 : rédaction de posts LinkedIn, articles SEO hebdomadaires, newsletter mensuelle, séquence de réactivation des clients perdus, relance personnalisée des trials, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et réponses FAQ automatiques, chat pré-vente et support in-app. Une boucle de méta-autonomie analyse chaque semaine le ROI de toutes les autres et propose de nouvelles automatisations à créer. Plus de 400 commits publics documentent le fonctionnement. Hébergée en Union européenne (Supabase Frankfurt) et conforme RGPD par conception, Volia couvre 8 pays européens (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie). Anthony Malartre reste responsable produit, sales et service client — l'humain valide, l'IA exécute.",
 };
 
 // ─── KEY_NUMBERS — chiffres clés (cards page presse) ──────────────────
 // Chaque card doit avoir : value (string courte), label, sub (contexte),
 // gradient (Tailwind) et iconName (mappé côté UI vers Lucide).
 export const KEY_NUMBERS = [
+  {
+    value: 'Autopilot',
+    label: 'pipeline B2B automatisé de bout en bout',
+    sub: 'cible → email IA → qualification → scoring → CRM',
+    gradient: 'from-violet-500 to-fuchsia-600',
+    iconName: 'Zap',
+  },
   {
     value: '23',
     label: 'templates de pipeline Autopilot',
@@ -43,18 +51,11 @@ export const KEY_NUMBERS = [
     iconName: 'Zap',
   },
   {
-    value: '6',
-    label: 'semaines de construction',
-    sub: 'sprint intensif founder + IA agentique',
-    gradient: 'from-blue-500 to-cyan-600',
-    iconName: 'Calendar',
-  },
-  {
-    value: '1',
-    label: 'founder',
-    sub: 'augmenté par des agents IA autonomes',
+    value: '5',
+    label: 'plans tarifaires',
+    sub: 'Starter gratuit → Enterprise 499 €/mois',
     gradient: 'from-rose-500 to-pink-600',
-    iconName: 'User',
+    iconName: 'Wallet',
   },
   {
     value: '4',
@@ -94,7 +95,7 @@ export const KEY_NUMBERS = [
   {
     value: '0',
     label: 'salarié supplémentaire',
-    sub: '1 founder + agents IA, point.',
+    sub: 'opérations supervisées par l\'humain, exécutées par l\'IA',
     gradient: 'from-rose-500 to-orange-600',
     iconName: 'Sparkles',
   },
@@ -106,9 +107,9 @@ export const KEY_NUMBERS = [
     iconName: 'Wallet',
   },
   {
-    value: '287 000+',
-    label: 'entreprises accessibles',
-    sub: 'via Google Places + enrichissement waterfall',
+    value: '∞',
+    label: 'entreprises françaises accessibles',
+    sub: 'des centaines de milliers via Google Places + enrichissement waterfall',
     gradient: 'from-violet-600 to-fuchsia-600',
     iconName: 'Building2',
   },
@@ -153,8 +154,8 @@ export const FOUNDER_QUOTES = [
     context: "Sur l'organisation interne d'une entreprise autonome",
   },
   {
-    text: "Construire l'équivalent de HubSpot + Apollo + Lemlist + Tally en 6 semaines, seul, n'était pas possible il y a 18 mois. Maintenant si.",
-    context: "Sur la vélocité permise par l'IA agentique de dernière génération",
+    text: "Volia Autopilot remplace une stack Apollo + Lemlist + HubSpot par un seul pipeline : l'humain choisit la cible, l'IA exécute toute la chaîne jusqu'au lead chaud livré dans le CRM.",
+    context: "Sur le positionnement produit de Volia Autopilot",
   },
   {
     text: "Le futur des entreprises B2B ne ressemble plus à des équipes. Il ressemble à des founders augmentés.",
@@ -190,11 +191,11 @@ export const FOUNDER_QUOTES = [
 export const PRESS_ANGLES = [
   {
     slug: 'volia-autopilot-pipeline-b2b-automatise',
-    title: "Volia Autopilot : le pipeline B2B en autopilot",
+    title: "Volia Autopilot : de la cible au lead chaud, en un seul setup",
     audience: 'Presse business & growth B2B (Maddyness, FrenchWeb, BFM Tech, Welcome to the Jungle)',
     pitch:
-      "Et si décrocher des rendez-vous B2B ne demandait plus qu'un choix de cible ? Volia Autopilot est un pipeline B2B automatisé de bout en bout : l'utilisateur sélectionne sa cible et un template, Volia exécute toute la chaîne — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM. De la cible au lead chaud livré, sans gérer la mécanique. Produit phare de la suite Volia (à partir de 19 €/mois), il remplace une stack Apollo + Lemlist + HubSpot.",
-    releaseUrl: '/presse/cp-volia-autopilot.pdf',
+      "Le 1er pipeline B2B français qui va de la cible au lead chaud livré dans le CRM, en un seul setup. L'utilisateur sélectionne sa cible et un template (23 disponibles), et Volia Autopilot exécute toute la chaîne sous supervision humaine — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM. Produit phare de la suite Volia, il remplace une stack Apollo + Lemlist + HubSpot. Gamme : Starter gratuit · Solo 19 € · Pro 49 € (Autopilot 1 workflow) · Business · Enterprise 499 € (Autopilot illimité + A/B testing + optimisation Claude) — le flagship Autopilot démarre à 49 €/mois.",
+    releaseUrl: '/presse/cp/volia-autopilot-pipeline-b2b-automatise',
     iconName: 'Zap',
     gradient: 'from-violet-500 to-fuchsia-600',
   },
@@ -203,7 +204,7 @@ export const PRESS_ANGLES = [
     title: "L'entreprise autonome d'un nouveau genre",
     audience: 'Presse vision & futur du travail (Forbes FR, Les Echos, Maddyness)',
     pitch:
-      "Et si l'entreprise du XXIe siècle ne ressemblait plus à une équipe, mais à un founder augmenté par des agents IA autonomes ? Volia incarne cette nouvelle catégorie : 1 founder supervise, 1000 agents IA exécutent. Construite en 6 semaines à Marseille, sans salarié supplémentaire, sans levée de fonds, la suite SaaS B2B fonctionne aujourd'hui en production avec 10 cron jobs orchestrés par IA.",
+      "Et si l'entreprise du XXIe siècle ne ressemblait plus à une équipe, mais à un founder augmenté par des agents IA ? Volia incarne cette nouvelle catégorie : l'humain supervise et valide, les agents IA exécutent. Sans salarié supplémentaire, sans levée de fonds, la suite SaaS B2B fonctionne aujourd'hui en production avec 16 boucles d'agents IA orchestrées 24/7.",
     releaseUrl: '/presse/cp-entreprise-autonome.pdf',
     iconName: 'Sparkles',
     gradient: 'from-violet-500 to-indigo-600',
@@ -213,7 +214,7 @@ export const PRESS_ANGLES = [
     title: "L'alternative française à la stack US",
     audience: 'Presse business & souveraineté (Les Echos, BFM Tech, La Tribune)',
     pitch:
-      "Apollo, HubSpot, Lemlist, Typeform : la stack growth des PME françaises est 100 % américaine, facturée en dollars, hébergée hors UE. Volia propose en 2026 la première alternative souveraine complète : 4 modules connectés, hébergement Frankfurt, RGPD natif, support FR, à partir de 19 €/mois (5× moins cher).",
+      "Apollo, HubSpot, Lemlist, Typeform : la stack growth des PME françaises est 100 % américaine, facturée en dollars, hébergée hors UE. Volia propose en 2026 la première alternative souveraine complète : Volia Autopilot au-dessus de 4 modules connectés, hébergement Frankfurt, RGPD natif, support FR. Gamme : Starter gratuit · Solo 19 € · Pro 49 € (Autopilot 1 workflow) · Business · Enterprise 499 € (Autopilot illimité + A/B testing + optimisation Claude).",
     releaseUrl: '/presse/cp-alternative-francaise.pdf',
     iconName: 'Flag',
     gradient: 'from-blue-500 to-cyan-600',
@@ -223,7 +224,7 @@ export const PRESS_ANGLES = [
     title: "Première mondiale : l'IA agentique en production",
     audience: 'Presse IA spécialisée (ActuIA, Usine Digitale, Siècle Digital)',
     pitch:
-      "Volia est le premier SaaS B2B européen documenté entièrement co-construit par IA agentique et opéré en production par 16 boucles d'agents autonomes : 400+ commits publics, génération de contenu, code source, prospection, support client, le tout orchestré 24/7 sans intervention humaine en cascade. Un cas d'école mondial du paradigme \"AI-native company\" sur une stack moderne (Next.js 14, Supabase, Vercel, Anthropic) supervisée par 1 founder.",
+      "Volia est le premier SaaS B2B européen documenté entièrement co-construit par IA agentique et opéré en production par 16 boucles d'agents IA : 400+ commits publics, génération de contenu, code source, prospection, support client, le tout orchestré 24/7 — l'humain valide, l'IA exécute. Un cas d'école mondial du paradigme \"AI-native company\" sur une stack moderne (Next.js 14, Supabase, Vercel, Anthropic), supervisé par son founder.",
     releaseUrl: '/presse/cp-cas-ecole-ia-agentique.pdf',
     iconName: 'Brain',
     gradient: 'from-fuchsia-500 to-purple-600',
@@ -395,13 +396,23 @@ export const PRESS_RELEASES = [
     pdfUrl: '/presse/cp/meta-autonomie-ia-qui-soptimise',
   },
   {
+    date: '2026-06-02',
+    dateLabel: '2 juin 2026',
+    title:
+      "Volia lance Autopilot : le pipeline B2B qui va de la cible au lead chaud, en un seul setup",
+    slug: 'volia-autopilot-pipeline-b2b-automatise',
+    summary:
+      "Volia lance son produit phare, Volia Autopilot : un pipeline B2B automatisé de bout en bout (scrap → email IA → formulaire de qualification → scoring → CRM). L'humain choisit la cible, l'IA exécute la chaîne. 23 templates, RGPD et hébergement européen, gamme de Starter gratuit à Enterprise 499 €/mois. Autopilot remplace une stack Apollo + Lemlist + HubSpot.",
+    pdfUrl: '/presse/cp/volia-autopilot-pipeline-b2b-automatise',
+  },
+  {
     date: '2026-06-01',
     dateLabel: '1er juin 2026',
     title:
-      "Volia lance la première entreprise SaaS autonome au monde — construite en 6 semaines",
+      "Volia lance une nouvelle catégorie d'entreprise SaaS B2B pilotée par IA",
     slug: 'lancement-entreprise-autonome',
     summary:
-      "Volia officialise le lancement d'une nouvelle catégorie d'entreprise : une suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires) construite en 6 semaines à Marseille par 1 founder augmenté par des agents IA autonomes. Pas d'équipe, pas de levée, pas d'investisseurs.",
+      "Volia officialise le lancement d'une nouvelle catégorie d'entreprise : une suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires) supervisée par son founder à Marseille — l'humain valide, les agents IA exécutent. Pas d'équipe, pas de levée, pas d'investisseurs.",
     pdfUrl: '/presse/cp-lancement-entreprise-autonome-juin-2026.pdf',
   },
   {
@@ -418,25 +429,25 @@ export const PRESS_RELEASES = [
 // ─── PRESS_CONTACT — informations contact presse ──────────────────────
 export const PRESS_CONTACT = {
   email: 'contact@volia.fr',
-  phone: '+33 (0)X XX XX XX XX', // TODO: numéro presse dédié
+  phone: null, // numéro presse non communiqué publiquement (ne pas afficher)
   responseTime: '< 24h',
-  founderEmail: 'anthony@volia.fr',
+  founderEmail: 'anthony.malartre@suraya.fr',
   city: 'Marseille',
-  linkedin: 'https://www.linkedin.com/in/anthonymalartre/', // TODO: vérifier URL
-  twitter: 'https://twitter.com/anthonymalartre', // TODO: vérifier handle
+  linkedin: null, // TODO: vérifier URL avant exposition publique
+  twitter: null, // TODO: vérifier handle avant exposition publique
   github: 'https://github.com/anthonymalartre-rubia/volia',
 };
 
 // ─── FOUNDER_BIO — 3 versions ─────────────────────────────────────────
 export const FOUNDER_BIO = {
   short:
-    "Anthony Malartre, founder de Volia, la première entreprise SaaS autonome au monde, construite en 6 semaines à Marseille.",
+    "Anthony Malartre, founder de Volia, suite SaaS B2B française dont le produit phare Volia Autopilot automatise le pipeline B2B de bout en bout, sous supervision humaine.",
 
   medium:
-    "Anthony Malartre est le founder de Volia (volia.fr), première entreprise SaaS autonome d'un nouveau genre — pilotée par IA, augmentée par 1 founder. Basé à Marseille, ex-fondateur de plusieurs projets B2B, il a construit Volia en 6 semaines avec Claude, l'IA agentique d'Anthropic : 4 modules connectés, 400+ commits publics, 16 boucles d'agents IA en production qui orchestrent marketing, code, vente et support 24/7. Une couche de méta-autonomie analyse chaque semaine le ROI de toutes les boucles et propose à Anthony les prochaines automatisations à créer. Anthony défend la philosophie du founder augmenté : 1 humain qui décide, 1000 agents IA qui exécutent.",
+    "Anthony Malartre est le founder de Volia (volia.fr), suite SaaS B2B française dont le produit phare est Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM). Basé à Marseille, ex-fondateur de plusieurs projets B2B, il a bâti Volia avec Claude, l'IA agentique d'Anthropic : 4 modules connectés, 400+ commits publics, 16 boucles d'agents IA en production qui orchestrent marketing, code, vente et support 24/7. Une couche de méta-autonomie analyse chaque semaine le ROI de toutes les boucles et propose les prochaines automatisations à créer. Sa philosophie : l'humain valide, l'IA exécute.",
 
   long:
-    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'entreprise du XXIe siècle n'était plus une équipe, mais un founder augmenté par des agents IA autonomes ? Volia est la réponse. En 6 semaines de sprint intensif, sans co-fondateur, sans levée de fonds, sans salarié supplémentaire, il livre Volia Autopilot — le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → CRM) — au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne, accessibles à partir de 19 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn provocatrice, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email à Anthony avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client — l'exécution opérationnelle est assurée par les agents IA, et leur orchestration elle-même est devenue auto-optimisée. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
+    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'entreprise du XXIe siècle n'était plus une équipe, mais un founder augmenté par des agents IA, sous supervision permanente ? Volia est la réponse. Sans co-fondateur, sans levée de fonds, sans salarié supplémentaire, il livre Volia Autopilot — le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM) — au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne. La gamme va de Starter gratuit à Enterprise 499 €/mois (Autopilot illimité + A/B testing + optimisation Claude), le flagship Autopilot démarrant à 49 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client : l'humain valide, l'IA exécute. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
 };
 
 // ─── PRESS_RELEASE_FULL — contenu complet des communiqués de presse ──
@@ -445,6 +456,52 @@ export const FOUNDER_BIO = {
 // impression / sauvegarde PDF via navigateur). Pas de génération
 // binaire — l'HTML est canonique, indexable, simple à maintenir.
 export const PRESS_RELEASES_FULL = {
+  'volia-autopilot-pipeline-b2b-automatise': {
+    slug: 'volia-autopilot-pipeline-b2b-automatise',
+    date: '2026-06-02',
+    dateLabel: '2 juin 2026',
+    location: 'Marseille',
+    eyebrow: 'COMMUNIQUÉ DE PRESSE',
+    title: "Volia lance Autopilot : le pipeline B2B qui va de la cible au lead chaud, en un seul setup",
+    lead: "Volia (volia.fr), suite SaaS française pour la croissance B2B, lance Volia Autopilot, son produit phare : un pipeline B2B automatisé de bout en bout qui mène de la cible au lead chaud livré dans le CRM. L'utilisateur choisit sa cible et un template, et l'IA exécute toute la chaîne — sous supervision humaine. Autopilot remplace une stack fragmentée Apollo + Lemlist + HubSpot par un seul abonnement.",
+    sections: [
+      {
+        heading: "Le problème : une stack growth fragmentée",
+        paragraphs: [
+          "Pour décrocher des rendez-vous B2B, les PME françaises empilent aujourd'hui des outils américains qui ne se parlent pas : un outil de scraping et d'enrichissement (type Apollo), un outil de cold email (type Lemlist), un outil de formulaires (type Typeform) et un CRM (type HubSpot). Quatre abonnements, quatre interfaces, quatre exports CSV à recoller à la main — et autant de points de rupture entre la cible identifiée et le lead réellement exploitable.",
+          "Cette fragmentation coûte du temps, de l'argent et des leads perdus en route. Elle suppose aussi de maîtriser quatre outils distincts, là où l'enjeu réel est simple : transformer une cible en rendez-vous qualifié.",
+        ],
+      },
+      {
+        heading: "La solution : un pipeline automatisé de bout en bout",
+        paragraphs: [
+          "Volia Autopilot unifie toute cette chaîne en un seul pipeline. L'utilisateur sélectionne sa cible (secteur, zone géographique sur 101 départements) et un template parmi 23 disponibles. Volia exécute ensuite l'enchaînement complet : scrap des entreprises via Google Places, enrichissement waterfall multi-sources, rédaction d'un email personnalisé par IA, formulaire de qualification, scoring du lead, puis push automatique du lead chaud dans le CRM natif.",
+          "Le principe est constant : l'humain choisit la cible et valide, l'IA exécute la chaîne. Les actions à risque restent soumises à supervision et à des garde-fous explicites. Autopilot s'appuie sur les quatre modules connectés de la suite Volia — Prospection, Campagnes, CRM et Formulaires — réunis en un seul abonnement.",
+        ],
+      },
+      {
+        heading: "RGPD et hébergement européen par conception",
+        paragraphs: [
+          "Volia est une suite SaaS française, conforme RGPD par conception et hébergée en Union européenne (Supabase, Frankfurt). Les données des prospects et des clients restent traitées dans l'espace européen, avec un filtrage natif des emails personnels et une page d'opt-out publique.",
+          "Volia couvre 8 pays européens (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie) et 101 départements français, donnant accès à des centaines de milliers d'entreprises.",
+        ],
+      },
+      {
+        heading: "Une gamme tarifaire complète",
+        paragraphs: [
+          "Volia se décline en cinq plans : Starter gratuit, Solo à 19 €/mois, Pro à 49 €/mois (incluant Autopilot avec 1 workflow), Business, et Enterprise à 499 €/mois (Autopilot illimité, A/B testing et optimisation par Claude). Le flagship Autopilot démarre donc à 49 €/mois.",
+          "Là où une stack équivalente cumule plusieurs abonnements facturés en dollars et hébergés hors UE, Volia propose une alternative souveraine unifiée, facturée en euros, avec un support en français.",
+        ],
+      },
+    ],
+    quote: {
+      text: "Volia Autopilot remplace une stack Apollo + Lemlist + HubSpot par un seul pipeline. L'humain choisit la cible, l'IA exécute toute la chaîne jusqu'au lead chaud livré dans le CRM. C'est le premier pipeline B2B français qui va de la cible au lead chaud, en un seul setup.",
+      author: 'Anthony Malartre',
+      authorRole: 'Fondateur de Volia',
+    },
+    boilerplate: BOILERPLATE.medium,
+  },
+
   'meta-autonomie-ia-qui-soptimise': {
     slug: 'meta-autonomie-ia-qui-soptimise',
     date: '2026-06-06',
@@ -496,7 +553,7 @@ export const PRESS_RELEASES_FULL = {
       {
         heading: "1. Volia utilise Volia pour vendre Volia",
         paragraphs: [
-          "Chaque lundi à 14 heures, une boucle baptisée dogfood-outreach pioche une combinaison ICP × département parmi 12 rotations déterministes (agences marketing à Paris, agences web à Marseille, cabinets conseil à Bordeaux, etc.). Elle interroge l'API Google Places via le propre module Prospection de Volia, déduplique contre l'historique de campagnes passées, et constitue une liste de 50 prospects qualifiés.",
+          "Chaque lundi à 14 heures, une boucle baptisée dogfood-outreach pioche une combinaison ICP × département parmi 12 rotations déterministes (agences marketing à Marseille, agences web à Nantes, cabinets conseil à Lille, etc.). Elle interroge l'API Google Places via le propre module Prospection de Volia, déduplique contre l'historique de campagnes passées, et constitue une liste de 50 prospects qualifiés.",
           "La liste est livrée directement dans le module Campagnes de Volia, prête à être enrichie et activée par Anthony Malartre. \"C'est mon meilleur démo,\" explique le fondateur. \"Volia utilise Volia pour vendre Volia. Aucun autre outil de prospection français ne peut se permettre cette démonstration.\"",
         ],
       },
@@ -520,7 +577,7 @@ export const PRESS_RELEASES_FULL = {
         heading: "Trois boucles, un seul principe",
         paragraphs: [
           "Le mot d'ordre est constant : l'humain valide, l'IA exécute. Toutes les actions à risque (publication de code, envoi d'email client, post public) passent par une validation manuelle ou un garde-fou strict (quotas, threshold de confiance, mode draft GitHub). Le founder reste responsable du produit, des ventes et du service client.",
-          "L'ensemble du code source et des boucles est documenté publiquement. Plus de 400 commits Git tracent six mois de construction.",
+          "L'ensemble du code source et des boucles est documenté publiquement. Plus de 400 commits Git tracent le développement de la suite.",
         ],
       },
     ],

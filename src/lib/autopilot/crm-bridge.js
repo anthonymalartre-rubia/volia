@@ -257,5 +257,80 @@ export async function createDealFromAutopilot(supabase, args) {
     return { deal_id: null, contact_id: contactId, stage_id: stageId, error: error.message };
   }
 
-  return { deal_id: deal?.id, contact_id: contactId, stage_id: stageId };
+  return { deal_id: deal?.id, contact_id: contactId, stage_id: stageId, destination: 'volia' };
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Destination CRM externe — "connecte TON CRM, pas le nôtre"
+// ─────────────────────────────────────────────────────────────────────
+// Beaucoup de clients ont déjà leur CRM (HubSpot, Pipedrive, Salesforce…)
+// et ne migreront pas. Le workflow peut donc router les leads vers une
+// destination configurée dans workflow.config.crm_destination :
+//   { type: 'volia' }                              → CRM Volia natif (défaut)
+//   { type: 'webhook', webhook_url: 'https://…' }  → POST JSON vers leur endpoint
+//                                                     (HubSpot/Pipedrive/Salesforce
+//                                                      via webhook natif ou Zapier/Make)
+// Le payload webhook est stable et documenté (voir buildLeadPayload).
+
+function buildLeadPayload({ prospect, workflow, score, tier, routing, formResponse }) {
+  return {
+    source: 'volia_autopilot',
+    workflow: { id: workflow?.id, name: workflow?.name, template_id: workflow?.template_id },
+    lead: {
+      name: prospect?.first_name || prospect?.nom || null,
+      company: prospect?.nom || null,
+      email: prospect?.email || null,
+      phone: prospect?.telephone || null,
+      department: prospect?.departement || null,
+    },
+    qualification: { score: score ?? null, tier: tier || null },
+    routing: routing || null,
+    form_response: formResponse || null,
+    delivered_at: new Date().toISOString(),
+  };
+}
+
+/**
+ * Livre un lead vers un webhook externe (CRM du client).
+ * POST JSON, timeout 10s. Ne crée AUCUN deal Volia (le client veut SON CRM).
+ */
+async function deliverViaWebhook({ webhookUrl, payload }) {
+  if (!webhookUrl || !/^https:\/\//i.test(webhookUrl)) {
+    return { deal_id: null, destination: 'webhook', error: 'invalid_webhook_url' };
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  try {
+    const res = await fetch(webhookUrl, {
+      method: 'POST',
+      signal: controller.signal,
+      headers: { 'Content-Type': 'application/json', 'User-Agent': 'Volia-Autopilot/1.0' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      return { deal_id: null, destination: 'webhook', error: `webhook_http_${res.status}` };
+    }
+    return { deal_id: null, destination: 'webhook', delivered: true };
+  } catch (err) {
+    return { deal_id: null, destination: 'webhook', error: err.name === 'AbortError' ? 'webhook_timeout' : err.message };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+/**
+ * Point d'entrée unique : route le lead vers la destination configurée.
+ * Utilisé par form-submit (hot path) ET stepper (warm/cold path).
+ */
+export async function routeLeadToCrm(supabase, args) {
+  const dest = args.workflow?.config?.crm_destination;
+  const type = dest?.type || 'volia';
+
+  if (type === 'webhook') {
+    const payload = buildLeadPayload(args);
+    return deliverViaWebhook({ webhookUrl: dest.webhook_url, payload });
+  }
+
+  // Défaut : CRM Volia natif
+  return createDealFromAutopilot(supabase, args);
 }

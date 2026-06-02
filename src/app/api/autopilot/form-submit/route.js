@@ -29,7 +29,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { calculateScore, resolveRouting } from '@/lib/autopilot/scoring';
 import { getTemplate } from '@/lib/autopilot/templates';
-import { createDealFromAutopilot } from '@/lib/autopilot/crm-bridge';
+import { routeLeadToCrm } from '@/lib/autopilot/crm-bridge';
 import { logAutonomousAction } from '@/lib/autonomy';
 
 export const dynamic = 'force-dynamic';
@@ -192,7 +192,7 @@ export async function POST(request) {
       .maybeSingle();
 
     if (prospect) {
-      const bridgeResult = await createDealFromAutopilot(supabase, {
+      const bridgeResult = await routeLeadToCrm(supabase, {
         userId: workflow.user_id,
         prospect,
         workflow,
@@ -202,17 +202,19 @@ export async function POST(request) {
         routing,
         formResponse: { responses, breakdown },
       });
-      if (bridgeResult.deal_id) {
-        crmDealId = bridgeResult.deal_id;
-        updates.crm_deal_id = bridgeResult.deal_id;
+      // Succès = deal Volia créé OU lead livré au CRM externe (webhook)
+      if (bridgeResult.deal_id || bridgeResult.delivered) {
+        crmDealId = bridgeResult.deal_id || null;
+        updates.crm_deal_id = bridgeResult.deal_id || null;
         updates.crm_pushed_at = nowIso;
         updates.current_step = 'crm_pushed';
         updates.step_history.push({
           step: 'crm_pushed',
           at: nowIso,
-          deal_id: bridgeResult.deal_id,
-          contact_id: bridgeResult.contact_id,
-          stage_id: bridgeResult.stage_id,
+          destination: bridgeResult.destination || 'volia',
+          deal_id: bridgeResult.deal_id || null,
+          contact_id: bridgeResult.contact_id || null,
+          stage_id: bridgeResult.stage_id || null,
           source: 'webhook_hot_path',
         });
       } else if (bridgeResult.error) {

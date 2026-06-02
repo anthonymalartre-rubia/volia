@@ -10,7 +10,8 @@ import {
   Trash2, KeyRound, Eye, EyeOff, Ban, CheckCircle, AlertTriangle, X,
   ChevronDown, ChevronUp, Clock, Globe, UserCheck, UserX,
   BarChart3, TrendingUp, Activity, DollarSign, Zap, Download, Database,
-  Bot, Flame, Brain, Lightbulb, ListChecks, Send, Layers, Palette, Newspaper
+  Bot, Flame, Brain, Lightbulb, ListChecks, Send, Layers, Palette, Newspaper,
+  Briefcase, Rocket
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -431,6 +432,8 @@ export default function AdminPage() {
                   { href: '/admin/metrics',        label: 'Metrics biz',   icon: BarChart3,   color: 'indigo',  desc: 'KPIs business' },
                   { href: '/admin/prospection',    label: 'Prospection',   icon: ListChecks,  color: 'teal',    desc: 'Listes + dogfood' },
                   { href: '/admin/forms',          label: 'Forms',         icon: Newspaper,   color: 'cyan',    desc: 'Formulaires' },
+                  { href: '/admin/linkedin-dm-queue', label: 'LinkedIn DM', icon: Briefcase, color: 'indigo', desc: 'Top engageurs à DM manuellement' },
+                  { href: '/admin/ph-launch',      label: 'PH Launch',     icon: Rocket,      color: 'orange',  desc: 'Product Hunt launch cockpit' },
                   { href: '/admin/publishers',     label: 'Publishers',    icon: Send,        color: 'pink',    desc: 'LinkedIn tokens' },
                   { href: '/admin/design-system',  label: 'Design system', icon: Palette,     color: 'rose',    desc: 'Tokens UI' },
                 ].map(({ href, label, icon: Icon, color, desc }) => (

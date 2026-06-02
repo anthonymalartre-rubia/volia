@@ -27,18 +27,21 @@ async function fetchWorkflowMetrics(supabase, workflowId) {
   // Funnel : count par current_step
   const { data: execs } = await supabase
     .from('autopilot_executions')
-    .select('current_step, form_submitted_at, crm_pushed_at, exit_reason, email_1_sent_at')
+    .select('current_step, form_submitted_at, crm_pushed_at, exit_reason, email_1_sent_at, computed_score')
     .eq('workflow_id', workflowId);
   const total = execs?.length || 0;
   const emailed = execs?.filter((e) => e.email_1_sent_at).length || 0;
   const formed = execs?.filter((e) => e.form_submitted_at).length || 0;
-  const hot = execs?.filter((e) => e.crm_pushed_at).length || 0;
+  // crm_total = tous les push (hot+warm+cold) ; crm_hot = uniquement score >= 70
+  const crmTotal = execs?.filter((e) => e.crm_pushed_at).length || 0;
+  const crmHot = execs?.filter((e) => e.crm_pushed_at && (e.computed_score ?? 0) >= 70).length || 0;
   const exited = execs?.filter((e) => e.exit_reason).length || 0;
   return {
     total_enrolled: total,
     emailed,
     form_submitted: formed,
-    crm_hot: hot,
+    crm_hot: crmHot,
+    crm_total: crmTotal,
     exited,
   };
 }

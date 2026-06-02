@@ -22,6 +22,11 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 
+// Aligné sur le reste du repo prod (parse-search, blog-writer, etc.).
+// ⚠️ NE PAS utiliser 'claude-sonnet-4-5' (string invalide → 404 silencieux
+// → fallback systématique sur body_summary).
+const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+
 const FORBIDDEN_PATTERNS = [
   // DGCCRF
   /\b0\s*humain\b/i,
@@ -117,7 +122,7 @@ ${step.includes_calcom ? '- Un lien Cal.com (15 min) sera ajouté automatiquemen
   try {
     const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
-      model: 'claude-sonnet-4-5',
+      model: CLAUDE_MODEL,
       max_tokens: 600,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],

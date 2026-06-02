@@ -20,24 +20,39 @@
 // avec les règles textuelles `template.form.scoring` comme guide.
 // ─────────────────────────────────────────────────────────────────────
 
+// Sémantique négative → score bas (peu importe la position de l'option)
 const NEGATIVE_KEYWORDS = [
   'non',
-  'pas',
+  'pas pour',
+  'pas encore',
   'aucun',
   'jamais',
   'désinscription',
-  'archive',
+  'on stoppe',
+  'on a stoppé',
+  'plus vraiment',
   'curieux',
   'veille',
-  'autre',
+  'statu quo',
+  'juste curieux',
+  'pas de démo',
 ];
 
-const URGENT_KEYWORDS = [
+// Sémantique positive / intention forte → score haut (peu importe la position)
+const POSITIVE_KEYWORDS = [
+  'oui',
   'cette semaine',
   'maintenant',
-  'oui activement',
+  'urgent',
+  'activement',
+  'très intéressé',
+  'important',
   '< 1 mois',
   'septembre',
+  'scaler',
+  'validé',
+  'certain',
+  'beaucoup',
 ];
 
 const TIER_THRESHOLDS = {
@@ -55,22 +70,34 @@ export function scoreToTier(score) {
 }
 
 /**
- * Computes weight for a select option based on position + negativity.
+ * Score une réponse select.
+ *
+ * Priorité :
+ *   1. weights explicites définis par le template (q.weights, index ||| options)
+ *   2. sémantique des mots-clés (positif → 100, négatif → 0)
+ *   3. bande neutre compressée 35-85 selon la position (jamais 0 sauf négatif,
+ *      jamais 100 sauf positif) — car l'ordre des options n'est PAS garanti
+ *      monotone (ex: "Cette semaine" est souvent en 1ère position = la meilleure).
  */
-function scoreSelect(answer, options) {
+function scoreSelect(answer, options, weights) {
   if (!answer || !options || options.length === 0) return 0;
-  const idx = options.findIndex((opt) => opt === answer || opt.toLowerCase?.() === String(answer).toLowerCase());
-  if (idx < 0) return 0;
+  const a = String(answer).toLowerCase();
+  const idx = options.findIndex((opt) => opt === answer || opt.toLowerCase?.() === a);
 
-  const answerLower = String(answer).toLowerCase();
-  // Negative override → 0 points
-  if (NEGATIVE_KEYWORDS.some((kw) => answerLower.includes(kw) && !URGENT_KEYWORDS.some((u) => answerLower.includes(u)))) {
-    return 0;
+  // 1. Weights explicites (template-defined) — la source de vérité si fournie
+  if (Array.isArray(weights) && idx >= 0 && typeof weights[idx] === 'number') {
+    return Math.min(Math.max(weights[idx], 0), 100);
   }
-  // Urgent override → +25 bonus on top of position weight
-  const positionWeight = Math.round((idx / Math.max(options.length - 1, 1)) * 100);
-  const urgentBonus = URGENT_KEYWORDS.some((kw) => answerLower.includes(kw)) ? 25 : 0;
-  return Math.min(positionWeight + urgentBonus, 100);
+
+  // 2. Sentiment-first (ordre des options non garanti)
+  const isPositive = POSITIVE_KEYWORDS.some((kw) => a.includes(kw));
+  const isNegative = NEGATIVE_KEYWORDS.some((kw) => a.includes(kw));
+  if (isPositive && !isNegative) return 100;
+  if (isNegative && !isPositive) return 0;
+
+  // 3. Neutre / inconnu → bande compressée 35-85
+  if (idx < 0) return 45; // réponse hors options listées
+  return Math.round(35 + (idx / Math.max(options.length - 1, 1)) * 50);
 }
 
 /**
@@ -112,7 +139,7 @@ export function calculateScore(formResponse, template) {
 
     switch (q.type) {
       case 'select':
-        points = scoreSelect(answer, q.options || []);
+        points = scoreSelect(answer, q.options || [], q.weights);
         break;
       case 'multiselect': {
         const selected = Array.isArray(answer) ? answer.length : 1;

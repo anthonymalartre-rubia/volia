@@ -7,8 +7,9 @@
 // Réponse : { ok: true, to: 'user@email.com' } ou { error }
 //
 // Notes :
-//  - sender_id est optionnel : si fourni et vérifié, on envoie depuis ce
-//    domaine (alignement DKIM/SPF). Sinon, sendEmail() utilise son fallback.
+//  - sender_id est OBLIGATOIRE et doit être vérifié : l'email de test part
+//    toujours du domaine du user (DKIM/SPF), JAMAIS de hello@volia.fr
+//    (cohérent avec le garde-fou réputation campagnes/séquences/autopilot).
 //  - On préfixe le subject avec [TEST] pour que le user identifie clairement
 //    le mail dans sa boîte.
 //  - Le body est échappé en HTML simple si l'utilisateur n'a tapé aucune
@@ -55,20 +56,32 @@ export async function POST(request) {
   const interpolatedSubject = interpolate(subject);
   const interpolatedBody = interpolate(bodyHtml);
 
-  // Si sender_id fourni, on récupère le domaine vérifié pour aligner DKIM
-  let fromAddress = null;
-  if (senderId) {
-    const { data: sender } = await supabase
-      .from('email_senders')
-      .select('id, domain, from_name, status')
-      .eq('id', senderId)
-      .eq('owner_id', user.id)
-      .maybeSingle();
-    if (sender && sender.status === 'verified') {
-      const displayName = fromNameRaw || sender.from_name || 'Volia';
-      fromAddress = `${displayName} <noreply@${sender.domain}>`;
-    }
+  // Garde-fou réputation : un email de test part TOUJOURS du domaine vérifié
+  // du user, JAMAIS de hello@volia.fr (cohérent avec campagnes/séquences).
+  // → sender_id obligatoire + vérifié.
+  if (!senderId) {
+    return NextResponse.json({
+      error: "Sélectionne ton domaine d'envoi vérifié avant d'envoyer un test.",
+      action: 'configure_sender',
+      link: '/settings/email-senders',
+    }, { status: 400 });
   }
+  // NB: la colonne owner est `user_id` (pas owner_id) — bug corrigé.
+  const { data: sender } = await supabase
+    .from('email_senders')
+    .select('id, domain, from_name, status')
+    .eq('id', senderId)
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (!sender || sender.status !== 'verified') {
+    return NextResponse.json({
+      error: "Ce domaine d'envoi n'est pas vérifié. Vérifie-le avant d'envoyer un test.",
+      action: 'configure_sender',
+      link: '/settings/email-senders',
+    }, { status: 400 });
+  }
+  const displayName = fromNameRaw || sender.from_name || 'Volia';
+  const fromAddress = `${displayName} <noreply@${sender.domain}>`;
 
   // Banner test en haut du body pour ne laisser aucun doute sur la nature de l'email
   const wrappedHtml = `
@@ -84,7 +97,7 @@ export async function POST(request) {
     subject: `[TEST] ${interpolatedSubject}`,
     html: wrappedHtml,
     replyTo: replyTo || user.email,
-    from: fromAddress || undefined,
+    from: fromAddress, // toujours défini (sender vérifié) — jamais hello@volia.fr
     tags: [
       { name: 'type', value: 'campaign_test' },
       { name: 'user_id', value: user.id },

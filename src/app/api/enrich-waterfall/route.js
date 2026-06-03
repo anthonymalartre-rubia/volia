@@ -34,7 +34,12 @@ const BLOCKED_DOMAINS = new Set([
   'twitter.com', 'placeholder.com', 'email.com', 'domain.com',
   'yoursite.com', 'test.com', 'sample.com',
 ]);
-const COMMON_PATHS = ['/contact', '/contactez-nous', '/nous-contacter', '/mentions-legales'];
+// Pages qui portent souvent un VRAI email (pas de guess → pas de bounce).
+// Ordre = probabilité décroissante ; le scrape s'arrête au 1er hit.
+const COMMON_PATHS = [
+  '/contact', '/contactez-nous', '/nous-contacter', '/mentions-legales',
+  '/cgv', '/a-propos', '/equipe', '/politique-de-confidentialite',
+];
 
 function extractEmails(html) {
   const emails = new Set();

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import TopBar from '@/components/TopBar';
+import LivePipelinePanel from '@/components/autopilot/LivePipelinePanel';
 import { getSupabase } from '@/lib/supabase';
 import {
   Loader2, RefreshCw, Plus, Zap, Pause, Play, Trash2, Settings,
@@ -118,6 +119,9 @@ export default function AutopilotPage() {
           )}
         </div>
       </div>
+
+      {/* Pipeline en direct — ce que l'Autopilot a fait aujourd'hui / 7j */}
+      <LivePipelinePanel />
 
       {data && (
         <div className="rounded-xl border border-line bg-surface-card p-4 flex items-center justify-between">

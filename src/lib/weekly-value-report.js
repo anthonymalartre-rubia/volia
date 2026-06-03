@@ -58,26 +58,50 @@ async function computeUserStats(supabase, userId) {
     dealsThisWeek = count || 0;
   } catch {}
 
-  // Campagnes envoyées cette sem
+  // Campagnes lancées cette sem (FIX: la table utilise owner_id, pas user_id —
+  // l'ancienne requête renvoyait toujours 0). On récupère aussi les ids pour
+  // compter les emails (email_sends n'a pas de user_id → via campaign_id).
   let campaignsThisWeek = 0;
+  let campaignIds = [];
   try {
-    const { count } = await supabase
+    const { data: camps } = await supabase
       .from('email_campaigns')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .gte('created_at', weekAgo);
-    campaignsThisWeek = count || 0;
+      .select('id, created_at')
+      .eq('owner_id', userId);
+    campaignIds = (camps || []).map((c) => c.id);
+    campaignsThisWeek = (camps || []).filter((c) => c.created_at && c.created_at >= weekAgo).length;
   } catch {}
 
-  // Emails envoyés cette sem
+  // Emails envoyés cette sem (FIX: via campaign_id, pas user_id)
   let emailsSentThisWeek = 0;
+  if (campaignIds.length) {
+    try {
+      const { count } = await supabase
+        .from('email_sends')
+        .select('id', { count: 'exact', head: true })
+        .in('campaign_id', campaignIds)
+        .gte('sent_at', weekAgo);
+      emailsSentThisWeek = count || 0;
+    } catch {}
+  }
+
+  // Autopilot — leads chauds cette sem (score>=70 + form rempli), via workflows
+  let hotLeadsThisWeek = 0;
   try {
-    const { count } = await supabase
-      .from('email_sends')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .gte('created_at', weekAgo);
-    emailsSentThisWeek = count || 0;
+    const { data: wfs } = await supabase
+      .from('autopilot_workflows')
+      .select('id')
+      .eq('user_id', userId);
+    const wfIds = (wfs || []).map((x) => x.id);
+    if (wfIds.length) {
+      const { count } = await supabase
+        .from('autopilot_executions')
+        .select('id', { count: 'exact', head: true })
+        .in('workflow_id', wfIds)
+        .gte('computed_score', 70)
+        .gte('form_submitted_at', weekAgo);
+      hotLeadsThisWeek = count || 0;
+    }
   } catch {}
 
   // Estimate this week from current month (rough)
@@ -93,6 +117,7 @@ async function computeUserStats(supabase, userId) {
       deals: dealsThisWeek,
       campaigns: campaignsThisWeek,
       emails_sent: emailsSentThisWeek,
+      hot_leads: hotLeadsThisWeek,
     },
     month: {
       searches_current: current.searches || 0,
@@ -143,6 +168,10 @@ function buildEmail({ firstName, stats }) {
         <td style="padding:6px 0;">📨 Emails envoyés</td>
         <td style="padding:6px 0;text-align:right;font-weight:bold;font-size:18px;color:#5b21b6;">${w.emails_sent}</td>
       </tr>` : ''}
+      ${w.hot_leads > 0 ? `<tr>
+        <td style="padding:6px 0;">🔥 Leads chauds (Autopilot)</td>
+        <td style="padding:6px 0;text-align:right;font-weight:bold;font-size:18px;color:#be123c;">${w.hot_leads}</td>
+      </tr>` : ''}
       ${w.deals > 0 ? `<tr>
         <td style="padding:6px 0;">💼 Deals CRM créés</td>
         <td style="padding:6px 0;text-align:right;font-weight:bold;font-size:18px;color:#5b21b6;">${w.deals}</td>
@@ -154,7 +183,7 @@ function buildEmail({ firstName, stats }) {
     <strong>Tendance mensuelle</strong> : ${m.searches_current} recherches ce mois vs ${m.searches_prev} le mois dernier (${deltaStr})
   </p>
 
-  ${w.searches === 0 && w.enrichments === 0 && w.deals === 0 ? `
+  ${w.searches === 0 && w.enrichments === 0 && w.deals === 0 && w.emails_sent === 0 && w.hot_leads === 0 ? `
   <div style="margin:20px 0;padding:14px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:4px;">
     <p style="margin:0;font-size:13px;color:#92400e;">
       0 activité cette semaine. Tu galères sur quelque chose ? Réponds à ce mail, je débloque.

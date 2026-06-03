@@ -89,7 +89,7 @@ export default async function DepartmentPage({ params }) {
     },
     {
       question: `Comment fonctionne l'enrichissement email dans le ${dept.name} ?`,
-      answer: `Pour chaque entreprise du ${dept.name}, notre IA scrape son site web et cherche son email sur Google. Si l'entreprise n'a pas de site web, nous découvrons son domaine via Google avant d'extraire l'email. Taux de couverture moyen : 70-85%.`,
+      answer: `Pour chaque entreprise du ${dept.name}, notre IA scrape son site web et cherche son email sur Google. Si l'entreprise n'a pas de site web, nous découvrons son domaine via Google avant d'extraire l'email. Taux de couverture moyen : ~46%.`,
     },
     {
       question: `La prospection dans le ${dept.name} est-elle conforme au RGPD ?`,

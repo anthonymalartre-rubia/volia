@@ -90,7 +90,7 @@ export default async function CategoryProvinceBePage({ params }) {
     },
     {
       question: `Comment trouver l'email d'un ${category.label} en ${province.name} ?`,
-      answer: `Sélectionnez "${category.label}" et la province "${province.name}" sur Volia. Notre IA scrape les sites web et complète avec Google. Taux : 70-85 %.`,
+      answer: `Sélectionnez "${category.label}" et la province "${province.name}" sur Volia. Notre IA scrape les sites web et complète avec Google. Taux : ~46 %.`,
     },
     {
       question: `La prospection en Belgique est-elle conforme au RGPD ?`,

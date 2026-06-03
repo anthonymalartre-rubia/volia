@@ -96,7 +96,7 @@ const GROUP_DEFAULTS = {
     objections: [
       { objection: 'On préfère du physique', reponse: 'Vous gardez la main : on vous fournit la liste qualifiée, vous décidez du moyen de contact (email, visite, téléphone).' },
       { objection: 'Trop cher pour mes marges', reponse: 'À 19 €/mois pour 1 000 prospects, c\'est moins cher qu\'un encart Pages Jaunes.' },
-      { objection: 'On a fait Apollo, ça ne sert à rien', reponse: 'Apollo est faible en France (40 % de couverture). Nous on est sur 70-85 % spécifiquement sur le marché français.' },
+      { objection: 'On a fait Apollo, ça ne sert à rien', reponse: 'Apollo est faible en France (40 % de couverture). Nous on est sur ~46 % spécifiquement sur le marché français.' },
     ],
     pitchHook: 'Bonjour {first_name}, je vois que {company} est bien implanté localement. Comment vous faites pour fidéliser face à la concurrence e-commerce ?',
     glossary: [

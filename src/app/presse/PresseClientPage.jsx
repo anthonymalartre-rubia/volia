@@ -148,11 +148,10 @@ function HeroSection() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-content-primary mb-6 leading-[1.05]">
-            Volia presse — la première{' '}
+            Volia presse — une{' '}
             <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">
-              entreprise SaaS autonome
-            </span>{' '}
-            au monde
+              suite B2B d&apos;un nouveau genre
+            </span>
           </h1>
 
           <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-3xl mb-8">
@@ -335,8 +334,8 @@ function FounderBioSection() {
               Anthony Malartre, founder augmenté
             </h2>
             <p className="text-base sm:text-lg text-content-secondary max-w-2xl">
-              1 humain qui décide, 1000 agents IA qui exécutent. Le nouveau modèle de
-              l&apos;entreprise SaaS, supervisé depuis Marseille.
+              L&apos;humain décide, l&apos;IA exécute la corvée. Une suite B2B
+              construite autrement, supervisée depuis Marseille.
             </p>
           </div>
         </MotionInView>
@@ -572,7 +571,7 @@ function AILoopsInventorySection() {
               Les 16 boucles d'agents IA en production
             </h2>
             <p className="text-base sm:text-lg text-content-secondary max-w-3xl">
-              Détail complet de chaque automatisation autonome qui orchestre Volia 24/7,
+              Détail complet de chaque automatisation qui orchestre Volia 24/7,
               regroupé par catégorie. Pour les journalistes qui veulent du concret.
             </p>
             <p className="text-xs text-content-tertiary mt-3 italic max-w-3xl">

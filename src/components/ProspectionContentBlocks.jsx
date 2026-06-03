@@ -68,7 +68,7 @@ export function SocialProofBlock({ department, region, category }) {
 }
 
 // ─── Comparatif inline vs concurrent (différenciation FR) ─────────────
-// Encart visuel "Apollo : 40 % / Volia : 70-85 % en France".
+// Encart visuel "Apollo : 40 % / Volia : ~46 % en France".
 // Différenciation N°1 du produit, visible sur chaque page.
 export function CompetitorInlineBlock({ category }) {
   const what = category ? category.labelPlural : 'entreprises françaises';
@@ -98,7 +98,7 @@ export function CompetitorInlineBlock({ category }) {
         <div className="rounded-xl border-2 border-violet-500/40 bg-gradient-to-br from-violet-500/[0.08] to-indigo-500/[0.08] p-5 relative">
           <div className="absolute -top-2 -right-2 px-2 py-0.5 rounded-full bg-violet-500 text-[10px] font-bold text-white uppercase tracking-wider">Volia</div>
           <div className="text-xs font-semibold text-violet-300 uppercase tracking-wider mb-2">Notre cascade waterfall</div>
-          <div className="text-3xl font-bold text-emerald-300 tabular-nums mb-1">70-85 %</div>
+          <div className="text-3xl font-bold text-emerald-300 tabular-nums mb-1">~46 %</div>
           <div className="text-xs text-content-secondary leading-relaxed">
             <strong className="text-content-primary">Scraping site → Recherche Google → Patterns</strong> — taux d&apos;emails trouvés sur les {what}
           </div>

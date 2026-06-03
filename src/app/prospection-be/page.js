@@ -92,7 +92,7 @@ export default function ProspectionBeHub() {
               Trouvez les emails B2B des entreprises belges francophones
             </h1>
             <p className="text-lg text-content-secondary leading-relaxed max-w-3xl mb-6">
-              Volia couvre <strong className="text-content-primary">6 provinces francophones de Belgique</strong> (Wallonie + Bruxelles-Capitale) et <strong className="text-content-primary">150 secteurs d&apos;activité</strong>. Recherche d&apos;entreprises via Google Places + enrichissement email automatique (taux de couverture 70-85 %). Conforme RGPD européen.
+              Volia couvre <strong className="text-content-primary">6 provinces francophones de Belgique</strong> (Wallonie + Bruxelles-Capitale) et <strong className="text-content-primary">150 secteurs d&apos;activité</strong>. Recherche d&apos;entreprises via Google Places + enrichissement email automatique (taux de couverture ~46 %). Conforme RGPD européen.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Link href="/signup" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/20">
@@ -107,7 +107,7 @@ export default function ProspectionBeHub() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <StatCard icon={MapPin} label="Provinces" value="6" color="text-violet-400" />
               <StatCard icon={Users} label="Secteurs" value="150+" color="text-green-400" />
-              <StatCard icon={Mail} label="Taux email" value="70-85%" color="text-blue-400" />
+              <StatCard icon={Mail} label="Taux email" value="~46%" color="text-blue-400" />
               <StatCard icon={Shield} label="RGPD" value="✓" color="text-amber-600" />
             </div>
           </section>

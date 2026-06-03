@@ -29,7 +29,7 @@ import { B2B_GROUPS, REGIONS, DEPTS } from '@/lib/constants';
 import { Button, Input, LogoIcon } from '@/components/ui';
 import {
   ArrowRight, ArrowLeft, Loader2, Building2, Users, Target,
-  MapPin, Sparkles, Rocket,
+  MapPin, Sparkles, Rocket, Mail, Star, Globe, Check,
 } from 'lucide-react';
 
 // Liste plate des catégories B2B avec leur groupe pour l'optgroup du select
@@ -97,6 +97,11 @@ export default function OnboardingPage() {
   const [targetCategory, setTargetCategory] = useState('restaurant'); // sensible default
   const [regionOrDept, setRegionOrDept] = useState('dept:75'); // Paris par défaut
 
+  // Étape 4 — aperçu "premier run" (vrais leads + email IA d'exemple)
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [preview, setPreview] = useState(null); // { leads, example, message }
+  const [previewError, setPreviewError] = useState('');
+
   // ─── Mount : check session + onboarding déjà fait ─────────────────
   useEffect(() => {
     let mounted = true;
@@ -145,9 +150,40 @@ export default function OnboardingPage() {
     return '75';
   }, [regionOrDept]);
 
+  // Ville utilisée pour la recherche Places de l'aperçu (nom du dépt — Places
+  // est tolérant : "restaurant à Bouches-du-Rhône" renvoie des résultats).
+  const cityForSearch = useMemo(() => DEPTS[targetDept]?.name || targetDept, [targetDept]);
+
   const canGoNextStep1 = companyName.trim().length > 0 && role && teamSize;
   const canGoNextStep2 = !!targetCategory;
   const canSubmit = !!targetDept;
+
+  // ─── Étape 4 : lance le "premier run" (vrais leads + email IA) ──────
+  async function startPreview() {
+    if (!canSubmit || previewLoading) return;
+    setStep(4);
+    setPreviewLoading(true);
+    setPreviewError('');
+    setPreview(null);
+    track('first_run_preview', { category: targetCategory, dept: targetDept });
+    try {
+      const res = await fetch('/api/onboarding/first-run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cat: targetCategory, city: cityForSearch }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setPreviewError(data.error || 'Aperçu indisponible — tu peux lancer directement dans ton espace.');
+      } else {
+        setPreview(data);
+      }
+    } catch {
+      setPreviewError('Réseau indisponible — tu peux lancer directement dans ton espace.');
+    } finally {
+      setPreviewLoading(false);
+    }
+  }
 
   // ─── Submit final ─────────────────────────────────────────────────
   async function handleSubmit() {
@@ -227,7 +263,7 @@ export default function OnboardingPage() {
     );
   }
 
-  const pct = Math.round((step / 3) * 100);
+  const pct = step >= 4 ? 100 : Math.round((step / 3) * 100);
 
   return (
     <main className="min-h-screen bg-surface-base text-content-primary">
@@ -251,19 +287,21 @@ export default function OnboardingPage() {
       {/* ─── Wizard container ──────────────────────────────────── */}
       <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 py-20">
         <div className="w-full max-w-xl">
-          {/* Progress bar */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-2 text-[11px] font-medium text-content-tertiary">
-              <span>Étape {step} sur 3</span>
-              <span className="tabular-nums">{pct}%</span>
+          {/* Progress bar (étapes 1-3 ; l'étape 4 est l'aperçu/récompense) */}
+          {step <= 3 && (
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-2 text-[11px] font-medium text-content-tertiary">
+                <span>Étape {step} sur 3</span>
+                <span className="tabular-nums">{pct}%</span>
+              </div>
+              <div className="h-1.5 bg-surface-elevated rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-500 ease-out"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
             </div>
-            <div className="h-1.5 bg-surface-elevated rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-violet-500 to-indigo-500 transition-all duration-500 ease-out"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-          </div>
+          )}
 
           {/* Title hero — visible only on step 1 pour pas trop charger
               ensuite. Donne le contexte "30 secondes" pour rassurer. */}
@@ -520,32 +558,139 @@ export default function OnboardingPage() {
                   type="button"
                   variant="primary"
                   size="lg"
-                  iconRight={Rocket}
-                  onClick={handleSubmit}
-                  disabled={!canSubmit}
-                  loading={submitting}
+                  iconRight={Sparkles}
+                  onClick={startPreview}
+                  disabled={!canSubmit || previewLoading}
+                  loading={previewLoading}
                 >
-                  {submitting ? 'Lancement…' : 'Lancer ma première recherche'}
+                  {previewLoading ? 'Recherche…' : 'Voir mes premiers leads'}
                 </Button>
               </div>
             </div>
           )}
 
-          {/* Step dots */}
-          <div className="mt-6 flex items-center justify-center gap-2">
-            {[1, 2, 3].map((s) => (
-              <span
-                key={s}
-                className={`h-1.5 rounded-full transition-all ${
-                  s === step
-                    ? 'w-6 bg-violet-500'
-                    : s < step
-                      ? 'w-1.5 bg-violet-500/60'
-                      : 'w-1.5 bg-line'
-                }`}
-              />
-            ))}
-          </div>
+          {/* ─── STEP 4 — Aperçu "premier run" (récompense) ──────── */}
+          {step === 4 && (
+            <div
+              key="step-4"
+              className="bg-surface-card border border-line rounded-2xl p-6 sm:p-8 shadow-xl shadow-black/5 animate-in fade-in slide-in-from-right-4 duration-300"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Sparkles size={16} className="text-violet-400" />
+                <h2 className="text-lg font-semibold text-content-primary">Ton premier pipeline, en vrai</h2>
+              </div>
+              <p className="text-xs text-content-tertiary mb-5">
+                Voici de vrais prospects <span className="text-content-primary font-medium">{targetCategory}</span> ({cityForSearch}) + un email que l&apos;IA a écrit pour le premier. C&apos;est exactement ce que Volia Autopilot fait pour toi, en boucle.
+              </p>
+
+              {previewLoading && (
+                <div className="flex flex-col items-center justify-center py-12 gap-3">
+                  <Loader2 className="w-7 h-7 text-violet-500 animate-spin" />
+                  <p className="text-sm text-content-tertiary">Volia scanne {cityForSearch}…</p>
+                </div>
+              )}
+
+              {!previewLoading && previewError && (
+                <div className="px-4 py-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-xs text-amber-700">
+                  {previewError}
+                </div>
+              )}
+
+              {!previewLoading && preview && (
+                <div className="space-y-4">
+                  {/* Leads réels */}
+                  {Array.isArray(preview.leads) && preview.leads.length > 0 ? (
+                    <ul className="space-y-2">
+                      {preview.leads.map((l, i) => (
+                        <li key={i} className="flex items-start justify-between gap-3 px-3 py-2.5 rounded-xl border border-line bg-surface-base">
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-content-primary truncate">{l.name}</p>
+                            <p className="text-[11px] text-content-tertiary truncate">{l.address}</p>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            {l.rating ? (
+                              <span className="inline-flex items-center gap-0.5 text-[11px] text-amber-600 font-medium tabular-nums">
+                                <Star size={11} className="fill-amber-400 text-amber-400" />{l.rating}
+                              </span>
+                            ) : null}
+                            {l.website ? (
+                              <a href={l.website} target="_blank" rel="noopener noreferrer" className="text-content-tertiary hover:text-violet-500" title="Site web">
+                                <Globe size={13} />
+                              </a>
+                            ) : null}
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-xs text-content-tertiary">{preview.message || 'Aucun résultat sur cette cible.'}</p>
+                  )}
+
+                  {/* Email IA d'exemple */}
+                  {preview.example && (
+                    <div className="rounded-xl border border-violet-500/25 bg-violet-500/[0.05] overflow-hidden">
+                      <div className="flex items-center gap-1.5 px-3 py-2 border-b border-violet-500/15 bg-violet-500/[0.04]">
+                        <Mail size={12} className="text-violet-500" />
+                        <span className="text-[11px] font-semibold text-violet-700">Email écrit par l&apos;IA · {preview.example.company}</span>
+                      </div>
+                      <div className="px-3 py-3 space-y-2">
+                        <p className="text-xs"><span className="text-content-tertiary">Objet :</span> <span className="font-semibold text-content-primary">{preview.example.subject}</span></p>
+                        <p className="text-xs text-content-secondary whitespace-pre-wrap leading-relaxed">{preview.example.body}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {error && (
+                <div className="mt-4 px-4 py-3 rounded-xl border border-red-500/30 bg-red-500/10 text-xs text-red-300">
+                  {error}
+                </div>
+              )}
+
+              <div className="mt-7 flex items-center justify-between gap-2">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="lg"
+                  icon={ArrowLeft}
+                  onClick={() => setStep(2)}
+                  disabled={submitting}
+                >
+                  Changer de cible
+                </Button>
+                <Button
+                  type="button"
+                  variant="primary"
+                  size="lg"
+                  iconRight={Rocket}
+                  onClick={handleSubmit}
+                  disabled={submitting || previewLoading}
+                  loading={submitting}
+                >
+                  {submitting ? 'Lancement…' : 'Lancer dans mon espace'}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Step dots (étapes 1-3) */}
+          {step <= 3 && (
+            <div className="mt-6 flex items-center justify-center gap-2">
+              {[1, 2, 3].map((s) => (
+                <span
+                  key={s}
+                  className={`h-1.5 rounded-full transition-all ${
+                    s === step
+                      ? 'w-6 bg-violet-500'
+                      : s < step
+                        ? 'w-1.5 bg-violet-500/60'
+                        : 'w-1.5 bg-line'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </main>

@@ -102,7 +102,7 @@ export default async function CantonChPage({ params }) {
         intro={intro}
         category={null}
         department={cantonAsDept}
-        stats={{ total: '8 500', avgRating: '4.4', withEmail: '78%', withPhone: '92%' }}
+        stats={{ total: '8 500', avgRating: '4.4', withEmail: '~46%', withPhone: '92%' }}
         faq={faq}
         relatedCategories={catLinks}
         relatedDepartments={otherCantons}

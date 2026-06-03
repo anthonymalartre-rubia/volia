@@ -416,7 +416,7 @@ export default function LandingContentEN() {
               {[
                 { icon: Layers, title: 'Waterfall enrichment', desc: 'Scrape the site. Search Google. Guess the pattern. Stop the second we find a real email — so we don\'t burn your quota.' },
                 { icon: Sparkles, title: 'AI search (Claude)', desc: 'Type "50 SaaS founders in Paris" — get a Google Places query in 2 seconds. No filters to learn.' },
-                { icon: Globe, title: 'Full France coverage', desc: 'Access to the entire French B2B landscape via Google Places (live scraping). 78% email hit rate, including landline + mobile phones. Apollo and Hunter sit around 40%.' },
+                { icon: Globe, title: 'Full France coverage', desc: 'Access to the entire French B2B landscape via Google Places (live scraping). We find a verified pro email for ~46% of companies that have a website — landline + mobile too. Apollo and Hunter cover France poorly.' },
                 { icon: Mail, title: 'Native cold email (Business)', desc: '28-day auto warmup, multi-inbox rotation, 94% inbox rate. No Smartlead subscription needed.' },
                 { icon: Zap, title: 'Auto-create deals (Business)', desc: 'Someone replies? A deal shows up in your CRM at Lead stage. No copy-paste, no Zapier, no tabs.' },
                 { icon: Shield, title: 'GDPR by default', desc: 'Personal-email filter, public opt-out, EU hosting, CNIL guidelines. Built-in, not bolted on.' },

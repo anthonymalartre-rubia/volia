@@ -127,6 +127,7 @@ export async function middleware(request) {
     pathname.startsWith('/produits') ||           // pages produits /produits/{prospection,campagnes,crm}
     pathname.startsWith('/pricing') ||            // page tarifs standalone
     pathname.startsWith('/demo') ||               // page demo Cal.com
+    pathname.startsWith('/faq') ||                // page FAQ dédiée
     pathname.startsWith('/en') ||                 // version anglaise (landing + pricing + products)
     pathname.startsWith('/integrations') ||       // pages docs intégrations (hub + Zapier + Make)
     pathname.startsWith('/docs') ||               // help center / documentation

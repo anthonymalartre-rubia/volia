@@ -1,5 +1,4 @@
 import LandingContent from '@/components/LandingContent';
-import { FAQ_ITEMS } from '@/lib/faq-data';
 import { getTrustpilotData, TRUSTPILOT_PROFILE_URL } from '@/lib/trustpilot-data';
 
 const SITE_URL = 'https://volia.fr';
@@ -104,19 +103,9 @@ const softwareApplicationSchema = {
   },
 };
 
-// FAQPage schema — Google renders Q/R rich snippet in SERP
-const faqPageSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQ_ITEMS.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer,
-    },
-  })),
-};
+// Note : le schema FAQPage et la section FAQ ont été déplacés sur /faq
+// (page dédiée). Garder le markup FAQPage ici sans contenu Q/R visible
+// violerait les règles structured-data de Google.
 
 export default function LandingPage() {
   return (
@@ -124,10 +113,6 @@ export default function LandingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageSchema) }}
       />
       <LandingContent />
     </>

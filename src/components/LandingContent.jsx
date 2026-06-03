@@ -7,7 +7,6 @@ import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
 import { PLANS } from '@/lib/plans';
-import FAQSection from '@/components/FAQSection';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -248,7 +247,7 @@ export default function LandingContent() {
             <ProductsMenu label="Produits" locale="fr" />
             <Link href="/pricing" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.pricing')}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">Blog</Link>
-            <Link href="#faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
+            <Link href="/faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
           </div>
           <div className="flex items-center gap-3">
             <LanguageSwitcher />
@@ -1504,8 +1503,7 @@ export default function LandingContent() {
       </section>
 
 
-      {/* FAQ */}
-      <FAQSection />
+      {/* FAQ déplacée sur la page dédiée /faq (allègement de la home). */}
 
       {/* ──────────────────────────────────────────────────────────────
           FINAL CTA — gradient mesh hero-like impactant

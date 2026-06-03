@@ -41,13 +41,17 @@ export default function SupportBotWidget() {
     setSessionId(id);
   }, []);
 
-  if (!shouldShow) return null;
-
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, open]);
+
+  // ⚠️ L'early-return DOIT venir APRÈS tous les hooks (règle des Hooks React).
+  // Sinon, en naviguant app → marketing (shouldShow passe true→false) ou
+  // l'inverse, le composant rend un nombre de hooks différent du render
+  // précédent → React error #300 → crash global de l'app (page 500).
+  if (!shouldShow) return null;
 
   async function handleSend(e) {
     e?.preventDefault();

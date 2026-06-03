@@ -58,14 +58,18 @@ export default function DemoBotWidget() {
     setSessionId(id);
   }, []);
 
-  if (shouldHide) return null;
-
   // Auto-scroll vers bas
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, open]);
+
+  // ⚠️ L'early-return DOIT venir APRÈS tous les hooks (règle des Hooks React).
+  // Sinon, en naviguant marketing → app (shouldHide passe false→true), le
+  // composant rend moins de hooks que le render précédent → React error #300
+  // "Rendered fewer hooks than expected" → crash global de l'app (page 500).
+  if (shouldHide) return null;
 
   async function handleSend(e) {
     e?.preventDefault();

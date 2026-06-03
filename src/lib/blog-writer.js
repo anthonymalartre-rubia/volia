@@ -114,9 +114,9 @@ STRUCTURE :
 
 LIENS INTERNES À INSÉRER NATURELLEMENT (selon pertinence du sujet, 2-4 max) :
 - volia.fr/pricing (tarifs)
-- volia.fr/comparatif/apollo
-- volia.fr/comparatif/lemlist
-- volia.fr/comparatif/hubspot
+- volia.fr/comparatif/apollo-vs-volia
+- volia.fr/comparatif/lemlist-vs-volia
+- volia.fr/comparatif/hubspot-vs-volia
 - volia.fr/etude (étude prospection FR 2026)
 - volia.fr/ressources (lead magnets : templates email, calculateurs)
 - volia.fr/glossaire (termes sales/marketing définis)

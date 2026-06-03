@@ -11,9 +11,9 @@
 // partagé ComparatifPage.jsx (avec force light theme).
 // ─────────────────────────────────────────────────────────────────────
 
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import ComparatifPage from '@/components/ComparatifPage';
-import { getComparatif, getAllComparatifSlugs } from '@/lib/comparatifs';
+import { getComparatif, getAllComparatifSlugs, getCanonicalComparatifSlug } from '@/lib/comparatifs';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 
 const SITE_URL = 'https://volia.fr';
@@ -57,7 +57,13 @@ export async function generateMetadata({ params }) {
 export default async function ComparatifSlugPage({ params }) {
   const { slug } = await params;
   const c = getComparatif(slug);
-  if (!c) notFound();
+  if (!c) {
+    // URL courte (ex. /comparatif/apollo) → redirige vers la page canonique
+    // /comparatif/apollo-vs-volia. Sinon vrai 404.
+    const canonical = getCanonicalComparatifSlug(slug);
+    if (canonical) redirect(`/comparatif/${canonical}`);
+    notFound();
+  }
 
   const url = `${SITE_URL}/comparatif/${slug}`;
 

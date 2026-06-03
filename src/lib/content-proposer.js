@@ -363,7 +363,7 @@ AUTORISÉ ET ENCOURAGÉ :
 - "Volia 179€/mois" vs concurrents x 5-10
 - "Scrape live Google Places" (USP technique réel)
 - "1 founder + Claude" (mention discrète, pas central)
-- Liens vers volia.fr/pricing, volia.fr/changelog, volia.fr/comparatif/apollo
+- Liens vers volia.fr/pricing, volia.fr/changelog, volia.fr/comparatif/apollo-vs-volia
 - Tease "Demo 8min sur Cal" en CTA discret final
 
 ═══════════════════════════════════════════════════════════════════════
@@ -449,7 +449,7 @@ ${angleHints}
 ## CTA AUTORISÉS (mini, en dernière ligne max)
 - volia.fr (générique)
 - volia.fr/pricing (battle prix)
-- volia.fr/comparatif/apollo (versus direct)
+- volia.fr/comparatif/apollo-vs-volia (versus direct)
 - volia.fr/etude (data B2B FR fraîche)
 - "Curieux ? Réponds 'demo' en commentaire" (engagement bait)
 

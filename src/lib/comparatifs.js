@@ -789,6 +789,20 @@ export function getComparatif(slug) {
   return COMPARATIFS[slug] || null;
 }
 
+// Résout une URL courte (ex. "apollo") vers le slug canonique complet
+// (ex. "apollo-vs-volia"). Utilisé pour rediriger /comparatif/apollo —
+// forme référencée par plusieurs liens internes et contenus générés — vers
+// la page canonique, au lieu de renvoyer un 404. Retourne le slug complet
+// si `slug` est déjà canonique OU correspond à un slug court de concurrent,
+// sinon null.
+export function getCanonicalComparatifSlug(slug) {
+  if (COMPARATIFS[slug]) return slug;
+  const match = Object.values(COMPARATIFS).find(
+    (c) => c.competitor?.slug === slug
+  );
+  return match ? match.slug : null;
+}
+
 export function getAllComparatifs() {
   return Object.values(COMPARATIFS);
 }

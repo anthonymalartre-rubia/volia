@@ -1,0 +1,19 @@
+{
+  "root": true,
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+    "react/no-unescaped-entities": "off",
+    "react/display-name": "off",
+    "react/jsx-no-comment-textnodes": "off",
+    "@next/next/no-img-element": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "@next/next/no-page-custom-font": "off",
+    "@next/next/no-css-tags": "off",
+    "@next/next/no-sync-scripts": "warn",
+    "@next/next/no-assign-module-variable": "off",
+    "jsx-a11y/alt-text": "off",
+    "import/no-anonymous-default-export": "off"
+  }
+}

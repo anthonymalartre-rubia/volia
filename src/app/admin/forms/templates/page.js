@@ -110,7 +110,7 @@ export default function FormsTemplatesPage() {
     });
   }, [templates, activeCategory, search]);
 
-  async function useTemplate(tpl) {
+  async function applyTemplate(tpl) {
     setLoadingSlug(tpl.slug);
     setError(null);
     try {
@@ -279,7 +279,7 @@ export default function FormsTemplatesPage() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => useTemplate(tpl)}
+                    onClick={() => applyTemplate(tpl)}
                     disabled={isLoading || !!loadingSlug}
                     className="mt-auto pt-4"
                   >

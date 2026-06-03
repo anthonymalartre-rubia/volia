@@ -719,6 +719,23 @@ export default memo(function ResultsPanel({
     }
   }, []);
 
+  // Count prospects per folder (exclude archived from regular counts).
+  // ⚠️ DOIT rester AVANT l'early-return `if (prospects.length === 0)` ci-dessous
+  // (règle des Hooks : sinon useMemo devient conditionnel → React #300).
+  const folderCounts = useMemo(() => {
+    const counts = { all: 0, unassigned: 0, archived: 0 };
+    for (const p of prospects) {
+      if (p.archived_at) {
+        counts.archived++;
+        continue;
+      }
+      counts.all++;
+      if (!p.folder_id) counts.unassigned++;
+      else counts[p.folder_id] = (counts[p.folder_id] || 0) + 1;
+    }
+    return counts;
+  }, [prospects]);
+
   // Empty state — un user qui atterrit ici sans prospects est au début de
   // son parcours. CTA explicite vers la recherche + 3 chips presets pour
   // l'inspirer sur ce qu'il peut chercher.
@@ -784,20 +801,7 @@ export default memo(function ResultsPanel({
     }
   };
 
-  // Count prospects per folder (exclude archived from regular counts)
-  const folderCounts = useMemo(() => {
-    const counts = { all: 0, unassigned: 0, archived: 0 };
-    for (const p of prospects) {
-      if (p.archived_at) {
-        counts.archived++;
-        continue;
-      }
-      counts.all++;
-      if (!p.folder_id) counts.unassigned++;
-      else counts[p.folder_id] = (counts[p.folder_id] || 0) + 1;
-    }
-    return counts;
-  }, [prospects]);
+  // (folderCounts déplacé plus haut, avant l'early-return — cf. règle des Hooks)
 
   return (
     <div className="space-y-4">

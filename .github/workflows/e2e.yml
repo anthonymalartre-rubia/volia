@@ -70,6 +70,10 @@ jobs:
         env:
           E2E_BASE_URL: http://localhost:3000
           CI: 'true'
+          # Inclut e2e/smoke-prod.spec.js (dont le test de navigation client
+          # marketing → /login) contre le build local → attrape un crash React
+          # #300 (hook après return) avant le déploiement, pas après.
+          E2E_INCLUDE_SMOKE: '1'
 
       - name: Upload Playwright report (on failure)
         if: failure()

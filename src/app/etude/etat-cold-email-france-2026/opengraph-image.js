@@ -4,7 +4,7 @@ export const runtime = 'edge';
 export const revalidate = 86400;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = "Étude exclusive : État du cold email B2B en France 2026 — Volia";
+export const alt = "Benchmark : État du cold email B2B en France 2026 — Volia";
 
 export default async function Image() {
   return new ImageResponse(
@@ -43,7 +43,7 @@ export default async function Image() {
             </div>
           </div>
           <div style={{ padding: '10px 18px', borderRadius: '999px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.4)', color: '#c4b5fd', fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', display: 'flex' }}>
-            ✉️ Étude exclusive · Mai 2026
+            ✉️ Benchmark · Mai 2026
           </div>
         </div>
 
@@ -54,7 +54,7 @@ export default async function Image() {
             <span style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 100%)', backgroundClip: 'text', color: 'transparent', WebkitBackgroundClip: 'text' }}>en France 2026</span>
           </div>
           <div style={{ fontSize: '26px', color: '#a1a1aa', lineHeight: 1.4, maxWidth: '950px' }}>
-            12 chiffres clés · 287 000+ entreprises analysées · 14 800 campagnes · RGPD · IA
+            Les chiffres réalistes · Réponse · Relances · Séquences · RGPD
           </div>
         </div>
 
@@ -62,20 +62,20 @@ export default async function Image() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', gap: '36px' }}>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>62 %</div>
-              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>taux ouverture</div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>8,4 %</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>1-5 %</div>
               <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>taux réponse</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>47 %</div>
-              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>sans email pro</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>55-65 %</div>
+              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>via les relances</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>1,20 €</div>
-              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>coût / email</div>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>0 %</div>
+              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>emails devinés</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ fontSize: '32px', fontWeight: 700, color: '#a78bfa' }}>~46 %</div>
+              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>find-rate email</div>
             </div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr/etude</div>

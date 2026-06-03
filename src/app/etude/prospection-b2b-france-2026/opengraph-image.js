@@ -4,7 +4,7 @@ export const runtime = 'edge';
 export const revalidate = 86400;
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = "Étude exclusive : L'État de la Prospection B2B en France 2026 — Volia";
+export const alt = "Étude : L'État de la Prospection B2B en France 2026 — Volia";
 
 export default async function Image() {
   return new ImageResponse(
@@ -43,7 +43,7 @@ export default async function Image() {
             </div>
           </div>
           <div style={{ padding: '10px 18px', borderRadius: '999px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.4)', color: '#c4b5fd', fontSize: '14px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1.5px', display: 'flex' }}>
-            ✨ Étude exclusive
+            ✨ Étude Volia
           </div>
         </div>
 
@@ -54,7 +54,7 @@ export default async function Image() {
             <span style={{ background: 'linear-gradient(135deg, #a78bfa 0%, #818cf8 100%)', backgroundClip: 'text', color: 'transparent', WebkitBackgroundClip: 'text' }}>en France 2026</span>
           </div>
           <div style={{ fontSize: '26px', color: '#a1a1aa', lineHeight: 1.4, maxWidth: '950px' }}>
-            38 chiffres clés · Coûts réels · Performance cold email · RGPD · 14 régions · 12 secteurs
+            Le marché · Coûts réels · Cold email · RGPD · Couverture Volia
           </div>
         </div>
 
@@ -66,16 +66,16 @@ export default async function Image() {
               <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>entreprises FR</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '24px', fontWeight: 700, color: '#a78bfa' }}>8-15 %</div>
+              <div style={{ fontSize: '24px', fontWeight: 700, color: '#a78bfa' }}>~40 000</div>
+              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>analysées</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ fontSize: '24px', fontWeight: 700, color: '#a78bfa' }}>1-5 %</div>
               <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>reply cold email</div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ fontSize: '24px', fontWeight: 700, color: '#a78bfa' }}>450 €</div>
               <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>coût / lead B2B</div>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ fontSize: '24px', fontWeight: 700, color: '#a78bfa' }}>101</div>
-              <div style={{ fontSize: '12px', color: '#71717a', textTransform: 'uppercase', letterSpacing: '1px' }}>départements</div>
             </div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr/etude</div>

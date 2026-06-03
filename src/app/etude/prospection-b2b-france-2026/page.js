@@ -15,7 +15,7 @@ const PUBLISHED_AT = '2026-05-20';
 export const metadata = {
   title: "L'État de la Prospection B2B en France 2026 — Étude Volia",
   description:
-    "Benchmark exclusif du marché français de la prospection B2B en 2026 : 38 chiffres clés, performance cold email, conformité RGPD, couverture par secteur et par région. Données publiques + analyse Volia.",
+    "Benchmark du marché français de la prospection B2B en 2026 : taille du marché, coûts réels, performance cold email, conformité RGPD. Sources publiques officielles + données de couverture Volia (~40 000 entreprises analysées).",
   alternates: { canonical: STUDY_URL },
   keywords: [
     'étude prospection b2b france 2026',
@@ -27,7 +27,7 @@ export const metadata = {
   openGraph: {
     title: "L'État de la Prospection B2B en France 2026",
     description:
-      "38 chiffres clés sur le marché français de la prospection B2B : coûts, performance cold email, conformité RGPD, couverture par secteur et région.",
+      "Les chiffres clés du marché français de la prospection B2B : coûts, performance cold email, conformité RGPD, couverture par secteur et région.",
     url: STUDY_URL,
     type: 'article',
     publishedTime: PUBLISHED_AT,
@@ -40,11 +40,11 @@ export const metadata = {
 
 const HERO_STATS = [
   { value: '4,8 M', label: "d'entreprises actives en France", source: 'INSEE 2026' },
-  { value: '101', label: 'départements couverts par Volia', source: 'Volia 2026' },
+  { value: '~40 000', label: 'entreprises françaises analysées par Volia', source: 'Volia 2026' },
   { value: '19 €', label: "ticket d'entrée mensuel le moins cher du marché", source: 'Benchmark concurrents 2026' },
-  { value: '8-15 %', label: 'taux de réponse moyen cold email B2B FR', source: 'Smartlead + Belkins 2026' },
-  { value: '450 €', label: "coût moyen d'un lead B2B qualifié en France", source: "Forrester + analyse marché 2025" },
-  { value: '€20 M', label: 'amende max CNIL pour non-conformité B2B', source: 'CNIL — RGPD art. 83' },
+  { value: '1-5 %', label: 'taux de réponse moyen cold email B2B (top 10-15 %)', source: 'Belkins + Instantly 2025' },
+  { value: '80-450 €', label: "coût d'un lead B2B qualifié (MQL) en France", source: 'Forrester 2025' },
+  { value: '20 M€', label: 'amende max RGPD (ou 4 % du CA mondial)', source: 'RGPD art. 83' },
 ];
 
 const MARKET_SECTIONS = [
@@ -108,12 +108,12 @@ const COST_STATS = [
 ];
 
 const COLD_EMAIL_PERF = [
-  { metric: 'Taux d\'ouverture moyen', value: '40-55 %', note: 'Apple Mail Privacy fausse les chiffres depuis 2021', source: 'Smartlead 2026' },
-  { metric: 'Taux de réponse moyen', value: '8-15 %', note: 'Au-delà = excellent. En dessous de 5 % = revoir le ciblage.', source: 'Belkins + Lemlist 2026' },
-  { metric: 'Taux de meeting réservé', value: '2-5 %', note: 'Après personnalisation et 3-4 relances', source: 'Pavilion 2025' },
-  { metric: 'Nombre moyen de touches avant réponse', value: '5-12', note: '80 % des deals closent entre la 5e et la 12e relance', source: 'Brevet + Marketing Donut 2025' },
-  { metric: 'Meilleur jour d\'envoi (France)', value: 'Mardi & jeudi', note: '9h-11h ou 14h-16h, hors vendredi PM', source: 'GetResponse + Yesware 2025' },
-  { metric: 'Volume max recommandé par boîte / jour', value: '50-100', note: 'Au-delà : risque de blacklist et de spam folder', source: 'Smartlead 2026' },
+  { metric: 'Taux de réponse moyen', value: '1-5 %', note: 'Médian 3-6 %. Au-delà de 10-15 % = excellent. En dessous de 2 % = revoir ciblage/délivrabilité.', source: 'Belkins + Instantly 2025' },
+  { metric: 'Taux d\'ouverture moyen', value: '~27 %', note: 'Peu fiable depuis Apple Mail Privacy : la réponse est la seule vraie métrique.', source: 'Instantly + Mailforge 2026' },
+  { metric: 'Part des réponses issues des relances', value: '55-65 %', note: 'La majorité des réponses arrive après le 1er mail, pas dessus.', source: 'Belkins + thedigitalbloom 2025' },
+  { metric: 'Longueur de séquence optimale', value: '3-5 mails', note: 'Sur ~20 jours. Au-delà : gain marginal et risque de plaintes.', source: 'Instantly + Belkins 2025' },
+  { metric: 'Effet de la taille d\'envoi', value: '5,8 % vs 2,1 %', note: 'Envois < 50 destinataires vs gros volumes : le ciblage serré double les réponses.', source: 'Built For B2B + Instantly 2025' },
+  { metric: 'Volume max recommandé par boîte / jour', value: '50-100', note: 'Au-delà : risque de blacklist et de spam folder.', source: 'Instantly 2026' },
 ];
 
 const RGPD_STATS = [
@@ -172,9 +172,9 @@ const FAQ = [
       "Environ 4,8 millions d'entreprises actives selon l'INSEE 2026 (toutes tailles confondues, y compris auto-entrepreneurs). Le segment réellement adressable en prospection B2B se concentre sur environ 1,8 million d'entreprises ayant un site web et au moins 1 salarié.",
   },
   {
-    question: "Quel est le taux de réponse moyen d'un cold email en France ?",
     answer:
-      "Entre 8 % et 15 % selon les benchmarks Smartlead, Belkins et Lemlist 2026. En dessous de 5 % : revoir le ciblage. Au-dessus de 15 % : excellent ciblage, on peut pousser le volume. Les taux d'ouverture (40-55 %) sont moins fiables depuis Apple Mail Privacy (2021).",
+      "Entre 1 % et 5 % en moyenne selon les benchmarks publics (Belkins, Instantly 2025), avec un médian autour de 3-6 %. En dessous de 2 % : revoir le ciblage et la délivrabilité. Au-dessus de 10-15 % : excellent, on peut pousser le volume. Le taux d'ouverture (~27 %) est peu fiable depuis Apple Mail Privacy — la réponse reste la seule vraie métrique. À noter : 55-65 % des réponses arrivent via les relances, pas sur le 1er mail.",
+    question: "Quel est le taux de réponse moyen d'un cold email en France ?",
   },
   {
     question: "Combien coûte vraiment un lead B2B qualifié en France ?",
@@ -199,7 +199,7 @@ const TOC = [
   { id: 'couts', label: 'Combien ça coûte vraiment' },
   { id: 'cold-email', label: 'Performance cold email' },
   { id: 'rgpd', label: 'Conformité RGPD' },
-  { id: 'secteurs', label: 'Couverture par secteur' },
+  { id: 'secteurs', label: 'Ce que révèlent nos données' },
   { id: 'regions', label: 'Disparités régionales' },
   { id: 'predictions', label: 'Prédictions 2026-2027' },
   { id: 'faq', label: 'FAQ' },
@@ -245,7 +245,7 @@ const jsonLd = {
       '@id': `${STUDY_URL}#dataset`,
       name: "Benchmark de la prospection B2B en France 2026",
       description:
-        "38 indicateurs consolidés sur le marché français de la prospection B2B : taille du marché par secteur (8 segments), coûts (CAC, salaires SDR, prix outils), performance cold email (taux ouverture, réponse, meeting), conformité RGPD (sanctions CNIL), couverture par région (14 régions, 101 départements).",
+        "Indicateurs consolidés sur le marché français de la prospection B2B : taille du marché par secteur (8 segments), coûts (CAC, salaires SDR, prix outils), performance cold email (sources publiques), conformité RGPD (sanctions CNIL), couverture par région (14 régions) et données de couverture Volia (~40 000 entreprises analysées).",
       url: STUDY_URL,
       keywords: ['prospection B2B', 'cold email', 'RGPD', 'France', 'CAC', 'SDR'],
       creator: {
@@ -301,7 +301,7 @@ export default function EtudePage() {
           <div className="flex items-center gap-3 text-xs text-content-tertiary mb-4 flex-wrap">
             <span className="px-2.5 py-1 rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/30 inline-flex items-center gap-1.5 font-semibold uppercase tracking-wider">
               <Sparkles size={11} />
-              Étude exclusive
+              Étude Volia
             </span>
             <span className="inline-flex items-center gap-1"><Calendar size={11} />Publié le 20 mai 2026</span>
             <span>·</span>
@@ -316,9 +316,9 @@ export default function EtudePage() {
           </h1>
 
           <p className="text-lg sm:text-xl text-content-secondary leading-relaxed mb-10 max-w-3xl">
-            38 chiffres clés consolidés sur le marché français de la prospection B2B :
+            Les chiffres clés du marché français de la prospection B2B :
             taille du marché, coûts réels, performance du cold email, conformité RGPD,
-            couverture par secteur et par région.
+            et ce que révèlent les données de couverture de Volia (~40 000 entreprises analysées).
           </p>
 
           {/* HERO STATS GRID */}
@@ -499,35 +499,41 @@ export default function EtudePage() {
           <section id="secteurs" className="mb-14 scroll-mt-24">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 flex items-center gap-2">
               <BarChart3 size={24} className="text-violet-400" />
-              6. Couverture par secteur (data Volia)
+              6. Ce que révèlent les données Volia
             </h2>
             <p className="text-content-secondary leading-relaxed mb-6">
-              Volia identifie automatiquement les entreprises de <strong className="text-content-primary">150+ catégories</strong>
-              via Google Places, réparties en 12 grands secteurs B2B + 3 groupes copropriété. Le taux d&apos;email trouvé varie
-              selon la maturité digitale du secteur :
+              Volia identifie les entreprises de <strong className="text-content-primary">150+ catégories</strong> via Google Places,
+              puis cherche l&apos;email professionnel par un waterfall multi-sources. Voici ce qu&apos;on observe sur un échantillon de{' '}
+              <strong className="text-content-primary">~40 000 entreprises françaises</strong> analysées (83 départements représentés) :
             </p>
 
-            <div className="space-y-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               {[
-                { sector: 'Tech & SaaS', rate: 92 },
-                { sector: 'Agences digitales', rate: 88 },
-                { sector: 'Conseil & services aux entreprises', rate: 85 },
-                { sector: 'Finance & banque', rate: 82 },
-                { sector: 'Santé & médical', rate: 78 },
-                { sector: 'Hôtellerie', rate: 75 },
-                { sector: 'Commerce & retail', rate: 71 },
-                { sector: 'Restauration', rate: 68 },
-                { sector: 'BTP & artisans', rate: 54 },
-                { sector: 'Automobile', rate: 64 },
-                { sector: 'Industrie', rate: 73 },
-                { sector: 'Immobilier', rate: 81 },
+                { v: '~40 000', l: 'entreprises analysées' },
+                { v: '83', l: 'départements représentés' },
+                { v: '4,57/5', l: 'note Google moyenne' },
+                { v: '142', l: 'avis Google en moyenne' },
+              ].map((k) => (
+                <div key={k.l} className="rounded-xl border border-line bg-surface-card p-4 text-center">
+                  <div className="text-xl font-bold text-violet-300">{k.v}</div>
+                  <div className="text-[11px] text-content-tertiary mt-1 leading-snug">{k.l}</div>
+                </div>
+              ))}
+            </div>
+
+            <h3 className="font-semibold text-content-primary mb-3">D&apos;où viennent les emails trouvés par Volia</h3>
+            <div className="space-y-2 mb-3">
+              {[
+                { label: 'Scrapés directement sur le site officiel', rate: 70 },
+                { label: 'Trouvés via une recherche Google', rate: 30 },
+                { label: 'Devinés par pattern (contact@, info@…)', rate: 0 },
               ].map((s) => (
-                <div key={s.sector} className="flex items-center gap-3">
-                  <div className="w-44 text-sm text-content-secondary flex-shrink-0">{s.sector}</div>
+                <div key={s.label} className="flex items-center gap-3">
+                  <div className="w-52 sm:w-64 text-sm text-content-secondary flex-shrink-0">{s.label}</div>
                   <div className="flex-1 h-7 rounded-md bg-surface-elevated overflow-hidden relative">
                     <div
                       className="h-full bg-gradient-to-r from-violet-600 to-indigo-500 flex items-center justify-end pr-2"
-                      style={{ width: `${s.rate}%` }}
+                      style={{ width: `${Math.max(s.rate, 2)}%` }}
                     >
                       <span className="text-xs font-mono font-semibold text-white">{s.rate} %</span>
                     </div>
@@ -535,8 +541,28 @@ export default function EtudePage() {
                 </div>
               ))}
             </div>
+            <p className="text-sm text-content-secondary leading-relaxed mb-8">
+              <strong className="text-content-primary">0 % d&apos;emails devinés.</strong> Chaque email de notre base est soit
+              scrapé sur le site de l&apos;entreprise, soit issu d&apos;une recherche Google — jamais fabriqué par pattern. C&apos;est
+              un choix assumé : un email deviné bounce, abîme la réputation d&apos;envoi, et n&apos;a aucune valeur en prospection sérieuse.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { v: '~46 %', l: "des entreprises avec un site web obtiennent un email pro vérifié (zones enrichies)" },
+                { v: '95,6 %', l: 'disposent d’un téléphone public' },
+                { v: '75,3 %', l: 'disposent d’un site web' },
+              ].map((k) => (
+                <div key={k.l} className="rounded-xl border border-line bg-surface-card p-4">
+                  <div className="text-2xl font-bold text-violet-300 mb-1">{k.v}</div>
+                  <div className="text-xs text-content-secondary leading-snug">{k.l}</div>
+                </div>
+              ))}
+            </div>
             <p className="text-xs text-content-tertiary mt-3 italic">
-              Source : Données agrégées Volia (waterfall scraping + Serper + patterns) sur 100 000+ enrichissements en 2025-2026.
+              Source : données de couverture agrégées Volia (Google Places + waterfall), échantillon ~40 000 entreprises, 2025-2026.
+              Le taux de découverte d&apos;email dépend fortement de la présence d&apos;un site : environ 1 entreprise sur 4 n&apos;en a pas
+              et reste surtout joignable par téléphone — d&apos;où l&apos;intérêt du multicanal.
             </p>
           </section>
 

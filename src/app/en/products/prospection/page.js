@@ -11,7 +11,7 @@ const FR_PAGE = `${SITE_URL}/produits/prospection`;
 
 export const metadata = {
   title: 'Volia Prospecting - French B2B emails + phones, from $21/mo',
-  description: "Find emails AND phone numbers (landline + mobile) for any French B2B company. Access to 287,000+ companies via Google Places (live scraping), 150+ industries, 101 departments. Waterfall enrichment, GDPR by default. From $21/mo, no card.",
+  description: "Find emails AND phone numbers (landline + mobile) for any French B2B company. Access to the entire French B2B landscape via Google Places (live scraping), 150+ industries, 101 departments. Waterfall enrichment, GDPR by default. From $21/mo, no card.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -23,7 +23,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia Prospecting - Find B2B emails + phone numbers in 30 seconds',
-    description: '287,000+ French companies via Google Places. Email + landline + mobile. From $21/mo. GDPR by default.',
+    description: 'the entire French B2B landscape via Google Places. Email + landline + mobile. From $21/mo. GDPR by default.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -86,7 +86,7 @@ const FAQ = [
   { q: 'Do you get mobile phones too, or just landlines?', a: 'Both. Starter and Solo get landline numbers (when published on the company site). Pro and Business add mobile phone enrichment — same waterfall logic, just more sources tried. You always see the type (landline/mobile) per row.' },
   { q: 'Is it GDPR-compliant?', a: 'Yes. Built that way from day one, not bolted on later. Legitimate interest basis, opt-out on every email, public removal page, permanent blocklist. 28 personal-email domains blocked by default. EU hosting. CNIL guidelines. Your DPO will sleep at night.' },
   { q: 'Does it work outside metropolitan France?', a: 'Yes — all 5 overseas departments (Guadeloupe 971, Martinique 972, Guyane 973, Réunion 974, Mayotte 976). Same APIs, same categories, same price. Apollo and Hunter have near-zero coverage there. We don\'t.' },
-  { q: 'How is Volia different from a generic prospecting tool?', a: 'Three things. (1) France-specialized — 287k+ FR companies accessible via Google Places, 78% email coverage. Generalist tools sit around 40% on France. (2) Phone numbers on every row, landline + mobile (Pro+). (3) Waterfall that stops the second we find an email — your monthly quota is never wasted on useless external API calls.' },
+  { q: 'How is Volia different from a generic prospecting tool?', a: 'Three things. (1) France-specialized — all French B2B companies accessible via Google Places, 78% email coverage. Generalist tools sit around 40% on France. (2) Phone numbers on every row, landline + mobile (Pro+). (3) Waterfall that stops the second we find an email — your monthly quota is never wasted on useless external API calls.' },
   { q: 'Is there a daily enrichment limit?', a: 'No daily cap. You get a monthly quota based on your plan (20 / 400 / 1,200 / 10,000 enrichments). Use it all on Monday, spread it across the month — your call.' },
 ];
 
@@ -105,14 +105,14 @@ export default function EnProspectionPage() {
         h1After: '30 seconds. Go.',
         subtitle: (
           <>
-            <strong className="text-content-primary font-semibold">287,000+ French companies</strong> accessible via Google Places — emails, landlines, and mobile numbers all scraped in cascade.{' '}
+            <strong className="text-content-primary font-semibold">the entire French B2B landscape</strong> accessible via Google Places — emails, landlines, and mobile numbers all scraped in cascade.{' '}
             <strong className="text-emerald-700 font-semibold">From $21/mo</strong>. GDPR by default.
           </>
         ),
         ctaPrimary: { label: 'Start free', href: '/signup?plan=free' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
-          (<><strong className="font-mono text-content-secondary">287,000+</strong> companies</>),
+          (<><strong className="font-mono text-content-secondary">All</strong> French B2B</>),
           (<><strong className="font-mono text-content-secondary">101</strong> departments</>),
           (<><strong className="font-mono text-content-secondary">150+</strong> industries</>),
           (<><ShieldCheck size={12} className="text-emerald-600" /> GDPR by default</>),

@@ -840,7 +840,7 @@ export default function CampagnesProductPage() {
         crossSell={{
           subtitle: 'Campagnes consomme les prospects de Prospection et alimente le CRM dès qu\'un prospect répond. Boucle complète, zéro copier-coller.',
           otherModules: [
-            { module: 'prospection', direction: 'in', desc: 'La source de vos prospects. 287 k+ entreprises FR accessibles via Google Places, 150+ secteurs, emails enrichis et scorés.', cta: 'Découvrir Prospection' },
+            { module: 'prospection', direction: 'in', desc: 'La source de vos prospects. tout le tissu B2B français accessibles via Google Places, 150+ secteurs, emails enrichis et scorés.', cta: 'Découvrir Prospection' },
             { module: 'crm', direction: 'out', desc: 'Chaque reply devient un deal au stage Lead. Pipeline Kanban natif Volia, déjà LIVE.', cta: 'Découvrir le CRM' },
           ],
         }}

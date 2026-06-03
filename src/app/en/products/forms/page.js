@@ -137,7 +137,7 @@ export default function EnFormsPage() {
       crossSell={{
         subtitle: 'Forms feeds the CRM. Triggers Campaigns sequences. All inside Business. Inbound loop, on autopilot.',
         otherModules: [
-          { module: 'prospection', direction: 'in', desc: 'Top-of-funnel outbound. 287k+ FR companies, emails + phones. Available on every paid plan.', cta: 'See Prospecting' },
+          { module: 'prospection', direction: 'in', desc: 'Top-of-funnel outbound. all French B2B companies, emails + phones. Available on every paid plan.', cta: 'See Prospecting' },
           { module: 'crm', direction: 'out', desc: 'Every submission = a contact at Lead stage. Native Kanban pipeline.', cta: 'See CRM' },
           { module: 'campagnes', direction: 'out', desc: 'Optionally add submissions to a Campaigns list and fire sequences automatically.', cta: 'See Campaigns' },
         ],

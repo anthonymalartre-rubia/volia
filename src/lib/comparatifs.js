@@ -57,7 +57,7 @@ export const COMPARATIFS = {
       h1: 'Apollo vs Volia : lequel choisir en 2026 ?',
       subtitle: (
         // text-only used as JSX in component — keep as plain string with markers
-        "Apollo.io facture 99 $/mois pour 40 % de couverture France. Volia propose 287 000+ entreprises françaises à partir de 19 €/mois — une économie moyenne de 80 €/mois pour les freelances et 130 €/mois pour les équipes growth. Comparatif exhaustif, sans langue de bois."
+        "Apollo.io facture 99 $/mois pour 40 % de couverture France. Volia propose tout le tissu B2B français à partir de 19 €/mois — une économie moyenne de 80 €/mois pour les freelances et 130 €/mois pour les équipes growth. Comparatif exhaustif, sans langue de bois."
       ),
       ctaPrimary: { label: 'Essayer Volia gratuitement', href: '/signup?plan=starter' },
       ctaSecondary: { label: 'Voir le tableau comparatif', href: '#comparatif-features' },
@@ -74,7 +74,7 @@ export const COMPARATIFS = {
       { label: 'Prix Pro (5k contacts)', apollo: '99 $/mo (~92 €)', volia: '49 €/mo (Pro)', voliaWins: true },
       { label: 'Prix scale (10k+)', apollo: '149 $/mo + emails illimités', volia: '149 €/mo (Business)', voliaWins: true },
       { label: 'Plan gratuit', apollo: '60 crédits/mois', volia: '100 prospects/mois', voliaWins: true },
-      { label: 'Base de contacts', apollo: '220M (monde)', volia: '287k entreprises FR vérifiées', voliaWins: null },
+      { label: 'Base de contacts', apollo: '220M (monde)', volia: 'tout le B2B FR vérifié', voliaWins: null },
       { label: 'Couverture PME France', apollo: '~40 %', volia: '78 % (#1 marché FR)', voliaWins: true },
       { label: 'Note Trustpilot', apollo: '4,3 / 5', volia: '4,8 / 5 (FR)', voliaWins: true },
       { label: 'Marché cible', apollo: '🇺🇸 USA / international', volia: '🇫🇷 France + DOM-TOM', voliaWins: null },
@@ -148,7 +148,7 @@ export const COMPARATIFS = {
     analyses: [
       {
         title: 'Couverture France : qui gagne vraiment ?',
-        body: "Apollo annonce fièrement 220 millions de contacts mondiaux. C'est vrai. Mais dans le détail, sa base française est constituée majoritairement de profils LinkedIn scrapés, avec une fraîcheur souvent supérieure à 18 mois. Sur les PME (TPE + ETI), la couverture réelle plafonne autour de 40 % — testez vous-même : cherchez \"boulangerie Lille\" sur Apollo, vous remonterez 8-12 résultats. Sur Volia, vous en aurez 200+, sourcés via Google Places (mis à jour quotidiennement par les commerçants eux-mêmes). Volia n'a pas la profondeur mondiale d'Apollo, mais sur la France elle gagne sur le terrain : 287 000+ entreprises actives, 78 % de couverture sur les PME, et un waterfall qui va chercher l'email là où Apollo abandonne (scraping du site puis Google via Serper avant le pattern guessing). Pour cibler la France, Volia est mathématiquement meilleur. Pour cibler l'international, Apollo reste devant.",
+        body: "Apollo annonce fièrement 220 millions de contacts mondiaux. C'est vrai. Mais dans le détail, sa base française est constituée majoritairement de profils LinkedIn scrapés, avec une fraîcheur souvent supérieure à 18 mois. Sur les PME (TPE + ETI), la couverture réelle plafonne autour de 40 % — testez vous-même : cherchez \"boulangerie Lille\" sur Apollo, vous remonterez 8-12 résultats. Sur Volia, vous en aurez 200+, sourcés via Google Places (mis à jour quotidiennement par les commerçants eux-mêmes). Volia n'a pas la profondeur mondiale d'Apollo, mais sur la France elle gagne sur le terrain : tout le tissu B2B français, 78 % de couverture sur les PME, et un waterfall qui va chercher l'email là où Apollo abandonne (scraping du site puis Google via Serper avant le pattern guessing). Pour cibler la France, Volia est mathématiquement meilleur. Pour cibler l'international, Apollo reste devant.",
       },
       {
         title: 'Fonctionnalités prospection : qui est plus complet ?',
@@ -596,7 +596,7 @@ export const COMPARATIFS = {
       { section: 'Prospection — Découverte de prospects' },
       { label: 'Trouver des prospects par catégorie', apollo: 'no', volia: 'yes', note: 'HubSpot : zéro découverte, intégration Apollo nécessaire.' },
       { label: 'Recherche par département / région FR', apollo: 'no', volia: 'yes' },
-      { label: 'Base d\'entreprises France', apollo: 'no', volia: 'yes', note: 'Volia : 287k entreprises FR.' },
+      { label: 'Base d\'entreprises France', apollo: 'no', volia: 'yes', note: 'Volia : tout le tissu B2B français.' },
       { label: 'Enrichissement email natif', apollo: 'partial', volia: 'yes', note: 'HubSpot : Breeze AI enrichit existant, ne découvre pas.' },
       { label: 'Waterfall multi-sources', apollo: 'no', volia: 'yes' },
       { label: 'Téléphones inclus', apollo: 'partial', volia: 'yes' },

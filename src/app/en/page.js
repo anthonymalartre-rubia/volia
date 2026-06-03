@@ -14,7 +14,7 @@ const PAGE_URL = `${SITE_URL}/en`;
 
 export const metadata = {
   title: 'Volia - Find B2B emails and phone numbers in 30 seconds. From $21/mo',
-  description: 'The French B2B lead generator. Access to 287,000+ companies via Google Places (live scraping), email + phone (landline & mobile), waterfall enrichment, GDPR by default. From $21 (EUR 19) / month, no card. Business plan ($169/mo) adds Campaigns + CRM + Forms.',
+  description: 'The French B2B lead generator. Access to the entire French B2B landscape via Google Places (live scraping), email + phone (landline & mobile), waterfall enrichment, GDPR by default. From $21 (EUR 19) / month, no card. Business plan ($169/mo) adds Campaigns + CRM + Forms.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -26,7 +26,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia - B2B email + phone generator from $21/mo',
-    description: 'Find verified B2B emails + phone numbers in 30 seconds. 287,000+ French companies accessible via Google Places. GDPR by default.',
+    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape accessible via Google Places. GDPR by default.',
     url: PAGE_URL,
     siteName: 'Volia',
     locale: 'en_US',
@@ -35,7 +35,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Volia - B2B email + phone generator from $21/mo',
-    description: 'Find verified B2B emails + phone numbers in 30 seconds. 287,000+ French companies accessible via Google Places. GDPR by default.',
+    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape accessible via Google Places. GDPR by default.',
   },
   robots: {
     index: true,
@@ -52,12 +52,12 @@ const softwareApplicationSchema = {
   applicationCategory: 'BusinessApplication',
   applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
-  description: 'B2B lead generator built in France. Find verified emails and phone numbers (landline + mobile) for 287,000+ French companies accessible via Google Places (live scraping) + waterfall enrichment. Plus optional Campaigns + CRM + Forms on Business plan. Starts at $21 (EUR 19) per month.',
+  description: 'B2B lead generator built in France. Find verified emails and phone numbers (landline + mobile) for the entire French B2B landscape accessible via Google Places (live scraping) + waterfall enrichment. Plus optional Campaigns + CRM + Forms on Business plan. Starts at $21 (EUR 19) per month.',
   url: PAGE_URL,
   inLanguage: 'en-US',
   countriesSupported: ['FR', 'US', 'GB'],
   featureList: [
-    'B2B prospecting across 287,000+ French companies',
+    'B2B prospecting across the entire French B2B landscape',
     'Waterfall email + phone enrichment (scraping + Google search + patterns)',
     'Landline + mobile phone numbers scraped',
     'AI natural-language search powered by Claude',

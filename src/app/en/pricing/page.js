@@ -6,7 +6,7 @@ const FR_PRICING = `${SITE_URL}/pricing`;
 
 export const metadata = {
   title: 'Volia Pricing - B2B email + phone generator from $21/mo (EUR 19)',
-  description: 'Find verified B2B emails + phone numbers in 30 seconds. 287,000+ French companies. GDPR-native. From $21/mo, no card. Business $169/mo (12-month launch promo, then $199/mo) unlocks Campaigns + CRM + Forms.',
+  description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape. GDPR-native. From $21/mo, no card. Business $169/mo (12-month launch promo, then $199/mo) unlocks Campaigns + CRM + Forms.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -18,7 +18,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia Pricing - B2B email + phone generator from $21/mo',
-    description: 'Find verified B2B emails + phone numbers in 30 seconds. 287,000+ French companies. GDPR-native. From $21/mo, no card.',
+    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape. GDPR-native. From $21/mo, no card.',
     url: PAGE_URL,
     siteName: 'Volia',
     locale: 'en_US',
@@ -32,7 +32,7 @@ const PRODUCT_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: 'Volia - B2B email + phone generator',
-  description: 'B2B sales suite built in France. Prospecting (287k+ verified French companies, waterfall email + phone enrichment) + optional Campaigns + CRM + Forms on Business plan.',
+  description: 'B2B sales suite built in France. Prospecting (the full French B2B landscape (verified), waterfall email + phone enrichment) + optional Campaigns + CRM + Forms on Business plan.',
   url: PAGE_URL,
   brand: { '@type': 'Brand', name: 'Volia' },
   offers: {

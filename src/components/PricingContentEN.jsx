@@ -151,7 +151,7 @@ const COMPARE_SECTIONS = [
       ['AI natural-language search', true, true, true, true],
       ['CSV exports', '5/mo', 'Unlimited', 'Unlimited', 'Unlimited'],
       ['Folders / lists', '3', '10', 'Unlimited', 'Unlimited'],
-      ['287,000+ French companies', true, true, true, true],
+      ['the entire French B2B landscape', true, true, true, true],
       ['101 departments (overseas included)', true, true, true, true],
       ['150+ B2B industries', true, true, true, true],
     ],
@@ -249,7 +249,7 @@ const FAQ = [
   },
   {
     q: 'Is everything really included in the price?',
-    a: 'Yes. Access to 287,000+ French companies (101 departments x 150+ sectors), waterfall enrichment, CSV exports, transactional emails. No hidden feature behind a paywall.',
+    a: 'Yes. Access to the entire French B2B landscape (101 departments x 150+ sectors), waterfall enrichment, CSV exports, transactional emails. No hidden feature behind a paywall.',
   },
   {
     q: 'Is the CRM really in Business?',

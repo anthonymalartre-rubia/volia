@@ -372,7 +372,7 @@ export default function LandingContent() {
                 />
               </div>
 
-              {/* Trust strip sous hero — 4 signaux factuels (287k = chiffre VRAI).
+              {/* Trust strip sous hero — 4 signaux factuels (couverture = tout le tissu B2B FR).
                   TODO Anthony : remplace l'avatars stack par le compteur MRR/founders
                   quand tu auras les chiffres réels. */}
               <div className="flex items-center gap-3 mb-6">
@@ -685,7 +685,7 @@ export default function LandingContent() {
           <MotionInView>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               {[
-                { value: '287 000+', label: 'entreprises accessibles via Google Places' },
+                { value: '0', label: 'email deviné — 100 % vérifiés' },
                 { value: '101', label: 'départements France + Belgique + Suisse romande' },
                 { value: '150+', label: 'catégories B2B (commerce de proximité aux SaaS)' },
                 // TODO Anthony : remplace "founders" par chiffre réel (MRR ou nb clients payants)

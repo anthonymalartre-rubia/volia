@@ -14,6 +14,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { applyTemplate, appendOptOutFooter } from '@/lib/campaign-templates';
+import { expandSpintax } from '@/lib/email-deliverability';
 import { cleanEnv } from '@/lib/envClean';
 import { logEmailSentToCrm } from '@/lib/crm-activity-logger';
 import { buildCampaignReplyAddress } from '@/lib/inbound-domain';
@@ -454,9 +455,10 @@ async function handleCron(request) {
     if (chosenVariant === 2 && campaign.subject_variant_2) rawSubject = campaign.subject_variant_2;
     else if (chosenVariant === 3 && campaign.subject_variant_3) rawSubject = campaign.subject_variant_3;
 
-    // Templating
-    const subject = applyTemplate(rawSubject, contact, '');
-    let html = applyTemplate(campaign.body_html, contact, '');
+    // Templating + spintax : {a|b|c} résolu par destinataire → variété d'envoi
+    // (moins de "même mail 500x" = meilleure réputation/délivrabilité).
+    const subject = expandSpintax(applyTemplate(rawSubject, contact, ''));
+    let html = expandSpintax(applyTemplate(campaign.body_html, contact, ''));
 
     // Ajoute le lien opt-out RGPD
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://volia.fr';

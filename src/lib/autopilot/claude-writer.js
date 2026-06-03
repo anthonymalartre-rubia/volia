@@ -72,6 +72,9 @@ RÈGLES INVIOLABLES (DGCCRF + brand) :
 - JAMAIS de storytelling type "1 founder + IA" / "6 semaines pour bâtir"
 - Tutoiement OU vouvoiement selon le ton du template (précisé plus bas)
 - Pas d'emoji dans le sujet (max 1 dans le body si ton sympathique)
+- DÉLIVRABILITÉ : éviter les déclencheurs de spam → pas de "gratuit", "urgent",
+  "gagnez", "cliquez ici", "offre limitée", "garanti", pas de MAJUSCULES sur
+  des mots entiers, pas de "!!!" ni de €€/$$. Ton humain, pas promotionnel.
 - Toujours mentionner la base RGPD (intérêt légitime B2B) si CTA présent
 
 STRUCTURE :

@@ -14,6 +14,7 @@ import NoAdminScreen from '@/components/NoAdminScreen';
 import TemplateLibraryModal from '@/components/campagnes/TemplateLibraryModal';
 import ConfirmModal from '@/components/ui/ConfirmModal';
 import { getTemplateById } from '@/lib/email-templates';
+import { scanSpam, hasSpintax, countSpintaxVariants } from '@/lib/email-deliverability';
 
 /**
  * Wizard 3 étapes pour la création de campagne email.
@@ -80,6 +81,13 @@ function NewCampaignContent() {
   // Smart scheduling timezone-aware : default ON.
   const [smartScheduling, setSmartScheduling] = useState(true);
   const [fieldErrors, setFieldErrors] = useState({});
+
+  // Délivrabilité : spam-score live + détection spintax (sujet + corps)
+  const spamCheck = useMemo(() => scanSpam(`${subject}\n${bodyHtml}`), [subject, bodyHtml]);
+  const spintaxVariants = useMemo(
+    () => (hasSpintax(`${subject} ${bodyHtml}`) ? countSpintaxVariants(`${subject} ${bodyHtml}`) : 0),
+    [subject, bodyHtml]
+  );
 
   // Default auto pour le nom interne ("Campagne du DD/MM HH:MM").
   // Calculé une seule fois au montage pour éviter de re-générer à chaque render.
@@ -884,8 +892,35 @@ function StepMessage({
         )}
         <p className="text-[10px] text-content-tertiary mt-2 leading-relaxed">
           Variables dispo&nbsp;: <code>{`{{first_name}}`}</code>, <code>{`{{last_name}}`}</code>, <code>{`{{company}}`}</code>, <code>{`{{position_title}}`}</code>.
+          Spintax dispo&nbsp;: <code>{`{Bonjour|Salut|Hello}`}</code> → une variante choisie par destinataire.
           Le footer RGPD (lien désabonnement 1 clic) sera ajouté automatiquement.
         </p>
+
+        {/* Délivrabilité : spam-score live + spintax */}
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span
+            className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold ${
+              spamCheck.verdict === 'ok'
+                ? 'bg-emerald-100 text-emerald-700'
+                : spamCheck.verdict === 'warn'
+                ? 'bg-amber-100 text-amber-700'
+                : 'bg-rose-100 text-rose-700'
+            }`}
+            title="Score basé sur les déclencheurs de spam détectés dans le sujet + le corps"
+          >
+            Délivrabilité : {spamCheck.verdict === 'ok' ? 'OK ✓' : spamCheck.verdict === 'warn' ? 'à surveiller' : 'risqué'}
+          </span>
+          {spamCheck.hits.length > 0 && (
+            <span className="text-[11px] text-content-tertiary">
+              Déclencheurs : {spamCheck.hits.map((h) => h.term).join(', ')}
+            </span>
+          )}
+          {spintaxVariants > 1 && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] bg-violet-100 text-violet-700 font-medium">
+              Spintax : {spintaxVariants} variantes
+            </span>
+          )}
+        </div>
       </WizardBlock>
 
       {/* QW7 — Options avancées (A/B test) cachées par défaut.

@@ -13,11 +13,11 @@ import { AUTOPILOT_TEMPLATES } from '@/lib/autopilot/templates';
 
 export const metadata = {
   title: 'Volia Autopilot — Ton pipeline B2B en autopilot | Volia',
-  description: 'Sélectionne ta cible. Volia scrap, enrichit, contacte, qualifie et livre les leads chauds dans ton CRM. 12 templates B2B France. À partir de 49 €/mois.',
+  description: 'Sélectionne ta cible, Volia exécute : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. 12 templates B2B France, RGPD natif. À partir de 19 €/mois — essai 14 jours, sans carte bancaire.',
   alternates: { canonical: 'https://volia.fr/produits/autopilot' },
   openGraph: {
     title: 'Volia Autopilot — Pipeline B2B en autopilot',
-    description: 'Le seul SaaS qui fait scrap → email → form → CRM en 1 setup. À partir de 49 €/mois.',
+    description: 'Volia exécute ta prospection B2B de bout en bout : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. Made in France, RGPD natif, dès 19 €/mois — essai 14 jours.',
     type: 'website',
   },
 };

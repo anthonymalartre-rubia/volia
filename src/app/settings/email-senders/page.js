@@ -36,6 +36,7 @@ import {
   Play,
 } from 'lucide-react';
 import { ConfirmModal, InfoTooltip } from '@/components/ui';
+import DeliverabilityPanel from '@/components/settings/DeliverabilityPanel';
 import {
   calculateCurrentDay,
   getCurrentPhase,
@@ -600,6 +601,9 @@ export default function EmailSendersPage() {
       </header>
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 lg:py-10 space-y-6">
+        {/* Santé d'envoi (récap 30j + DNS + warmup par domaine) */}
+        <DeliverabilityPanel />
+
         {/* Intro */}
         <section className="rounded-2xl border border-line bg-gradient-to-br from-violet-500/[0.06] via-indigo-500/[0.04] to-surface-card p-5 sm:p-6">
           <div className="flex items-start gap-3">

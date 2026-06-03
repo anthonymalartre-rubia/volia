@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
+import { scoreLead } from "@/lib/lead-score";
 import {
   Download,
   Trash2,
@@ -652,7 +653,7 @@ export default memo(function ResultsPanel({
   }, [prospects, activeFolder]);
 
   const filteredProspects = useMemo(() => {
-    return folderProspects.filter((prospect) => {
+    const filtered = folderProspects.filter((prospect) => {
       const q = searchText.toLowerCase();
       const matchesSearch =
         !searchText ||
@@ -666,6 +667,12 @@ export default memo(function ResultsPanel({
 
       return matchesSearch && matchesDept && matchesType;
     });
+    // Tri "meilleurs leads d'abord" : score ICP décroissant (contactabilité +
+    // signaux établissement). Égalité → ordre d'origine stable.
+    return filtered
+      .map((p, i) => ({ p, i, s: scoreLead(p) }))
+      .sort((a, b) => b.s - a.s || a.i - b.i)
+      .map((x) => x.p);
   }, [folderProspects, searchText, selectedDept, selectedType]);
 
   // Reset page when filters change (outside useMemo to avoid setState during render)

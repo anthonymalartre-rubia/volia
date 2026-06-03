@@ -70,6 +70,10 @@ export default function MarketingHeader({ locale = 'fr', labels }) {
           </div>
         </div>
       </nav>
+      {/* Spacer : la nav est `fixed` (hors flux) → on réserve sa hauteur (h-16)
+          pour que le contenu des pages ne passe pas DESSOUS le header (sinon le
+          1er élément du hero, ex. badge "NOUVEAU · VOLIA AUTOPILOT", est masqué). */}
+      <div aria-hidden className="h-16" />
     </header>
   );
 }

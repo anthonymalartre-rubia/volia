@@ -128,6 +128,18 @@ const nextConfig = {
     ];
   },
 
+  // Redirections 301 (SEO : préserve le link equity des URLs indexées dépubliées)
+  async redirects() {
+    return [
+      {
+        // Article de blog dépublié (thèse "entreprise autonome" non conforme).
+        source: '/blog/premiere-entreprise-saas-autonome-au-monde-6-semaines',
+        destination: '/notre-histoire',
+        permanent: true,
+      },
+    ];
+  },
+
   // Reduce bundle: don't include server-only packages in client
   experimental: {
     optimizePackageImports: ['lucide-react'],

@@ -4,6 +4,7 @@
 export const BLOG_POSTS = [
   {
     slug: 'premiere-entreprise-saas-autonome-au-monde-6-semaines',
+    unpublished: true, // DÉPUBLIÉ : thèse "entreprise autonome / 6 semaines" non conforme (DGCCRF + marque). 301 vers /notre-histoire dans next.config.js.
     title: "Comment j'ai bâti la première entreprise SaaS autonome au monde en 6 semaines à Marseille",
     description: "Story 100% transparente : 4 modules, 370+ commits, 0 levée, 0 équipe technique salariée. 1 humain décide, 1000 agents exécutent. Voici comment.",
     publishedAt: '2026-06-01',
@@ -324,7 +325,7 @@ Le résultat : on trouve les emails là où Apollo, Hunter et Lusha échouent.
 - Pas (encore) de séquences d'outreach intégrées
 - Outil français récent, moins connu qu'Apollo
 
-**Taux de succès observé** : 70-85% sur 1 000 PME françaises testées.
+**Find-rate observé** : ~46 % d'email pro vérifié sur les entreprises ayant un site web (jamais deviné).
 
 ## Tableau récapitulatif
 
@@ -910,7 +911,7 @@ Voir [Snov vs Volia en détail](/vs/snov).
 
 ## Conclusion : un seul gagnant par cas d'usage
 
-Il n'y a pas un "meilleur" outil dans l'absolu. Sur le marché français B2B (PME et commerces locaux), **Volia gagne nettement** : 78% de couverture vs 31-41% pour Hunter et Snov, à un prix équivalent ou inférieur.
+Il n'y a pas un "meilleur" outil dans l'absolu. Sur le marché français B2B (PME et commerces locaux), **Volia est conçu pour le terrain** : un email pro vérifié trouvé pour ~46 % des entreprises ayant un site web (jamais deviné), à un prix équivalent ou inférieur.
 
 Sur les marchés anglo-saxons et pour les domaines bien établis (entreprises tech US, SaaS), Hunter reste un excellent choix.
 
@@ -12035,6 +12036,7 @@ function todayISO() {
 
 function isPublished(post) {
   if (!post?.publishedAt) return false;
+  if (post.unpublished) return false; // dépublié manuellement (ex: contenu non conforme)
   return post.publishedAt <= todayISO();
 }
 
@@ -12111,13 +12113,14 @@ export async function getAllPostsWithAuto() {
   const staticSlugs = new Set(BLOG_POSTS.map((p) => p.slug));
   const filteredDb = dbPosts.filter((p) => !staticSlugs.has(p.slug));
   return [...BLOG_POSTS, ...filteredDb]
-    .filter((p) => p.publishedAt <= today)
+    .filter((p) => !p.unpublished && p.publishedAt <= today)
     .sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''));
 }
 
 export async function getPostBySlugWithAuto(slug) {
   const staticPost = BLOG_POSTS.find((p) => p.slug === slug);
   if (staticPost) {
+    if (staticPost.unpublished) return null;
     const today = new Date().toISOString().split('T')[0];
     if (staticPost.publishedAt && staticPost.publishedAt > today) return null;
     return staticPost;

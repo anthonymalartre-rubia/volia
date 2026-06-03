@@ -66,7 +66,7 @@ export const KEY_NUMBERS = [
   },
   {
     value: '400+',
-    label: 'commits autonomes',
+    label: 'commits publics',
     sub: 'historique transparent sur GitHub',
     gradient: 'from-indigo-500 to-blue-600',
     iconName: 'GitCommit',
@@ -80,7 +80,7 @@ export const KEY_NUMBERS = [
   },
   {
     value: '9',
-    label: "types d'actions autonomes",
+    label: "types d'actions automatisées",
     sub: 'posts, articles, emails, PR code, leads, recos…',
     gradient: 'from-purple-500 to-pink-600',
     iconName: 'Sparkles',
@@ -147,18 +147,18 @@ export const KEY_NUMBERS = [
 export const FOUNDER_QUOTES = [
   {
     text: "Volia n'est pas un SaaS. C'est la preuve qu'une nouvelle catégorie d'entreprise est née.",
-    context: 'Sur le positionnement de Volia comme entreprise autonome',
+    context: "Sur le positionnement de Volia (l'IA exécute, l'humain décide)",
   },
   {
-    text: "1 humain décide. 1000 agents IA exécutent. C'est ça le nouveau modèle.",
-    context: "Sur l'organisation interne d'une entreprise autonome",
+    text: "L'humain décide, l'IA exécute. C'est ça le nouveau modèle.",
+    context: "Sur l'organisation interne de Volia",
   },
   {
     text: "Volia Autopilot remplace une stack Apollo + Lemlist + HubSpot par un seul pipeline : l'humain choisit la cible, l'IA exécute toute la chaîne jusqu'au lead chaud livré dans le CRM.",
     context: "Sur le positionnement produit de Volia Autopilot",
   },
   {
-    text: "Le futur des entreprises B2B ne ressemble plus à des équipes. Il ressemble à des founders augmentés.",
+    text: "Le futur des entreprises B2B, c'est l'humain augmenté par l'IA : il décide, les agents exécutent la corvée.",
     context: "Sur la vision de l'entreprise du nouveau genre",
   },
   {
@@ -175,14 +175,14 @@ export const FOUNDER_QUOTES = [
   },
   {
     text: "Volia utilise Volia pour vendre Volia. Chaque lundi, le module Prospection génère 50 prospects ICP, et le module Campagnes les contacte. C'est mon meilleur démo.",
-    context: 'Sur le dogfood-outreach autonome',
+    context: 'Sur le dogfood-outreach automatisé',
   },
   {
     text: "Quand Sentry détecte un bug en prod, Claude lit le stack trace, comprend le code, et m'ouvre la pull request. Je n'ai qu'à valider. C'est la fin du backlog.",
     context: 'Sur le pipeline self-healing : Sentry → GitHub issue → PR draft Claude',
   },
   {
-    text: "Chaque mardi à 10h, je reçois un email automatique avec le ROI précis de chacune de mes 16 boucles autonomes, et 3 recommandations Claude pour la semaine suivante. Aucune équipe humaine ne pourrait produire ça aussi vite.",
+    text: "Chaque mardi à 10h, je reçois un email automatique avec le ROI précis de chacune de mes 16 boucles d'agents IA, et 3 recommandations Claude pour la semaine suivante. Aucune équipe humaine ne pourrait produire ça aussi vite.",
     context: 'Sur la weekly review et l\'auto-optimisation continue',
   },
 ];
@@ -201,11 +201,11 @@ export const PRESS_ANGLES = [
     gradient: 'from-violet-500 to-fuchsia-600',
   },
   {
-    slug: 'entreprise-autonome-nouveau-genre',
-    title: "L'entreprise autonome d'un nouveau genre",
+    slug: 'entreprise-nouveau-genre',
+    title: "L'entreprise d'un nouveau genre",
     audience: 'Presse vision & futur du travail (Forbes FR, Les Echos, Maddyness)',
     pitch:
-      "Et si l'entreprise du XXIe siècle ne ressemblait plus à une équipe, mais à un founder augmenté par des agents IA ? Volia incarne cette nouvelle catégorie : l'humain supervise et valide, les agents IA exécutent. Sans salarié supplémentaire, sans levée de fonds, la suite SaaS B2B fonctionne aujourd'hui en production avec 16 boucles d'agents IA orchestrées 24/7.",
+      "Et si l'entreprise du XXIe siècle confiait le travail répétitif à des agents IA, pour que l'humain se concentre sur la vision et les décisions ? Volia incarne cette approche : l'humain supervise et valide, les agents IA exécutent. La suite SaaS B2B fonctionne aujourd'hui en production avec 16 boucles d'agents IA orchestrées 24/7.",
     // Pas (encore) de communiqué dédié → pas de lien (CP sur demande presse)
     htmlUrl: null,
     iconName: 'Sparkles',
@@ -227,7 +227,7 @@ export const PRESS_ANGLES = [
     title: "Première mondiale : l'IA agentique en production",
     audience: 'Presse IA spécialisée (ActuIA, Usine Digitale, Siècle Digital)',
     pitch:
-      "Volia est le premier SaaS B2B européen documenté entièrement co-construit par IA agentique et opéré en production par 16 boucles d'agents IA : 400+ commits publics, génération de contenu, code source, prospection, support client, le tout orchestré 24/7 — l'humain valide, l'IA exécute. Un cas d'école mondial du paradigme \"AI-native company\" sur une stack moderne (Next.js 14, Supabase, Vercel, Anthropic), supervisé par son founder.",
+      "Volia est un SaaS B2B européen documenté, largement co-construit avec l'IA agentique et opéré en production par 16 boucles d'agents IA : 400+ commits publics, génération de contenu, code source, prospection, support client, le tout orchestré 24/7 — l'humain valide, l'IA exécute. Un cas concret du paradigme « AI-augmented » sur une stack moderne (Next.js 14, Supabase, Vercel, Anthropic), supervisé par son founder.",
     // Pas (encore) de communiqué dédié → pas de lien (CP sur demande presse)
     htmlUrl: null,
     iconName: 'Brain',
@@ -249,7 +249,7 @@ export const PRESS_ANGLES = [
     title: "Volia se vend, se code et se support — tout seul",
     audience: 'Presse business & tech (Maddyness, Les Echos Tech, FrenchWeb, BFM Tech)',
     pitch:
-      "Trois preuves concrètes de l'entreprise autonome en juin 2026 : (1) Volia utilise son propre module Prospection chaque semaine pour générer 50 prospects ICP-fit puis les contacter via son module Campagnes — un cas unique de SaaS qui vend grâce à lui-même. (2) Quand Sentry détecte une erreur en prod, Claude lit le code source, comprend la cause, et ouvre une pull request de correction sur GitHub que le founder n'a qu'à valider. (3) Pour les emails clients classifiés comme questions FAQ avec confiance >85 %, Claude envoie directement une réponse signée au nom d'Anthony, avec copie au founder. Trois boucles, un seul mot d'ordre : l'humain valide, l'IA exécute.",
+      "Trois preuves concrètes du modèle (l'humain valide, l'IA exécute) en juin 2026 : (1) Volia utilise son propre module Prospection chaque semaine pour générer 50 prospects ICP-fit puis les contacter via son module Campagnes — un cas unique de SaaS qui vend grâce à lui-même. (2) Quand Sentry détecte une erreur en prod, Claude lit le code source, comprend la cause, et ouvre une pull request de correction sur GitHub que le founder n'a qu'à valider. (3) Pour les emails clients classifiés comme questions FAQ avec confiance >85 %, Claude envoie directement une réponse signée au nom d'Anthony, avec copie au founder. Trois boucles, un seul mot d'ordre : l'humain valide, l'IA exécute.",
     // CP disponible en page HTML dédiée (pas de PDF) → lien "Lire le communiqué"
     htmlUrl: '/presse/cp/volia-vend-supporte-code-soi-meme',
     iconName: 'Sparkles',
@@ -478,7 +478,7 @@ export const FOUNDER_BIO = {
     "Anthony Malartre est le founder de Volia (volia.fr), suite SaaS B2B française dont le produit phare est Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM). Basé à Marseille, ex-fondateur de plusieurs projets B2B, il a bâti Volia avec Claude, l'IA agentique d'Anthropic : 4 modules connectés, 400+ commits publics, 16 boucles d'agents IA en production qui orchestrent marketing, code, vente et support 24/7. Une couche de méta-autonomie analyse chaque semaine le ROI de toutes les boucles et propose les prochaines automatisations à créer. Sa philosophie : l'humain valide, l'IA exécute.",
 
   long:
-    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'entreprise du XXIe siècle n'était plus une équipe, mais un founder augmenté par des agents IA, sous supervision permanente ? Volia est la réponse. Sans co-fondateur, sans levée de fonds, sans salarié supplémentaire, il livre Volia Autopilot — le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM) — au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne. La gamme va de Starter gratuit à Enterprise 499 €/mois (Autopilot illimité + A/B testing + optimisation Claude), le flagship Autopilot démarrant à 49 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client : l'humain valide, l'IA exécute. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
+    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'humain confiait le travail répétitif à des agents IA, sous supervision permanente, pour se concentrer sur la vision et les décisions ? Volia est la réponse. En bootstrap, il livre Volia Autopilot — le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM) — au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne. La gamme va de Starter gratuit à Enterprise 499 €/mois (Autopilot illimité + A/B testing + optimisation Claude), le flagship Autopilot démarrant à 49 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client : l'humain valide, l'IA exécute. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
 };
 
 // ─── PRESS_RELEASE_FULL — contenu complet des communiqués de presse ──
@@ -546,7 +546,7 @@ export const PRESS_RELEASES_FULL = {
         heading: "Au-delà de l'autonomie d'exécution",
         paragraphs: [
           "Depuis son lancement en mai 2026, Volia faisait déjà tourner 16 boucles d'agents IA en production 24 heures sur 24 : rédaction de posts LinkedIn, articles SEO hebdomadaires, newsletter mensuelle, séquences de réactivation client, prospection sortante auto-générée, détection d'erreurs en production avec création de pull requests de correction, classification des emails entrants avec réponses FAQ automatiques, deux chatbots IA (pré-vente et support). Une exécution déjà sans précédent pour une entreprise française.",
-          "Ce qui change le 6 juin 2026 : ces agents ne se contentent plus d'exécuter — ils mesurent. Chaque action autonome est journalisée avec un coût estimé (en euros) et une valeur estimée (proxy MRR). Chaque nuit à 2 heures du matin, une boucle d'agrégation calcule pour chaque type d'action le taux de succès, le coût cumulé, la valeur générée et le retour sur investissement. Le tout est consultable en temps réel dans un dashboard interne dédié.",
+          "Ce qui change le 6 juin 2026 : ces agents ne se contentent plus d'exécuter — ils mesurent. Chaque action automatisée est journalisée avec un coût estimé (en euros) et une valeur estimée (proxy MRR). Chaque nuit à 2 heures du matin, une boucle d'agrégation calcule pour chaque type d'action le taux de succès, le coût cumulé, la valeur générée et le retour sur investissement. Le tout est consultable en temps réel dans un dashboard interne dédié.",
         ],
       },
       {
@@ -621,7 +621,7 @@ export const PRESS_RELEASES_FULL = {
   },
 };
 
-// ─── AI_LOOPS_INVENTORY — détail technique des 16 boucles autonomes ──
+// ─── AI_LOOPS_INVENTORY — détail technique des 16 boucles d'agents IA ──
 // Liste exhaustive pour journalistes qui veulent du concret.
 // Ajoutée juin 2026 après livraison Sprint Méta-autonomie + Support + Insights.
 export const AI_LOOPS_INVENTORY = [

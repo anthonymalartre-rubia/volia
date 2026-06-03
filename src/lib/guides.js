@@ -248,7 +248,7 @@ Pour les SDR débutants sur le secteur, je conseille de coupler [Volia](/signup)
 
 - Cible : 12 000 restaurants indépendants en métropole, segment bistronomie
 - Méthode : sourcing Volia, cadencement Lemlist 5 emails sur 14 jours
-- Résultats à 90 jours : 8,4 % taux de réponse, 3,1 % meetings bookés, 0,9 % closés en abonnement annuel à 990 € HT
+- Ordre de grandeur à 90 jours (exemple) : ~4 % de taux de réponse, ~2 % de meetings bookés, ~0,8 % closés en abonnement annuel à 990 € HT
 - ROI : 270 % la première année
 
 **Cas 2 — fournisseur emballages éco-responsables**

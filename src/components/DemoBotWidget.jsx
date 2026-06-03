@@ -7,6 +7,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { safeStorage } from '@/lib/safe-storage';
 
 function generateSessionId() {
   // Simple UUID-like (sans Math.random côté server-friendly — c'est client-only OK)
@@ -50,10 +51,10 @@ export default function DemoBotWidget() {
   // Init session_id côté client
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    let id = localStorage.getItem('volia_demo_session_id');
+    let id = safeStorage.get('volia_demo_session_id');
     if (!id) {
       id = generateSessionId();
-      localStorage.setItem('volia_demo_session_id', id);
+      safeStorage.set('volia_demo_session_id', id);
     }
     setSessionId(id);
   }, []);

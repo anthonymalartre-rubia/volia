@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import fr from '@/locales/fr';
+import { safeStorage } from '@/lib/safe-storage';
 
 // FR est chargé en sync (locale par défaut, majorité des users).
 // EN est lazy-loadé via dynamic import → -30 KB sur le First Load JS pour
@@ -29,7 +30,7 @@ export function I18nProvider({ children }) {
   const [locale, setLocaleState] = useState('fr');
 
   useEffect(() => {
-    const saved = localStorage.getItem('volia_locale');
+    const saved = safeStorage.get('volia_locale');
     if (saved === 'fr' || saved === 'en') {
       // Précharger la locale avant de switcher pour éviter un flash de FR.
       loadLocale(saved).then((loaded) => {
@@ -42,7 +43,7 @@ export function I18nProvider({ children }) {
     const loaded = await loadLocale(newLocale);
     if (loaded) {
       setLocaleState(newLocale);
-      try { localStorage.setItem('volia_locale', newLocale); } catch {}
+      safeStorage.set('volia_locale', newLocale);
     }
   }, []);
 

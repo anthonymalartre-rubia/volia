@@ -106,6 +106,7 @@ const RISK_BADGES = {
 
 const ACTION_ICONS = {
   linkedin_post: Send,
+  linkedin_founder_post: Send,
   twitter_post: Send,
   cold_email_send: Send,
   blog_publish: FileText,
@@ -554,13 +555,13 @@ export default function AutoQueuePage() {
                       </div>
                     </div>
 
-                    {/* Social post drafts (linkedin_post) : affichage dédié + boutons Copier */}
-                    {action.action_type === 'linkedin_post' && action.payload?.linkedin && (
+                    {/* Social post drafts (linkedin_post + linkedin_founder_post) : affichage dédié + boutons Copier */}
+                    {(action.action_type === 'linkedin_post' || action.action_type === 'linkedin_founder_post') && action.payload?.linkedin && (
                       <SocialPostPreview payload={action.payload} />
                     )}
 
                     {/* Preview standard (sauf si déjà couvert par SocialPostPreview ci-dessus) */}
-                    {action.preview && action.action_type !== 'linkedin_post' && (
+                    {action.preview && action.action_type !== 'linkedin_post' && action.action_type !== 'linkedin_founder_post' && (
                       <div className="mb-3 p-3 rounded-lg bg-surface-elevated border border-line">
                         <p className="text-xs uppercase tracking-wider text-content-muted font-semibold mb-1">
                           Aperçu

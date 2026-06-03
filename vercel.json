@@ -110,6 +110,10 @@
       "schedule": "0 10 * * 1-5"
     },
     {
+      "path": "/api/cron/founder-post-proposer",
+      "schedule": "0 9 * * 4"
+    },
+    {
       "path": "/api/cron/publish-approved-actions",
       "schedule": "*/15 * * * *"
     },

@@ -400,6 +400,7 @@ export async function checkActionQuota(actionType, limits = {}) {
 
 export const DEFAULT_QUOTAS = {
   linkedin_post: { perDay: 3, perWeek: 7, perMonth: 25 },
+  linkedin_founder_post: { perWeek: 2, perMonth: 6 },
   twitter_post: { perDay: 5, perWeek: 15, perMonth: 50 },
   comment_reply: { perDay: 20, perWeek: 100, perMonth: 300 },
   cold_email_send: { perDay: 100, perWeek: 500, perMonth: 2000 },

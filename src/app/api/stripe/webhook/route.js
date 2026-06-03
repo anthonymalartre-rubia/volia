@@ -225,6 +225,54 @@ export async function POST(request) {
         } catch (err) {
           console.error('[webhook] Referral qualify failed:', err);
         }
+
+        // Programme apporteurs d'affaires : lier le client à l'affilié
+        // (via le code passé en metadata depuis le cookie volia_aff au checkout).
+        try {
+          const affCode = session.metadata?.affiliate_code;
+          if (affCode) {
+            const { linkClientToAffiliate } = require('@/lib/affiliates');
+            await linkClientToAffiliate(userId, affCode);
+          }
+        } catch (err) {
+          console.error('[webhook] Affiliate link failed:', err);
+        }
+        break;
+      }
+
+      // ═══════════════════════════════════════════════════════════
+      // invoice.paid → tout paiement réussi (1er + renouvellements).
+      // Point d'entrée du moteur de commission affilié (récurrent).
+      // ═══════════════════════════════════════════════════════════
+      case 'invoice.paid': {
+        const invoice = event.data.object;
+        try {
+          const { accrueCommissionForInvoice } = require('@/lib/affiliates');
+          const res = await accrueCommissionForInvoice(invoice);
+          if (res.commission_cents) {
+            console.log(`[webhook] Commission affilié ${res.affiliate_id} : ${res.commission_cents}c (taux ${res.rate})`);
+          }
+        } catch (err) {
+          console.error('[webhook] Affiliate commission accrual failed:', err);
+        }
+        break;
+      }
+
+      // ═══════════════════════════════════════════════════════════
+      // charge.refunded → clawback de la commission de la facture liée
+      // ═══════════════════════════════════════════════════════════
+      case 'charge.refunded': {
+        const charge = event.data.object;
+        const invoiceId = charge.invoice;
+        if (invoiceId) {
+          try {
+            const { clawbackCommissionForInvoice } = require('@/lib/affiliates');
+            const res = await clawbackCommissionForInvoice(invoiceId);
+            if (res.clawed_back) console.log(`[webhook] Clawback ${res.clawed_back} commission(s) sur ${invoiceId}`);
+          } catch (err) {
+            console.error('[webhook] Affiliate clawback failed:', err);
+          }
+        }
         break;
       }
 

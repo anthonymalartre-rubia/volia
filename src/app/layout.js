@@ -7,6 +7,7 @@ import AchievementToast from '@/components/welcome/AchievementToast';
 import DemoBotWidget from '@/components/DemoBotWidget';
 import SupportBotWidget from '@/components/SupportBotWidget';
 import UpgradeContextModal from '@/components/UpgradeContextModal';
+import AffiliateTracker from '@/components/AffiliateTracker';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -195,6 +196,8 @@ export default function RootLayout({ children }) {
                 dismiss ou last_shown. Affiche seulement sur /dashboard
                 et /app/* (l'API gère aussi le filtre côté serveur). */}
             <UpgradeContextModal />
+            {/* Capture ?aff=CODE → cookie volia_aff (programme apporteurs d'affaires) */}
+            <AffiliateTracker />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

@@ -25,6 +25,7 @@ import { formatDealValue } from '@/lib/crm';
 import ActivityForm from './ActivityForm';
 import AddToCampagneModal from './AddToCampagneModal';
 import CustomFieldsSection from './CustomFieldsSection';
+import CallSummarizer from './CallSummarizer';
 
 // Icône par type d'activity
 const ACTIVITY_TYPE_META = {
@@ -512,6 +513,26 @@ export default function DealDetailDrawer({
               onValuesChange={(nextValues) => {
                 setDeal((prev) => (prev ? { ...prev, custom_fields: nextValues } : prev));
                 onUpdate?.({ ...deal, custom_fields: nextValues });
+              }}
+            />
+
+            {/* Résumé d'appel IA → met à jour étape + tâches (depuis un transcript collé) */}
+            <CallSummarizer
+              dealId={deal.id}
+              stages={stages}
+              currentStageId={deal.stage_id}
+              onApplied={({ newStageId, createdActivities }) => {
+                setDeal((prev) => {
+                  if (!prev) return prev;
+                  const next = { ...prev };
+                  if (newStageId) next.stage_id = newStageId;
+                  if (Array.isArray(createdActivities) && createdActivities.length) {
+                    next.activities = [...createdActivities, ...(prev.activities || [])];
+                  }
+                  return next;
+                });
+                // Sync carte board (déplacement de colonne si l'étape a changé)
+                if (newStageId) onUpdate?.({ ...deal, stage_id: newStageId });
               }}
             />
 

@@ -100,6 +100,23 @@ export default function OutilsIndex() {
             Triés du moins cher au plus cher, avec prix, avis et alternatives.
           </p>
 
+          {/* Outil gratuit Volia — mis en avant avant l'annuaire */}
+          <Link
+            href="/outils/trouver-emails"
+            className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 rounded-2xl bg-gradient-to-r from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-5 mb-12 hover:border-violet-500/60 transition"
+          >
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-200 text-[10px] font-semibold uppercase tracking-wider mb-2">
+                <Zap size={11} /> Gratuit · sans carte bancaire
+              </div>
+              <div className="font-bold text-lg text-white">Trouvez des emails d'entreprises gratuitement</div>
+              <p className="text-sm text-content-secondary mt-0.5">Par secteur + ville, données réelles, conforme RGPD — directement sur Volia.</p>
+            </div>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-violet-600 group-hover:bg-violet-500 text-white text-sm font-semibold transition whitespace-nowrap">
+              Essayer l'outil <ArrowRight size={14} />
+            </span>
+          </Link>
+
           {/* Tools grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
             {tools.map((c) => (

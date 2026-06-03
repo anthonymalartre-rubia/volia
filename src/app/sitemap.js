@@ -105,6 +105,8 @@ export default async function sitemap({ id }) {
     const outilsHub = [
       { url: `${baseUrl}/outils`, priority: 0.8, changeFrequency: 'weekly', lastModified: now },
       { url: `${baseUrl}/outils/comparatif`, priority: 0.8, changeFrequency: 'weekly', lastModified: now },
+      // Outil gratuit standalone (cheval de Troie SEO + acquisition)
+      { url: `${baseUrl}/outils/trouver-emails`, priority: 0.9, changeFrequency: 'weekly', lastModified: now },
     ];
 
     // 91 pages de comparatif 1-vs-1 entre les 14 outils (priority 0.6, plus

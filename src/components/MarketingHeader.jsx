@@ -60,7 +60,7 @@ export default function MarketingHeader({ locale = 'fr', labels }) {
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">
               {l.blog}
             </Link>
-            <Link href={`${home}#faq`} className="text-sm text-content-tertiary hover:text-content-primary transition">
+            <Link href="/faq" className="text-sm text-content-tertiary hover:text-content-primary transition">
               {l.faq}
             </Link>
           </div>

@@ -53,6 +53,7 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/signup`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/login`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/faq`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
       // [31 mai 2026] /pricing priority 0.95 → 0.85 : clarifie la hiérarchie
       // vs / (1.0). Le delta de 0.05 était trop faible → Google a choisi
       // /pricing comme canonical de la homepage (cf. GSC "Page en double :

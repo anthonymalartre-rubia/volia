@@ -106,7 +106,7 @@ const COMPARE_SECTIONS = [
       ['Recherche IA langage naturel', true, true, true, true],
       ['Exports CSV', '5/mois', 'Illimité', 'Illimité', 'Illimité'],
       ['Dossiers / listes', '3', '10', 'Illimité', 'Illimité'],
-      ['Accès Google Places (287 000+ entreprises FR)', true, true, true, true],
+      ['Accès Google Places (tout le tissu B2B français)', true, true, true, true],
       ['101 départements (DROM inclus)', true, true, true, true],
       ['150+ catégories B2B', true, true, true, true],
     ],
@@ -250,7 +250,7 @@ const FAQ_PRICING = [
   },
   {
     q: 'Tout est vraiment inclus dans le prix ?',
-    a: 'Oui. Accès à 287 000+ entreprises FR via Google Places (scraping en temps réel sur 101 départements × 150+ secteurs), cascade waterfall multi-sources, exports CSV, emails transactionnels. Aucune option cachée derrière un paywall.',
+    a: 'Oui. Accès à tout le tissu B2B français via Google Places (scraping en temps réel sur 101 départements × 150+ secteurs), cascade waterfall multi-sources, exports CSV, emails transactionnels. Aucune option cachée derrière un paywall.',
   },
   {
     q: 'Le CRM est vraiment dans le plan Business ?',

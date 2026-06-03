@@ -119,7 +119,7 @@ export default function EnCampaignsPage() {
       crossSell={{
         subtitle: 'Campaigns pulls leads from Prospecting. Pushes replies to CRM. All inside Business. Zero copy-paste.',
         otherModules: [
-          { module: 'prospection', direction: 'in', desc: 'Where your prospects come from. 287k+ FR companies, 150+ industries, scored emails + phones. Available on every paid plan.', cta: 'See Prospecting' },
+          { module: 'prospection', direction: 'in', desc: 'Where your prospects come from. all French B2B companies, 150+ industries, scored emails + phones. Available on every paid plan.', cta: 'See Prospecting' },
           { module: 'crm', direction: 'out', desc: 'Replies become deals at Lead stage. Native Kanban pipeline. Also part of Business.', cta: 'See CRM' },
           { module: 'formulaires', direction: 'in', desc: 'Forms submissions can fire a Campaigns sequence automatically. Inbound on autopilot.', cta: 'See Forms' },
         ],

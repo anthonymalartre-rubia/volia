@@ -287,7 +287,7 @@ function ExperienceSection() {
               emails transactionnels, cron jobs autonomes.
             </p>
             <p className="text-lg text-content-secondary leading-relaxed mb-6">
-              4 modules connectés (Prospection, Campagnes, CRM, Forms), 287 000 entreprises accessibles, couverture sur 8 pays.
+              4 modules connectés (Prospection, Campagnes, CRM, Forms), tout le tissu B2B français accessible, couverture sur 8 pays.
               Ce qu&apos;une équipe de 8 développeurs aurait mis 12 mois à livrer.
             </p>
             <div className="my-8 px-6 py-5 rounded-xl bg-gradient-to-br from-violet-50 via-white to-indigo-50 border-l-4 border-violet-500">
@@ -311,7 +311,7 @@ function ExperienceSection() {
           {[
             { value: '6', sub: 'semaines V1', icon: Zap, gradient: 'from-violet-600 to-indigo-600' },
             { value: '4', sub: 'modules connectés', icon: Layers, gradient: 'from-indigo-600 to-blue-600' },
-            { value: '287k', sub: 'entreprises FR', icon: TargetIcon, gradient: 'from-blue-600 to-cyan-600' },
+            { value: '150+', sub: 'secteurs B2B FR', icon: TargetIcon, gradient: 'from-blue-600 to-cyan-600' },
             { value: '8', sub: 'pays couverts', icon: Globe, gradient: 'from-emerald-600 to-teal-600' },
           ].map((s, i) => {
             const Icon = s.icon;

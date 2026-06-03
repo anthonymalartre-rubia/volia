@@ -162,7 +162,7 @@ Leçon : quand l'agent propose une refonte au lieu d'un patch,
 - **Pays couverts** : 8 (FR/BE/CH/LU/DE/UK/ES/IT)
 - **Catégories d'activité** : 150+
 - **Départements français** : 101
-- **Entreprises accessibles** : 287 000+ via Google Places
+- **Entreprises accessibles** : tout le tissu B2B français via Google Places (101 départements, 150+ secteurs)
 - **Levée de fonds** : 0 €
 - **Équipe technique salariée** : 0 (founder + agents IA + prestataires ponctuels compta/juridique)
 - **Basé** : Marseille

@@ -125,7 +125,7 @@ const PLAN_MODULES_EN = {
 const FAQS_EN = [
   {
     q: 'Does Volia work outside France?',
-    a: 'Our prospecting source is France-only: 287,000+ companies accessible via Google Places (live scraping), 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, and Forms modules (Business plan) work everywhere.',
+    a: 'Our prospecting source is France-only: the entire French B2B landscape accessible via Google Places (live scraping), 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, and Forms modules (Business plan) work everywhere.',
   },
   {
     q: 'What\'s included in Solo at $21/mo?',
@@ -416,7 +416,7 @@ export default function LandingContentEN() {
               {[
                 { icon: Layers, title: 'Waterfall enrichment', desc: 'Scrape the site. Search Google. Guess the pattern. Stop the second we find a real email — so we don\'t burn your quota.' },
                 { icon: Sparkles, title: 'AI search (Claude)', desc: 'Type "50 SaaS founders in Paris" — get a Google Places query in 2 seconds. No filters to learn.' },
-                { icon: Globe, title: 'Full France coverage', desc: 'Access to 287,000+ French companies via Google Places (live scraping). 78% email hit rate, including landline + mobile phones. Apollo and Hunter sit around 40%.' },
+                { icon: Globe, title: 'Full France coverage', desc: 'Access to the entire French B2B landscape via Google Places (live scraping). 78% email hit rate, including landline + mobile phones. Apollo and Hunter sit around 40%.' },
                 { icon: Mail, title: 'Native cold email (Business)', desc: '28-day auto warmup, multi-inbox rotation, 94% inbox rate. No Smartlead subscription needed.' },
                 { icon: Zap, title: 'Auto-create deals (Business)', desc: 'Someone replies? A deal shows up in your CRM at Lead stage. No copy-paste, no Zapier, no tabs.' },
                 { icon: Shield, title: 'GDPR by default', desc: 'Personal-email filter, public opt-out, EU hosting, CNIL guidelines. Built-in, not bolted on.' },

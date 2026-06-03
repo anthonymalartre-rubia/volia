@@ -597,7 +597,7 @@ export default function FormulairesProductPage() {
         crossSell={{
           subtitle: 'Les Formulaires alimentent automatiquement votre CRM et vos Campagnes. Boucle complète, zéro copier-coller.',
           otherModules: [
-            { module: 'prospection', direction: 'in', desc: 'Pour le cold outbound. 287 k+ entreprises FR accessibles via Google Places, 150+ secteurs, emails enrichis.', cta: 'Découvrir Prospection' },
+            { module: 'prospection', direction: 'in', desc: 'Pour le cold outbound. tout le tissu B2B français accessibles via Google Places, 150+ secteurs, emails enrichis.', cta: 'Découvrir Prospection' },
             { module: 'campagnes', direction: 'out', desc: 'Chaque submission alimente une liste Campagnes. Nurturing automatique, warmup intégré.', cta: 'Découvrir Campagnes' },
             { module: 'crm', direction: 'out', desc: 'Une submission devient un deal au stage Lead. Pipeline Kanban natif.', cta: 'Voir le CRM' },
           ],

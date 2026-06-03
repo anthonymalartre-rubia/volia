@@ -65,7 +65,7 @@ const PRODUCT_JSON_LD = {
   '@type': 'Product',
   name: 'Volia — Suite B2B Prospection + Campagnes + CRM',
   description:
-    'Suite SaaS française tout-en-un : prospection B2B (287k+ entreprises FR), cold email avec warmup auto, CRM intégré. À partir de 0 €/mois.',
+    'Suite SaaS française tout-en-un : prospection B2B (tout le tissu B2B français), cold email avec warmup auto, CRM intégré. À partir de 0 €/mois.',
   url: PAGE_URL,
   brand: { '@type': 'Brand', name: 'Volia' },
   offers: {

@@ -315,7 +315,7 @@ export const MEDIA_KIT_ASSETS = [
     items: [
       {
         title: 'Volia Prospection — dashboard',
-        description: 'Recherche par catégorie, 287k+ entreprises',
+        description: 'Recherche par catégorie, tout le tissu B2B FR',
         url: '/presse/screenshot-prospection.png',
         format: 'PNG',
         size: '~600 KB',

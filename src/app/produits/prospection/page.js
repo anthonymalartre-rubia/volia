@@ -2,7 +2,7 @@
 // /produits/prospection — landing page COMMERCIALE Volia Prospection (LIVE)
 // ─────────────────────────────────────────────────────────────────────
 // Positionnement : alternative française à Apollo.io, 5× moins chère,
-// 287k+ entreprises France, RGPD natif. Conversion-first.
+// tout le tissu B2B français, RGPD natif. Conversion-first.
 // Accent : violet/indigo (couleur signature module Prospection).
 // ─────────────────────────────────────────────────────────────────────
 
@@ -27,7 +27,7 @@ const PAGE_URL = `${SITE_URL}/produits/prospection`;
 export const metadata = {
   title: 'Volia Prospection — Alternative française à Apollo, 5× moins chère (19 €/mois)',
   description:
-    "Trouvez 1 000 prospects qualifiés en France en 30 secondes. Accès à 287 000+ entreprises via Google Places (scraping en temps réel) avec emails + téléphones. À partir de 19 €/mois — 5× moins cher qu'Apollo. 100% conforme RGPD.",
+    "Trouvez 1 000 prospects qualifiés en France en 30 secondes. Accès à tout le tissu B2B français via Google Places (scraping en temps réel) avec emails + téléphones. À partir de 19 €/mois — 5× moins cher qu'Apollo. 100% conforme RGPD.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -56,7 +56,7 @@ export const metadata = {
   openGraph: {
     title: 'Volia Prospection — Alternative française à Apollo, 5× moins chère',
     description:
-      "Accès à 287 000+ entreprises françaises via Google Places avec emails + téléphones scrappés en cascade. À partir de 19 €/mois. RGPD inclus. L'alternative française à Apollo, Hunter, Lemlist.",
+      "Accès à tout le tissu B2B français via Google Places avec emails + téléphones scrappés en cascade. À partir de 19 €/mois. RGPD inclus. L'alternative française à Apollo, Hunter, Lemlist.",
     url: PAGE_URL,
     type: 'website',
     // Pas de `images` ici : Next.js sert automatiquement /opengraph-image.js
@@ -66,7 +66,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Volia Prospection — Alternative française à Apollo, 5× moins chère',
-    description: '287k+ entreprises FR, emails + tels, RGPD inclus. À partir de 19 €/mois.',
+    description: 'tout le tissu B2B français, emails + tels, RGPD inclus. À partir de 19 €/mois.',
   },
 };
 
@@ -350,7 +350,7 @@ function ProblemSolutionSection() {
 // ─────────────────────────────────────────────────────────────────────
 function ComparatifSection() {
   const rows = [
-    { feature: 'Emails B2B France', apollo: 'Limité (~40 %)', hunter: 'Non', lemlist: 'Partiel', volia: '287k entreprises' },
+    { feature: 'Emails B2B France', apollo: 'Limité (~40 %)', hunter: 'Non', lemlist: 'Partiel', volia: 'tout le B2B FR' },
     { feature: 'Téléphones inclus', apollo: 'oui', hunter: 'non', lemlist: 'non', volia: 'oui' },
     { feature: 'Recherche en langage naturel (IA)', apollo: 'oui', hunter: 'non', lemlist: 'non', volia: 'oui' },
     { feature: 'Waterfall multi-sources', apollo: 'non', hunter: 'non', lemlist: 'non', volia: 'oui' },
@@ -804,7 +804,7 @@ const FAQ = [
   },
   {
     q: 'Quelle différence avec Apollo / Hunter ?',
-    a: 'Trois différences clés : (1) Volia est 5× moins cher (19 € vs ~92-99 $/mois) ; (2) Volia est spécialisé France (287k entreprises FR, 78 % de couverture) alors qu\'Apollo/Hunter sont US-first (40 % de couverture FR) ; (3) Volia inclut le téléphone à chaque ligne et un waterfall multi-sources qui maximise le taux email sans gaspiller de crédits. Et bien sûr : support en français, RGPD natif, hébergement EU.',
+    a: 'Trois différences clés : (1) Volia est 5× moins cher (19 € vs ~92-99 $/mois) ; (2) Volia est spécialisé France (tout le tissu B2B français, 78 % de couverture) alors qu\'Apollo/Hunter sont US-first (40 % de couverture FR) ; (3) Volia inclut le téléphone à chaque ligne et un waterfall multi-sources qui maximise le taux email sans gaspiller de crédits. Et bien sûr : support en français, RGPD natif, hébergement EU.',
   },
   {
     q: 'Puis-je faire des recherches en langage naturel ?',
@@ -833,7 +833,7 @@ const product = {
   '@context': 'https://schema.org',
   ...productSchema({
     name: 'Volia Prospection',
-    description: "Alternative française à Apollo.io, 5× moins chère. 287k+ entreprises françaises avec emails + téléphones, 150+ secteurs, 101 départements. À partir de 19 €/mois, RGPD inclus.",
+    description: "Alternative française à Apollo.io, 5× moins chère. tout le tissu B2B français avec emails + téléphones, 150+ secteurs, 101 départements. À partir de 19 €/mois, RGPD inclus.",
     url: PAGE_URL,
     priceFrom: 19,
   }),
@@ -858,14 +858,14 @@ export default function ProspectionProductPage() {
           h1After: 'En 30 secondes.',
           subtitle: (
             <>
-              <strong className="text-content-primary font-semibold">287 000+ entreprises françaises</strong> accessibles via Google Places — emails + téléphones scrappés en cascade.{' '}
+              <strong className="text-content-primary font-semibold">tout le tissu B2B français</strong> accessibles via Google Places — emails + téléphones scrappés en cascade.{' '}
               <strong className="text-emerald-700 font-semibold">5× moins cher qu&apos;Apollo</strong>. 100% conforme RGPD.
             </>
           ),
           ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=starter' },
           ctaSecondary: { label: 'Voir une démo en direct', href: '/#try-live' },
           trust: [
-            (<><strong className="font-mono text-content-secondary">287 000+</strong> entreprises</>),
+            (<><strong className="font-mono text-content-secondary">Tout</strong> le B2B français</>),
             (<><strong className="font-mono text-content-secondary">101</strong> départements</>),
             (<><strong className="font-mono text-content-secondary">150+</strong> catégories</>),
             (<><ShieldCheck size={12} className="text-emerald-600" /> 100% RGPD</>),

@@ -62,6 +62,10 @@
   ],
   "crons": [
     {
+      "path": "/api/cron/health-canary",
+      "schedule": "*/10 * * * *"
+    },
+    {
       "path": "/api/cron/monthly-nudge",
       "schedule": "0 9 1 * *"
     },

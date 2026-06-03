@@ -13,10 +13,14 @@
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
 import NextError from 'next/error';
+import { reportError } from '@/lib/errorReporting';
 
 export default function GlobalError({ error }) {
   useEffect(() => {
     Sentry.captureException(error);
+    // Double filet : forward aussi à /api/report-error → déclenche l'alerte
+    // e-mail ops throttlée (on ne découvre plus une panne par l'utilisateur).
+    reportError(error, { boundary: 'global-error' });
   }, [error]);
 
   return (

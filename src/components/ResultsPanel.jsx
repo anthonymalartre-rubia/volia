@@ -2,7 +2,26 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
 import { createPortal } from "react-dom";
-import { scoreLead } from "@/lib/lead-score";
+import { scoreLead, scoreTier } from "@/lib/lead-score";
+
+// Badge score ICP (0-100) — couleur par tier. Affiché à côté du nom prospect.
+function ScoreBadge({ p }) {
+  const s = scoreLead(p);
+  const tier = scoreTier(s);
+  const cls = {
+    emerald: 'bg-emerald-500/15 text-emerald-500',
+    amber: 'bg-amber-500/15 text-amber-600',
+    zinc: 'bg-zinc-500/15 text-zinc-400',
+  }[tier.color];
+  return (
+    <span
+      title={`Score ICP ${s}/100 — ${tier.label} (contactabilité + signaux)`}
+      className={`flex-shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold tabular-nums ${cls}`}
+    >
+      {s}
+    </span>
+  );
+}
 import {
   Download,
   Trash2,
@@ -1379,7 +1398,10 @@ export default memo(function ResultsPanel({
                     )}
                   </button>
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-content-primary truncate">{p.nom}</div>
+                    <div className="text-sm font-medium text-content-primary truncate flex items-center gap-1.5">
+                      <span className="truncate">{p.nom}</span>
+                      <ScoreBadge p={p} />
+                    </div>
                     <div className="text-[11px] text-content-faint truncate">{p.adresse}</div>
                   </div>
                 </div>

@@ -16,7 +16,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useState } from 'react';
-import { Sparkles, Loader2, X, Check, AlertCircle, Wand2 } from 'lucide-react';
+import { Sparkles, Loader2, X, Check, AlertCircle, Wand2, Calendar } from 'lucide-react';
 
 function dueIsoFromDays(days) {
   const d = new Date(Date.now() + (Number(days) || 3) * 86400000);
@@ -35,6 +35,43 @@ export default function CallSummarizer({ dealId, stages = [], currentStageId, on
   const [summary, setSummary] = useState('');
   const [stageId, setStageId] = useState('');
   const [tasks, setTasks] = useState([]); // [{ content, due_in_days, checked }]
+
+  // Import Fireflies (transcripts auto, au lieu du collage manuel)
+  const [ff, setFf] = useState({ open: false, loading: false, connected: null, meetings: [], keyInput: '', error: '' });
+
+  async function openFireflies() {
+    setFf((s) => ({ ...s, open: true, loading: true, error: '' }));
+    try {
+      const res = await fetch('/api/integrations/fireflies');
+      const d = await res.json();
+      setFf((s) => ({ ...s, loading: false, connected: !!d.connected, meetings: d.meetings || [], error: d.error || '' }));
+    } catch { setFf((s) => ({ ...s, loading: false, error: 'Réseau indisponible' })); }
+  }
+  async function connectFireflies() {
+    const key = ff.keyInput.trim();
+    if (!key) return;
+    setFf((s) => ({ ...s, loading: true, error: '' }));
+    try {
+      const res = await fetch('/api/integrations/fireflies', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ api_key: key }),
+      });
+      const d = await res.json();
+      if (!res.ok || !d.success) { setFf((s) => ({ ...s, loading: false, error: d.error || 'Clé invalide' })); return; }
+      const r2 = await fetch('/api/integrations/fireflies');
+      const d2 = await r2.json();
+      setFf((s) => ({ ...s, loading: false, connected: true, meetings: d2.meetings || [], keyInput: '' }));
+    } catch { setFf((s) => ({ ...s, loading: false, error: 'Réseau indisponible' })); }
+  }
+  async function pickMeeting(id) {
+    setFf((s) => ({ ...s, loading: true, error: '' }));
+    try {
+      const res = await fetch(`/api/integrations/fireflies?id=${encodeURIComponent(id)}`);
+      const d = await res.json();
+      if (!res.ok || !d.success) { setFf((s) => ({ ...s, loading: false, error: d.error || 'Transcript indisponible' })); return; }
+      setTranscript(d.text || '');
+      setFf((s) => ({ ...s, open: false, loading: false }));
+    } catch { setFf((s) => ({ ...s, loading: false, error: 'Réseau indisponible' })); }
+  }
 
   function reset() {
     setOpen(false);
@@ -160,6 +197,52 @@ export default function CallSummarizer({ dealId, stages = [], currentStageId, on
 
       {!proposal ? (
         <>
+          {/* Import auto Fireflies (au lieu du collage manuel) */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] text-content-tertiary">Colle le transcript, ou…</span>
+            <button type="button" onClick={openFireflies} className="inline-flex items-center gap-1 text-[11px] font-semibold text-violet-600 hover:text-violet-500">
+              <Calendar size={12} /> Importer depuis Fireflies
+            </button>
+          </div>
+          {ff.open && (
+            <div className="rounded-lg border border-line bg-surface-base p-2.5 space-y-2">
+              {ff.loading && (
+                <p className="text-xs text-content-tertiary flex items-center gap-1"><Loader2 size={12} className="animate-spin" /> Chargement…</p>
+              )}
+              {!ff.loading && ff.connected === false && (
+                <div className="space-y-1.5">
+                  <p className="text-[11px] text-content-tertiary">Connecte ta clé API Fireflies (Fireflies → Settings → Developer Settings → API).</p>
+                  <div className="flex gap-1.5">
+                    <input
+                      type="password"
+                      value={ff.keyInput}
+                      onChange={(e) => setFf((s) => ({ ...s, keyInput: e.target.value }))}
+                      placeholder="Clé API Fireflies"
+                      className="flex-1 px-2 py-1.5 rounded border border-line bg-surface-card text-xs text-content-primary focus:outline-none focus:border-violet-500"
+                    />
+                    <button type="button" onClick={connectFireflies} className="px-2.5 py-1.5 rounded bg-violet-600 text-white text-xs font-semibold">Connecter</button>
+                  </div>
+                </div>
+              )}
+              {!ff.loading && ff.connected && ff.meetings.length > 0 && (
+                <ul className="max-h-40 overflow-y-auto space-y-1">
+                  {ff.meetings.map((m) => (
+                    <li key={m.id}>
+                      <button type="button" onClick={() => pickMeeting(m.id)} className="w-full text-left px-2 py-1.5 rounded hover:bg-violet-500/10 text-xs">
+                        <span className="font-medium text-content-primary">{m.title}</span>
+                        {m.date ? <span className="text-content-tertiary ml-2">{new Date(m.date).toLocaleDateString('fr-FR')}</span> : null}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {!ff.loading && ff.connected && ff.meetings.length === 0 && (
+                <p className="text-xs text-content-tertiary">Aucune réunion récente trouvée dans Fireflies.</p>
+              )}
+              {ff.error && <p className="text-[11px] text-rose-600">{ff.error}</p>}
+            </div>
+          )}
+
           <textarea
             rows={6}
             value={transcript}

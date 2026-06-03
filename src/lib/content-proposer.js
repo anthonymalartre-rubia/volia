@@ -237,38 +237,42 @@ function buildEventsBrief(events) {
 // ─────────────────────────────────────────────────────────────────────
 // Pas obligatoire d'utiliser ces angles, mais ils servent de matière si
 // la semaine est calme. Claude pioche celui qui résonne avec le contexte.
+// IMPORTANT : tous les chiffres ci-dessous sont VRAIS et défendables —
+// soit issus de notre étude (sources publiques attribuées : Belkins,
+// Instantly), soit de notre data de couverture réelle (~40 000 entreprises).
+// NE PAS réintroduire de claims fabriqués type "+47%", "87%", "800€".
 const EVERGREEN_PROVOCATIVE_ANGLES = [
   {
-    angle: 'Pricing concurrentiel choc',
-    hook: 'Apollo facture 800€/mois pour des features que Volia fait à 179€/mois. Voici ce que tu paies réellement chez Apollo.',
+    angle: 'Le vrai taux de réponse',
+    hook: 'On te vend le cold email à "8-15% de réponse". Les sources publiques (Belkins, Instantly) disent 1-5%. Quiconque promet plus te vend du vent.',
   },
   {
-    angle: 'Best practice démontée',
-    hook: 'On t\'a vendu le "warmup à $20/mo" comme magique. Réalité : 87% des emails warmés finissent quand même en promotions Gmail. Pourquoi.',
+    angle: 'Le poids des relances',
+    hook: '55 à 65% des réponses en cold email arrivent sur les relances, pas sur le 1er mail. Ceux qui s\'arrêtent après un envoi jettent la moitié de leurs deals.',
   },
   {
-    angle: 'Fact-bomb deliverability',
-    hook: 'J\'ai analysé X cold emails B2B FR ce mois. Y% finissent en spam. Les 3 erreurs qu\'ils font tous.',
+    angle: 'Zéro email deviné',
+    hook: 'La plupart des outils "devinent" les emails (contact@, info@). Ça bounce et ça flingue ta délivrabilité. Sur ~40 000 entreprises, on en a deviné 0.',
   },
   {
-    angle: 'Stack overpriced',
-    hook: 'Le stack B2B "standard" en 2026 : 800€ Apollo + 1200€ HubSpot + 400€ Lemlist + 200€ Calendly = 2600€/mois. Pour 179€ tu as 80% du même.',
+    angle: 'La moitié du marché invisible',
+    hook: '1 entreprise française sur 4 n\'a même pas de site web. Donc injoignable par email. C\'est pour ça que le tout-email plafonne — et que le multicanal gagne.',
   },
   {
-    angle: 'Mythe IA tueuse de jobs',
-    hook: 'Non, l\'IA va pas remplacer ton SDR. Elle va remplacer ton SDR qui copie-colle Apollo dans HubSpot manuellement.',
+    angle: 'Le ciblage bat le volume',
+    hook: 'Petits envois ciblés (<50) : 5,8% de réponse. Gros volumes à l\'aveugle : 2,1%. Le ciblage chirurgical double tes résultats. Le volume, non.',
+  },
+  {
+    angle: 'Le ticket d\'entrée',
+    hook: 'La prospection sérieuse est devenue un truc de gros budgets (outils US à 99$/mois). Volia démarre à 19€/mois, RGPD inclus. Pourquoi ça devrait coûter plus ?',
   },
   {
     angle: 'Manuel = perte de temps',
-    hook: 'Si tu passes encore +4h/semaine à scraper LinkedIn manuellement, tu travailles pour ton outil. Pas l\'inverse.',
-  },
-  {
-    angle: 'Données fiables vs vendues',
-    hook: 'Les bases "vendues" comme Apollo te donnent 30% d\'emails morts. Pourquoi ? Parce qu\'ils achètent en gros et revendent froid.',
+    hook: 'Si tu passes encore +4h/semaine à scraper LinkedIn à la main, tu travailles pour ton outil. Pas l\'inverse.',
   },
   {
     angle: 'Compliance RGPD ignorée',
-    hook: 'Les outils US oublient un détail : la CNIL. 80% des bases B2B importées violent le RGPD. Voici les 3 critères à vérifier.',
+    hook: 'Les outils US oublient un détail : la CNIL. Le cold email B2B est légal en France (intérêt légitime, art. 6.1.f) — mais à 4 conditions précises. Voici lesquelles.',
   },
 ];
 
@@ -289,10 +293,9 @@ KPI secondaire : reach.
 ═══════════════════════════════════════════════════════════════════════
 PROMESSE DE VALEUR VOLIA (à transmettre, jamais à expliquer)
 ═══════════════════════════════════════════════════════════════════════
-"Tout ton stack prospection + campagnes + CRM pour 179€/mois (vs 2000€
-chez Apollo+HubSpot+Lemlist), 100% conforme RGPD, scrape live de Google
-Places sur 101 départements FR + Belgique + Suisse, données toujours
-fraîches (pas une base vendue froide)."
+"Toute ta prospection B2B française à partir de 19€/mois, 100% conforme
+RGPD, scrape live de Google Places sur 101 départements + Belgique +
+Suisse romande, emails vérifiés (jamais devinés), pas une base vendue froide."
 
 PRODUITS (à mentionner si pertinent au sujet, pas exhaustif) :
 - Prospection : scraping live Google Places, 101 dépts FR + BE + CH
@@ -300,8 +303,9 @@ PRODUITS (à mentionner si pertinent au sujet, pas exhaustif) :
 - CRM : pipeline natif
 - Forms : capture leads
 
-PLAN : Business 179€/mois (4 modules débloqués) — ou 149€/mois en
-promo annuelle.
+PLANS : Starter gratuit (100 prospects) → à partir de 19€/mois. Le plan
+Business débloque les 4 modules (Prospection + Campagnes + CRM + Forms).
+NE JAMAIS inventer un prix précis non vérifié.
 
 ═══════════════════════════════════════════════════════════════════════
 TON DU POST — IMPORTANT
@@ -315,7 +319,7 @@ faire RÉAGIR la bonne cible (et faire fuir les autres, c'est OK).
 - Démolir un mythe / best practice usée du B2B.
 - Comparer factuellement avec un concurrent quand pertinent (Apollo, HubSpot,
   Lemlist sont fair game pour des comparaisons CHIFFRÉES — jamais d'insulte).
-- Chiffres concrets. "+47% de réponse" > "boost ton taux de réponse".
+- Chiffres concrets ET vrais/sourcés. "1-5% de réponse moyen (Belkins)" > "boost ton taux". JAMAIS de chiffre inventé.
 - Anecdote vécue / observation > théorie.
 - Phrase courte. Punch. Rythme.
 - Finir par un appel à débat ou un mini-CTA discret vers volia.fr.
@@ -338,7 +342,7 @@ FRAMEWORKS DE POSTS PROVOCATEURS (pick UN par post)
 3. **Fact-bomb chiffré** : "J'ai analysé 1000 X. 87% se trompent sur Z. Voici pourquoi."
 4. **Contrarian take** : "Tout le monde dit X. C'est faux. Voici pourquoi."
 5. **Anecdote founder** : "Un prospect m'a dit X la semaine dernière. Ma réponse l'a choqué."
-6. **Comparaison cash** : "Apollo + HubSpot + Lemlist = 2000€/mois. Voici la même chose pour 179€."
+6. **Comparaison cash** : "Apollo démarre à ~99$/mois pour la France. Volia : 19€/mois, RGPD inclus."
 7. **Pain point amplifié** : "Si tu fais encore X manuellement, tu travailles pour ton outil."
 8. **Données vs intuition** : "Les SDR pensent que X marche. Les data disent l'inverse."
 
@@ -360,7 +364,7 @@ INTERDIT :
 
 AUTORISÉ ET ENCOURAGÉ :
 - Comparaisons factuelles de prix avec Apollo, HubSpot, Lemlist, Hunter, Lusha
-- "Volia 179€/mois" vs concurrents x 5-10
+- "Volia à partir de 19€/mois" vs concurrents US plus chers
 - "Scrape live Google Places" (USP technique réel)
 - "1 founder + Claude" (mention discrète, pas central)
 - Liens vers volia.fr/pricing, volia.fr/changelog, volia.fr/comparatif/apollo-vs-volia

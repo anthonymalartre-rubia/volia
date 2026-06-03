@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import Link from 'next/link';
 import { ArrowLeft, Printer, Zap, Download, X } from 'lucide-react';
 import ReaderHeader from '@/components/ReaderHeader';
@@ -21,7 +22,7 @@ function PrintToPdfButton() {
   const [showHint, setShowHint] = useState(false);
 
   const handleClick = () => {
-    const hintSeen = typeof window !== 'undefined' && localStorage.getItem('print-pdf-hint-seen') === '1';
+    const hintSeen = typeof window !== 'undefined' && safeStorage.get('print-pdf-hint-seen') === '1';
     if (!hintSeen) {
       setShowHint(true);
     } else {
@@ -30,7 +31,7 @@ function PrintToPdfButton() {
   };
 
   const confirmAndPrint = () => {
-    if (typeof window !== 'undefined') localStorage.setItem('print-pdf-hint-seen', '1');
+    if (typeof window !== 'undefined') safeStorage.set('print-pdf-hint-seen', '1');
     setShowHint(false);
     // Délai court pour laisser la modale se fermer avant la dialog print
     setTimeout(() => window.print(), 100);

@@ -17,6 +17,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import { useRouter } from 'next/navigation';
 import {
   Users,
@@ -150,7 +151,7 @@ export default function CrmContactsPage() {
         setCustomFields(list);
         // Restore préférence localStorage
         try {
-          const raw = window.localStorage.getItem(COLUMNS_STORAGE_KEY);
+          const raw = safeStorage.get(COLUMNS_STORAGE_KEY);
           if (raw) {
             const ids = JSON.parse(raw);
             if (Array.isArray(ids)) {
@@ -173,7 +174,7 @@ export default function CrmContactsPage() {
       if (next.has(fieldId)) next.delete(fieldId);
       else next.add(fieldId);
       try {
-        window.localStorage.setItem(COLUMNS_STORAGE_KEY, JSON.stringify(Array.from(next)));
+        safeStorage.set(COLUMNS_STORAGE_KEY, JSON.stringify(Array.from(next)));
       } catch {
         /* noop */
       }

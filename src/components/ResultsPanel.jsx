@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect, useRef, memo, lazy, Suspense } from "react";
+import { safeStorage } from "@/lib/safe-storage";
 import { createPortal } from "react-dom";
 import { scoreLead, scoreTier } from "@/lib/lead-score";
 
@@ -484,7 +485,7 @@ export default memo(function ResultsPanel({
   const [visibleCols, setVisibleCols] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
-        const saved = localStorage.getItem('leadColumns');
+        const saved = safeStorage.get('leadColumns');
         if (saved) return JSON.parse(saved);
       } catch {}
     }
@@ -554,7 +555,7 @@ export default memo(function ResultsPanel({
     if (col?.required) return;
     const next = { ...visibleCols, [key]: !visibleCols[key] };
     setVisibleCols(next);
-    try { localStorage.setItem('leadColumns', JSON.stringify(next)); } catch {}
+    try { safeStorage.set('leadColumns', JSON.stringify(next)); } catch {}
   };
 
   const toggleSelect = (id) => {

@@ -28,7 +28,7 @@ const MONTHS_FR = [
 
 // Stats sectorielles tournantes (1 par mois)
 const MONTHLY_STATS = [
-  { headline: '40 % de couverture chez Apollo en France', body: 'Notre cascade waterfall monte à 70-85 % sur le même périmètre — testé sur 500 entreprises FR.' },
+  { headline: 'Apollo couvre mal la France', body: 'Notre cascade waterfall trouve un email pro vérifié dans ~46 % des cas quand l\'entreprise a un site — et ne le devine jamais.' },
   { headline: '+18 % de coût matière en restauration depuis 2022', body: 'C\'est l\'objection N°1 des restaurateurs en cold email. Anticipez-la dans votre accroche.' },
   { headline: '92 j de délai moyen de vente immobilière en 2024', body: 'Soit +25 j vs 2021. Les agences immo prospectent les vendeurs en amont — votre opportunité.' },
   { headline: '15 000 postes ouverts en plomberie', body: 'Les artisans BTP sont en sur-charge — démarchez les soirs (19h-21h) et hivers (intersaison).' },

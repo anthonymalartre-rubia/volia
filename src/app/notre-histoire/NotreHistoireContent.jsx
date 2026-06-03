@@ -78,8 +78,8 @@ function HeroSection() {
 
         <MotionInView delay={200}>
           <p className="text-center text-xl sm:text-2xl text-content-secondary leading-relaxed max-w-3xl mx-auto mb-10 font-light">
-            Première entreprise <strong className="text-content-primary font-semibold">autonome</strong>,{' '}
-            pilotée par IA, augmentée par <strong className="text-content-primary font-semibold">1 founder</strong>.
+            Une entreprise pensée autrement : <strong className="text-content-primary font-semibold">l&apos;IA exécute</strong>{' '}
+            le travail répétitif, <strong className="text-content-primary font-semibold">l&apos;humain décide</strong>.
           </p>
         </MotionInView>
 
@@ -87,10 +87,10 @@ function HeroSection() {
         <MotionInView delay={300}>
           <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-10">
             {[
-              { value: '6', label: 'semaines de sprint', icon: Zap },
+              { value: '101', label: 'départements FR', icon: Zap },
               { value: '4', label: 'modules connectés', icon: Layers },
               { value: '0', label: 'levée', icon: Wallet },
-              { value: '0', label: 'salarié supplémentaire', icon: User },
+              { value: '1', label: 'humain aux commandes', icon: User },
               { value: 'Marseille', label: '', icon: MapPin, mono: false },
             ].map((stat) => {
               const Icon = stat.icon;
@@ -116,11 +116,11 @@ function HeroSection() {
             <div className="text-center px-6 py-5 rounded-2xl bg-white/70 backdrop-blur-sm border border-violet-200 shadow-sm">
               <p className="text-base sm:text-lg text-content-primary font-medium leading-relaxed">
                 <span className="bg-gradient-to-br from-violet-700 to-indigo-700 bg-clip-text text-transparent font-bold">
-                  1 humain décide. 1000 agents exécutent.
+                  L&apos;IA exécute la corvée. L&apos;humain décide.
                 </span>
                 <br />
                 <span className="text-content-secondary text-sm sm:text-base">
-                  L&apos;entreprise n&apos;a plus besoin d&apos;une équipe. Elle a besoin d&apos;un chef d&apos;orchestre.
+                  Le rôle de l&apos;humain n&apos;est pas de faire la corvée. C&apos;est de décider, créer, et garder le contrôle.
                 </span>
               </p>
             </div>
@@ -161,11 +161,11 @@ function ConstatSection() {
       title: 'Entreprise traditionnelle',
       tone: 'bad',
       items: [
-        'Lève 2M€, recrute 12 personnes',
-        '6 à 12 mois pour sortir un v1',
-        '350k€/mois de payroll, 2 ans avant rentabilité',
+        'Des semaines de réunions avant le moindre livrable',
+        'La corvée (saisie, recherche, reporting) mange le temps utile',
         'Chaque feature = 4 réunions + 2 sprints',
-        'Vélocité limitée par la bande passante humaine',
+        'Les meilleurs profils passent leur temps sur des tâches sans valeur',
+        'Vélocité limitée par le travail manuel',
       ],
     },
     {
@@ -173,11 +173,11 @@ function ConstatSection() {
       title: 'Entreprise pilotée par IA',
       tone: 'good',
       items: [
-        '1 founder + un orchestre d\'agents IA',
-        '6 semaines pour sortir une suite complète',
+        'Des agents IA gèrent la corvée, l\'humain pilote',
+        'Une suite produit livrée vite, itérée en continu',
         '< 500€/mois de coûts opérationnels',
         'Chaque feature = 1 prompt + 1 review humaine',
-        'Vélocité limitée par la vision du founder',
+        'L\'humain se concentre sur la vision et la décision',
       ],
     },
   ];
@@ -192,13 +192,13 @@ function ConstatSection() {
               Le constat
             </span>
             <h2 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              En 2026, l&apos;entreprise traditionnelle est devenue obsolète.
+              En 2026, on peut construire une entreprise autrement.
             </h2>
             <p className="text-content-tertiary text-lg max-w-3xl mx-auto leading-relaxed">
               Nous sommes entrés dans l&apos;ère des <strong className="text-content-secondary">agents IA</strong>. Coder, designer,
-              écrire, vendre, opérer — chaque fonction d&apos;une entreprise peut désormais être déléguée à un orchestre d&apos;agents
-              spécialisés. Le coût marginal d&apos;une équipe humaine n&apos;est plus défendable face à la vélocité d&apos;une équipe
-              augmentée par l&apos;IA.
+              écrire, opérer — une grande partie de la corvée peut désormais être confiée à des agents
+              spécialisés, sous supervision humaine. L&apos;humain garde la vision, les décisions et la relation client ;
+              l&apos;IA exécute le reste, plus vite.
             </p>
           </div>
         </MotionInView>
@@ -272,9 +272,9 @@ function ExperienceSection() {
               L&apos;expérience radicale
             </span>
             <h2 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              J&apos;ai construit Volia en 6 semaines.
+              Volia est construit autrement.
               <br />
-              <span className="bg-gradient-to-br from-violet-600 to-indigo-600 bg-clip-text text-transparent">Seul. Avec Claude.</span>
+              <span className="bg-gradient-to-br from-violet-600 to-indigo-600 bg-clip-text text-transparent">L&apos;IA exécute, je décide.</span>
             </h2>
           </div>
         </MotionInView>
@@ -284,17 +284,17 @@ function ExperienceSection() {
             <p className="text-lg text-content-secondary leading-relaxed mb-6">
               Pas un POC. Pas une démo. <strong className="text-content-primary">Un produit en production</strong>, utilisé par
               des entreprises payantes, déployé sur Vercel avec monitoring temps réel, base de données managée, paiements Stripe,
-              emails transactionnels, cron jobs autonomes.
+              emails transactionnels, cron jobs automatisés.
             </p>
             <p className="text-lg text-content-secondary leading-relaxed mb-6">
               4 modules connectés (Prospection, Campagnes, CRM, Forms), tout le tissu B2B français accessible, couverture sur 8 pays.
-              Ce qu&apos;une équipe de 8 développeurs aurait mis 12 mois à livrer.
+              Une vraie suite produit, livrée vite et itérée en continu — sans armée de développeurs.
             </p>
             <div className="my-8 px-6 py-5 rounded-xl bg-gradient-to-br from-violet-50 via-white to-indigo-50 border-l-4 border-violet-500">
               <p className="text-lg sm:text-xl text-content-primary font-medium italic leading-relaxed">
-                «&nbsp;L&apos;IA n&apos;a pas remplacé une équipe. Elle a permis qu&apos;une équipe{' '}
+                «&nbsp;L&apos;IA ne remplace pas l&apos;humain. Elle lui rend son temps pour{' '}
                 <strong className="bg-gradient-to-br from-violet-700 to-indigo-700 bg-clip-text text-transparent font-bold">
-                  n&apos;ait pas besoin d&apos;exister
+                  ce qui compte vraiment
                 </strong>
                 .&nbsp;»
               </p>
@@ -309,7 +309,7 @@ function ExperienceSection() {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { value: '6', sub: 'semaines V1', icon: Zap, gradient: 'from-violet-600 to-indigo-600' },
+            { value: '0', sub: 'email deviné (100% vérifiés)', icon: Zap, gradient: 'from-violet-600 to-indigo-600' },
             { value: '4', sub: 'modules connectés', icon: Layers, gradient: 'from-indigo-600 to-blue-600' },
             { value: '150+', sub: 'secteurs B2B FR', icon: TargetIcon, gradient: 'from-blue-600 to-cyan-600' },
             { value: '8', sub: 'pays couverts', icon: Globe, gradient: 'from-emerald-600 to-teal-600' },
@@ -352,7 +352,7 @@ function MethodSection() {
               Comment ça fonctionne au quotidien.
             </h2>
             <p className="text-content-tertiary text-lg max-w-3xl mx-auto leading-relaxed">
-              Le founder n&apos;écrit pas le code. Il pitche les besoins. L&apos;orchestre d&apos;agents propose
+              L&apos;humain n&apos;écrit pas la corvée. Il pitche les besoins, il décide, il valide. Les agents proposent
               l&apos;architecture, le code, les tests, la documentation, le déploiement. La boucle est{' '}
               <strong className="text-content-secondary">de l&apos;ordre de la minute</strong>, pas du sprint.
             </p>
@@ -369,7 +369,7 @@ function MethodSection() {
                 </div>
                 <div>
                   <div className="text-xs uppercase tracking-wider text-violet-600 font-bold">Le chef d&apos;orchestre</div>
-                  <div className="text-lg font-bold text-content-primary">1 founder · Anthony</div>
+                  <div className="text-lg font-bold text-content-primary">Anthony · fondateur</div>
                 </div>
               </div>
               <p className="text-sm text-content-secondary mb-4 leading-relaxed">
@@ -547,8 +547,8 @@ function NumbersSection() {
     },
     {
       value: '10',
-      label: 'cron jobs autonomes',
-      sub: 'tournent 24/7 sans intervention',
+      label: 'cron jobs automatisés',
+      sub: 'tournent 24/7, supervisés',
       icon: Network,
       gradient: 'from-blue-600 to-cyan-600',
     },
@@ -919,7 +919,7 @@ function PageFooter() {
           <ArrowLeft size={14} />
           Retour à Volia.fr
         </Link>
-        <p>&copy; 2026 Volia — Marseille · Pilotée par IA, augmentée par 1 founder.</p>
+        <p>&copy; 2026 Volia — Marseille · L&apos;IA exécute, l&apos;humain décide.</p>
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <Link href="/changelog" className="hover:text-content-secondary transition">Changelog</Link>
           <Link href="/cgu" className="hover:text-content-secondary transition">CGU</Link>

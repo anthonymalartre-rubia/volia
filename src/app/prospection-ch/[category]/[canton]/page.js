@@ -150,7 +150,7 @@ export default async function CategoryCantonChPage({ params }) {
         intro={intro}
         category={category}
         department={cantonAsDept}
-        stats={{ total: total.toLocaleString('fr-FR'), avgRating: '4.4', withEmail: '78%', withPhone: '92%' }}
+        stats={{ total: total.toLocaleString('fr-FR'), avgRating: '4.4', withEmail: '~46%', withPhone: '92%' }}
         faq={faq}
         relatedCategories={relatedCategories}
         relatedDepartments={otherCantons}

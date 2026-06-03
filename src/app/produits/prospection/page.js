@@ -260,7 +260,7 @@ function ProblemSolutionSection() {
       'Volia Prospection : 19 €/mois pour 1 000 prospects',
       '30 secondes par recherche (waterfall auto)',
       'Email + téléphone à chaque ligne, scorés',
-      'Couverture France : 78 % (#1 du marché FR)',
+      'Email pro trouvé : ~46 % (entreprises avec site web)',
       'Export 1-clic vers HubSpot, Salesforce, Zoho',
     ],
     total: '19 €/mois — économie 218 €/mois',
@@ -685,7 +685,7 @@ function FeaturedTestimonialSection() {
       <MotionInView className="max-w-4xl mx-auto text-center relative z-10">
         <div className="text-6xl sm:text-7xl text-violet-300 leading-none mb-4 font-serif">“</div>
         <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-medium text-content-primary leading-snug mb-8 tracking-tight">
-          Avant Volia, on payait Apollo <strong className="font-bold">99 $/mois</strong> pour <strong className="font-bold">40 %</strong> de couverture France. Aujourd&apos;hui, on est à <strong className="bg-gradient-to-br from-violet-700 to-indigo-700 bg-clip-text text-transparent font-bold">19 €/mois</strong> pour <strong className="bg-gradient-to-br from-emerald-700 to-teal-700 bg-clip-text text-transparent font-bold">78 %</strong>. Le gain est insolent.
+          Avant Volia, on payait Apollo <strong className="font-bold">99 $/mois</strong> pour des données françaises partielles. Aujourd&apos;hui, on est à <strong className="bg-gradient-to-br from-violet-700 to-indigo-700 bg-clip-text text-transparent font-bold">19 €/mois</strong>, sur des données <strong className="bg-gradient-to-br from-emerald-700 to-teal-700 bg-clip-text text-transparent font-bold">fraîches et vérifiées</strong>. Le gain est insolent.
         </blockquote>
 
         <div className="flex items-center justify-center gap-4">
@@ -804,7 +804,7 @@ const FAQ = [
   },
   {
     q: 'Quelle différence avec Apollo / Hunter ?',
-    a: 'Trois différences clés : (1) Volia est 5× moins cher (19 € vs ~92-99 $/mois) ; (2) Volia est spécialisé France (tout le tissu B2B français, 78 % de couverture) alors qu\'Apollo/Hunter sont US-first (40 % de couverture FR) ; (3) Volia inclut le téléphone à chaque ligne et un waterfall multi-sources qui maximise le taux email sans gaspiller de crédits. Et bien sûr : support en français, RGPD natif, hébergement EU.',
+    a: 'Trois différences clés : (1) Volia est 5× moins cher (19 € vs ~92-99 $/mois) ; (2) Volia est spécialisé France (données fraîches via Google Places, email pro trouvé ~46 % sur les entreprises avec site) alors qu\'Apollo/Hunter sont US-first et couvrent mal la France ; (3) Volia inclut le téléphone à chaque ligne et un waterfall multi-sources qui maximise le taux email sans gaspiller de crédits. Et bien sûr : support en français, RGPD natif, hébergement EU.',
   },
   {
     q: 'Puis-je faire des recherches en langage naturel ?',

@@ -122,7 +122,7 @@ export default async function CategoryChPage({ params }) {
         intro={intro}
         category={category}
         department={null}
-        stats={{ total: '1 800', avgRating: '4.4', withEmail: '78%', withPhone: '92%' }}
+        stats={{ total: '1 800', avgRating: '4.4', withEmail: '~46%', withPhone: '92%' }}
         faq={faq}
         relatedCategories={relatedCategories}
         relatedDepartments={cantonLinks}

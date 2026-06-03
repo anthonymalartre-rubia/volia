@@ -39,7 +39,7 @@ export default function ProspectionSeoPage({
   category,        // Category info { slug, label, labelCapitalized, labelPlural, group } or null
   department,      // Department info { code, slug, name, region } or null
   // Stats (mocked)
-  stats = { total: '1 250', avgRating: 4.2, withEmail: '78%', withPhone: '92%' },
+  stats = { total: '1 250', avgRating: 4.2, withEmail: '~46%', withPhone: '92%' },
   // FAQ items
   faq = [],
   // Related links

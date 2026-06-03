@@ -27,6 +27,7 @@ const ELIGIBLE_ACTION_TYPES = [
   'changelog_entry',
   'blog_post_draft',
   'newsletter_send',
+  'inbound_reply_suggested',
 ];
 
 /**
@@ -289,6 +290,88 @@ export async function runPublishApprovedActions() {
           await markActionFailed(action.id, errMsg.slice(0, 500));
           results.push({ id: action.id, ok: false, error: errMsg });
           console.error(`[publish-approved] FAQ reply FAILED : ${errMsg}`);
+        }
+        continue;
+      }
+
+      // ─── inbound_reply_suggested : réponse à un prospect, validée par
+      // l'humain → envoi depuis le domaine VÉRIFIÉ du user (jamais hello@volia.fr,
+      // règle réputation). Si pas de sender vérifié → on échoue l'action plutôt
+      // que d'envoyer depuis un domaine de repli.
+      if (action.action_type === 'inbound_reply_suggested') {
+        const supabase = getSupabaseAdmin();
+        const {
+          to,
+          draft_subject,
+          draft_body,
+          email_sender_id,
+          reply_to,
+          classification,
+        } = action.payload || {};
+
+        if (!to || !draft_subject || !draft_body || !email_sender_id) {
+          await markActionFailed(action.id, 'payload incomplet (to, draft_subject, draft_body, email_sender_id requis)');
+          results.push({ id: action.id, ok: false, error: 'missing_reply_fields' });
+          continue;
+        }
+
+        try {
+          // Re-vérifie le sender AU MOMENT de l'envoi (il a pu être supprimé/
+          // dé-vérifié entre la mise en file et l'approbation).
+          const { data: sender } = await supabase
+            .from('email_senders')
+            .select('id, domain, from_name, status')
+            .eq('id', email_sender_id)
+            .maybeSingle();
+
+          if (!sender || sender.status !== 'verified' || !sender.domain) {
+            await markActionFailed(action.id, 'sender non vérifié à l\'envoi — réponse NON envoyée (règle réputation : jamais hello@volia.fr)');
+            results.push({ id: action.id, ok: false, error: 'sender_not_verified' });
+            continue;
+          }
+
+          const fromHeader = `${sender.from_name || 'Volia'} <noreply@${sender.domain}>`;
+          const html = markdownToBasicHtml(draft_body);
+          const sent = await sendEmail({
+            to,
+            subject: draft_subject,
+            html,
+            from: fromHeader,
+            replyTo: reply_to || undefined,
+            tags: [{ name: 'type', value: 'inbound_reply' }],
+          });
+
+          // sendEmail peut basculer sur un domaine de repli si le primaire est
+          // refusé. Pour une réponse prospect, on REFUSE ce repli (réputation).
+          if (sent?.fallbackUsed) {
+            await markActionFailed(action.id, `refus repli hello@volia.fr (sender ${sender.domain} a été refusé par Resend) — vérifier le domaine`);
+            results.push({ id: action.id, ok: false, error: 'fallback_refused' });
+            console.error(`[publish-approved] inbound_reply fallback REFUSED → ${to}`);
+            continue;
+          }
+          if (!sent?.success) {
+            await markActionFailed(action.id, (sent?.error || 'send failed').slice(0, 500));
+            results.push({ id: action.id, ok: false, error: sent?.error || 'send_failed' });
+            continue;
+          }
+
+          await markActionExecuted(action.id, {
+            inbound_reply: {
+              sent_to: to,
+              subject: draft_subject,
+              from: fromHeader,
+              category: classification?.category || null,
+              sent_at: new Date().toISOString(),
+              provider_id: sent?.id || null,
+            },
+          });
+          results.push({ id: action.id, ok: true, sent_to: to, type: 'inbound_reply' });
+          console.log(`[publish-approved] Inbound reply OK → ${to} (from @${sender.domain})`);
+        } catch (err) {
+          const errMsg = err.message || String(err);
+          await markActionFailed(action.id, errMsg.slice(0, 500));
+          results.push({ id: action.id, ok: false, error: errMsg });
+          console.error(`[publish-approved] Inbound reply FAILED : ${errMsg}`);
         }
         continue;
       }

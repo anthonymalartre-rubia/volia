@@ -18,7 +18,9 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { cleanEnv } from '@/lib/envClean';
 import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
 import { autoCreateFromReply } from '@/lib/crm-auto-create';
-import { parseCampaignReplyAddress, parseSequenceReplyAddress, isInboundDomain } from '@/lib/inbound-domain';
+import { parseCampaignReplyAddress, parseSequenceReplyAddress, isInboundDomain, buildCampaignReplyAddress } from '@/lib/inbound-domain';
+import { logAutonomousAction } from '@/lib/autonomy';
+import { classifyAndDraftReply, DRAFTABLE_CATEGORIES } from '@/lib/autopilot/reply-classifier';
 import { parsePeerEmailAddress } from '@/lib/warmup-peer';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { reportError } from '@/lib/errorReporting';
@@ -410,22 +412,142 @@ async function handleInbound(request) {
   }
 
   // 6) Insert audit inbound_events
+  let inboundEventId = null;
   try {
-    await supabaseAdmin.from('inbound_events').insert({
-      user_id: ownerId,
-      channel: 'email',
-      sender_id: senderRow?.id || null,
-      from_email: from,
-      from_phone: null,
-      subject,
-      body: typeof bodyText === 'string' ? bodyText.slice(0, 10000) : null,
-      raw_payload: payload,
-      processed_at: new Date().toISOString(),
-      contact_id: autoResult?.contact_id || null,
-      deal_id: autoResult?.deal_id || null,
-    });
+    const { data: ev } = await supabaseAdmin
+      .from('inbound_events')
+      .insert({
+        user_id: ownerId,
+        channel: 'email',
+        sender_id: senderRow?.id || null,
+        from_email: from,
+        from_phone: null,
+        subject,
+        body: typeof bodyText === 'string' ? bodyText.slice(0, 10000) : null,
+        raw_payload: payload,
+        processed_at: new Date().toISOString(),
+        contact_id: autoResult?.contact_id || null,
+        deal_id: autoResult?.deal_id || null,
+      })
+      .select('id')
+      .single();
+    inboundEventId = ev?.id || null;
   } catch (e) {
     console.warn('[resend-inbound] inbound_events insert failed', e?.message);
+  }
+
+  // 6.5) IA — classification de la réponse + brouillon en file d'approbation.
+  // Inspiré du "reply handling system" (post viral) mais RGPD/marque-safe :
+  // l'humain valide en 1 clic dans /admin/auto-queue, PUIS l'envoi part du
+  // domaine VÉRIFIÉ (jamais hello@volia.fr). Best-effort, jamais bloquant.
+  // Garde-fous coût : plan payant (pro/business/enterprise), clé Anthropic
+  // présente, kill-switch env REPLY_AI_DISABLED.
+  if (
+    ownerId &&
+    from &&
+    typeof bodyText === 'string' &&
+    bodyText.trim().length > 1 &&
+    cleanEnv(process.env.ANTHROPIC_API_KEY) &&
+    cleanEnv(process.env.REPLY_AI_DISABLED) !== '1'
+  ) {
+    try {
+      // Gating plan : Claude reply-AI réservé aux plans payants.
+      const { data: prof } = await supabaseAdmin
+        .from('user_profiles')
+        .select('plan')
+        .eq('id', ownerId)
+        .maybeSingle();
+      const plan = (prof?.plan || 'free').toLowerCase();
+      const planAllowed = ['pro', 'business', 'enterprise'].includes(plan);
+
+      if (planAllowed) {
+        // Résout le sender VÉRIFIÉ depuis lequel on pourra répondre : d'abord
+        // celui de la campagne, sinon n'importe quel sender vérifié du user.
+        let replySender =
+          senderRow?.status === 'verified' && senderRow.domain ? senderRow : null;
+        if (!replySender) {
+          const { data: vs } = await supabaseAdmin
+            .from('email_senders')
+            .select('id, domain, from_name, status')
+            .eq('user_id', ownerId)
+            .eq('status', 'verified')
+            .limit(1)
+            .maybeSingle();
+          if (vs?.domain) replySender = vs;
+        }
+
+        const cls = await classifyAndDraftReply({
+          body: bodyText,
+          subject,
+          contactName: null,
+          campaignName: null,
+        });
+
+        if (cls.ok) {
+          // Trace la classification sur l'event (analytics + visibilité CRM).
+          if (inboundEventId) {
+            await supabaseAdmin
+              .from('inbound_events')
+              .update({ ai_category: cls.category, ai_summary: cls.summary })
+              .eq('id', inboundEventId)
+              .then(() => {}, () => {});
+          }
+
+          // Brouillon en file d'approbation UNIQUEMENT si :
+          //  - catégorie draftable (interested/question/objection)
+          //  - un brouillon sûr a été produit
+          //  - un sender vérifié existe pour envoyer (sinon on ne peut pas
+          //    répondre proprement → pas d'envoi depuis hello@volia.fr)
+          const canDraft =
+            DRAFTABLE_CATEGORIES.includes(cls.category) &&
+            cls.draftBody &&
+            replySender;
+
+          if (canDraft) {
+            const replyTo = matchedCampaignId
+              ? buildCampaignReplyAddress(matchedCampaignId)
+              : `noreply@${replySender.domain}`;
+            const preview = `[${cls.category}] ${cls.summary || ''}\n\n↳ Brouillon proposé :\n${String(cls.draftBody).slice(0, 280)}`;
+            const action = await logAutonomousAction({
+              actionType: 'inbound_reply_suggested',
+              source: 'webhooks/resend/inbound',
+              riskLevel: 'medium',
+              userId: ownerId,
+              autoExecute: false,
+              expiresInHours: 168, // 7 jours pour répondre
+              payload: {
+                to: from,
+                draft_subject: cls.draftSubject,
+                draft_body: cls.draftBody,
+                email_sender_id: replySender.id,
+                reply_to: replyTo,
+                contact_id: autoResult?.contact_id || null,
+                deal_id: autoResult?.deal_id || null,
+                campaign_id: matchedCampaignId || null,
+                owner_id: ownerId,
+                classification: {
+                  category: cls.category,
+                  confidence: cls.confidence,
+                  summary: cls.summary,
+                },
+                original_subject: subject || null,
+              },
+              preview,
+              rationale: `Réponse prospect classée "${cls.category}" — brouillon prêt, validation 1-clic requise avant envoi depuis @${replySender.domain}.`,
+            });
+            if (inboundEventId && action?.id) {
+              await supabaseAdmin
+                .from('inbound_events')
+                .update({ ai_reply_action_id: action.id })
+                .eq('id', inboundEventId)
+                .then(() => {}, () => {});
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[resend-inbound] reply-AI classification failed', e?.message);
+    }
   }
 
   // 7) Fire-and-forget : webhook 'email.replied' aux abonnés Zapier/Make

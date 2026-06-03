@@ -81,7 +81,7 @@ const HOW_IT_WORKS = [
 ];
 
 const FAQ = [
-  { q: 'How many emails do I actually get?', a: 'On average, 47% of prospects come back with a real professional email. Digital industries (SaaS, agencies, e-commerce): 70-85%. Less online industries (local trades, construction): 30-45%. You always see the confidence score before reaching out.' },
+  { q: 'How many emails do I actually get?', a: 'On average, ~46% of companies that have a website come back with a verified professional email (site scraping, then Google search). The rate is higher for digital industries (SaaS, agencies, e-commerce) and lower for less-online trades (local trades, construction). You always see the confidence score before reaching out — and we never guess an email.' },
   { q: 'Where does the data come from?', a: 'Three sources, no purchased lists. (1) Google Places for company identification — name, address, phone, rating. (2) Live website scraping for emails AND phone numbers (Verified). (3) Serper.dev Google search when the site is empty (Google). Fallback: pattern guess like contact@domain.fr (Probable). That\'s it.' },
   { q: 'Do you get mobile phones too, or just landlines?', a: 'Both. Starter and Solo get landline numbers (when published on the company site). Pro and Business add mobile phone enrichment — same waterfall logic, just more sources tried. You always see the type (landline/mobile) per row.' },
   { q: 'Is it GDPR-compliant?', a: 'Yes. Built that way from day one, not bolted on later. Legitimate interest basis, opt-out on every email, public removal page, permanent blocklist. 28 personal-email domains blocked by default. EU hosting. CNIL guidelines. Your DPO will sleep at night.' },

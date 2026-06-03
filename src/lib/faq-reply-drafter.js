@@ -29,7 +29,7 @@ CONTEXTE PRODUIT VOLIA :
 
 LIENS UTILES (à intégrer naturellement si pertinent) :
 - volia.fr/pricing : tarifs
-- volia.fr/comparatif/apollo : vs Apollo
+- volia.fr/comparatif/apollo-vs-volia : vs Apollo
 - volia.fr/etude : étude prospection B2B FR 2026
 - volia.fr/docs : help center
 - volia.fr/changelog : roadmap publique

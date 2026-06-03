@@ -21,7 +21,7 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 const DEFAULT_LABELS_FR = {
   products: 'Produits',
   features: 'Fonctionnalités',
-  pricing: 'Pricing',
+  pricing: 'Tarifs',
   blog: 'Blog',
   faq: 'FAQ',
 };

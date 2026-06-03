@@ -2,7 +2,9 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import {
-  useCaseDay1Email,
+  // Alias : le nom 'useCaseDay1Email' déclenche un faux positif
+  // react-hooks/rules-of-hooks (préfixe "use"). Ce n'est PAS un hook.
+  useCaseDay1Email as caseDay1Email,
   templateKillerDay3Email,
   trialExpiringDay7Email,
   finalDemoDay14Email,
@@ -65,7 +67,7 @@ const DRIP_STEPS = [
     label: 'J+1 Use case',
     /** Aucun pré-requis : envoyé à tout user actif. */
     isEligible: () => true,
-    build: ({ fullName }) => useCaseDay1Email(fullName),
+    build: ({ fullName }) => caseDay1Email(fullName),
   },
   {
     key: 'template_d3',

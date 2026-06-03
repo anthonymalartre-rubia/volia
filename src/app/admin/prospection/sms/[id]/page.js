@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {
   ArrowLeft, MessageSquare, Loader2, Send, AlertTriangle, CheckCircle2,
   XCircle, Clock, Pause, Trash2, RefreshCw, Users, Calendar, BarChart3,
-  AlertCircle, Euro, Hash,
+  AlertCircle, Euro, Hash, LogIn,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
 import { CAMPAGNES_ALLOWED_PLANS } from '@/lib/campagnes-access';

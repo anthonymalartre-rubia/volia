@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Gift, Copy, Check, Share2, Users, Loader2, LogIn,
-  CheckCircle2, Clock, TrendingUp, Mail,
+  CheckCircle2, Clock, TrendingUp, Mail, Sparkles, ArrowRight,
 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui';
 

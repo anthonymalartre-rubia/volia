@@ -100,7 +100,7 @@ export default function AffiliationPage() {
             Les candidatures sont validées manuellement. Tu recevras ton lien et tes accès par email.
           </p>
           <AffiliateApplyForm />
-          <p className="mt-4 text-center text-sm text-content-tertiary">
+          <div className="mt-4 flex flex-col items-center gap-2 text-center text-sm text-content-tertiary">
             <a
               href="/contrat-apporteur-affaires-volia.pdf"
               target="_blank"
@@ -109,7 +109,15 @@ export default function AffiliationPage() {
             >
               <FileText className="h-4 w-4" /> Consulter le contrat type d'apporteur d'affaires (PDF)
             </a>
-          </p>
+            <a
+              href="/annexes-apporteur-affaires-volia.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-medium text-violet-500 underline-offset-2 hover:underline"
+            >
+              <FileText className="h-4 w-4" /> Annexes : conditions du programme &amp; charte de marque (PDF)
+            </a>
+          </div>
         </section>
 
         {/* Mentions */}

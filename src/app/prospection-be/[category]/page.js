@@ -70,7 +70,7 @@ export default async function CategoryBePage({ params }) {
     },
     {
       question: `Comment Volia trouve-t-il les emails en Belgique ?`,
-      answer: `Le moteur scrape le site web de chaque entreprise belge, puis effectue une recherche Google ciblée. Taux de couverture moyen : 70-85 %.`,
+      answer: `Le moteur scrape le site web de chaque entreprise belge, puis effectue une recherche Google ciblée. Taux de couverture moyen : ~46 %.`,
     },
     {
       question: `La prospection B2B en Belgique est-elle conforme au RGPD ?`,

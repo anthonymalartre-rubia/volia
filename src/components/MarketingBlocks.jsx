@@ -163,7 +163,7 @@ export function BuiltForProfilesBlock({
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-emerald-400" />
-          <strong className="text-content-secondary font-mono">70-85%</strong> taux découverte email
+          <strong className="text-content-secondary font-mono">~46%</strong> taux découverte email
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-1 h-1 rounded-full bg-emerald-400" />
@@ -262,7 +262,7 @@ export function CompetitorMiniBlock() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto">
         <CompetitorCard name="Apollo.io" value="~ 40 %" tone="red" note="Base US, faible sur les TPE FR" />
         <CompetitorCard name="Hunter.io" value="~ 55 %" tone="orange" note="Bon si site web, faible sinon" />
-        <CompetitorCard name="Volia" value="70-85 %" tone="emerald" note="Scraping + Google + patterns" featured />
+        <CompetitorCard name="Volia" value="~46 %" tone="emerald" note="Scraping + Google + patterns" featured />
       </div>
     </section>
   );

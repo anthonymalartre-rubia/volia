@@ -467,7 +467,7 @@ export default function ProspectionSeoPage({
                 <span className="text-violet-400 text-xs font-semibold">.fr</span>
               </div>
               <p className="text-xs text-content-tertiary leading-relaxed mb-4">
-                Agrégateur de prospection B2B. 150 secteurs, 101 départements français, cascade waterfall 70-85 % de couverture email.
+                Agrégateur de prospection B2B. 150 secteurs, 101 départements français, cascade waterfall ~46 % de couverture email.
               </p>
               <a href="https://www.linkedin.com/company/volia" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5 text-xs text-content-secondary hover:text-violet-300 transition">
                 <LinkedinIcon size={12} />

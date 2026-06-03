@@ -69,7 +69,7 @@ export default async function CategoryChPage({ params }) {
     },
     {
       question: `Comment Volia trouve-t-il les emails en Suisse ?`,
-      answer: `Le moteur scrape le site web de chaque entreprise suisse, puis effectue une recherche Google. Taux : 70-85 %.`,
+      answer: `Le moteur scrape le site web de chaque entreprise suisse, puis effectue une recherche Google. Taux : ~46 %.`,
     },
     {
       question: `La prospection B2B en Suisse est-elle conforme RGPD ?`,

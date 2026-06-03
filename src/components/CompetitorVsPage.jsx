@@ -65,7 +65,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             {isAlternative ? (
               <>
                 Tu utilises {competitor.name} et tu trouves que <strong className="text-content-primary">ça coûte cher pour trop peu d&apos;emails français</strong> ?
-                Volia : 19€/mois ({savingsPct}% moins cher), cascade waterfall qui trouve 70-85% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
+                Volia : 19€/mois ({savingsPct}% moins cher), cascade waterfall qui trouve ~46% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
                 Tu te poses encore la question ?
               </>
             ) : (
@@ -99,7 +99,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               <SwitchReason
                 num="1"
                 title={`Couverture FR à 30-40% chez ${competitor.name}`}
-                desc={`${competitor.name} est conçu pour le marché US. Sur les TPE/PME françaises, leur taux de couverture email plafonne à 30-40%. Volia monte à 70-85% sur le même périmètre. C'est un fait, pas un argument.`}
+                desc={`${competitor.name} est conçu pour le marché US. Sur les TPE/PME françaises, leur taux de couverture email plafonne à 30-40%. Volia monte à ~46% sur le même périmètre. C'est un fait, pas un argument.`}
               />
               <SwitchReason
                 num="2"

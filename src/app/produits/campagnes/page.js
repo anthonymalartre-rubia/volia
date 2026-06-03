@@ -22,7 +22,7 @@ const PAGE_URL = `${SITE_URL}/produits/campagnes`;
 export const metadata = {
   title: 'Volia Campagnes — Cold email B2B qui finit en Inbox, pas en Spam',
   description:
-    'Alternative française à Lemlist + Instantly + Smartlead. Cold email illimité, warmup automatique 28 jours, multi-tenant Resend, auto-create CRM depuis replies. Inclus dans la suite Business 149 €/mois vs 108€/mo cumulés. 62 % taux ouverture moyen.',
+    'Alternative française à Lemlist + Instantly + Smartlead. Cold email illimité, warmup automatique 28 jours, multi-tenant Resend, auto-create CRM depuis replies. Inclus dans la suite Business 149 €/mois vs 108€/mo cumulés.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -744,7 +744,7 @@ const FAQ = [
   },
   {
     q: 'Comment éviter le spam folder ?',
-    a: 'Quatre garde-fous : (1) warmup automatique 28 jours obligatoire avant tout envoi en volume, (2) vérification DKIM / SPF / DMARC à la connexion du domaine, (3) monitoring bounce rate avec pause auto si > 2 %, (4) opt-out unifié qui préserve la réputation du domaine sur la durée. Résultat moyen beta : 62 % d\'ouverture, 94 % d\'inbox rate.',
+    a: 'Quatre garde-fous : (1) warmup automatique 28 jours obligatoire avant tout envoi en volume, (2) vérification DKIM / SPF / DMARC à la connexion du domaine, (3) monitoring bounce rate avec pause auto si > 2 %, (4) opt-out unifié qui préserve la réputation du domaine sur la durée.',
   },
   {
     q: 'Qu\'est-ce que le warmup d\'un domaine email ?',

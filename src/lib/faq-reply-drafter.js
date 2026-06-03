@@ -25,7 +25,7 @@ CONTEXTE PRODUIT VOLIA :
 - Plan UNIQUE Business 179€/mois (debloque les 4 modules) — ou 1690€/an en yearly (-2 mois offerts) — promo -30€/mois 12 mois pour les early adopters
 - Trial 14 jours sans CB pour le plan Pro existant (Solo et Pro disponibles aussi)
 - Hébergement 100% UE, conforme RGPD
-- 1 founder + agents IA pour l'exécution (Marseille, 6 semaines de build)
+- l'IA exécute le travail répétitif, l'humain décide (équipe basée à Marseille)
 
 LIENS UTILES (à intégrer naturellement si pertinent) :
 - volia.fr/pricing : tarifs

@@ -366,7 +366,7 @@ AUTORISÉ ET ENCOURAGÉ :
 - Comparaisons factuelles de prix avec Apollo, HubSpot, Lemlist, Hunter, Lusha
 - "Volia à partir de 19€/mois" vs concurrents US plus chers
 - "Scrape live Google Places" (USP technique réel)
-- "1 founder + Claude" (mention discrète, pas central)
+- "RGPD natif, hébergé en UE" (USP conformité)
 - Liens vers volia.fr/pricing, volia.fr/changelog, volia.fr/comparatif/apollo-vs-volia
 - Tease "Demo 8min sur Cal" en CTA discret final
 

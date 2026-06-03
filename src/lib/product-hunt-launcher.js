@@ -34,7 +34,7 @@ export const TEMPLATES = {
     'La suite SaaS B2B qui a 16 boucles d\'agents IA en production',
     'Prospection + Campagnes + CRM + Forms — Volia, à partir de 19€/mois',
     'L\'alternative française à Apollo + Lemlist + HubSpot + Typeform',
-    'Une suite B2B construite en 6 semaines par 1 founder + IA',
+    'Une suite B2B où l\'IA exécute et l\'humain décide',
   ],
   descriptionSeed:
     'Volia est la suite SaaS B2B française qui combine Prospection (Google Places + enrichissement waterfall), Campagnes (email auto), CRM (pipeline) et Forms (no-code). 16 boucles d\'agents IA orchestrent le marketing, le code, la vente, le support — 24/7. À partir de 19 €/mois. RGPD natif, hébergement UE.',
@@ -95,7 +95,7 @@ CONTRAINTES :
 - Max 2000 caractères
 - En anglais (audience PH internationale)
 - Ton : ${vibe === 'authentic-founder' ? 'founder authentique, légèrement vulnérable, factuel' : vibe}
-- Inclure : story 6 semaines + 1 founder + agents IA, 4 modules, 16 boucles autonomes, prix 19€/mois, lien volia.fr
+- Inclure : l'angle "l'IA exécute, l'humain décide", 4 modules, prix 19€/mois, RGPD natif, lien volia.fr
 - Pas de superlatives marketing creux ("revolutionary", "best ever")
 - Doit donner envie de tester sans pousser
 

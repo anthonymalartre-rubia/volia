@@ -102,7 +102,7 @@ export default function ProspectionChHub() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <StatCard label="Cantons" value="6" color="text-violet-400" />
               <StatCard label="Secteurs" value="150+" color="text-green-400" />
-              <StatCard label="Taux email" value="70-85%" color="text-blue-400" />
+              <StatCard label="Taux email" value="~46%" color="text-blue-400" />
               <StatCard label="RGPD" value="✓" color="text-amber-600" />
             </div>
           </section>

@@ -788,7 +788,7 @@ const HOW_IT_WORKS = [
 const FAQ = [
   {
     q: 'Combien d\'emails j\'obtiens par recherche ?',
-    a: 'En moyenne, 47 % des prospects extraits sont enrichis d\'un email professionnel (sources : scraping site + Serper + patterns). Sur certains secteurs très digitalisés (SaaS, agences digitales, e-commerce), on monte à 70-85 %. Sur des secteurs moins en ligne (artisans, BTP local), c\'est plutôt 30-45 %. Dans tous les cas, vous voyez le score de confiance avant l\'envoi.',
+    a: 'En moyenne, ~46 % des entreprises ayant un site web obtiennent un email professionnel vérifié (scraping du site puis recherche Google). Le taux est plus élevé sur les secteurs très digitalisés (SaaS, agences, e-commerce) et plus faible sur les métiers peu présents en ligne (artisans, BTP local). Dans tous les cas, vous voyez le score de confiance avant l\'envoi — et on ne devine jamais un email.',
   },
   {
     q: 'D\'où viennent les données ?',

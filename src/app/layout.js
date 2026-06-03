@@ -8,6 +8,7 @@ import DemoBotWidget from '@/components/DemoBotWidget';
 import SupportBotWidget from '@/components/SupportBotWidget';
 import UpgradeContextModal from '@/components/UpgradeContextModal';
 import AffiliateTracker from '@/components/AffiliateTracker';
+import AttributionTracker from '@/components/AttributionTracker';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -198,6 +199,8 @@ export default function RootLayout({ children }) {
             <UpgradeContextModal />
             {/* Capture ?aff=CODE → cookie volia_aff (programme apporteurs d'affaires) */}
             <AffiliateTracker />
+            {/* Capture UTM + referrer (first-touch) → cookie volia_attr + user_profiles.signup_attribution */}
+            <AttributionTracker />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

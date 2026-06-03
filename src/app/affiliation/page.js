@@ -4,7 +4,7 @@
 import MarketingHeader from '@/components/MarketingHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 import AffiliateApplyForm from '@/components/AffiliateApplyForm';
-import { Banknote, Link2, ShieldCheck, TrendingUp } from 'lucide-react';
+import { Banknote, Link2, ShieldCheck, TrendingUp, FileText } from 'lucide-react';
 
 export const metadata = {
   title: 'Programme apporteurs d\'affaires — Gagne des commissions avec Volia',
@@ -100,6 +100,16 @@ export default function AffiliationPage() {
             Les candidatures sont validées manuellement. Tu recevras ton lien et tes accès par email.
           </p>
           <AffiliateApplyForm />
+          <p className="mt-4 text-center text-sm text-content-tertiary">
+            <a
+              href="/contrat-apporteur-affaires-volia.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 font-medium text-violet-500 underline-offset-2 hover:underline"
+            >
+              <FileText className="h-4 w-4" /> Consulter le contrat type d'apporteur d'affaires (PDF)
+            </a>
+          </p>
         </section>
 
         {/* Mentions */}

@@ -1,17 +1,16 @@
 // ─────────────────────────────────────────────────────────────────────
-// /notre-histoire — page manifeste Volia (entreprise autonome d'un nouveau genre)
+// /notre-histoire — page manifeste Volia (une entreprise d'un nouveau genre)
 // ─────────────────────────────────────────────────────────────────────
-// Angle : "Volia est la première entreprise autonome d'un nouveau genre.
-// Pilotée par IA, augmentée par 1 founder. Construite en 6 semaines de
-// sprint intensif à Marseille, sans levée, sans salarié supplémentaire."
+// Angle : "Volia est construit autrement : l'IA exécute le travail
+// répétitif, l'humain décide. Une suite de prospection B2B française,
+// accessible et RGPD, depuis Marseille."
 //
-// Garde-fous :
-//   - Vision-driven, polarisant, manifeste — pas un récit modeste.
-//   - "1 founder + ∞ agents IA" ou "1 humain décide, 1000 agents exécutent".
-//   - Mention DISCRÈTE (1 fois max) qu'Anthony reste responsable produit/sales/CS.
-//   - Pas de "0 humain" en gros, pas de "100% autonome" non supervisé.
-//   - DGCCRF safe : "supervisé par 1 founder", "0 salarié supplémentaire ajouté".
-//   - Light mode only, accent violet/indigo.
+// Garde-fous (DGCCRF + marque) :
+//   - JAMAIS "entreprise autonome", "0 humain", "100% autonome",
+//     "remplace les humains/l'équipe", "1 founder + IA", "1000 agents".
+//   - JAMAIS "6 semaines"/"12 mois" comme durée de construction.
+//   - Principe conforme : "l'IA exécute, l'humain décide" (supervision).
+//   - Marseille OK. Light mode only, accent violet/indigo.
 //
 // Pattern : server page (metadata + JSON-LD) + client content.
 // ─────────────────────────────────────────────────────────────────────
@@ -26,9 +25,9 @@ const PAGE_URL = `${SITE_URL}/notre-histoire`;
 // SEO METADATA
 // ─────────────────────────────────────────────────────────────────────
 export const metadata = {
-  title: "Volia, une entreprise d'un nouveau genre — Première entreprise autonome, pilotée par IA",
+  title: "Volia, une entreprise d'un nouveau genre — l'IA exécute, l'humain décide",
   description:
-    "Volia est la première entreprise SaaS autonome au monde. Construite en 6 semaines à Marseille, pilotée par IA, augmentée par 1 founder. 4 modules connectés, 0 levée, 0 salarié supplémentaire.",
+    "Volia est construit autrement : l'IA exécute le travail répétitif, l'humain décide. Suite de prospection B2B française, 4 modules connectés, RGPD natif, à partir de 19 €/mois. Depuis Marseille.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -37,23 +36,23 @@ export const metadata = {
     },
   },
   keywords: [
-    'entreprise autonome',
-    'entreprise pilotée par IA',
-    'AI-native company',
+    'entreprise nouvelle génération',
+    'entreprise augmentée par IA',
+    'AI-augmented company',
     'Volia manifeste',
     'Anthony Malartre',
     'agents IA entreprise',
-    'founder augmenté IA',
-    'SaaS autonome',
+    'prospection B2B IA',
+    'SaaS prospection B2B France',
     'nouvelle catégorie entreprise',
     'orchestrateur agents IA',
     'futur des entreprises',
     'alternative HubSpot française',
   ],
   openGraph: {
-    title: "Volia — Une entreprise d'un nouveau genre, pilotée par IA",
+    title: "Volia — Une entreprise d'un nouveau genre",
     description:
-      "Première entreprise autonome construite en 6 semaines à Marseille. 1 founder décide, 1000 agents exécutent. 4 modules, 0 levée, 0 salarié supplémentaire.",
+      "Construit autrement : l'IA exécute le travail répétitif, l'humain décide. 4 modules connectés, RGPD natif, depuis Marseille.",
     url: PAGE_URL,
     type: 'article',
     siteName: 'Volia',
@@ -61,8 +60,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Volia — Première entreprise autonome d'un nouveau genre",
-    description: '1 founder. ∞ agents IA. 6 semaines. 4 modules. Le futur des entreprises commence à Marseille.',
+    title: "Volia — Une entreprise d'un nouveau genre",
+    description: "L'IA exécute, l'humain décide. Prospection B2B française, RGPD, 4 modules. Depuis Marseille.",
   },
   robots: { index: true, follow: true },
 };
@@ -78,9 +77,9 @@ const breadcrumbs = breadcrumbSchema([
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: "Volia — Une entreprise d'un nouveau genre, pilotée par IA, augmentée par 1 founder",
+  headline: "Volia — Une entreprise d'un nouveau genre : l'IA exécute, l'humain décide",
   description:
-    "Volia est la première entreprise SaaS autonome au monde : 6 semaines de sprint intensif à Marseille, 4 modules connectés (Prospection, Campagnes, CRM, Forms), 0 levée, 0 salarié supplémentaire. Une nouvelle catégorie d'entreprise pilotée par IA et augmentée par un seul founder.",
+    "Volia, suite de prospection B2B française construite autrement : l'IA exécute le travail répétitif, l'humain garde la vision et les décisions. 4 modules connectés (Prospection, Campagnes, CRM, Forms), RGPD natif, depuis Marseille.",
   url: PAGE_URL,
   mainEntityOfPage: { '@type': 'WebPage', '@id': PAGE_URL },
   datePublished: '2026-06-01',

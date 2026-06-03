@@ -5,6 +5,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { LifeBuoy, X, Send, Loader2 } from 'lucide-react';
+import { safeStorage } from '@/lib/safe-storage';
 
 function generateSessionId() {
   return 'supp_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -33,10 +34,10 @@ export default function SupportBotWidget() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    let id = localStorage.getItem('volia_support_session_id');
+    let id = safeStorage.get('volia_support_session_id');
     if (!id) {
       id = generateSessionId();
-      localStorage.setItem('volia_support_session_id', id);
+      safeStorage.set('volia_support_session_id', id);
     }
     setSessionId(id);
   }, []);

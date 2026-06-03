@@ -20,7 +20,7 @@ const BASE_URL = 'https://volia.fr';
 const PAGE_URL = `${BASE_URL}/outils/trouver-emails`;
 
 export const metadata = {
-  title: 'Trouver les emails des entreprises — outil gratuit | Volia',
+  title: 'Trouver les emails des entreprises — outil gratuit',
   description:
     "Trouvez gratuitement les emails professionnels d'entreprises par secteur et par ville en France. Données Google Places, aperçu anonymisé, conforme RGPD. Sans carte bancaire.",
   alternates: { canonical: PAGE_URL },

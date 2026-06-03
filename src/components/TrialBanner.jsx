@@ -14,6 +14,7 @@
 // ─────────────────────────────────────────────────────────────────
 
 import { useEffect, useState } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import Link from 'next/link';
 import { daysRemainingInTrial, isTrialActive, isTrialExpired, isTrialExpiringSoon } from '@/lib/trial';
 
@@ -24,7 +25,7 @@ export default function TrialBanner({ profile }) {
 
   useEffect(() => {
     try {
-      const v = localStorage.getItem(DISMISS_KEY);
+      const v = safeStorage.get(DISMISS_KEY);
       if (v) setDismissedUntil(parseInt(v, 10));
     } catch {
       /* localStorage indispo (SSR / privé) → ignore */
@@ -49,7 +50,7 @@ export default function TrialBanner({ profile }) {
   const handleDismiss = () => {
     const until = Date.now() + 24 * 60 * 60 * 1000; // +24h
     try {
-      localStorage.setItem(DISMISS_KEY, String(until));
+      safeStorage.set(DISMISS_KEY, String(until));
     } catch {
       /* ignore */
     }

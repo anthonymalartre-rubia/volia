@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import { Lightbulb } from 'lucide-react';
 
 /**
@@ -17,7 +18,7 @@ export default function OnboardingHint({ storageKey, children, dismissLabel = 'C
   const [dismissed, setDismissed] = useState(() => {
     if (typeof window === 'undefined') return true;
     try {
-      return localStorage.getItem(storageKey) === '1';
+      return safeStorage.get(storageKey) === '1';
     } catch {
       return false;
     }
@@ -27,7 +28,7 @@ export default function OnboardingHint({ storageKey, children, dismissLabel = 'C
 
   const handleDismiss = () => {
     setDismissed(true);
-    try { localStorage.setItem(storageKey, '1'); } catch {}
+    try { safeStorage.set(storageKey, '1'); } catch {}
   };
 
   return (

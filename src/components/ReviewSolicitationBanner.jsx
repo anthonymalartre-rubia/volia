@@ -19,6 +19,7 @@
 // - L'user n'a pas dismiss dans les 30 derniers jours (localStorage)
 
 import { useState, useEffect } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import Script from 'next/script';
 import { X } from 'lucide-react';
 import {
@@ -41,7 +42,7 @@ export default function ReviewSolicitationBanner({ exportsCount = 0 }) {
 
     // Vérifie dismiss (avec date d'expiration 30 jours)
     try {
-      const dismissedAtStr = localStorage.getItem(DISMISS_KEY);
+      const dismissedAtStr = safeStorage.get(DISMISS_KEY);
       if (dismissedAtStr) {
         const dismissedAt = parseInt(dismissedAtStr, 10);
         const expiresAt = dismissedAt + DISMISS_DURATION_DAYS * 24 * 60 * 60 * 1000;
@@ -54,7 +55,7 @@ export default function ReviewSolicitationBanner({ exportsCount = 0 }) {
 
   function handleDismiss() {
     try {
-      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+      safeStorage.set(DISMISS_KEY, String(Date.now()));
     } catch {}
     setVisible(false);
   }

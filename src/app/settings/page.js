@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import { useRouter } from 'next/navigation';
 import { getSupabase } from '@/lib/supabase';
 import { PLANS } from '@/lib/plans';
@@ -1197,7 +1198,7 @@ export default function SettingsPage() {
                   control={
                     <button
                       onClick={() => {
-                        localStorage.removeItem('onboarding_completed');
+                        safeStorage.remove('onboarding_completed');
                         router.push('/dashboard?onboarding=1');
                       }}
                       className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-violet-500/10 text-violet-600 hover:bg-violet-500/20 border border-violet-500/30 transition whitespace-nowrap"

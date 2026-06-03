@@ -4,6 +4,7 @@
 // Dismissable (localStorage) — réapparait après 7 jours.
 
 import { useState, useEffect } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import Link from 'next/link';
 import { Gift, X, ArrowRight, Sparkles } from 'lucide-react';
 
@@ -17,7 +18,7 @@ export default function ReferralBanner() {
   useEffect(() => {
     // Si fermé récemment (< 7j), ne pas afficher
     try {
-      const dismissed = localStorage.getItem(DISMISS_KEY);
+      const dismissed = safeStorage.get(DISMISS_KEY);
       if (dismissed) {
         const dismissedAt = parseInt(dismissed, 10);
         if (Date.now() - dismissedAt < DISMISS_DAYS * 24 * 60 * 60 * 1000) {
@@ -40,7 +41,7 @@ export default function ReferralBanner() {
 
   function handleDismiss() {
     try {
-      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+      safeStorage.set(DISMISS_KEY, String(Date.now()));
     } catch {}
     setVisible(false);
   }

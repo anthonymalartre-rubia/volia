@@ -17,6 +17,7 @@
 // Auto-fetch /api/onboarding/complete-step (GET) pour récupérer l'état.
 
 import { useState, useEffect } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 import Link from 'next/link';
 import {
   CheckCircle2, Circle, Search, Upload, Send, Download,
@@ -90,7 +91,7 @@ export default function OnboardingChecklist({ isAdmin = false }) {
 
   useEffect(() => {
     // Local dismiss session (l'user peut masquer définitivement)
-    if (typeof window !== 'undefined' && localStorage.getItem('onboarding_progressbar_dismissed') === '1') {
+    if (typeof window !== 'undefined' && safeStorage.get('onboarding_progressbar_dismissed') === '1') {
       setDismissed(true);
     }
     (async () => {
@@ -117,7 +118,7 @@ export default function OnboardingChecklist({ isAdmin = false }) {
   const pct = Math.round((stepsDone / visibleSteps.length) * 100);
 
   function handleDismiss() {
-    try { localStorage.setItem('onboarding_progressbar_dismissed', '1'); } catch {}
+    try { safeStorage.set('onboarding_progressbar_dismissed', '1'); } catch {}
     setDismissed(true);
   }
 

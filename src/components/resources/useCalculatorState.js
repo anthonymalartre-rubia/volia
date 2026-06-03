@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { safeStorage } from "@/lib/safe-storage";
 
 /**
  * Hook qui combine 3 sources de vérité pour l'état d'un calculateur :
@@ -32,7 +33,7 @@ export function useCalculatorState(storageKey, defaults) {
 
     // Étape 1 : localStorage
     try {
-      const stored = localStorage.getItem(storageKey);
+      const stored = safeStorage.get(storageKey);
       if (stored) {
         const parsed = JSON.parse(stored);
         next = { ...next, ...parsed };
@@ -60,7 +61,7 @@ export function useCalculatorState(storageKey, defaults) {
 
     // localStorage
     try {
-      localStorage.setItem(storageKey, JSON.stringify(state));
+      safeStorage.set(storageKey, JSON.stringify(state));
     } catch {}
 
     // URL — debounced via replaceState pour ne pas polluer l'historique

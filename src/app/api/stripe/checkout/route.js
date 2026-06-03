@@ -101,6 +101,12 @@ export async function POST(request) {
     const shouldApplyBusinessPromo =
       planId === 'business' && period === 'monthly' && businessPromoCouponId;
 
+    // ─── Programme apporteurs d'affaires ────────────────────────────
+    // Le lien volia.fr/?aff=CODE pose un cookie `volia_aff`. On le récupère
+    // ici pour le transmettre en metadata de la session → le webhook
+    // checkout.session.completed liera le client à l'affilié.
+    const affiliateCode = (request.cookies.get('volia_aff')?.value || '').trim().toUpperCase().slice(0, 16) || null;
+
     const sessionParams = {
       customer: customerId,
       mode: 'subscription',
@@ -118,6 +124,7 @@ export async function POST(request) {
         plan_id: planId,
         period,
         ...(shouldApplyBusinessPromo ? { business_launch_promo_applied: 'true' } : {}),
+        ...(affiliateCode ? { affiliate_code: affiliateCode } : {}),
       },
       // subscription_data.metadata : ATTACHÉ À LA SUBSCRIPTION elle-même
       // → retrouvable dans tous les futurs events subscription.updated /

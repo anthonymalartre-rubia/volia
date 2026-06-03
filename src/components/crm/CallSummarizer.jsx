@@ -199,9 +199,9 @@ export default function CallSummarizer({ dealId, stages = [], currentStageId, on
         <>
           {/* Import auto Fireflies (au lieu du collage manuel) */}
           <div className="flex items-center justify-between gap-2">
-            <span className="text-[11px] text-content-tertiary">Colle le transcript, ou…</span>
-            <button type="button" onClick={openFireflies} className="inline-flex items-center gap-1 text-[11px] font-semibold text-violet-600 hover:text-violet-500">
-              <Calendar size={12} /> Importer depuis Fireflies
+            <span className="text-[11px] text-content-tertiary">Tes notes d&apos;appel (en vrac, c&apos;est ok) :</span>
+            <button type="button" onClick={openFireflies} className="inline-flex items-center gap-1 text-[10px] text-content-tertiary hover:text-violet-500" title="Optionnel — si tu utilises Fireflies (visio)">
+              <Calendar size={11} /> Fireflies
             </button>
           </div>
           {ff.open && (
@@ -247,7 +247,7 @@ export default function CallSummarizer({ dealId, stages = [], currentStageId, on
             rows={6}
             value={transcript}
             onChange={(e) => setTranscript(e.target.value)}
-            placeholder="Colle ici le compte-rendu ou le transcript de l'appel (Fireflies, Meet, tes notes…). Claude propose un résumé, la nouvelle étape et les tâches de relance."
+            placeholder="Tape ou colle tes notes d'appel — même en vrac : « intéressé, budget ~5k, relancer après le board, veut une démo ». Claude en sort le résumé, la nouvelle étape et les tâches de relance."
             className="w-full px-3 py-2 rounded-lg border border-line bg-surface-card text-sm text-content-primary placeholder:text-content-muted focus:outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 resize-none"
           />
           <button

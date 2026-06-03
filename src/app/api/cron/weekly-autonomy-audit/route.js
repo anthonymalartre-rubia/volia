@@ -88,7 +88,25 @@ export async function GET(request) {
   // 7. Recommandations basées sur patterns
   const recommendations = generateRecommendations(actions, byStatus, publishedPosts);
 
+  // 8. Acquisition — d'où viennent les signups cette semaine (attribution first-touch)
+  const { data: newProfiles } = await supabase
+    .from('user_profiles')
+    .select('signup_attribution, created_at')
+    .gte('created_at', weekAgo);
+  const channelCounts = {};
+  for (const p of (newProfiles || [])) {
+    const ch = p.signup_attribution?.channel || (p.signup_attribution ? 'direct' : 'non tracké');
+    channelCounts[ch] = (channelCounts[ch] || 0) + 1;
+  }
+  const acquisition = {
+    total: (newProfiles || []).length,
+    channels: Object.entries(channelCounts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([channel, count]) => ({ channel, count })),
+  };
+
   const html = buildAuditEmailHtml({
+    acquisition,
     weekStart: new Date(weekAgo).toLocaleDateString('fr-FR'),
     weekEnd: new Date().toLocaleDateString('fr-FR'),
     byStatus,
@@ -115,6 +133,7 @@ export async function GET(request) {
   return NextResponse.json({
     ok: true,
     sent_to: FOUNDER_EMAIL,
+    acquisition,
     stats: byStatus,
     published_count: publishedPosts.length,
     estimated_cost_eur: estimatedCostEur,
@@ -146,7 +165,15 @@ function generateRecommendations(actions, byStatus, publishedPosts) {
   return recs;
 }
 
-function buildAuditEmailHtml({ weekStart, weekEnd, byStatus, publishedPosts, lastWeekExecuted, cronsRun, estimatedCostEur, quotaReport, recommendations, totalActions }) {
+function buildAuditEmailHtml({ weekStart, weekEnd, byStatus, publishedPosts, lastWeekExecuted, cronsRun, estimatedCostEur, quotaReport, recommendations, totalActions, acquisition }) {
+  const acq = acquisition || { total: 0, channels: [] };
+  const acquisitionRows = acq.total === 0
+    ? `<tr><td colspan="2" style="padding:12px;color:#9ca3af;font-style:italic;border:1px solid #e5e7eb;font-size:13px;">Aucune inscription cette semaine</td></tr>`
+    : acq.channels.map((c) => `
+      <tr>
+        <td style="padding:10px;border:1px solid #e5e7eb;font-size:13px;font-family:monospace;">${c.channel}</td>
+        <td style="padding:10px;border:1px solid #e5e7eb;font-size:16px;font-weight:700;text-align:right;color:#5b21b6;">${c.count}</td>
+      </tr>`).join('');
   const publishedRows = publishedPosts.length === 0
     ? `<tr><td colspan="2" style="padding:12px;color:#9ca3af;font-style:italic;border:1px solid #e5e7eb;">Aucun post publié cette semaine</td></tr>`
     : publishedPosts.map((p) => `
@@ -202,6 +229,12 @@ function buildAuditEmailHtml({ weekStart, weekEnd, byStatus, publishedPosts, las
       <div style="font-size:11px;color:#6b7280;">~${totalActions} appels Claude</div>
     </div>
   </div>
+
+  <!-- Acquisition : d'où viennent les signups -->
+  <h2 style="font-size:16px;margin:24px 0 8px;">📈 D'où viennent tes signups cette semaine</h2>
+  <p style="color:#6b7280;font-size:13px;margin:0 0 8px;"><strong style="color:#111827;">${acq.total}</strong> inscription(s) cette semaine — par canal d'acquisition (attribution first-touch) :</p>
+  <table style="width:100%;border-collapse:collapse;background:white;">${acquisitionRows}</table>
+  <p style="color:#9ca3af;font-size:11px;margin:6px 0 0;">Canaux : <code>linkedin-ads</code> / <code>linkedin</code> / <code>seo</code> / <code>referral:&lt;domaine&gt;</code> / <code>direct</code>. « non tracké » = compte créé avant la pose de l'attribution. Pense aux liens UTM dans tes posts/pubs pour une attribution nette.</p>
 
   <!-- Posts publiés -->
   <h2 style="font-size:16px;margin:24px 0 8px;">🚀 Posts publiés</h2>

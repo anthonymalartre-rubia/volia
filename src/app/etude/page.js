@@ -11,9 +11,9 @@ const BASE_URL = 'https://volia.fr';
 const HUB_URL = `${BASE_URL}/etude`;
 
 export const metadata = {
-  title: 'Études Volia — Baromètres exclusifs du B2B français',
+  title: 'Études Volia — Baromètres du B2B français',
   description:
-    'Tous les benchmarks et études Volia sur le marché B2B français : prospection, cold email, conformité RGPD. Données publiques + analyse exclusive. Citables avec attribution.',
+    'Tous les benchmarks et études Volia sur le marché B2B français : prospection, cold email, conformité RGPD. Sources publiques officielles + données de couverture Volia. Citables avec attribution.',
   alternates: { canonical: HUB_URL },
   keywords: [
     'étude prospection b2b france',
@@ -24,16 +24,16 @@ export const metadata = {
     'volia études',
   ],
   openGraph: {
-    title: 'Études Volia — Baromètres exclusifs du B2B français',
+    title: 'Études Volia — Baromètres du B2B français',
     description:
-      'Benchmarks publics du marché B2B français. Données 2026. Citables par les journalistes, étudiants, professionnels.',
+      'Benchmarks du marché B2B français. Sources publiques + données de couverture Volia. Citables par les journalistes, étudiants, professionnels.',
     url: HUB_URL,
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Études Volia — Baromètres B2B France 2026',
-    description: 'Benchmarks exclusifs du marché B2B français. Données publiques + analyse.',
+    description: 'Benchmarks du marché B2B français. Sources publiques + données de couverture Volia.',
   },
   robots: { index: true, follow: true },
 };
@@ -45,17 +45,17 @@ const STUDIES = [
   {
     slug: 'prospection-b2b-france-2026',
     title: "L'État de la Prospection B2B en France 2026",
-    subtitle: '38 chiffres clés sur un marché de 4,8 millions d\'entreprises',
+    subtitle: 'Le marché, les coûts, le RGPD — et ce que révèlent nos données',
     description:
-      "Benchmark exclusif du marché français de la prospection B2B en 2026 : coûts, performance cold email, conformité RGPD, couverture par secteur et par région. Données publiques + analyse Volia sur 287 000+ entreprises.",
+      "Benchmark du marché français de la prospection B2B en 2026 : taille du marché, coûts réels, performance cold email, conformité RGPD. Sources publiques officielles + données de couverture Volia sur ~40 000 entreprises.",
     publishedAt: '2026-05-20',
     readTime: 18,
     accent: 'violet', // pour gradient hero card
     icon: BarChart3,
     keyStats: [
       { value: '4,8 M', label: "d'entreprises actives en France", source: 'INSEE' },
-      { value: '101', label: 'départements couverts', source: 'Volia' },
-      { value: '8-15 %', label: 'taux de réponse cold email B2B FR', source: 'Smartlead' },
+      { value: '~40 000', label: 'entreprises analysées', source: 'Volia' },
+      { value: '1-5 %', label: 'taux de réponse cold email B2B FR', source: 'Belkins' },
       { value: '450 €', label: 'coût moyen d\'un lead B2B qualifié', source: 'Forrester' },
     ],
     href: '/etude/prospection-b2b-france-2026',
@@ -64,18 +64,18 @@ const STUDIES = [
   {
     slug: 'etat-cold-email-france-2026',
     title: 'État du cold email B2B France 2026',
-    subtitle: '12 chiffres clés sur 14 800 campagnes étudiées',
+    subtitle: 'Les chiffres réalistes : réponse, relances, séquences, RGPD',
     description:
-      "Enquête sur 287 000+ entreprises françaises et 14 800 campagnes : taux d'ouverture, taux de réponse, couverture email pro, deliverability. Données 2026 exclusives Volia.",
+      "Benchmark du cold email B2B en France 2026 : taux de réponse réalistes, poids des relances, longueur de séquence, conformité RGPD. Sources publiques (Belkins, Instantly, HubSpot) + données de couverture Volia.",
     publishedAt: '2026-05-15',
     readTime: 12,
     accent: 'blue',
     icon: Mail,
     keyStats: [
-      { value: '62 %', label: "taux d'ouverture moyen", source: 'Volia' },
-      { value: '8,4 %', label: 'taux de réponse moyen', source: 'Volia' },
-      { value: '47 %', label: "n'ont aucun email pro public", source: 'Volia' },
-      { value: '14 800', label: 'campagnes étudiées', source: 'Volia' },
+      { value: '1-5 %', label: 'taux de réponse moyen', source: 'Belkins' },
+      { value: '55-65 %', label: 'des réponses via les relances', source: 'Instantly' },
+      { value: '0 %', label: "d'emails devinés (base Volia)", source: 'Volia' },
+      { value: '~46 %', label: 'find-rate email (avec site)', source: 'Volia' },
     ],
     href: '/etude/etat-cold-email-france-2026',
     tags: ['Cold email', 'Deliverability', 'Benchmark'],
@@ -89,7 +89,7 @@ const collectionSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'Études Volia',
-  description: 'Baromètres et études exclusives du marché B2B français',
+  description: 'Baromètres et études du marché B2B français',
   url: HUB_URL,
   publisher: {
     '@type': 'Organization',
@@ -155,14 +155,14 @@ export default function EtudesHubPage() {
 
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 border border-violet-200 text-violet-700 text-xs font-semibold mb-5">
               <Sparkles size={12} />
-              Données publiques + analyse exclusive Volia
+              Sources publiques + données de couverture Volia
             </div>
 
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-content-primary mb-5 leading-tight">
               Études Volia
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary max-w-2xl leading-relaxed mb-6">
-              Tous nos baromètres et études exclusives sur le marché B2B français.
+              Tous nos baromètres et études sur le marché B2B français.
               Chiffres sourcés. Méthodologie publique. Citables avec attribution.
             </p>
 

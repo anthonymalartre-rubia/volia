@@ -349,6 +349,16 @@ function EmailBadge({ method }) {
     );
   }
 
+  // Servi par la base commune Volia (couche 0 — email déjà vérifié auparavant).
+  if (method === 'volia_db') {
+    return (
+      <span className="inline-flex items-center gap-0.5 px-1.5 py-[1px] rounded-full text-[9px] font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/20 whitespace-nowrap">
+        <CheckCircle size={8} className="flex-shrink-0" />
+        Base Volia
+      </span>
+    );
+  }
+
   if (method === 'deep-pattern') {
     return (
       <span className="inline-flex items-center gap-0.5 px-1.5 py-[1px] rounded-full text-[9px] font-semibold bg-purple-500/15 text-purple-400 border border-purple-500/20 whitespace-nowrap">
@@ -704,7 +714,7 @@ export default memo(function ResultsPanel({
     const total = folderProspects.length;
     const phones = folderProspects.filter((p) => p.telephone).length;
     const emails = folderProspects.filter((p) => p.email).length;
-    const verifiedMethods = new Set(['scrape', 'deep-verified']);
+    const verifiedMethods = new Set(['scrape', 'deep-verified', 'volia_db']);
     const verifiedEmails = folderProspects.filter((p) => p.email && verifiedMethods.has(p.email_method)).length;
     const googleEmails = folderProspects.filter((p) => p.email && (p.email_method === 'serper' || p.email_method === 'apollo' || p.email_method === 'apollo_org')).length;
     const guessedEmails = folderProspects.filter((p) => p.email && p.email_method === 'guess').length;

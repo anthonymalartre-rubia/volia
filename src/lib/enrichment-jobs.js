@@ -122,6 +122,17 @@ async function processJob(supabase, job) {
   let found = job.found || 0;
   let writeFails = 0;       // écritures d'email échouées (diagnostic)
   let lastWriteErr = null;  // dernier message d'erreur d'écriture
+  let cacheHits = 0;        // emails servis par la base commune (0 Serper)
+
+  // Base commune (couche 0) : on n'alimente le pool que si l'enrichisseur est
+  // admin (Volia) en Phase 1 — cf. lib/global-contacts. 1 seule lecture/job.
+  let isAdmin = false;
+  try {
+    const { data: prof } = await withTimeout(
+      supabase.from('user_profiles').select('is_admin').eq('id', job.user_id).maybeSingle(),
+      'fetch-admin');
+    isAdmin = !!prof?.is_admin;
+  } catch { /* défaut non-admin */ }
 
   // marque running
   await withTimeout(
@@ -148,7 +159,7 @@ async function processJob(supabase, job) {
 
     // Prochain lot (requête directe SANS count:'exact' → plus léger).
     // `nom` est nécessaire pour la requête Serper du waterfall.
-    let bq = supabase.from('prospects').select('id, site_web, nom').eq('user_id', job.user_id).not('site_web', 'is', null).or('email.is.null,email.eq.');
+    let bq = supabase.from('prospects').select('id, site_web, nom, place_id, telephone, type, departement').eq('user_id', job.user_id).not('site_web', 'is', null).or('email.is.null,email.eq.');
     if (job.scope?.folder_id) bq = bq.eq('folder_id', job.scope.folder_id);
     if (job.scope?.departement) bq = bq.eq('departement', job.scope.departement);
     const { data: batch } = await withTimeout(bq.limit(cap), 'batch-query');
@@ -174,13 +185,26 @@ async function processJob(supabase, job) {
       batchAttempted++;
       const v = validateUrl(p.site_web);
       if (!v.valid) return;
+      const domain = normalizeDomain(p.site_web);
       try {
-        // Cascade waterfall : scrape site → Serper (Google). Aucun guess.
+        // ── COUCHE 0 : base commune Volia (0 crédit Serper si hit) ──
+        const cached = await lookupGlobalContact({ domain, placeId: p.place_id });
+        if (cached?.email) {
+          toWrite.push({ id: p.id, email: cached.email, method: 'volia_db', fromCache: true });
+          return; // pas de scrape/Serper
+        }
+        // ── Sinon : cascade waterfall scrape → Serper (Google). Aucun guess. ──
         const res = await Promise.race([
           enrichWaterfall(p.nom, v.url),
           new Promise((resolve) => setTimeout(() => resolve({ email: null, timedOut: true }), PER_SITE_TIMEOUT_MS)),
         ]);
-        if (res && res.email) toWrite.push({ id: p.id, email: res.email, method: res.method });
+        if (res && res.email) {
+          toWrite.push({
+            id: p.id, email: res.email, method: res.method, fromCache: false,
+            domain, placeId: p.place_id, companyName: p.nom,
+            phone: p.telephone, sector: p.type, departement: p.departement,
+          });
+        }
       } catch { /* item-level error → on continue */ }
     }, CONCURRENCY);
 
@@ -192,7 +216,20 @@ async function processJob(supabase, job) {
           'save-prospect');
         if (wErr) { writeFails++; lastWriteErr = `err:${wErr.message || wErr}`; }
         else if (!upd || upd.length === 0) { writeFails++; lastWriteErr = `0rows id=${String(w.id).slice(0, 8)}`; }
-        else found++; // found ne compte QUE les emails réellement persistés (ligne affectée)
+        else {
+          found++; // found ne compte QUE les emails réellement persistés (ligne affectée)
+          if (w.fromCache) {
+            cacheHits++; // servi par la base commune → 0 crédit Serper
+          } else {
+            // Alimente la base commune (best-effort). En Phase 1 (volia_only),
+            // n'écrit réellement que si l'enrichisseur est admin (Volia).
+            await upsertGlobalContact({
+              domain: w.domain, placeId: w.placeId, companyName: w.companyName,
+              email: w.email, emailMethod: w.method, phone: w.phone,
+              sector: w.sector, departement: w.departement, isAdmin,
+            });
+          }
+        }
       } catch (e) { writeFails++; lastWriteErr = e?.message || String(e); }
     }
 
@@ -204,6 +241,7 @@ async function processJob(supabase, job) {
         .update({ processed, found, error: lastWriteErr ? `writeFail x${writeFails}: ${lastWriteErr}`.slice(0, 200) : null, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
         .eq('id', job.id),
       'save-progress');
+    console.log(`[enrichment] tick job=${String(job.id).slice(0, 8)} processed=${processed} found=${found} cacheHits=${cacheHits} (servis par la base commune, 0 Serper)`);
   }
 
   return { processed, found, ended: 'budget' };

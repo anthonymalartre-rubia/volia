@@ -47,7 +47,7 @@ const en = {
   sidebar: {
     overview: 'Overview',
     search: 'Search',
-    leads: 'My leads',
+    leads: 'Prospects',
     export: 'Export',
     verify: 'Verification',
     verifyDesc: 'Email validity',

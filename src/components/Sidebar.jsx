@@ -306,8 +306,8 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
               Bug fix 27 mai 2026 : flex-shrink-0 + bg solide
               (bg-surface-base) + border-top → toujours visible en bas, pas de
               chevauchement avec l'historique qui scroll au-dessus. */}
-          <div className="flex-shrink-0 px-4 py-3 space-y-2 bg-surface-base border-t border-line">
-            {nextMeta && (
+          {nextMeta && (
+            <div className="flex-shrink-0 px-4 py-3 bg-surface-base border-t border-line">
               <button
                 onClick={() => setUpgradeModal({ feature: null, requiredPlan: nextPlan })}
                 className="w-full group relative text-left p-3 rounded-xl bg-gradient-to-br from-amber-500/[0.08] via-violet-500/[0.06] to-indigo-500/[0.08] border border-violet-500/20 hover:border-violet-500/40 hover:from-amber-500/[0.12] hover:to-indigo-500/[0.12] transition-all overflow-hidden"
@@ -331,15 +331,8 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
                   </div>
                 </div>
               </button>
-            )}
-
-            {/* Bottom info — encart subtil avec hint gradient violet/indigo */}
-            <div className="relative p-4 rounded-xl bg-gradient-to-br from-violet-500/[0.05] to-indigo-500/[0.05] border border-violet-500/15 overflow-hidden">
-              <div className="absolute -bottom-8 -right-8 w-20 h-20 rounded-full bg-violet-500/15 blur-2xl pointer-events-none" />
-              <p className="relative text-[10px] uppercase tracking-wider text-violet-300 font-semibold mb-2">{t('sidebar.allFrance')}</p>
-              <p className="relative text-[10px] text-content-muted leading-relaxed">{t('sidebar.franceMeta')}</p>
             </div>
-          </div>
+          )}
         </div>
       </aside>
 

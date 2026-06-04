@@ -175,6 +175,10 @@ function generateSessionLabel(depts, b2bCats, coproCats, customQueries) {
 
 export default function Dashboard() {
   const [prospects, setProspects] = useState([]);
+  // Total exact (count Supabase) — affiché immédiatement pour éviter que le
+  // compteur "monte" de 1000 → N pendant le chargement progressif (UX trompeuse).
+  const [prospectsTotal, setProspectsTotal] = useState(0);
+  const [loadingMoreProspects, setLoadingMoreProspects] = useState(false);
   const [folders, setFolders] = useState([]);
   const [activeFolder, setActiveFolder] = useState('all'); // 'all' | folder id
   // activeView est sync'd avec ?view=... dans l'URL (voir handleViewChange
@@ -491,11 +495,16 @@ export default function Dashboard() {
       // Apply prospects (1re page) — l'UI est rendue immédiatement avec ça.
       if (!prospectsRes.error && prospectsRes.data) setProspects(prospectsRes.data);
 
+      // Total exact connu dès le 1er round-trip → on l'affiche tout de suite
+      // (pas d'attente que toutes les pages arrivent).
+      const totalCount = prospectsRes.count || 0;
+      if (!prospectsRes.error) setProspectsTotal(totalCount);
+
       // Charge le reste EN ARRIÈRE-PLAN, page par page (séquentiel → ordre
       // created_at desc préservé), en complétant l'état au fil de l'eau. Ne
       // bloque pas le rendu : la liste est déjà affichée avec la 1re page.
-      const totalCount = prospectsRes.count || 0;
       if (!prospectsRes.error && totalCount > PAGE_SIZE) {
+        setLoadingMoreProspects(true);
         (async () => {
           const totalPages = Math.ceil(totalCount / PAGE_SIZE);
           for (let i = 1; i < totalPages; i++) {
@@ -508,6 +517,7 @@ export default function Dashboard() {
             if (pageErr || !pageData || pageData.length === 0) break;
             setProspects((prev) => [...prev, ...pageData]);
           }
+          setLoadingMoreProspects(false);
         })();
       }
 
@@ -1479,7 +1489,7 @@ export default function Dashboard() {
             onViewChange={handleViewChange}
             onClose={() => setSidebarOpen(false)}
             isOpen={sidebarOpen}
-            prospectCount={prospects.length}
+            prospectCount={Math.max(prospectsTotal, prospects.length)}
             folders={folders}
             searchHistory={searchHistory}
             isAdmin={isAdmin}
@@ -1510,7 +1520,7 @@ export default function Dashboard() {
               (() => {
                 const meta = {
                   search:  { kicker: 'Découvrir', title: 'Recherche', sub: 'Trouvez des prospects via Google Places — 150+ catégories, 101 départements, 6 provinces BE, 6 cantons CH.' },
-                  results: { kicker: 'Vos prospects',  title: `Prospects${prospects.length ? ` · ${prospects.length.toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
+                  results: { kicker: 'Vos prospects',  title: `Prospects${(Math.max(prospectsTotal, prospects.length)) ? ` · ${Math.max(prospectsTotal, prospects.length).toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
                   export:  { kicker: 'Données',    title: 'Export CSV', sub: 'Exportez en CSV compatible HubSpot / Salesforce / Zoho / Pipedrive.' },
                   verify:  { kicker: 'Validation', title: 'Vérifier un email', sub: 'Confirmez la délivrabilité d\'un email avant de l\'envoyer.' },
                 }[activeView];
@@ -1520,8 +1530,13 @@ export default function Dashboard() {
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-400 mb-2">
                       {meta.kicker}
                     </p>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-content-primary tracking-tight">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-content-primary tracking-tight flex items-center gap-2 flex-wrap">
                       {meta.title}
+                      {activeView === 'results' && loadingMoreProspects && (
+                        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-content-muted normal-case tracking-normal">
+                          <span className="w-3 h-3 rounded-full border-2 border-content-muted/30 border-t-content-muted animate-spin" aria-hidden="true" /> chargement…
+                        </span>
+                      )}
                     </h2>
                     <p className="text-sm text-content-tertiary mt-1.5 leading-relaxed max-w-2xl">
                       {meta.sub}

@@ -57,17 +57,17 @@ export const COMPARATIFS = {
       h1: 'Apollo vs Volia : lequel choisir en 2026 ?',
       subtitle: (
         // text-only used as JSX in component — keep as plain string with markers
-        "Apollo.io facture 99 $/mois pour 40 % de couverture France. Volia propose tout le tissu B2B français à partir de 19 €/mois — une économie moyenne de 80 €/mois pour les freelances et 130 €/mois pour les équipes growth. Comparatif exhaustif, sans langue de bois."
+        "Apollo.io facture 99 $/mois, avec une base orientée USA. Volia couvre le tissu B2B français à partir de 19 €/mois. Comparatif factuel : prix, couverture et fonctionnalités."
       ),
       ctaPrimary: { label: 'Essayer Volia gratuitement', href: '/signup?plan=starter' },
       ctaSecondary: { label: 'Voir le tableau comparatif', href: '#comparatif-features' },
     },
     tldr: [
-      "Volia est 4 à 5× moins chère qu'Apollo en France (19 € vs 92 € équivalent) — économie moyenne 80 €/mois en solo, 130 €/mois pour une petite équipe.",
-      "Apollo ne couvre que ~40 % des PME françaises (base US-first, données souvent obsolètes en EU). Volia couvre 78 % du tissu français via Google Places + waterfall.",
-      "Killer feature manquante chez Apollo : recherche par catégorie + département français, waterfall multi-sources, et conformité RGPD native (CNIL + opt-out auto).",
-      "Apollo reste meilleur pour : vendre aux USA à des grands comptes SaaS, intégration native Salesforce profonde, intent data B2B mondial.",
-      "Pour 80 % des PME / freelances / agences françaises : Volia est le meilleur choix. Pour scale-ups B2B SaaS visant l'international : Apollo reste pertinent.",
+      "Sur les tarifs affichés, Volia est nettement moins chère qu'Apollo en France (dès 19 €/mois vs 49 $/mois Basic, 49 €/mois vs 99 $/mois Pro).",
+      "Apollo s'appuie sur une base mondiale orientée USA ; sur le marché français, la couverture PME est plus limitée. Volia est conçu pour la France (Google Places + cascade waterfall multi-sources).",
+      "Fonctionnalités clés absentes chez Apollo côté France : recherche par catégorie + département français, et conformité RGPD native (CNIL + opt-out auto).",
+      "Apollo reste pertinent pour : vendre aux USA à des grands comptes SaaS, intégration Salesforce native, intent data B2B mondial.",
+      "Pour la plupart des PME / freelances / agences françaises : Volia est le choix le plus adapté. Pour les scale-ups B2B SaaS visant l'international : Apollo reste pertinent.",
     ],
     chiffresCles: [
       { label: 'Prix d\'entrée', apollo: '49 $/mo (Basic)', volia: '19 €/mo (Solo)', voliaWins: true },
@@ -75,8 +75,7 @@ export const COMPARATIFS = {
       { label: 'Prix scale (10k+)', apollo: '149 $/mo + emails illimités', volia: '149 €/mo (Business)', voliaWins: true },
       { label: 'Plan gratuit', apollo: '60 crédits/mois', volia: '100 prospects/mois', voliaWins: true },
       { label: 'Base de contacts', apollo: '220M (monde)', volia: 'tout le B2B FR vérifié', voliaWins: null },
-      { label: 'Couverture PME France', apollo: '~40 %', volia: '78 % (#1 marché FR)', voliaWins: true },
-      { label: 'Note Trustpilot', apollo: '4,3 / 5', volia: '4,8 / 5 (FR)', voliaWins: true },
+      { label: 'Couverture PME France', apollo: 'Partielle (base US-first)', volia: 'Tissu B2B FR (Google Places)', voliaWins: true },
       { label: 'Marché cible', apollo: '🇺🇸 USA / international', volia: '🇫🇷 France + DOM-TOM', voliaWins: null },
       { label: 'Support en français', apollo: '❌', volia: '✓ humain 24 h', voliaWins: true },
       { label: 'Conformité RGPD native', apollo: 'Partielle (toggle EU)', volia: '✓ by-design CNIL', voliaWins: true },

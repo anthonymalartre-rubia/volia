@@ -61,7 +61,7 @@ STRUCTURE OBLIGATOIRE :
    - Janvier : 80% des cold emails B2B FR finissent en spam (étude Volia 2026)
    - Février : Un commercial PME passe 4h/sem à scraper LinkedIn manuellement
    - Mars : 65% des fondateurs FR utilisent encore Excel comme "CRM"
-   - Avril : Apollo a indexé 287M de contacts mais 30% sont obsolètes
+   - Avril : ~30% des contacts d'une base B2B deviennent obsolètes en 1 an (turnover des postes)
    - Mai : Le RGPD B2B autorise le cold email sous 3 conditions seulement
    - Juin : 47% des SDR FR pensent que leur stack outil leur fait perdre du temps
    - Juillet : Le warmup email coûte en moyenne 19€/mois pour 12% d'efficacité réelle

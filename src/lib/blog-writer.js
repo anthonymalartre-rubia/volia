@@ -67,7 +67,7 @@ const TOPICS_BACKLOG = [
     category: 'Comparatif',
   },
   {
-    angle: 'Les données prospects "à vie" d\'Apollo sont vendues 50 fois. Tu paies pour des doublons.',
+    angle: 'Fraîcheur des données B2B : pourquoi les bases mondiales sont souvent moins à jour sur les PME françaises, et comment l\'éviter.',
     keywords: ['données apollo qualité', 'base donnees b2b fraiche', 'données prospects qualité'],
     category: 'Étude',
   },

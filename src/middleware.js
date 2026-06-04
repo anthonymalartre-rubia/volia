@@ -125,6 +125,8 @@ export async function middleware(request) {
     pathname.startsWith('/alternative') ||
     pathname.startsWith('/comparatif') ||         // pages /comparatif/[slug] + /comparatif-outils-prospection-b2b-france
     pathname.startsWith('/produits') ||           // pages produits /produits/{prospection,campagnes,crm}
+    pathname.startsWith('/mcp') ||                // page de vente MCP (publique, marketing Business)
+    pathname.startsWith('/affiliation') ||        // page contrat apporteur d'affaires (publique)
     pathname.startsWith('/pricing') ||            // page tarifs standalone
     pathname.startsWith('/demo') ||               // page demo Cal.com
     pathname.startsWith('/faq') ||                // page FAQ dédiée

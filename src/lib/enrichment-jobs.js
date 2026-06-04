@@ -14,9 +14,10 @@ import { enrichEmail } from '@/lib/enrich-core';
 import { validateUrl } from '@/lib/url-validation';
 import { sendEmail } from '@/lib/email';
 
-const BATCH_SIZE = 40;       // prospects récupérés par lot
+const BATCH_SIZE = 12;       // prospects par lot (petit → progression sauvée souvent)
 const CONCURRENCY = 8;       // enrichissements en parallèle dans un lot
-const TIME_BUDGET_MS = 240000; // 4 min (maxDuration cron = 300s)
+const TIME_BUDGET_MS = 230000; // ~3min50 (marge sous maxDuration cron = 300s)
+const PER_SITE_TIMEOUT_MS = 15000; // garde-temps DUR par site (évite qu'un site lent bloque le lot)
 
 // ── Sélecteur des prospects à enrichir (a un site, pas d'email, non archivé) ──
 function pendingQuery(supabase, userId, scope) {
@@ -162,8 +163,13 @@ async function processJob(supabase, job, deadline) {
       const v = validateUrl(p.site_web);
       if (!v.valid) return;
       try {
-        const res = await enrichEmail(v.url, filterPersonal);
-        if (res.email) {
+        // Garde-temps dur : aucun site ne peut bloquer un slot > PER_SITE_TIMEOUT_MS,
+        // même si enrichEmail enchaîne plusieurs fetchs internes.
+        const res = await Promise.race([
+          enrichEmail(v.url, filterPersonal),
+          new Promise((resolve) => setTimeout(() => resolve({ email: null, timedOut: true }), PER_SITE_TIMEOUT_MS)),
+        ]);
+        if (res && res.email) {
           await supabase.from('prospects')
             .update({ email: res.email, email_method: res.method })
             .eq('id', p.id);

@@ -29,16 +29,41 @@ const HIDDEN_PATH_PREFIXES = [
   '/auth',
 ];
 
-const INITIAL_MESSAGE = {
-  role: 'assistant',
-  content:
-    "Salut 👋 Je suis l'assistant Volia. Je peux répondre à tes questions tarifs, features, RGPD ou planifier une démo avec Anthony. Qu'est-ce que tu veux savoir ?",
+// Bilingue : FR par défaut, EN sur les routes /en.
+const T = {
+  fr: {
+    greeting: "Salut 👋 Je suis l'assistant Volia. Je peux répondre à tes questions tarifs, features, RGPD ou planifier une démo avec Anthony. Qu'est-ce que tu veux savoir ?",
+    cta: 'Une question ?',
+    subtitle: 'Réponses pré-vente · IA',
+    open: 'Ouvrir le chat Volia',
+    close: 'Fermer le chat',
+    placeholder: 'Ta question...',
+    send: 'Envoyer',
+    errLimit: 'Limite atteinte (20 messages / 30 min). Écris à contact@volia.fr pour continuer.',
+    errDaily: 'Le chat est temporairement indisponible (limite quotidienne). Écris à contact@volia.fr.',
+    errGeneric: 'Une erreur est survenue. Écris à contact@volia.fr.',
+    errNetwork: 'Connexion impossible. Écris à contact@volia.fr.',
+  },
+  en: {
+    greeting: "Hi 👋 I'm the Volia assistant. I can answer questions on pricing, features, GDPR, or book a demo with Anthony. What would you like to know?",
+    cta: 'A question?',
+    subtitle: 'Pre-sales answers · AI',
+    open: 'Open Volia chat',
+    close: 'Close chat',
+    placeholder: 'Your question...',
+    send: 'Send',
+    errLimit: 'Limit reached (20 messages / 30 min). Email contact@volia.fr to continue.',
+    errDaily: 'Chat is temporarily unavailable (daily limit). Email contact@volia.fr.',
+    errGeneric: 'Something went wrong. Email contact@volia.fr.',
+    errNetwork: 'Connection failed. Email contact@volia.fr.',
+  },
 };
 
 export default function DemoBotWidget() {
   const pathname = usePathname();
+  const t = T[pathname && pathname.startsWith('/en') ? 'en' : 'fr'];
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState([INITIAL_MESSAGE]);
+  const [messages, setMessages] = useState(() => [{ role: 'assistant', content: t.greeting }]);
   const [input, setInput] = useState('');
   const [sending, setSending] = useState(false);
   const [sessionId, setSessionId] = useState(null);
@@ -96,17 +121,17 @@ export default function DemoBotWidget() {
       const data = await res.json();
       if (!res.ok || !data.ok) {
         if (data.error === 'rate_limit') {
-          setError("Limite atteinte (20 messages / 30 min). Écris à contact@volia.fr pour continuer.");
+          setError(t.errLimit);
         } else if (data.error === 'global_quota_exceeded') {
-          setError("Le chat est temporairement indisponible (limite quotidienne). Écris à contact@volia.fr.");
+          setError(t.errDaily);
         } else {
-          setError("Une erreur est survenue. Écris à contact@volia.fr.");
+          setError(t.errGeneric);
         }
         return;
       }
       setMessages((m) => [...m, { role: 'assistant', content: data.reply }]);
     } catch (err) {
-      setError("Connexion impossible. Écris à contact@volia.fr.");
+      setError(t.errNetwork);
     } finally {
       setSending(false);
     }
@@ -118,11 +143,11 @@ export default function DemoBotWidget() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          aria-label="Ouvrir le chat Volia"
+          aria-label={t.open}
           className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 px-4 py-3 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-500 hover:scale-105 transition"
         >
           <MessageCircle size={20} />
-          <span className="text-sm font-semibold hidden sm:inline">Une question ?</span>
+          <span className="text-sm font-semibold hidden sm:inline">{t.cta}</span>
         </button>
       )}
 
@@ -133,11 +158,11 @@ export default function DemoBotWidget() {
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 dark:border-slate-700 bg-gradient-to-r from-indigo-600 to-violet-600 text-white">
             <div>
               <div className="text-sm font-semibold">Volia — Assistant</div>
-              <div className="text-xs opacity-80">Réponses pré-vente · IA</div>
+              <div className="text-xs opacity-80">{t.subtitle}</div>
             </div>
             <button
               onClick={() => setOpen(false)}
-              aria-label="Fermer le chat"
+              aria-label={t.close}
               className="p-1 rounded hover:bg-white/20 transition"
             >
               <X size={18} />
@@ -195,7 +220,7 @@ export default function DemoBotWidget() {
                     handleSend(e);
                   }
                 }}
-                placeholder="Ta question..."
+                placeholder={t.placeholder}
                 rows={1}
                 disabled={sending}
                 maxLength={1000}
@@ -205,7 +230,7 @@ export default function DemoBotWidget() {
               <button
                 type="submit"
                 disabled={sending || !input.trim()}
-                aria-label="Envoyer"
+                aria-label={t.send}
                 className="p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 <Send size={16} />

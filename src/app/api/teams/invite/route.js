@@ -17,6 +17,7 @@ import {
 } from '@/lib/teams';
 import { sendEmail } from '@/lib/email';
 import { teamInvitationEmail } from '@/lib/emailTemplates';
+import { syncTeamSeats } from '@/lib/seats';
 
 const INVITATION_TTL_DAYS = 7;
 const MAX_PENDING_INVITES = 50; // anti-abus
@@ -153,5 +154,9 @@ export async function POST(request) {
     console.error('[api/teams/invite] email build error:', err);
   }
 
-  return NextResponse.json({ invitation: invite, ok: true });
+  // Facturation au siège : un siège est réservé dès l'invitation (proraté).
+  let seatSync = null;
+  try { seatSync = await syncTeamSeats(teamData.team.id); } catch (e) { console.error('[api/teams/invite] seat sync', e?.message || e); }
+
+  return NextResponse.json({ invitation: invite, ok: true, seats: seatSync?.seats });
 }

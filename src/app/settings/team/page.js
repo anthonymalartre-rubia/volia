@@ -138,6 +138,11 @@ export default function TeamSettingsPage() {
             {members.length} membre{members.length > 1 ? 's' : ''}
             {invitations.length > 0 && ` · ${invitations.length} invitation${invitations.length > 1 ? 's' : ''} en attente`}
           </p>
+          {can_invite && (
+            <p className="mt-1 text-xs text-content-tertiary">
+              1 utilisateur inclus · <span className="font-medium text-content-secondary">+10 €/mois par utilisateur supplémentaire</span> (facturé au prorata dès l'invitation).
+            </p>
+          )}
         </div>
         {can_invite && (
           <button

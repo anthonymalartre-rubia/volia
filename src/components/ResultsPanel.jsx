@@ -65,6 +65,7 @@ import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
 import { useI18n } from "@/lib/i18n";
 import { Info } from "lucide-react";
 import OnboardingHint from "@/components/OnboardingHint";
+import Button from "@/components/ui/Button";
 // Modal Prospection → Campagnes (lazy : non-critique au render initial)
 const SendToCampagneModal = lazy(() => import("@/components/SendToCampagneModal"));
 
@@ -1016,7 +1017,10 @@ export default memo(function ResultsPanel({
         {!isWaterfallEnriching ? (
           selectedIds.size > 0 ? (
             <div className="relative group/tip">
-              <button
+              <Button
+                tone="violet"
+                size="sm"
+                icon={Zap}
                 onClick={() => {
                   const ids = Array.from(selectedIds);
                   const hasUnenriched = prospects.some(p => ids.includes(p.id) && !p.email);
@@ -1025,11 +1029,10 @@ export default memo(function ResultsPanel({
                   }
                 }}
                 disabled={prospects.length === 0}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 min-h-[44px] sm:min-h-0 rounded-lg bg-violet-600 hover:bg-violet-500 disabled:bg-surface-elevated disabled:text-content-faint text-white text-xs font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed"
+                className="min-h-[44px] sm:min-h-0"
               >
-                <Zap size={14} />
                 {t('results.enrichSelection', { count: selectedIds.size })}
-              </button>
+              </Button>
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-surface-elevated border border-line-hover rounded-xl text-[10px] text-content-secondary w-56 opacity-0 group-hover/tip:opacity-100 pointer-events-none transition-opacity z-20 shadow-xl">
                 <div className="font-semibold text-violet-400 mb-1">{t('results.cascadeTitle')}</div>
                 <div className="space-y-0.5">
@@ -1069,14 +1072,15 @@ export default memo(function ResultsPanel({
         )}
 
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            tone="violet"
+            size="sm"
+            icon={Zap}
             onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, null)}
             disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium bg-violet-600 text-white hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
-            <Zap className="h-3.5 w-3.5" />
             {t('results.enrichAll', { count: prospectsWithoutEmail })}
-          </button>
+          </Button>
           {activeFolder === 'archived' && folderProspects.length > 0 && (
             <button
               onClick={() => {
@@ -1301,7 +1305,10 @@ export default memo(function ResultsPanel({
             <span className="text-xs font-medium text-indigo-400">
               {t('results.selected', { count: selectedIds.size, plural: selectedIds.size > 1 ? 's' : '' })}
             </span>
-            <button
+            <Button
+              tone="violet"
+              size="sm"
+              icon={Zap}
               onClick={() => {
                 const ids = Array.from(selectedIds);
                 const withoutEmail = prospects.filter(p => ids.includes(p.id) && !p.email);
@@ -1309,11 +1316,9 @@ export default memo(function ResultsPanel({
                   onBulkEnrich?.(null, null, ids);
                 }
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-medium transition"
             >
-              <Zap size={12} />
               {t('results.enrichBtn')}
-            </button>
+            </Button>
             <button
               onClick={deleteSelected}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-600/10 border border-red-600/20 text-red-400 text-[11px] font-medium hover:bg-red-600/20 transition"

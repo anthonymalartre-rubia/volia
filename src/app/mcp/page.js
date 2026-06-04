@@ -3,7 +3,7 @@
 // avec un serveur MCP réel.
 
 import Link from 'next/link';
-import { Bot, KeyRound, Plug, ShieldCheck, Terminal, ArrowRight } from 'lucide-react';
+import { Bot, KeyRound, Plug, ShieldCheck, Terminal, ArrowRight, MessageSquare, Workflow, BarChart3, Building2 } from 'lucide-react';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
@@ -11,12 +11,12 @@ import ReaderFooter from '@/components/ReaderFooter';
 export const metadata = {
   title: 'Volia MCP — la prospection B2B utilisable par les agents IA (Claude, Cursor…)',
   description:
-    'Volia expose un serveur MCP (Model Context Protocol) : connecte Volia à Claude Desktop, Cursor ou tout agent IA et laisse-le lire tes prospects, ton plan et ton usage. Lecture seule, clé API, RGPD.',
+    'Volia expose un serveur MCP (Model Context Protocol) : pilote ta prospection B2B depuis Claude Desktop, Cursor ou ton agent IA — cherche des prospects, exporte, suis ton usage. Inclus dans le plan Business, dans la limite de ton forfait, RGPD.',
   alternates: { canonical: 'https://volia.fr/mcp' },
   keywords: ['Volia MCP', 'serveur MCP prospection', 'Model Context Protocol', 'Volia Claude Desktop', 'agent IA prospection B2B', 'MCP France'],
   openGraph: {
     title: 'Volia MCP — prospection B2B utilisable par les agents IA',
-    description: 'Connecte Volia à Claude, Cursor ou ton agent IA via le Model Context Protocol. Serveur MCP réel, lecture seule, clé API.',
+    description: 'Pilote ta prospection B2B depuis Claude, Cursor ou ton agent IA via le Model Context Protocol. Inclus dans le plan Business Volia.',
     type: 'website',
     url: 'https://volia.fr/mcp',
   },
@@ -28,6 +28,29 @@ const TOOLS = [
   { name: 'get_usage', tag: 'lecture', desc: "Usage du mois (recherches, enrichissements, exports) vs limites du plan." },
   { name: 'start_search', tag: 'écriture', desc: "Lance une vraie recherche d'entreprises (Google Places) dans un département et l'enregistre. Décompté sur le quota du forfait. Scope write requis." },
   { name: 'export_csv', tag: 'écriture', desc: "Exporte les prospects au format CSV (nom, email, téléphone, site, adresse…)." },
+];
+
+const USE_CASES = [
+  {
+    icon: MessageSquare,
+    title: 'Prospecter sans quitter ton outil IA',
+    text: "« Trouve 20 cabinets comptables à Lyon et exporte-les en CSV. » Ton équipe pilote Volia directement depuis Claude ou Cursor — zéro changement d'outil, zéro export manuel.",
+  },
+  {
+    icon: Workflow,
+    title: 'Brancher Volia à ton agent interne',
+    text: "Ton assistant IA d'équipe interroge Volia dans ses workflows : il cherche des prospects, vérifie le quota restant avant d'agir, et prépare les données pour une campagne.",
+  },
+  {
+    icon: BarChart3,
+    title: 'Piloter en langage naturel',
+    text: "« Combien de prospects avec email j'ai dans le 13 ? Quel est mon usage ce mois ? » L'agent lit ton compte, ton plan et ton usage et te répond instantanément.",
+  },
+  {
+    icon: Building2,
+    title: 'Industrialiser la prospection',
+    text: "Enchaîne recherche → lecture → export en une conversation. L'IA fait la corvée répétitive, ton équipe garde la décision et la relation client.",
+  },
 ];
 
 const CONFIG_JSON = `{
@@ -72,6 +95,39 @@ export default function McpPage() {
           </div>
           <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-semibold text-violet-500">
             ⭐ Fonctionnalité incluse dans le plan <Link href="/pricing" className="underline underline-offset-2">Business</Link>
+          </div>
+        </section>
+
+        {/* Cas d'usage & valeur Business */}
+        <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
+          <h2 className="text-center text-2xl font-bold">Ce que ça change pour une équipe Business</h2>
+          <p className="mx-auto mt-2 mb-8 max-w-2xl text-center text-sm text-content-tertiary">
+            Tes commerciaux passent déjà leurs journées dans Claude ou Cursor. Le MCP y branche Volia :
+            ils prospectent, exportent et pilotent sans jamais ouvrir une autre app.
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {USE_CASES.map((u) => (
+              <div key={u.title} className="rounded-2xl border border-line bg-surface-raised p-6">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-indigo-600 text-white">
+                  <u.icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-semibold">{u.title}</h3>
+                <p className="mt-2 text-sm text-content-secondary">{u.text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {[
+              ['⏱️', 'Zéro context-switch', "L'équipe reste dans l'outil IA qu'elle utilise déjà — rien de nouveau à apprendre."],
+              ['🔐', 'Sous contrôle', 'Quota du forfait respecté, lecture/écriture séparées, données hébergées en UE (RGPD).'],
+              ['🔌', 'Intégrable', "Se branche aux assistants IA internes et aux process de l'entreprise."],
+            ].map(([emoji, t, d]) => (
+              <div key={t} className="rounded-xl border border-line bg-surface-base p-4 text-center">
+                <div className="text-2xl">{emoji}</div>
+                <div className="mt-2 font-semibold text-content-primary">{t}</div>
+                <div className="mt-1 text-xs text-content-tertiary">{d}</div>
+              </div>
+            ))}
           </div>
         </section>
 

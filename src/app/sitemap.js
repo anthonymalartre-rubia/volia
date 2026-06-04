@@ -57,6 +57,8 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/ressources/kit-prospection-2026`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/faq`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
+      // Landing verticale immobilier d'entreprise (page autonome, hors /pour/[persona])
+      { url: `${baseUrl}/pour/immobilier-entreprise`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
       // [31 mai 2026] /pricing priority 0.95 → 0.85 : clarifie la hiérarchie
       // vs / (1.0). Le delta de 0.05 était trop faible → Google a choisi
       // /pricing comme canonical de la homepage (cf. GSC "Page en double :

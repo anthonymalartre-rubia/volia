@@ -1,6 +1,6 @@
 # Volia
 
-> Volia est une plateforme SaaS française dont le produit phare est Volia Autopilot : un pipeline B2B autonome end-to-end. L'utilisateur sélectionne uniquement la cible, et Volia exécute la chaîne complète — scraping Google Places, email personnalisé, formulaire de qualification, scoring, push CRM — de la cible au lead chaud dans le CRM, en un seul setup. Volia inclut aussi sa suite de prospection B2B automatisée historique : recherche Google Places (150+ catégories d'entreprises, 101 départements français) + enrichissement email en cascade (scraping intelligent du site web, recherche Google via Serper, fallback patterns), chaque email recevant un score de confiance.
+> Volia est une plateforme SaaS française dont le produit phare est Volia Autopilot : un pipeline B2B où l'IA exécute la corvée et l'humain garde la décision. L'utilisateur sélectionne la cible et valide les étapes clés, et Volia exécute la chaîne — scraping Google Places, email personnalisé, formulaire de qualification, scoring, push CRM — de la cible au lead chaud dans le CRM. Volia inclut aussi sa suite de prospection B2B automatisée historique : recherche Google Places (150+ catégories d'entreprises, 101 départements français) + enrichissement email en cascade (scraping intelligent du site web, recherche Google via Serper, fallback patterns), chaque email recevant un score de confiance.
 
 ## En bref
 

@@ -189,10 +189,16 @@ export default function SignupPage() {
       });
       const data = await res.json().catch(() => ({}));
 
-      if (res.status === 409) {
+      // Messages d'erreur TOUJOURS localisés (mappés par code serveur, jamais
+      // le `data.error` brut qui est en FR — sinon FR affiché sur la version EN).
+      if (res.status === 409 || data?.code === 'already_exists') {
         setError(t('auth.accountExists'));
+      } else if (res.status === 429 || data?.code === 'rate_limited') {
+        setError(t('auth.rateLimited'));
+      } else if (data?.code === 'email_send_failed') {
+        setError(t('auth.emailSendFailed'));
       } else if (!res.ok || !data?.success) {
-        setError(data?.error || t('auth.genericError'));
+        setError(t('auth.serverError'));
       } else {
         // Le cookie volia_ref (parrainage) sera consommé après la 1ère
         // connexion réussie (cf. trackReferralIfAny appelé depuis le

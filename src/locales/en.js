@@ -619,6 +619,9 @@ const en = {
     genericError: 'An error occurred. Please try again.',
     passwordMismatch: 'Passwords do not match.',
     accountExists: 'An account already exists with this email.',
+    rateLimited: 'Too many attempts. Please wait a minute and try again.',
+    serverError: 'Something went wrong on our side. Please try again in a moment — your details are fine.',
+    emailSendFailed: 'Account created, but we couldn\'t send the confirmation email. Use "Resend email" or contact support.',
   },
 
   // ─── Dashboard ─────────────────────────────────────────────

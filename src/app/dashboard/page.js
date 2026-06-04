@@ -5,6 +5,7 @@ import { getSupabase } from '@/lib/supabase';
 import { DEPTS, REGIONS, COUNTRIES, getDeptData, getCountryForDept, getRegionsForCountry, getDeptsForCountry } from '@/lib/constants';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
+import BackgroundEnrichPanel from '@/components/BackgroundEnrichPanel';
 import UsageBanner from '@/components/UsageBanner';
 import UpgradeBanner from '@/components/UpgradeBanner';
 import TrialBanner from '@/components/TrialBanner';
@@ -1557,6 +1558,8 @@ export default function Dashboard() {
                 />
               )}
               {activeView === 'results' && (
+                <>
+                <div className="mb-4"><BackgroundEnrichPanel /></div>
                 <ResultsPanel
                   prospects={prospects}
                   folders={folders}
@@ -1590,6 +1593,7 @@ export default function Dashboard() {
                   onSendToCrm={handleSendToCrm}
                   hasCrmAccess={userPlan?.id === 'business' || userPlan?.id === 'enterprise'}
                 />
+                </>
               )}
               {activeView === 'export' && (
                 <ExportPanel prospects={prospects} onDownloadCSV={downloadCSV} />

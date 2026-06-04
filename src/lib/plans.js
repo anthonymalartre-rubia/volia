@@ -85,6 +85,7 @@ export const PLANS = {
     highlight: true,        // affiché comme "Recommandé" / "POPULAIRE"
     stripePriceId: cleanEnv(process.env.STRIPE_PRO_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_PRO_YEARLY_PRICE_ID || ''),
+    unlocksModules: true,   // CRM + Campagnes + Formulaires inclus dès Pro (PME/agences)
     limits: {
       searches_per_month: 5000,
       enrichments_per_month: 1200,
@@ -92,12 +93,15 @@ export const PLANS = {
       folders: -1,
       exports_per_month: -1,
       verifications_per_month: 500,
-      emails_sent_per_month: 0,            // Campagnes = Business-only
-      form_submissions_per_month: 0,  // Forms = Business-only
+      emails_sent_per_month: 2000,         // Campagnes incluses dès Pro
+      form_submissions_per_month: 1000,    // Formulaires inclus dès Pro
       autopilot_workflows: 1,        // ⚡ Volia Autopilot Phase 1 : 1 workflow linéaire
       autopilot_branching: false,
     },
     features: [
+      '✅ CRM, Campagnes email & Formulaires inclus',
+      '2 000 cold emails/mois (Campagnes)',
+      '1 000 soumissions de formulaires/mois',
       '1 200 enrichissements email/mois (×3)',
       '1 200 numéros de téléphone/mois (mobiles prioritaires)',
       '⚡ 1 workflow Autopilot (linéaire)',
@@ -137,7 +141,8 @@ export const PLANS = {
     },
     tagline: 'Pour équipes outbound',
     inheritsFrom: 'pro',
-    unlocksModules: true,   // SEUL plan qui débloque CRM + Campagnes + Formulaires
+    unlocksModules: true,   // CRM + Campagnes + Formulaires (aussi inclus sur Pro)
+    unlocksMcp: true,       // Serveur MCP : Business / Enterprise uniquement
     stripePriceId: cleanEnv(process.env.STRIPE_BUSINESS_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_BUSINESS_YEARLY_PRICE_ID || ''),
     limits: {
@@ -185,6 +190,7 @@ export const PLANS = {
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_BUSINESS_YEARLY_PRICE_ID || ''),
     inheritsFrom: 'business',
     unlocksModules: true,
+    unlocksMcp: true,
     limits: {
       searches_per_month: 10000,
       enrichments_per_month: 10000,
@@ -211,6 +217,7 @@ export const PLANS = {
     tagline: 'Pour équipes qui scalent',
     inheritsFrom: 'business',
     unlocksModules: true,
+    unlocksMcp: true,
     stripePriceId: cleanEnv(process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_ENTERPRISE_YEARLY_PRICE_ID || ''),
     limits: {

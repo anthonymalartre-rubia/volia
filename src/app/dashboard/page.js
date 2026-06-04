@@ -286,11 +286,14 @@ export default function Dashboard() {
     // On déclenche un checkout Stripe direct (sans demander à l'user de
     // re-cliquer un bouton — il a déjà fait le choix sur la landing).
     if (['solo', 'pro', 'business'].includes(upgrade)) {
-      // Nettoie le cookie qui a survécu au signup
+      // Nettoie les cookies qui ont survécu au signup
       document.cookie = 'volia_signup_plan=; path=/; max-age=0';
+      document.cookie = 'volia_signup_period=; path=/; max-age=0';
+      // Période choisie sur la card pricing (annuel/mensuel), propagée via l'URL.
+      const upPeriod = searchParams.get('period') === 'yearly' ? 'yearly' : 'monthly';
       // Déclenche le checkout avec un petit délai pour laisser le
       // composant se monter et l'auth se stabiliser.
-      setTimeout(() => handleUpgrade(upgrade), 600);
+      setTimeout(() => handleUpgrade(upgrade, upPeriod), 600);
       return;
     }
 
@@ -825,12 +828,12 @@ export default function Dashboard() {
     setIsSearching(false);
   }, [prospects, user, supabase]);
 
-  const handleUpgrade = async (planId = 'pro') => {
+  const handleUpgrade = async (planId = 'pro', period = 'monthly') => {
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId }),
+        body: JSON.stringify({ planId, period: period === 'yearly' ? 'yearly' : 'monthly' }),
       });
       const { url, error } = await res.json();
       if (url) {

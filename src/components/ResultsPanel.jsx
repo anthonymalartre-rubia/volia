@@ -1102,7 +1102,6 @@ export default memo(function ResultsPanel({
             title={t('results.chooseColumns')}
           >
             <Columns3 size={14} />
-            <span className="hidden sm:inline">{t('results.columnsLabel')}</span>
           </button>
           {showColumnPicker && (
             <div className="absolute z-50 top-full mt-1 right-0 w-52 rounded-lg border border-line bg-surface-card shadow-xl py-1">
@@ -1143,7 +1142,6 @@ export default memo(function ResultsPanel({
           title={t('results.exportCSV')}
         >
           <Download size={14} />
-          <span className="hidden sm:inline">{t('results.csv')}</span>
         </button>
         {/* Export Preview */}
         <div className="relative">
@@ -1158,7 +1156,6 @@ export default memo(function ResultsPanel({
             title={t('results.exportPreview')}
           >
             <Eye size={14} />
-            <span className="hidden sm:inline">{t('results.preview')}</span>
           </button>
           {showExportPreview && folderProspects.length > 0 && (
             <div className="absolute right-0 top-full mt-2 z-50 w-[600px] max-w-[90vw] rounded-xl border border-line bg-surface-elevated shadow-2xl overflow-hidden">

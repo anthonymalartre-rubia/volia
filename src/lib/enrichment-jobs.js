@@ -205,6 +205,35 @@ export async function runEnrichmentBatch() {
   }
 
   console.log(`[enrichment] active jobs found: ${jobs?.length || 0}`);
+
+  // ── DIAGNOSTIC TEMPORAIRE : que voit/peut le client admin en base ? ──
+  // adminTotal = nb total de jobs vus SANS filtre (test lecture service-role).
+  // writeErr = test écriture. Écrit dans cron_debug (lisible via SQL).
+  let adminTotal = null, totalErrMsg = null, writeErrMsg = null;
+  try {
+    const { count, error: cErr } = await supabase
+      .from('enrichment_jobs')
+      .select('id', { count: 'exact', head: true });
+    adminTotal = count;
+    totalErrMsg = cErr ? (cErr.message || String(cErr)) : null;
+    const { error: wErr } = await supabase
+      .from('cron_debug')
+      .upsert({
+        id: 'enrichment',
+        payload: {
+          adminTotal,
+          totalErr: totalErrMsg,
+          activeCount: jobs?.length ?? null,
+          selectErr: null,
+          ts: startedAt,
+        },
+        updated_at: startedAt,
+      });
+    writeErrMsg = wErr ? (wErr.message || String(wErr)) : null;
+  } catch (e) { writeErrMsg = String(e?.message || e); }
+  console.log('[enrichment] diag', JSON.stringify({ adminTotal, totalErrMsg, active: jobs?.length, writeErrMsg }));
+  // ── FIN DIAGNOSTIC ──
+
   if (!jobs || jobs.length === 0) {
     return { ok: true, processedJobs: 0, startedAt };
   }

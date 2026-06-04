@@ -97,6 +97,13 @@ export async function POST(request) {
           { status: 409 }
         );
       }
+      // Rate-limit côté Supabase (throttle anti-abus) → message clair, pas "erreur serveur".
+      if (linkError.status === 429 || msg.includes('rate limit') || msg.includes('rate_limit') || msg.includes('too many') || msg.includes('over_')) {
+        return NextResponse.json(
+          { error: 'Trop de tentatives. Réessaie dans quelques minutes.', code: 'rate_limited' },
+          { status: 429 }
+        );
+      }
       console.error('[auth/signup] generateLink error (after retry):', linkError);
       return NextResponse.json(
         { error: 'Impossible de créer le compte. Réessayez ou contactez le support.', code: 'server_error' },

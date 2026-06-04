@@ -57,6 +57,35 @@ const TOOLS = [
       additionalProperties: false,
     },
   },
+  {
+    name: 'start_search',
+    title: 'Lancer une recherche (écriture)',
+    description: "Lance une vraie recherche d'entreprises (Google Places) dans un département français et enregistre les résultats comme prospects de l'utilisateur. ⚠️ Action d'écriture : décomptée sur le quota mensuel du forfait de l'utilisateur. Nécessite une clé API avec le scope 'write'. 1 appel = jusqu'à 20 entreprises.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        query: { type: 'string', description: 'Terme de recherche, ex "restaurant", "agence immobilière", "garage automobile".' },
+        dept: { type: 'string', description: 'Code département français, ex "75", "13", "2A". Obligatoire.' },
+        limit: { type: 'integer', minimum: 1, maximum: 20, description: 'Nb max de résultats (1-20, défaut 20). Borné par le quota restant.' },
+      },
+      required: ['query', 'dept'],
+      additionalProperties: false,
+    },
+  },
+  {
+    name: 'export_csv',
+    title: 'Exporter les prospects en CSV',
+    description: "Exporte les prospects de l'utilisateur au format CSV (nom, email, téléphone, site, adresse, département). Filtres optionnels : présence d'email, département.",
+    inputSchema: {
+      type: 'object',
+      properties: {
+        limit: { type: 'integer', minimum: 1, maximum: 100, description: 'Nb max de lignes (1-100, défaut 100)' },
+        has_email: { type: 'boolean', description: 'true = uniquement les prospects avec email' },
+        department: { type: 'string', description: 'Filtrer sur un code département FR' },
+      },
+      additionalProperties: false,
+    },
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────
@@ -68,14 +97,32 @@ function rpcError(id, code, message) {
 }
 
 // Appelle l'API v1 en interne en transmettant la clé de l'utilisateur.
-async function callV1(origin, path, authHeader) {
-  const res = await fetch(`${origin}${path}`, {
+async function callV1(origin, path, authHeader, opts = {}) {
+  const init = {
+    method: opts.method || 'GET',
     headers: { Authorization: authHeader, Accept: 'application/json' },
-  });
+  };
+  if (opts.body !== undefined) {
+    init.headers['Content-Type'] = 'application/json';
+    init.body = JSON.stringify(opts.body);
+  }
+  const res = await fetch(`${origin}${path}`, init);
   const text = await res.text();
   let json;
   try { json = JSON.parse(text); } catch { json = { raw: text }; }
   return { ok: res.ok, status: res.status, json };
+}
+
+// Convertit une liste de prospects en CSV.
+function prospectsToCsv(list) {
+  const cols = ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'note', 'nb_avis'];
+  const esc = (v) => {
+    const s = v === null || v === undefined ? '' : String(v);
+    return /[",\n;]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const header = cols.join(',');
+  const lines = (list || []).map((p) => cols.map((c) => esc(p[c])).join(','));
+  return [header, ...lines].join('\n');
 }
 
 async function runTool(name, args, origin, authHeader) {
@@ -105,6 +152,32 @@ async function runTool(name, args, origin, authHeader) {
     if (args.month) qs.set('month', String(args.month));
     const r = await callV1(origin, `/api/v1/usage?${qs.toString()}`, authHeader);
     return r.ok ? { text: JSON.stringify(r.json, null, 2) } : { isError: true, text: `Erreur ${r.status}: ${r.json?.error || 'inconnue'}` };
+  }
+
+  // ─── Tools d'ÉCRITURE (scope write requis, vérifié côté API v1) ──────
+  if (name === 'start_search') {
+    if (!args.query && !args.category) return { isError: true, text: 'Paramètre "query" (ou "category") requis.' };
+    if (!args.dept) return { isError: true, text: 'Paramètre "dept" requis (code département FR, ex "75").' };
+    const r = await callV1(origin, '/api/v1/search', authHeader, {
+      method: 'POST',
+      body: { query: args.query || args.category, dept: String(args.dept), limit: args.limit },
+    });
+    if (r.ok) return { text: JSON.stringify(r.json, null, 2) };
+    if (r.status === 429) return { isError: true, text: `Quota de recherche du forfait atteint ce mois-ci. ${r.json?.error || ''}` };
+    if (r.status === 403) return { isError: true, text: `Clé API en lecture seule : il faut une clé avec le scope "write" pour lancer une recherche.` };
+    return { isError: true, text: `Erreur ${r.status}: ${r.json?.error || 'inconnue'}` };
+  }
+
+  if (name === 'export_csv') {
+    const qs = new URLSearchParams();
+    qs.set('limit', String(Math.min(100, Math.max(1, parseInt(args.limit, 10) || 100))));
+    if (typeof args.has_email === 'boolean') qs.set('has_email', String(args.has_email));
+    if (args.department) qs.set('department', String(args.department));
+    const r = await callV1(origin, `/api/v1/prospects?${qs.toString()}`, authHeader);
+    if (!r.ok) return { isError: true, text: `Erreur ${r.status}: ${r.json?.error || 'inconnue'}` };
+    const list = r.json?.prospects || r.json?.data || [];
+    const csv = prospectsToCsv(list);
+    return { text: `${list.length} prospect(s) exporté(s) en CSV :\n\n${csv}` };
   }
 
   return { isError: true, text: `Tool inconnu : ${name}` };

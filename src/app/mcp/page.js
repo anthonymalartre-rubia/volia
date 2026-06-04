@@ -23,9 +23,11 @@ export const metadata = {
 };
 
 const TOOLS = [
-  { name: 'get_account', desc: 'Profil, plan Volia et usage du mois. À appeler pour vérifier la clé.' },
-  { name: 'list_prospects', desc: "Liste les prospects (entreprises) de l'utilisateur. Filtres : département, présence d'email, tri." },
-  { name: 'get_usage', desc: "Usage du mois (recherches, enrichissements, exports) vs limites du plan." },
+  { name: 'get_account', tag: 'lecture', desc: 'Profil, plan Volia et usage du mois. À appeler pour vérifier la clé.' },
+  { name: 'list_prospects', tag: 'lecture', desc: "Liste les prospects (entreprises) de l'utilisateur. Filtres : département, présence d'email, tri." },
+  { name: 'get_usage', tag: 'lecture', desc: "Usage du mois (recherches, enrichissements, exports) vs limites du plan." },
+  { name: 'start_search', tag: 'écriture', desc: "Lance une vraie recherche d'entreprises (Google Places) dans un département et l'enregistre. Décompté sur le quota du forfait. Scope write requis." },
+  { name: 'export_csv', tag: 'écriture', desc: "Exporte les prospects au format CSV (nom, email, téléphone, site, adresse…)." },
 ];
 
 const CONFIG_JSON = `{
@@ -64,7 +66,7 @@ export default function McpPage() {
             compatible, et laisse-le interroger tes prospects en langage naturel.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-content-tertiary">
-            <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> Lecture seule (V1)</span>
+            <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> Lecture + écriture (quota forfait)</span>
             <span className="inline-flex items-center gap-1.5"><KeyRound className="h-4 w-4 text-emerald-500" /> Clé API requise</span>
             <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> 🇫🇷 RGPD</span>
           </div>
@@ -73,17 +75,21 @@ export default function McpPage() {
         {/* Tools */}
         <section className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
           <h2 className="text-2xl font-bold">Ce que l'agent peut faire</h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {TOOLS.map((t) => (
               <div key={t.name} className="rounded-2xl border border-line bg-surface-raised p-5">
-                <code className="rounded bg-surface-base px-2 py-1 text-sm font-semibold text-violet-500">{t.name}</code>
+                <div className="flex items-center gap-2">
+                  <code className="rounded bg-surface-base px-2 py-1 text-sm font-semibold text-violet-500">{t.name}</code>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${t.tag === 'écriture' ? 'bg-amber-500/15 text-amber-500' : 'bg-emerald-500/15 text-emerald-500'}`}>{t.tag}</span>
+                </div>
                 <p className="mt-3 text-sm text-content-secondary">{t.desc}</p>
               </div>
             ))}
           </div>
           <p className="mt-4 text-sm text-content-tertiary">
-            V1 en <strong>lecture seule</strong> (l'agent consulte, il ne modifie rien). Les actions d'écriture
-            (lancer une recherche, créer une campagne) arriveront ensuite.
+            Les tools de <strong>lecture</strong> fonctionnent avec n'importe quelle clé API. Les tools d'<strong>écriture</strong>
+            (lancer une recherche, exporter) nécessitent une clé avec le scope <code className="rounded bg-surface-raised px-1.5 py-0.5 text-xs">write</code>,
+            et <strong>start_search est décompté sur ton quota mensuel</strong> (impossible de dépasser ton forfait).
           </p>
         </section>
 

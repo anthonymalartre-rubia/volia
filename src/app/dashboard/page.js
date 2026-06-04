@@ -11,10 +11,6 @@ import TrialBanner from '@/components/TrialBanner';
 // OnboardingChecklist + ReferralPushBanner + ReviewSolicitationBanner :
 // lazy load (widgets non-critiques)
 const OnboardingChecklist = lazy(() => import('@/components/OnboardingChecklist'));
-// ReferralPushBanner remplace l'ancien ReferralBanner (mai 2026) : design
-// horizontal sticky-top plus visible avec copie de lien intégrée, gradient
-// violet→pink et 2 CTA. Dismiss 7j conservé.
-const ReferralPushBanner = lazy(() => import('@/components/ReferralPushBanner'));
 const ReviewSolicitationBanner = lazy(() => import('@/components/ReviewSolicitationBanner'));
 const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgroundDecor'));
 import LimitReachedModal from '@/components/LimitReachedModal';
@@ -1505,11 +1501,6 @@ export default function Dashboard() {
             usage={userUsage}
             onUpgrade={(targetPlan) => handleUpgrade(targetPlan || 'pro')}
           />
-          {/* Banner parrainage push — design persistant horizontal,
-              copie lien intégrée, dismiss 7j (lazy) */}
-          <Suspense fallback={null}>
-            <ReferralPushBanner />
-          </Suspense>
           <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
             {/* Header de section premium pour les vues non-overview (Recherche,

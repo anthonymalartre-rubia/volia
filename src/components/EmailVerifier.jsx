@@ -354,7 +354,7 @@ export default function EmailVerifier({ userPlan }) {
               )}
             </div>
             <div className="flex justify-between text-[10px] text-content-faint">
-              <span>{stats.total} emails verifies</span>
+              <span>{stats.total} emails vérifiés</span>
               <span>{stats.valid} exploitables ({stats.total > 0 ? Math.round((stats.valid / stats.total) * 100) : 0}%)</span>
             </div>
           </div>

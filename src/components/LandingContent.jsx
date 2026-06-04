@@ -688,8 +688,9 @@ export default function LandingContent() {
                 { value: '0', label: 'email deviné — 100 % vérifiés' },
                 { value: '101', label: 'départements France + Belgique + Suisse romande' },
                 { value: '150+', label: 'catégories B2B (commerce de proximité aux SaaS)' },
-                // TODO Anthony : remplace "founders" par chiffre réel (MRR ou nb clients payants)
-                { value: '47', label: 'founders nous font déjà confiance', placeholder: true },
+                // Stat factuelle (pas de social proof inventée tant que la base
+                // clients n'est pas significative — on met l'offre d'essai).
+                { value: '14 j', label: 'essai gratuit — sans carte bancaire' },
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-3xl sm:text-4xl font-bold font-mono tabular-nums text-violet-700 mb-1">
@@ -697,13 +698,6 @@ export default function LandingContent() {
                   </div>
                   <div className="text-xs sm:text-sm text-content-tertiary leading-snug">
                     {stat.label}
-                    {stat.placeholder && (
-                      // Marqueur visuel discret pour Anthony — à supprimer une fois chiffre réel
-                      <span className="block text-[9px] uppercase tracking-wider text-amber-600 mt-0.5">
-                        {/* TODO Anthony : remplace 47 par MRR ou nb clients réels */}
-                        chiffre à confirmer
-                      </span>
-                    )}
                   </div>
                 </div>
               ))}

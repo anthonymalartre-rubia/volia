@@ -149,8 +149,12 @@ export default function RootLayout({ children }) {
         <script dangerouslySetInnerHTML={{ __html: `
           (function() {
             try {
+              var p = window.location.pathname;
+              var APP = ['/dashboard','/app','/admin','/settings','/onboarding','/parrainage','/notifications'];
+              var isApp = APP.some(function(a){ return p === a || p.indexOf(a + '/') === 0; });
               var t = localStorage.getItem('theme');
-              if (t !== 'dark') {
+              // Hors app (landing/marketing) : toujours clair. Dans l'app : honore le choix.
+              if (!isApp || t !== 'dark') {
                 document.documentElement.classList.add('light');
               }
             } catch(e) {

@@ -32,13 +32,13 @@ export function NavAuth() {
     <>
       <Link
         href="/login"
-        className="px-4 py-2 text-sm text-content-secondary hover:text-content-primary transition"
+        className="hidden sm:inline-flex px-4 py-2 text-sm text-content-secondary hover:text-content-primary transition whitespace-nowrap"
       >
         Se connecter
       </Link>
       <Link
         href="/signup"
-        className="px-5 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium hover:from-violet-500 hover:to-indigo-500 transition-all"
+        className="px-5 py-2 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-medium hover:from-violet-500 hover:to-indigo-500 transition-all whitespace-nowrap"
       >
         On essaie
       </Link>

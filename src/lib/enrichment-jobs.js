@@ -10,14 +10,14 @@
 
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { enrichEmail } from '@/lib/enrich-core';
+import { enrichWaterfall } from '@/lib/enrich-waterfall-core';
 import { validateUrl } from '@/lib/url-validation';
 import { sendEmail } from '@/lib/email';
 
 const BATCH_SIZE = 12;       // prospects par lot (petit → progression sauvée souvent)
 const CONCURRENCY = 8;       // enrichissements en parallèle dans un lot
 const TIME_BUDGET_MS = 220000; // ~3min40 (marge sous maxDuration cron = 300s)
-const PER_SITE_TIMEOUT_MS = 15000; // garde-temps DUR par site (évite qu'un site lent bloque le lot)
+const PER_SITE_TIMEOUT_MS = 35000; // garde-temps DUR par site (waterfall = scrape multi-pages + Serper)
 const DB_TIMEOUT_MS = 15000; // garde-temps DUR par requête DB (évite qu'une requête lente gèle le job)
 
 // Borne une requête/thenable Supabase : rejette avec timeout:<label> si trop long.
@@ -117,11 +117,6 @@ function completionEmail({ job, total, found }) {
 async function processJob(supabase, job) {
   const deadline = Date.now() + TIME_BUDGET_MS; // budget recalculé PAR job
 
-  const { data: prof } = await withTimeout(
-    supabase.from('user_profiles').select('filter_personal_emails').eq('id', job.user_id).maybeSingle(),
-    'user_profiles');
-  const filterPersonal = prof?.filter_personal_emails !== false;
-
   let processed = job.processed || 0;
   let found = job.found || 0;
 
@@ -148,8 +143,9 @@ async function processJob(supabase, job) {
     }
     const cap = lim.remaining === -1 ? BATCH_SIZE : Math.min(BATCH_SIZE, lim.remaining);
 
-    // Prochain lot (requête directe SANS count:'exact' → plus léger)
-    let bq = supabase.from('prospects').select('id, site_web').eq('user_id', job.user_id).not('site_web', 'is', null).or('email.is.null,email.eq.');
+    // Prochain lot (requête directe SANS count:'exact' → plus léger).
+    // `nom` est nécessaire pour la requête Serper du waterfall.
+    let bq = supabase.from('prospects').select('id, site_web, nom').eq('user_id', job.user_id).not('site_web', 'is', null).or('email.is.null,email.eq.');
     if (job.scope?.folder_id) bq = bq.eq('folder_id', job.scope.folder_id);
     if (job.scope?.departement) bq = bq.eq('departement', job.scope.departement);
     const { data: batch } = await withTimeout(bq.limit(cap), 'batch-query');
@@ -174,8 +170,9 @@ async function processJob(supabase, job) {
       const v = validateUrl(p.site_web);
       if (!v.valid) return;
       try {
+        // Cascade waterfall : scrape site → Serper (Google). Aucun guess.
         const res = await Promise.race([
-          enrichEmail(v.url, filterPersonal),
+          enrichWaterfall(p.nom, v.url),
           new Promise((resolve) => setTimeout(() => resolve({ email: null, timedOut: true }), PER_SITE_TIMEOUT_MS)),
         ]);
         if (res && res.email) {

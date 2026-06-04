@@ -49,6 +49,7 @@ export default function SignupPage() {
   const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [selectedPeriod, setSelectedPeriod] = useState('monthly');
   // Validation inline onBlur (Sprint 2 UX polish)
   const [fieldErrors, setFieldErrors] = useState({});
   const router = useRouter();
@@ -90,13 +91,19 @@ export default function SignupPage() {
       if (plan && ['solo', 'pro', 'business'].includes(plan)) {
         setSelectedPlan(plan);
         document.cookie = `volia_signup_plan=${plan}; path=/; max-age=3600; SameSite=Lax`;
+        // ?period=yearly|monthly → on conserve le choix annuel/mensuel de la card
+        const per = params.get('period') === 'yearly' ? 'yearly' : 'monthly';
+        setSelectedPeriod(per);
+        document.cookie = `volia_signup_period=${per}; path=/; max-age=3600; SameSite=Lax`;
       }
     } catch {}
   }, []);
 
   // URL post-signup — si l'user a choisi un plan, le dashboard déclenchera
   // l'upgrade automatiquement au mount.
-  const postSignupRedirect = selectedPlan ? `/dashboard?upgrade=${selectedPlan}` : '/dashboard';
+  const postSignupRedirect = selectedPlan
+    ? `/dashboard?upgrade=${selectedPlan}${selectedPeriod === 'yearly' ? '&period=yearly' : ''}`
+    : '/dashboard';
 
   // OAuth Google — bypass le signup form entièrement. Le provider doit
   // être activé dans Supabase > Auth > Providers > Google.

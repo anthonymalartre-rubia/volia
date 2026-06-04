@@ -14,8 +14,34 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
+import { authenticateApiRequest } from '@/lib/api-auth';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { PLANS } from '@/lib/plans';
 
 export const dynamic = 'force-dynamic';
+
+// ─── Gate plan : le serveur MCP est réservé au plan Business (et au-dessus) ──
+// On s'appuie sur `unlocksModules` (true uniquement sur business / enterprise),
+// la même marque que pour CRM/Campagnes/Forms.
+async function planGate(request) {
+  const auth = await authenticateApiRequest(request);
+  if (!auth.ok) return { ok: false, text: `Clé API invalide : ${auth.error}` };
+  const supabase = getSupabaseAdmin();
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('plan')
+    .eq('id', auth.userId)
+    .maybeSingle();
+  const planId = profile?.plan || 'free';
+  const plan = PLANS[planId] || PLANS.free;
+  if (!plan.unlocksModules) {
+    return {
+      ok: false,
+      text: `🔒 Le serveur MCP de Volia est réservé au plan Business. Ton plan actuel (${plan.name}) n'y donne pas accès. Passe au plan Business pour piloter Volia depuis un agent IA : https://volia.fr/pricing`,
+    };
+  }
+  return { ok: true };
+}
 
 const SERVER_INFO = { name: 'Volia', title: 'Volia — Prospection B2B', version: '1.0.0' };
 const DEFAULT_PROTOCOL = '2025-06-18';
@@ -221,6 +247,11 @@ export async function POST(request) {
       const toolName = params?.name;
       if (!TOOLS.some((t) => t.name === toolName)) {
         return rpcError(id, -32602, `Tool inconnu : ${toolName}`);
+      }
+      // Gate Business : tous les tools nécessitent un plan Business+
+      const gate = await planGate(request);
+      if (!gate.ok) {
+        return rpcResult(id, { content: [{ type: 'text', text: gate.text }], isError: true });
       }
       try {
         const out = await runTool(toolName, params?.arguments, origin, authHeader);

@@ -6,20 +6,21 @@
 
 - **Produit** : Agrégateur de prospection B2B (découverte + enrichissement email)
 - **Marché** : Entreprises françaises uniquement (métropole + DROM, 101 départements)
-- **Particularité** : Le ticket d'entrée le moins cher du marché français (19 €/mois pour 1 000 prospects)
+- **Particularité** : Ticket d'entrée parmi les moins chers du marché français (dès 19 €/mois)
+- **Version détaillée pour IA** : https://volia.fr/llms-full.txt
 - **Cible** : TPE, PME, freelances, agences, équipes sales B2B en France
 - **Conformité** : RGPD natif (filtre 28 domaines d'emails personnels, opt-out public)
 
 ## Tarification (2026)
 
-| Plan | Prix mensuel | Prix annuel (-2 mois) | Prospects/mois | Enrichissements/mois |
-|---|---|---|---|---|
-| Starter | Gratuit | — | 100 | 20 |
-| Solo | 19 € | 190 € | 1 000 | 400 |
-| Pro | 49 € | 490 € | 5 000 | 2 000 |
-| Business | 99 € | 990 € | 10 000 | 4 000 |
+| Plan | Mensuel | Annuel (~2 mois offerts) | Enrichissements/mois | Numéros tél./mois | Modules |
+|---|---|---|---|---|---|
+| Starter | Gratuit | — | 20 | 20 | Prospection |
+| Solo | 19 € | 190 € | 400 | 400 | Prospection |
+| Pro | 49 € | 490 € | 1 200 | 1 200 | Prospection |
+| Business | 179 € | 1 690 € | 10 000 | 10 000 | Prospection + Campagnes + CRM + Forms |
 
-Sans engagement, annulation à tout moment, paiement par carte (Stripe).
+Essai 14 jours sans carte bancaire. Sans engagement, annulation à tout moment, paiement par carte (Stripe). Business est le seul plan qui débloque la suite complète (Campagnes, CRM, Forms).
 
 ## Différenciation vs concurrents
 

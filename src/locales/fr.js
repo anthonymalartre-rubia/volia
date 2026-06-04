@@ -621,6 +621,9 @@ const fr = {
     genericError: 'Ça a planté. On regarde, retentez dans 30 secondes.',
     passwordMismatch: 'Les mots de passe ne correspondent pas.',
     accountExists: 'Un compte existe déjà avec cet email.',
+    rateLimited: 'Trop de tentatives. Patiente une minute et réessaie.',
+    serverError: 'Souci de notre côté. Réessaie dans un instant — tes infos sont bonnes.',
+    emailSendFailed: 'Compte créé, mais l\'email de confirmation n\'a pas pu partir. Clique sur « Renvoyer l\'email » ou contacte le support.',
   },
 
   // ─── Dashboard ─────────────────────────────────────────────

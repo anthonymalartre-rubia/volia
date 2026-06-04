@@ -12,6 +12,7 @@ import {
   canChangeRole,
   ROLES,
 } from '@/lib/teams';
+import { syncTeamSeats } from '@/lib/seats';
 
 export async function PATCH(request, context) {
   const { id } = await context.params;
@@ -121,6 +122,9 @@ export async function DELETE(_request, context) {
     .from('user_profiles')
     .update({ team_id: null })
     .eq('id', target.user_id);
+
+  // Un siège est libéré → resync facturation (avoir proraté).
+  try { await syncTeamSeats(teamData.team.id); } catch (e) { console.error('[api/teams/members DELETE] seat sync', e?.message || e); }
 
   return NextResponse.json({ ok: true });
 }

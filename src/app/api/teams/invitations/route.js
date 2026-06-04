@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { getTeamForUser, canInviteMembers } from '@/lib/teams';
+import { syncTeamSeats } from '@/lib/seats';
 
 export async function GET() {
   const { user } = await getAuthenticatedUser();
@@ -53,6 +54,9 @@ export async function DELETE(request) {
     console.error('[api/teams/invitations] delete error', error);
     return NextResponse.json({ error: 'Erreur suppression.' }, { status: 500 });
   }
+
+  // Le siège réservé pour cette invite est libéré → on resynchronise la facturation.
+  try { await syncTeamSeats(teamData.team.id); } catch (e) { console.error('[api/teams/invitations] seat sync', e?.message || e); }
 
   return NextResponse.json({ ok: true });
 }

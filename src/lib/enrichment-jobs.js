@@ -208,8 +208,34 @@ export async function runEnrichmentBatch() {
   console.log(`[enrich-fix] jobs=${jobs?.length ?? 'null'} statuses=${JSON.stringify((jobs || []).map((j) => j.status))}`);
 
   if (!jobs || jobs.length === 0) {
+    // DIAG : pourquoi 0 ? (ne devrait pas arriver vu le diag B=1)
+    try { await supabase.from('cron_debug').upsert({ id: 'enrichment', payload: { phase: 'no-jobs', jobsLen: 0, ts: startedAt }, updated_at: startedAt }); } catch { /* */ }
     return { ok: true, processedJobs: 0, startedAt };
   }
+
+  // ── DIAG DÉCISIF : break deadline ? + l'UPDATE admin persiste-t-il ? ──
+  {
+    const j0 = jobs[0];
+    const nowTs = Date.now();
+    let updErr = null, updRows = null;
+    try {
+      const { data: upd, error } = await supabase
+        .from('enrichment_jobs')
+        .update({ updated_at: new Date().toISOString() })
+        .eq('id', j0.id)
+        .select('id');
+      updErr = error ? (error.message || String(error)) : null;
+      updRows = upd?.length ?? null;
+    } catch (e) { updErr = `EX:${e?.message || e}`; }
+    try {
+      await supabase.from('cron_debug').upsert({ id: 'enrichment', payload: {
+        phase: 'pre-loop', jobsLen: jobs.length, jobId: j0.id, status0: j0.status,
+        nowTs, deadline, budget: TIME_BUDGET_MS, breakWouldFire: nowTs >= deadline,
+        updErr, updRows, ts: startedAt,
+      }, updated_at: startedAt });
+    } catch { /* */ }
+  }
+  // ── FIN DIAG ──
 
   // Tri équitable : les jobs jamais tickés (last_tick_at null) en premier,
   // puis du tick le plus ancien au plus récent.

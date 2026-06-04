@@ -16,6 +16,7 @@ export async function GET(request) {
   }
   try {
     const result = await runEnrichmentBatch();
+    console.log('[cron/process-enrichment] result:', JSON.stringify(result));
     return NextResponse.json(result);
   } catch (err) {
     console.error('[cron/process-enrichment] unhandled', err);

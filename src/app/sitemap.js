@@ -50,8 +50,10 @@ export default async function sitemap({ id }) {
     // ─── Pages "manuelles" (peu nombreuses, mises à jour fréquentes) ────
     const staticPages = [
       { url: `${baseUrl}/`, priority: 1.0, changeFrequency: 'weekly', lastModified: now, alternates: { languages: { 'fr-FR': `${baseUrl}/`, 'en-US': `${baseUrl}/en`, 'x-default': `${baseUrl}/` } } },
-      { url: `${baseUrl}/signup`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
-      { url: `${baseUrl}/login`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
+      // NB : /signup et /login sont volontairement RETIRÉS du sitemap — ils sont
+      // bloqués dans robots.txt (disallow). Les laisser ici déclenchait l'alerte
+      // Search Console « URL envoyée bloquée par robots.txt ». Le CTA d'inscription
+      // reste accessible partout (header, landing, cards pricing).
       { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/faq`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
       // [31 mai 2026] /pricing priority 0.95 → 0.85 : clarifie la hiérarchie

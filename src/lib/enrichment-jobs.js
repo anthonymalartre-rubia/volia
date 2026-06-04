@@ -186,11 +186,12 @@ async function processJob(supabase, job) {
     // Phase 2 — ÉCRITURES SÉQUENTIELLES (zéro contention → fiables).
     for (const w of toWrite) {
       try {
-        const { error: wErr } = await withTimeout(
+        const { data: upd, error: wErr } = await withTimeout(
           supabase.from('prospects').update({ email: w.email, email_method: w.method }).eq('id', w.id).select('id'),
           'save-prospect');
-        if (wErr) { writeFails++; lastWriteErr = wErr.message || String(wErr); }
-        else found++; // found ne compte QUE les emails réellement persistés
+        if (wErr) { writeFails++; lastWriteErr = `err:${wErr.message || wErr}`; }
+        else if (!upd || upd.length === 0) { writeFails++; lastWriteErr = `0rows id=${String(w.id).slice(0, 8)}`; }
+        else found++; // found ne compte QUE les emails réellement persistés (ligne affectée)
       } catch (e) { writeFails++; lastWriteErr = e?.message || String(e); }
     }
 

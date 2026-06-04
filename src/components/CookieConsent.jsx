@@ -1,24 +1,105 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { X, Cookie, ShieldCheck } from 'lucide-react';
 import {
   CATEGORIES,
   ALL_OFF,
-  ALL_ON,
   CONSENT_OPEN_EVENT,
   useCookieConsent,
 } from '@/lib/cookieConsent';
 
 /**
  * Bandeau + modal de consentement aux cookies — conformité CNIL stricte.
+ * - Bilingue : FR par défaut, EN sur les routes /en (visiteurs anglophones).
  * - Bouton "Refuser tout" même taille / même visibilité que "Accepter tout"
  * - Modal accessible (focus trap, ESC, ARIA)
  * - Re-consentement automatique après 6 mois (géré par le hook)
  */
+
+// ─── i18n local (composant global monté hors des pages localisées) ───
+const STR = {
+  fr: {
+    regionAria: 'Consentement aux cookies',
+    bannerTitle: 'Cookies : on vous demande.',
+    bannerBodyA: "On utilise des cookies pour faire tourner le site et améliorer l'expérience. Acceptez tout, refusez tout, ou personnalisez. Vous changez d'avis quand vous voulez via le footer ou la page ",
+    manageLink: 'Gérer mes cookies',
+    rejectAll: 'Refuser tout',
+    customize: 'Personnaliser',
+    acceptAll: 'Accepter tout',
+    modalTitle: 'Gérer mes préférences cookies',
+    modalSubtitle: 'Conforme aux recommandations CNIL · Modifiable à tout moment',
+    close: 'Fermer',
+    modalIntro: "Volia ne vend aucune donnée à des tiers. Vous pouvez activer ou désactiver chaque catégorie de cookies ci-dessous. Les cookies strictement nécessaires sont indispensables au fonctionnement du site et ne peuvent pas être désactivés.",
+    listIntroA: 'Pour la liste exhaustive de tous les cookies déposés (nom, finalité, émetteur, durée), consultez notre page ',
+    listLink: 'Gestion des cookies',
+    modalReject: 'Tout refuser',
+    modalSave: 'Sauvegarder mes choix',
+    modalAccept: 'Tout accepter',
+    alwaysOn: 'Toujours actif',
+    show: 'Voir',
+    hide: 'Masquer',
+    listOf: 'la liste des cookies',
+    thName: 'Nom',
+    thIssuer: 'Émetteur',
+    thPurpose: 'Finalité',
+    thDuration: 'Durée',
+  },
+  en: {
+    regionAria: 'Cookie consent',
+    bannerTitle: 'Cookies: your call.',
+    bannerBodyA: 'We use cookies to run the site and improve your experience. Accept all, reject all, or customize. Change your mind anytime via the footer or the ',
+    manageLink: 'Manage cookies',
+    rejectAll: 'Reject all',
+    customize: 'Customize',
+    acceptAll: 'Accept all',
+    modalTitle: 'Manage cookie preferences',
+    modalSubtitle: 'Compliant with CNIL guidelines · Editable anytime',
+    close: 'Close',
+    modalIntro: "Volia never sells your data to third parties. You can enable or disable each cookie category below. Strictly necessary cookies are essential for the site to work and cannot be disabled.",
+    listIntroA: 'For the full list of cookies set (name, purpose, issuer, duration), see our ',
+    listLink: 'Cookie management',
+    modalReject: 'Reject all',
+    modalSave: 'Save my choices',
+    modalAccept: 'Accept all',
+    alwaysOn: 'Always on',
+    show: 'Show',
+    hide: 'Hide',
+    listOf: 'cookie list',
+    thName: 'Name',
+    thIssuer: 'Issuer',
+    thPurpose: 'Purpose',
+    thDuration: 'Duration',
+  },
+};
+
+// Traductions EN des catégories (les libellés source en lib/cookieConsent.js sont en FR)
+const CAT_EN = {
+  strict: {
+    label: 'Strictly necessary cookies',
+    description: 'Essential for the site to work (security, session, preferences). Always on — they cannot be disabled.',
+  },
+  functional: {
+    label: 'Functional cookies',
+    description: 'Remember your choices (theme, language) to improve your experience.',
+  },
+  analytics: {
+    label: 'Analytics cookies',
+    description: 'Help us understand how the site is used so we can improve it. Aggregated and anonymized.',
+  },
+  marketing: {
+    label: 'Marketing cookies',
+    description: 'Used to measure and improve our campaigns. Volia never sells your data.',
+  },
+};
+
 export default function CookieConsent() {
   const { hydrated, needsConsent, consent, acceptAll, rejectAll, accept } = useCookieConsent();
+  const pathname = usePathname();
+  const lang = pathname && pathname.startsWith('/en') ? 'en' : 'fr';
+  const t = STR[lang];
 
   const [bannerVisible, setBannerVisible] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -28,13 +109,12 @@ export default function CookieConsent() {
   useEffect(() => {
     if (!hydrated) return;
     if (needsConsent) {
-      const t = setTimeout(() => setBannerVisible(true), 600);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setBannerVisible(true), 600);
+      return () => clearTimeout(timer);
     }
     setBannerVisible(false);
   }, [hydrated, needsConsent]);
 
-  // Initialise la sélection avec le consentement existant à l'ouverture de la modal
   useEffect(() => {
     if (modalOpen) {
       const initial = consent?.categories ? { ...consent.categories } : { ...ALL_OFF };
@@ -42,7 +122,6 @@ export default function CookieConsent() {
     }
   }, [modalOpen, consent]);
 
-  // Écoute de l'événement global "ouvrir la modal" (déclenché depuis footer, page /cookies, etc.)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const handler = () => setModalOpen(true);
@@ -73,13 +152,13 @@ export default function CookieConsent() {
     setSelection((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Ne rien afficher tant qu'on n'est pas hydraté (évite flash)
   if (!hydrated) return null;
 
   return (
     <>
       {bannerVisible && !modalOpen && (
         <CookieBanner
+          t={t}
           onAcceptAll={handleAcceptAll}
           onRejectAll={handleRejectAll}
           onCustomize={() => setModalOpen(true)}
@@ -87,6 +166,8 @@ export default function CookieConsent() {
       )}
       {modalOpen && (
         <CookieModal
+          t={t}
+          lang={lang}
           selection={selection}
           onToggle={toggleCategory}
           onClose={() => setModalOpen(false)}
@@ -103,12 +184,12 @@ export default function CookieConsent() {
 /* Bandeau initial                                                      */
 /* ------------------------------------------------------------------ */
 
-function CookieBanner({ onAcceptAll, onRejectAll, onCustomize }) {
+function CookieBanner({ t, onAcceptAll, onRejectAll, onCustomize }) {
   return (
     <div
       className="fixed inset-x-0 bottom-0 z-[100] pointer-events-none"
       role="region"
-      aria-label="Consentement aux cookies"
+      aria-label={t.regionAria}
     >
       <div className="max-w-4xl mx-auto px-3 sm:px-4 pb-3 sm:pb-6 pointer-events-auto animate-[slideUp_0.4s_ease-out]">
         <div className="p-4 sm:p-5 rounded-2xl border border-line bg-surface-card shadow-2xl shadow-black/20">
@@ -118,14 +199,12 @@ function CookieBanner({ onAcceptAll, onRejectAll, onCustomize }) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-content-primary mb-1">
-                Cookies : on vous demande.
+                {t.bannerTitle}
               </p>
               <p className="text-xs sm:text-[13px] text-content-secondary leading-relaxed">
-                On utilise des cookies pour faire tourner le site et améliorer l&apos;expérience.
-                Acceptez tout, refusez tout, ou personnalisez. Vous changez d&apos;avis quand vous
-                voulez via le footer ou la page{' '}
+                {t.bannerBodyA}
                 <Link href="/cookies" className="text-violet-400 hover:text-violet-300 underline-offset-2 hover:underline">
-                  Gérer mes cookies
+                  {t.manageLink}
                 </Link>
                 .
               </p>
@@ -139,21 +218,21 @@ function CookieBanner({ onAcceptAll, onRejectAll, onCustomize }) {
               onClick={onRejectAll}
               className="px-4 py-2.5 text-sm font-semibold text-content-primary bg-surface-elevated border border-line rounded-lg hover:bg-surface-hover transition focus:outline-none focus:ring-2 focus:ring-violet-500/40"
             >
-              Refuser tout
+              {t.rejectAll}
             </button>
             <button
               type="button"
               onClick={onCustomize}
               className="px-4 py-2.5 text-sm font-semibold text-content-primary bg-surface-elevated border border-line rounded-lg hover:bg-surface-hover transition focus:outline-none focus:ring-2 focus:ring-violet-500/40"
             >
-              Personnaliser
+              {t.customize}
             </button>
             <button
               type="button"
               onClick={onAcceptAll}
               className="px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-lg hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-400"
             >
-              Accepter tout
+              {t.acceptAll}
             </button>
           </div>
         </div>
@@ -179,12 +258,11 @@ function CookieBanner({ onAcceptAll, onRejectAll, onCustomize }) {
 /* Modal de personnalisation                                            */
 /* ------------------------------------------------------------------ */
 
-function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, onSave }) {
+function CookieModal({ t, lang, selection, onToggle, onClose, onAcceptAll, onRejectAll, onSave }) {
   const dialogRef = useRef(null);
   const closeBtnRef = useRef(null);
   const previousFocus = useRef(null);
 
-  // Focus trap + ESC + bloquage scroll body
   useEffect(() => {
     previousFocus.current = document.activeElement;
     closeBtnRef.current?.focus();
@@ -250,10 +328,10 @@ function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, o
             </div>
             <div>
               <h2 id="cookie-modal-title" className="text-lg font-semibold text-content-primary">
-                Gérer mes préférences cookies
+                {t.modalTitle}
               </h2>
               <p className="text-xs text-content-secondary mt-1">
-                Conforme aux recommandations CNIL · Modifiable à tout moment
+                {t.modalSubtitle}
               </p>
             </div>
           </div>
@@ -261,7 +339,7 @@ function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, o
             type="button"
             ref={closeBtnRef}
             onClick={onClose}
-            aria-label="Fermer"
+            aria-label={t.close}
             className="p-2 rounded-lg text-content-secondary hover:text-content-primary hover:bg-surface-elevated transition focus:outline-none focus:ring-2 focus:ring-violet-500/40"
           >
             <X size={18} />
@@ -271,14 +349,14 @@ function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, o
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
           <p className="text-sm text-content-secondary">
-            Volia ne vend aucune donnée à des tiers. Vous pouvez activer ou désactiver chaque catégorie
-            de cookies ci-dessous. Les cookies strictement nécessaires sont indispensables au
-            fonctionnement du site et ne peuvent pas être désactivés.
+            {t.modalIntro}
           </p>
 
           {Object.values(CATEGORIES).map((cat) => (
             <CategoryCard
               key={cat.id}
+              t={t}
+              lang={lang}
               category={cat}
               enabled={!!selection[cat.id]}
               onToggle={() => onToggle(cat.id)}
@@ -286,10 +364,9 @@ function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, o
           ))}
 
           <p className="text-xs text-content-tertiary pt-2">
-            Pour la liste exhaustive de tous les cookies déposés (nom, finalité, émetteur, durée),
-            consultez notre page{' '}
+            {t.listIntroA}
             <Link href="/cookies" className="text-violet-400 hover:text-violet-300 underline-offset-2 hover:underline">
-              Gestion des cookies
+              {t.listLink}
             </Link>
             .
           </p>
@@ -303,21 +380,21 @@ function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, o
               onClick={onRejectAll}
               className="px-4 py-2.5 text-sm font-semibold text-content-primary bg-surface-elevated border border-line rounded-lg hover:bg-surface-hover transition focus:outline-none focus:ring-2 focus:ring-violet-500/40"
             >
-              Tout refuser
+              {t.modalReject}
             </button>
             <button
               type="button"
               onClick={onSave}
               className="px-4 py-2.5 text-sm font-semibold text-content-primary bg-surface-elevated border border-line rounded-lg hover:bg-surface-hover transition focus:outline-none focus:ring-2 focus:ring-violet-500/40"
             >
-              Sauvegarder mes choix
+              {t.modalSave}
             </button>
             <button
               type="button"
               onClick={onAcceptAll}
               className="px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-lg hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-400"
             >
-              Tout accepter
+              {t.modalAccept}
             </button>
           </div>
         </div>
@@ -351,23 +428,25 @@ function CookieModal({ selection, onToggle, onClose, onAcceptAll, onRejectAll, o
 /* Sous-composant catégorie                                             */
 /* ------------------------------------------------------------------ */
 
-function CategoryCard({ category, enabled, onToggle }) {
+function CategoryCard({ t, lang, category, enabled, onToggle }) {
   const [expanded, setExpanded] = useState(false);
   const switchId = `cookie-toggle-${category.id}`;
+  const label = lang === 'en' ? (CAT_EN[category.id]?.label || category.label) : category.label;
+  const description = lang === 'en' ? (CAT_EN[category.id]?.description || category.description) : category.description;
 
   return (
     <div className="rounded-xl border border-line bg-surface-elevated p-4">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-sm font-semibold text-content-primary">{category.label}</h3>
+            <h3 className="text-sm font-semibold text-content-primary">{label}</h3>
             {category.required && (
               <span className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-violet-500/10 text-violet-300 border border-violet-500/20">
-                Toujours actif
+                {t.alwaysOn}
               </span>
             )}
           </div>
-          <p className="text-xs text-content-secondary mt-1.5 leading-relaxed">{category.description}</p>
+          <p className="text-xs text-content-secondary mt-1.5 leading-relaxed">{description}</p>
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
@@ -375,7 +454,7 @@ function CategoryCard({ category, enabled, onToggle }) {
             aria-expanded={expanded}
             aria-controls={`cookies-list-${category.id}`}
           >
-            {expanded ? 'Masquer' : 'Voir'} la liste des cookies ({category.cookies.length})
+            {expanded ? t.hide : t.show} {t.listOf} ({category.cookies.length})
           </button>
         </div>
 
@@ -384,7 +463,7 @@ function CategoryCard({ category, enabled, onToggle }) {
           checked={enabled}
           disabled={category.required}
           onChange={onToggle}
-          label={category.label}
+          label={label}
         />
       </div>
 
@@ -394,10 +473,10 @@ function CategoryCard({ category, enabled, onToggle }) {
             <table className="w-full text-xs">
               <thead>
                 <tr className="text-content-tertiary text-left">
-                  <th className="py-1.5 pr-3 font-medium">Nom</th>
-                  <th className="py-1.5 pr-3 font-medium">Émetteur</th>
-                  <th className="py-1.5 pr-3 font-medium">Finalité</th>
-                  <th className="py-1.5 font-medium">Durée</th>
+                  <th className="py-1.5 pr-3 font-medium">{t.thName}</th>
+                  <th className="py-1.5 pr-3 font-medium">{t.thIssuer}</th>
+                  <th className="py-1.5 pr-3 font-medium">{t.thPurpose}</th>
+                  <th className="py-1.5 font-medium">{t.thDuration}</th>
                 </tr>
               </thead>
               <tbody>

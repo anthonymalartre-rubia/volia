@@ -55,6 +55,7 @@ export default async function sitemap({ id }) {
       // Search Console « URL envoyée bloquée par robots.txt ». Le CTA d'inscription
       // reste accessible partout (header, landing, cards pricing).
       { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/ressources/kit-prospection-2026`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/faq`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
       // [31 mai 2026] /pricing priority 0.95 → 0.85 : clarifie la hiérarchie
       // vs / (1.0). Le delta de 0.05 était trop faible → Google a choisi

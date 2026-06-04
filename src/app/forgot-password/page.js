@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useI18n } from '@/lib/i18n';
+import { mapApiAuthStatus } from '@/lib/auth-errors';
 import Link from 'next/link';
 import { Mail, AlertCircle, CheckCircle2, Loader2, ArrowLeft } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
@@ -35,12 +36,12 @@ export default function ForgotPasswordPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      const data = await res.json().catch(() => ({}));
+      await res.json().catch(() => ({}));
 
-      if (res.status === 429) {
-        setError(data?.error || t('auth.genericError'));
-      } else if (!res.ok) {
-        setError(data?.error || t('auth.genericError'));
+      if (!res.ok) {
+        // Jamais le message brut de l'API (FR) sur la version EN — on mappe
+        // le statut HTTP vers une clé i18n (incident messages FR-sur-EN).
+        setError(t(mapApiAuthStatus(res.status)));
       } else {
         // Toujours success pour ne pas leaker — l'utilisateur voit le même
         // message qu'un email existe ou non.

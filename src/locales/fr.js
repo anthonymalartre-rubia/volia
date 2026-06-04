@@ -624,6 +624,9 @@ const fr = {
     rateLimited: 'Trop de tentatives. Patiente une minute et réessaie.',
     serverError: 'Souci de notre côté. Réessaie dans un instant — tes infos sont bonnes.',
     emailSendFailed: 'Compte créé, mais l\'email de confirmation n\'a pas pu partir. Clique sur « Renvoyer l\'email » ou contacte le support.',
+    invalidCredentials: 'Email ou mot de passe incorrect.',
+    emailNotConfirmed: 'Confirme d\'abord ton email — regarde ta boîte mail (et les spams).',
+    invalidEmail: 'Entre une adresse email valide.',
   },
 
   // ─── Dashboard ─────────────────────────────────────────────

@@ -76,7 +76,7 @@ const organizationSchema = {
   url: 'https://volia.fr',
   logo: 'https://volia.fr/icon.svg',
   description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Le ticket d\'entrée le moins cher du marché français à 19 €/mois.',
-  sameAs: [],
+  sameAs: ['https://www.linkedin.com/company/volia-saas/'],
   founder: {
     '@type': 'Person',
     name: 'Anthony Malartre',

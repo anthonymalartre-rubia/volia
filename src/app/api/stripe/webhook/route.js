@@ -251,6 +251,33 @@ export async function POST(request) {
           const res = await accrueCommissionForInvoice(invoice);
           if (res.commission_cents) {
             console.log(`[webhook] Commission affilié ${res.affiliate_id} : ${res.commission_cents}c (taux ${res.rate})`);
+            // Notif email "commission gagnée" à l'affilié (non bloquant)
+            try {
+              const { getSupabaseAdmin } = require('@/lib/supabase-admin');
+              const { sendEmail } = require('@/lib/email');
+              const { data: aff } = await getSupabaseAdmin()
+                .from('affiliates')
+                .select('email, name, code, status')
+                .eq('id', res.affiliate_id)
+                .maybeSingle();
+              if (aff?.email && aff.status === 'approved') {
+                const eur = (res.commission_cents / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
+                const pct = Math.round((res.rate || 0) * 100);
+                const dash = `https://volia.fr/affiliation/suivi?code=${aff.code}`;
+                await sendEmail({
+                  to: aff.email,
+                  subject: `💸 Nouvelle commission : ${eur}`,
+                  html: `<p>Salut ${aff.name || ''},</p>
+<p>Bonne nouvelle : un client que tu as amené vient de payer. Tu gagnes <b>${eur}</b> (taux ${pct} %).</p>
+<p>Elle devient disponible 30 jours après le paiement (fenêtre de remboursement), puis réglée sur facture.</p>
+<p>Suivi en temps réel : <a href="${dash}">${dash}</a></p>
+<p>Continue comme ça 🚀<br>Anthony · Volia</p>`,
+                  tags: [{ name: 'type', value: 'affiliate_commission' }],
+                });
+              }
+            } catch (mailErr) {
+              console.error('[webhook] Affiliate commission email failed:', mailErr);
+            }
           }
         } catch (err) {
           console.error('[webhook] Affiliate commission accrual failed:', err);

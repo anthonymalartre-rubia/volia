@@ -53,7 +53,7 @@ export default async function OutilPage({ params }) {
   // Les 13 comparatifs 1-vs-1 où cet outil apparaît
   const pairsForThis = getPairsFor(slug);
 
-  const savingsPct = Math.max(0, Math.round(((c.pricing - 19) / c.pricing) * 100));
+  const savingsPct = Math.max(0, Math.round(((c.pricing - 49) / c.pricing) * 100));
   const isExpensive = c.pricing >= 100;
 
   const breadcrumbs = [
@@ -182,7 +182,7 @@ export default async function OutilPage({ params }) {
               <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Principal atout</strong> : {c.strengths[0]}</span></li>
               <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Principale limite</strong> : {c.weaknesses[0]}</span></li>
               {savingsPct > 0 && (
-                <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Alternative française</strong> : Volia à 19 €/mois ({savingsPct}% moins cher)</span></li>
+                <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Alternative française</strong> : Volia à 49 €/mois ({savingsPct}% moins cher · dès 19 € avec ETE2026)</span></li>
               )}
             </ul>
           </div>

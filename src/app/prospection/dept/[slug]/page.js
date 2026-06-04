@@ -97,7 +97,7 @@ export default async function DepartmentPage({ params }) {
     },
     {
       question: `Quel est le prix pour prospecter dans le ${dept.name} ?`,
-      answer: `À partir de 19 €/mois (plan Solo, 1 000 prospects et 400 enrichissements/mois). Le plan Pro à 49 €/mois donne 5 000 prospects + 2 000 enrichissements, et Business à 149 €/mois 10 000 + 10 000. Tous les départements et toutes les catégories sont inclus, sans supplément.`,
+      answer: `À partir de 49 €/mois (plan Pro : 5 000 prospects + 2 000 enrichissements/mois, soit 19 € les 3 premiers mois avec le code ETE2026). Le plan Business à 179 €/mois donne 10 000 + 10 000, et Enterprise à 499 €/mois tout illimité. Tous les départements et toutes les catégories sont inclus, sans supplément.`,
     },
   ];
 

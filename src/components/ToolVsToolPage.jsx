@@ -136,7 +136,7 @@ export default function ToolVsToolPage({ a, b }) {
               <li className="flex gap-2">
                 <span className="text-violet-400 flex-shrink-0">→</span>
                 <span>
-                  <strong className="text-content-primary">Alternative française</strong> : Volia à 19 €/mois, combine sourcing (Google Places) + enrichissement email + RGPD natif
+                  <strong className="text-content-primary">Alternative française</strong> : Volia à 49 €/mois (dès 19 € avec ETE2026), combine sourcing (Google Places) + enrichissement email + RGPD natif
                 </span>
               </li>
             </ul>

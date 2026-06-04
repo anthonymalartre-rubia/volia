@@ -206,32 +206,20 @@ export async function runEnrichmentBatch() {
 
   console.log(`[enrichment] active jobs found: ${jobs?.length || 0}`);
 
-  // ── DIAGNOSTIC TEMPORAIRE : que voit/peut le client admin en base ? ──
-  // adminTotal = nb total de jobs vus SANS filtre (test lecture service-role).
-  // writeErr = test écriture. Écrit dans cron_debug (lisible via SQL).
-  let adminTotal = null, totalErrMsg = null, writeErrMsg = null;
+  // ── DIAGNOSTIC TEMPORAIRE : quelle forme de requête matche le job ? ──
+  const T = () => supabase.from('enrichment_jobs');
+  const cnt = async (q) => { try { const { data, error } = await q; return error ? `ERR:${error.message}` : (data?.length ?? 0); } catch (e) { return `EX:${e?.message || e}`; } };
+  const variants = {
+    A_in_order: await cnt(T().select('*').in('status', ['queued', 'running']).order('last_tick_at', { ascending: true, nullsFirst: true }).limit(10)),
+    B_in_noorder: await cnt(T().select('*').in('status', ['queued', 'running']).limit(10)),
+    C_eq_queued: await cnt(T().select('*').eq('status', 'queued').limit(10)),
+    D_or: await cnt(T().select('*').or('status.eq.queued,status.eq.running').limit(10)),
+    E_neq_canceled: await cnt(T().select('*').not('status', 'in', '(canceled,done,error)').limit(10)),
+  };
   try {
-    const { count, error: cErr } = await supabase
-      .from('enrichment_jobs')
-      .select('id', { count: 'exact', head: true });
-    adminTotal = count;
-    totalErrMsg = cErr ? (cErr.message || String(cErr)) : null;
-    const { error: wErr } = await supabase
-      .from('cron_debug')
-      .upsert({
-        id: 'enrichment',
-        payload: {
-          adminTotal,
-          totalErr: totalErrMsg,
-          activeCount: jobs?.length ?? null,
-          selectErr: null,
-          ts: startedAt,
-        },
-        updated_at: startedAt,
-      });
-    writeErrMsg = wErr ? (wErr.message || String(wErr)) : null;
-  } catch (e) { writeErrMsg = String(e?.message || e); }
-  console.log('[enrichment] diag', JSON.stringify({ adminTotal, totalErrMsg, active: jobs?.length, writeErrMsg }));
+    await supabase.from('cron_debug').upsert({ id: 'enrichment', payload: { variants, ts: startedAt }, updated_at: startedAt });
+  } catch { /* no-op */ }
+  console.log('[enrichment] variants', JSON.stringify(variants));
   // ── FIN DIAGNOSTIC ──
 
   if (!jobs || jobs.length === 0) {

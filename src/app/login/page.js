@@ -9,6 +9,7 @@ import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2, ArrowLeft } from 'lucide
 import ThemeToggle from '@/components/ThemeToggle';
 import AuthBackgroundDecor from '@/components/AuthBackgroundDecor';
 import { GOOGLE_OAUTH_ENABLED } from '@/lib/auth-config';
+import { mapSupabaseAuthError } from '@/lib/auth-errors';
 import { Button, Input, LogoIcon } from '@/components/ui';
 
 // SVG inline Google logo officiel — pas dispo dans lucide
@@ -52,7 +53,8 @@ export default function LoginPage() {
         },
       });
       if (error) {
-        setError(error.message);
+        // Jamais le message brut Supabase (EN) — toujours localisé.
+        setError(t(mapSupabaseAuthError(error)) || t('auth.googleError'));
         setOauthLoading(false);
       }
     } catch (err) {
@@ -73,7 +75,9 @@ export default function LoginPage() {
       });
 
       if (error) {
-        setError(error.message);
+        // Supabase renvoie des messages EN bruts ("Invalid login credentials"…)
+        // quelle que soit la locale → on mappe vers une clé i18n.
+        setError(t(mapSupabaseAuthError(error)));
       } else {
         router.push('/dashboard');
         router.refresh();

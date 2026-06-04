@@ -3,6 +3,7 @@ import { checkRateLimit } from '@/lib/rateLimit';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { authSignupConfirm } from '@/lib/emailTemplates';
+import { alertCritical } from '@/lib/critical-alert';
 
 /**
  * POST /api/auth/signup
@@ -105,6 +106,12 @@ export async function POST(request) {
         );
       }
       console.error('[auth/signup] generateLink error (after retry):', linkError);
+      await alertCritical({
+        kind: 'signup_500',
+        message: 'generateLink a échoué (après retry) — un utilisateur n\'a pas pu créer son compte.',
+        error: linkError,
+        context: { route: '/api/auth/signup', stage: 'generateLink', email: normalizedEmail, status: linkError.status },
+      });
       return NextResponse.json(
         { error: 'Impossible de créer le compte. Réessayez ou contactez le support.', code: 'server_error' },
         { status: 500 }
@@ -113,6 +120,11 @@ export async function POST(request) {
 
     if (!linkData?.properties?.action_link) {
       console.error('[auth/signup] generateLink returned no action_link:', linkData);
+      await alertCritical({
+        kind: 'signup_500',
+        message: 'generateLink n\'a pas renvoyé de action_link — inscription bloquée.',
+        context: { route: '/api/auth/signup', stage: 'no_action_link', email: normalizedEmail },
+      });
       return NextResponse.json(
         { error: 'Lien de confirmation non disponible. Contactez le support.', code: 'server_error' },
         { status: 500 }
@@ -130,6 +142,12 @@ export async function POST(request) {
       // L'utilisateur EST déjà créé en base. On log + retourne une 500
       // avec un message qui invite à utiliser "Renvoyer l'email".
       console.error('[auth/signup] Resend send failed for', normalizedEmail, sendResult.error);
+      await alertCritical({
+        kind: 'signup_email_failed',
+        message: 'Compte créé mais l\'email de confirmation n\'a pas pu être envoyé (Resend).',
+        error: sendResult.error,
+        context: { route: '/api/auth/signup', stage: 'send_confirmation', email: normalizedEmail },
+      });
       return NextResponse.json(
         {
           error: 'Compte créé mais l\'email de confirmation n\'a pas pu être envoyé. Cliquez sur "Renvoyer l\'email" ou contactez le support.',

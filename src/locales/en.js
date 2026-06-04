@@ -622,6 +622,9 @@ const en = {
     rateLimited: 'Too many attempts. Please wait a minute and try again.',
     serverError: 'Something went wrong on our side. Please try again in a moment — your details are fine.',
     emailSendFailed: 'Account created, but we couldn\'t send the confirmation email. Use "Resend email" or contact support.',
+    invalidCredentials: 'Incorrect email or password.',
+    emailNotConfirmed: 'Please confirm your email first — check your inbox (and spam).',
+    invalidEmail: 'Please enter a valid email address.',
   },
 
   // ─── Dashboard ─────────────────────────────────────────────

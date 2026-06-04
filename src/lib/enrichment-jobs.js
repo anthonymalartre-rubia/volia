@@ -166,7 +166,9 @@ async function processJob(supabase, job) {
       return { processed, found, ended: 'done' };
     }
 
+    // Phase 1 — SCRAPING concurrent (rapide), aucune écriture DB ici.
     let batchAttempted = 0;
+    const toWrite = [];
     await processWithConcurrency(batch, async (p) => {
       batchAttempted++;
       const v = validateUrl(p.site_web);
@@ -177,17 +179,20 @@ async function processJob(supabase, job) {
           enrichWaterfall(p.nom, v.url),
           new Promise((resolve) => setTimeout(() => resolve({ email: null, timedOut: true }), PER_SITE_TIMEOUT_MS)),
         ]);
-        if (res && res.email) {
-          try {
-            const { error: wErr } = await withTimeout(
-              supabase.from('prospects').update({ email: res.email, email_method: res.method }).eq('id', p.id).select('id'),
-              'save-prospect');
-            if (wErr) { writeFails++; lastWriteErr = wErr.message || String(wErr); }
-            else found++; // found ne compte QUE les emails réellement persistés
-          } catch (e) { writeFails++; lastWriteErr = e?.message || String(e); }
-        }
+        if (res && res.email) toWrite.push({ id: p.id, email: res.email, method: res.method });
       } catch { /* item-level error → on continue */ }
     }, CONCURRENCY);
+
+    // Phase 2 — ÉCRITURES SÉQUENTIELLES (zéro contention → fiables).
+    for (const w of toWrite) {
+      try {
+        const { error: wErr } = await withTimeout(
+          supabase.from('prospects').update({ email: w.email, email_method: w.method }).eq('id', w.id).select('id'),
+          'save-prospect');
+        if (wErr) { writeFails++; lastWriteErr = wErr.message || String(wErr); }
+        else found++; // found ne compte QUE les emails réellement persistés
+      } catch (e) { writeFails++; lastWriteErr = e?.message || String(e); }
+    }
 
     processed += batchAttempted;
     try { await withTimeout(incrementUsage(supabase, job.user_id, 'enrichments', batchAttempted), 'incrementUsage'); } catch { /* non bloquant */ }

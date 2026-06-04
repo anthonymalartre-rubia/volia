@@ -88,6 +88,7 @@ export default async function sitemap({ id }) {
       { url: `${baseUrl}/etude/prospection-b2b-france-2026`, priority: 1.0, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/etude/etat-cold-email-france-2026`, priority: 0.95, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/api`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
+      { url: `${baseUrl}/mcp`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/tutoriels`, priority: 0.7, changeFrequency: 'monthly', lastModified: now },
       // Espace presse (press kit) + page narrative founder
       { url: `${baseUrl}/presse`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },

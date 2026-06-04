@@ -8,6 +8,7 @@
 - **Marché** : Entreprises françaises uniquement (métropole + DROM, 101 départements)
 - **Particularité** : Ticket d'entrée parmi les moins chers du marché français (dès 19 €/mois)
 - **Version détaillée pour IA** : https://volia.fr/llms-full.txt
+- **Serveur MCP** : Volia expose un serveur Model Context Protocol sur https://volia.fr/api/mcp (utilisable par Claude Desktop, Cursor, etc. ; doc : https://volia.fr/mcp). Un agent IA peut y lire les prospects, le plan et l'usage de l'utilisateur via une clé API.
 - **Cible** : TPE, PME, freelances, agences, équipes sales B2B en France
 - **Conformité** : RGPD natif (filtre 28 domaines d'emails personnels, opt-out public)
 

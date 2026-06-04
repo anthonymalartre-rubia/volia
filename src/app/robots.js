@@ -18,6 +18,7 @@ export default function robots() {
           '/vs',
           '/alternative',
           '/outils',
+          '/mcp',
           '/blog',
           '/ressources',
           '/glossaire',

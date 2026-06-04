@@ -11,6 +11,7 @@
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { enrichWaterfall } from '@/lib/enrich-waterfall-core';
+import { lookupGlobalContact, upsertGlobalContact, normalizeDomain } from '@/lib/global-contacts';
 import { validateUrl } from '@/lib/url-validation';
 import { sendEmail } from '@/lib/email';
 

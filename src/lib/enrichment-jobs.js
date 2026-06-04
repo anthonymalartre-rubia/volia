@@ -16,8 +16,17 @@ import { sendEmail } from '@/lib/email';
 
 const BATCH_SIZE = 12;       // prospects par lot (petit → progression sauvée souvent)
 const CONCURRENCY = 8;       // enrichissements en parallèle dans un lot
-const TIME_BUDGET_MS = 230000; // ~3min50 (marge sous maxDuration cron = 300s)
+const TIME_BUDGET_MS = 220000; // ~3min40 (marge sous maxDuration cron = 300s)
 const PER_SITE_TIMEOUT_MS = 15000; // garde-temps DUR par site (évite qu'un site lent bloque le lot)
+const DB_TIMEOUT_MS = 15000; // garde-temps DUR par requête DB (évite qu'une requête lente gèle le job)
+
+// Borne une requête/thenable Supabase : rejette avec timeout:<label> si trop long.
+function withTimeout(thenable, label, ms = DB_TIMEOUT_MS) {
+  return Promise.race([
+    Promise.resolve(thenable),
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout:${label}`)), ms)),
+  ]);
+}
 
 // ── Sélecteur des prospects à enrichir (a un site, pas d'email, non archivé) ──
 function pendingQuery(supabase, userId, scope) {
@@ -102,57 +111,53 @@ function completionEmail({ job, total, found }) {
 }
 
 // ── Traitement d'UN job jusqu'au budget temps ou épuisement ──
-async function processJob(supabase, job, deadline) {
-  // Préférence filtrage emails perso
-  const { data: prof } = await supabase
-    .from('user_profiles')
-    .select('filter_personal_emails')
-    .eq('id', job.user_id)
-    .maybeSingle();
+// Chaque requête DB est bornée par withTimeout : si l'une dépasse, processJob
+// throw `timeout:<étape>` → runEnrichmentBatch met le job en 'error' avec ce
+// libellé (visible en base) au lieu de geler indéfiniment.
+async function processJob(supabase, job) {
+  const deadline = Date.now() + TIME_BUDGET_MS; // budget recalculé PAR job
+
+  const { data: prof } = await withTimeout(
+    supabase.from('user_profiles').select('filter_personal_emails').eq('id', job.user_id).maybeSingle(),
+    'user_profiles');
   const filterPersonal = prof?.filter_personal_emails !== false;
 
   let processed = job.processed || 0;
   let found = job.found || 0;
 
   // marque running
-  await supabase.from('enrichment_jobs')
-    .update({ status: 'running', started_at: job.started_at || new Date().toISOString(), last_tick_at: new Date().toISOString(), paused_reason: null, updated_at: new Date().toISOString() })
-    .eq('id', job.id);
+  await withTimeout(
+    supabase.from('enrichment_jobs')
+      .update({ status: 'running', started_at: job.started_at || new Date().toISOString(), last_tick_at: new Date().toISOString(), paused_reason: null, error: null, updated_at: new Date().toISOString() })
+      .eq('id', job.id),
+    'mark-running');
 
   while (Date.now() < deadline) {
     // Re-check annulation
-    const { data: fresh } = await supabase.from('enrichment_jobs').select('status').eq('id', job.id).maybeSingle();
+    const { data: fresh } = await withTimeout(
+      supabase.from('enrichment_jobs').select('status').eq('id', job.id).maybeSingle(), 'recheck-status');
     if (!fresh || fresh.status === 'canceled') return { processed, found, ended: 'canceled' };
 
-    await supabase.from('enrichment_jobs').update({ error: 'dbg:checkLimit', last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq('id', job.id);
     // Quota
-    const lim = await checkLimit(supabase, job.user_id, 'enrichments');
-    if (!lim.allowed) {
-      await supabase.from('enrichment_jobs')
+    const lim = await withTimeout(checkLimit(supabase, job.user_id, 'enrichments'), 'checkLimit');
+    if (!lim.allowed || (lim.remaining !== -1 && lim.remaining <= 0)) {
+      await withTimeout(supabase.from('enrichment_jobs')
         .update({ status: 'paused', paused_reason: 'quota', processed, found, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-        .eq('id', job.id);
+        .eq('id', job.id), 'pause-quota');
       return { processed, found, ended: 'quota' };
     }
     const cap = lim.remaining === -1 ? BATCH_SIZE : Math.min(BATCH_SIZE, lim.remaining);
-    if (cap <= 0) {
-      await supabase.from('enrichment_jobs')
-        .update({ status: 'paused', paused_reason: 'quota', processed, found, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-        .eq('id', job.id);
-      return { processed, found, ended: 'quota' };
-    }
 
-    await supabase.from('enrichment_jobs').update({ error: 'dbg:pendingQuery', updated_at: new Date().toISOString() }).eq('id', job.id);
-    // Prochain lot (requête directe SANS count:'exact' → plus léger que pendingQuery)
+    // Prochain lot (requête directe SANS count:'exact' → plus léger)
     let bq = supabase.from('prospects').select('id, site_web').eq('user_id', job.user_id).not('site_web', 'is', null).or('email.is.null,email.eq.');
     if (job.scope?.folder_id) bq = bq.eq('folder_id', job.scope.folder_id);
     if (job.scope?.departement) bq = bq.eq('departement', job.scope.departement);
-    const { data: batch } = await bq.limit(cap);
-    await supabase.from('enrichment_jobs').update({ error: `dbg:batch:${batch?.length ?? 'null'}`, updated_at: new Date().toISOString() }).eq('id', job.id);
+    const { data: batch } = await withTimeout(bq.limit(cap), 'batch-query');
+
     if (!batch || batch.length === 0) {
-      await supabase.from('enrichment_jobs')
+      await withTimeout(supabase.from('enrichment_jobs')
         .update({ status: 'done', processed, found, finished_at: new Date().toISOString(), last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-        .eq('id', job.id);
-      // Email de fin
+        .eq('id', job.id), 'mark-done');
       const to = await getUserEmail(supabase, job.user_id);
       if (to) {
         try {
@@ -169,29 +174,27 @@ async function processJob(supabase, job, deadline) {
       const v = validateUrl(p.site_web);
       if (!v.valid) return;
       try {
-        // Garde-temps dur : aucun site ne peut bloquer un slot > PER_SITE_TIMEOUT_MS,
-        // même si enrichEmail enchaîne plusieurs fetchs internes.
         const res = await Promise.race([
           enrichEmail(v.url, filterPersonal),
           new Promise((resolve) => setTimeout(() => resolve({ email: null, timedOut: true }), PER_SITE_TIMEOUT_MS)),
         ]);
         if (res && res.email) {
-          await supabase.from('prospects')
-            .update({ email: res.email, email_method: res.method })
-            .eq('id', p.id);
+          await withTimeout(
+            supabase.from('prospects').update({ email: res.email, email_method: res.method }).eq('id', p.id),
+            'save-prospect').catch(() => {});
           found++;
         }
       } catch { /* item-level error → on continue */ }
     }, CONCURRENCY);
 
-    await supabase.from('enrichment_jobs').update({ error: `dbg:enriched:${batchAttempted}`, updated_at: new Date().toISOString() }).eq('id', job.id);
     processed += batchAttempted;
-    // Comptabilise l'usage (1 enrichissement = 1 tentative, comme /api/enrich)
-    try { await incrementUsage(supabase, job.user_id, 'enrichments', batchAttempted); } catch { /* non bloquant */ }
+    try { await withTimeout(incrementUsage(supabase, job.user_id, 'enrichments', batchAttempted), 'incrementUsage'); } catch { /* non bloquant */ }
 
-    await supabase.from('enrichment_jobs')
-      .update({ processed, found, error: null, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-      .eq('id', job.id);
+    await withTimeout(
+      supabase.from('enrichment_jobs')
+        .update({ processed, found, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .eq('id', job.id),
+      'save-progress');
   }
 
   return { processed, found, ended: 'budget' };
@@ -234,7 +237,7 @@ export async function runEnrichmentBatch() {
   for (const job of jobs) {
     if (Date.now() >= deadline) break;
     try {
-      const r = await processJob(supabase, job, deadline);
+      const r = await processJob(supabase, job);
       results.push({ jobId: job.id, ...r });
     } catch (err) {
       await supabase.from('enrichment_jobs')

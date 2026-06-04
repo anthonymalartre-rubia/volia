@@ -95,6 +95,22 @@ const CAT_EN = {
   },
 };
 
+// Traductions EN du détail par cookie (finalité + durée). issuer = noms propres, inchangés.
+const COOKIE_EN = {
+  'sb-*-auth-token': { purpose: 'Authentication session', duration: 'Session / 1 year' },
+  volia_session: { purpose: 'Keeps the user session', duration: 'Session' },
+  'cookie-consent': { purpose: 'Stores your consent', duration: '6 months' },
+  volia_cookie_consent_v2: { purpose: 'Consent details', duration: '6 months' },
+  volia_theme: { purpose: 'Light / dark theme', duration: '1 year' },
+  volia_locale: { purpose: 'Interface language', duration: '1 year' },
+  'columns_*': { purpose: 'Columns shown in the table', duration: '1 year' },
+  '__vercel_analytics_*': { purpose: 'Anonymous audience measurement', duration: 'Session' },
+  '_vercel_speed_*': { purpose: 'Performance measurement', duration: 'Session' },
+  _stripe_mid: { purpose: 'Payment fraud detection', duration: '1 year' },
+  _stripe_sid: { purpose: 'Payment session', duration: '30 minutes' },
+  'cal_*': { purpose: 'Demo booking widget', duration: 'Session' },
+};
+
 export default function CookieConsent() {
   const { hydrated, needsConsent, consent, acceptAll, rejectAll, accept } = useCookieConsent();
   const pathname = usePathname();
@@ -480,14 +496,17 @@ function CategoryCard({ t, lang, category, enabled, onToggle }) {
                 </tr>
               </thead>
               <tbody>
-                {category.cookies.map((c) => (
+                {category.cookies.map((c) => {
+                  const en = lang === 'en' ? COOKIE_EN[c.name] : null;
+                  return (
                   <tr key={c.name} className="border-t border-line/50">
                     <td className="py-1.5 pr-3 font-mono text-content-primary">{c.name}</td>
                     <td className="py-1.5 pr-3 text-content-secondary">{c.issuer}</td>
-                    <td className="py-1.5 pr-3 text-content-secondary">{c.purpose}</td>
-                    <td className="py-1.5 text-content-secondary">{c.duration}</td>
+                    <td className="py-1.5 pr-3 text-content-secondary">{en?.purpose || c.purpose}</td>
+                    <td className="py-1.5 text-content-secondary">{en?.duration || c.duration}</td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -896,7 +896,7 @@ export default memo(function ResultsPanel({
                   ? 'bg-zinc-500/10 border-zinc-500/30 text-content-secondary'
                   : 'border-transparent text-content-faint hover:text-content-tertiary hover:bg-surface-card'
               }`}
-              title="Prospects enrichis sans email trouve"
+              title="Prospects enrichis sans email trouvé"
             >
               <Archive size={13} />
               Archives

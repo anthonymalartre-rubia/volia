@@ -338,11 +338,11 @@ export default function LandingContent() {
                 À partir de <strong className="text-content-primary">49&nbsp;€/mois. Sans CB.</strong>
               </p>
 
-              {/* Bonus mention — Solo 19€ pour le lead-gen pur (ceux qui veulent
-                  juste l'ancien usecase). Autopilot reste le flagship. */}
+              {/* Bonus mention — offre ÉTÉ 2026 : Pro à 19€/mois les 3 premiers
+                  mois avec le code ETE2026. Essai 14 j sans CB en entrée. */}
               <p className="text-sm text-content-tertiary mb-8 italic flex items-start gap-1.5">
                 <Sparkles size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
-                <span>Tu veux juste les contacts B2B ? <strong className="text-content-secondary not-italic">Plan Solo&nbsp;19&nbsp;€</strong> sans Autopilot.</span>
+                <span>🌞 Offre ÉTÉ 2026 : <strong className="text-content-secondary not-italic">Pro à 19&nbsp;€/mois</strong> les 3 premiers mois — code <strong className="text-content-secondary not-italic">ETE2026</strong>.</span>
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
@@ -1634,12 +1634,12 @@ export default function LandingContent() {
                         })}
                       </tr>
                     ))}
-                    {/* Price rows : Entry tier (Solo) + Pro tier */}
+                    {/* Price rows : Entry tier (Pro w/ ETE2026) + Pro tier */}
                     <tr className="border-t-2 border-line">
                       <td className="py-4 px-4 text-content-secondary font-semibold">Ticket d&apos;entrée</td>
                       <td className="py-4 px-4 text-center">
                         <span className="text-2xl font-bold text-emerald-400">19&euro;</span>
-                        <div className="text-[10px] text-emerald-400/60 mt-0.5 uppercase tracking-wider font-bold">Solo</div>
+                        <div className="text-[10px] text-emerald-400/60 mt-0.5 uppercase tracking-wider font-bold">Pro · ÉTÉ2026</div>
                       </td>
                       {COMPETITORS.map((c) => (
                         <td key={c.name} className="py-4 px-4 text-center">

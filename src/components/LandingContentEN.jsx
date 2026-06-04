@@ -33,41 +33,10 @@ const NAV_LINKS = [
 // ─── Pricing cards data ────────────────────────────────────────────
 // Delta-features pattern : each tier lists ONLY what's added vs the
 // previous one (Solo +1, Pro +2, Business +3). Mirrors FR plans.js.
+// Option B (June 2026): 3 plans shown — Pro / Business / Enterprise.
+// Starter + Solo remain for existing customers (grandfathering) but are
+// no longer offered at purchase.
 const PLANS_EN = [
-  {
-    id: 'free',
-    name: 'Starter',
-    price: '$0',
-    period: 'forever',
-    tagline: 'To try Volia',
-    features: [
-      '20 enrichments / month',
-      '5 CSV exports / month',
-      'Email + phone scraping (landline & mobile)',
-      '101 departments (all of France)',
-    ],
-    cta: 'Start free',
-    ctaHref: '/signup?plan=free',
-    highlighted: false,
-  },
-  {
-    id: 'solo',
-    name: 'Solo',
-    price: '$21',
-    sub: 'EUR 19/mo billed in EUR',
-    period: '/mo',
-    tagline: 'For freelancers & consultants',
-    inheritsFrom: 'Starter',
-    features: [
-      '400 enrichments / month (x20)',
-      'Unlimited CSV exports',
-      'Waterfall enrichment (scraping + Google) - emails AND phones',
-      'Email support (48 h)',
-    ],
-    cta: 'Choose Solo',
-    ctaHref: '/signup?plan=solo',
-    highlighted: false,
-  },
   {
     id: 'pro',
     name: 'Pro',
@@ -75,15 +44,19 @@ const PLANS_EN = [
     sub: 'EUR 49/mo billed in EUR',
     period: '/mo',
     tagline: 'For SMBs & agencies',
-    inheritsFrom: 'Solo',
+    inheritsFrom: null,
+    unlocksModules: true,
+    promoLabel: 'Code ETE2026',
+    promoSub: '€19/mo for your first 3 months',
     features: [
-      '1,200 enrichments / month (x3)',
-      'Unlimited folders',
-      'Email verification (MillionVerifier)',
-      'Mobile phone enrichment',
-      'Email support (24 h)',
+      'CRM, Campaigns & Forms included',
+      '2,000 cold emails / month',
+      '1,000 form submissions / month',
+      '1,200 enrichments + 1,200 phone numbers / month',
+      '1 Autopilot workflow',
+      '14-day free trial — no card',
     ],
-    cta: 'Choose Pro',
+    cta: 'Start Pro trial',
     ctaHref: '/signup?plan=pro',
     highlighted: true,
     badge: 'POPULAR',
@@ -102,24 +75,45 @@ const PLANS_EN = [
     promoLabel: 'Launch promo',
     promoSub: 'First 12 months - then $199/mo',
     features: [
-      '10,000 enrichments / month (x8)',
+      '10,000 enrichments / month',
+      '10,000 cold emails / month (auto warmup)',
+      '3 Autopilot workflows + branching',
       'Multi-user (teams, RBAC)',
-      'API access (coming soon)',
-      'Personalized onboarding',
-      'Priority support',
+      'MCP server + REST API',
+      'Priority support + onboarding',
     ],
     cta: 'Choose Business',
     ctaHref: '/signup?plan=business',
     highlighted: false,
   },
+  {
+    id: 'enterprise',
+    name: 'Enterprise',
+    price: '$559',
+    sub: 'EUR 499/mo billed in EUR',
+    period: '/mo',
+    tagline: 'For teams that scale',
+    inheritsFrom: 'Business',
+    unlocksModules: true,
+    features: [
+      'Unlimited Autopilot workflows',
+      'A/B subject testing + weekly Claude optimization',
+      'Everything unlimited',
+      '50,000 cold emails / month',
+      'White-label CRM + emails',
+      '99.9% uptime SLA + dedicated Slack',
+    ],
+    cta: 'Choose Enterprise',
+    ctaHref: '/signup?plan=enterprise',
+    highlighted: false,
+  },
 ];
 
-// Modules unlocked per plan — only Business unlocks the 3 secondary
+// Modules unlocked per plan — Pro now unlocks the 3 secondary modules.
 const PLAN_MODULES_EN = {
-  free:     { prospection: 'limited', campaigns: false, crm: false, forms: false },
-  solo:     { prospection: true,      campaigns: false, crm: false, forms: false },
-  pro:      { prospection: true,      campaigns: false, crm: false, forms: false },
-  business: { prospection: true,      campaigns: true,  crm: true,  forms: true },
+  pro:        { prospection: true, campaigns: true, crm: true, forms: true },
+  business:   { prospection: true, campaigns: true, crm: true, forms: true },
+  enterprise: { prospection: true, campaigns: true, crm: true, forms: true },
 };
 
 const FAQS_EN = [
@@ -128,12 +122,12 @@ const FAQS_EN = [
     a: 'Our prospecting source is France-only: the entire French B2B landscape accessible via Google Places (live scraping), 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, and Forms modules (Business plan) work everywhere.',
   },
   {
-    q: 'What\'s included in Solo at $21/mo?',
-    a: 'Everything you need to generate B2B leads: 400 enrichments/month, unlimited CSV exports, waterfall enrichment (site scraping + Google search + pattern fallback) for emails AND phone numbers. Apollo charges $99 for less. We chose to be the cheapest entry ticket on the market.',
+    q: 'What\'s included in Pro at $55/mo?',
+    a: 'The full suite: Prospecting (1,200 enrichments + 1,200 phone numbers/month, waterfall for emails AND phones), plus Campaigns (cold email + warmup), CRM (Kanban + auto-deals) and Forms — all included. Start with a 14-day free trial (no card). Code ETE2026 gets you €19/mo for the first 3 months.',
   },
   {
-    q: 'What does Business unlock that the other plans don\'t?',
-    a: 'Three more modules, all included at $169/mo (12-month launch promo, then $199). (1) Campaigns: native cold email + 28-day auto warmup. (2) CRM: drag-and-drop Kanban + auto-create deals from email replies. (3) Forms: drag-drop builder with native bridges to CRM + Campaigns. Plus 10,000 enrichments/mo, multi-user, API access, priority support.',
+    q: 'What does Business unlock that Pro doesn\'t?',
+    a: 'Pro already includes the full suite (Prospecting + Campaigns + CRM + Forms). Business adds scale and power: 10,000 enrichments + 10,000 cold emails/month, 3 Autopilot workflows with conditional branching, multi-user (teams/RBAC), the MCP server (drive Volia from Claude, Cursor & AI agents), REST API, and priority support with onboarding.',
   },
   {
     q: 'Is it GDPR-compliant?',
@@ -453,7 +447,7 @@ export default function LandingContentEN() {
               </div>
             </MotionInView>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
               {PLANS_EN.map((plan) => {
                 const modules = PLAN_MODULES_EN[plan.id];
                 return (

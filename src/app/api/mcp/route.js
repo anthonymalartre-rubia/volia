@@ -21,8 +21,9 @@ import { PLANS } from '@/lib/plans';
 export const dynamic = 'force-dynamic';
 
 // ─── Gate plan : le serveur MCP est réservé au plan Business (et au-dessus) ──
-// On s'appuie sur `unlocksModules` (true uniquement sur business / enterprise),
-// la même marque que pour CRM/Campagnes/Forms.
+// On s'appuie sur `unlocksMcp` (true uniquement sur business / enterprise).
+// NB : distinct de `unlocksModules` (CRM/Campagnes/Forms), qui est désormais
+// aussi inclus sur Pro — le MCP, lui, reste Business+.
 async function planGate(request) {
   const auth = await authenticateApiRequest(request);
   if (!auth.ok) return { ok: false, text: `Clé API invalide : ${auth.error}` };
@@ -34,7 +35,7 @@ async function planGate(request) {
     .maybeSingle();
   const planId = profile?.plan || 'free';
   const plan = PLANS[planId] || PLANS.free;
-  if (!plan.unlocksModules) {
+  if (!plan.unlocksMcp) {
     return {
       ok: false,
       text: `🔒 Le serveur MCP de Volia est réservé au plan Business. Ton plan actuel (${plan.name}) n'y donne pas accès. Passe au plan Business pour piloter Volia depuis un agent IA : https://volia.fr/pricing`,

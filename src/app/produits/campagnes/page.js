@@ -566,21 +566,21 @@ function UseCasesSection() {
 function PricingFocusSection() {
   const plans = [
     {
-      name: 'Starter', price: '0 €', tag: 'Pour découvrir',
-      desc: 'Prospection seule (100 prospects/mois). Pas de cold email.',
-      cta: 'Démarrer', href: '/signup?plan=free',
+      name: 'Pro', price: '49 €', tag: 'Cold email inclus',
+      desc: 'Cold email (2 000/mois) + warmup + suite complète (Prospection + CRM + Forms). 19 € avec ETE2026.',
+      cta: 'Essai Pro 14 j', href: '/signup?plan=pro',
       featured: false,
     },
     {
-      name: 'Business', price: '149 €', tag: 'Recommandé · Tout inclus',
+      name: 'Business', price: '179 €', tag: 'Recommandé · Volume max',
       desc: 'Cold email illimité + warmup + multi-inbox + auto-create CRM depuis replies. Plus Prospection 10k + Formulaires.',
       cta: 'Choisir Business', href: '/signup?plan=business',
       featured: true,
       bullets: ['Cold email illimité', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Auto-create CRM depuis replies'],
     },
     {
-      name: 'Annuel', price: '125 €', tag: '−2 mois offerts',
-      desc: 'Même Business, facturé annuellement. 1 490 €/an au lieu de 1 788 €.',
+      name: 'Annuel', price: '141 €', tag: '−2 mois offerts',
+      desc: 'Même Business, facturé annuellement. 1 690 €/an au lieu de 2 148 €.',
       cta: 'Choisir Annuel', href: '/signup?plan=business&billing=yearly',
       featured: false,
     },
@@ -595,7 +595,7 @@ function PricingFocusSection() {
               Tarification Campagnes
             </span>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              Cold email illimité dans la suite Business à 149 €.
+              Cold email inclus dès le plan Pro à 49 €.
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
               Pas d&apos;add-on, pas de surprise. Annulation 1 clic, migration depuis Lemlist incluse.

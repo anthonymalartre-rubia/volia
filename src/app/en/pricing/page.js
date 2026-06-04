@@ -38,14 +38,13 @@ const PRODUCT_SCHEMA = {
   offers: {
     '@type': 'AggregateOffer',
     priceCurrency: 'USD',
-    lowPrice: '0',
-    highPrice: '1799',
-    offerCount: 4,
+    lowPrice: '55',
+    highPrice: '559',
+    offerCount: 3,
     offers: [
-      { '@type': 'Offer', name: 'Starter', price: '0', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=free` },
-      { '@type': 'Offer', name: 'Solo', price: '21', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=solo` },
-      { '@type': 'Offer', name: 'Pro', price: '55', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=pro` },
-      { '@type': 'Offer', name: 'Business', price: '169', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=business`, description: 'Launch promo: first 12 months at $169/mo, then $199/mo. Includes Campaigns + CRM + Forms.' },
+      { '@type': 'Offer', name: 'Pro', price: '55', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=pro`, description: 'Full suite: Prospecting + Campaigns + CRM + Forms. 14-day free trial, no card. Code ETE2026: €19/mo for 3 months.' },
+      { '@type': 'Offer', name: 'Business', price: '169', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=business`, description: 'Launch promo: first 12 months at $169/mo, then $199/mo. Adds volume, multi-user, MCP server + API.' },
+      { '@type': 'Offer', name: 'Enterprise', price: '559', priceCurrency: 'USD', url: `${SITE_URL}/signup?plan=enterprise`, description: 'Unlimited Autopilot (A/B testing, weekly Claude optimization), everything unlimited, white-label, 99.9% SLA.' },
     ],
   },
 };

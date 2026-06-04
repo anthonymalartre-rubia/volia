@@ -11,7 +11,7 @@ import { LogoIcon } from '@/components/ui';
  */
 export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
   const isAlternative = intent === 'alternative';
-  const savingsPct = Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100));
+  const savingsPct = Math.max(0, Math.round((competitor.pricing - 49) / competitor.pricing * 100));
   // Comparison criteria — fixed list of features
   const comparison = [
     { feature: 'Prix mensuel', volia: '49€', competitor: `${competitor.pricing}${competitor.pricingUnit}`, voliaWins: true },
@@ -65,13 +65,13 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             {isAlternative ? (
               <>
                 Tu utilises {competitor.name} et tu trouves que <strong className="text-content-primary">ça coûte cher pour trop peu d&apos;emails français</strong> ?
-                Volia : 19€/mois ({savingsPct}% moins cher), cascade waterfall qui trouve ~46% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
+                Volia : 49€/mois ({savingsPct}% moins cher, dès 19€ les 3 premiers mois avec ETE2026), cascade waterfall qui trouve ~46% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
                 Tu te poses encore la question ?
               </>
             ) : (
               <>
                 {competitor.description} <strong className="text-content-primary">Volia, c&apos;est l&apos;alternative française</strong> :
-                19€/mois (le moins cher du marché FR), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
+                49€/mois pour la suite complète (dès 19€ avec ETE2026), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
               </>
             )}
           </p>
@@ -104,7 +104,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               <SwitchReason
                 num="2"
                 title={`${savingsPct}% moins cher. Tu fais le calcul.`}
-                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 19€/mois (Solo), 49€ (Pro), 149€ (Business). Tous les plans, tous les pays inclus. Pas de "contact sales".`}
+                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 49€ (Pro, dès 19€ avec ETE2026), 179€ (Business), 499€ (Enterprise). Tous les plans, tous les pays inclus. Pas de "contact sales".`}
               />
               <SwitchReason
                 num="3"
@@ -216,7 +216,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
                 Jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}% moins cher
               </h3>
               <p className="text-sm text-content-secondary leading-relaxed">
-                Volia = 19€/mois (Solo, 1 000 prospects + 400 enrichissements). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
+                Volia = 49€/mois (Pro, suite complète — dès 19€ les 3 premiers mois avec ETE2026). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
               </p>
             </div>
             <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">

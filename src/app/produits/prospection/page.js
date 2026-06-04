@@ -445,7 +445,7 @@ function ComparatifSection() {
         <MotionInView delay={300}>
           <div className="mt-10 text-center">
             <Link
-              href="/signup?plan=starter"
+              href="/signup?plan=pro"
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Sparkles size={18} className="text-amber-200" />
@@ -560,43 +560,33 @@ function UseCasesSection() {
 function PricingFocusSection() {
   const plans = [
     {
-      name: 'Starter',
-      price: '0 €',
-      period: 'à vie',
-      prospects: '100 prospects/mois',
-      audience: 'pour tester',
-      cta: 'Démarrer',
-      href: '/signup?plan=starter',
-      popular: false,
-    },
-    {
-      name: 'Solo',
-      price: '19 €',
-      period: '/mois',
-      prospects: '1 000 prospects/mois',
-      audience: 'pour les freelances',
-      cta: 'Choisir Solo',
-      href: '/signup?plan=solo',
-      popular: true,
-    },
-    {
       name: 'Pro',
       price: '49 €',
       period: '/mois',
-      prospects: '5 000 prospects/mois',
-      audience: 'pour agences & PME',
-      cta: 'Choisir Pro',
+      prospects: '5 000 prospects/mois + Campagnes + CRM + Forms',
+      audience: 'pour agences & PME · 19 € avec ETE2026',
+      cta: 'Essai Pro 14 j',
       href: '/signup?plan=pro',
-      popular: false,
+      popular: true,
     },
     {
       name: 'Business',
-      price: '149 €',
+      price: '179 €',
       period: '/mois',
-      prospects: '10 000 prospects/mois + Campagnes + CRM',
-      audience: 'pour scaleups',
+      prospects: '10 000 prospects/mois + MCP + multi-utilisateurs',
+      audience: 'pour équipes outbound',
       cta: 'Choisir Business',
       href: '/signup?plan=business',
+      popular: false,
+    },
+    {
+      name: 'Enterprise',
+      price: '499 €',
+      period: '/mois',
+      prospects: 'Tout illimité + Autopilot illimité',
+      audience: 'pour scaleups',
+      cta: 'Choisir Enterprise',
+      href: '/signup?plan=enterprise',
       popular: false,
     },
   ];
@@ -618,7 +608,7 @@ function PricingFocusSection() {
           </div>
         </MotionInView>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
           {plans.map((plan, i) => (
             <MotionInView key={plan.name} delay={i * 100}>
               <div className={`relative h-full p-6 rounded-2xl border-2 ${plan.popular ? 'border-violet-400 bg-gradient-to-br from-violet-50 via-white to-indigo-50/40 shadow-xl shadow-violet-500/15' : 'border-line bg-white hover:border-violet-200'} transition-all hover:-translate-y-1 flex flex-col`}>
@@ -862,7 +852,7 @@ export default function ProspectionProductPage() {
               <strong className="text-emerald-700 font-semibold">5× moins cher qu&apos;Apollo</strong>. 100% conforme RGPD.
             </>
           ),
-          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=starter' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=pro' },
           ctaSecondary: { label: 'Voir une démo en direct', href: '/#try-live' },
           trust: [
             (<><strong className="font-mono text-content-secondary">Tout</strong> le B2B français</>),
@@ -910,7 +900,7 @@ export default function ProspectionProductPage() {
         finalCta={{
           title: 'Prêt à arrêter de payer Apollo 5× trop cher ?',
           subtitle: '100 prospects gratuits pour tester, sans carte bancaire. Vous gardez tout ce que vous exportez, pour toujours.',
-          primary: { label: 'Démarrer gratuitement', href: '/signup?plan=starter' },
+          primary: { label: 'Démarrer gratuitement', href: '/signup?plan=pro' },
           secondary: { label: 'Voir une démo', href: '/#try-live' },
           trust: 'Sans CB · Annulation 1 clic · Made in France',
         }}

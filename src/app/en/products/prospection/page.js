@@ -109,7 +109,7 @@ export default function EnProspectionPage() {
             <strong className="text-emerald-700 font-semibold">From $21/mo</strong>. GDPR by default.
           </>
         ),
-        ctaPrimary: { label: 'Start free', href: '/signup?plan=free' },
+        ctaPrimary: { label: 'Start Pro trial', href: '/signup?plan=pro' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           (<><strong className="font-mono text-content-secondary">All</strong> French B2B</>),
@@ -146,7 +146,7 @@ export default function EnProspectionPage() {
       }}
       pricing={{
         label: 'In every plan. Starter is free, forever.',
-        subtext: 'Starter $0 (20 enrichments/mo) - Solo $21 (400) - Pro $55 (1,200) - Business $169 (10,000 + Campaigns + CRM + Forms). 1-click cancel.',
+        subtext: 'Pro $55/mo (full suite: Prospecting + Campaigns + CRM + Forms) - Business $169 (10,000 + MCP + multi-user) - Enterprise $559 (unlimited Autopilot). 14-day free trial, 1-click cancel.',
         cta: 'See full pricing',
         ctaHref: '/en/pricing',
       }}
@@ -154,7 +154,7 @@ export default function EnProspectionPage() {
       finalCta={{
         title: 'Stop overpaying for prospecting.',
         subtitle: '100 prospects free. No card. You keep everything you export. Forever.',
-        primary: { label: 'Start free', href: '/signup?plan=free' },
+        primary: { label: 'Start Pro trial', href: '/signup?plan=pro' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: 'No card - 1-click cancel - Built in France',
       }}

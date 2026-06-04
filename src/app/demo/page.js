@@ -256,7 +256,7 @@ export default function DemoPage() {
                 Testez Volia tout de suite, 100 prospects offerts.
               </h3>
               <Link
-                href="/signup?plan=free&source=demo_page"
+                href="/signup?plan=pro&source=demo_page"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-violet-500/30 hover:shadow-xl transition-all"
               >
                 Démarrer gratuitement

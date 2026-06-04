@@ -563,7 +563,7 @@ export default function ComparatifPage({ data }) {
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Link
-                    href="/signup?plan=starter"
+                    href="/signup?plan=pro"
                     className={`group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r ${c.colorClasses.buttonGradient} ${c.colorClasses.buttonHover} text-white font-bold shadow-xl hover:-translate-y-0.5 transition-all`}
                   >
                     <Sparkles size={16} className="text-amber-200" />

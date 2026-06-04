@@ -131,7 +131,7 @@ function HeroSection() {
         <MotionInView delay={500}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/signup?plan=starter"
+              href="/signup?plan=pro"
               className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-violet-500/30 hover:shadow-xl transition-all"
             >
               Essayer Volia
@@ -885,7 +885,7 @@ function FinalCtaSection() {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
-            href="/signup?plan=starter"
+            href="/signup?plan=pro"
             className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-bold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/40 hover:-translate-y-0.5 transition-all text-base"
           >
             <Sparkles size={18} className="text-amber-200" />

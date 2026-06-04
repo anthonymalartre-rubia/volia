@@ -15,6 +15,7 @@ import {
   Lock,
   Gift,
   PlayCircle,
+  Banknote,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
 import UpgradeRequiredModal from '@/components/UpgradeRequiredModal';
@@ -235,6 +236,25 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
                 </span>
               </div>
               <div className="text-[10px] text-content-faint">Gagnez des mois gratuits</div>
+            </div>
+          </a>
+
+          {/* Affiliation — devenir apporteur d'affaires (commission en €) */}
+          <a
+            href="/affiliation"
+            className="mt-1 flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-content-tertiary hover:text-content-primary hover:bg-gradient-to-r hover:from-violet-500/10 hover:to-amber-500/10 transition-all duration-200 group"
+          >
+            <div className="p-1.5 rounded-lg bg-gradient-to-br from-violet-500/15 to-amber-500/15 group-hover:from-violet-500/25 group-hover:to-amber-500/25 transition-colors">
+              <Banknote size={16} className="text-amber-400" />
+            </div>
+            <div className="flex-1 text-left">
+              <div className="flex items-center gap-1.5">
+                <span>Devenir apporteur</span>
+                <span className="inline-flex items-center text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                  50 %
+                </span>
+              </div>
+              <div className="text-[10px] text-content-faint">Commission sur chaque client amené</div>
             </div>
           </a>
 

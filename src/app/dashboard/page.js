@@ -423,41 +423,24 @@ export default function Dashboard() {
       const month = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}`;
       const { getPlan } = await import('@/lib/plans');
 
-      // Supabase caps at 1000 rows per query — paginate to fetch all prospects.
-      // P2 perf : on récupère d'abord le count exact via head:true, puis on lance
-      // toutes les pages en parallèle via Promise.all. Pour 5000 prospects =
-      // 1 round-trip count + 5 pages en parallèle (~400ms total) au lieu de
-      // 5 round-trips séquentiels (~2s).
+      // Supabase caps at 1000 rows per query.
+      // P3 perf (chargement progressif) : on ne bloque PLUS le 1er rendu sur le
+      // téléchargement des dizaines de milliers de prospects. On récupère
+      // seulement la 1re page (1000 lignes) + le count exact en un seul
+      // round-trip, on rend l'UI immédiatement, puis les pages suivantes sont
+      // chargées EN ARRIÈRE-PLAN (cf. loadRemainingProspects) et viennent
+      // compléter le tableau/stats au fil de l'eau. La 1re page suffit à
+      // afficher la liste ; les compteurs montent pendant ~1-2s le temps que
+      // le reste arrive.
+      const PAGE_SIZE = 1000;
       const COLS = 'id,place_id,nom,adresse,telephone,email,email_method,site_web,note,nb_avis,type,departement,folder_id,search_session_id,created_at,updated_at,archived_at';
-      async function fetchAllProspects() {
-        const PAGE_SIZE = 1000;
-        const { count, error: countError } = await supabase
+      async function fetchFirstProspectsPage() {
+        const { data, error, count } = await supabase
           .from('prospects')
-          .select('id', { count: 'exact', head: true });
-        if (countError || !count) return { data: [], error: countError };
-        if (count <= PAGE_SIZE) {
-          const { data, error } = await supabase
-            .from('prospects')
-            .select(COLS)
-            .order('created_at', { ascending: false })
-            .range(0, PAGE_SIZE - 1);
-          return { data: data || [], error };
-        }
-        const pages = Math.ceil(count / PAGE_SIZE);
-        const promises = [];
-        for (let i = 0; i < pages; i++) {
-          const from = i * PAGE_SIZE;
-          promises.push(
-            supabase
-              .from('prospects')
-              .select(COLS)
-              .order('created_at', { ascending: false })
-              .range(from, from + PAGE_SIZE - 1)
-          );
-        }
-        const results = await Promise.all(promises);
-        const allData = results.flatMap((r) => r.data || []);
-        return { data: allData, error: null };
+          .select(COLS, { count: 'exact' })
+          .order('created_at', { ascending: false })
+          .range(0, PAGE_SIZE - 1);
+        return { data: data || [], count: count || 0, error };
       }
 
       const [
@@ -476,7 +459,7 @@ export default function Dashboard() {
         supabase.from('lead_folders').select('*').order('created_at', { ascending: true }),
         supabase.from('lead_tags').select('*').order('name'),
         supabase.from('prospect_tags').select('prospect_id, tag_id'),
-        fetchAllProspects(),
+        fetchFirstProspectsPage(),
         supabase.from('search_sessions').select('*').order('created_at', { ascending: false }).limit(20),
       ]);
 
@@ -510,8 +493,28 @@ export default function Dashboard() {
       });
       setProspectTagMap(tagMap);
 
-      // Apply prospects
+      // Apply prospects (1re page) — l'UI est rendue immédiatement avec ça.
       if (!prospectsRes.error && prospectsRes.data) setProspects(prospectsRes.data);
+
+      // Charge le reste EN ARRIÈRE-PLAN, page par page (séquentiel → ordre
+      // created_at desc préservé), en complétant l'état au fil de l'eau. Ne
+      // bloque pas le rendu : la liste est déjà affichée avec la 1re page.
+      const totalCount = prospectsRes.count || 0;
+      if (!prospectsRes.error && totalCount > PAGE_SIZE) {
+        (async () => {
+          const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+          for (let i = 1; i < totalPages; i++) {
+            const from = i * PAGE_SIZE;
+            const { data: pageData, error: pageErr } = await supabase
+              .from('prospects')
+              .select(COLS)
+              .order('created_at', { ascending: false })
+              .range(from, from + PAGE_SIZE - 1);
+            if (pageErr || !pageData || pageData.length === 0) break;
+            setProspects((prev) => [...prev, ...pageData]);
+          }
+        })();
+      }
 
       // Apply search history
       setSearchHistory(sessionsRes.data || []);

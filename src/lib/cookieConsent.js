@@ -65,13 +65,15 @@ export const CATEGORIES = {
     id: 'marketing',
     label: 'Cookies marketing',
     description:
-      "Tracking des conversions (essai gratuit → paiement), widget de réservation de démo (Cal.com), retargeting. Tiers concernés : Stripe, Cal.com.",
+      "Tracking des conversions (essai gratuit → paiement), mesure et retargeting des campagnes publicitaires, widget de réservation de démo (Cal.com). Tiers concernés : Stripe, Cal.com, LinkedIn.",
     required: false,
     defaultValue: false,
     cookies: [
       { name: '_stripe_mid', issuer: 'Stripe', purpose: 'Détection de fraude paiement', duration: '1 an' },
       { name: '_stripe_sid', issuer: 'Stripe', purpose: 'Session paiement', duration: '30 minutes' },
       { name: 'cal_*', issuer: 'Cal.com', purpose: 'Widget de réservation de démo', duration: 'Session' },
+      { name: 'li_fat_id', issuer: 'LinkedIn', purpose: 'Mesure des conversions publicitaires', duration: '30 jours' },
+      { name: 'bcookie', issuer: 'LinkedIn', purpose: 'Identification navigateur & retargeting', duration: '1 an' },
     ],
   },
 };

@@ -109,6 +109,8 @@ const COOKIE_EN = {
   _stripe_mid: { purpose: 'Payment fraud detection', duration: '1 year' },
   _stripe_sid: { purpose: 'Payment session', duration: '30 minutes' },
   'cal_*': { purpose: 'Demo booking widget', duration: 'Session' },
+  li_fat_id: { purpose: 'LinkedIn ad conversion measurement', duration: '30 days' },
+  bcookie: { purpose: 'LinkedIn browser ID & retargeting', duration: '1 year' },
 };
 
 export default function CookieConsent() {

@@ -34,7 +34,7 @@ On garde : « l'IA fait la corvée, tu gardes la main », « dès 19 €/mois »
 > Et toi, tu es team « IA autonome » ou team « IA + humain » ?
 
 **1er commentaire (à poster toi-même, juste après) :**
-> 👉 Le kit prospection B2B (gratuit, sans email bidon) : https://volia.fr/ressources
+> 👉 Le kit prospection B2B (gratuit, sans email bidon) : https://volia.fr/ressources/kit-prospection-2026
 > Dedans : 20 templates cold email, checklist RGPD 47 points, scripts d'appel, calculateur ROI. Made in France, RGPD natif. Volia, c'est dès 19 €/mois.
 
 ---
@@ -53,7 +53,7 @@ On garde : « l'IA fait la corvée, tu gardes la main », « dès 19 €/mois »
 >
 > 🇫🇷 Made in France · RGPD natif · l'IA fait la corvée, tu gardes la main.
 >
-> 👉 C'est ici (gratuit) : https://volia.fr/ressources
+> 👉 C'est ici (gratuit) : https://volia.fr/ressources/kit-prospection-2026
 
 ---
 

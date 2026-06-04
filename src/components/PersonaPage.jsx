@@ -17,8 +17,8 @@ export default function PersonaPage({ persona }) {
             <span className="text-violet-400 text-xs font-semibold">.fr</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-content-secondary hover:text-content-primary transition">Se connecter</Link>
-            <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition">
+            <Link href="/login" className="hidden sm:inline text-sm text-content-secondary hover:text-content-primary transition">Se connecter</Link>
+            <Link href="/signup" className="text-sm px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white font-semibold transition whitespace-nowrap">
               Essayer gratuitement
             </Link>
           </div>

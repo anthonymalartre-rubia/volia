@@ -4,6 +4,7 @@ import { checkLimit, incrementUsage } from '@/lib/usage';
 import { PERSONAL_DOMAINS } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { lookupGlobalContact, upsertGlobalContact } from '@/lib/global-contacts';
 
 // Client admin réutilisé via le singleton de lib/supabase-admin (P1 perf
 // + immunité aux \n dans les env vars).
@@ -313,10 +314,11 @@ export async function POST(request) {
     // ─── Fetch user preference for personal email filtering ───
     const { data: userProfile } = await supabase
       .from('user_profiles')
-      .select('filter_personal_emails')
+      .select('filter_personal_emails, is_admin')
       .eq('id', user.id)
       .single();
     const filterPersonalEmails = userProfile?.filter_personal_emails !== false;
+    const isAdmin = !!userProfile?.is_admin;
 
     // ─── Check opt-out list: never enrich emails that opted out ───
     async function isOptedOut(email) {
@@ -329,6 +331,23 @@ export async function POST(request) {
           .maybeSingle();
         return !!data;
       } catch { return false; }
+    }
+
+    // ─── COUCHE 0 : base commune Volia (0 crédit Serper si hit) ───
+    // On ne court-circuite pas si un `method` précis est demandé (Enterprise).
+    if (!method && domain) {
+      const cached = await lookupGlobalContact({ domain });
+      const skipPersonal = filterPersonalEmails && cached?.email && isPersonalEmail(cached.email);
+      if (cached?.email && !skipPersonal) {
+        await incrementUsage(supabase, user.id, 'enrichments');
+        return Response.json({
+          email: cached.email,
+          source: 'volia_db',
+          extra: null,
+          linkedin_url: null,
+          waterfall: [{ step: 'volia_db', label: 'Base commune Volia', found: true }],
+        });
+      }
     }
 
     // If a specific method is requested (Enterprise feature), only run that step
@@ -350,6 +369,12 @@ export async function POST(request) {
         tried.push({ step: step.name, label: step.label, found: !!result?.email });
         if (result?.email) {
           await incrementUsage(supabase, user.id, 'enrichments');
+          // Alimente la base commune (best-effort). En Phase 1, n'écrit
+          // réellement que si l'utilisateur est admin (Volia).
+          upsertGlobalContact({
+            domain, companyName: name, email: result.email,
+            emailMethod: result.source, isAdmin,
+          });
           return Response.json({
             email: result.email,
             source: result.source,

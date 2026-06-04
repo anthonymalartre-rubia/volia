@@ -114,6 +114,10 @@
       "schedule": "0 9 * * 4"
     },
     {
+      "path": "/api/cron/process-enrichment",
+      "schedule": "*/5 * * * *"
+    },
+    {
       "path": "/api/cron/publish-approved-actions",
       "schedule": "*/15 * * * *"
     },

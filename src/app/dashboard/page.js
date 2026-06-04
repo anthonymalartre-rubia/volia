@@ -451,6 +451,7 @@ export default function Dashboard() {
         ptRes,
         prospectsRes,
         sessionsRes,
+        activeCountRes,
       ] = await Promise.all([
         supabase.from('user_profiles').select('plan, stripe_customer_id, is_admin, trial_plan, trial_started_at, trial_ends_at, trial_converted_at').eq('id', currentUser.id).single(),
         supabase.from('usage_tracking').select('searches, enrichments, exports').eq('user_id', currentUser.id).eq('month', month).single(),
@@ -460,6 +461,9 @@ export default function Dashboard() {
         supabase.from('prospect_tags').select('prospect_id, tag_id'),
         fetchFirstProspectsPage(),
         supabase.from('search_sessions').select('*').order('created_at', { ascending: false }).limit(20),
+        // Count des prospects ACTIFS (non archivés) — pour la headline (les
+        // archives ne doivent pas être comptées dans "Tous").
+        supabase.from('prospects').select('id', { count: 'exact', head: true }).is('archived_at', null),
       ]);
 
       // Apply profile
@@ -495,10 +499,11 @@ export default function Dashboard() {
       // Apply prospects (1re page) — l'UI est rendue immédiatement avec ça.
       if (!prospectsRes.error && prospectsRes.data) setProspects(prospectsRes.data);
 
-      // Total exact connu dès le 1er round-trip → on l'affiche tout de suite
-      // (pas d'attente que toutes les pages arrivent).
+      // Total à afficher = prospects ACTIFS (hors archives), connu dès le 1er
+      // round-trip. (totalCount inclut les archives → sert uniquement à paginer.)
       const totalCount = prospectsRes.count || 0;
-      if (!prospectsRes.error) setProspectsTotal(totalCount);
+      const activeCount = activeCountRes && !activeCountRes.error ? (activeCountRes.count || 0) : totalCount;
+      setProspectsTotal(activeCount);
 
       // Charge le reste EN ARRIÈRE-PLAN, page par page (séquentiel → ordre
       // created_at desc préservé), en complétant l'état au fil de l'eau. Ne
@@ -1489,7 +1494,7 @@ export default function Dashboard() {
             onViewChange={handleViewChange}
             onClose={() => setSidebarOpen(false)}
             isOpen={sidebarOpen}
-            prospectCount={Math.max(prospectsTotal, prospects.length)}
+            prospectCount={prospectsTotal || prospects.length}
             folders={folders}
             searchHistory={searchHistory}
             isAdmin={isAdmin}
@@ -1520,7 +1525,7 @@ export default function Dashboard() {
               (() => {
                 const meta = {
                   search:  { kicker: 'Découvrir', title: 'Recherche', sub: 'Trouvez des prospects via Google Places — 150+ catégories, 101 départements, 6 provinces BE, 6 cantons CH.' },
-                  results: { kicker: 'Vos prospects',  title: `Prospects${(Math.max(prospectsTotal, prospects.length)) ? ` · ${Math.max(prospectsTotal, prospects.length).toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
+                  results: { kicker: 'Vos prospects',  title: `Prospects${prospectsTotal ? ` · ${prospectsTotal.toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
                   export:  { kicker: 'Données',    title: 'Export CSV', sub: 'Exportez en CSV compatible HubSpot / Salesforce / Zoho / Pipedrive.' },
                   verify:  { kicker: 'Validation', title: 'Vérifier un email', sub: 'Confirmez la délivrabilité d\'un email avant de l\'envoyer.' },
                 }[activeView];

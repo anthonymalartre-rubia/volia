@@ -6,7 +6,7 @@ export const COMPETITORS = {
     name: 'Apollo.io',
     domain: 'apollo.io',
     tagline: 'La base B2B mondiale. Très américaine.',
-    description: 'Apollo.io a 220M+ contacts. Très utilisé aux USA. En France, c\'est l\'autre histoire : couverture PME à 30-40%, données souvent périmées, interface en anglais. 99$/mois, ça pique quand t\'es français.',
+    description: 'Apollo.io a 220M+ contacts et est très utilisé aux USA. Sa base est orientée marché américain : pour le tissu PME français, la couverture est plus limitée, et l\'interface est en anglais. Tarif à partir de 99$/mois.',
     pricing: 99,
     pricingUnit: '$/mois',
     strengths: [
@@ -15,9 +15,8 @@ export const COMPETITORS = {
       'Séquences d\'outreach intégrées',
     ],
     weaknesses: [
-      'Cher (99$/mois en Basic, ~150$ avec emails illimités)',
-      'Couverture PME françaises à 30-40% — t\'as l\'impression de payer pour du vide',
-      'Données souvent obsolètes en France (parfois > 2 ans)',
+      'Tarif vite élevé (99$/mois et plus selon le volume)',
+      'Base orientée USA — couverture des PME françaises plus limitée',
       'Interface en anglais uniquement, pas de support FR',
       'Pas de Google Places intégré — les commerces locaux passent à la trappe',
     ],

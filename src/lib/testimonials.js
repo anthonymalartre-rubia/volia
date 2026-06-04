@@ -13,7 +13,7 @@ const TESTIMONIALS = [
     role: 'Directeur commercial',
     company: 'Cabinet d\'expertise comptable',
     sector: 'Services aux entreprises',
-    content: 'On utilisait Apollo : 40 % de couverture en France, beaucoup d\'emails périmés. Avec Volia on monte à 78 % sur le 75 et 92, c\'est concret. Le ROI s\'est fait en 2 semaines.',
+    content: 'On galérait avec des bases mondiales mal couvertes sur la France. Avec Volia, la couverture locale est concrète et le ROI s\'est fait en quelques semaines.',
     location: 'Paris',
     rating: 5,
   },

@@ -15,7 +15,7 @@ const PERSONAS = {
     intro: 'Toi, SDR, tu fais 50 cold emails par jour à la main. Tu jongles entre Apollo, LinkedIn Sales Nav, et un CRM. Tu passes 60% de ton temps à chercher des contacts au lieu de prospecter. Volia te file 50 à 500 prospects qualifiés par jour, à exporter direct dans ton CRM. À partir de 19€/mois.',
     keyMetric: { value: '3×', label: 'plus de RDV qualifiés', sub: 'vs sourcing manuel' },
     painPoints: [
-      'Apollo plafonne à 40% de couverture en France — tu reçois des emails périmés et tes meetings tombent',
+      'Les bases mondiales couvrent mal les PME françaises — tu perds du temps sur des contacts hors cible',
       'LinkedIn Sales Navigator te coûte 99€/mois et te force au sourcing manuel à la souris',
       'Tu passes 60% de ton temps à chercher au lieu de pitcher. C\'est pas pour ça que tu signes un CDI',
     ],

@@ -19,6 +19,7 @@ export default function ReaderFooter() {
           <Link href="/etude/etat-cold-email-france-2026" className="hover:text-content-secondary transition">Étude cold email</Link>
           <Link href="/glossaire" className="hover:text-content-secondary transition">Glossaire</Link>
           <Link href="/affiliation" className="hover:text-content-secondary transition">Devenir apporteur</Link>
+          <Link href="/mcp" className="hover:text-content-secondary transition">MCP (agents IA)</Link>
           <Link href="/cgu" className="hover:text-content-secondary transition">CGU</Link>
           <Link href="/cgv" className="hover:text-content-secondary transition">CGV</Link>
           <Link href="/dpa" className="hover:text-content-secondary transition">DPA</Link>

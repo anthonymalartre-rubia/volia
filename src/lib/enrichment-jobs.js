@@ -124,6 +124,7 @@ async function processJob(supabase, job, deadline) {
     const { data: fresh } = await supabase.from('enrichment_jobs').select('status').eq('id', job.id).maybeSingle();
     if (!fresh || fresh.status === 'canceled') return { processed, found, ended: 'canceled' };
 
+    await supabase.from('enrichment_jobs').update({ error: 'dbg:checkLimit', last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq('id', job.id);
     // Quota
     const lim = await checkLimit(supabase, job.user_id, 'enrichments');
     if (!lim.allowed) {
@@ -140,8 +141,13 @@ async function processJob(supabase, job, deadline) {
       return { processed, found, ended: 'quota' };
     }
 
-    // Prochain lot
-    const { data: batch } = await pendingQuery(supabase, job.user_id, job.scope).limit(cap);
+    await supabase.from('enrichment_jobs').update({ error: 'dbg:pendingQuery', updated_at: new Date().toISOString() }).eq('id', job.id);
+    // Prochain lot (requête directe SANS count:'exact' → plus léger que pendingQuery)
+    let bq = supabase.from('prospects').select('id, site_web').eq('user_id', job.user_id).not('site_web', 'is', null).or('email.is.null,email.eq.');
+    if (job.scope?.folder_id) bq = bq.eq('folder_id', job.scope.folder_id);
+    if (job.scope?.departement) bq = bq.eq('departement', job.scope.departement);
+    const { data: batch } = await bq.limit(cap);
+    await supabase.from('enrichment_jobs').update({ error: `dbg:batch:${batch?.length ?? 'null'}`, updated_at: new Date().toISOString() }).eq('id', job.id);
     if (!batch || batch.length === 0) {
       await supabase.from('enrichment_jobs')
         .update({ status: 'done', processed, found, finished_at: new Date().toISOString(), last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
@@ -178,12 +184,13 @@ async function processJob(supabase, job, deadline) {
       } catch { /* item-level error → on continue */ }
     }, CONCURRENCY);
 
+    await supabase.from('enrichment_jobs').update({ error: `dbg:enriched:${batchAttempted}`, updated_at: new Date().toISOString() }).eq('id', job.id);
     processed += batchAttempted;
     // Comptabilise l'usage (1 enrichissement = 1 tentative, comme /api/enrich)
     try { await incrementUsage(supabase, job.user_id, 'enrichments', batchAttempted); } catch { /* non bloquant */ }
 
     await supabase.from('enrichment_jobs')
-      .update({ processed, found, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+      .update({ processed, found, error: null, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
       .eq('id', job.id);
   }
 

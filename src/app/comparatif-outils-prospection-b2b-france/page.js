@@ -178,11 +178,11 @@ const FAQ = [
   },
   {
     question: 'Quelle est l\'alternative française à Apollo.io ?',
-    answer: 'Volia est l\'alternative française à Apollo : combinaison de découverte (Google Places, 150+ catégories, 101 départements) + enrichissement email, ticket d\'entrée à 19 €/mois (vs 49-99 € Apollo). Conforme RGPD natif (filtre 28 domaines d\'emails personnels + opt-out public).',
+    answer: 'Volia est l\'alternative française à Apollo : combinaison de découverte (Google Places, 150+ catégories, 101 départements) + enrichissement email, plan Pro à 49 €/mois (soit 19 €/mois les 3 premiers mois avec le code ETE2026, vs 49-99 € Apollo) — et la suite complète incluse (campagnes, CRM, formulaires). Conforme RGPD natif (filtre 28 domaines d\'emails personnels + opt-out public).',
   },
   {
     question: 'Quel est l\'outil le moins cher pour faire de la prospection B2B en France ?',
-    answer: 'Volia avec son plan Solo à 19 €/mois (1 000 prospects + 400 enrichissements) est le ticket d\'entrée le moins cher du marché français. À titre de comparaison : Dropcontact démarre à 31 €, Snov à 39 €, Hunter à 34 €, Apollo à 49 €, Lemlist à 59 €.',
+    answer: 'Volia avec son plan Pro à 49 €/mois (5 000 prospects + 2 000 enrichissements, soit 19 €/mois les 3 premiers mois avec le code ETE2026) offre l\'un des meilleurs rapports qualité-prix du marché français — une suite complète (prospection + campagnes + CRM + formulaires) pour le prix d\'un simple outil d\'enrichissement. À titre de comparaison : Dropcontact démarre à 31 €, Snov à 39 €, Hunter à 34 €, Apollo à 49 €, Lemlist à 59 €.',
   },
   {
     question: 'Quels outils sont conformes au RGPD pour la prospection B2B en France ?',

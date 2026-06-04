@@ -76,7 +76,7 @@ const organizationSchema = {
   alternateName: ['Volia.fr', 'Volia.fr'],
   url: 'https://volia.fr',
   logo: 'https://volia.fr/icon.svg',
-  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Le ticket d\'entrée le moins cher du marché français à 19 €/mois.',
+  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Suite complète (prospection, campagnes, CRM, formulaires) dès 49 €/mois — 19 €/mois les 3 premiers mois avec le code ETE2026.',
   sameAs: ['https://www.linkedin.com/company/volia-saas/'],
   founder: {
     '@type': 'Person',

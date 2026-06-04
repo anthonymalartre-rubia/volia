@@ -149,7 +149,7 @@ export default function ParrainagePage() {
           <div className="grid sm:grid-cols-3 gap-3">
             <Step num={1} title="Partagez votre lien" desc="Envoyez votre lien personnalisé à vos contacts B2B (LinkedIn, email, Slack...)." />
             <Step num={2} title="Ils s'inscrivent" desc="Quand un ami crée un compte via votre lien, vous voyez la conversion en temps réel ici." />
-            <Step num={3} title="Vous gagnez 1 mois" desc="Dès qu'il devient client payant (Solo, Pro ou Business), 1 mois bonus est crédité." />
+            <Step num={3} title="Vous gagnez 1 mois" desc="Dès qu'il devient client payant (Pro, Business ou Enterprise), 1 mois bonus est crédité." />
           </div>
         </section>
 
@@ -198,7 +198,7 @@ export default function ParrainagePage() {
             </details>
             <details className="group py-2.5">
               <summary className="cursor-pointer text-sm font-medium text-content-secondary group-open:text-content-primary">Quand mon bonus est-il crédité ?</summary>
-              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Dès que le filleul devient client payant (Solo, Pro ou Business). Notification email + in-app instantanée. Vous voyez le total dans le compteur "Mois gagnés".</p>
+              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Dès que le filleul devient client payant (Pro, Business ou Enterprise). Notification email + in-app instantanée. Vous voyez le total dans le compteur "Mois gagnés".</p>
             </details>
           </div>
         </section>

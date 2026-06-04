@@ -190,13 +190,21 @@ export async function runEnrichmentBatch() {
   const startedAt = new Date().toISOString();
   const deadline = Date.now() + TIME_BUDGET_MS;
 
-  const { data: jobs } = await supabase
+  const { data: jobs, error: selectErr } = await supabase
     .from('enrichment_jobs')
     .select('*')
     .in('status', ['queued', 'running'])
     .order('last_tick_at', { ascending: true, nullsFirst: true })
     .limit(10);
 
+  if (selectErr) {
+    // Erreur de lecture (souvent : service-role mal configurée → RLS bloque).
+    // On la remonte au lieu de la gober silencieusement (cron 200 / 0 job).
+    console.error('[enrichment] select active jobs FAILED:', selectErr.message || selectErr);
+    return { ok: false, error: `select failed: ${selectErr.message || selectErr}`, startedAt };
+  }
+
+  console.log(`[enrichment] active jobs found: ${jobs?.length || 0}`);
   if (!jobs || jobs.length === 0) {
     return { ok: true, processedJobs: 0, startedAt };
   }

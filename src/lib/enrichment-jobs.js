@@ -190,41 +190,32 @@ export async function runEnrichmentBatch() {
   const startedAt = new Date().toISOString();
   const deadline = Date.now() + TIME_BUDGET_MS;
 
+  // NB : PAS de .order('last_tick_at', { nullsFirst: true }) ici — sur cette
+  // version de supabase-js, combiné au filtre .in(), il renvoie 0 ligne quand
+  // la colonne est entièrement NULL (jobs jamais tickés) → jobs bloqués en file.
+  // On trie en JS à la place (jamais-tické d'abord, puis last_tick le + ancien).
   const { data: jobs, error: selectErr } = await supabase
     .from('enrichment_jobs')
     .select('*')
     .in('status', ['queued', 'running'])
-    .order('last_tick_at', { ascending: true, nullsFirst: true })
     .limit(10);
 
   if (selectErr) {
-    // Erreur de lecture (souvent : service-role mal configurée → RLS bloque).
-    // On la remonte au lieu de la gober silencieusement (cron 200 / 0 job).
     console.error('[enrichment] select active jobs FAILED:', selectErr.message || selectErr);
     return { ok: false, error: `select failed: ${selectErr.message || selectErr}`, startedAt };
   }
 
-  console.log(`[enrichment] active jobs found: ${jobs?.length || 0}`);
-
-  // ── DIAGNOSTIC TEMPORAIRE : quelle forme de requête matche le job ? ──
-  const T = () => supabase.from('enrichment_jobs');
-  const cnt = async (q) => { try { const { data, error } = await q; return error ? `ERR:${error.message}` : (data?.length ?? 0); } catch (e) { return `EX:${e?.message || e}`; } };
-  const variants = {
-    A_in_order: await cnt(T().select('*').in('status', ['queued', 'running']).order('last_tick_at', { ascending: true, nullsFirst: true }).limit(10)),
-    B_in_noorder: await cnt(T().select('*').in('status', ['queued', 'running']).limit(10)),
-    C_eq_queued: await cnt(T().select('*').eq('status', 'queued').limit(10)),
-    D_or: await cnt(T().select('*').or('status.eq.queued,status.eq.running').limit(10)),
-    E_neq_canceled: await cnt(T().select('*').not('status', 'in', '(canceled,done,error)').limit(10)),
-  };
-  try {
-    await supabase.from('cron_debug').upsert({ id: 'enrichment', payload: { variants, ts: startedAt }, updated_at: startedAt });
-  } catch { /* no-op */ }
-  console.log('[enrichment] variants', JSON.stringify(variants));
-  // ── FIN DIAGNOSTIC ──
-
   if (!jobs || jobs.length === 0) {
     return { ok: true, processedJobs: 0, startedAt };
   }
+
+  // Tri équitable : les jobs jamais tickés (last_tick_at null) en premier,
+  // puis du tick le plus ancien au plus récent.
+  jobs.sort((a, b) => {
+    const ta = a.last_tick_at ? new Date(a.last_tick_at).getTime() : 0;
+    const tb = b.last_tick_at ? new Date(b.last_tick_at).getTime() : 0;
+    return ta - tb;
+  });
 
   const results = [];
   for (const job of jobs) {

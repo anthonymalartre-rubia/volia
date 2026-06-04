@@ -28,7 +28,7 @@
 - 10 clients Business actifs = **~900 €/mois de revenu passif** la 1ʳᵉ année.
 
 **Comment ça se passe en pratique :**
-1. Tu reçois **ton lien d'affiliation perso** (format `volia.fr/?aff=TONCODE`). Toute personne qui s'inscrit via ce lien t'est attribuée automatiquement (cookie + base).
+1. Tu reçois **ton lien d'affiliation perso** (format `volia.fr/?aff=FLMALART`). Toute personne qui s'inscrit via ce lien t'est attribuée automatiquement (cookie + base).
 2. Tu signes le **contrat d'apporteur** (déjà prêt, PDF) — il fixe les commissions et les règles.
 3. Tu prospectes, tu envoies ton lien, ou tu organises une démo et on close ensemble si besoin.
 4. Le suivi de tes filleuls + commissions est visible sur ton espace.
@@ -172,12 +172,12 @@ Pour bien vendre, il faut comprendre le parcours. Voici ce qu'un client vit :
 >
 > Volia fait tout ça pour vous : vous choisissez votre cible (secteur + ville), vous obtenez une liste d'entreprises avec **emails pros vérifiés** en quelques secondes, et vous lancez vos relances depuis le même outil. 100 % français, RGPD, **dès 19 €/mois**.
 >
-> Je vous montre en 10 min cette semaine ? Sinon testez gratuitement ici (sans CB) : [TON LIEN D'AFFILIATION]
+> Je vous montre en 10 min cette semaine ? Sinon testez gratuitement ici (sans CB) : https://volia.fr/?aff=FLMALART
 >
 > [Ton prénom]
 
 ### Relance (J+3, si pas de réponse)
-> Bonjour [Prénom], juste au cas où mon message serait passé à la trappe — je peux vous faire une démo de 10 min de Volia, ou vous testez direct gratuitement : [TON LIEN]. Bonne journée !
+> Bonjour [Prénom], juste au cas où mon message serait passé à la trappe — je peux vous faire une démo de 10 min de Volia, ou vous testez direct gratuitement : https://volia.fr/?aff=FLMALART. Bonne journée !
 
 ### Accroche téléphone (30 s)
 > « Bonjour [Prénom], [Ton prénom] de Volia. Je vous appelle parce qu'on aide les [type de boîte] à trouver des clients sans y passer des heures : on génère des listes d'entreprises avec emails vérifiés, en français, dès 19 €. Vous avez 2 minutes ou je vous rappelle ? »

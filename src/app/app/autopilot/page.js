@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import TopBar from '@/components/TopBar';
+import Button from '@/components/ui/Button';
 import LivePipelinePanel from '@/components/autopilot/LivePipelinePanel';
 import { getSupabase } from '@/lib/supabase';
 import {
@@ -110,12 +111,9 @@ export default function AutopilotPage() {
             <RefreshCw size={14} className="inline mr-1" /> Refresh
           </button>
           {data?.can_create_more && (
-            <Link
-              href="/app/autopilot?view=new"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-violet-600 text-white hover:bg-violet-500 text-sm font-semibold"
-            >
-              <Plus size={14} /> Nouveau workflow
-            </Link>
+            <Button href="/app/autopilot?view=new" tone="amber" size="md" icon={Plus}>
+              Nouveau workflow
+            </Button>
           )}
         </div>
       </div>
@@ -185,9 +183,9 @@ function EmptyState({ canCreate, templateCount }) {
         {templateCount ? `${templateCount} templates` : 'Des templates'} pré-faits adaptés à ton segment.
       </p>
       {canCreate ? (
-        <Link href="/app/autopilot?view=new" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-violet-600 text-white hover:bg-violet-500 font-semibold text-sm">
-          <Plus size={16} /> Créer mon premier workflow
-        </Link>
+        <Button href="/app/autopilot?view=new" tone="amber" size="lg" icon={Plus}>
+          Créer mon premier workflow
+        </Button>
       ) : (
         <Link href="/pricing" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-600 text-white hover:bg-amber-500 font-semibold text-sm">
           🚀 Passer en Pro (49€/mois) pour débloquer Autopilot

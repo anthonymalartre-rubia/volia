@@ -26,9 +26,20 @@ import { forwardRef } from 'react';
 // - hover : scale 1.02 + glow violet diffus (sur primary uniquement)
 // - active : scale 0.98 (feedback haptique-like)
 // - disabled : opacity 60 + cursor not-allowed
+// Forme commune des CTA primaires, couleur par module (prop `tone`).
+// Permet d'harmoniser la FORME des boutons primaires entre modules
+// (Prospection/Campagnes/CRM/Autopilot) tout en gardant l'identité couleur.
+const SCALE = 'hover:scale-[1.02] active:scale-[0.98]';
+const PRIMARY_TONES = {
+  violet: 'bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/40',
+  blue: 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40',
+  emerald: 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40',
+  amber: 'bg-amber-600 hover:bg-amber-500 text-white shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40',
+  pink: 'bg-pink-600 hover:bg-pink-500 text-white shadow-lg shadow-pink-500/20 hover:shadow-pink-500/40',
+};
+
 const VARIANTS = {
-  primary:
-    'bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-500/20 hover:shadow-violet-500/40 hover:scale-[1.02] active:scale-[0.98]',
+  primary: `${PRIMARY_TONES.violet} ${SCALE}`, // surchargé par `tone` dans le composant
   secondary:
     'bg-surface-card hover:bg-surface-elevated text-content-primary border border-line hover:border-line-hover hover:scale-[1.01] active:scale-[0.98]',
   ghost:
@@ -62,6 +73,7 @@ const BASE =
 const Button = forwardRef(function Button(
   {
     variant = 'primary',
+    tone = 'violet',
     size = 'md',
     href,
     loading = false,
@@ -76,7 +88,11 @@ const Button = forwardRef(function Button(
   },
   ref
 ) {
-  const classes = `${BASE} ${VARIANTS[variant] || VARIANTS.primary} ${SIZES[size] || SIZES.md} ${fullWidth ? 'w-full' : ''} ${className}`.trim();
+  // Pour les CTA primaires, la couleur vient du `tone` (forme commune, couleur module).
+  const variantClass = variant === 'primary'
+    ? `${PRIMARY_TONES[tone] || PRIMARY_TONES.violet} ${SCALE}`
+    : (VARIANTS[variant] || VARIANTS.primary);
+  const classes = `${BASE} ${variantClass} ${SIZES[size] || SIZES.md} ${fullWidth ? 'w-full' : ''} ${className}`.trim();
 
   const iconSize = size === 'sm' ? 12 : size === 'lg' ? 16 : 14;
   const inner = (

@@ -70,6 +70,9 @@ export default function McpPage() {
             <span className="inline-flex items-center gap-1.5"><KeyRound className="h-4 w-4 text-emerald-500" /> Clé API requise</span>
             <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> 🇫🇷 RGPD</span>
           </div>
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-semibold text-violet-500">
+            ⭐ Fonctionnalité incluse dans le plan <Link href="/pricing" className="underline underline-offset-2">Business</Link>
+          </div>
         </section>
 
         {/* Tools */}
@@ -99,7 +102,7 @@ export default function McpPage() {
           <ol className="mt-5 space-y-4 text-sm text-content-secondary">
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-bold text-white">1</span>
-              <span>Crée ta clé API Volia dans <Link href="/settings" className="text-violet-500 hover:underline">tes paramètres</Link> (commence par <code className="rounded bg-surface-raised px-1.5 py-0.5 text-xs">pk_</code>).</span>
+              <span>Avec un <strong>compte Business</strong>, crée ta clé API Volia dans <Link href="/settings" className="text-violet-500 hover:underline">tes paramètres</Link> (commence par <code className="rounded bg-surface-raised px-1.5 py-0.5 text-xs">pk_</code>). Le MCP est réservé au plan Business.</span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-bold text-white">2</span>

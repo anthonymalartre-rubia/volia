@@ -927,7 +927,7 @@ export default memo(function ResultsPanel({
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl font-bold font-mono text-green-400 tabular-nums">{stats.emails}</span>
-              <span className="text-[10px] text-content-faint font-mono">({stats.emailPct}%)</span>
+              <span className="text-[10px] text-content-faint">({stats.emailPct}% enrichis)</span>
             </div>
             <div className="text-[10px] text-content-faint uppercase tracking-wider flex items-center">
               {t('results.emails')}
@@ -993,13 +993,6 @@ export default memo(function ResultsPanel({
       {folderProspects.length > 0 && stats.emails === 0 && (
         <OnboardingHint storageKey="hint_enrich_dismissed" dismissLabel={t('results.understood')}>
           {t('results.hintEnrich')}
-        </OnboardingHint>
-      )}
-
-      {/* Onboarding hint: export */}
-      {stats.emails > 0 && (
-        <OnboardingHint storageKey="hint_export_dismissed" dismissLabel={t('results.understood')}>
-          {t('results.hintExport')}
         </OnboardingHint>
       )}
 

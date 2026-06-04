@@ -1510,7 +1510,7 @@ export default function Dashboard() {
               (() => {
                 const meta = {
                   search:  { kicker: 'Découvrir', title: 'Recherche', sub: 'Trouvez des prospects via Google Places — 150+ catégories, 101 départements, 6 provinces BE, 6 cantons CH.' },
-                  results: { kicker: 'Vos leads',  title: `Prospects${prospects.length ? ` · ${prospects.length.toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
+                  results: { kicker: 'Vos prospects',  title: `Prospects${prospects.length ? ` · ${prospects.length.toLocaleString('fr-FR')}` : ''}`, sub: 'Liste de tous les prospects collectés, prêts à enrichir et exporter.' },
                   export:  { kicker: 'Données',    title: 'Export CSV', sub: 'Exportez en CSV compatible HubSpot / Salesforce / Zoho / Pipedrive.' },
                   verify:  { kicker: 'Validation', title: 'Vérifier un email', sub: 'Confirmez la délivrabilité d\'un email avant de l\'envoyer.' },
                 }[activeView];

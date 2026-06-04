@@ -119,6 +119,8 @@ async function processJob(supabase, job) {
 
   let processed = job.processed || 0;
   let found = job.found || 0;
+  let writeFails = 0;       // écritures d'email échouées (diagnostic)
+  let lastWriteErr = null;  // dernier message d'erreur d'écriture
 
   // marque running
   await withTimeout(
@@ -176,10 +178,13 @@ async function processJob(supabase, job) {
           new Promise((resolve) => setTimeout(() => resolve({ email: null, timedOut: true }), PER_SITE_TIMEOUT_MS)),
         ]);
         if (res && res.email) {
-          await withTimeout(
-            supabase.from('prospects').update({ email: res.email, email_method: res.method }).eq('id', p.id),
-            'save-prospect').catch(() => {});
-          found++;
+          try {
+            const { error: wErr } = await withTimeout(
+              supabase.from('prospects').update({ email: res.email, email_method: res.method }).eq('id', p.id).select('id'),
+              'save-prospect');
+            if (wErr) { writeFails++; lastWriteErr = wErr.message || String(wErr); }
+            else found++; // found ne compte QUE les emails réellement persistés
+          } catch (e) { writeFails++; lastWriteErr = e?.message || String(e); }
         }
       } catch { /* item-level error → on continue */ }
     }, CONCURRENCY);
@@ -189,7 +194,7 @@ async function processJob(supabase, job) {
 
     await withTimeout(
       supabase.from('enrichment_jobs')
-        .update({ processed, found, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .update({ processed, found, error: lastWriteErr ? `writeFail x${writeFails}: ${lastWriteErr}`.slice(0, 200) : null, last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
         .eq('id', job.id),
       'save-progress');
   }

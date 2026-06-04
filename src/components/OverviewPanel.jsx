@@ -34,7 +34,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <KpiCard
           icon={Users}
-          label="Total leads"
+          label="Prospects"
           value={analytics.total.toLocaleString('fr-FR')}
           color="text-violet-400"
           bgColor="bg-violet-500/10"
@@ -49,7 +49,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
         />
         <KpiCard
           icon={Phone}
-          label="Telephones"
+          label="Téléphones"
           value={analytics.withPhone.toLocaleString('fr-FR')}
           color="text-blue-400"
           bgColor="bg-blue-500/10"
@@ -75,7 +75,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
                 <div
                   className="h-full bg-green-500 transition-all duration-500"
                   style={{ width: `${(analytics.withEmail / analytics.total) * 100}%` }}
-                  title={`${analytics.withEmail} emails trouves`}
+                  title={`${analytics.withEmail} emails trouvés`}
                 />
               )}
             </div>
@@ -131,7 +131,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
         {/* By department — top 6 */}
         <div className="rounded-2xl border border-line bg-surface-card p-5 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
-            <MapPin className="h-4 w-4" /> Top departements
+            <MapPin className="h-4 w-4" /> Top départements
           </h3>
           <div className="space-y-2.5">
             {Object.entries(analytics.byDept)
@@ -163,7 +163,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-2xl border border-line bg-surface-card p-5 shadow-sm">
           <h3 className="text-sm font-medium text-content-secondary mb-4 flex items-center gap-2">
-            <Target className="h-4 w-4" /> Qualite des leads
+            <Target className="h-4 w-4" /> Qualité des prospects
           </h3>
           {hasData ? (
             <div className="space-y-2.5">
@@ -171,7 +171,7 @@ export default function OverviewPanel({ prospects, searchHistory }) {
                 { key: 'excellent', label: 'Excellent (email + tel + site)', color: 'bg-green-500' },
                 { key: 'bon', label: 'Bon (email + tel ou site)', color: 'bg-blue-500' },
                 { key: 'moyen', label: 'Moyen (tel ou site seul)', color: 'bg-amber-500' },
-                { key: 'faible', label: 'Faible (peu de donnees)', color: 'bg-red-500' },
+                { key: 'faible', label: 'Faible (peu de données)', color: 'bg-red-500' },
               ].map(({ key, label, color }) => {
                 const count = analytics.scoreDistribution[key];
                 const pct = analytics.total > 0 ? Math.round((count / analytics.total) * 100) : 0;
@@ -211,8 +211,8 @@ export default function OverviewPanel({ prospects, searchHistory }) {
                   serper: 'Recherche Google',
                   apollo: 'Apollo (ancien)',
                   apollo_org: 'Apollo Org (ancien)',
-                  guess: 'Email devine',
-                  'deep-verified': 'Deep - verifie',
+                  guess: 'Email deviné',
+                  'deep-verified': 'Deep - vérifié',
                   'deep-pattern': 'Deep - pattern',
                 };
                 const pct = analytics.withEmail > 0 ? Math.round((count / analytics.withEmail) * 100) : 0;

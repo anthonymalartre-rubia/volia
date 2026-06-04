@@ -205,6 +205,8 @@ export async function runEnrichmentBatch() {
     return { ok: false, error: `select failed: ${selectErr.message || selectErr}`, startedAt };
   }
 
+  console.log(`[enrich-fix] jobs=${jobs?.length ?? 'null'} statuses=${JSON.stringify((jobs || []).map((j) => j.status))}`);
+
   if (!jobs || jobs.length === 0) {
     return { ok: true, processedJobs: 0, startedAt };
   }
@@ -221,9 +223,12 @@ export async function runEnrichmentBatch() {
   for (const job of jobs) {
     if (Date.now() >= deadline) break;
     try {
+      console.log(`[enrich-fix] processing job ${job.id} (status=${job.status})`);
       const r = await processJob(supabase, job, deadline);
+      console.log(`[enrich-fix] job ${job.id} done:`, JSON.stringify(r));
       results.push({ jobId: job.id, ...r });
     } catch (err) {
+      console.error(`[enrich-fix] job ${job.id} THREW:`, err?.message || err);
       await supabase.from('enrichment_jobs')
         .update({ status: 'error', error: String(err?.message || err).slice(0, 500), updated_at: new Date().toISOString() })
         .eq('id', job.id);

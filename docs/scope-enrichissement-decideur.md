@@ -114,5 +114,18 @@ Clé de lookup décideur : `(domain, role, contact_type='decision_maker')`.
 
 ⚠️ Le cœur (cascade, `global_contacts`, `enrich-waterfall-core`, `enrichment-jobs`) est **en cours de réécriture par l'autre session**. Pour éviter les collisions :
 
-- **Étape A — sans collision (faisable maintenant)** : `src/lib/decision-maker-core.js` (module autonome : map rôles, recherche personne Serper, dérivation patterns email, hook de vérif) — pur, non câblé, ne touche aucun fichier de l'autre session.
-- **Étape B — à coordonner** : extension schéma `global_contacts` (niveau personne) + insertion de l'étape dans la cascade + `plans.js` (flag `unlocksDecisionMaker` + quota 6k) + UI toggle/colonne. À faire **une fois la cascade de l'autre session stabilisée**.
+- **Étape A — sans collision (faisable maintenant)** : `src/lib/decision-maker-core.js` (module autonome : map rôles, recherche personne Serper, dérivation patterns email, hook de vérif) — pur, non câblé, ne touche aucun fichier de l'autre session. ✅ **FAIT**
+- **Étape B — à coordonner** : extension schéma `global_contacts` (niveau personne) + insertion de l'étape dans la cascade + `plans.js` (flag `unlocksDecisionMaker` + quota 6k) + UI toggle/colonne. À faire **une fois la cascade de l'autre session stabilisée**. ✅ **FAIT** (cascade stable 17h, 0 client Business impacté par le quota).
+
+## 13. Étape B — livré (2026-06)
+
+- **Migration** `decision_maker_person_columns` : `global_contacts` (+ contact_type/role/full_name/title/linkedin_url/confidence, additif & nullable) + `prospects` (+ contact_name/contact_role). N'altère NI la contrainte `UNIQUE(domain)` NI l'`upsertGlobalContact` générique.
+- **`src/lib/email-verify.js`** (nouveau) : `verifyEmailRaw` + `isEmailDeliverable` (zéro-bounce = MillionVerifier `ok`). `/api/verify-emails` refactoré pour l'utiliser (comportement identique).
+- **`/api/enrich-waterfall`** : étape décideur AVANT couche 0 (priorité au contact nominatif), gatée `unlocksDecisionMaker` + rôle valide + domaine. Compte 1 enrichissement. Best-effort → retombe sur le générique si rien de vérifié.
+- **`plans.js`** : `unlocksDecisionMaker: true` (business/enterprise_legacy/enterprise), Business `enrichments_per_month` 10 000 → **6 000**, libellés features MAJ.
+- **UI** : toggle « Décideur » + sélecteur de rôle à côté d'« Enrichir tout » (verrou + lien /pricing hors Business), badge `Décideur` sur l'email, nom+rôle du contact affiché sous l'email. Persistance `contact_name`/`contact_role`.
+
+### Reste pour V2 (non bloquant)
+- **Cache décideur dans `global_contacts`** (économie Serper) : nécessite de revoir la contrainte `UNIQUE(domain)` (aujourd'hui 1 ligne/domaine) pour permettre une ligne décideur par `(domain, role)`. Reporté pour ne pas toucher l'archi générique de l'autre session. Au MVP : Serper + vérif **en live** à chaque appel.
+- Colonne « Contact » dédiée (triable/togglable) dans le sélecteur de colonnes ; choix multi-rôles en 1 passe ; export CSV enrichi (nom/rôle décideur).
+- Ligne RGPD « contacts décideurs » à ajouter à la politique de confidentialité.

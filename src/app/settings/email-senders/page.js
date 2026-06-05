@@ -66,6 +66,18 @@ const RECORD_NAME_HELP = (name = '') => {
   return null;
 };
 
+// Rôle du record (DKIM / SPF / DMARC / MX) — déduit du nom ET de la valeur,
+// pour l'afficher en clair (l'utilisateur ne devine pas qu'un TXT = DKIM).
+function recordPurpose(type = '', name = '', value = '') {
+  const n = String(name).toLowerCase();
+  const v = String(value).toLowerCase();
+  if (n.includes('_domainkey') || n.includes('dkim') || v.startsWith('p=') || v.includes('dkim')) return 'DKIM';
+  if (v.startsWith('v=spf1') || n.includes('spf')) return 'SPF';
+  if (v.startsWith('v=dmarc1') || n.includes('_dmarc') || n.includes('dmarc')) return 'DMARC';
+  if (String(type).toUpperCase() === 'MX') return 'MX (retours)';
+  return null;
+}
+
 function statusBadge(status) {
   switch (status) {
     case 'verified':
@@ -161,13 +173,21 @@ function DnsTable({ records }) {
             const recStatus = r.status || 'pending';
             const typeHelp = DNS_TYPE_HELP[type];
             const nameHelp = RECORD_NAME_HELP(name);
+            const purpose = recordPurpose(type, name, value);
             return (
               <tr key={`${type}-${name}-${i}`} className="border-t border-line">
                 <td className="px-3 py-2 align-top">
-                  <span className="font-mono font-semibold text-content-primary inline-flex items-center gap-1">
-                    {type}
-                    {typeHelp && <InfoTooltip content={typeHelp} iconSize={10} />}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span className="font-mono font-semibold text-content-primary inline-flex items-center gap-1">
+                      {type}
+                      {typeHelp && <InfoTooltip content={typeHelp} iconSize={10} />}
+                    </span>
+                    {purpose && (
+                      <span className="inline-flex w-fit items-center rounded-full bg-violet-500/10 text-violet-600 border border-violet-500/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+                        {purpose}
+                      </span>
+                    )}
+                  </div>
                 </td>
                 <td className="px-3 py-2 align-top">
                   <div className="flex items-start gap-2">

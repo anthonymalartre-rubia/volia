@@ -49,3 +49,6 @@ yarn-error.log*
 Thumbs.db
 .env*.local
 .claude/
+
+# Documents stratégiques internes (ne JAMAIS pousser sur le repo public)
+business/

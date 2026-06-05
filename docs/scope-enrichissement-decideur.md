@@ -125,7 +125,12 @@ Clé de lookup décideur : `(domain, role, contact_type='decision_maker')`.
 - **`plans.js`** : `unlocksDecisionMaker: true` (business/enterprise_legacy/enterprise), Business `enrichments_per_month` 10 000 → **6 000**, libellés features MAJ.
 - **UI** : toggle « Décideur » + sélecteur de rôle à côté d'« Enrichir tout » (verrou + lien /pricing hors Business), badge `Décideur` sur l'email, nom+rôle du contact affiché sous l'email. Persistance `contact_name`/`contact_role`.
 
-### Reste pour V2 (non bloquant)
-- **Cache décideur dans `global_contacts`** (économie Serper) : nécessite de revoir la contrainte `UNIQUE(domain)` (aujourd'hui 1 ligne/domaine) pour permettre une ligne décideur par `(domain, role)`. Reporté pour ne pas toucher l'archi générique de l'autre session. Au MVP : Serper + vérif **en live** à chaque appel.
-- Colonne « Contact » dédiée (triable/togglable) dans le sélecteur de colonnes ; choix multi-rôles en 1 passe ; export CSV enrichi (nom/rôle décideur).
-- Ligne RGPD « contacts décideurs » à ajouter à la politique de confidentialité.
+## 14. V2 — livré (2026-06)
+
+- **Cache décideur** : table **dédiée** `decision_maker_contacts` (clé `(domain, role)`, RLS service-role) au lieu d'étendre `global_contacts` — évite de toucher la contrainte `UNIQUE(domain)` et l'upsert générique de l'autre session (les 6 colonnes ajoutées au MVP sur `global_contacts` ont été retirées). `lookupDecisionMaker`/`upsertDecisionMaker` (TTL 3 ans + opt-out + `GLOBAL_POOL_WRITE`). Câblé dans la route : couche 0 décideur (cache → 0 crédit Serper) avant le live, write-back après une recherche réussie.
+- **Colonne « Contact (décideur) »** togglable dans le sélecteur de colonnes (défaut visible, même pour les configs sauvegardées) — remplace l'affichage inline sous l'email.
+- **Export CSV enrichi** : colonnes `contact_decideur` + `role_decideur` (+ `COLS` du chargement prospects étendu).
+- **Ligne RGPD** : section 4 de `/confidentialite` complétée (contacts décideurs, finalité B2B, droit d'opposition /opt-out).
+
+### Reste V3 (non bloquant)
+- Choix multi-rôles en une passe ; multi-personnes par boîte ; connecteur tiers (Apollo/people-DB) en option.

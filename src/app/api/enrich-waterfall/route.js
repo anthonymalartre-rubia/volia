@@ -4,7 +4,7 @@ import { checkLimit, incrementUsage } from '@/lib/usage';
 import { PERSONAL_DOMAINS } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
-import { lookupGlobalContact, upsertGlobalContact } from '@/lib/global-contacts';
+import { lookupGlobalContact, upsertGlobalContact, lookupDecisionMaker, upsertDecisionMaker } from '@/lib/global-contacts';
 import { enrichDecisionMaker, SUPPORTED_ROLES } from '@/lib/decision-maker-core';
 import { isEmailDeliverable } from '@/lib/email-verify';
 import { getPlan } from '@/lib/plans';
@@ -351,6 +351,29 @@ export async function POST(request) {
 
     if (wantDecisionMaker) {
       try {
+        // Couche 0 décideur : cache mutualisé (domain, role) → 0 crédit Serper.
+        const cachedDm = await lookupDecisionMaker({ domain, role });
+        if (cachedDm?.email) {
+          const skipPersonal = filterPersonalEmails && isPersonalEmail(cachedDm.email);
+          if (!skipPersonal) {
+            await incrementUsage(supabase, user.id, 'enrichments');
+            return Response.json({
+              email: cachedDm.email,
+              source: 'decision_maker',
+              extra: null,
+              linkedin_url: cachedDm.linkedinUrl || null,
+              contact_name: cachedDm.fullName || null,
+              contact_role: cachedDm.role || role,
+              title: cachedDm.title || null,
+              confidence: cachedDm.confidence ?? null,
+              waterfall: [
+                { step: 'decision_maker_cache', label: 'Décideur (cache Volia)', found: true },
+              ],
+            });
+          }
+        }
+
+        // Sinon recherche live (Serper LinkedIn + vérif zéro-bounce).
         const dm = await enrichDecisionMaker({
           companyName: name,
           domain,
@@ -364,6 +387,18 @@ export async function POST(request) {
           const optedOut = await isOptedOut(dm.email);
           if (!skipPersonal && !optedOut) {
             await incrementUsage(supabase, user.id, 'enrichments');
+            // Write-back cache (phase 1 : admin seul, cf. GLOBAL_POOL_WRITE).
+            upsertDecisionMaker({
+              domain,
+              role,
+              email: dm.email,
+              fullName: dm.fullName,
+              title: dm.title,
+              linkedinUrl: dm.linkedinUrl,
+              confidence: dm.confidence,
+              companyName: name,
+              isAdmin,
+            });
             return Response.json({
               email: dm.email,
               source: 'decision_maker',

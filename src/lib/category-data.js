@@ -96,7 +96,7 @@ const GROUP_DEFAULTS = {
     objections: [
       { objection: 'On préfère du physique', reponse: 'Vous gardez la main : on vous fournit la liste qualifiée, vous décidez du moyen de contact (email, visite, téléphone).' },
       { objection: 'Trop cher pour mes marges', reponse: 'À 19 €/mois pour 1 000 prospects, c\'est moins cher qu\'un encart Pages Jaunes.' },
-      { objection: 'On a fait Apollo, ça ne sert à rien', reponse: 'Apollo est faible en France (40 % de couverture). Nous on est sur ~46 % spécifiquement sur le marché français.' },
+      { objection: 'On a fait Apollo, ça ne sert à rien', reponse: 'Les bases orientées USA sont moins denses sur le tissu PME français. Nous sommes sur ~46 % de find-rate email spécifiquement sur le marché français.' },
     ],
     pitchHook: 'Bonjour {first_name}, je vois que {company} est bien implanté localement. Comment vous faites pour fidéliser face à la concurrence e-commerce ?',
     glossary: [
@@ -517,7 +517,7 @@ const GROUP_DEFAULTS = {
       { slug: 'occitanie', reason: 'Toulouse spatial + Montpellier eHealth' },
     ],
     objections: [
-      { objection: 'On utilise déjà Apollo', reponse: 'Apollo est faible en France (40 % de couverture). Test gratuit sur 100 prospects FR, comparez les résultats.' },
+      { objection: 'On utilise déjà Apollo', reponse: 'Les bases orientées USA sont moins denses sur le tissu PME français. Test gratuit sur 100 prospects FR, comparez les résultats.' },
       { objection: 'Pas de budget marketing', reponse: '19 €/mois et 0 commitment. Vous coupez quand vous voulez.' },
       { objection: 'On bosse 100 % en inbound', reponse: 'Quand vous voulez accélérer ou cibler des grands comptes, outbound = obligatoire. On vous prépare le terrain.' },
     ],

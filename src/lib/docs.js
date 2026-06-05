@@ -410,7 +410,7 @@ L'email arrive ensuite via la [cascade waterfall](/docs/cascade-waterfall-enrich
     tags: ['waterfall', 'enrichissement', 'email', 'serper', 'scraping'],
     content: `## Pourquoi une cascade ?
 
-Un seul outil d'email finder (Hunter, Apollo…) trouve en moyenne **35-40 %** des emails B2B en France. Volia combine 3 sources en cascade : on trouve **80 %** en moyenne.
+Un seul outil de pattern matching couvre moins bien le tissu B2B français, surtout les commerces sans site web. Volia combine plusieurs sources en cascade (scraping → Google → patterns) pour un find-rate email d'environ **~46 %** sur les entreprises ayant un site web.
 
 ## Les 3 étages de la cascade
 

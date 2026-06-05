@@ -521,10 +521,11 @@ export default memo(function ResultsPanel({
     if (typeof window !== 'undefined') {
       try {
         const saved = safeStorage.get('leadColumns');
-        if (saved) return JSON.parse(saved);
+        // `contact` default true même pour les configs sauvegardées avant la feature.
+        if (saved) return { contact: true, ...JSON.parse(saved) };
       } catch {}
     }
-    return { type: true, nom: true, telephone: true, email: true, site: true, note: true, dept: true, score: true, tags: true };
+    return { type: true, nom: true, telephone: true, email: true, site: true, note: true, dept: true, score: true, tags: true, contact: true };
   });
 
   // Enrichment progress tracking
@@ -578,6 +579,7 @@ export default memo(function ResultsPanel({
     { key: 'nom', label: t('results.columns.name'), required: true },
     { key: 'telephone', label: t('results.columns.phone'), required: false },
     { key: 'email', label: t('results.columns.email'), required: true },
+    { key: 'contact', label: 'Contact (décideur)', required: false },
     { key: 'site', label: t('results.columns.website'), required: false },
     { key: 'note', label: t('results.columns.googleRating'), required: false },
     { key: 'dept', label: t('results.columns.department'), required: false },
@@ -1627,6 +1629,9 @@ export default memo(function ResultsPanel({
                     <span className="flex items-center">{t('results.columns.email')}<InfoTooltip text={t('results.colorLegend')} wide /></span>
                   </th>
                 )}
+                {visibleCols.contact && (
+                  <th className="px-4 py-3 text-left font-medium text-content-faint uppercase tracking-wider text-[10px]">Contact</th>
+                )}
                 {visibleCols.site && (
                   <th className="px-4 py-3 text-left font-medium text-content-faint uppercase tracking-wider text-[10px]">{t('results.columns.website')}</th>
                 )}
@@ -1756,14 +1761,6 @@ export default memo(function ResultsPanel({
                               )}
                             </button>
                           </div>
-                          {p.contact_name && (
-                            <div className="flex items-center gap-1 text-[10px] text-violet-300/90 mt-0.5">
-                              <UserSearch size={9} className="flex-shrink-0" />
-                              <span className="truncate max-w-[180px]">
-                                {p.contact_name}{p.contact_role ? ` · ${ROLE_LABELS[p.contact_role] || p.contact_role}` : ''}
-                              </span>
-                            </div>
-                          )}
                           {tooltipId === p.id && methodInfo && (
                             <div className="absolute bottom-full left-0 mb-1 px-2.5 py-1.5 bg-surface-elevated border border-line-hover rounded-lg text-[10px] text-content-secondary whitespace-normal max-w-[250px] z-10 shadow-lg leading-relaxed">
                               <div className="font-semibold text-content-primary mb-0.5">{methodInfo.label}</div>
@@ -1778,6 +1775,25 @@ export default memo(function ResultsPanel({
                             {p.email_method ? t('results.notFound') : t('results.notEnrichedYet')}
                           </span>
                         </span>
+                      )}
+                    </td>
+                    )}
+                    {visibleCols.contact && (
+                    <td className="px-4 py-2.5">
+                      {p.contact_name ? (
+                        <div className="flex flex-col gap-0.5">
+                          <span className="flex items-center gap-1 text-xs text-content-secondary">
+                            <UserSearch size={11} className="flex-shrink-0 text-violet-400" />
+                            <span className="truncate max-w-[160px]">{p.contact_name}</span>
+                          </span>
+                          {p.contact_role && (
+                            <span className="text-[10px] text-violet-300/80 pl-[15px]">
+                              {ROLE_LABELS[p.contact_role] || p.contact_role}
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-content-dim">—</span>
                       )}
                     </td>
                     )}

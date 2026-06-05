@@ -122,6 +122,16 @@ export default function ConfidentialitePage() {
               <li>Note et nombre d&apos;avis Google</li>
               <li>Catégorie d&apos;activité professionnelle</li>
               <li>Département et localisation géographique</li>
+              <li>
+                <span className="text-content-primary font-medium">Contacts décideurs</span> (fonctionnalité optionnelle, plans Business et plus) :
+                nom et prénom d&apos;un dirigeant ou responsable, sa fonction professionnelle (ex. direction, marketing,
+                commercial, RSE, RH), son adresse email professionnelle nominative (domaine de l&apos;entreprise) et,
+                le cas échéant, l&apos;URL de son profil LinkedIn public. Ces données sont collectées exclusivement à des
+                fins de prospection B2B, à partir de sources professionnelles publiques. Aucune donnée personnelle hors
+                cadre professionnel n&apos;est traitée. Le droit d&apos;opposition s&apos;applique : tout contact peut demander
+                son retrait via <a href="/opt-out" className="text-indigo-400 hover:underline">/opt-out</a>, et un email
+                opté-out n&apos;est jamais servi ni conservé en base.
+              </li>
             </ul>
             <p className="mt-4">
               <span className="text-content-primary font-medium">Volia.fr ne traite aucune donnée sensible</span> au sens

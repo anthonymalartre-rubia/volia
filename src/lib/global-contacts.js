@@ -131,3 +131,89 @@ export async function upsertGlobalContact({
     /* best-effort — ne casse jamais l'enrichissement */
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────
+// Cache DÉCIDEUR (table dédiée decision_maker_contacts, clé (domain, role))
+// ─────────────────────────────────────────────────────────────────────
+// Même cadre RGPD que le générique : on ne SERT que des contacts frais (TTL)
+// et non opté-out ; on n'ÉCRIT (phase 1) que si l'enrichisseur est admin
+// (GLOBAL_POOL_WRITE='volia_only'). Best-effort partout.
+
+/**
+ * Couche 0 décideur — cherche un décideur frais en cache pour (domain, role).
+ * @returns {Promise<{email,fullName,title,linkedinUrl,confidence,role}|null>}
+ */
+export async function lookupDecisionMaker({ domain, role } = {}) {
+  const d = normalizeDomain(domain);
+  if (!d || !role) return null;
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data } = await supabase
+      .from('decision_maker_contacts')
+      .select('email, full_name, title, linkedin_url, confidence, role, last_verified_at')
+      .eq('domain', d)
+      .eq('role', role)
+      .maybeSingle();
+    if (!data || !data.email) return null;
+
+    // Fraîcheur (même TTL que le générique)
+    const age = Date.now() - new Date(data.last_verified_at).getTime();
+    if (Number.isFinite(age) && age > TTL_MS) return null;
+
+    // Opt-out : on ne sert jamais un email désinscrit
+    if (await isOptedOut(supabase, data.email)) return null;
+
+    return {
+      email: data.email,
+      fullName: data.full_name || null,
+      title: data.title || null,
+      linkedinUrl: data.linkedin_url || null,
+      confidence: data.confidence ?? null,
+      role: data.role,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Write-back décideur — alimente le cache après une recherche live réussie.
+ * Respecte l'interrupteur (volia_only → admin seul) + l'opt-out.
+ * Upsert sur (domain, role) : on rafraîchit si on retrouve un contact.
+ */
+export async function upsertDecisionMaker({
+  domain, role, email, fullName, title, linkedinUrl, confidence, companyName, isAdmin,
+} = {}) {
+  const d = normalizeDomain(domain);
+  if (!d || !role || !email) return;
+
+  const mode = poolWriteMode();
+  if (mode === 'off') return;
+  if (mode === 'volia_only' && !isAdmin) return; // Phase 1 : seul Volia alimente
+
+  try {
+    const supabase = getSupabaseAdmin();
+    if (await isOptedOut(supabase, email)) return;
+
+    await supabase
+      .from('decision_maker_contacts')
+      .upsert(
+        {
+          domain: d,
+          role,
+          email,
+          full_name: fullName || null,
+          title: title || null,
+          linkedin_url: linkedinUrl || null,
+          confidence: confidence ?? null,
+          company_name: companyName || null,
+          source: isAdmin ? 'volia' : 'client',
+          last_verified_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'domain,role' }
+      );
+  } catch {
+    /* best-effort — ne casse jamais l'enrichissement */
+  }
+}

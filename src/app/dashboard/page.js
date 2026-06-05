@@ -432,7 +432,7 @@ export default function Dashboard() {
       // afficher la liste ; les compteurs montent pendant ~1-2s le temps que
       // le reste arrive.
       const PAGE_SIZE = 1000;
-      const COLS = 'id,place_id,nom,adresse,telephone,email,email_method,site_web,note,nb_avis,type,departement,folder_id,search_session_id,created_at,updated_at,archived_at';
+      const COLS = 'id,place_id,nom,adresse,telephone,email,email_method,contact_name,contact_role,site_web,note,nb_avis,type,departement,folder_id,search_session_id,created_at,updated_at,archived_at';
       async function fetchFirstProspectsPage() {
         const { data, error, count } = await supabase
           .from('prospects')
@@ -1360,12 +1360,14 @@ export default function Dashboard() {
       }
     }
 
-    const headers = ['nom', 'email', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
+    const headers = ['nom', 'email', 'contact_decideur', 'role_decideur', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
 
     const rows = list.map((prospect) => {
       return [
         escapeCSV(prospect.nom),
         escapeCSV(prospect.email),
+        escapeCSV(prospect.contact_name),
+        escapeCSV(prospect.contact_role),
         escapeCSV(prospect.telephone),
         escapeCSV(prospect.site_web),
         escapeCSV(prospect.adresse),

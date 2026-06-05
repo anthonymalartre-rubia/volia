@@ -110,10 +110,13 @@ export default function ImmoLandingContent() {
             Des biens à vendre apparaissent sur ton secteur chaque jour.<br />
             <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Sois le premier à appeler.</span>
           </h1>
-          <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-            Volia&nbsp;Immo surveille tous les portails en temps réel et te sort, chaque matin,
-            <strong className="text-content-primary"> les biens de particuliers à appeler en priorité</strong> — classés par probabilité de mandat.
-            Tu arrêtes de chercher. Tu signes.
+          <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-4">
+            <strong className="text-content-primary">1 vente sur 3 démarre entre particuliers.</strong> Le premier agent qui appelle, bien, signe le mandat.
+            Volia&nbsp;Immo surveille tous les portails en temps réel et te livre, chaque matin,
+            <strong className="text-content-primary"> les biens à appeler en priorité</strong> — classés par probabilité de mandat.
+          </p>
+          <p className="text-base text-content-tertiary max-w-2xl mx-auto mb-8">
+            Résultat : <strong className="text-violet-700">plus de mandats rentrés</strong>, <strong className="text-violet-700">2 h/jour de pige en moins</strong>, et <strong className="text-violet-700">zéro opportunité ratée</strong>. Tu arrêtes de chercher. Tu signes.
           </p>
           <a href="#form" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-base font-semibold shadow-lg shadow-violet-500/25 hover:from-violet-500 hover:to-indigo-500 transition">
             🎯 Rejoindre la liste fondateur <ArrowRight size={16} />
@@ -153,6 +156,40 @@ export default function ImmoLandingContent() {
               </li>
             ))}
           </ul>
+        </section>
+
+        {/* ── TRANSFORMATION (avant / après) ── */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-20">
+          <div className="text-center mb-10">
+            <p className="text-sm font-semibold text-violet-600 mb-3">CE QUE ÇA CHANGE</p>
+            <h2 className="text-3xl sm:text-4xl font-bold">Ta prospection, avant et après Volia&nbsp;Immo.</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Avant */}
+            <div className="rounded-2xl border border-line bg-surface-card p-6">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-content-tertiary mb-4">😤 Sans Volia Immo</div>
+              <ul className="space-y-3 text-sm text-content-secondary">
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✗</span> 1 à 2 h par jour à éplucher les portails à la main</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✗</span> Tu appelles après 3 autres agences — le vendeur a déjà choisi</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✗</span> Des leads tièdes oubliés, des relances qui sautent</li>
+                <li className="flex items-start gap-2"><span className="text-red-400 mt-0.5">✗</span> Des mandats qui partent à la concurrence chaque semaine</li>
+              </ul>
+            </div>
+            {/* Après */}
+            <div className="rounded-2xl border-2 border-violet-300 bg-gradient-to-br from-violet-50 to-indigo-50 p-6">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-violet-700 mb-4">🚀 Avec Volia Immo</div>
+              <ul className="space-y-3 text-sm text-content-secondary">
+                <li className="flex items-start gap-2"><Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" /> Ta liste d&apos;appels prête en 5 min, classée par chance de mandat</li>
+                <li className="flex items-start gap-2"><Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" /> Alerte dès la publication — tu es le <strong>premier</strong> à appeler</li>
+                <li className="flex items-start gap-2"><Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" /> Relances automatiques, rien ne passe à la trappe</li>
+                <li className="flex items-start gap-2"><Check size={16} className="text-emerald-500 mt-0.5 flex-shrink-0" /> Plus de mandats signés, sans y passer tes soirées</li>
+              </ul>
+            </div>
+          </div>
+          {/* Coût de l'inaction */}
+          <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-center text-sm text-amber-900">
+            💸 <strong>Un seul mandat manqué = plusieurs milliers d&apos;euros de commission perdus.</strong> Volia Immo coûte moins qu&apos;un plein d&apos;essence.
+          </div>
         </section>
 
         {/* ── SOLUTION ── */}

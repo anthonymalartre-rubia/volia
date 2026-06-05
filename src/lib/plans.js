@@ -143,11 +143,14 @@ export const PLANS = {
     inheritsFrom: 'pro',
     unlocksModules: true,   // CRM + Campagnes + Formulaires (aussi inclus sur Pro)
     unlocksMcp: true,       // Serveur MCP : Business / Enterprise uniquement
+    unlocksDecisionMaker: true, // Enrichissement décideur (CEO/CMO/Sales…) : Business+
     stripePriceId: cleanEnv(process.env.STRIPE_BUSINESS_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_BUSINESS_YEARLY_PRICE_ID || ''),
     limits: {
       searches_per_month: 10000,
-      enrichments_per_month: 10000,
+      // 6 000 (au lieu de 10 000) : intègre l'enrichissement décideur (Serper
+      // LinkedIn + vérifs SMTP, plus coûteux). Même compteur générique+décideur.
+      enrichments_per_month: 6000,
       phones_per_month: 10000,
       folders: -1,
       exports_per_month: -1,
@@ -161,7 +164,8 @@ export const PLANS = {
       autopilot_branching: true,         // IF/ELSE conditional branches
     },
     features: [
-      '10 000 enrichissements email/mois (×8)',
+      '6 000 enrichissements/mois (emails + décideurs)',
+      '🎯 Enrichissement décideur (CEO, CMO, Sales, RH, RSE)',
       '10 000 numéros de téléphone/mois',
       '10 000 cold emails/mois (warmup auto inclus)',
       '5 000 soumissions de formulaires/mois',
@@ -191,6 +195,7 @@ export const PLANS = {
     inheritsFrom: 'business',
     unlocksModules: true,
     unlocksMcp: true,
+    unlocksDecisionMaker: true, // alias Business : même feature décideur
     limits: {
       searches_per_month: 10000,
       enrichments_per_month: 10000,
@@ -218,6 +223,7 @@ export const PLANS = {
     inheritsFrom: 'business',
     unlocksModules: true,
     unlocksMcp: true,
+    unlocksDecisionMaker: true, // décideur inclus (enrichissements illimités)
     stripePriceId: cleanEnv(process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || ''),
     stripePriceIdYearly: cleanEnv(process.env.STRIPE_ENTERPRISE_YEARLY_PRICE_ID || ''),
     limits: {

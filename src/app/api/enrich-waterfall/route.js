@@ -5,6 +5,10 @@ import { PERSONAL_DOMAINS } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { lookupGlobalContact, upsertGlobalContact } from '@/lib/global-contacts';
+import { enrichDecisionMaker, SUPPORTED_ROLES } from '@/lib/decision-maker-core';
+import { isEmailDeliverable } from '@/lib/email-verify';
+import { getPlan } from '@/lib/plans';
+import { getEffectivePlan } from '@/lib/trial';
 
 // Client admin réutilisé via le singleton de lib/supabase-admin (P1 perf
 // + immunité aux \n dans les env vars).
@@ -273,7 +277,7 @@ export async function POST(request) {
       );
     }
 
-    const { url, name, method } = await request.json();
+    const { url, name, method, decisionMaker, role } = await request.json();
 
     if (!url && !name) {
       return Response.json({ error: 'url or name required' }, { status: 400 });
@@ -311,14 +315,15 @@ export async function POST(request) {
 
     console.log(`[waterfall] name="${name}" domain="${domain}" url="${validatedUrl}"`);
 
-    // ─── Fetch user preference for personal email filtering ───
+    // ─── Fetch user preference for personal email filtering + plan ───
     const { data: userProfile } = await supabase
       .from('user_profiles')
-      .select('filter_personal_emails, is_admin')
+      .select('filter_personal_emails, is_admin, plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
       .eq('id', user.id)
       .single();
     const filterPersonalEmails = userProfile?.filter_personal_emails !== false;
     const isAdmin = !!userProfile?.is_admin;
+    const unlocksDecisionMaker = !!getPlan(getEffectivePlan(userProfile)).unlocksDecisionMaker;
 
     // ─── Check opt-out list: never enrich emails that opted out ───
     async function isOptedOut(email) {
@@ -331,6 +336,51 @@ export async function POST(request) {
           .maybeSingle();
         return !!data;
       } catch { return false; }
+    }
+
+    // ─── ÉTAPE DÉCIDEUR (Business+) : contact nominatif > générique ───
+    // Tentée AVANT la couche 0 / le générique car c'est le contact à plus forte
+    // valeur. Gating plan (unlocksDecisionMaker) + rôle valide + domaine requis.
+    // Politique zéro-bounce : enrichDecisionMaker ne renvoie qu'un email vérifié.
+    // Compte comme 1 enrichissement (même compteur que le générique).
+    const wantDecisionMaker =
+      decisionMaker === true &&
+      unlocksDecisionMaker &&
+      SUPPORTED_ROLES.includes(role) &&
+      !!domain;
+
+    if (wantDecisionMaker) {
+      try {
+        const dm = await enrichDecisionMaker({
+          companyName: name,
+          domain,
+          role,
+          verifyEmail: isEmailDeliverable,
+          apiKey: process.env.SERPER_API_KEY,
+          trackApiCall,
+        });
+        if (dm?.email) {
+          const skipPersonal = filterPersonalEmails && isPersonalEmail(dm.email);
+          const optedOut = await isOptedOut(dm.email);
+          if (!skipPersonal && !optedOut) {
+            await incrementUsage(supabase, user.id, 'enrichments');
+            return Response.json({
+              email: dm.email,
+              source: 'decision_maker',
+              extra: null,
+              linkedin_url: dm.linkedinUrl || null,
+              contact_name: dm.fullName || null,
+              contact_role: dm.role || role,
+              title: dm.title || null,
+              confidence: dm.confidence ?? null,
+              waterfall: [{ step: 'decision_maker', label: `Décideur (${role})`, found: true }],
+            });
+          }
+        }
+        // Aucun décideur vérifié → on retombe sur le générique (valeur de base).
+      } catch (e) {
+        console.warn('[waterfall] décideur best-effort failed:', e?.message || e);
+      }
     }
 
     // ─── COUCHE 0 : base commune Volia (0 crédit Serper si hit) ───

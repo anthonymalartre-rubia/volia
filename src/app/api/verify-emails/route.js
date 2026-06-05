@@ -1,42 +1,7 @@
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { getPlan } from '@/lib/plans';
 import { getEffectivePlan } from '@/lib/trial';
-
-function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
-}
-
-// ─── Single email verification via MillionVerifier ──────
-async function verifyEmail(email) {
-  const apiKey = process.env.MILLIONVERIFIER_API_KEY;
-  if (!apiKey) return { email, result: 'unknown', error: 'API key missing' };
-
-  try {
-    const params = new URLSearchParams({ api: apiKey, email });
-    const res = await fetchWithTimeout(
-      `https://api.millionverifier.com/api/v3/?${params.toString()}`
-    );
-    if (!res.ok) {
-      return { email, result: 'unknown', error: `HTTP ${res.status}` };
-    }
-    const data = await res.json();
-    // MillionVerifier returns: result (ok, catch_all, unknown, invalid, disposable, error)
-    // and quality score
-    return {
-      email,
-      result: data.result || 'unknown',
-      subresult: data.subresult || null,
-      free: data.free || false,
-      role: data.role || false,
-      quality: data.quality_score ?? null,
-    };
-  } catch (err) {
-    return { email, result: 'unknown', error: err.name === 'AbortError' ? 'timeout' : err.message };
-  }
-}
+import { verifyEmailRaw as verifyEmail } from '@/lib/email-verify';
 
 export async function POST(request) {
   try {

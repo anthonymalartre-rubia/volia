@@ -43,15 +43,18 @@ function normalizeStatus(resendStatus) {
 export async function syncSenderFromResend({ supabase, sender, triggerVerify = false }) {
   if (!sender?.resend_domain_id) return { sender, changed: false, flipped: false };
 
-  if (triggerVerify) {
-    try { await verifyResendDomain(sender.resend_domain_id); } catch { /* best-effort */ }
-  }
-
+  // 1) On LIT D'ABORD le statut réel (jamais de reset).
+  //    ⚠️ POST /domains/{id}/verify de Resend REMET tout à 'pending' le temps
+  //    du re-check async. Si on l'appelait AVANT le get, on relirait toujours
+  //    'pending' (bug observé). Donc : get d'abord, nudge ensuite.
   let resendData;
   try {
     resendData = await getResendDomain(sender.resend_domain_id);
   } catch {
-    // Resend indispo / transitoire → on garde la row DB telle quelle.
+    // Resend indispo : on tente quand même un nudge best-effort si demandé.
+    if (triggerVerify) {
+      try { await verifyResendDomain(sender.resend_domain_id); } catch { /* noop */ }
+    }
     return { sender, changed: false, flipped: false };
   }
 
@@ -94,6 +97,13 @@ export async function syncSenderFromResend({ supabase, sender, triggerVerify = f
         });
       }
     } catch { /* 23505 = déjà enrôlé */ }
+  }
+
+  // 2) Toujours pending + mode cron → on « nudge » Resend pour forcer un
+  //    re-check DNS d'ici la prochaine passe. Fire-and-forget : on NE relit
+  //    PAS le résultat (sinon on remettrait l'affichage à 'pending').
+  if (triggerVerify && newStatus !== 'verified') {
+    try { await verifyResendDomain(sender.resend_domain_id); } catch { /* noop */ }
   }
 
   return { sender: data, changed, flipped };

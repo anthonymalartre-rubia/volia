@@ -1030,6 +1030,20 @@ export default function EmailSendersPage() {
                     </div>
                   </div>
 
+                  {s.status === 'pending' && (
+                    <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs text-amber-800 leading-relaxed">
+                      ⏳ <strong>DNS en cours de propagation.</strong> Tes records sont bien enregistrés —
+                      leur vérification peut prendre jusqu&apos;à 1 h (cache DNS).{' '}
+                      <strong>Volia re-vérifie automatiquement chaque heure</strong> : inutile de cliquer en boucle
+                      (chaque clic relance le compteur côté fournisseur).
+                      {Array.isArray(s.dns_records) && s.dns_records.some((r) => r.status === 'verified') && (
+                        <span className="block mt-1 text-emerald-700">
+                          ✓ Déjà validé : {Array.from(new Set(s.dns_records.filter((r) => r.status === 'verified').map((r) => r.record || r.type))).join(', ')}.
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {isExpanded && (
                     <div className="mt-4 pt-4 border-t border-line">
                       <DnsTable records={s.dns_records} />

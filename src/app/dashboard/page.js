@@ -1089,7 +1089,7 @@ export default function Dashboard() {
   });
   const stopWaterfallRef = useRef(false);
 
-  const startWaterfallEnrichment = useCallback(async (customList = null, method = null) => {
+  const startWaterfallEnrichment = useCallback(async (customList = null, method = null, dmOptions = null) => {
     stopWaterfallRef.current = false;
     setIsWaterfallEnriching(true);
     const initStats = { scrape: 0, serper: 0, guess: 0 };
@@ -1118,7 +1118,13 @@ export default function Dashboard() {
         const response = await fetch('/api/enrich-waterfall', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: prospect.site_web || undefined, name: prospect.nom, method: method || undefined }),
+          body: JSON.stringify({
+            url: prospect.site_web || undefined,
+            name: prospect.nom,
+            method: method || undefined,
+            decisionMaker: dmOptions?.decisionMaker || undefined,
+            role: dmOptions?.role || undefined,
+          }),
         });
         const data = await response.json();
 
@@ -1137,17 +1143,22 @@ export default function Dashboard() {
 
         if (data.email) {
           const method = data.source === 'guess' ? 'guess' : data.source;
+          // Décideur : on stocke aussi le contact nominatif (nom + rôle).
+          const contactFields = data.source === 'decision_maker'
+            ? { contact_name: data.contact_name || null, contact_role: data.contact_role || null }
+            : {};
           setProspects((prev) =>
             prev.map((p) =>
               p.id === prospect.id
-                ? { ...p, email: data.email, email_method: method }
+                ? { ...p, email: data.email, email_method: method, ...contactFields }
                 : p
             )
           );
           if (supabase && user) {
+            const updatePayload = { email: data.email, email_method: method, ...contactFields, updated_at: new Date().toISOString() };
             const { error: saveError } = await supabase
               .from('prospects')
-              .update({ email: data.email, email_method: method, updated_at: new Date().toISOString() })
+              .update(updatePayload)
               .eq('id', prospect.id)
               .eq('user_id', user.id);
             if (saveError) {
@@ -1156,7 +1167,7 @@ export default function Dashboard() {
               await new Promise(r => setTimeout(r, 1000));
               const { error: retryError } = await supabase
                 .from('prospects')
-                .update({ email: data.email, email_method: method, updated_at: new Date().toISOString() })
+                .update(updatePayload)
                 .eq('id', prospect.id)
                 .eq('user_id', user.id);
               if (retryError) {
@@ -1211,7 +1222,7 @@ export default function Dashboard() {
     setIsWaterfallEnriching(false);
   }, []);
 
-  const handleBulkEnrich = async (folderId, method = null, selectedIds = null) => {
+  const handleBulkEnrich = async (folderId, method = null, selectedIds = null, dmOptions = null) => {
     let toEnrich;
     if (selectedIds && selectedIds.length > 0) {
       // Enrich selected prospects (can include archived — user explicitly selected)
@@ -1222,7 +1233,7 @@ export default function Dashboard() {
       if (folderId) toEnrich = toEnrich.filter(p => p.folder_id === folderId);
     }
     if (toEnrich.length === 0) return;
-    startWaterfallEnrichment(toEnrich, method);
+    startWaterfallEnrichment(toEnrich, method, dmOptions);
   };
 
   // Delete all prospects (optionally scoped to folder)

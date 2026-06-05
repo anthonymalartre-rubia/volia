@@ -59,6 +59,7 @@ import {
   KanbanSquare,
   Lock,
   Send,
+  UserSearch,
 } from "lucide-react";
 import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
@@ -317,10 +318,29 @@ function getEmailMethodInfo(method, t) {
   return { label: t(info.labelKey), color: info.color, tip: t(info.tipKey) };
 }
 
+// Libellés FR des rôles décideur (enrichissement décideur Business+).
+const ROLE_LABELS = {
+  direction: 'Direction',
+  marketing: 'Marketing',
+  commercial: 'Commercial',
+  rse: 'RSE',
+  rh: 'RH',
+};
+
 // Email quality badge component
 function EmailBadge({ method }) {
   const { t } = useI18n();
   if (!method) return null;
+
+  // Décideur nominatif (Business+) — email vérifié zéro-bounce d'un C-level.
+  if (method === 'decision_maker') {
+    return (
+      <span className="inline-flex items-center gap-0.5 px-1.5 py-[1px] rounded-full text-[9px] font-semibold bg-violet-500/20 text-violet-300 border border-violet-500/30 whitespace-nowrap">
+        <UserSearch size={8} className="flex-shrink-0" />
+        Décideur
+      </span>
+    );
+  }
 
   // Group methods into quality tiers
   if (method === 'scrape' || method === 'deep-verified') {
@@ -487,6 +507,10 @@ export default memo(function ResultsPanel({
   const [showCampagneModal, setShowCampagneModal] = useState(false);
   const [showColumnPicker, setShowColumnPicker] = useState(false);
   const [showExportPreview, setShowExportPreview] = useState(false);
+  // ─── Enrichissement décideur (Business+) ───
+  const hasDecisionMaker = !!userPlan?.unlocksDecisionMaker;
+  const [dmEnabled, setDmEnabled] = useState(false);
+  const [dmRole, setDmRole] = useState('direction');
   // ⚠️ Ce useState DOIT rester avant tout early-return conditionnel.
   // Avant le fix audit P0 #8, il était déclaré ligne 708, après le
   // `if (prospects.length === 0) return ...`. Quand prospects passait de
@@ -1072,11 +1096,59 @@ export default memo(function ResultsPanel({
         )}
 
         <div className="flex items-center gap-2">
+          {/* ─── Mode décideur (Business+) ─── */}
+          {hasDecisionMaker ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setDmEnabled((v) => !v)}
+                disabled={isWaterfallEnriching}
+                className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg border text-xs font-medium transition ${
+                  dmEnabled
+                    ? 'border-violet-500/40 bg-violet-500/10 text-violet-300'
+                    : 'border-line hover:bg-surface-elevated text-content-tertiary hover:text-content-primary'
+                }`}
+                title="Chercher le contact nominatif d'un décideur (CEO, CMO, Sales…)"
+              >
+                <UserSearch size={14} />
+                <span className="hidden sm:inline">Décideur</span>
+              </button>
+              {dmEnabled && (
+                <select
+                  value={dmRole}
+                  onChange={(e) => setDmRole(e.target.value)}
+                  disabled={isWaterfallEnriching}
+                  className="px-2 py-2 rounded-lg border border-line bg-surface-card text-xs text-content-secondary focus:border-violet-500/40 focus:outline-none"
+                  title="Rôle ciblé"
+                >
+                  <option value="direction">Direction (CEO/Fondateur)</option>
+                  <option value="marketing">Marketing</option>
+                  <option value="commercial">Commercial</option>
+                  <option value="rse">RSE</option>
+                  <option value="rh">RH</option>
+                </select>
+              )}
+            </div>
+          ) : (
+            <a
+              href="/pricing"
+              className="hidden md:flex items-center gap-1.5 px-2.5 py-2 rounded-lg border border-line text-xs font-medium text-content-muted hover:text-content-primary hover:bg-surface-elevated transition"
+              title="L'enrichissement décideur (CEO, CMO, Sales…) est inclus à partir du plan Business"
+            >
+              <Lock size={12} />
+              <span>Décideur · Business</span>
+            </a>
+          )}
           <Button
             tone="violet"
             size="sm"
             icon={Zap}
-            onClick={() => onBulkEnrich?.(activeFolder === 'all' ? null : activeFolder, null)}
+            onClick={() => onBulkEnrich?.(
+              activeFolder === 'all' ? null : activeFolder,
+              null,
+              null,
+              dmEnabled && hasDecisionMaker ? { decisionMaker: true, role: dmRole } : null
+            )}
             disabled={isWaterfallEnriching || prospectsWithoutEmail === 0}
           >
             {t('results.enrichAll', { count: prospectsWithoutEmail })}
@@ -1684,6 +1756,14 @@ export default memo(function ResultsPanel({
                               )}
                             </button>
                           </div>
+                          {p.contact_name && (
+                            <div className="flex items-center gap-1 text-[10px] text-violet-300/90 mt-0.5">
+                              <UserSearch size={9} className="flex-shrink-0" />
+                              <span className="truncate max-w-[180px]">
+                                {p.contact_name}{p.contact_role ? ` · ${ROLE_LABELS[p.contact_role] || p.contact_role}` : ''}
+                              </span>
+                            </div>
+                          )}
                           {tooltipId === p.id && methodInfo && (
                             <div className="absolute bottom-full left-0 mb-1 px-2.5 py-1.5 bg-surface-elevated border border-line-hover rounded-lg text-[10px] text-content-secondary whitespace-normal max-w-[250px] z-10 shadow-lg leading-relaxed">
                               <div className="font-semibold text-content-primary mb-0.5">{methodInfo.label}</div>

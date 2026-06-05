@@ -14,6 +14,7 @@ import {
   createResendDomain,
   validateSenderDomain,
 } from '@/lib/resend-domains';
+import { syncSenderFromResend } from '@/lib/email-sender-sync';
 
 function mapResendErrorToStatus(err) {
   if (!err) return 500;
@@ -33,7 +34,7 @@ export async function GET() {
   const { data, error } = await supabase
     .from('email_senders')
     .select(
-      'id, domain, resend_domain_id, status, dns_records, from_name, verified_at, last_check_at, created_at, updated_at'
+      'id, user_id, domain, resend_domain_id, status, dns_records, from_name, verified_at, last_check_at, created_at, updated_at'
     )
     .order('created_at', { ascending: false });
 
@@ -42,9 +43,24 @@ export async function GET() {
     return NextResponse.json({ error: 'Erreur lecture' }, { status: 500 });
   }
 
-  // Bulk fetch des warmup sessions liées pour enrichir la réponse (l'UI affiche
-  // une progress bar / phase courante par sender).
-  const senders = data || [];
+  let senders = data || [];
+
+  // Auto-refresh à l'ouverture : pour les domaines encore 'pending', on relit
+  // le statut RÉEL côté Resend (lecture seule getResendDomain — NE déclenche PAS
+  // de re-vérif qui remettrait tout en pending) et on synchronise la DB.
+  // → l'affichage n'est jamais figé sur un vieux snapshot. Best-effort, parallèle.
+  const pendings = senders.filter((s) => s.status === 'pending' && s.resend_domain_id);
+  if (pendings.length > 0) {
+    const synced = await Promise.all(
+      pendings.map((s) =>
+        syncSenderFromResend({ supabase, sender: s, triggerVerify: false })
+          .then((r) => r.sender)
+          .catch(() => s)
+      )
+    );
+    const byId = new Map(synced.map((s) => [s.id, s]));
+    senders = senders.map((s) => byId.get(s.id) || s);
+  }
   if (senders.length > 0) {
     const senderIds = senders.map((s) => s.id);
     const { data: sessions } = await supabase

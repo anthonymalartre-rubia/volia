@@ -9,7 +9,7 @@
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
-import { getResendDomain } from '@/lib/resend-domains';
+import { getResendDomain, verifyResendDomain } from '@/lib/resend-domains';
 import { buildPeerEmailAddress } from '@/lib/warmup-peer';
 
 const ALLOWED_STATUSES = new Set(['pending', 'verified', 'failed', 'temp_failure']);
@@ -63,6 +63,9 @@ export async function POST(_request, { params }) {
 
   let resendData;
   try {
+    // 1) Déclenche une re-vérification DNS immédiate côté Resend (best-effort)…
+    await verifyResendDomain(sender.resend_domain_id);
+    // 2) …puis lit le statut/records actualisés.
     resendData = await getResendDomain(sender.resend_domain_id);
   } catch (err) {
     console.error('[api/email-senders/verify] Resend get error', err);

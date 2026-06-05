@@ -323,7 +323,7 @@ Le secteur de la restauration ferme à un taux de 6,8 % par an, ce qui veut dire
 | 13-24 mois | 84 % | 51 % | 38 % |
 | 25+ mois | 72 % | 32 % | 21 % |
 
-C'est pour cette raison que [Volia](/signup) interroge Google Places en temps réel à chaque recherche : la donnée est par construction fraîche du jour, et le taux de mail valide post-waterfall dépasse 80 % sur la restauration. Voir [comparaison vs Apollo](/vs/apollo) (qui s'appuie sur une base statique souvent vieille de 12-18 mois).
+C'est pour cette raison que [Volia](/signup) interroge Google Places en temps réel à chaque recherche : la donnée est par construction fraîche du jour, et le taux de mail valide post-waterfall reste élevé sur la restauration. Voir [comparaison vs Apollo](/vs/apollo) (qui s'appuie sur une base statique, par nature moins fraîche qu'une interrogation en temps réel).
 
 ## Annexe 3 : 5 idées de produits qui cartonnent en restauration en 2026
 

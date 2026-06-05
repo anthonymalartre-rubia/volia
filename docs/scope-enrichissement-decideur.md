@@ -35,7 +35,14 @@ Cascade cible (mode décideur activé, prospect avec domaine) :
 
 ## 4. Algorithme « étape décideur »
 
-Entrée : `{ domain, companyName, role }` (role ∈ direction | tech | marketing | commercial | rh).
+Entrée : `{ domain, companyName, role }` (role ∈ **direction | marketing | commercial | rse | rh** — décidé).
+
+Mots-clés Serper par rôle :
+- **direction** : "CEO" OR "Fondateur" OR "Co-fondateur" OR "Gérant" OR "Président" OR "Directeur général" OR "Dirigeant"
+- **marketing** : "CMO" OR "Directeur marketing" OR "Responsable marketing" OR "Head of Marketing" OR "Growth"
+- **commercial** : "Directeur commercial" OR "Sales" OR "Responsable commercial" OR "Business Developer" OR "Head of Sales"
+- **rse** : "RSE" OR "Responsable RSE" OR "Développement durable" OR "Sustainability" OR "QSE"
+- **rh** : "DRH" OR "Directeur des ressources humaines" OR "Responsable RH" OR "Talent" OR "People"
 
 1. **Cache** : `lookupDecisionMaker({ domain, role })` dans `global_contacts` (clé domaine+role). Hit frais → servir, 0 crédit.
 2. **Trouver la personne** : Serper `site:linkedin.com/in "<companyName>" <mots-clés rôle>` (ex direction → "CEO" OR "Fondateur" OR "Gérant" OR "Directeur"). Parser nom + titre depuis les snippets/titres.
@@ -67,14 +74,17 @@ Clé de lookup décideur : `(domain, role, contact_type='decision_maker')`.
 - **Ne jamais** stocker de donnée sensible (uniquement nom + rôle pro + email pro + URL LinkedIn publique).
 - Cache mutualisé : garder `GLOBAL_POOL_WRITE='volia_only'` tant que le cadre client n'est pas validé.
 
-## 7. Quota & coût
+## 7. Quota & coût — DÉCIDÉ
 
-- Étape décideur = **+1 à +2 appels Serper** + N vérifs SMTP par prospect → bien plus cher que le scrape.
-- Compteur dédié : **`decision_maker_enrichments`** (séparé de `enrichments`) dans `usage_tracking` + limites par plan dans `plans.js` :
-  - Free/Solo/Pro : 0 (feature verrouillée).
-  - Business : quota (ex. 1 000 / mois) — à définir.
-  - Enterprise : illimité ou volume élevé.
-- Gating technique : réutiliser le pattern `unlocksModules` / un nouveau flag `unlocksDecisionMaker` dans `plans.js`, vérifié dans l'API + l'UI (comme le serveur MCP Business-only).
+**Pas de compteur séparé.** Un enrichissement décideur **compte comme 1 enrichissement** (même `enrichments` que le générique) — on ajoute juste la *profondeur* de recherche. Comme cette profondeur coûte plus cher (Serper LinkedIn + vérifs SMTP), on **abaisse le quota Business** pour absorber le coût :
+
+- **Business : 10 000 → 6 000 enrichissements / mois** (un seul compteur, générique + décideur confondus).
+- Free/Solo/Pro : quotas inchangés ; le **mode décideur reste verrouillé** (gating plan), ils gardent l'enrichissement générique.
+- Enterprise : inchangé (volume élevé / illimité).
+
+> ⚠️ Le passage 10 000 → 6 000 s'applique **au lancement de la feature** (sinon on nerferait Business sans contrepartie). À faire dans le même déploiement que la feature.
+
+- Gating technique : nouveau flag `unlocksDecisionMaker: true` (Business+) dans `plans.js`, vérifié dans l'API + l'UI (même pattern que le serveur MCP Business-only). Le toggle « décideur » est ignoré/verrouillé hors Business.
 
 ## 8. UI (dashboard, vue Prospection)
 
@@ -85,17 +95,24 @@ Clé de lookup décideur : `(domain, role, contact_type='decision_maker')`.
 
 ## 9. Découpage
 
-- **MVP** : 1 rôle « Direction » (CEO/Fondateur/Gérant) — le plus universel — sur les prospects avec domaine + nom. Réutilise Serper + vérif MX existante. Gating Business.
-- **V2** : multi-rôles (tech/marketing/commercial/RH), cache décideur dans `global_contacts`, colonne UI, quota dédié.
-- **V3** : score de confiance affiné, multi-personnes par boîte, export enrichi.
+- **MVP** : les **5 rôles** (direction / marketing / commercial / rse / rh), **emails vérifiés uniquement** (zéro-bounce), **Serper LinkedIn** seule source, gating **Business**. Sur les prospects avec domaine + nom. Réutilise Serper + vérif MX/SMTP existante. Quota Business 10k→6k au lancement.
+- **V2** : cache décideur dans `global_contacts` (économie Serper), colonne UI + badge, score de confiance affiné, choix multi-rôles en 1 passe.
+- **V3** : multi-personnes par boîte, connecteur tiers (Apollo/people-DB) en option, export enrichi.
 
 ## 10. Coordination
 
 ⚠️ La couche `global_contacts` est en cours de construction par une autre session. **À aligner avant code** : le niveau « personne/rôle » doit être ajouté **dans** ce modèle (section 5), pas dans une table concurrente.
 
-## 11. Questions ouvertes (à trancher)
+## 11. Décisions actées (2026-06)
 
-1. Quota Business mensuel pour `decision_maker_enrichments` ? (proposition : 1 000/mois)
-2. Rôles exposés au MVP : juste « Direction », ou direction+marketing+commercial dès le départ ?
-3. Servir un email décideur **non vérifié** (probable) avec badge « probable », ou **uniquement vérifié** (politique zéro-bounce) ? (reco : uniquement vérifié)
-4. Source personne : Serper LinkedIn uniquement (MVP), ou prévoir un connecteur Apollo/people-DB plus tard ?
+1. **Quota** : pas de compteur séparé — même décompte que le générique ; **Business 10 000 → 6 000 enrichissements/mois** (au lancement).
+2. **Rôles MVP** : **direction + marketing + commercial + rse + rh** (les 5).
+3. **Vérif** : **emails vérifiés uniquement** (zéro-bounce) — pas de « probable » servi.
+4. **Source** : **Serper LinkedIn seule** au MVP (porte ouverte pour Apollo/people-DB en V3).
+
+## 12. Plan de build (séquencement)
+
+⚠️ Le cœur (cascade, `global_contacts`, `enrich-waterfall-core`, `enrichment-jobs`) est **en cours de réécriture par l'autre session**. Pour éviter les collisions :
+
+- **Étape A — sans collision (faisable maintenant)** : `src/lib/decision-maker-core.js` (module autonome : map rôles, recherche personne Serper, dérivation patterns email, hook de vérif) — pur, non câblé, ne touche aucun fichier de l'autre session.
+- **Étape B — à coordonner** : extension schéma `global_contacts` (niveau personne) + insertion de l'étape dans la cascade + `plans.js` (flag `unlocksDecisionMaker` + quota 6k) + UI toggle/colonne. À faire **une fois la cascade de l'autre session stabilisée**.

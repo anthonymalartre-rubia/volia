@@ -122,6 +122,29 @@ export async function getResendDomain(resendDomainId) {
 }
 
 /**
+ * Déclenche une RE-VÉRIFICATION DNS immédiate côté Resend (POST /domains/{id}/verify).
+ * À appeler avant getResendDomain pour une vérif "à la demande" (sinon Resend
+ * ne re-check que périodiquement en tâche de fond). Best-effort : si Resend
+ * répond une erreur transitoire, on n'échoue pas (le getResendDomain suivant
+ * lira le statut courant quand même).
+ * @param {string} resendDomainId
+ * @returns {Promise<boolean>} true si l'appel a abouti
+ */
+export async function verifyResendDomain(resendDomainId) {
+  if (!resendDomainId) throw new Error('resendDomainId is required');
+  try {
+    await resendFetch(`/domains/${encodeURIComponent(resendDomainId)}/verify`, {
+      method: 'POST',
+    });
+    return true;
+  } catch (err) {
+    // Best-effort : on log, mais on laisse le GET suivant lire le statut.
+    console.warn('[resend-domains] verify trigger failed (non-bloquant):', err?.message || err);
+    return false;
+  }
+}
+
+/**
  * Supprime un domaine côté Resend.
  * Idempotent côté Volia : si Resend renvoie 404 (déjà supprimé), on traite
  * comme un succès pour ne pas bloquer la suppression de la row Supabase.

@@ -155,6 +155,14 @@ export async function POST(request, { params }) {
     return NextResponse.json({ inserted: 0, skipped: 0, total: 0 });
   }
 
+  // Vraie erreur DB ≠ doublon : on la remonte si rien n'a pu être inséré.
+  if (inserted === 0 && insertErrors.length > 0) {
+    return NextResponse.json(
+      { error: `Échec de l'import : ${insertErrors[0]}` },
+      { status: 500 }
+    );
+  }
+
   const skipped = total - inserted;
 
   // 5. Refresh des compteurs de la liste

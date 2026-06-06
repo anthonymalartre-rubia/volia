@@ -83,9 +83,8 @@ export const STAGE_PROBABILITIES = [0, 10, 25, 50, 75, 90, 100];
 // Closing types autorisés
 export const CLOSING_TYPES = ['none', 'won', 'lost'];
 
-// Plans autorisés à accéder au module CRM.
-// Note : "enterprise" est l'alias legacy de "business" (cf. src/lib/plans.js)
-export const CRM_ALLOWED_PLANS = ['business', 'enterprise'];
+// Plans autorisés à accéder au module CRM (inclus dès Pro).
+export const CRM_ALLOWED_PLANS = ['pro', 'business', 'enterprise', 'enterprise_legacy'];
 
 /**
  * Vérifie que l'utilisateur a accès au module CRM (plan Business).

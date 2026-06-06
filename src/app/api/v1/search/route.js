@@ -143,10 +143,12 @@ export async function POST(request) {
     };
   }).filter((r) => r.place_id);
 
-  // Upsert idempotent sur place_id (pas de doublon, pas de crash si déjà vu)
+  // Upsert idempotent (pas de doublon, pas de crash si déjà vu).
+  // ⚠️ onConflict DOIT matcher l'index unique réel = (user_id, place_id).
+  // 'place_id' seul → erreur 42P10 (aucune contrainte unique sur place_id seul).
   const { data: inserted } = await supabase
     .from('prospects')
-    .upsert(rows, { onConflict: 'place_id', ignoreDuplicates: true })
+    .upsert(rows, { onConflict: 'user_id,place_id', ignoreDuplicates: true })
     .select('id, nom, telephone, site_web, departement');
 
   const saved = inserted?.length || 0;

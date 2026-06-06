@@ -11,6 +11,7 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { getResendDomain, verifyResendDomain } from '@/lib/resend-domains';
 import { buildPeerEmailAddress } from '@/lib/warmup-peer';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 const ALLOWED_STATUSES = new Set(['pending', 'verified', 'failed', 'temp_failure']);
 
@@ -131,10 +132,15 @@ export async function POST(_request, { params }) {
 
     // Auto-enrôle dans le pool peer-to-peer (Phase 3).
     // Idempotent : UNIQUE(sender_id) bloque les doublons (code 23505).
+    // ⚠️ warmup_peer_pool n'a PAS de policy INSERT RLS → on écrit en service-role
+    // (sinon l'insert via client user est refusé silencieusement). Aligné sur
+    // email-sender-sync.js. Fallback client user si la clé admin est absente.
     try {
       const peerEmail = buildPeerEmailAddress(id);
       if (peerEmail) {
-        const { error: poolErr } = await supabase
+        let admin = null;
+        try { admin = getSupabaseAdmin(); } catch { admin = null; }
+        const { error: poolErr } = await (admin || supabase)
           .from('warmup_peer_pool')
           .insert({
             sender_id: id,

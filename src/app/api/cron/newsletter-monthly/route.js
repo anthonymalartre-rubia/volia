@@ -57,18 +57,28 @@ export async function GET(request) {
   const stat = MONTHLY_STATS[monthIdx % MONTHLY_STATS.length];
   const monthLabel = `${MONTHS_FR[monthIdx]} ${now.getFullYear()}`;
 
-  // 3. Récup tous les subscribers actifs
-  const { data: subs, error: fetchErr } = await supabase
-    .from('newsletter_subscribers')
-    .select('id, email, unsubscribe_token')
-    .is('unsubscribed_at', null)
-    .order('subscribed_at', { ascending: true });
-
-  if (fetchErr) {
-    console.error('[cron/newsletter] fetch error', fetchErr);
-    return NextResponse.json({ error: fetchErr.message }, { status: 500 });
+  // 3. Récup tous les subscribers actifs — PAR PAGES.
+  // ⚠️ PostgREST plafonne à 1000 lignes : sans pagination, au-delà de 1000
+  // abonnés seuls les 1000 plus anciens recevaient la newsletter. On boucle.
+  // (emails_sent_count ajouté au select : sinon l'incrément repartait de 1.)
+  const PAGE_SIZE = 1000;
+  const subs = [];
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data, error: fetchErr } = await supabase
+      .from('newsletter_subscribers')
+      .select('id, email, unsubscribe_token, emails_sent_count')
+      .is('unsubscribed_at', null)
+      .order('subscribed_at', { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1);
+    if (fetchErr) {
+      console.error('[cron/newsletter] fetch error', fetchErr);
+      return NextResponse.json({ error: fetchErr.message }, { status: 500 });
+    }
+    if (!data || data.length === 0) break;
+    subs.push(...data);
+    if (data.length < PAGE_SIZE) break;
   }
-  if (!subs || subs.length === 0) {
+  if (subs.length === 0) {
     return NextResponse.json({ ok: true, sent: 0, message: 'Aucun subscriber actif' });
   }
 

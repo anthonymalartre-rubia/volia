@@ -12,6 +12,19 @@ function getCurrentMonth() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 }
 
+// ⚠️ usage_tracking a RLS activée SANS policy INSERT/UPDATE (la migration
+// harden_security_p0_audit a retiré la policy permissive). Écrire via le client
+// USER échoue donc SILENCIEUSEMENT → les compteurs n'étaient jamais incrémentés,
+// les quotas mensuels jamais appliqués. On écrit en SERVICE-ROLE (bypass RLS) ;
+// fallback sur le client passé si la clé admin est absente.
+function getWriteClient(fallback) {
+  try {
+    return getSupabaseAdmin() || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 /**
  * Calcule l'usage cumulé d'une team (somme des usages individuels de chaque member)
  * pour le mois en cours. Si le user n'est pas dans une team, retourne son propre usage.
@@ -62,13 +75,14 @@ export async function getUsage(supabase, userId) {
 
   if (data) return data;
 
-  // Create if not exists
-  const { data: newData } = await supabase
+  // Create if not exists (service-role : RLS n'autorise pas l'INSERT user).
+  const { data: newData, error: insErr } = await getWriteClient(supabase)
     .from('usage_tracking')
     .insert({ user_id: userId, month })
     .select()
     .single();
 
+  if (insErr) console.error('[usage] getUsage insert error', insErr.message);
   return newData || { searches: 0, enrichments: 0, exports: 0 };
 }
 
@@ -123,15 +137,19 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
   const previousCount = existing ? (existing[action] || 0) : 0;
   const newCount = previousCount + amount;
 
+  // Écritures en service-role : RLS n'a pas de policy INSERT/UPDATE sur usage_tracking.
+  const writeDb = getWriteClient(supabase);
   if (existing) {
-    await supabase
+    const { error: upErr } = await writeDb
       .from('usage_tracking')
       .update({ [action]: newCount, updated_at: new Date().toISOString() })
       .eq('id', existing.id);
+    if (upErr) console.error('[usage] incrementUsage update error', upErr.message);
   } else {
-    await supabase
+    const { error: insErr } = await writeDb
       .from('usage_tracking')
       .insert({ user_id: userId, month, [action]: amount });
+    if (insErr) console.error('[usage] incrementUsage insert error', insErr.message);
   }
 
   // ─── Usage warning emails ──────────────────────────────────────────────────

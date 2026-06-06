@@ -47,12 +47,17 @@ async function getUserContact(supabaseAdmin, userId) {
 function planIdFromPriceId(priceId) {
   if (!priceId) return 'free';
   for (const [id, plan] of Object.entries(PLANS)) {
-    if (id === 'enterprise') continue; // skip alias
+    // 'enterprise_legacy' est l'ALIAS historique (ancien Business 99€). Il partage
+    // STRIPE_BUSINESS_YEARLY_PRICE_ID avec business → on le SKIP de la boucle pour
+    // éviter une collision de mapping, et on le route via le fallback ci-dessous.
+    // ⚠️ Ne PAS skip 'enterprise' : c'est désormais un vrai plan vendu (499€) avec
+    // ses propres price IDs — le skipper rétrogradait tout abonné Enterprise.
+    if (id === 'enterprise_legacy') continue;
     if (plan.stripePriceId && plan.stripePriceId === priceId) return id;
     if (plan.stripePriceIdYearly && plan.stripePriceIdYearly === priceId) return id;
   }
-  // Fallback compat : si on hit le vieux price_id Enterprise
-  if (PLANS.enterprise?.stripePriceId === priceId) return 'business';
+  // Fallback compat : ancien price_id Enterprise legacy → mappé sur business.
+  if (PLANS.enterprise_legacy?.stripePriceId === priceId) return 'business';
   return 'free';
 }
 

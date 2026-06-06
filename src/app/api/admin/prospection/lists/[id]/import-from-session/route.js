@@ -82,60 +82,77 @@ export async function POST(request, { params }) {
     return NextResponse.json({ error: 'Session introuvable' }, { status: 404 });
   }
 
-  // 3. Récupère les prospects de la session
-  let query = supabase
-    .from('prospects')
-    .select('id, place_id, nom, telephone, email, site_web, departement')
-    .eq('user_id', user.id)
-    .eq('search_session_id', sessionId);
+  // 3. Récupère les prospects de la session PAR PAGES, et importe au fil de
+  //    l'eau.
+  //    ⚠️ NE PAS faire un seul SELECT sans pagination : PostgREST plafonne à
+  //    1000 lignes par défaut → l'ancien code n'importait QUE les 1000 premiers
+  //    prospects, même pour une session de 30 000+ (perte de données
+  //    silencieuse). On boucle en .range() jusqu'à épuisement.
+  const PAGE_SIZE = 1000;
 
-  if (!includeEmailless) {
-    query = query.not('email', 'is', null);
-  }
-
-  const { data: prospects, error: pErr } = await query;
-  if (pErr) return NextResponse.json({ error: pErr.message }, { status: 500 });
-
-  const total = prospects?.length || 0;
-  if (total === 0) {
-    return NextResponse.json({ inserted: 0, skipped: 0, total: 0 });
-  }
-
-  // 4. Mapping + bulk upsert (dedup sur list_id, email — phone-only à part)
-  const mapped = prospects.map((p) => mapProspectToContact(p, listId)).filter(Boolean);
-
+  let total = 0;
   let inserted = 0;
   const insertErrors = [];
 
-  for (let start = 0; start < mapped.length; start += CHUNK_SIZE) {
-    const chunk = mapped.slice(start, start + CHUNK_SIZE);
-    const withEmail = chunk.filter((c) => c.email);
-    const phoneOnly = chunk.filter((c) => !c.email && c.phone);
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    let query = supabase
+      .from('prospects')
+      .select('id, place_id, nom, telephone, email, site_web, departement')
+      .eq('user_id', user.id)
+      .eq('search_session_id', sessionId)
+      .order('id', { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1);
 
-    if (withEmail.length > 0) {
-      const { data, error } = await supabase
-        .from('prospect_contacts')
-        .upsert(withEmail, { onConflict: 'list_id,email', ignoreDuplicates: true })
-        .select('id');
-      if (error) {
-        console.error('[import-from-session] upsert email error', error);
-        insertErrors.push(error.message);
-      } else {
-        inserted += data?.length || 0;
+    if (!includeEmailless) {
+      query = query.not('email', 'is', null);
+    }
+
+    const { data: page, error: pErr } = await query;
+    if (pErr) return NextResponse.json({ error: pErr.message }, { status: 500 });
+
+    const rows = page || [];
+    if (rows.length === 0) break;
+    total += rows.length;
+
+    // 4. Mapping + bulk upsert (dedup sur list_id, email — phone-only à part)
+    const mapped = rows.map((p) => mapProspectToContact(p, listId)).filter(Boolean);
+
+    for (let start = 0; start < mapped.length; start += CHUNK_SIZE) {
+      const chunk = mapped.slice(start, start + CHUNK_SIZE);
+      const withEmail = chunk.filter((c) => c.email);
+      const phoneOnly = chunk.filter((c) => !c.email && c.phone);
+
+      if (withEmail.length > 0) {
+        const { data, error } = await supabase
+          .from('prospect_contacts')
+          .upsert(withEmail, { onConflict: 'list_id,email', ignoreDuplicates: true })
+          .select('id');
+        if (error) {
+          console.error('[import-from-session] upsert email error', error);
+          insertErrors.push(error.message);
+        } else {
+          inserted += data?.length || 0;
+        }
+      }
+      if (phoneOnly.length > 0) {
+        const { data, error } = await supabase
+          .from('prospect_contacts')
+          .upsert(phoneOnly, { onConflict: 'list_id,phone', ignoreDuplicates: true })
+          .select('id');
+        if (error) {
+          console.error('[import-from-session] upsert phone error', error);
+          insertErrors.push(error.message);
+        } else {
+          inserted += data?.length || 0;
+        }
       }
     }
-    if (phoneOnly.length > 0) {
-      const { data, error } = await supabase
-        .from('prospect_contacts')
-        .upsert(phoneOnly, { onConflict: 'list_id,phone', ignoreDuplicates: true })
-        .select('id');
-      if (error) {
-        console.error('[import-from-session] upsert phone error', error);
-        insertErrors.push(error.message);
-      } else {
-        inserted += data?.length || 0;
-      }
-    }
+
+    if (rows.length < PAGE_SIZE) break;
+  }
+
+  if (total === 0) {
+    return NextResponse.json({ inserted: 0, skipped: 0, total: 0 });
   }
 
   const skipped = total - inserted;

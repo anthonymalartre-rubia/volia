@@ -23,7 +23,7 @@ export const metadata = {
 };
 
 const PIPELINE_STEPS = [
-  { num: 1, label: 'Cible scrap', icon: Target, color: 'violet', desc: '101 départements · 150+ catégories · Google Places + enrichissement waterfall (email + téléphone)' },
+  { num: 1, label: 'Ciblage', icon: Target, color: 'violet', desc: '101 départements · 150+ catégories · Google Places + enrichissement waterfall (email + téléphone)' },
   { num: 2, label: 'Email auto', icon: Mail, color: 'indigo', desc: 'Séquence 3 emails (J+0, J+3, J+7) avec relances intelligentes, depuis ton domaine pro' },
   { num: 3, label: 'Form qualif', icon: FileText, color: 'amber', desc: '3-5 questions ciblées avec scoring auto. Sépare les hot leads des curieux' },
   { num: 4, label: 'CRM chaud', icon: KanbanSquare, color: 'emerald', desc: 'Push automatique dans ton pipeline avec score + tag. Tu réponds, tu signes' },
@@ -81,14 +81,14 @@ export default function AutopilotProductPage() {
             </h1>
 
             <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-3xl mx-auto">
-              Sélectionne ta cible. Volia scrap, enrichit, contacte, qualifie et livre les
-              leads chauds dans ton CRM. <strong className="text-content-primary">Tu ne touches rien.</strong>
+              Sélectionne ta cible. Volia trouve tes prospects, les enrichit, les contacte
+              et livre les leads chauds dans ton CRM. <strong className="text-content-primary">Tu gardes la main, Volia fait le reste.</strong>
             </p>
             <p className="text-base text-content-tertiary mb-10 italic">
-              2 semaines plus tard, ton pipeline est plein.
+              Toi, tu te concentres sur le closing.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
               <Link
                 href="/signup?plan=pro"
                 className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-semibold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/50 hover:-translate-y-0.5 transition-all text-base"
@@ -104,6 +104,13 @@ export default function AutopilotProductPage() {
               >
                 Voir une démo 15 min
               </a>
+            </div>
+
+            {/* Réassurance + signaux de confiance (aucune métrique inventée) */}
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs sm:text-sm text-content-tertiary mb-12">
+              <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-emerald-600" /> Sans carte bancaire</span>
+              <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-emerald-600" /> Annulable en 1 clic</span>
+              <span className="inline-flex items-center gap-1.5"><CheckCircle2 size={14} className="text-emerald-600" /> Made in France · RGPD</span>
             </div>
 
             {/* Pipeline visualization */}
@@ -162,9 +169,9 @@ export default function AutopilotProductPage() {
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold mb-4">
                 <Zap size={12} /> Ce qui se passe en autopilot
               </div>
-              <h2 className="text-3xl font-bold tracking-tight mb-3">24/7, sans toi</h2>
+              <h2 className="text-3xl font-bold tracking-tight mb-3">24/7, en pilote auto</h2>
               <p className="text-content-secondary mb-6">
-                Tu ferme l'ordi. Volia continue.
+                Tu fermes l'ordi. Volia continue.
               </p>
               <ul className="space-y-2.5">
                 {WHAT_HAPPENS_AUTO.map((item, i) => {
@@ -267,10 +274,10 @@ export default function AutopilotProductPage() {
         <section className="py-20 px-4 sm:px-6 bg-gradient-to-br from-amber-600 to-orange-700 text-white">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-              Prêt à pleurer plus jamais sur Apollo ?
+              Prêt à remplir ton pipeline sans y passer tes journées ?
             </h2>
             <p className="text-lg opacity-90 mb-8">
-              Trial 14 jours sans CB. Tu sets up en 10 minutes, tu vois les premiers leads dans 48 heures.
+              Essai 14 jours, sans carte bancaire. Tu configures en 10 minutes — Volia s'occupe du reste.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link

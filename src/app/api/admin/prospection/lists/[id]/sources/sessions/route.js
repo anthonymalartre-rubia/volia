@@ -43,23 +43,25 @@ export async function GET(_request, { params }) {
   const sessionIds = (sessions || []).map((s) => s.id);
   if (sessionIds.length === 0) return NextResponse.json({ sessions: [] });
 
-  // 2. Compte les prospects par session (total + ceux avec email).
-  //    Une seule requête, on agrège côté JS.
-  const { data: prospectRows, error: pErr } = await supabase
-    .from('prospects')
-    .select('search_session_id, email')
-    .eq('user_id', user.id)
-    .in('search_session_id', sessionIds);
+  // 2. Compte les prospects par session (total + ceux avec email) via une
+  //    fonction SQL d'agrégation.
+  //    ⚠️ NE PAS lire les lignes pour compter côté JS : PostgREST plafonne le
+  //    SELECT à 1000 lignes par défaut → l'ancien code sous-comptait toute
+  //    session > 1000 prospects (ex: 30 600 affichés "1000"). La fonction
+  //    session_prospect_counts agrège côté Postgres, sans cap.
+  const { data: countRows, error: pErr } = await supabase.rpc('session_prospect_counts', {
+    p_user_id: user.id,
+    p_session_ids: sessionIds,
+  });
 
   if (pErr) return NextResponse.json({ error: pErr.message }, { status: 500 });
 
   const counts = new Map(); // session_id → { total, withEmail }
-  for (const row of prospectRows || []) {
-    const k = row.search_session_id;
-    const c = counts.get(k) || { total: 0, withEmail: 0 };
-    c.total++;
-    if (row.email && String(row.email).trim()) c.withEmail++;
-    counts.set(k, c);
+  for (const row of countRows || []) {
+    counts.set(row.search_session_id, {
+      total: Number(row.total) || 0,
+      withEmail: Number(row.with_email) || 0,
+    });
   }
 
   const out = (sessions || []).map((s) => {

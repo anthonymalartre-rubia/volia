@@ -517,6 +517,8 @@ function NewCampaignContent() {
             insertVar={insertVar}
             onOpenTemplateLibrary={() => setTemplateModalOpen(true)}
             fieldErrors={fieldErrors}
+            spamCheck={spamCheck}
+            spintaxVariants={spintaxVariants}
           />
         )}
 
@@ -787,6 +789,7 @@ function StepMessage({
   hasVariant3, setHasVariant3,
   abTestSampleSize, setAbTestSampleSize,
   insertVar, onOpenTemplateLibrary, fieldErrors,
+  spamCheck, spintaxVariants,
 }) {
   // QW7 — A/B test pollue l'écran de 90% des freelances qui font leur
   // 1ère campagne. On le cache derrière "+ Options avancées" en bas du step.

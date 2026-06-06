@@ -19,6 +19,7 @@
 
 import { getResendDomain, verifyResendDomain } from '@/lib/resend-domains';
 import { buildPeerEmailAddress } from '@/lib/warmup-peer';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 const SELECT_COLS =
   'id, domain, resend_domain_id, status, dns_records, from_name, verified_at, last_check_at, created_at, updated_at';
@@ -83,16 +84,28 @@ export async function syncSenderFromResend({ supabase, sender, triggerVerify = f
   }
 
   // Première bascule en verified → warmup + pool peer (idempotent).
+  //
+  // ⚠️ On utilise le client SERVICE-ROLE (admin) pour ces inserts, pas le
+  //    `supabase` reçu en argument. Raison : quand le flip se produit via la
+  //    route GET /api/email-senders, `supabase` est le client RLS du user.
+  //    Or `warmup_peer_pool` n'a QU'UNE policy SELECT pour le propriétaire et
+  //    AUCUNE policy INSERT → l'insert user était silencieusement refusé par
+  //    RLS (avalé par le catch). Résultat : warmup_sessions OK (policy ALL)
+  //    mais enrôlement peer pool manquant. Le service-role bypasse la RLS et
+  //    rend le bootstrap fiable quel que soit l'appelant (GET ou cron).
   if (flipped && sender.user_id) {
+    let admin = null;
+    try { admin = getSupabaseAdmin(); } catch { admin = supabase; }
+    const db = admin || supabase;
     try {
-      await supabase.from('warmup_sessions').insert({
+      await db.from('warmup_sessions').insert({
         sender_id: sender.id, user_id: sender.user_id, current_day: 1, status: 'active',
       });
     } catch { /* 23505 = déjà démarré */ }
     try {
       const peerEmail = buildPeerEmailAddress(sender.id);
       if (peerEmail) {
-        await supabase.from('warmup_peer_pool').insert({
+        await db.from('warmup_peer_pool').insert({
           sender_id: sender.id, peer_email: peerEmail, active: true,
         });
       }

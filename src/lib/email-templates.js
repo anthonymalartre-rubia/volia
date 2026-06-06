@@ -17,6 +17,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 export const TEMPLATE_CATEGORIES = [
+  { id: 'prospection', label: 'Premier contact', color: 'blue' },
   { id: 'saas', label: 'SaaS B2B', color: 'blue' },
   { id: 'agence', label: 'Agence & Services', color: 'violet' },
   { id: 'ecommerce', label: 'E-commerce B2B', color: 'emerald' },
@@ -30,9 +31,137 @@ export const TEMPLATE_TAGS = [
   'cold', 'follow-up', 'post-demo', 'win-back',
   'demo', 'audit', 'partenariat', 'devis',
   'saas', 'agence', 'tech', 'sales', 'marketing',
+  'premier-contact', 'presentation', 'produit',
 ];
 
 export const EMAIL_TEMPLATES = [
+  // ───── Premier contact & présentation produit (7) — génériques, tous secteurs ─────
+  {
+    id: 'pc-probleme-solution',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Premier contact — problème → solution',
+    description: 'Cold email classique : on nomme le problème, puis la solution. Marche dans tous les secteurs.',
+    subject: '{{company}} — une idée pour {{first_name}}',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>La plupart des équipes comme la vôtre chez {{company}} perdent un temps fou à [décrire le problème concret que vous résolvez].</p>
+<p>On a justement conçu une solution pour ça : [votre produit en une phrase, orientée résultat].</p>
+<p>Concrètement, nos clients constatent [bénéfice principal chiffré — ex : « -40 % de temps passé »] dès les premières semaines.</p>
+<p>Est-ce que ça vaut le coup d'en discuter 15 minutes cette semaine ?</p>
+<p>Bien à vous,<br>[Votre prénom]</p>`,
+    tags: ['cold', 'premier-contact'],
+    use_case: 'Premier email à froid sur une cible qui ne vous connaît pas',
+    estimated_reply_rate: '6-10%',
+  },
+  {
+    id: 'pc-accroche-observation',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Premier contact — accroche personnalisée',
+    description: 'Ouvre sur une observation concrète sur le prospect — le meilleur taux de réponse en cold.',
+    subject: 'Vu chez {{company}} — {{first_name}}',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>J'ai remarqué que {{company}} [observation concrète : recrute, vient de lever, a lancé un produit, est présent sur tel marché…]. Félicitations, c'est un beau signal.</p>
+<p>C'est souvent à ce moment-là que [le problème que vous résolvez] devient critique.</p>
+<p>On aide des entreprises comme la vôtre à [bénéfice en une phrase]. Si le sujet est d'actualité, je vous montre comment en 10 minutes ?</p>
+<p>Bonne journée,<br>[Votre prénom]</p>
+<p style="font-size:12px;color:#888;">PS — si ce n'est pas le bon moment, dites-le-moi, je n'insiste pas.</p>`,
+    tags: ['cold', 'premier-contact'],
+    use_case: 'Cold email personnalisé sur une cible que vous avez un minimum researchée',
+    estimated_reply_rate: '10-18%',
+  },
+  {
+    id: 'pc-ultra-court',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Premier contact — ultra court (3 lignes)',
+    description: 'Le format le plus lu sur mobile : 3 phrases, une seule question. Idéal volume.',
+    subject: 'Question rapide, {{first_name}}',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>Qui s'occupe de [domaine concerné par votre produit] chez {{company}} en ce moment&nbsp;?</p>
+<p>On aide des boîtes similaires à [résultat en quelques mots] — je voulais savoir si c'était la bonne porte.</p>
+<p>Merci d'avance,<br>[Votre prénom]</p>`,
+    tags: ['cold', 'premier-contact'],
+    use_case: 'Premier contact à fort volume — trouver le bon interlocuteur',
+    estimated_reply_rate: '8-14%',
+  },
+  {
+    id: 'produit-benefice-chiffre',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Présentation produit — bénéfice chiffré',
+    description: 'Présente le produit par le résultat business, pas par les fonctionnalités.',
+    subject: '{{first_name}}, [résultat chiffré] pour {{company}} ?',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>Je me permets de vous présenter [nom du produit] en une phrase : <strong>[ce que ça fait, orienté résultat]</strong>.</p>
+<p>Ce que ça change concrètement pour une entreprise comme {{company}} :</p>
+<ul>
+  <li>✅ [Bénéfice 1 — chiffré si possible]</li>
+  <li>✅ [Bénéfice 2 — gain de temps / d'argent]</li>
+  <li>✅ [Bénéfice 3 — tranquillité / conformité / simplicité]</li>
+</ul>
+<p>Le tout sans [la friction habituelle : sans engagement, sans installation, sans changer d'outil…].</p>
+<p>Je vous montre en 15 minutes ce que ça donnerait chez vous ?</p>
+<p>Bien à vous,<br>[Votre prénom]</p>`,
+    tags: ['presentation', 'produit'],
+    use_case: 'Présenter votre produit/offre à un prospect tiède ou en réponse à un intérêt',
+    estimated_reply_rate: '12-20%',
+  },
+  {
+    id: 'produit-3-etapes',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Présentation produit — comment ça marche',
+    description: 'Rassure en montrant la simplicité : votre produit en 3 étapes claires.',
+    subject: 'Comment ça marche — pour {{company}}',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>Vous vous demandez peut-être comment [nom du produit] s'intègre concrètement chez {{company}}. C'est simple, en 3 étapes :</p>
+<ol>
+  <li><strong>[Étape 1]</strong> — [ce que vous faites / ce que le client fait].</li>
+  <li><strong>[Étape 2]</strong> — [la mise en place, en quelques minutes].</li>
+  <li><strong>[Étape 3]</strong> — [le résultat que le client obtient].</li>
+</ol>
+<p>Pas de projet à rallonge, pas de risque : [garantie / essai gratuit / sans engagement].</p>
+<p>Envie de voir ça en live&nbsp;? Je vous propose un créneau de 15 minutes.</p>
+<p>À très vite,<br>[Votre prénom]</p>`,
+    tags: ['presentation', 'produit'],
+    use_case: 'Lever l\'objection "ça a l\'air compliqué" en montrant la simplicité',
+    estimated_reply_rate: '10-16%',
+  },
+  {
+    id: 'produit-preuve-sociale',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Présentation produit — preuve sociale / cas client',
+    description: 'Appuie la présentation sur un résultat client concret — rassure et crédibilise.',
+    subject: 'Ce qu\'on a fait pour [client similaire]',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>Je vous écris parce qu'on a récemment aidé [type d'entreprise proche de {{company}}] à [résultat obtenu — chiffré idéalement].</p>
+<p>Le principe&nbsp;: [votre produit/offre en une phrase].</p>
+<p>Vu votre activité chez {{company}}, je pense qu'on pourrait obtenir un résultat similaire — voire meilleur.</p>
+<p>Je vous partage l'étude de cas complète et on en discute 15 minutes&nbsp;?</p>
+<p>Bien cordialement,<br>[Votre prénom]</p>`,
+    tags: ['presentation', 'produit'],
+    use_case: 'Présenter le produit via un cas client crédible et un secteur proche',
+    estimated_reply_rate: '12-18%',
+  },
+  {
+    id: 'pc-recommandation',
+    category: 'prospection',
+    sector: 'tous',
+    label: 'Premier contact — recommandé par un tiers',
+    description: 'Utilise une recommandation (réelle) pour casser la glace — taux de réponse élevé.',
+    subject: '[Nom du contact] m\'a suggéré de vous écrire',
+    body_html: `<p>Bonjour {{first_name}},</p>
+<p>[Nom du contact commun / source] m'a suggéré de vous contacter — il/elle pensait que ce qu'on fait pourrait être utile à {{company}}.</p>
+<p>En deux mots&nbsp;: on aide [type d'entreprise] à [bénéfice principal].</p>
+<p>Je ne veux pas vous faire perdre de temps&nbsp;: est-ce un sujet pertinent pour vous en ce moment&nbsp;? Si oui, 15 minutes suffisent pour voir si ça colle.</p>
+<p>Bien à vous,<br>[Votre prénom]</p>`,
+    tags: ['cold', 'premier-contact'],
+    use_case: 'Premier contact avec une recommandation réelle (référence, événement, contact commun)',
+    estimated_reply_rate: '15-25%',
+  },
+
   // ───── SaaS B2B (5) ─────
   {
     id: 'saas-demo-cold',

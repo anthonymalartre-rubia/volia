@@ -74,10 +74,13 @@ export async function POST() {
     const sub = subs.data[0];
     const priceId = sub.items?.data?.[0]?.price?.id;
 
-    // Map price → plan
+    // Map price → plan. ⚠️ Tester AUSSI le price annuel (stripePriceIdYearly),
+    // sinon un abonné yearly ne matche rien → downgradé à tort en 'free'.
     let matchedPlan = 'free';
     for (const [planId, plan] of Object.entries(PLANS)) {
-      if (plan.stripePriceId && plan.stripePriceId.trim() === priceId) {
+      const monthly = plan.stripePriceId?.trim();
+      const yearly = plan.stripePriceIdYearly?.trim();
+      if ((monthly && monthly === priceId) || (yearly && yearly === priceId)) {
         matchedPlan = planId;
         break;
       }

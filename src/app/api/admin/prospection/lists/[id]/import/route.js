@@ -88,22 +88,39 @@ export async function POST(request, { params }) {
   let inserted = 0;
   const insertErrors = [];
 
+  // prospect_contacts a DEUX index uniques (list_id,email) ET (list_id,phone).
+  // Un upsert mono-cible onConflict:'list_id,email' n'absorbe PAS un conflit de
+  // téléphone → 23505 qui fait échouer TOUT le chunk. On scinde donc, comme
+  // import-from-session / import-from-crm : contacts avec email (dédup email) vs
+  // téléphone-seul (dédup phone).
   for (let start = 0; start < toInsert.length; start += CHUNK_SIZE) {
     const chunk = toInsert.slice(start, start + CHUNK_SIZE);
-    const { data, error, count } = await supabase
-      .from('prospect_contacts')
-      .upsert(chunk, {
-        onConflict: 'list_id,email',
-        ignoreDuplicates: true,
-        count: 'exact',
-      })
-      .select('id', { count: 'exact' });
+    const withEmail = chunk.filter((c) => c.email);
+    const phoneOnly = chunk.filter((c) => !c.email && c.phone);
 
-    if (error) {
-      console.error('[import] chunk error', error);
-      insertErrors.push(error.message);
-    } else {
-      inserted += (data?.length || count || 0);
+    if (withEmail.length > 0) {
+      const { data, error } = await supabase
+        .from('prospect_contacts')
+        .upsert(withEmail, { onConflict: 'list_id,email', ignoreDuplicates: true })
+        .select('id');
+      if (error) {
+        console.error('[import] chunk email error', error);
+        insertErrors.push(error.message);
+      } else {
+        inserted += data?.length || 0;
+      }
+    }
+    if (phoneOnly.length > 0) {
+      const { data, error } = await supabase
+        .from('prospect_contacts')
+        .upsert(phoneOnly, { onConflict: 'list_id,phone', ignoreDuplicates: true })
+        .select('id');
+      if (error) {
+        console.error('[import] chunk phone error', error);
+        insertErrors.push(error.message);
+      } else {
+        inserted += data?.length || 0;
+      }
     }
   }
 

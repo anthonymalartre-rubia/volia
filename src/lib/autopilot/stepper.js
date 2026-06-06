@@ -40,7 +40,7 @@ const CLAUDE_WRITES_PER_WORKFLOW_PER_MONTH = 1500;
  */
 async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl, workflowMetricsCache, allowClaude = true }) {
   const step = template.sequence[stepIndex];
-  const firstName = prospect.first_name || prospect.nom?.split(' ')[0] || 'toi';
+  const firstName = prospect.contact_name || prospect.nom?.split(' ')[0] || 'toi';
   const company = prospect.nom || prospect.company || 'votre entreprise';
 
   // ─── Phase 3.1 : A/B subject variant picker ───────────────────
@@ -135,12 +135,22 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
   const now = Date.now();
   let claudeUsed = false; // pour le compteur quota mensuel par workflow
 
-  // Charge le prospect
-  const { data: prospect } = await supabase
+  // Charge le prospect.
+  // ⚠️ La table prospects N'A PAS de colonne first_name (colonnes nom / contact_name).
+  // Sélectionner first_name renvoyait une 400 PostgREST → prospect=null → CHAQUE
+  // exécution marquée 'prospect_deleted' (autopilot 100% cassé). On lit contact_name
+  // et on garde l'erreur pour ne pas brûler une exécution sur un simple souci réseau.
+  const { data: prospect, error: prospectErr } = await supabase
     .from('prospects')
-    .select('id, nom, email, first_name, telephone')
+    .select('id, nom, contact_name, email, telephone')
     .eq('id', execution.prospect_id)
     .maybeSingle();
+  if (prospectErr) {
+    // Erreur DB transitoire : on NE marque PAS prospect_deleted (sinon on brûle
+    // l'exécution sur un simple souci réseau). On skippe ce cycle → retry au prochain cron.
+    console.error('[autopilot/stepper] prospect fetch error', prospectErr?.message || prospectErr);
+    return { skipped: true, reason: 'prospect_fetch_error' };
+  }
   if (!prospect) {
     updates.current_step = 'failed';
     updates.exit_reason = 'prospect_deleted';

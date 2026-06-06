@@ -42,6 +42,9 @@ export async function POST(request, { params }) {
   const now = new Date().toISOString();
   const PAGE_SIZE = 1000;
   const insertedEnrollments = [];
+  // Map globale contact_id → email, alimentée au fil des pages (sert aux webhooks
+  // APRÈS la boucle ; `contacts`/`rows` sont block-scoped et n'existent plus hors boucle).
+  const emailByContactId = new Map();
   let totalEligible = 0;
 
   for (let offset = 0; ; offset += PAGE_SIZE) {
@@ -57,6 +60,7 @@ export async function POST(request, { params }) {
     if (cErr) return NextResponse.json({ error: cErr.message }, { status: 500 });
     const batch = contacts || [];
     if (batch.length === 0) break;
+    for (const c of batch) emailByContactId.set(c.id, c.email);
 
     const rows = batch
       .filter((c) => c.email && c.email.includes('@'))
@@ -103,7 +107,7 @@ export async function POST(request, { params }) {
   // Fire-and-forget — n'arrête JAMAIS le flux principal en cas d'erreur.
   const newRows = insertedEnrollments || [];
   if (newRows.length > 0) {
-    const emailById = new Map(contacts.map((c) => [c.id, c.email]));
+    const emailById = emailByContactId;
     for (const er of newRows) {
       emitWebhookEvent({
         userId: seq.owner_id,

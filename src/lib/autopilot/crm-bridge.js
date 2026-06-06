@@ -57,7 +57,7 @@ async function findOrCreateContact(supabase, { userId, prospect, score }) {
     .from('crm_contacts')
     .insert({
       user_id: userId,
-      name: prospect.first_name || prospect.nom || 'Prospect Autopilot',
+      name: prospect.contact_name || prospect.nom || 'Prospect Autopilot',
       email: prospect.email || null,
       phone: prospect.telephone || null,
       company: prospect.nom || null,
@@ -277,7 +277,7 @@ function buildLeadPayload({ prospect, workflow, score, tier, routing, formRespon
     source: 'volia_autopilot',
     workflow: { id: workflow?.id, name: workflow?.name, template_id: workflow?.template_id },
     lead: {
-      name: prospect?.first_name || prospect?.nom || null,
+      name: prospect?.contact_name || prospect?.nom || null,
       company: prospect?.nom || null,
       email: prospect?.email || null,
       phone: prospect?.telephone || null,

@@ -29,27 +29,39 @@ export async function GET(request) {
   const stageId = url.searchParams.get('stage_id');
   const status = url.searchParams.get('status');
 
-  let query = supabase
-    .from('crm_deals')
-    .select(
-      `id, title, value_cents, currency, expected_close_date, notes, status, closed_at, position,
-       pipeline_id, stage_id, contact_id, metadata, created_at, updated_at,
-       contact:crm_contacts(id, name, email, company),
-       stage:crm_stages(id, name, color, probability, closing_type, position)`
-    )
-    .order('position', { ascending: true });
+  // ⚠️ Pagination obligatoire : PostgREST plafonne à 1000 lignes. Sans ça, un
+  // pipeline > 1000 deals tronque le Kanban ET fausse toutes les stats agrégées
+  // (calculatePipelineStats réduit la liste en JS). On boucle jusqu'à épuisement.
+  const PAGE_SIZE = 1000;
+  const all = [];
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    let query = supabase
+      .from('crm_deals')
+      .select(
+        `id, title, value_cents, currency, expected_close_date, notes, status, closed_at, position,
+         pipeline_id, stage_id, contact_id, metadata, created_at, updated_at,
+         contact:crm_contacts(id, name, email, company),
+         stage:crm_stages(id, name, color, probability, closing_type, position)`
+      )
+      .order('position', { ascending: true })
+      .order('id', { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1);
 
-  if (pipelineId) query = query.eq('pipeline_id', pipelineId);
-  if (stageId) query = query.eq('stage_id', stageId);
-  if (status && VALID_STATUS.includes(status)) query = query.eq('status', status);
+    if (pipelineId) query = query.eq('pipeline_id', pipelineId);
+    if (stageId) query = query.eq('stage_id', stageId);
+    if (status && VALID_STATUS.includes(status)) query = query.eq('status', status);
 
-  const { data, error } = await query;
-  if (error) {
-    console.error('[api/crm/deals] GET error', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    const { data, error } = await query;
+    if (error) {
+      console.error('[api/crm/deals] GET error', error);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    }
+    const batch = data || [];
+    all.push(...batch);
+    if (batch.length < PAGE_SIZE) break;
   }
 
-  return NextResponse.json({ success: true, data: data || [] });
+  return NextResponse.json({ success: true, data: all });
 }
 
 export async function POST(request) {

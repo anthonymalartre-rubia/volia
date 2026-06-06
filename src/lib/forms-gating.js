@@ -23,9 +23,10 @@ import { getEffectivePlan } from './trial';
 export const FORMS_LIMITS = {
   free: 0,
   solo: 0,
-  pro: 0,
+  pro: -1,         // Formulaires inclus dès Pro (soumissions plafonnées via form_submissions_per_month)
   business: -1,    // -1 = illimité
-  enterprise: -1,  // alias legacy
+  enterprise: -1,
+  enterprise_legacy: -1, // ancien Business 99€
 };
 
 /**

@@ -280,8 +280,8 @@ async function handleCron(request) {
   // après chaque success via incrementUsage() (fire-and-forget).
   //
   // Limites par plan (cf. src/lib/plans.js) :
-  //   free/solo/pro : 0 (Campagnes = Business-only)
-  //   business / enterprise : 10 000 emails/mois
+  //   free/solo : 0 (pas de Campagnes)
+  //   pro : 2 000 emails/mois · business/enterprise : 10 000+ emails/mois
   //
   // Sans ce garde-fou : un client Business pouvait envoyer un volume illimité
   // sur notre compte Resend, exposant Volia à des factures imprévisibles.

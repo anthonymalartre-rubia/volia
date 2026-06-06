@@ -28,8 +28,8 @@
 // '@/lib/campagnes-access-server'.
 // ─────────────────────────────────────────────────────────────────────
 
-// Plans qui ont accès au module Campagnes (Business-only — cf. positionnement)
-export const CAMPAGNES_ALLOWED_PLANS = ['business', 'enterprise'];
+// Plans qui ont accès au module Campagnes (inclus dès Pro).
+export const CAMPAGNES_ALLOWED_PLANS = ['pro', 'business', 'enterprise', 'enterprise_legacy'];
 
 /**
  * Vérifie qu'un plan a accès au module Campagnes (pure function, no IO).

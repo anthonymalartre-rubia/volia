@@ -71,10 +71,10 @@ export const PLANS = {
     ],
   },
 
-  // ─── Pro : plus de volume Prospection vs Solo ────
-  // Pro = Solo gonflé (5× le volume, dossiers illimités, vérif email).
-  // Ne débloque PAS CRM/Campagnes/Formulaires — ces 3 modules sont
-  // réservés à Business (positionnement upmarket).
+  // ─── Pro : Solo gonflé + la suite (PME/agences) ────
+  // Pro = Solo gonflé (5× le volume, dossiers illimités, vérif email)
+  // ET débloque CRM + Campagnes + Formulaires (unlocksModules).
+  // Business se différencie par les quotas supérieurs, les équipes et le MCP.
   pro: {
     id: 'pro',
     name: 'Pro',

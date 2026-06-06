@@ -119,7 +119,14 @@ export default function ImportFromProspectionModal({ open, onClose, listId, onSu
 
   const importCount = useMemo(() => {
     if (!selectedSession) return 0;
-    return includeEmailless ? selectedSession.prospects_count : selectedSession.emails_count;
+    // On affiche le nombre RÉELLEMENT importé (dédupliqué) :
+    //   - mode défaut : emails_count = emails uniques
+    //   - mode "inclure sans email" : importable_count = emails uniques + tels uniques
+    // importable_count peut être absent (vieux cache) → fallback prospects_count.
+    if (includeEmailless) {
+      return selectedSession.importable_count ?? selectedSession.prospects_count;
+    }
+    return selectedSession.emails_count;
   }, [selectedSession, includeEmailless]);
 
   // Auto-coche "Inclure les prospects sans email" quand on sélectionne une

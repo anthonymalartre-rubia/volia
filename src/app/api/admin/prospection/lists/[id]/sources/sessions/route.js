@@ -56,16 +56,20 @@ export async function GET(_request, { params }) {
 
   if (pErr) return NextResponse.json({ error: pErr.message }, { status: 500 });
 
-  const counts = new Map(); // session_id → { total, withEmail }
+  // total      = nb brut de prospects trouvés (headline)
+  // withEmail  = nb de contacts email UNIQUES (dédup email = ce que l'import insère)
+  // importable = withEmail + contacts téléphone-seul uniques (mode "inclure sans email")
+  const counts = new Map(); // session_id → { total, withEmail, importable }
   for (const row of countRows || []) {
     counts.set(row.search_session_id, {
       total: Number(row.total) || 0,
       withEmail: Number(row.with_email) || 0,
+      importable: Number(row.importable) || 0,
     });
   }
 
   const out = (sessions || []).map((s) => {
-    const c = counts.get(s.id) || { total: 0, withEmail: 0 };
+    const c = counts.get(s.id) || { total: 0, withEmail: 0, importable: 0 };
     return {
       session_id: s.id,
       created_at: s.created_at,
@@ -75,6 +79,8 @@ export async function GET(_request, { params }) {
       status: s.status || null,
       prospects_count: c.total,
       emails_count: c.withEmail,
+      // Nb réellement importable en mode "inclure sans email" (dédup email + tel).
+      importable_count: c.importable,
     };
   });
 

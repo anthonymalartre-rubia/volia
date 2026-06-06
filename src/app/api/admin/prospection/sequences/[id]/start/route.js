@@ -36,41 +36,56 @@ export async function POST(request, { params }) {
     return NextResponse.json({ error: 'Aucun step défini' }, { status: 400 });
   }
 
-  // Récupère les contacts de la liste (avec email non null, non opt-out)
-  // prospect_contacts a list_id ? On vérifie via la table de jointure si besoin.
-  // Pattern dans le code existant : prospect_contacts.list_id direct (cf prospect_lists / contacts_count).
-  const { data: contacts, error: cErr } = await supabase
-    .from('prospect_contacts')
-    .select('id, email')
-    .eq('list_id', seq.list_id)
-    .eq('opt_out', false)
-    .not('email', 'is', null);
+  // Récupère les contacts de la liste (email non null, non opt-out) PAR PAGES.
+  // ⚠️ PostgREST plafonne le SELECT à 1000 lignes par défaut → sans pagination
+  // une liste > 1000 contacts n'enrôlerait que les 1000 premiers. On boucle.
+  const now = new Date().toISOString();
+  const PAGE_SIZE = 1000;
+  const insertedEnrollments = [];
+  let totalEligible = 0;
 
-  if (cErr) return NextResponse.json({ error: cErr.message }, { status: 500 });
-  if (!contacts || contacts.length === 0) {
-    return NextResponse.json({ error: 'Aucun contact éligible dans la liste' }, { status: 400 });
+  for (let offset = 0; ; offset += PAGE_SIZE) {
+    const { data: contacts, error: cErr } = await supabase
+      .from('prospect_contacts')
+      .select('id, email')
+      .eq('list_id', seq.list_id)
+      .eq('opt_out', false)
+      .not('email', 'is', null)
+      .order('id', { ascending: true })
+      .range(offset, offset + PAGE_SIZE - 1);
+
+    if (cErr) return NextResponse.json({ error: cErr.message }, { status: 500 });
+    const batch = contacts || [];
+    if (batch.length === 0) break;
+
+    const rows = batch
+      .filter((c) => c.email && c.email.includes('@'))
+      .map((c) => ({
+        sequence_id: id,
+        contact_id: c.id,
+        current_step: 0,
+        status: 'active',
+        next_send_at: now,
+      }));
+    totalEligible += rows.length;
+
+    if (rows.length > 0) {
+      // onConflict (sequence_id, contact_id) → ignore les déjà-enrôlés.
+      // .select() pour émettre 1 webhook par NOUVEL enrollment.
+      const { data: ins, error: insErr } = await supabase
+        .from('sequence_enrollments')
+        .upsert(rows, { onConflict: 'sequence_id,contact_id', ignoreDuplicates: true })
+        .select('id, contact_id');
+      if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
+      if (ins?.length) insertedEnrollments.push(...ins);
+    }
+
+    if (batch.length < PAGE_SIZE) break;
   }
 
-  const now = new Date().toISOString();
-  const rows = contacts
-    .filter((c) => c.email && c.email.includes('@'))
-    .map((c) => ({
-      sequence_id: id,
-      contact_id: c.id,
-      current_step: 0,
-      status: 'active',
-      next_send_at: now,
-    }));
-
-  // Insert avec onConflict pour ignorer les enrollments déjà existants
-  // (UNIQUE (sequence_id, contact_id)). On `select()` pour récupérer les
-  // rows réellement insérées et émettre 1 webhook par nouvel enrollment.
-  const { data: insertedEnrollments, error: insErr } = await supabase
-    .from('sequence_enrollments')
-    .upsert(rows, { onConflict: 'sequence_id,contact_id', ignoreDuplicates: true })
-    .select('id, contact_id');
-
-  if (insErr) return NextResponse.json({ error: insErr.message }, { status: 500 });
+  if (totalEligible === 0) {
+    return NextResponse.json({ error: 'Aucun contact éligible dans la liste' }, { status: 400 });
+  }
 
   // Active la séquence
   const updates = { status: 'active', updated_at: now };

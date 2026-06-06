@@ -135,6 +135,16 @@ export async function POST(request, { params }) {
     }
   }
 
+  // Si AUCUN insert n'a réussi alors qu'il y avait des contacts ET qu'on a des
+  // erreurs DB → ce n'est PAS un doublon, c'est une vraie erreur. On la remonte
+  // au lieu de la maquiller en "skipped/doublon".
+  if (inserted === 0 && insertErrors.length > 0) {
+    return NextResponse.json(
+      { error: `Échec de l'import : ${insertErrors[0]}` },
+      { status: 500 }
+    );
+  }
+
   const skipped = total - inserted;
 
   // 5. Refresh des compteurs de la liste

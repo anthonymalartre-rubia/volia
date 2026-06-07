@@ -15,6 +15,7 @@ import {
   validateSenderDomain,
 } from '@/lib/resend-domains';
 import { syncSenderFromResend } from '@/lib/email-sender-sync';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 function mapResendErrorToStatus(err) {
   if (!err) return 500;
@@ -77,11 +78,18 @@ export async function GET() {
       .in('sender_id', senderIds);
     const peerMap = new Map((peers || []).map((p) => [p.sender_id, p]));
 
-    // Taille du pool global (info pour le bloc "vous contribuez à X+ domaines")
-    const { count: poolCount } = await supabase
-      .from('warmup_peer_pool')
-      .select('id', { count: 'exact', head: true })
-      .eq('active', true);
+    // Taille du pool GLOBAL (info "vous contribuez à X+ domaines").
+    // ⚠️ Compté en service-role : sous RLS user, warmup_peer_pool n'expose que
+    // les peers du user (policy SELECT own) → poolCount valait ~1 au lieu du total.
+    let poolCount = 0;
+    try {
+      const admin = getSupabaseAdmin();
+      const { count } = await admin
+        .from('warmup_peer_pool')
+        .select('id', { count: 'exact', head: true })
+        .eq('active', true);
+      poolCount = count || 0;
+    } catch { /* admin indispo → 0 (bloc info non critique) */ }
 
     for (const s of senders) {
       const sess = sessionMap.get(s.id) || null;

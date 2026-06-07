@@ -94,10 +94,22 @@ async function handleCron(request) {
 
   // 3) Charge TOUS les peers actifs du pool (on a besoin du pool global
   //    pour pouvoir sélectionner des destinataires ≠ self)
-  const { data: allPeers } = await supabase
-    .from('warmup_peer_pool')
-    .select('id, sender_id, peer_email, active')
-    .eq('active', true);
+  // Pagination (plafond PostgREST 1000) : sinon au-delà de 1000 peers actifs,
+  // le cron en ignore une partie (jamais choisis comme destinataires).
+  const POOL_PAGE = 1000;
+  const allPeers = [];
+  for (let off = 0; ; off += POOL_PAGE) {
+    const { data, error } = await supabase
+      .from('warmup_peer_pool')
+      .select('id, sender_id, peer_email, active')
+      .eq('active', true)
+      .order('id', { ascending: true })
+      .range(off, off + POOL_PAGE - 1);
+    if (error) break;
+    const batch = data || [];
+    allPeers.push(...batch);
+    if (batch.length < POOL_PAGE) break;
+  }
 
   if (!allPeers || allPeers.length < 2) {
     // Besoin d'au moins 2 peers pour un échange (un envoyeur + un receveur).
@@ -119,15 +131,24 @@ async function handleCron(request) {
   // On récupère tous les exchanges du jour pour les peers de notre liste,
   // puis on agrège par from_peer_id côté JS (plus simple que des group by SQL).
   const peerIds = allPeers.map((p) => p.id);
-  const { data: todayExchanges } = await supabase
-    .from('warmup_exchanges')
-    .select('from_peer_id')
-    .gte('sent_at', todayStartIso)
-    .in('from_peer_id', peerIds);
-
+  // Pagination (plafond 1000) : sinon le décompte du jour est tronqué et le
+  // throttling journalier peut être contourné (sur-envoi).
   const sentTodayByPeerId = new Map();
-  for (const ex of todayExchanges || []) {
-    sentTodayByPeerId.set(ex.from_peer_id, (sentTodayByPeerId.get(ex.from_peer_id) || 0) + 1);
+  const EX_PAGE = 1000;
+  for (let off = 0; ; off += EX_PAGE) {
+    const { data, error } = await supabase
+      .from('warmup_exchanges')
+      .select('from_peer_id')
+      .gte('sent_at', todayStartIso)
+      .in('from_peer_id', peerIds)
+      .order('id', { ascending: true })
+      .range(off, off + EX_PAGE - 1);
+    if (error) break;
+    const batch = data || [];
+    for (const ex of batch) {
+      sentTodayByPeerId.set(ex.from_peer_id, (sentTodayByPeerId.get(ex.from_peer_id) || 0) + 1);
+    }
+    if (batch.length < EX_PAGE) break;
   }
 
   // 5) Boucle d'envoi

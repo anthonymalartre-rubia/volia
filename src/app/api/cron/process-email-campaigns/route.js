@@ -610,14 +610,22 @@ async function handleCron(request) {
       // Fire-and-forget : webhook 'campaign_completed' aux abonnés Zapier/Make
       // NB : la colonne est owner_id (pas user_id) — bug fix audit du 27 mai 2026
       if (completedCampaign?.owner_id) {
-        const { data: stats } = await supabase
-          .from('email_sends')
-          .select('status')
-          .eq('campaign_id', cid);
-        const counts = (stats || []).reduce((acc, s) => {
-          acc[s.status] = (acc[s.status] || 0) + 1;
-          return acc;
-        }, {});
+        // Pagination (plafond PostgREST 1000) : Business/Enterprise envoient
+        // jusqu'à 10k/50k → sans ça les totaux du webhook seraient sous-comptés.
+        const counts = {};
+        const STAT_PAGE = 1000;
+        for (let off = 0; ; off += STAT_PAGE) {
+          const { data: stats, error } = await supabase
+            .from('email_sends')
+            .select('status')
+            .eq('campaign_id', cid)
+            .order('id', { ascending: true })
+            .range(off, off + STAT_PAGE - 1);
+          if (error) break;
+          const batch = stats || [];
+          for (const s of batch) counts[s.status] = (counts[s.status] || 0) + 1;
+          if (batch.length < STAT_PAGE) break;
+        }
         emitWebhookEvent({
           // Bug fix audit 1er juin 2026 : avant on lisait completedCampaign.user_id
           // qui n'existe pas (la colonne est owner_id, cf. ligne 532 et le check

@@ -40,11 +40,24 @@ const ANALYSIS_WINDOW_DAYS = 7;
 async function computeWorkflowKpis(supabase, workflowId, windowDays = ANALYSIS_WINDOW_DAYS) {
   const since = new Date(Date.now() - windowDays * 86400 * 1000).toISOString();
 
-  const { data: executions } = await supabase
-    .from('autopilot_executions')
-    .select('current_step, email_1_sent_at, form_submitted_at, crm_pushed_at, computed_score, created_at, step_history')
-    .eq('workflow_id', workflowId)
-    .gte('created_at', since);
+  // Pagination obligatoire : PostgREST plafonne à 1000 lignes. Un workflow
+  // Business/Enterprise peut dépasser 1000 exécutions sur la fenêtre → KPIs
+  // sous-estimés → faux positifs underperformance + suggestions Claude biaisées.
+  const PAGE = 1000;
+  const executions = [];
+  for (let off = 0; ; off += PAGE) {
+    const { data, error } = await supabase
+      .from('autopilot_executions')
+      .select('current_step, email_1_sent_at, form_submitted_at, crm_pushed_at, computed_score, created_at, step_history')
+      .eq('workflow_id', workflowId)
+      .gte('created_at', since)
+      .order('id', { ascending: true })
+      .range(off, off + PAGE - 1);
+    if (error) break;
+    const batch = data || [];
+    executions.push(...batch);
+    if (batch.length < PAGE) break;
+  }
 
   const total = executions?.length || 0;
   const emailed = executions?.filter((e) => e.email_1_sent_at).length || 0;

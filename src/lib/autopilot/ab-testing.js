@@ -183,10 +183,22 @@ export async function updateWinnersForWorkflow(supabase, workflowId, sequenceLen
     .maybeSingle();
   if (!workflow) return null;
 
-  const { data: executions } = await supabase
-    .from('autopilot_executions')
-    .select('id, step_history, form_submitted_at, crm_pushed_at, computed_score')
-    .eq('workflow_id', workflowId);
+  // Pagination obligatoire (plafond PostgREST 1000) : sur un workflow > 1000
+  // exécutions, le winner A/B serait calculé sur un échantillon tronqué.
+  const PAGE = 1000;
+  const executions = [];
+  for (let off = 0; ; off += PAGE) {
+    const { data, error } = await supabase
+      .from('autopilot_executions')
+      .select('id, step_history, form_submitted_at, crm_pushed_at, computed_score')
+      .eq('workflow_id', workflowId)
+      .order('id', { ascending: true })
+      .range(off, off + PAGE - 1);
+    if (error) break;
+    const batch = data || [];
+    executions.push(...batch);
+    if (batch.length < PAGE) break;
+  }
 
   const cache = workflow.metrics_cache || {};
   const winners = cache.ab_winners || {};

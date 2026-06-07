@@ -15,6 +15,7 @@ import {
   getWarmupProgressPercent,
   WARMUP_DURATION_DAYS,
 } from '@/lib/warmup';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 async function buildWarmupPayload(supabase, session, senderId) {
   if (!session) return { warmup: null };
@@ -54,11 +55,17 @@ async function buildWarmupPayload(supabase, session, senderId) {
       exchangesToday = count || 0;
     }
 
-    // Taille du pool actif (info publique style "vous contribuez à N+ domaines")
-    const { count: poolCount } = await supabase
-      .from('warmup_peer_pool')
-      .select('id', { count: 'exact', head: true })
-      .eq('active', true);
+    // Taille du pool GLOBAL — compté en service-role (sous RLS user on ne verrait
+    // que les peers du user → chiffre faux).
+    let poolCount = 0;
+    try {
+      const admin = getSupabaseAdmin();
+      const { count } = await admin
+        .from('warmup_peer_pool')
+        .select('id', { count: 'exact', head: true })
+        .eq('active', true);
+      poolCount = count || 0;
+    } catch { /* admin indispo → 0 */ }
 
     peer = peerRow
       ? {

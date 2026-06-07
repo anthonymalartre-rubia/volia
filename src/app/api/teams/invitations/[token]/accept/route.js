@@ -19,7 +19,7 @@ export async function GET(_request, context) {
   const supabase = getSupabaseAdmin();
   const { data: invite } = await supabase
     .from('team_invitations')
-    .select('id, team_id, email, role, expires_at, accepted_at')
+    .select('id, team_id, email, role, expires_at, accepted_at, invited_by')
     .eq('token', token)
     .maybeSingle();
 
@@ -64,7 +64,7 @@ export async function POST(_request, context) {
   // Récupère l'invite
   const { data: invite } = await supabase
     .from('team_invitations')
-    .select('id, team_id, email, role, expires_at, accepted_at')
+    .select('id, team_id, email, role, expires_at, accepted_at, invited_by')
     .eq('token', token)
     .maybeSingle();
 

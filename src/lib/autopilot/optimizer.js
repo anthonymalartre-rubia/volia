@@ -29,7 +29,7 @@ import { updateWinnersForWorkflow } from './ab-testing';
 import { getPlanAutopilotLimits } from '../plans';
 
 // Aligné sur le reste du repo prod. NE PAS utiliser 'claude-sonnet-4-5'.
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const UNDERPERF_THRESHOLD = 0.7; // actual < expected × 0.7 = underperf
 const MAX_SUGGESTIONS_PER_RUN = 4;
 const ANALYSIS_WINDOW_DAYS = 7;

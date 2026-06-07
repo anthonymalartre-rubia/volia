@@ -22,7 +22,7 @@ import {
   enforceQuotaOrThrow,
 } from './autonomy';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 // Pool topics evergreen B2B SEO — Claude pioche un sujet par rotation date-based
 const TOPICS_BACKLOG = [

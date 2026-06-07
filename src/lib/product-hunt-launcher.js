@@ -9,7 +9,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 export const LAUNCH_CHECKLIST = [
   { id: 'tagline_ready', label: 'Tagline finalisé (≤60 caractères)', phase: 'J-14' },

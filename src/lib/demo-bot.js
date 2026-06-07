@@ -11,7 +11,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { getSupabaseAdmin } from './supabase-admin';
 import { enforceQuotaOrThrow } from './autonomy';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const MAX_MESSAGES_PER_SESSION = 20;
 const SESSION_WINDOW_MINUTES = 30;
 const MAX_MESSAGE_LENGTH = 1000;

@@ -46,7 +46,7 @@ import {
 } from './autonomy';
 import { getSupabaseAdmin } from './supabase-admin';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const MAX_PER_RUN = 2;
 const MAX_FILE_LINES = 500;
 const MAX_PATCH_LINES = 30;

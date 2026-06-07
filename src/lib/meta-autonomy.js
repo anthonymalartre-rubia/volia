@@ -15,7 +15,7 @@ import { getSupabaseAdmin } from './supabase-admin';
 import { sendEmail } from './email';
 import { isAutonomyEnabled, logAutonomousAction, enforceQuotaOrThrow } from './autonomy';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const FOUNDER_EMAIL = process.env.AUTONOMY_FOUNDER_EMAIL || 'anthony.malartre@suraya.fr';
 
 // Coût estimé par action (en EUR). Hypothèses raisonnables sans API metering.

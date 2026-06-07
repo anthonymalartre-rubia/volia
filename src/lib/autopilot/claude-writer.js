@@ -27,7 +27,7 @@ import Anthropic from '@anthropic-ai/sdk';
 // Aligné sur le reste du repo prod (parse-search, blog-writer, etc.).
 // ⚠️ NE PAS utiliser 'claude-sonnet-4-5' (string invalide → 404 silencieux
 // → fallback systématique sur body_summary).
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 const FORBIDDEN_PATTERNS = [
   // DGCCRF

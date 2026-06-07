@@ -31,7 +31,7 @@ import {
   enforceQuotaOrThrow,
 } from './autonomy';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const ACTION_TYPE = 'linkedin_founder_post';
 const MIN_HOURS_BETWEEN_POSTS = 144; // 1 post founder / 6 jours max
 

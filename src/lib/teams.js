@@ -21,9 +21,9 @@ export const ROLES = {
   MEMBER: 'member',
 };
 
-// Plans qui débloquent le multi-utilisateurs.
-// Garde 'enterprise' comme alias historique (cf. lib/plans.js).
-export const TEAMS_ENABLED_PLANS = ['business', 'enterprise'];
+// Plans qui débloquent le multi-utilisateurs (Business et au-delà).
+// 'enterprise_legacy' = ancien Business 99€ → garde l'accès équipes.
+export const TEAMS_ENABLED_PLANS = ['business', 'enterprise', 'enterprise_legacy'];
 
 /**
  * Vrai si le plan donné débloque le multi-utilisateurs.

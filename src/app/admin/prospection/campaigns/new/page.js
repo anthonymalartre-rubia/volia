@@ -319,7 +319,7 @@ function NewCampaignContent() {
       } else {
         setToast({
           type: 'success',
-          message: `Email test envoyé à ${data.to} — check ta boîte.`,
+          message: `Email test envoyé à ${data.to} — vérifie ta boîte.`,
         });
       }
     } catch {
@@ -403,10 +403,10 @@ function NewCampaignContent() {
       {/* Toast QW5 — feedback envoi test ou erreur de validation */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-[100] max-w-sm flex items-start gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-2xl border animate-in fade-in slide-in-from-top-2 duration-200 ${
+          className={`fixed top-20 right-4 z-[100] max-w-sm flex items-start gap-2 px-4 py-3 rounded-lg text-sm font-medium shadow-2xl border bg-surface-card animate-in fade-in slide-in-from-top-2 duration-200 ${
             toast.type === 'success'
-              ? 'bg-emerald-500/15 text-emerald-600 border-emerald-500/30'
-              : 'bg-red-500/15 text-red-600 border-red-500/30'
+              ? 'text-emerald-600 border-emerald-500/40'
+              : 'text-red-600 border-red-500/40'
           }`}
           role="status"
         >

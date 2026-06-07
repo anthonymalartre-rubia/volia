@@ -26,7 +26,7 @@ import {
   enforceQuotaOrThrow,
 } from './autonomy';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const MIN_COMMITS_FOR_ENTRY = 3;
 
 // Préfixes commits user-facing (worth a changelog mention)

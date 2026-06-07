@@ -34,7 +34,7 @@ import {
   enforceQuotaOrThrow,
 } from './autonomy';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 const MIN_HOURS_BETWEEN_POSTS = 48; // 1 brouillon proposé / 2 jours max
 const EVENTS_LOOKBACK_DAYS = 7;
 

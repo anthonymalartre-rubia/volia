@@ -25,7 +25,7 @@ import Anthropic from '@anthropic-ai/sdk';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 export async function POST(request) {
   const { user, supabase } = await getAuthenticatedUser();

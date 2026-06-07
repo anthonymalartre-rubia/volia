@@ -15,7 +15,7 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 const SYSTEM_PROMPT = `Tu es l'assistant de classification d'emails de Volia.fr (SaaS B2B prospection + CRM + campagnes email + forms).
 

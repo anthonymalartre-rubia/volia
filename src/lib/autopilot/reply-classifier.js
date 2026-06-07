@@ -18,7 +18,7 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { cleanEnv } from '@/lib/envClean';
 
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 // Catégories pour lesquelles on génère un brouillon de réponse.
 // not_interested / unsubscribe / auto_reply → AUCUN brouillon (on ne relance

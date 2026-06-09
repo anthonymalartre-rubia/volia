@@ -158,14 +158,9 @@ export function getAllSeoUrls(baseUrl = 'https://volia.fr') {
     });
   }
 
-  // Department pages (1 per dept)
-  for (const dept of depts) {
-    urls.push({
-      loc: `${baseUrl}/prospection/dept/${dept.slug}`,
-      priority: 0.6,
-      changefreq: 'monthly',
-    });
-  }
+  // Department pages (1 per dept) — EXCLUES du sitemap : ces pages /dept/[slug]
+  // sont en noindex (Option C SEO, page.js robots:{index:false}). Lister une
+  // URL noindex dans le sitemap est contradictoire (warning Search Console).
 
   // Combined category × department pages (the bulk)
   for (const cat of cats) {
@@ -178,19 +173,8 @@ export function getAllSeoUrls(baseUrl = 'https://volia.fr') {
     }
   }
 
-  // Combined category × region pages (14 régions × ~150 cats ≈ 2 100 URLs)
-  // Priority intermédiaire entre /[cat] (0.6) et /[cat]/[dept] (0.4) :
-  // les pages région agrègent l'information et méritent un signal plus fort.
-  const regions = getAllRegions();
-  for (const cat of cats) {
-    for (const r of regions) {
-      urls.push({
-        loc: `${baseUrl}/prospection/${cat.slug}/region/${r.slug}`,
-        priority: 0.5,
-        changefreq: 'monthly',
-      });
-    }
-  }
+  // Combined category × region pages — EXCLUES du sitemap : pages
+  // /[cat]/region/[r] en noindex (Option C SEO). On ne les liste plus.
 
   // ─── Pages utilitaires publiques ───────────────────────────────
   urls.push({ loc: `${baseUrl}/changelog`, priority: 0.5, changefreq: 'weekly' });
@@ -208,70 +192,24 @@ export function getAllSeoUrls(baseUrl = 'https://volia.fr') {
     // personas optionnel — si non présent, on skip
   }
 
-  // ─── Suisse romande (6 cantons francophones) ────────────────────
-  try {
-    const { getAllCantonsCH } = require('./slugs-ch');
-    const cantonsCH = getAllCantonsCH();
-
-    urls.push({ loc: `${baseUrl}/prospection-ch`, priority: 0.7, changefreq: 'weekly' });
-    for (const cat of cats) {
-      urls.push({ loc: `${baseUrl}/prospection-ch/${cat.slug}`, priority: 0.55, changefreq: 'monthly' });
-    }
-    for (const c of cantonsCH) {
-      urls.push({ loc: `${baseUrl}/prospection-ch/canton/${c.slug}`, priority: 0.55, changefreq: 'monthly' });
-    }
-    for (const cat of cats) {
-      for (const c of cantonsCH) {
-        urls.push({ loc: `${baseUrl}/prospection-ch/${cat.slug}/${c.slug}`, priority: 0.4, changefreq: 'monthly' });
-      }
-    }
-  } catch (e) {
-    // slugs-ch optionnel
+  // ─── Suisse romande ─────────────────────────────────────────────
+  // Seuls le hub + les pages catégorie sont indexables ; canton/[slug] et
+  // [cat]/[canton] sont en noindex (Option C SEO) → exclus du sitemap.
+  urls.push({ loc: `${baseUrl}/prospection-ch`, priority: 0.7, changefreq: 'weekly' });
+  for (const cat of cats) {
+    urls.push({ loc: `${baseUrl}/prospection-ch/${cat.slug}`, priority: 0.55, changefreq: 'monthly' });
   }
 
-  // ─── Belgique francophone (Wallonie + Bruxelles, 6 provinces) ───
-  // Lazy import pour éviter cycle de dépendance
-  try {
-    const { getAllProvincesBE } = require('./slugs-be');
-    const provincesBE = getAllProvincesBE();
-
-    // Hub /prospection-be
-    urls.push({ loc: `${baseUrl}/prospection-be`, priority: 0.7, changefreq: 'weekly' });
-
-    // Pages catégorie BE (~150)
-    for (const cat of cats) {
-      urls.push({ loc: `${baseUrl}/prospection-be/${cat.slug}`, priority: 0.55, changefreq: 'monthly' });
-    }
-
-    // Pages province seules (6)
-    for (const p of provincesBE) {
-      urls.push({ loc: `${baseUrl}/prospection-be/province/${p.slug}`, priority: 0.55, changefreq: 'monthly' });
-    }
-
-    // Pages cat × province (150 × 6 = 900)
-    for (const cat of cats) {
-      for (const p of provincesBE) {
-        urls.push({ loc: `${baseUrl}/prospection-be/${cat.slug}/${p.slug}`, priority: 0.4, changefreq: 'monthly' });
-      }
-    }
-  } catch (e) {
-    // slugs-be optionnel — si non présent, on skip
+  // ─── Belgique francophone (Wallonie + Bruxelles) ────────────────
+  // Hub + pages catégorie indexables ; province/[slug] et [cat]/[province]
+  // sont en noindex (Option C SEO) → exclus du sitemap.
+  urls.push({ loc: `${baseUrl}/prospection-be`, priority: 0.7, changefreq: 'weekly' });
+  for (const cat of cats) {
+    urls.push({ loc: `${baseUrl}/prospection-be/${cat.slug}`, priority: 0.55, changefreq: 'monthly' });
   }
 
-  // Combined category × city pages (top 100 French cities)
-  // Lazy import to avoid circular dependency
-  try {
-    const { CITIES_FR } = require('./cities');
-    for (const cat of cats) {
-      for (const city of CITIES_FR) {
-        urls.push({
-          loc: `${baseUrl}/prospection/${cat.slug}/ville/${city.slug}`,
-          priority: 0.5,
-          changefreq: 'monthly',
-        });
-      }
-    }
-  } catch {}
+  // Combined category × city pages — EXCLUES du sitemap : pages
+  // /[cat]/ville/[city] en noindex (Option C SEO). Ne plus les lister.
 
   return urls;
 }

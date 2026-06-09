@@ -49,6 +49,13 @@ const STEPS = [
     cta: { label: 'Y aller', href: '/dashboard?view=search' },
   },
   {
+    id: 'first_enrich',
+    title: 'Récupère les emails (enrichissement)',
+    desc: "L'étape clé : transforme tes prospects en contacts joignables",
+    icon: Sparkles,
+    cta: { label: 'Enrichir mes leads', href: '/dashboard?view=results' },
+  },
+  {
     id: 'first_export',
     title: 'Exporte ton CSV',
     desc: 'Format HubSpot / Salesforce / Pipedrive, prêt à coller',

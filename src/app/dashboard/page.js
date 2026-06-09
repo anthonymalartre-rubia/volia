@@ -29,7 +29,9 @@ const ExportPanel = lazy(() => import('@/components/ExportPanel'));
 const EmailVerifier = lazy(() => import('@/components/EmailVerifier'));
 // Phase 3 : modales CRM (Send to CRM + Upgrade) — lazy car non-critique
 const SendToCrmModal = lazy(() => import('@/components/crm/SendToCrmModal'));
-const UpgradeCrmModal = lazy(() => import('@/components/crm/UpgradeCrmModal'));
+// Gate d'upgrade unifié (UX-5) : on réutilise le composant canonique
+// UpgradeRequiredModal partout au lieu d'un modal CRM-spécifique.
+const UpgradeRequiredModal = lazy(() => import('@/components/UpgradeRequiredModal'));
 // OnboardingOverlay (5 modals plein écran) supprimé en mai 2026 :
 // pattern intrusif "tour produit" remplacé par l'approche Linear :
 // barre progress discrète en top + hints contextuels inline. Voir
@@ -1329,7 +1331,7 @@ export default function Dashboard() {
 
   // Phase 3 — Envoyer une sélection de prospects vers le CRM.
   // - Si l'user a Business : ouvre SendToCrmModal avec la liste.
-  // - Sinon : ouvre UpgradeCrmModal (CTA Business).
+  // - Sinon : ouvre UpgradeRequiredModal (gate unifié, CTA Business).
   // Le bouton est rendu par ResultsPanel quand selectedIds.size > 0.
   const handleSendToCrm = useCallback(({ prospects: list }) => {
     const hasBusinessAccess =
@@ -1667,8 +1669,9 @@ export default function Dashboard() {
       )}
       {upgradeCrmOpen && (
         <Suspense fallback={null}>
-          <UpgradeCrmModal
-            open={true}
+          <UpgradeRequiredModal
+            feature="CRM Volia"
+            requiredPlan="business"
             onClose={() => setUpgradeCrmOpen(false)}
           />
         </Suspense>

@@ -6,6 +6,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { checkCrmAccess } from '@/lib/crm';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { unlockAchievement } from '@/lib/achievements';
+import { createOnboardingTaskOnWon } from '@/lib/crm-automations';
 
 const VALID_STATUS = ['open', 'won', 'lost'];
 
@@ -180,6 +181,13 @@ export async function POST(request) {
         closed_at: data.closed_at,
         contact: data.contact || null,
       },
+    }).catch(() => {});
+  }
+
+  // Automatisation P3-2 : deal créé directement "gagné" → tâche onboarding auto.
+  if (data.status === 'won') {
+    createOnboardingTaskOnWon(supabase, {
+      id: data.id, user_id: user.id, title: data.title, contact_id: data.contact_id,
     }).catch(() => {});
   }
 

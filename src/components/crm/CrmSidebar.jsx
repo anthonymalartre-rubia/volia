@@ -27,6 +27,7 @@ import {
   Sparkles,
   Inbox,
   Sliders,
+  BarChart3,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -61,6 +62,14 @@ const NAV_ITEMS = [
     href: '/app/crm/inbound',
     icon: Inbox,
     matches: (p) => p.startsWith('/app/crm/inbound'),
+  },
+  {
+    id: 'reports',
+    label: 'Rapports',
+    description: 'Performance commerciale',
+    href: '/app/crm/reports',
+    icon: BarChart3,
+    matches: (p) => p.startsWith('/app/crm/reports'),
   },
 ];
 

@@ -291,6 +291,11 @@ const en = {
     probableCount: '{{count}} prob.',
     otherCount: '{{count}} other',
     emailBreakdown: '{{verified}} verified, {{guessed}} probable{{other}}. The badge indicates the reliability of each email.',
+    // Enrichment "next step" banner
+    enrichHintTitle: 'Next step: get the emails',
+    enrichHintDesc: '{{count}} prospects without an email, {{sites}} of them have a website. Run enrichment to find their emails automatically.',
+    enrichHintCta: 'Find their emails',
+    enrichHintDismiss: 'Hide this tip',
     // Enrichment buttons
     enrichBtn: 'Enrich',
     enrichAll: 'Enrich all ({{count}})',

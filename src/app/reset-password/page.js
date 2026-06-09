@@ -85,7 +85,7 @@ export default function ResetPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+      <div translate="no" className="notranslate min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
       <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4" />
         <div
@@ -119,7 +119,7 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+    <div translate="no" className="notranslate min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
       <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4" />
       <div

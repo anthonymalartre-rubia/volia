@@ -90,6 +90,25 @@ export async function PATCH(request, { params }) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 
+  // Renumérote le stage cible (positions 0..N propres, sans collision ni trou
+  // après de nombreux déplacements). Best-effort : si ça échoue, le move reste
+  // valide (l'ordre est départagé par id côté lecture). On relit ensuite la
+  // position réelle de la carte déplacée pour que le client reste cohérent.
+  try {
+    await supabase.rpc('crm_reindex_stage', {
+      p_pipeline_id: deal.pipeline_id,
+      p_stage_id: stageId,
+    });
+    const { data: fresh } = await supabase
+      .from('crm_deals')
+      .select('position')
+      .eq('id', id)
+      .maybeSingle();
+    if (fresh && Number.isInteger(fresh.position)) data.position = fresh.position;
+  } catch (e) {
+    console.warn('[api/crm/deals/[id]/move] reindex failed', e?.message);
+  }
+
   // Fire-and-forget : emit stage_changed à chaque move + won/lost si transition
   // vers un closing stage (différent de l'état précédent du deal).
   if (deal.stage_id !== stageId) {

@@ -1,5 +1,6 @@
 import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { trackOnboardingStep } from '@/lib/onboarding';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { PERSONAL_DOMAINS } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
@@ -357,6 +358,7 @@ export async function POST(request) {
           const skipPersonal = filterPersonalEmails && isPersonalEmail(cachedDm.email);
           if (!skipPersonal) {
             await incrementUsage(supabase, user.id, 'enrichments');
+            trackOnboardingStep(user.id, 'first_enrich'); // activation : email trouvé (fire-and-forget)
             return Response.json({
               email: cachedDm.email,
               source: 'decision_maker',
@@ -387,6 +389,7 @@ export async function POST(request) {
           const optedOut = await isOptedOut(dm.email);
           if (!skipPersonal && !optedOut) {
             await incrementUsage(supabase, user.id, 'enrichments');
+            trackOnboardingStep(user.id, 'first_enrich'); // activation : email trouvé (fire-and-forget)
             // Write-back cache (phase 1 : admin seul, cf. GLOBAL_POOL_WRITE).
             upsertDecisionMaker({
               domain,
@@ -425,6 +428,7 @@ export async function POST(request) {
       const skipPersonal = filterPersonalEmails && cached?.email && isPersonalEmail(cached.email);
       if (cached?.email && !skipPersonal) {
         await incrementUsage(supabase, user.id, 'enrichments');
+            trackOnboardingStep(user.id, 'first_enrich'); // activation : email trouvé (fire-and-forget)
         return Response.json({
           email: cached.email,
           source: 'volia_db',
@@ -454,6 +458,7 @@ export async function POST(request) {
         tried.push({ step: step.name, label: step.label, found: !!result?.email });
         if (result?.email) {
           await incrementUsage(supabase, user.id, 'enrichments');
+            trackOnboardingStep(user.id, 'first_enrich'); // activation : email trouvé (fire-and-forget)
           // Alimente la base commune (best-effort). En Phase 1, n'écrit
           // réellement que si l'utilisateur est admin (Volia).
           upsertGlobalContact({

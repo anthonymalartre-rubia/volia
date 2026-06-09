@@ -12,16 +12,19 @@ import { getAuthenticatedUser } from '@/lib/auth';
 const VALID_STEPS = [
   'overlay_seen',
   'first_search',
+  'first_enrich',
   'first_csv_import',
   'first_campaign',
   'first_export',
   'profile_completed',
 ];
 
-// Les 5 étapes obligatoires pour marquer l'onboarding 100% complet
+// Étapes obligatoires pour marquer l'onboarding 100% complet.
+// 'first_enrich' (récupération des emails) ajouté : c'est l'étape de vraie
+// valeur — un user qui cherche sans enrichir repart sans emails (cf. activation).
 const REQUIRED_STEPS = [
   'first_search',
-  'first_csv_import',
+  'first_enrich',
   'first_campaign',
   'first_export',
   'profile_completed',

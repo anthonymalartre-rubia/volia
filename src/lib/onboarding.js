@@ -11,13 +11,14 @@ import { getSupabaseAdmin } from './supabase-admin';
 
 const REQUIRED_STEPS = [
   'first_search',
-  'first_csv_import',
+  'first_enrich',
   'first_campaign',
   'first_export',
   'profile_completed',
 ];
 
-const VALID_STEPS = [...REQUIRED_STEPS, 'overlay_seen'];
+// 'first_csv_import' reste une étape valide (trackable) mais non obligatoire.
+const VALID_STEPS = [...REQUIRED_STEPS, 'overlay_seen', 'first_csv_import'];
 
 /**
  * Marque une étape comme complétée pour un user.

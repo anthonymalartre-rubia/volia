@@ -296,6 +296,9 @@ const en = {
     enrichHintDesc: '{{count}} prospects without an email, {{sites}} of them have a website. Run enrichment to find their emails automatically.',
     enrichHintCta: 'Find their emails',
     enrichHintDismiss: 'Hide this tip',
+    campaignHintTitle: 'Next step: take action',
+    campaignHintDesc: '{{count}} prospects with an email, ready to reach out. Launch a campaign in a few clicks.',
+    campaignHintCta: 'Launch a campaign',
     // Enrichment buttons
     enrichBtn: 'Enrich',
     enrichAll: 'Enrich all ({{count}})',

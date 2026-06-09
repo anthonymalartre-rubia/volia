@@ -296,6 +296,9 @@ const fr = {
     enrichHintDesc: '{{count}} prospects sans email, dont {{sites}} avec un site web. Lancez l\'enrichissement pour trouver leurs emails automatiquement.',
     enrichHintCta: 'Trouver leurs emails',
     enrichHintDismiss: 'Masquer ce conseil',
+    campaignHintTitle: 'Étape suivante : passez à l\'action',
+    campaignHintDesc: '{{count}} prospects avec email, prêts à être contactés. Lancez une campagne en quelques clics.',
+    campaignHintCta: 'Lancer une campagne',
     // Enrichment buttons
     enrichBtn: 'Enrichir',
     enrichAll: 'Enrichir tout ({{count}})',

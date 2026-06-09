@@ -447,6 +447,7 @@ export default function KanbanBoard({
   onNewDeal,
   onMoveStage, // P1-3 : fallback mobile drag-drop
   onStagesMutation, // refetch pipelines + deals après mutation stages
+  sortMode = 'position', // 'position' | 'value_desc' | 'close_asc' | 'recent'
 }) {
   const [draggingDealId, setDraggingDealId] = useState(null);
 
@@ -468,14 +469,31 @@ export default function KanbanBoard({
       dealsByStage[d.stage_id].push(d);
     }
   }
-  // Sort by position then created_at desc inside each column
+  // Tri des cartes dans chaque colonne selon sortMode (P1-3).
+  // 'position' = ordre manuel drag-drop (défaut) ; les autres sont des tris
+  // d'affichage qui n'altèrent pas la position stockée (repasser en 'position'
+  // pour réorganiser à la main).
+  const byPosition = (a, b) => {
+    const posA = a.position ?? 0;
+    const posB = b.position ?? 0;
+    if (posA !== posB) return posA - posB;
+    return new Date(b.created_at) - new Date(a.created_at);
+  };
+  const comparators = {
+    position: byPosition,
+    value_desc: (a, b) => (b.value_cents || 0) - (a.value_cents || 0) || byPosition(a, b),
+    close_asc: (a, b) => {
+      // Sans date de clôture → en dernier
+      const ta = a.expected_close_date ? new Date(a.expected_close_date).getTime() : Infinity;
+      const tb = b.expected_close_date ? new Date(b.expected_close_date).getTime() : Infinity;
+      if (ta !== tb) return ta - tb;
+      return byPosition(a, b);
+    },
+    recent: (a, b) => new Date(b.created_at) - new Date(a.created_at),
+  };
+  const cmp = comparators[sortMode] || byPosition;
   for (const sid of Object.keys(dealsByStage)) {
-    dealsByStage[sid].sort((a, b) => {
-      const posA = a.position ?? 0;
-      const posB = b.position ?? 0;
-      if (posA !== posB) return posA - posB;
-      return new Date(b.created_at) - new Date(a.created_at);
-    });
+    dealsByStage[sid].sort(cmp);
   }
 
   const stageCount = pipeline.stages.length;

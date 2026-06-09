@@ -29,6 +29,7 @@ import { getSupabase } from '@/lib/supabase';
 import { formatDealValue, calculatePipelineStats } from '@/lib/crm';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import KanbanBoard from '@/components/crm/KanbanBoard';
+import TasksTodayWidget from '@/components/crm/TasksTodayWidget';
 import NewDealModal from '@/components/crm/NewDealModal';
 import DealDetailDrawer from '@/components/crm/DealDetailDrawer';
 import WaitlistForm from './WaitlistForm';
@@ -94,6 +95,8 @@ export default function CrmAppPage() {
   const [newDealStageId, setNewDealStageId] = useState(null);
   const [selectedDealId, setSelectedDealId] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'open' | 'won' | 'lost'
+  // P1-3 : tri des cartes dans chaque colonne (affichage, n'altère pas la position)
+  const [sortMode, setSortMode] = useState('position'); // 'position'|'value_desc'|'close_asc'|'recent'
 
   // ─── Search ──────────────────────────────────────────────
   const [searchInput, setSearchInput] = useState('');
@@ -351,8 +354,11 @@ export default function CrmAppPage() {
   const showWeightedStat = !isEmptyExperience && stats.weightedPipeline > 0;
   const showClosingRateStat = !isEmptyExperience && stats.closingRate30d !== null;
   const showWonMonthStat = stats.wonCountMonth > 0;
+  // P1-1 : panier moyen (valeur moyenne d'une affaire gagnée) — affiché dès qu'on
+  // a une moyenne calculable et qu'on n'est pas en empty experience.
+  const showAvgStat = !isEmptyExperience && stats.avgWonValue > 0;
   // "Plus de stats" disponible uniquement si au moins une stat avancée existe
-  const hasExtraStats = showWeightedStat || showClosingRateStat || showWonMonthStat;
+  const hasExtraStats = showWeightedStat || showClosingRateStat || showWonMonthStat || showAvgStat;
 
   // ─────────────────────────────────────────────────────────────────
   // RENDER
@@ -588,6 +594,23 @@ export default function CrmAppPage() {
                         </span>
                       </>
                     )}
+                    {showAvgStat && (
+                      <>
+                        <span className="hidden md:inline text-content-faint">·</span>
+                        <span
+                          className="hidden md:inline-flex items-center gap-1"
+                          title={stats.avgBasedOn === 'won'
+                            ? 'Panier moyen : valeur moyenne d’une affaire gagnée'
+                            : 'Panier moyen estimé : valeur moyenne des deals ouverts'}
+                        >
+                          <BarChart3 size={11} className="text-amber-600" />
+                          <span className="tabular-nums font-semibold text-content-secondary">
+                            {formatDealValue(stats.avgWonValue)}
+                          </span>
+                          <span>panier moyen</span>
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -664,6 +687,21 @@ export default function CrmAppPage() {
                   ))}
                 </div>
 
+                {/* P1-3 : tri des cartes par colonne */}
+                <select
+                  value={sortMode}
+                  onChange={(e) => setSortMode(e.target.value)}
+                  title="Trier les cartes de chaque colonne"
+                  className={`rounded-lg border border-line bg-surface-card px-2 py-1.5 text-[11px] font-semibold text-content-secondary focus:border-emerald-500/40 focus:outline-none ${
+                    mobileHeaderCollapsed ? 'hidden md:inline-flex' : 'inline-flex'
+                  }`}
+                >
+                  <option value="position">Tri : manuel</option>
+                  <option value="value_desc">Tri : montant ↓</option>
+                  <option value="close_asc">Tri : clôture ↑</option>
+                  <option value="recent">Tri : récents</option>
+                </select>
+
                 {/* Bouton "Nouveau deal" — TOUJOURS visible (pas dans le collapse) */}
                 <button
                   type="button"
@@ -699,6 +737,8 @@ export default function CrmAppPage() {
 
           {/* ─── Kanban content ──────────────────────────────────── */}
           <section className="flex-1 px-3 sm:px-5 py-4 bg-gradient-to-br from-emerald-50/30 via-surface-base to-teal-50/20 overflow-hidden">
+            {/* P1-2 : widget tâches à faire / en retard (s'auto-masque si vide) */}
+            {pipeline && <TasksTodayWidget onOpenDeal={(id) => setSelectedDealId(id)} />}
             {dataLoading && !pipeline ? (
               <KanbanSkeleton />
             ) : !pipeline ? (
@@ -733,6 +773,7 @@ export default function CrmAppPage() {
               <KanbanBoard
                 pipeline={pipeline}
                 deals={filteredDeals}
+                sortMode={sortMode}
                 onDealMove={handleDealMove}
                 onDealClick={(d) => setSelectedDealId(d.id)}
                 onNewDeal={handleNewDeal}
@@ -842,6 +883,25 @@ export default function CrmAppPage() {
                     </p>
                     <p className="text-[10px] text-content-tertiary mt-0.5">
                       Gagnés / (gagnés + perdus) sur 30 derniers jours
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {showAvgStat && (
+                <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-50 border border-amber-200">
+                  <BarChart3 size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-amber-700">
+                      Panier moyen
+                    </p>
+                    <p className="text-base font-bold text-content-primary tabular-nums mt-0.5">
+                      {formatDealValue(stats.avgWonValue)}
+                    </p>
+                    <p className="text-[10px] text-content-tertiary mt-0.5">
+                      {stats.avgBasedOn === 'won'
+                        ? 'Valeur moyenne d’une affaire gagnée'
+                        : 'Valeur moyenne des deals ouverts (estimation)'}
                     </p>
                   </div>
                 </div>

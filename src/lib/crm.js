@@ -212,6 +212,19 @@ export function calculatePipelineStats(deals) {
       ? Math.round((wonRecently / closedRecently.length) * 100)
       : null;
 
+  // Panier moyen : valeur moyenne d'une affaire gagnée (ce qu'on closé en moyenne).
+  // Fallback sur la moyenne des deals ouverts si aucun gagné (nouveau compte).
+  const avgWonValue = wonDeals.length
+    ? Math.round(totalWonValue / wonDeals.length)
+    : (openDeals.length ? Math.round(totalOpenValue / openDeals.length) : 0);
+  const avgBasedOn = wonDeals.length ? 'won' : 'open';
+
+  // Taux de win all-time : gagnés / (gagnés + perdus) sur tout l'historique.
+  const closedAll = wonDeals.length + lostDeals.length;
+  const winRateAllTime = closedAll > 0
+    ? Math.round((wonDeals.length / closedAll) * 100)
+    : null;
+
   return {
     openCount: openDeals.length,
     wonCount: wonDeals.length,
@@ -222,5 +235,8 @@ export function calculatePipelineStats(deals) {
     wonCountMonth,
     wonValueMonth,
     closingRate30d,
+    avgWonValue,
+    avgBasedOn,
+    winRateAllTime,
   };
 }

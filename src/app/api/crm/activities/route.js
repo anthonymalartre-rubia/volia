@@ -73,6 +73,15 @@ export async function GET(request) {
     query = query.is('completed_at', null);
   } else if (status === 'overdue') {
     query = query.is('completed_at', null).lt('due_at', nowIso);
+  } else if (status === 'due') {
+    // En retard + dues aujourd'hui : non complétées, avec échéance <= fin de journée.
+    // Sert au widget "À faire aujourd'hui / en retard" (P1-2).
+    const endOfToday = new Date();
+    endOfToday.setHours(23, 59, 59, 999);
+    query = query
+      .is('completed_at', null)
+      .not('due_at', 'is', null)
+      .lte('due_at', endOfToday.toISOString());
   }
 
   const { data, error } = await query;

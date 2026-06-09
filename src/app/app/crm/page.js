@@ -30,6 +30,7 @@ import { formatDealValue, calculatePipelineStats } from '@/lib/crm';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import KanbanBoard from '@/components/crm/KanbanBoard';
 import TasksTodayWidget from '@/components/crm/TasksTodayWidget';
+import DealsTableView from '@/components/crm/DealsTableView';
 import NewDealModal from '@/components/crm/NewDealModal';
 import DealDetailDrawer from '@/components/crm/DealDetailDrawer';
 import WaitlistForm from './WaitlistForm';
@@ -97,6 +98,18 @@ export default function CrmAppPage() {
   const [statusFilter, setStatusFilter] = useState('all'); // 'all' | 'open' | 'won' | 'lost'
   // P1-3 : tri des cartes dans chaque colonne (affichage, n'altère pas la position)
   const [sortMode, setSortMode] = useState('position'); // 'position'|'value_desc'|'close_asc'|'recent'
+  // P2-1 : vue Kanban ou Liste (persistée en localStorage)
+  const [viewMode, setViewMode] = useState('kanban'); // 'kanban' | 'list'
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem('volia_crm_view');
+      if (v === 'list' || v === 'kanban') setViewMode(v);
+    } catch {}
+  }, []);
+  const changeView = useCallback((v) => {
+    setViewMode(v);
+    try { localStorage.setItem('volia_crm_view', v); } catch {}
+  }, []);
 
   // ─── Search ──────────────────────────────────────────────
   const [searchInput, setSearchInput] = useState('');
@@ -687,20 +700,47 @@ export default function CrmAppPage() {
                   ))}
                 </div>
 
-                {/* P1-3 : tri des cartes par colonne */}
-                <select
-                  value={sortMode}
-                  onChange={(e) => setSortMode(e.target.value)}
-                  title="Trier les cartes de chaque colonne"
-                  className={`rounded-lg border border-line bg-surface-card px-2 py-1.5 text-[11px] font-semibold text-content-secondary focus:border-emerald-500/40 focus:outline-none ${
+                {/* P2-1 : toggle vue Kanban / Liste */}
+                <div
+                  className={`items-center rounded-lg border border-line bg-surface-card p-0.5 ${
                     mobileHeaderCollapsed ? 'hidden md:inline-flex' : 'inline-flex'
                   }`}
                 >
-                  <option value="position">Tri : manuel</option>
-                  <option value="value_desc">Tri : montant ↓</option>
-                  <option value="close_asc">Tri : clôture ↑</option>
-                  <option value="recent">Tri : récents</option>
-                </select>
+                  {[
+                    { value: 'kanban', label: 'Kanban' },
+                    { value: 'list', label: 'Liste' },
+                  ].map((v) => (
+                    <button
+                      key={v.value}
+                      type="button"
+                      onClick={() => changeView(v.value)}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-semibold transition-colors ${
+                        viewMode === v.value
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : 'text-content-tertiary hover:text-content-primary'
+                      }`}
+                    >
+                      {v.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* P1-3 : tri des cartes par colonne (vue Kanban uniquement) */}
+                {viewMode === 'kanban' && (
+                  <select
+                    value={sortMode}
+                    onChange={(e) => setSortMode(e.target.value)}
+                    title="Trier les cartes de chaque colonne"
+                    className={`rounded-lg border border-line bg-surface-card px-2 py-1.5 text-[11px] font-semibold text-content-secondary focus:border-emerald-500/40 focus:outline-none ${
+                      mobileHeaderCollapsed ? 'hidden md:inline-flex' : 'inline-flex'
+                    }`}
+                  >
+                    <option value="position">Tri : manuel</option>
+                    <option value="value_desc">Tri : montant ↓</option>
+                    <option value="close_asc">Tri : clôture ↑</option>
+                    <option value="recent">Tri : récents</option>
+                  </select>
+                )}
 
                 {/* Bouton "Nouveau deal" — TOUJOURS visible (pas dans le collapse) */}
                 <button
@@ -745,6 +785,13 @@ export default function CrmAppPage() {
               <div className="text-center py-20 text-content-tertiary">
                 <p className="text-sm">Aucun pipeline trouvé. Rechargez la page.</p>
               </div>
+            ) : viewMode === 'list' ? (
+              // ─── VUE LISTE / TABLEAU (P2-1) ────────────────────
+              <DealsTableView
+                deals={filteredDeals}
+                onOpenDeal={(id) => setSelectedDealId(id)}
+                pipelineName={pipeline?.name || 'pipeline'}
+              />
             ) : deals.length === 0 ? (
               // ─── EMPTY STATE (aucun deal du tout) ──────────────
               <div className="max-w-md mx-auto py-16 text-center">

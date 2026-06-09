@@ -216,6 +216,10 @@
     {
       "path": "/api/cron/autopilot-weekly",
       "schedule": "0 2 * * 0"
+    },
+    {
+      "path": "/api/cron/crm-overdue-tasks",
+      "schedule": "0 8 * * *"
     }
   ]
 }

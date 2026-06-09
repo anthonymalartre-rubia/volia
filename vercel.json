@@ -220,6 +220,10 @@
     {
       "path": "/api/cron/crm-overdue-tasks",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/crm-automations",
+      "schedule": "0 7 * * *"
     }
   ]
 }

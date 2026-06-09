@@ -90,7 +90,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
+    <div translate="no" className="notranslate min-h-screen bg-surface-base flex items-center justify-center px-4 relative overflow-hidden">
       <AuthBackgroundDecor />
       <ThemeToggle className="absolute top-4 right-4 z-10" />
       <Link href="/" className="absolute top-4 left-4 z-10 inline-flex items-center gap-1.5 text-xs text-content-tertiary hover:text-content-primary transition">

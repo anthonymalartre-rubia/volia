@@ -38,6 +38,7 @@ import {
   Mail,
   KanbanSquare,
   FormInput,
+  FolderKanban,
   ChevronDown,
   ChevronRight,
   Check,
@@ -133,6 +134,23 @@ const MODULES = [
     activeText: 'text-pink-700',
     accent: 'text-pink-600',
   },
+  {
+    // Volia Project (juin 2026) — gestion de projets de livraison.
+    // Deal gagné → projet · kanban simple · partage client par lien.
+    id: 'project',
+    name: 'Project',
+    description: 'Livraison & suivi client',
+    href: '/app/projets',
+    icon: FolderKanban,
+    businessOnly: true,
+    color: 'orange',
+    iconGradient: 'from-orange-500 to-amber-600',
+    activeBg: 'bg-orange-50',
+    activeBorder: 'border-orange-200',
+    activeText: 'text-orange-700',
+    accent: 'text-orange-600',
+    badge: 'NEW',
+  },
 ];
 
 // Lookup par id (robuste à l'ordre du tableau).
@@ -166,6 +184,11 @@ function detectActiveModule(pathname) {
   // CRM
   if (pathname.startsWith('/app/crm')) {
     return moduleById('crm');
+  }
+
+  // Volia Project
+  if (pathname.startsWith('/app/projets')) {
+    return moduleById('project');
   }
 
   // Formulaires : /admin/forms/*

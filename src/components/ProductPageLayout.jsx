@@ -32,6 +32,7 @@ import {
   Smartphone, TrendingUp, Rocket, Flame,
   Repeat, MousePointerClick, Workflow, BookOpen, Inbox,
   FormInput, ClipboardList, QrCode, Webhook, LockKeyhole, Code2,
+  FolderKanban, Link2, PackageCheck,
 } from 'lucide-react';
 import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
@@ -51,6 +52,7 @@ const ICONS = {
   Smartphone, TrendingUp, Rocket, Flame,
   Repeat, MousePointerClick, Workflow, BookOpen, Inbox,
   FormInput, ClipboardList, QrCode, Webhook, LockKeyhole, Code2,
+  FolderKanban, Link2, PackageCheck,
 };
 function resolveIcon(name) {
   return ICONS[name] || Search;
@@ -145,6 +147,27 @@ export const MODULE_THEMES = {
     linkText: 'text-pink-700',
     connector: 'from-pink-300 via-rose-300 to-fuchsia-300',
     secondaryHover: 'hover:border-pink-400 hover:bg-pink-50',
+  },
+  project: {
+    accent: 'orange',
+    label: 'Project',
+    iconName: 'FolderKanban',
+    statusBadge: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+    heroGradient: 'from-orange-200/40 via-amber-100/30 to-yellow-100/20',
+    heroBlob1: 'bg-orange-300/20',
+    heroBlob2: 'bg-amber-200/30',
+    pill: 'bg-orange-100 border-orange-200 text-orange-700',
+    titleGradient: 'from-orange-600 via-amber-600 to-orange-700',
+    ctaGradient: 'from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500',
+    ctaShadow: 'shadow-orange-500/30 hover:shadow-orange-500/40',
+    iconBg: 'from-orange-500 to-amber-600',
+    sectionTint: 'from-orange-50/40 via-amber-50/20 to-white',
+    cardBorder: 'border-orange-200',
+    cardBg: 'from-orange-50 via-white to-amber-50/50',
+    checkIcon: 'text-orange-600',
+    linkText: 'text-orange-700',
+    connector: 'from-orange-300 via-amber-300 to-yellow-300',
+    secondaryHover: 'hover:border-orange-400 hover:bg-orange-50',
   },
 };
 

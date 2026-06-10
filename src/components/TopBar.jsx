@@ -80,8 +80,11 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           </div>
         )}
 
-        {/* Right: aide + lang toggle + theme toggle + user */}
-        <div className="flex items-center gap-2">
+        {/* Right: aide + lang toggle + theme toggle + user.
+            ⚠️ Mobile (<640px) : ce bloc doit tenir à côté de
+            hamburger + logo + ModuleSwitcher dans 390px, sinon toute la
+            page scrolle horizontalement (audit mobile : 423px mesurés). */}
+        <div className="flex items-center gap-0.5 sm:gap-2">
           <Link
             href="/docs"
             className="p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all hidden sm:flex items-center"
@@ -92,16 +95,16 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           </Link>
           <button
             onClick={() => setLocale(locale === 'fr' ? 'en' : 'fr')}
-            className="p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all flex items-center gap-1.5"
+            className="p-2 sm:p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all flex items-center gap-1.5"
             title={locale === 'fr' ? 'Switch to English' : 'Passer en francais'}
             aria-label={locale === 'fr' ? 'Switch to English' : 'Passer en francais'}
           >
             <Globe size={16} />
-            <span className="text-xs font-semibold">{locale === 'fr' ? 'FR' : 'EN'}</span>
+            <span className="text-xs font-semibold hidden sm:inline">{locale === 'fr' ? 'FR' : 'EN'}</span>
           </button>
           <button
             onClick={toggle}
-            className="p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
+            className="p-2 sm:p-2.5 rounded-lg text-content-muted hover:text-content-primary hover:bg-surface-elevated active:scale-95 transition-all"
             title={theme === 'dark' ? t('topbar.lightMode') : t('topbar.darkMode')}
             aria-label={theme === 'dark' ? t('topbar.switchLight') : t('topbar.switchDark')}
           >
@@ -110,7 +113,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
           {user && <NotificationBell />}
           {user && (
             <>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-card border border-line">
+              <div className="flex items-center gap-2 px-1.5 sm:px-3 py-1.5 rounded-lg bg-surface-card border border-line">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ring-2 ring-indigo-500/20">
                   <span className="text-[10px] font-bold text-white">
                     {user.email?.charAt(0).toUpperCase()}
@@ -123,7 +126,7 @@ export default function TopBar({ user, onToggleSidebar, searchProgress, isSearch
               <button
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="p-2.5 rounded-lg text-content-muted hover:text-red-400 hover:bg-red-500/10 active:scale-95 transition-all disabled:opacity-50"
+                className="p-2 sm:p-2.5 rounded-lg text-content-muted hover:text-red-400 hover:bg-red-500/10 active:scale-95 transition-all disabled:opacity-50"
                 title={t('topbar.logout')}
                 aria-label={t('topbar.logout')}
               >

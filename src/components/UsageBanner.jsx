@@ -13,7 +13,10 @@ export default function UsageBanner({ plan, usage, onUpgrade }) {
   ];
 
   return (
-    <div className="mx-4 mt-4 rounded-xl border border-line bg-surface-card p-4">
+    // hidden md:block : sur mobile la Sidebar passe en fixed (drawer) mais ce
+    // banner resterait en flux dans la colonne flex → il écrasait <main> dans
+    // une bande de ~200px (audit mobile). L'usage reste visible dans Settings.
+    <div className="hidden md:block mx-4 mt-4 rounded-xl border border-line bg-surface-card p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Zap className="h-4 w-4 text-violet-400" />

@@ -84,7 +84,7 @@ export default function InfoTooltip({
         role="tooltip"
         className={`pointer-events-none absolute z-50 max-w-xs w-max px-2.5 py-1.5 rounded-md bg-zinc-800 text-white text-xs leading-snug shadow-lg transition-opacity duration-150 ${
           SIDE_POSITION[side] || SIDE_POSITION.top
-        } ${open ? 'opacity-100' : 'opacity-0'}`}
+        } ${open ? 'opacity-100' : 'hidden opacity-0'}`}
       >
         {content}
         <span

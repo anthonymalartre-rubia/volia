@@ -82,7 +82,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=pro`,
         availability: 'https://schema.org/InStock',
-        description: 'Suite complète : Prospection + Campagnes + CRM + Formulaires. 14 j d\'essai sans CB. Code ETE2026 : 19 €/mois les 3 premiers mois.',
+        description: 'Suite complète : Prospection + Campagnes + CRM + Formulaires + Project. 14 j d\'essai sans CB. Code ETE2026 : 19 €/mois les 3 premiers mois.',
       },
       {
         '@type': 'Offer',

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, TrendingDown, X, Sparkles, FormInput, Rocket } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, TrendingDown, X, Sparkles, FormInput, Rocket, FolderKanban } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
@@ -146,7 +146,7 @@ function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted
             <Star size={11} fill="currentColor" /> Débloque la suite complète
           </p>
           <p className="text-[11px] text-violet-700 leading-snug">
-            CRM &middot; Campagnes email &middot; Formulaires — tous inclus
+            CRM &middot; Campagnes email &middot; Formulaires &middot; Project — tous inclus
           </p>
         </div>
       )}
@@ -853,7 +853,7 @@ export default function LandingContent() {
           </MotionInView>
 
           {/* 3 small bonus cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
                 name: 'Campagnes',
@@ -887,6 +887,17 @@ export default function LandingContent() {
                 iconBg: 'from-pink-500 to-rose-600',
                 href: '/produits/formulaires',
                 status: 'LIVE',
+              },
+              {
+                name: 'Project',
+                tagline: 'Deal gagné → projet livré, suivi client par lien',
+                icon: FolderKanban,
+                color: 'orange',
+                bg: 'from-orange-50/70 via-white to-amber-50/40',
+                border: 'border-orange-200',
+                iconBg: 'from-orange-500 to-amber-600',
+                href: '/produits/project',
+                status: 'NEW',
               },
             ].map((mod, i) => {
               const Icon = mod.icon;

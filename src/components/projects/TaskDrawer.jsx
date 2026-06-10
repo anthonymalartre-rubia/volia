@@ -6,8 +6,9 @@
 // Toute édition = PATCH immédiat (pas de bouton "Enregistrer").
 // ─────────────────────────────────────────────────────────────────────
 
-import { useEffect, useState } from 'react';
-import { X, Star, Trash2, Loader2, Send } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { X, Star, Trash2, Loader2, Send, Paperclip, Download, Upload } from 'lucide-react';
+import { getSupabase } from '@/lib/supabase';
 
 const STATUS_OPTIONS = [
   { id: 'todo', label: 'À faire' },
@@ -15,26 +16,83 @@ const STATUS_OPTIONS = [
   { id: 'done', label: 'Fait' },
 ];
 
-export default function TaskDrawer({ task, onClose, onUpdate, onDelete }) {
+export default function TaskDrawer({ task, projectId, userId, onClose, onUpdate, onDelete }) {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description || '');
   const [comments, setComments] = useState(null);
   const [newComment, setNewComment] = useState('');
   const [sending, setSending] = useState(false);
+  const [attachments, setAttachments] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     setTitle(task.title);
     setDescription(task.description || '');
     setComments(null);
+    setAttachments([]);
     let cancelled = false;
     fetch(`/api/projects/tasks/${task.id}/comments`)
       .then((r) => r.json())
       .then((j) => !cancelled && setComments(j.success ? j.data : []))
       .catch(() => !cancelled && setComments([]));
+    fetch(`/api/projects/tasks/${task.id}/attachments`)
+      .then((r) => r.json())
+      .then((j) => !cancelled && j.success && setAttachments(j.data))
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
   }, [task.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  async function handleFileUpload(e) {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file || !userId || !projectId) return;
+    if (file.size > 25 * 1024 * 1024) {
+      alert('Fichier trop lourd (max 25 Mo).');
+      return;
+    }
+    setUploading(true);
+    try {
+      // Upload direct Storage (policy : dossier racine = auth.uid()),
+      // puis enregistrement de la métadonnée côté API.
+      const supabase = getSupabase();
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 120);
+      const path = `${userId}/${projectId}/${Date.now()}-${safeName}`;
+      const { error: upErr } = await supabase.storage
+        .from('project-files')
+        .upload(path, file, { upsert: false });
+      if (upErr) throw upErr;
+      const res = await fetch(`/api/projects/tasks/${task.id}/attachments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ file_path: path, file_name: file.name, file_size: file.size }),
+      });
+      const json = await res.json();
+      if (json.success) setAttachments((a) => [...a, json.data]);
+    } catch (err) {
+      alert(`Upload impossible : ${err.message || 'erreur'}`);
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function downloadAttachment(att) {
+    const supabase = getSupabase();
+    const { data } = await supabase.storage
+      .from('project-files')
+      .createSignedUrl(att.file_path, 300, { download: att.file_name });
+    if (data?.signedUrl) window.open(data.signedUrl, '_blank');
+  }
+
+  async function deleteAttachment(att) {
+    if (!confirm(`Supprimer "${att.file_name}" ?`)) return;
+    const res = await fetch(`/api/projects/tasks/${task.id}/attachments?id=${att.id}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) setAttachments((a) => a.filter((x) => x.id !== att.id));
+  }
 
   async function addComment() {
     const content = newComment.trim();
@@ -155,6 +213,54 @@ export default function TaskDrawer({ task, onClose, onUpdate, onDelete }) {
               placeholder="Détails, contexte, liens…"
               className="w-full px-3 py-2.5 rounded-xl bg-surface-base border border-line text-sm text-content-primary placeholder:text-content-tertiary resize-y focus:outline-none focus:ring-2 focus:ring-amber-500/40"
             />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-xs font-semibold text-content-tertiary uppercase tracking-wider flex items-center gap-1.5">
+                <Paperclip size={12} /> Pièces jointes
+              </label>
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="inline-flex items-center gap-1 text-xs font-medium text-amber-600 hover:text-amber-500"
+              >
+                {uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+                Ajouter
+              </button>
+            </div>
+            {attachments.length === 0 ? (
+              <p className="text-xs text-content-tertiary">Aucun fichier.</p>
+            ) : (
+              <ul className="space-y-1.5">
+                {attachments.map((att) => (
+                  <li
+                    key={att.id}
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-base border border-line"
+                  >
+                    <span className="text-xs text-content-primary truncate flex-1">{att.file_name}</span>
+                    <button
+                      type="button"
+                      onClick={() => downloadAttachment(att)}
+                      className="p-1 rounded text-content-tertiary hover:text-amber-600"
+                      aria-label={`Télécharger ${att.file_name}`}
+                    >
+                      <Download size={13} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => deleteAttachment(att)}
+                      className="p-1 rounded text-content-tertiary hover:text-red-500"
+                      aria-label={`Supprimer ${att.file_name}`}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <input ref={fileInputRef} type="file" className="hidden" onChange={handleFileUpload} />
           </div>
 
           <div>

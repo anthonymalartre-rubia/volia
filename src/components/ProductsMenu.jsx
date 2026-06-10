@@ -19,7 +19,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Search, Mail, Users, FormInput, Zap } from 'lucide-react';
+import { ChevronDown, Search, Mail, Users, FormInput, Zap, FolderKanban } from 'lucide-react';
 
 const PRODUCTS_FR = [
   {
@@ -65,6 +65,15 @@ const PRODUCTS_FR = [
     accent: 'pink',
     badge: 'LIVE',
     badgeColor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  },
+  {
+    slug: 'project',
+    name: 'Volia Project',
+    description: 'Deal gagné → projet livré, suivi client par lien',
+    icon: FolderKanban,
+    accent: 'orange',
+    badge: 'NEW',
+    badgeColor: 'bg-orange-100 text-orange-700 border-orange-200',
   },
 ];
 
@@ -141,6 +150,11 @@ const ACCENT_STYLES = {
     iconBg: 'bg-amber-100 text-amber-600',
     hoverBg: 'group-hover:bg-amber-50',
     name: 'group-hover:text-amber-700',
+  },
+  orange: {
+    iconBg: 'bg-orange-100 text-orange-600',
+    hoverBg: 'group-hover:bg-orange-50',
+    name: 'group-hover:text-orange-700',
   },
 };
 

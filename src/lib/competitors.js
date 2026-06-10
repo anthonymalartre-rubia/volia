@@ -483,6 +483,30 @@ export const COMPETITORS = {
     bestFor: 'PME cherchant un CRM all-in-one économique et personnalisable',
     color: 'yellow',
   },
+  odoo: {
+    slug: 'odoo',
+    name: 'Odoo',
+    domain: 'odoo.com',
+    tagline: 'L\'ERP qui gère tout. Sauf trouver vos clients.',
+    description: 'Odoo est un ERP open-source belge avec 40+ apps (compta, stock, factu, RH, CRM, site web). Excellent pour administrer une entreprise — mais son CRM démarre vide : aucune génération de leads native, pas de cold email sérieux (pas de warmup, pas de séquences stop-on-reply), et un déploiement qui passe souvent par un intégrateur. Volia fait l\'inverse : une seule mission, remplir votre pipeline avec le tissu B2B français.',
+    pricing: 25,
+    pricingUnit: '€/utilisateur/mois',
+    strengths: [
+      'ERP complet : compta, factu, stock, RH, e-commerce (40+ apps)',
+      'Open-source, énorme communauté et réseau d\'intégrateurs en France',
+      'Une app gratuite en illimité (plan One App)',
+      'Très personnalisable pour des process métier complexes',
+    ],
+    weaknesses: [
+      'Aucune génération de leads : le CRM démarre vide, il faut brancher des outils tiers',
+      'Pas de cold email : le module Email Marketing = newsletters opt-in, sans warmup ni séquences',
+      'Pas de base d\'entreprises françaises ni d\'enrichissement email/téléphone natif',
+      'Time-to-value lent : paramétrage, souvent un intégrateur, prix par utilisateur qui s\'empile',
+      'La chaîne prospection → campagne → deal → livraison demande 3-4 modules à configurer',
+    ],
+    bestFor: 'Entreprises 20+ personnes qui veulent UN système pour administrer toute la gestion (et qui brancheront Volia devant pour le remplir)',
+    color: 'purple',
+  },
 };
 
 export function getCompetitor(slug) {

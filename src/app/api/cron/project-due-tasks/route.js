@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
+import { endOfTodayParis, startOfTodayParis } from '@/lib/timezone';
 
 /**
  * GET /api/cron/project-due-tasks  (Volia Project P4)
@@ -29,10 +30,9 @@ export async function GET(request) {
   }
 
   const supabase = getSupabaseAdmin();
-  const endOfToday = new Date();
-  endOfToday.setHours(23, 59, 59, 999);
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  // Journée Europe/Paris (les users sont français, le serveur est en UTC).
+  const endOfToday = endOfTodayParis();
+  const startOfToday = startOfTodayParis();
 
   const stats = { usersNotified: 0, skippedAlreadyNotified: 0 };
 

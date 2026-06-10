@@ -4,6 +4,7 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkCrmAccess } from '@/lib/crm';
+import { endOfTodayParis } from '@/lib/timezone';
 
 const VALID_TYPES = ['note', 'call', 'email', 'meeting', 'task'];
 const LIMIT_DEFAULT = 100;
@@ -74,14 +75,13 @@ export async function GET(request) {
   } else if (status === 'overdue') {
     query = query.is('completed_at', null).lt('due_at', nowIso);
   } else if (status === 'due') {
-    // En retard + dues aujourd'hui : non complétées, avec échéance <= fin de journée.
+    // En retard + dues aujourd'hui : non complétées, avec échéance <= fin de
+    // journée EUROPE/PARIS (le serveur est en UTC, les users sont français).
     // Sert au widget "À faire aujourd'hui / en retard" (P1-2).
-    const endOfToday = new Date();
-    endOfToday.setHours(23, 59, 59, 999);
     query = query
       .is('completed_at', null)
       .not('due_at', 'is', null)
-      .lte('due_at', endOfToday.toISOString());
+      .lte('due_at', endOfTodayParis().toISOString());
   }
 
   const { data, error } = await query;

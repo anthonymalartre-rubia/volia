@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft, KanbanSquare, List, Star, CheckCircle2, CalendarDays, Loader2, AlertCircle, Link2,
+  MoreVertical, Archive, ArchiveRestore, Trash2, RotateCcw,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
@@ -30,6 +31,29 @@ export default function ProjectDetailPage() {
   const [view, setView] = useState('kanban'); // kanban | list
   const [openTaskId, setOpenTaskId] = useState(null);
   const [showShare, setShowShare] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+
+  // ── Actions de statut du projet (Terminer / Archiver / Supprimer) ──
+  const updateProject = useCallback(
+    async (patch) => {
+      setShowMenu(false);
+      const res = await fetch(`/api/projects/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+      const json = await res.json();
+      if (json.success) setProject((p) => (p ? { ...p, ...json.data } : p));
+    },
+    [id]
+  );
+
+  const deleteProject = useCallback(async () => {
+    setShowMenu(false);
+    if (!confirm('Supprimer définitivement ce projet et toutes ses tâches ?')) return;
+    const res = await fetch(`/api/projects/${id}`, { method: 'DELETE' });
+    if (res.ok) router.push('/app/projets');
+  }, [id, router]);
 
   useEffect(() => {
     const supabase = getSupabase();
@@ -168,6 +192,11 @@ export default function ProjectDetailPage() {
                     <CheckCircle2 size={13} /> Terminé
                   </span>
                 )}
+                {project.status === 'archived' && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-content-tertiary bg-surface-raised border border-line px-2.5 py-1 rounded-full">
+                    <Archive size={13} /> Archivé
+                  </span>
+                )}
                 {project.crm_deal_id && (
                   <Link
                     href="/app/crm"
@@ -184,6 +213,65 @@ export default function ProjectDetailPage() {
                 >
                   <Link2 size={14} /> Partager
                 </button>
+                {project.status === 'active' ? (
+                  <button
+                    type="button"
+                    onClick={() => updateProject({ status: 'done' })}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 text-sm font-semibold hover:bg-emerald-500/20 transition-colors"
+                  >
+                    <CheckCircle2 size={14} /> Terminer
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => updateProject({ status: 'active' })}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-line bg-surface-raised text-content-secondary text-sm font-semibold hover:bg-surface-base transition-colors"
+                  >
+                    <RotateCcw size={14} /> Réactiver
+                  </button>
+                )}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setShowMenu((v) => !v)}
+                    className="p-2 rounded-xl border border-line bg-surface-raised text-content-tertiary hover:text-content-primary transition-colors"
+                    aria-label="Plus d'actions"
+                    aria-expanded={showMenu}
+                  >
+                    <MoreVertical size={16} />
+                  </button>
+                  {showMenu && (
+                    <>
+                      <div className="fixed inset-0 z-30" onClick={() => setShowMenu(false)} aria-hidden="true" />
+                      <div className="absolute right-0 top-full mt-1 z-40 w-52 bg-surface-raised border border-line rounded-xl shadow-xl overflow-hidden">
+                        {project.status !== 'archived' ? (
+                          <button
+                            type="button"
+                            onClick={() => updateProject({ status: 'archived' })}
+                            className="w-full flex items-center gap-2 px-3.5 py-2.5 text-sm text-content-secondary hover:bg-surface-base text-left"
+                          >
+                            <Archive size={14} /> Archiver le projet
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => updateProject({ status: 'active' })}
+                            className="w-full flex items-center gap-2 px-3.5 py-2.5 text-sm text-content-secondary hover:bg-surface-base text-left"
+                          >
+                            <ArchiveRestore size={14} /> Désarchiver
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={deleteProject}
+                          className="w-full flex items-center gap-2 px-3.5 py-2.5 text-sm text-red-500 hover:bg-red-500/10 text-left border-t border-line"
+                        >
+                          <Trash2 size={14} /> Supprimer
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
                 <div className="flex rounded-xl border border-line overflow-hidden">
                   <button
                     type="button"
@@ -230,7 +318,15 @@ export default function ProjectDetailPage() {
             {view === 'kanban' ? (
               <ProjectKanban
                 tasks={project.tasks}
-                onMove={(taskId, status) => updateTask(taskId, { status })}
+                onMove={(taskId, status) => {
+                  // Persiste aussi la position : fin de la colonne cible.
+                  // Sans ça, l'ordre après déplacement était arbitraire.
+                  const maxPos = Math.max(
+                    -1,
+                    ...project.tasks.filter((t) => t.status === status && t.id !== taskId).map((t) => t.position)
+                  );
+                  updateTask(taskId, { status, position: maxPos + 1 });
+                }}
                 onOpenTask={(t) => setOpenTaskId(t.id)}
                 onAddInline={addTask}
               />

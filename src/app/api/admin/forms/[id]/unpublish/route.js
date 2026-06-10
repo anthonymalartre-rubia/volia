@@ -1,4 +1,4 @@
-// POST /api/admin/forms/[id]/unpublish
+// POST /api/app/formulaires/[id]/unpublish
 // Repasse le form à status='draft' (sans toucher published_at — on garde
 // la date de première publication pour les stats / audit).
 
@@ -22,7 +22,7 @@ export async function POST(request, { params }) {
     .single();
 
   if (error) {
-    console.error('[api/admin/forms/[id]/unpublish] error', error);
+    console.error('[api/app/formulaires/[id]/unpublish] error', error);
     if (error.code === 'PGRST116') {
       return NextResponse.json({ success: false, error: 'Formulaire introuvable' }, { status: 404 });
     }

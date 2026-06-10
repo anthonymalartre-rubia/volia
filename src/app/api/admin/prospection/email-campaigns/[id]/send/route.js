@@ -1,4 +1,4 @@
-// POST /api/admin/prospection/email-campaigns/[id]/send
+// POST /api/app/campagnes/email-campaigns/[id]/send
 //
 // Action : génère un email_sends pour chaque contact NON opt-out NON
 // déjà envoyé de la liste, et passe la campagne en status 'sending'.

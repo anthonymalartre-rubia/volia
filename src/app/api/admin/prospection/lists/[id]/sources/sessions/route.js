@@ -1,4 +1,4 @@
-// GET /api/admin/prospection/lists/[id]/sources/sessions
+// GET /api/app/campagnes/lists/[id]/sources/sessions
 //
 // Liste les 50 dernières search_sessions de l'utilisateur avec compteurs agrégés
 // (prospects totaux + prospects avec email) pour proposer un import dans la liste.

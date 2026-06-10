@@ -1,11 +1,11 @@
 // ─────────────────────────────────────────────────────────────────
-// POST /api/admin/forms/templates/use — Instancie un template (Sprint F7)
+// POST /api/app/formulaires/templates/use — Instancie un template (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Body : { template_slug: string }
 // 1. Vérifie quota (canCreateForm — gating plan)
 // 2. Lit le template depuis form_templates
 // 3. Crée un form draft avec name + description + schema du template
-// 4. Renvoie le form créé → le client redirige vers /admin/forms/[id]
+// 4. Renvoie le form créé → le client redirige vers /app/formulaires/[id]
 //
 // Atomique côté UX : 1 appel HTTP, pas besoin de POST + PUT depuis le client.
 // ─────────────────────────────────────────────────────────────────

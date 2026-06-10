@@ -15,15 +15,15 @@
 //
 // Détection du module actif via usePathname() :
 //   - /dashboard*       OR /app/prospection* → Prospection (violet)
-//   - /admin/prospection (hub Listes du module Campagnes)
-//   - /admin/prospection/lists/*
-//   - /admin/prospection/campaigns/*
+//   - /app/campagnes (hub Listes du module Campagnes)
+//   - /app/campagnes/lists/*
+//   - /app/campagnes/campaigns/*
 //   - /app/campagnes*                        → Campagnes (blue)
-//   (Note : /admin/prospection est trompeur — c'est le BACKEND de
+//   (Note : /app/campagnes est trompeur — c'est le BACKEND de
 //   Campagnes, pas du module Prospection. Legacy nommage à
 //   refactorer un jour.)
 //   - /app/crm*                              → CRM (emerald)
-//   - /admin/forms*                          → Formulaires (pink)
+//   - /app/formulaires*                          → Formulaires (pink)
 //   - sinon (settings, admin home, ...)      → Prospection par défaut
 //
 // Couleurs alignées avec MODULE_THEMES de ProductPageLayout.jsx.
@@ -124,7 +124,7 @@ const MODULES = [
     id: 'formulaires',
     name: 'Formulaires',
     description: 'Form builder + bridges',
-    href: '/admin/forms',
+    href: '/app/formulaires',
     icon: FormInput,
     businessOnly: true,
     color: 'pink',
@@ -167,13 +167,10 @@ function detectActiveModule(pathname) {
     return moduleById('autopilot');
   }
 
-  // Campagnes : couvre TOUT /admin/prospection (le backend Campagnes
-  // est planqué sous cette route pour raisons legacy) + l'alias canonique
-  // /app/campagnes + les settings senders accessibles depuis la CampagnesSidebar.
+  // Campagnes : /app/campagnes/* (URL canonique depuis la migration
+  // /admin/prospection → /app/campagnes) + les settings senders
+  // accessibles depuis la CampagnesSidebar.
   if (
-    pathname === '/admin/prospection' ||
-    pathname === '/admin/prospection/' ||
-    pathname.startsWith('/admin/prospection/') ||
     pathname.startsWith('/app/campagnes') ||
     pathname.startsWith('/settings/email-senders') ||
     pathname.startsWith('/settings/sms-senders')
@@ -191,12 +188,8 @@ function detectActiveModule(pathname) {
     return moduleById('project');
   }
 
-  // Formulaires : /admin/forms/*
-  if (
-    pathname === '/admin/forms' ||
-    pathname === '/admin/forms/' ||
-    pathname.startsWith('/admin/forms/')
-  ) {
+  // Formulaires : /app/formulaires/*
+  if (pathname.startsWith('/app/formulaires')) {
     return moduleById('formulaires');
   }
 

@@ -32,7 +32,7 @@ const ACTIONS = [
     icon: Target,
     label: 'Démarrer une recherche',
     desc: 'Trouve tes 100 premiers prospects en 2 min.',
-    href: '/admin/prospection',
+    href: '/app/campagnes',
     accent: 'violet',
   },
   {
@@ -40,7 +40,7 @@ const ACTIONS = [
     icon: Send,
     label: 'Créer ma première campagne',
     desc: 'Lance une séquence cold email automatisée.',
-    href: '/admin/prospection/campaigns/new',
+    href: '/app/campagnes/campaigns/new',
     accent: 'indigo',
   },
   {
@@ -48,7 +48,7 @@ const ACTIONS = [
     icon: FormInput,
     label: 'Capturer des leads',
     desc: 'Crée un formulaire embeddable en 30 secondes.',
-    href: '/admin/forms',
+    href: '/app/formulaires',
     accent: 'sky',
   },
   {

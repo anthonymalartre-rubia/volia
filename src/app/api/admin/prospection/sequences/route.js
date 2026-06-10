@@ -1,5 +1,5 @@
-// GET  /api/admin/prospection/sequences  → liste des séquences du user
-// POST /api/admin/prospection/sequences  → crée une séquence + ses steps
+// GET  /api/app/campagnes/sequences  → liste des séquences du user
+// POST /api/app/campagnes/sequences  → crée une séquence + ses steps
 //
 // Body POST :
 //   {

@@ -299,7 +299,7 @@ async function notifyAdmin({ form, responseId, answers, ownerEmail }) {
         ${rows || '<tr><td style="padding:12px;color:#999;">Aucune réponse renseignée.</td></tr>'}
       </table>
       <p style="margin-top:24px;">
-        <a href="${baseUrl}/admin/forms/${form.id}/responses" style="display:inline-block;padding:10px 20px;background:#db2777;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;">
+        <a href="${baseUrl}/app/formulaires/${form.id}/responses" style="display:inline-block;padding:10px 20px;background:#db2777;color:#fff;text-decoration:none;border-radius:8px;font-weight:600;">
           Voir toutes les réponses
         </a>
       </p>

@@ -1,7 +1,7 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// StatsCards — 4 KPI cards pour /admin/forms/stats (Sprint F7)
+// StatsCards — 4 KPI cards pour /app/formulaires/stats (Sprint F7)
 // ─────────────────────────────────────────────────────────────────────
 // Affiche : Vues totales, Soumissions, Taux conv global, Bridges health.
 // Compact, light mode, accent pink. Pattern aligné sur les autres KPI

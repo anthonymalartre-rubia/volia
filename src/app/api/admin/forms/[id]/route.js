@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────
-// GET    /api/admin/forms/[id]   → détail + fields + stats summary
-// PUT    /api/admin/forms/[id]   → update (name, description, schema, settings, ...)
-// DELETE /api/admin/forms/[id]   → soft delete (archived) ou hard si ?hard=true
+// GET    /api/app/formulaires/[id]   → détail + fields + stats summary
+// PUT    /api/app/formulaires/[id]   → update (name, description, schema, settings, ...)
+// DELETE /api/app/formulaires/[id]   → soft delete (archived) ou hard si ?hard=true
 // ─────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
@@ -32,7 +32,7 @@ export async function GET(request, { params }) {
     .maybeSingle();
 
   if (error) {
-    console.error('[api/admin/forms/[id]] GET error', error);
+    console.error('[api/app/formulaires/[id]] GET error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
   if (!form) {
@@ -180,7 +180,7 @@ export async function PUT(request, { params }) {
     .single();
 
   if (error) {
-    console.error('[api/admin/forms/[id]] PUT error', error);
+    console.error('[api/app/formulaires/[id]] PUT error', error);
     if (error.code === '23505') {
       return NextResponse.json(
         { success: false, error: 'Slug déjà utilisé' },
@@ -208,7 +208,7 @@ export async function DELETE(request, { params }) {
       .eq('id', id)
       .eq('user_id', user.id);
     if (error) {
-      console.error('[api/admin/forms/[id]] DELETE hard error', error);
+      console.error('[api/app/formulaires/[id]] DELETE hard error', error);
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
     return NextResponse.json({ success: true, mode: 'hard' });
@@ -224,7 +224,7 @@ export async function DELETE(request, { params }) {
     .single();
 
   if (error) {
-    console.error('[api/admin/forms/[id]] DELETE soft error', error);
+    console.error('[api/app/formulaires/[id]] DELETE soft error', error);
     if (error.code === 'PGRST116') {
       return NextResponse.json({ success: false, error: 'Formulaire introuvable' }, { status: 404 });
     }

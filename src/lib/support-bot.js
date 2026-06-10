@@ -45,7 +45,7 @@ NAVIGATION VOLIA :
 - /app/crm : pipeline CRM kanban
 - /app/campagnes : créer/lancer campagnes email
 - /app/forms : builder formulaires
-- /admin/prospection : listes prospects
+- /app/campagnes : listes prospects
 - /settings : profil, abonnement, billing
 - /parrainage : programme parrainage (3 mois gratuit)
 

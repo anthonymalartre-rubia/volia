@@ -1,4 +1,4 @@
-// POST /api/admin/forms/[id]/publish
+// POST /api/app/formulaires/[id]/publish
 // Passe le form à status='published' + set published_at = now()
 // Le schema doit être valide (au moins 1 field) — on bloque le publish
 // d'un form vide pour éviter qu'un user partage un slug rendu blanc.
@@ -57,7 +57,7 @@ export async function POST(request, { params }) {
     .single();
 
   if (error) {
-    console.error('[api/admin/forms/[id]/publish] error', error);
+    console.error('[api/app/formulaires/[id]/publish] error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 
@@ -75,7 +75,7 @@ export async function POST(request, { params }) {
       },
     });
   } catch (e) {
-    console.warn('[api/admin/forms/[id]/publish] webhook form.published failed', e.message);
+    console.warn('[api/app/formulaires/[id]/publish] webhook form.published failed', e.message);
   }
 
   // Achievement : first_form_created (best-effort)

@@ -1,4 +1,4 @@
-// POST /api/admin/prospection/lists/[id]/import
+// POST /api/app/campagnes/lists/[id]/import
 //
 // Body : { csv: "header1,header2\nval,val\n..." }
 //   OU multipart form-data avec champ "file"

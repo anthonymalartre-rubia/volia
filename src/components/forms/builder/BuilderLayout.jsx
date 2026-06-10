@@ -4,7 +4,7 @@
 // BuilderLayout — Orchestration 3 colonnes + drag-drop + auto-save
 // ─────────────────────────────────────────────────────────────────────
 // • DndContext (@dnd-kit) qui couvre palette + canvas
-// • Auto-save debounced (1s) → PUT /api/admin/forms/[id]
+// • Auto-save debounced (1s) → PUT /api/app/formulaires/[id]
 // • Keyboard shortcuts : Cmd+S, Cmd+Z, Cmd+Shift+Z, Delete, Escape
 // • Topbar : nom inline-editable + status + Aperçu + Settings + Publier
 // • Toast "Sauvegardé" en bas à droite (1s)
@@ -120,7 +120,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
           name: formName,
           schema: builder.schema,
         };
-        const res = await fetch(`/api/admin/forms/${formId}`, {
+        const res = await fetch(`/api/app/formulaires/${formId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -223,7 +223,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         await new Promise((r) => setTimeout(r, 200));
       }
       const endpoint = status === 'published' ? `unpublish` : `publish`;
-      const res = await fetch(`/api/admin/forms/${formId}/${endpoint}`, {
+      const res = await fetch(`/api/app/formulaires/${formId}/${endpoint}`, {
         method: 'POST',
       });
       const json = await res.json().catch(() => ({}));
@@ -377,7 +377,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
             Utilise un écran plus grand ou bascule en mode aperçu pour tester ton formulaire sur mobile.
           </p>
           <Link
-            href="/admin/forms"
+            href="/app/formulaires"
             className="mt-5 inline-flex items-center gap-1.5 text-xs text-pink-700 hover:text-pink-800"
           >
             <ArrowLeft size={13} /> Retour à mes formulaires
@@ -394,7 +394,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
       {/* Topbar */}
       <header className="shrink-0 h-14 flex items-center gap-3 px-4 border-b border-line bg-surface-base/95 backdrop-blur z-20">
         <Link
-          href="/admin/forms"
+          href="/app/formulaires"
           className="inline-flex items-center gap-1 text-xs text-content-tertiary hover:text-pink-700 transition-colors"
         >
           <ArrowLeft size={14} /> Mes formulaires
@@ -495,7 +495,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
               <Zap size={12} /> Logique
             </button>
             <Link
-              href={`/admin/forms/${formId}/preview`}
+              href={`/app/formulaires/${formId}/preview`}
               target="_blank"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card border border-line hover:bg-surface-elevated text-xs font-medium text-content-primary transition-colors"
             >
@@ -540,7 +540,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
                   <Zap size={12} /> Logique
                 </button>
                 <Link
-                  href={`/admin/forms/${formId}/preview`}
+                  href={`/app/formulaires/${formId}/preview`}
                   target="_blank"
                   role="menuitem"
                   onClick={() => setActionsMenuOpen(false)}

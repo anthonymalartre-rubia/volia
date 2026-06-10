@@ -13,7 +13,7 @@
 //   - /produits/campagnes  → CTA pointe sur ?plan=business
 //
 // Historique : on avait ouvert Solo+ pour les premiers utilisateurs (audit
-// avait révélé que /admin/prospection était bloqué admin-only par erreur).
+// avait révélé que /app/campagnes était bloqué admin-only par erreur).
 // On a corrigé en ouvrant trop large. Aujourd'hui on positionne clairement.
 //
 // IMPORTANT — ne pas utiliser pour :

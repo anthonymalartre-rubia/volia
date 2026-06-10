@@ -137,6 +137,13 @@ const nextConfig = {
         destination: '/notre-histoire',
         permanent: true,
       },
+      // ── Unification des URLs modules sous /app/* (juin 2026, UX-1) ──
+      // Les modules Campagnes et Formulaires vivaient sous /admin/* pour
+      // des raisons historiques. 301 pour les favoris/liens externes.
+      { source: '/admin/prospection', destination: '/app/campagnes', permanent: true },
+      { source: '/admin/prospection/:path*', destination: '/app/campagnes/:path*', permanent: true },
+      { source: '/admin/forms', destination: '/app/formulaires', permanent: true },
+      { source: '/admin/forms/:path*', destination: '/app/formulaires/:path*', permanent: true },
     ];
   },
 

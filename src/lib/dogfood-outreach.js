@@ -13,7 +13,7 @@
 //   7. Log dans autonomous_actions (audit trail)
 //
 // ⚠️ Pas d'auto-send. La liste est créée draft, le founder décide d'en
-//    faire une campagne ou non via l'UI /admin/prospection existante.
+//    faire une campagne ou non via l'UI /app/campagnes existante.
 //    Raison : réputation domaine + warmup + opt-out RGPD obligatoire.
 //
 // ENV : VOLIA_ADMIN_USER_ID optionnel (si absent, fetch via is_admin=true)
@@ -173,7 +173,7 @@ export async function runDogfoodOutreach() {
     `ICP : ${icp.label} (categorie="${icp.category}", dept=${icp.dept})`,
     `${fresh.length} contacts ajoutés (sans email — Google Places ne fournit pas l'email).`,
     ``,
-    `▸ Étape 1 : enrichir les emails via le bouton "Enrichir tous les emails" de l'UI /admin/prospection.`,
+    `▸ Étape 1 : enrichir les emails via le bouton "Enrichir tous les emails" de l'UI /app/campagnes.`,
     `▸ Étape 2 : créer une campagne dessus depuis l'UI Volia (PAS d'envoi auto par sécurité réputation).`,
     `▸ Étape 3 : vérifier le sender configuré + RGPD opt-out dans l'email avant lancement.`,
   ].join('\n');
@@ -271,7 +271,7 @@ export async function runDogfoodOutreach() {
       kept: fresh.length,
       skipped_already_seen: places.length - fresh.length,
     },
-    preview: `📋 "${listName}" — ${fresh.length} leads dans /admin/prospection (à enrichir manuellement)`,
+    preview: `📋 "${listName}" — ${fresh.length} leads dans /app/campagnes (à enrichir manuellement)`,
     rationale: `Cron weekly génère leads ICP-fit via Google Places. Pas d'auto-send : founder review + enrichit + envoie via UI.`,
     autoExecute: true,
   });

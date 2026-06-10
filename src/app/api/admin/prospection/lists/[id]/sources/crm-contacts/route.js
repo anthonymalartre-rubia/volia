@@ -1,4 +1,4 @@
-// GET /api/admin/prospection/lists/[id]/sources/crm-contacts
+// GET /api/app/campagnes/lists/[id]/sources/crm-contacts
 //
 // Liste les contacts CRM du user (max 200) pour permettre l'import dans
 // une liste prospect_contacts. Gating CRM (plan Business) côté API.

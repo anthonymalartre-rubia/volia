@@ -5,17 +5,17 @@
 // ─────────────────────────────────────────────────────────────────────
 //
 // Fix P1-1 audit UX : avant, le CTA "Créer une liste" depuis le hub
-// Campagnes redirigeait vers /admin/prospection (page liste générique)
+// Campagnes redirigeait vers /app/campagnes (page liste générique)
 // → user perd le fil. Maintenant, modale inline en 2 étapes :
 //
 //   1) saisir nom de liste + uploader CSV
-//   2) POST création liste (/api/admin/prospection/lists)
-//      puis POST import (/api/admin/prospection/lists/[id]/import)
+//   2) POST création liste (/api/app/campagnes/lists)
+//      puis POST import (/api/app/campagnes/lists/[id]/import)
 //   3) onSuccess(listId) → le caller redirige vers /campaigns/new?list=<id>
 //
 // Volontairement minimal — pas de mapping de colonnes ni de drag&drop.
 // Le CSV doit avoir au moins une colonne `email` (le parser fait le reste).
-// Les freelances qui veulent du fancy passent par /admin/prospection.
+// Les freelances qui veulent du fancy passent par /app/campagnes.
 
 import { useEffect, useRef, useState } from 'react';
 import { Loader2, Upload, X, CheckCircle, AlertTriangle, FileText } from 'lucide-react';
@@ -68,7 +68,7 @@ export default function ImportCsvModal({ open, onClose, onSuccess }) {
     setSubmitting(true);
     try {
       // 1) Création de la liste (POST /lists)
-      const createRes = await fetch('/api/admin/prospection/lists', {
+      const createRes = await fetch('/api/app/campagnes/lists', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,14 +88,14 @@ export default function ImportCsvModal({ open, onClose, onSuccess }) {
       // 2) Upload du CSV (POST /lists/[id]/import — multipart/form-data)
       const form = new FormData();
       form.append('file', file);
-      const importRes = await fetch(`/api/admin/prospection/lists/${listId}/import`, {
+      const importRes = await fetch(`/api/app/campagnes/lists/${listId}/import`, {
         method: 'POST',
         body: form,
       });
       const importData = await importRes.json();
       if (!importRes.ok) {
         // Liste créée mais import KO — on propose au user de poursuivre
-        // avec la liste vide (il peut réessayer depuis /admin/prospection).
+        // avec la liste vide (il peut réessayer depuis /app/campagnes).
         setError(importData.error || 'CSV importé mais erreur lors du parsing');
         setSubmitting(false);
         return;

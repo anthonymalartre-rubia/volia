@@ -1,4 +1,4 @@
-// POST /api/admin/prospection/lists/[id]/import-from-session
+// POST /api/app/campagnes/lists/[id]/import-from-session
 //
 // Body : { session_id: string, include_emailless?: boolean (default false) }
 //

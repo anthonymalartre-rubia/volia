@@ -288,6 +288,7 @@ export default function CrmReportsPage() {
                       {[
                         { key: 'won_onboarding', label: 'Tâche d’onboarding auto', desc: 'Quand un deal passe en « gagné », créer une tâche d’onboarding du contact.' },
                         { key: 'stale_relance', label: 'Relance auto des deals dormants', desc: 'Deal ouvert sans activité depuis 7 jours → tâche de relance créée automatiquement.' },
+                        { key: 'won_project', label: 'Projet de livraison auto (Volia Project)', desc: 'Deal gagné → projet créé automatiquement depuis le modèle « Onboarding client ».' },
                       ].map((row) => (
                         <div key={row.key} className="flex items-center justify-between gap-3 rounded-lg border border-line bg-surface-base px-3 py-2.5">
                           <div className="min-w-0">

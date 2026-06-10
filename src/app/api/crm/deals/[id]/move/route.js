@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkCrmAccess } from '@/lib/crm';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
-import { createOnboardingTaskOnWon } from '@/lib/crm-automations';
+import { createOnboardingTaskOnWon, createProjectOnWon } from '@/lib/crm-automations';
 
 function forbidden() {
   return NextResponse.json(
@@ -114,6 +114,13 @@ export async function PATCH(request, { params }) {
   // (best-effort, idempotent, respecte les prefs user). N'échoue jamais le move.
   if (data.status === 'won' && deal.status !== 'won') {
     createOnboardingTaskOnWon(supabase, {
+      id: data.id,
+      user_id: user.id,
+      title: data.title,
+      contact_id: data.contact_id,
+    }).catch(() => {});
+    // Volia Project (opt-in won_project) : projet de livraison auto.
+    createProjectOnWon(supabase, {
       id: data.id,
       user_id: user.id,
       title: data.title,

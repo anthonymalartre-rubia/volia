@@ -38,10 +38,10 @@ export default async function Image({ params }) {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '900px' }}>
           <div style={{ fontSize: '20px', color: '#a78bfa', fontWeight: 600, marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '2px' }}>
-            📍 Département
+            Département
           </div>
           <div style={{ fontSize: '64px', fontWeight: 700, color: 'white', lineHeight: 1.1, marginBottom: '24px' }}>
-            Prospection B2B {title}
+            {`Prospection B2B ${title}`}
           </div>
           <div style={{ fontSize: '24px', color: '#a1a1aa', lineHeight: 1.4 }}>
             150+ secteurs couverts. Trouvez les emails des entreprises locales.
@@ -49,8 +49,8 @@ export default async function Image({ params }) {
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ 80% emails trouvés</div>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', fontSize: '14px' }}>💶 À partir de 19 €/mois</div>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>80% emails trouvés</div>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', fontSize: '14px' }}>À partir de 19 €/mois</div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr</div>
         </div>

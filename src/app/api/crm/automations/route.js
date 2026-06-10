@@ -8,7 +8,8 @@ import { checkCrmAccess } from '@/lib/crm';
 
 export const dynamic = 'force-dynamic';
 
-const DEFAULTS = { won_onboarding: true, stale_relance: true };
+// won_project (Volia Project : deal gagné → projet de livraison) est OPT-IN.
+const DEFAULTS = { won_onboarding: true, stale_relance: true, won_project: false };
 
 function forbidden() {
   return NextResponse.json({ success: false, error: 'CRM réservé au plan Business' }, { status: 403 });
@@ -35,6 +36,7 @@ export async function PATCH(request) {
   const prefs = { ...DEFAULTS, ...(existing?.crm_automation_prefs || {}) };
   if (typeof body.won_onboarding === 'boolean') prefs.won_onboarding = body.won_onboarding;
   if (typeof body.stale_relance === 'boolean') prefs.stale_relance = body.stale_relance;
+  if (typeof body.won_project === 'boolean') prefs.won_project = body.won_project;
 
   const { error } = await supabase
     .from('user_profiles').update({ crm_automation_prefs: prefs }).eq('id', user.id);

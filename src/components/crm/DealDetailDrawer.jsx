@@ -16,16 +16,64 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   X, Loader2, Trash2, Mail, Phone, Building2, User,
   Calendar, AlertCircle, Save, Check, StickyNote, CheckSquare,
-  Square, Users as UsersIcon, Megaphone, Sparkles,
+  Square, Users as UsersIcon, Megaphone, Sparkles, FolderKanban,
 } from 'lucide-react';
 import { formatDealValue } from '@/lib/crm';
 import ActivityForm from './ActivityForm';
 import AddToCampagneModal from './AddToCampagneModal';
 import CustomFieldsSection from './CustomFieldsSection';
 import CallSummarizer from './CallSummarizer';
+
+// ─── Pont Volia Project : deal gagné → projet de livraison ──────────
+// Un seul bouton : crée le projet (idempotent côté API) puis navigue
+// dessus. Si un projet est déjà lié, l'API renvoie l'existant.
+function WonProjectCta({ dealId }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState(null);
+
+  async function go() {
+    if (busy) return;
+    setBusy(true);
+    setErr(null);
+    try {
+      const res = await fetch('/api/projects/from-deal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ deal_id: dealId }),
+      });
+      const json = await res.json();
+      if (res.status === 403) throw new Error('Réservé au plan Business');
+      if (!json.success) throw new Error(json.error || 'Erreur');
+      router.push(`/app/projets/${json.data.id}`);
+    } catch (e) {
+      setErr(e.message);
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="rounded-xl border border-amber-200 bg-amber-50 p-3.5">
+      <p className="text-xs font-semibold text-amber-800 mb-2">
+        🎉 Deal gagné — et maintenant, la livraison ?
+      </p>
+      <button
+        type="button"
+        onClick={go}
+        disabled={busy}
+        className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white text-sm font-semibold disabled:opacity-60 transition-all"
+      >
+        {busy ? <Loader2 size={14} className="animate-spin" /> : <FolderKanban size={14} />}
+        Ouvrir le projet de livraison
+      </button>
+      {err && <p className="text-[11px] text-rose-600 mt-1.5">{err}</p>}
+    </div>
+  );
+}
 
 // Icône par type d'activity
 const ACTIVITY_TYPE_META = {
@@ -327,6 +375,9 @@ export default function DealDetailDrawer({
             {deal.metadata?.auto_created === true && (
               <AutoCreatedBanner metadata={deal.metadata} />
             )}
+
+            {/* Pont Volia Project : visible uniquement sur les deals gagnés */}
+            {isWon && <WonProjectCta dealId={deal.id} />}
 
             {/* Title (editable inline) */}
             <div>

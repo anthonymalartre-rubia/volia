@@ -10,13 +10,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import {
-  ArrowLeft, KanbanSquare, List, Star, CheckCircle2, CalendarDays, Loader2, AlertCircle,
+  ArrowLeft, KanbanSquare, List, Star, CheckCircle2, CalendarDays, Loader2, AlertCircle, Link2,
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
 import { computeProjectStats } from '@/lib/projects';
 import ProjectKanban from '@/components/projects/ProjectKanban';
 import TaskDrawer from '@/components/projects/TaskDrawer';
+import ShareModal from '@/components/projects/ShareModal';
 
 const STATUS_LABELS = { todo: 'À faire', doing: 'En cours', done: 'Fait' };
 
@@ -28,6 +29,7 @@ export default function ProjectDetailPage() {
   const [error, setError] = useState(null);
   const [view, setView] = useState('kanban'); // kanban | list
   const [openTaskId, setOpenTaskId] = useState(null);
+  const [showShare, setShowShare] = useState(false);
 
   useEffect(() => {
     const supabase = getSupabase();
@@ -166,7 +168,23 @@ export default function ProjectDetailPage() {
                     <CheckCircle2 size={13} /> Terminé
                   </span>
                 )}
-                <div className="flex rounded-xl border border-line overflow-hidden ml-auto">
+                {project.crm_deal_id && (
+                  <Link
+                    href="/app/crm"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full hover:bg-emerald-500/20 transition-colors"
+                    title="Ce projet est lié à un deal gagné du CRM"
+                  >
+                    Deal CRM lié →
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setShowShare(true)}
+                  className="ml-auto inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-700 text-sm font-semibold hover:bg-amber-500/20 transition-colors"
+                >
+                  <Link2 size={14} /> Partager
+                </button>
+                <div className="flex rounded-xl border border-line overflow-hidden">
                   <button
                     type="button"
                     onClick={() => switchView('kanban')}
@@ -291,6 +309,15 @@ export default function ProjectDetailPage() {
           onClose={() => setOpenTaskId(null)}
           onUpdate={updateTask}
           onDelete={deleteTask}
+        />
+      )}
+
+      {showShare && project && (
+        <ShareModal
+          project={project}
+          userId={user?.id}
+          onClose={() => setShowShare(false)}
+          onChanged={load}
         />
       )}
     </div>

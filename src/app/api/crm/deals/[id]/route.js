@@ -49,6 +49,35 @@ export async function GET(request, { params }) {
     data.activities.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   }
 
+  // ── Engagement email du contact (audit CRM) ──────────────────────
+  // Les envois Campagnes sont reliés par adresse email (les contacts
+  // Campagnes et CRM sont des tables distinctes). On remonte les 10
+  // derniers envois de MES campagnes vers ce contact : ouvertures,
+  // clics, réponses — le signal "appelle-le maintenant".
+  data.engagement = [];
+  const contactEmail = data.contact?.email?.trim().toLowerCase();
+  if (contactEmail) {
+    const { data: sends } = await supabase
+      .from('email_sends')
+      .select(
+        'id, sent_at, opened_at, clicked_at, replied_at, opens_count, clicks_count, campaign:email_campaigns!inner(id, name, owner_id)'
+      )
+      .eq('email', contactEmail)
+      .eq('campaign.owner_id', user.id)
+      .order('sent_at', { ascending: false })
+      .limit(10);
+    data.engagement = (sends || []).map((s) => ({
+      id: s.id,
+      campaign_name: s.campaign?.name || 'Campagne',
+      sent_at: s.sent_at,
+      opened_at: s.opened_at,
+      clicked_at: s.clicked_at,
+      replied_at: s.replied_at,
+      opens_count: s.opens_count || 0,
+      clicks_count: s.clicks_count || 0,
+    }));
+  }
+
   return NextResponse.json({ success: true, data });
 }
 

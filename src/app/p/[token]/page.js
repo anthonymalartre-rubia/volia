@@ -21,6 +21,29 @@ function fmtDate(iso) {
   return new Date(iso).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
+async function notifyOwnerOfView(admin, project) {
+  const startOfDay = new Date();
+  startOfDay.setUTCHours(0, 0, 0, 0);
+  const { data: existing } = await admin
+    .from('notifications')
+    .select('id')
+    .eq('user_id', project.user_id)
+    .eq('type', 'project_share_viewed')
+    .eq('metadata->>project_id', project.id)
+    .gte('created_at', startOfDay.toISOString())
+    .limit(1);
+  if (existing && existing.length > 0) return;
+
+  await admin.from('notifications').insert({
+    user_id: project.user_id,
+    type: 'project_share_viewed',
+    title: 'Votre client a consulté son suivi de projet 👀',
+    body: `Le lien de suivi de « ${project.name} » vient d'être ouvert. Bon moment pour prendre des nouvelles.`,
+    link: `/app/projets/${project.id}`,
+    metadata: { project_id: project.id, source: 'share_view' },
+  });
+}
+
 async function getSharedProject(token) {
   // Token = 48 hex chars générés par la DB. On rejette tout le reste
   // avant de toucher la base.
@@ -38,13 +61,18 @@ async function getSharedProject(token) {
   const { data: project } = await admin
     .from('projects')
     .select(`
-      id, name, description, status, created_at, updated_at,
+      id, user_id, name, description, status, created_at, updated_at,
       tasks:project_tasks(id, title, status, due_at, is_milestone, position),
       deliverables:project_deliverables(id, name, status, delivered_at, attachment_id)
     `)
     .eq('id', share.project_id)
     .maybeSingle();
   if (!project) return null;
+
+  // Signal commercial : prévenir le propriétaire que son client a ouvert
+  // le lien de suivi. Best-effort, dédupé à 1 notification / projet / jour
+  // (sinon chaque refresh du client spammerait la cloche).
+  notifyOwnerOfView(admin, project).catch(() => {});
 
   // URLs signées (24h) pour les livrables livrés avec fichier.
   const withFiles = (project.deliverables || []).filter((d) => d.attachment_id);

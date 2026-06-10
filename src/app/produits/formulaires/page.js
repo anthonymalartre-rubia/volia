@@ -513,7 +513,7 @@ const FAQ = [
   },
   {
     q: 'Les formulaires sont vraiment conformes RGPD ?',
-    a: 'Oui, by default : (1) IP et user-agent stockés en SHA-256 (16 chars), pas en clair ; (2) opt-in checkbox explicite généré automatiquement sur les templates contact ; (3) page publique /opt-out pour la suppression à la demande ; (4) endpoint DELETE /api/app/formulaires/[id]/responses/[responseId] pour la suppression admin (RGPD) ; (5) données hébergées en UE (Supabase EU + Vercel edge EU). Vous gardez la maîtrise complète, vous êtes le responsable de traitement.',
+    a: 'Oui, by default : (1) IP et user-agent stockés en SHA-256 (16 chars), pas en clair ; (2) opt-in checkbox explicite généré automatiquement sur les templates contact ; (3) page publique /opt-out pour la suppression à la demande ; (4) endpoint DELETE /api/admin/forms/[id]/responses/[responseId] pour la suppression admin (RGPD) ; (5) données hébergées en UE (Supabase EU + Vercel edge EU). Vous gardez la maîtrise complète, vous êtes le responsable de traitement.',
   },
   {
     q: 'Puis-je embarquer le formulaire sur mon site existant ?',

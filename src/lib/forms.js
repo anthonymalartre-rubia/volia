@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────
 // src/lib/forms.js — Helpers Volia Formulaires
 // ─────────────────────────────────────────────────────────────────
-// Utilitaires partagés par les routes /api/app/formulaires/*, le builder
+// Utilitaires partagés par les routes /api/admin/forms/*, le builder
 // /app/formulaires/[id] (Sprint F3) et le renderer public /f/[slug] (F2).
 //
 // Convention : tout helper qui touche la DB prend un client supabase

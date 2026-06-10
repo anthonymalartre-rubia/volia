@@ -57,7 +57,7 @@ export default function CampaignDetailPage() {
   const fetchCampaign = useCallback(async () => {
     if (!id) return;
     try {
-      const res = await fetch(`/api/app/campagnes/email-campaigns/${id}`);
+      const res = await fetch(`/api/admin/prospection/email-campaigns/${id}`);
       if (!res.ok) {
         setError('Campagne introuvable');
         setLoading(false);
@@ -110,7 +110,7 @@ export default function CampaignDetailPage() {
     setSending(true);
     setError(null);
     try {
-      const res = await fetch(`/api/app/campagnes/email-campaigns/${id}/send`, {
+      const res = await fetch(`/api/admin/prospection/email-campaigns/${id}/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -145,7 +145,7 @@ export default function CampaignDetailPage() {
   async function handleDelete() {
     if (!campaign) return;
     try {
-      const res = await fetch(`/api/app/campagnes/email-campaigns/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/prospection/email-campaigns/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || 'Erreur suppression');

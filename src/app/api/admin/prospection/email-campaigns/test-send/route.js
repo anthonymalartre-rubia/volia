@@ -1,4 +1,4 @@
-// POST /api/app/campagnes/email-campaigns/test-send
+// POST /api/admin/prospection/email-campaigns/test-send
 //
 // Envoie un email de test à l'utilisateur courant (lui-même) pour preview
 // d'une campagne en cours de création — quick win #5 du wizard.

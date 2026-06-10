@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────
-// GET /api/app/formulaires/[id]/analytics — Analytics par form (Sprint F7)
+// GET /api/admin/forms/[id]/analytics — Analytics par form (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Renvoie les stats détaillées d'un seul formulaire :
 //   - totals : views, submissions, conv rate, avg completion time
@@ -9,7 +9,7 @@
 //   - bridges_breakdown : count par bridge_status
 //
 // Important : on n'expose pas les answers ici. La page détail réponse
-// utilise /api/app/formulaires/[id]/responses + responses/[responseId].
+// utilise /api/admin/forms/[id]/responses + responses/[responseId].
 // ─────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';

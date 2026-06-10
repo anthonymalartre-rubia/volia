@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────
 // /app/formulaires/stats — Dashboard stats global du module (Sprint F7)
 // ─────────────────────────────────────────────────────────────────────
-// Fetch /api/app/formulaires/stats puis affiche :
+// Fetch /api/admin/forms/stats puis affiche :
 //   - 4 KPI cards (views, submits, conv rate, bridges health)
 //   - Bridge breakdown détaillé
 //   - Courbe submissions 30 jours
@@ -26,7 +26,7 @@ export default function FormsStatsPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/app/formulaires/stats');
+        const res = await fetch('/api/admin/forms/stats');
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {

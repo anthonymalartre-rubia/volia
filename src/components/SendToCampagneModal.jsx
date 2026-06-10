@@ -14,7 +14,7 @@
 //   - onSuccess?({ list_id, list_name, inserted, skipped }) : callback
 //
 // Flow :
-//   1. Au mount, fetch GET /api/app/campagnes/lists pour proposer
+//   1. Au mount, fetch GET /api/admin/prospection/lists pour proposer
 //      une liste existante (si l'user en a déjà).
 //   2. L'user choisit "nouvelle liste" (input nom) ou "liste existante"
 //      (select).
@@ -71,7 +71,7 @@ export default function SendToCampagneModal({
 
     setLoadingLists(true);
     setListsError('');
-    fetch('/api/app/campagnes/lists')
+    fetch('/api/admin/prospection/lists')
       .then((r) => r.json().then((d) => ({ ok: r.ok, status: r.status, d })))
       .then(({ ok, status, d }) => {
         if (!ok) {

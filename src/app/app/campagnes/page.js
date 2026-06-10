@@ -45,7 +45,7 @@ export default function ProspectionHubPage() {
       if (!allowed) { router.push('/dashboard?upgrade=campagnes'); return; }
       setAuthState('ok');
 
-      const res = await fetch('/api/app/campagnes/lists');
+      const res = await fetch('/api/admin/prospection/lists');
       if (res.ok) {
         const data = await res.json();
         setLists(data.lists || []);
@@ -60,7 +60,7 @@ export default function ProspectionHubPage() {
     setCreating(true);
     setError(null);
     try {
-      const res = await fetch('/api/app/campagnes/lists', {
+      const res = await fetch('/api/admin/prospection/lists', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

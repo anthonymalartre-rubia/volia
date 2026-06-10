@@ -48,7 +48,7 @@ export default function SmsDetailPage() {
   const fetchCampaign = useCallback(async () => {
     if (!id) return;
     try {
-      const res = await fetch(`/api/app/campagnes/sms-campaigns/${id}`);
+      const res = await fetch(`/api/admin/prospection/sms-campaigns/${id}`);
       if (!res.ok) { setError('Campagne introuvable'); setLoading(false); return; }
       const data = await res.json();
       setCampaign(data.campaign);
@@ -88,7 +88,7 @@ export default function SmsDetailPage() {
     setSending(true);
     setError(null);
     try {
-      const res = await fetch(`/api/app/campagnes/sms-campaigns/${id}/send`, {
+      const res = await fetch(`/api/admin/prospection/sms-campaigns/${id}/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -109,7 +109,7 @@ export default function SmsDetailPage() {
   async function handleDelete() {
     if (!campaign) return;
     try {
-      const res = await fetch(`/api/app/campagnes/sms-campaigns/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/prospection/sms-campaigns/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Erreur suppression'); return; }
       router.push('/app/campagnes/sms');

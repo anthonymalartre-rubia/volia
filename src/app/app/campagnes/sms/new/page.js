@@ -46,7 +46,7 @@ function NewSmsContent() {
       setAuthState('ok');
 
       const [listsRes, sendersRes] = await Promise.all([
-        fetch('/api/app/campagnes/lists'),
+        fetch('/api/admin/prospection/lists'),
         fetch('/api/sms-senders').catch(() => null),
       ]);
       if (listsRes.ok) {
@@ -86,7 +86,7 @@ function NewSmsContent() {
     setError(null);
     setSubmitting(true);
     try {
-      const res = await fetch('/api/app/campagnes/sms-campaigns', {
+      const res = await fetch('/api/admin/prospection/sms-campaigns', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

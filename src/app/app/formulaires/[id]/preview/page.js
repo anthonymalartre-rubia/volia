@@ -24,7 +24,7 @@ export default function FormPreviewPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`/api/app/formulaires/${id}`);
+        const res = await fetch(`/api/admin/forms/${id}`);
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {

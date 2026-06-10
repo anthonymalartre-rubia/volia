@@ -1,4 +1,4 @@
-// POST /api/app/campagnes/lists/[id]/import-from-crm
+// POST /api/admin/prospection/lists/[id]/import-from-crm
 //
 // Body : { contact_ids: string[] }
 //

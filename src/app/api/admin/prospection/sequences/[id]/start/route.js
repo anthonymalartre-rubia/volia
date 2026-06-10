@@ -1,4 +1,4 @@
-// POST /api/app/campagnes/sequences/[id]/start
+// POST /api/admin/prospection/sequences/[id]/start
 //
 // Active une séquence et enrôle TOUS les contacts de la list_id qui :
 //   - ont un email valide

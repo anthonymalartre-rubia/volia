@@ -4,7 +4,7 @@
 // SettingsDrawer — Drawer right-side pour réglages rapides du form (P1-5)
 // ─────────────────────────────────────────────────────────────────────
 // Réutilise le pattern visuel de JumpLogicDrawer. Auto-save debounced 1s
-// vers PUT /api/app/formulaires/[id]. Pour la config complète (notifications,
+// vers PUT /api/admin/forms/[id]. Pour la config complète (notifications,
 // bridges, sharing, QR…), un lien renvoie vers la page settings.
 // ─────────────────────────────────────────────────────────────────────
 
@@ -120,7 +120,7 @@ export default function SettingsDrawer({ open, formId, initialForm, onClose, onC
             privacy_url: privacyUrl.trim() || null,
           },
         };
-        const res = await fetch(`/api/app/formulaires/${formId}`, {
+        const res = await fetch(`/api/admin/forms/${formId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),

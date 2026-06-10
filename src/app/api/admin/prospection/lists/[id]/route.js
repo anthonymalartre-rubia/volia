@@ -1,6 +1,6 @@
-// GET    /api/app/campagnes/lists/[id]   → détails liste + premiers contacts
-// PATCH  /api/app/campagnes/lists/[id]   → met à jour nom/description/source
-// DELETE /api/app/campagnes/lists/[id]   → supprime liste + contacts (cascade)
+// GET    /api/admin/prospection/lists/[id]   → détails liste + premiers contacts
+// PATCH  /api/admin/prospection/lists/[id]   → met à jour nom/description/source
+// DELETE /api/admin/prospection/lists/[id]   → supprime liste + contacts (cascade)
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

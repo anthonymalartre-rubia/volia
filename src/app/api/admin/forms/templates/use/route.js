@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────
-// POST /api/app/formulaires/templates/use — Instancie un template (Sprint F7)
+// POST /api/admin/forms/templates/use — Instancie un template (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Body : { template_slug: string }
 // 1. Vérifie quota (canCreateForm — gating plan)

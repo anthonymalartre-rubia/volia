@@ -56,8 +56,8 @@ export default function CampaignsHubPage() {
       //  - 1 sender verified min → step "Brancher mon domaine" coché
       //  - 1 campagne `sent` min → step "Envoyer ma 1ère campagne" coché
       const [campRes, listsRes, sendersRes] = await Promise.all([
-        fetch('/api/app/campagnes/email-campaigns'),
-        fetch('/api/app/campagnes/lists'),
+        fetch('/api/admin/prospection/email-campaigns'),
+        fetch('/api/admin/prospection/lists'),
         fetch('/api/email-senders').catch(() => null),
       ]);
       if (campRes.ok) {

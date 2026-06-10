@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────
-// GET    /api/app/formulaires/[id]   → détail + fields + stats summary
-// PUT    /api/app/formulaires/[id]   → update (name, description, schema, settings, ...)
-// DELETE /api/app/formulaires/[id]   → soft delete (archived) ou hard si ?hard=true
+// GET    /api/admin/forms/[id]   → détail + fields + stats summary
+// PUT    /api/admin/forms/[id]   → update (name, description, schema, settings, ...)
+// DELETE /api/admin/forms/[id]   → soft delete (archived) ou hard si ?hard=true
 // ─────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';

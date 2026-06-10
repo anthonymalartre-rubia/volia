@@ -9,8 +9,8 @@
 // → user perd le fil. Maintenant, modale inline en 2 étapes :
 //
 //   1) saisir nom de liste + uploader CSV
-//   2) POST création liste (/api/app/campagnes/lists)
-//      puis POST import (/api/app/campagnes/lists/[id]/import)
+//   2) POST création liste (/api/admin/prospection/lists)
+//      puis POST import (/api/admin/prospection/lists/[id]/import)
 //   3) onSuccess(listId) → le caller redirige vers /campaigns/new?list=<id>
 //
 // Volontairement minimal — pas de mapping de colonnes ni de drag&drop.
@@ -68,7 +68,7 @@ export default function ImportCsvModal({ open, onClose, onSuccess }) {
     setSubmitting(true);
     try {
       // 1) Création de la liste (POST /lists)
-      const createRes = await fetch('/api/app/campagnes/lists', {
+      const createRes = await fetch('/api/admin/prospection/lists', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,7 +88,7 @@ export default function ImportCsvModal({ open, onClose, onSuccess }) {
       // 2) Upload du CSV (POST /lists/[id]/import — multipart/form-data)
       const form = new FormData();
       form.append('file', file);
-      const importRes = await fetch(`/api/app/campagnes/lists/${listId}/import`, {
+      const importRes = await fetch(`/api/admin/prospection/lists/${listId}/import`, {
         method: 'POST',
         body: form,
       });

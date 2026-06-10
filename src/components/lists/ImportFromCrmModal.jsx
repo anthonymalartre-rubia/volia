@@ -55,7 +55,7 @@ export default function ImportFromCrmModal({ open, onClose, listId, onSuccess })
         const params = new URLSearchParams({ limit: '200' });
         if (q) params.set('q', q);
         const res = await fetch(
-          `/api/app/campagnes/lists/${listId}/sources/crm-contacts?${params}`
+          `/api/admin/prospection/lists/${listId}/sources/crm-contacts?${params}`
         );
         const data = await res.json();
         if (!res.ok) {
@@ -146,7 +146,7 @@ export default function ImportFromCrmModal({ open, onClose, listId, onSuccess })
     setSubmitting(true);
     try {
       const res = await fetch(
-        `/api/app/campagnes/lists/${listId}/import-from-crm`,
+        `/api/admin/prospection/lists/${listId}/import-from-crm`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

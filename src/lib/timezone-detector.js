@@ -4,7 +4,7 @@
 // puis le TLD du domaine email. Si rien ne matche, on défaut sur Europe/Paris
 // car Volia est positionné France/EU.
 //
-// Helpers utilisés par /api/app/campagnes/email-campaigns/[id]/send pour
+// Helpers utilisés par /api/admin/prospection/email-campaigns/[id]/send pour
 // calculer scheduled_for quand campaign.smart_scheduling = true.
 //
 // Pas de dépendance externe (date-fns-tz) : on s'appuie sur Intl.DateTimeFormat

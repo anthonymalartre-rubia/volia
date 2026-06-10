@@ -47,7 +47,7 @@ export default function NewSequencePage() {
       setAuthState('ok');
 
       const [listsRes, sendersRes] = await Promise.all([
-        fetch('/api/app/campagnes/lists'),
+        fetch('/api/admin/prospection/lists'),
         fetch('/api/email-senders').catch(() => null),
       ]);
       if (listsRes.ok) {
@@ -91,7 +91,7 @@ export default function NewSequencePage() {
 
     setSubmitting(true);
     try {
-      const res = await fetch('/api/app/campagnes/sequences', {
+      const res = await fetch('/api/admin/prospection/sequences', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

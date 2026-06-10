@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────
 // PublishedModal — Modale "Formulaire publié" affichée après publish (P1-6)
 // ─────────────────────────────────────────────────────────────────────
-// Affiche : URL publique + bouton copier · QR code (via /api/app/formulaires/[id]/qr)
+// Affiche : URL publique + bouton copier · QR code (via /api/admin/forms/[id]/qr)
 // · code embed iframe + bouton copier · CTA "Voir le formulaire".
 // Pattern Tally/Typeform : on retient l'utilisateur dans le contexte builder.
 // ─────────────────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ export default function PublishedModal({ open, formId, slug, onClose }) {
 
   const publicUrl = `${baseUrl}/f/${slug}`;
   const embedCode = `<iframe src="${publicUrl}?embed=true" width="100%" height="600" style="border:0;" loading="lazy"></iframe>`;
-  const qrSrc = `/api/app/formulaires/${formId}/qr`;
+  const qrSrc = `/api/admin/forms/${formId}/qr`;
 
   function copy(text, key) {
     try {

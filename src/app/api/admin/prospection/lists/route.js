@@ -1,5 +1,5 @@
-// GET  /api/app/campagnes/lists       → liste des listes du user
-// POST /api/app/campagnes/lists       → crée une nouvelle liste
+// GET  /api/admin/prospection/lists       → liste des listes du user
+// POST /api/admin/prospection/lists       → crée une nouvelle liste
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

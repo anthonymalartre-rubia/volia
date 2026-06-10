@@ -77,7 +77,7 @@ export default function FormResponsesPage() {
     setError(null);
     try {
       const res = await fetch(
-        `/api/app/formulaires/${id}/responses?limit=${PAGE_SIZE}&offset=${offset}`
+        `/api/admin/forms/${id}/responses?limit=${PAGE_SIZE}&offset=${offset}`
       );
       const json = await res.json();
       if (!res.ok) {
@@ -102,7 +102,7 @@ export default function FormResponsesPage() {
   async function handleExportCsv() {
     setDownloading(true);
     try {
-      const res = await fetch(`/api/app/formulaires/${id}/responses?format=csv`);
+      const res = await fetch(`/api/admin/forms/${id}/responses?format=csv`);
       if (!res.ok) {
         setError('Export CSV échoué');
         return;

@@ -1,4 +1,4 @@
-// DELETE /api/app/campagnes/lists/[id]/contacts/[contactId]
+// DELETE /api/admin/prospection/lists/[id]/contacts/[contactId]
 // Supprime un contact spécifique d'une liste.
 
 import { NextResponse } from 'next/server';

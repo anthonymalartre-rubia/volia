@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────
-// GET /api/app/formulaires/templates — Liste des templates publics (Sprint F7)
+// GET /api/admin/forms/templates — Liste des templates publics (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Templates partagés à tous les users authentifiés. Lecture publique
 // (RLS policy "form_templates_select_all") mais on exige quand même un

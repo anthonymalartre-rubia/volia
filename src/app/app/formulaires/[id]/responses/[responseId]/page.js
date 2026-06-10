@@ -145,7 +145,7 @@ export default function ResponseDetailPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`/api/app/formulaires/${id}/responses/${responseId}`);
+        const res = await fetch(`/api/admin/forms/${id}/responses/${responseId}`);
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {
@@ -171,7 +171,7 @@ export default function ResponseDetailPage() {
     setActing('delete');
     setActionMessage(null);
     try {
-      const res = await fetch(`/api/app/formulaires/${id}/responses/${responseId}`, {
+      const res = await fetch(`/api/admin/forms/${id}/responses/${responseId}`, {
         method: 'DELETE',
       });
       const json = await res.json();
@@ -191,7 +191,7 @@ export default function ResponseDetailPage() {
     setActing('retry');
     setActionMessage(null);
     try {
-      const res = await fetch(`/api/app/formulaires/${id}/responses/${responseId}/retry`, {
+      const res = await fetch(`/api/admin/forms/${id}/responses/${responseId}/retry`, {
         method: 'POST',
       });
       const json = await res.json();
@@ -204,7 +204,7 @@ export default function ResponseDetailPage() {
       setActing(null);
       // Refetch après 1s pour voir le nouveau bridge_status
       setTimeout(() => {
-        fetch(`/api/app/formulaires/${id}/responses/${responseId}`)
+        fetch(`/api/admin/forms/${id}/responses/${responseId}`)
           .then((r) => r.json())
           .then((j) => { if (j.success) setData(j); })
           .catch(() => {});

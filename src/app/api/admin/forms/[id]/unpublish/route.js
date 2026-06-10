@@ -1,4 +1,4 @@
-// POST /api/app/formulaires/[id]/unpublish
+// POST /api/admin/forms/[id]/unpublish
 // Repasse le form à status='draft' (sans toucher published_at — on garde
 // la date de première publication pour les stats / audit).
 

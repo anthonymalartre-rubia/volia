@@ -11,7 +11,7 @@
 //   - onSuccess?({ list_id, list_name, inserted, skipped, activities_logged }) : callback
 //
 // Flow :
-//   1. Au mount, fetch GET /api/app/campagnes/lists pour proposer
+//   1. Au mount, fetch GET /api/admin/prospection/lists pour proposer
 //      les listes existantes. (Si l'API renvoie 403, l'option "liste existante"
 //      est masquée et seule la création reste possible.)
 //   2. L'user choisit : créer nouvelle liste OU sélectionner une existante.
@@ -65,7 +65,7 @@ export default function AddToCampagneModal({
     setLoadingLists(true);
     setListsAvailable(true);
 
-    fetch('/api/app/campagnes/lists')
+    fetch('/api/admin/prospection/lists')
       .then((r) => r.json().then((d) => ({ ok: r.ok, status: r.status, d })))
       .then(({ ok, status, d }) => {
         if (!ok) {

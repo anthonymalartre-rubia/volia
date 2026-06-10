@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────
-// GET /api/app/formulaires/[id]/qr — PNG QR code vers /f/[slug]
+// GET /api/admin/forms/[id]/qr — PNG QR code vers /f/[slug]
 // ─────────────────────────────────────────────────────────────────────
 // Génère un PNG 512x512 via la lib `qrcode`. Renvoie l'image
 // directement avec Content-Disposition: attachment pour le download.

@@ -37,7 +37,7 @@ export default function SequenceDetailPage() {
   const [error, setError] = useState(null);
 
   async function load() {
-    const res = await fetch(`/api/app/campagnes/sequences/${id}`);
+    const res = await fetch(`/api/admin/prospection/sequences/${id}`);
     if (!res.ok) {
       const e = await res.json().catch(() => ({}));
       setError(e.error || 'Erreur chargement');
@@ -67,7 +67,7 @@ export default function SequenceDetailPage() {
     if (actionLoading) return;
     setActionLoading(true);
     setError(null);
-    const res = await fetch(`/api/app/campagnes/sequences/${id}/start`, { method: 'POST' });
+    const res = await fetch(`/api/admin/prospection/sequences/${id}/start`, { method: 'POST' });
     const json = await res.json();
     if (!res.ok) setError(json.error || 'Erreur démarrage');
     await load();
@@ -77,7 +77,7 @@ export default function SequenceDetailPage() {
     if (actionLoading) return;
     setActionLoading(true);
     setError(null);
-    const res = await fetch(`/api/app/campagnes/sequences/${id}/pause`, { method: 'POST' });
+    const res = await fetch(`/api/admin/prospection/sequences/${id}/pause`, { method: 'POST' });
     const json = await res.json();
     if (!res.ok) setError(json.error || 'Erreur pause');
     await load();
@@ -86,7 +86,7 @@ export default function SequenceDetailPage() {
   async function handleDelete() {
     if (!confirm('Supprimer définitivement cette séquence ? Les enrollments seront aussi supprimés.')) return;
     setActionLoading(true);
-    const res = await fetch(`/api/app/campagnes/sequences/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/admin/prospection/sequences/${id}`, { method: 'DELETE' });
     if (!res.ok) {
       const e = await res.json().catch(() => ({}));
       setError(e.error || 'Suppression impossible');

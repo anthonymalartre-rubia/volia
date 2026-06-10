@@ -80,8 +80,8 @@ export default function FormSettingsPage() {
     (async () => {
       try {
         const [formRes, listsRes] = await Promise.all([
-          fetch(`/api/app/formulaires/${id}`),
-          fetch('/api/app/campagnes/lists'),
+          fetch(`/api/admin/forms/${id}`),
+          fetch('/api/admin/prospection/lists'),
         ]);
         const formJson = await formRes.json();
         if (cancelled) return;
@@ -139,7 +139,7 @@ export default function FormSettingsPage() {
       if (trimmedSlug && trimmedSlug !== form.slug) {
         payload.slug = trimmedSlug;
       }
-      const res = await fetch(`/api/app/formulaires/${id}`, {
+      const res = await fetch(`/api/admin/forms/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -175,7 +175,7 @@ export default function FormSettingsPage() {
     setError(null);
     const endpoint = form.status === 'published' ? 'unpublish' : 'publish';
     try {
-      const res = await fetch(`/api/app/formulaires/${id}/${endpoint}`, {
+      const res = await fetch(`/api/admin/forms/${id}/${endpoint}`, {
         method: 'POST',
       });
       const json = await res.json();

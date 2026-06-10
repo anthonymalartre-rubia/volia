@@ -41,7 +41,7 @@ export default function SmsHubPage() {
       if (!allowed) { router.push('/dashboard?upgrade=campagnes'); return; }
       setAuthState('ok');
 
-      const res = await fetch('/api/app/campagnes/sms-campaigns');
+      const res = await fetch('/api/admin/prospection/sms-campaigns');
       if (res.ok) {
         const data = await res.json();
         setCampaigns(data.campaigns || []);

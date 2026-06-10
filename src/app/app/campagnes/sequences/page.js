@@ -46,8 +46,8 @@ export default function SequencesHubPage() {
       setAuthState('ok');
 
       const [seqRes, listsRes] = await Promise.all([
-        fetch('/api/app/campagnes/sequences'),
-        fetch('/api/app/campagnes/lists'),
+        fetch('/api/admin/prospection/sequences'),
+        fetch('/api/admin/prospection/lists'),
       ]);
       if (seqRes.ok) {
         const data = await seqRes.json();

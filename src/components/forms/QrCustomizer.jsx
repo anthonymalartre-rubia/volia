@@ -181,8 +181,8 @@ export default function QrCustomizer({ url, slug }) {
           </button>
           {/* PDF skip : aucune lib pdfkit/jspdf dispo. À ajouter en V2 si besoin. */}
           <a
-            href={`/api/app/formulaires/${slug ? '__slug__' : ''}/qr`.replace('__slug__', '') || '#'}
-            // Le download serveur via /api/app/formulaires/[id]/qr reste dispo pour compat
+            href={`/api/admin/forms/${slug ? '__slug__' : ''}/qr`.replace('__slug__', '') || '#'}
+            // Le download serveur via /api/admin/forms/[id]/qr reste dispo pour compat
             className="hidden"
           >
             <Download size={12} />

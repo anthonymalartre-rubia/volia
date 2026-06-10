@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────
-// GET /api/app/formulaires/[id]/responses — Liste paginée + export CSV
+// GET /api/admin/forms/[id]/responses — Liste paginée + export CSV
 // ─────────────────────────────────────────────────────────────────────
 // Query params :
 //   - limit (default 50, max 200)

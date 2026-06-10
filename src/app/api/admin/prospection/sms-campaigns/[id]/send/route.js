@@ -1,4 +1,4 @@
-// POST /api/app/campagnes/sms-campaigns/[id]/send
+// POST /api/admin/prospection/sms-campaigns/[id]/send
 //
 // Queue un sms_sends pour chaque contact NON opt-out avec phone valide (mobile FR)
 // et passe la campagne en status 'sending' (ou 'scheduled').

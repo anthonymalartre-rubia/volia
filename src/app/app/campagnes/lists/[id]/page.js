@@ -43,7 +43,7 @@ export default function ListDetailPage() {
   const loadList = useCallback(async () => {
     const params = new URLSearchParams({ limit: '100' });
     if (search) params.set('search', search);
-    const res = await fetch(`/api/app/campagnes/lists/${listId}?${params}`);
+    const res = await fetch(`/api/admin/prospection/lists/${listId}?${params}`);
     if (res.status === 404) { setError('Liste introuvable'); return; }
     if (!res.ok) return;
     const data = await res.json();
@@ -84,7 +84,7 @@ export default function ListDetailPage() {
     setImportResult(null);
     try {
       const text = await file.text();
-      const res = await fetch(`/api/app/campagnes/lists/${listId}/import`, {
+      const res = await fetch(`/api/admin/prospection/lists/${listId}/import`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ csv: text }),
@@ -104,7 +104,7 @@ export default function ListDetailPage() {
     if (!contactToDelete) return;
     setDeleting(true);
     try {
-      await fetch(`/api/app/campagnes/lists/${listId}/contacts/${contactToDelete}`, { method: 'DELETE' });
+      await fetch(`/api/admin/prospection/lists/${listId}/contacts/${contactToDelete}`, { method: 'DELETE' });
       await loadList();
     } finally {
       setDeleting(false);
@@ -113,7 +113,7 @@ export default function ListDetailPage() {
   }
 
   async function toggleOptOut(contact) {
-    await fetch(`/api/app/campagnes/lists/${listId}/contacts/${contact.id}`, {
+    await fetch(`/api/admin/prospection/lists/${listId}/contacts/${contact.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ opt_out: !contact.opt_out, opt_out_reason: contact.opt_out ? null : 'Admin manuel' }),
@@ -124,7 +124,7 @@ export default function ListDetailPage() {
   async function performDeleteList() {
     setDeleting(true);
     try {
-      const res = await fetch(`/api/app/campagnes/lists/${listId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/prospection/lists/${listId}`, { method: 'DELETE' });
       if (res.ok) router.push('/app/campagnes');
     } finally {
       setDeleting(false);

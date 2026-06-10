@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────
-// GET  /api/app/formulaires        → liste des forms de l'user (paginated)
-// POST /api/app/formulaires        → crée un form (gating plan)
+// GET  /api/admin/forms        → liste des forms de l'user (paginated)
+// POST /api/admin/forms        → crée un form (gating plan)
 // ─────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';

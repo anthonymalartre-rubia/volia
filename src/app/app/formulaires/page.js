@@ -7,7 +7,7 @@
 // Le builder complet (drag-drop, multi-page, logique conditionnelle)
 // viendra Sprint F3.
 //
-// Flow création : clic sur "+ Nouveau formulaire" → POST /api/app/formulaires
+// Flow création : clic sur "+ Nouveau formulaire" → POST /api/admin/forms
 // avec un nom par défaut → redirect vers /app/formulaires/[id] (page builder
 // placeholder pour l'instant).
 // ─────────────────────────────────────────────────────────────────────
@@ -46,7 +46,7 @@ export default function FormsHubPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/app/formulaires');
+        const res = await fetch('/api/admin/forms');
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {
@@ -69,7 +69,7 @@ export default function FormsHubPage() {
     setCreating(true);
     setError(null);
     try {
-      const res = await fetch('/api/app/formulaires', {
+      const res = await fetch('/api/admin/forms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: 'Nouveau formulaire' }),

@@ -1,5 +1,5 @@
-// GET  /api/app/campagnes/sms-campaigns       → liste les campagnes SMS
-// POST /api/app/campagnes/sms-campaigns       → crée une campagne SMS (draft)
+// GET  /api/admin/prospection/sms-campaigns       → liste les campagnes SMS
+// POST /api/admin/prospection/sms-campaigns       → crée une campagne SMS (draft)
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

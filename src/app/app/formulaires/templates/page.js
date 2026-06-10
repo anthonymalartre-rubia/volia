@@ -3,10 +3,10 @@
 // ─────────────────────────────────────────────────────────────────────
 // /app/formulaires/templates — Bibliothèque de templates (Sprint F7)
 // ─────────────────────────────────────────────────────────────────────
-// Fetch dynamique depuis form_templates (via API /api/app/formulaires/templates).
+// Fetch dynamique depuis form_templates (via API /api/admin/forms/templates).
 // Filtres par category (chips) + search bar.
 //
-// Click "Utiliser ce template" → POST /api/app/formulaires/templates/use avec
+// Click "Utiliser ce template" → POST /api/admin/forms/templates/use avec
 // le slug → redirect vers /app/formulaires/[newId] (le builder).
 // ─────────────────────────────────────────────────────────────────────
 
@@ -77,7 +77,7 @@ export default function FormsTemplatesPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/app/formulaires/templates');
+        const res = await fetch('/api/admin/forms/templates');
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {
@@ -114,7 +114,7 @@ export default function FormsTemplatesPage() {
     setLoadingSlug(tpl.slug);
     setError(null);
     try {
-      const res = await fetch('/api/app/formulaires/templates/use', {
+      const res = await fetch('/api/admin/forms/templates/use', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ template_slug: tpl.slug }),

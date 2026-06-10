@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────
-// GET    /api/app/formulaires/[id]/responses/[responseId]
-// DELETE /api/app/formulaires/[id]/responses/[responseId]
-// POST   /api/app/formulaires/[id]/responses/[responseId]/retry
+// GET    /api/admin/forms/[id]/responses/[responseId]
+// DELETE /api/admin/forms/[id]/responses/[responseId]
+// POST   /api/admin/forms/[id]/responses/[responseId]/retry
 // ─────────────────────────────────────────────────────────────────
 // Sprint F7 — détail d'une réponse + actions admin :
 //   - GET    : fetch full response (answers, metadata, bridges, files)

@@ -1,5 +1,5 @@
-// GET    /api/app/campagnes/sms-campaigns/[id]  → détails + stats
-// DELETE /api/app/campagnes/sms-campaigns/[id]  → supprime (seulement si draft / paused)
+// GET    /api/admin/prospection/sms-campaigns/[id]  → détails + stats
+// DELETE /api/admin/prospection/sms-campaigns/[id]  → supprime (seulement si draft / paused)
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

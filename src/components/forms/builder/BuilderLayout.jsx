@@ -4,7 +4,7 @@
 // BuilderLayout — Orchestration 3 colonnes + drag-drop + auto-save
 // ─────────────────────────────────────────────────────────────────────
 // • DndContext (@dnd-kit) qui couvre palette + canvas
-// • Auto-save debounced (1s) → PUT /api/app/formulaires/[id]
+// • Auto-save debounced (1s) → PUT /api/admin/forms/[id]
 // • Keyboard shortcuts : Cmd+S, Cmd+Z, Cmd+Shift+Z, Delete, Escape
 // • Topbar : nom inline-editable + status + Aperçu + Settings + Publier
 // • Toast "Sauvegardé" en bas à droite (1s)
@@ -120,7 +120,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
           name: formName,
           schema: builder.schema,
         };
-        const res = await fetch(`/api/app/formulaires/${formId}`, {
+        const res = await fetch(`/api/admin/forms/${formId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -223,7 +223,7 @@ export default function BuilderLayout({ formId, initialForm, onPublishedChange }
         await new Promise((r) => setTimeout(r, 200));
       }
       const endpoint = status === 'published' ? `unpublish` : `publish`;
-      const res = await fetch(`/api/app/formulaires/${formId}/${endpoint}`, {
+      const res = await fetch(`/api/admin/forms/${formId}/${endpoint}`, {
         method: 'POST',
       });
       const json = await res.json().catch(() => ({}));

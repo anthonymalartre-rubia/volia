@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────
-// POST /api/app/formulaires/[id]/responses/[responseId]/retry (Sprint F7)
+// POST /api/admin/forms/[id]/responses/[responseId]/retry (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Re-trigger manuel des bridges pour 1 réponse :
 //   - bridge_status         = 'failed'

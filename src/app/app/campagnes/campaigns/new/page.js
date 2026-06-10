@@ -112,7 +112,7 @@ function NewCampaignContent() {
 
       setReplyTo(user.email);
       const [listsRes, sendersRes] = await Promise.all([
-        fetch('/api/app/campagnes/lists'),
+        fetch('/api/admin/prospection/lists'),
         fetch('/api/email-senders').catch(() => null),
       ]);
       if (listsRes.ok) {
@@ -229,7 +229,7 @@ function NewCampaignContent() {
         ? trimmedBody
         : `<p>${trimmedBody.replace(/\n+/g, '</p><p>')}</p>`;
 
-      const res = await fetch('/api/app/campagnes/email-campaigns', {
+      const res = await fetch('/api/admin/prospection/email-campaigns', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -263,7 +263,7 @@ function NewCampaignContent() {
         if (sendMode === 'scheduled' && scheduledAt) {
           sendBody.scheduled_at = new Date(scheduledAt).toISOString();
         }
-        const sendRes = await fetch(`/api/app/campagnes/email-campaigns/${campaignId}/send`, {
+        const sendRes = await fetch(`/api/admin/prospection/email-campaigns/${campaignId}/send`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sendBody),
@@ -288,7 +288,7 @@ function NewCampaignContent() {
   // ---------- QW5 — Envoyer un test à moi-même ----------
   // Permet au user de valider visuellement le mail dans sa propre boîte
   // avant de tirer sur 1 000 prospects. Côté serveur, route dédiée
-  // /api/app/campagnes/email-campaigns/test-send qui fait le wrap
+  // /api/admin/prospection/email-campaigns/test-send qui fait le wrap
   // HTML auto + préfixe [TEST] dans le subject.
   async function handleTestSend() {
     if (testSending) return;
@@ -302,7 +302,7 @@ function NewCampaignContent() {
     }
     setTestSending(true);
     try {
-      const res = await fetch('/api/app/campagnes/email-campaigns/test-send', {
+      const res = await fetch('/api/admin/prospection/email-campaigns/test-send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -11,9 +11,9 @@
 //   - onSuccess?({ inserted, skipped, total }) : callback
 //
 // Flow :
-//   1. Au mount → GET /api/app/campagnes/lists/[id]/sources/sessions
+//   1. Au mount → GET /api/admin/prospection/lists/[id]/sources/sessions
 //   2. L'user choisit une session (radio) + checkbox "inclure sans email"
-//   3. POST /api/app/campagnes/lists/[id]/import-from-session
+//   3. POST /api/admin/prospection/lists/[id]/import-from-session
 //   4. Succès → toast + close + onSuccess (parent refetch contacts)
 // ─────────────────────────────────────────────────────────────────────
 
@@ -83,7 +83,7 @@ export default function ImportFromProspectionModal({ open, onClose, listId, onSu
     setIncludeEmailless(false);
     setLoading(true);
 
-    fetch(`/api/app/campagnes/lists/${listId}/sources/sessions`)
+    fetch(`/api/admin/prospection/lists/${listId}/sources/sessions`)
       .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
       .then(({ ok, d }) => {
         if (!ok) {
@@ -148,7 +148,7 @@ export default function ImportFromProspectionModal({ open, onClose, listId, onSu
     setSubmitting(true);
     try {
       const res = await fetch(
-        `/api/app/campagnes/lists/${listId}/import-from-session`,
+        `/api/admin/prospection/lists/${listId}/import-from-session`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

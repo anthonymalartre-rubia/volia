@@ -1,4 +1,4 @@
-// POST /api/app/formulaires/[id]/publish
+// POST /api/admin/forms/[id]/publish
 // Passe le form à status='published' + set published_at = now()
 // Le schema doit être valide (au moins 1 field) — on bloque le publish
 // d'un form vide pour éviter qu'un user partage un slug rendu blanc.

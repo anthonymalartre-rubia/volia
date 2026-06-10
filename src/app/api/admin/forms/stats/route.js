@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────
-// GET /api/app/formulaires/stats — Stats globales du module (Sprint F7)
+// GET /api/admin/forms/stats — Stats globales du module (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Renvoie l'agrégat pour la page /app/formulaires/stats :
 //   - totals : views, submissions, conversion rate

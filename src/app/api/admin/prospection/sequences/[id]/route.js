@@ -1,6 +1,6 @@
-// GET    /api/app/campagnes/sequences/[id]  → détail + steps + stats enrollments
-// PATCH  /api/app/campagnes/sequences/[id]  → update (status, daily_limit, name, description, stop_on_reply)
-// DELETE /api/app/campagnes/sequences/[id]  → supprime (seulement draft / paused / completed)
+// GET    /api/admin/prospection/sequences/[id]  → détail + steps + stats enrollments
+// PATCH  /api/admin/prospection/sequences/[id]  → update (status, daily_limit, name, description, stop_on_reply)
+// DELETE /api/admin/prospection/sequences/[id]  → supprime (seulement draft / paused / completed)
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

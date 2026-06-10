@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────
 // /app/formulaires/[id]/analytics — Analytics par form (Sprint F7)
 // ─────────────────────────────────────────────────────────────────────
-// Fetch /api/app/formulaires/[id]/analytics et affiche les stats per-form.
+// Fetch /api/admin/forms/[id]/analytics et affiche les stats per-form.
 // Garde la sidebar du module (non-fullscreen).
 // ─────────────────────────────────────────────────────────────────────
 
@@ -59,7 +59,7 @@ export default function FormAnalyticsPage() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`/api/app/formulaires/${id}/analytics`);
+        const res = await fetch(`/api/admin/forms/${id}/analytics`);
         const json = await res.json();
         if (cancelled) return;
         if (!res.ok) {

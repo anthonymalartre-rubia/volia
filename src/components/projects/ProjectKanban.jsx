@@ -7,7 +7,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { useState } from 'react';
-import { Star, MessageSquare, CalendarDays } from 'lucide-react';
+import { Star, CalendarDays } from 'lucide-react';
 
 const COLUMNS = [
   { id: 'todo', label: 'À faire', dot: 'bg-content-tertiary' },
@@ -106,24 +106,16 @@ export default function ProjectKanban({ tasks, onMove, onOpenTask, onAddInline }
                         {task.title}
                       </span>
                     </div>
-                    {(task.due_at || task.comments_count > 0) && (
+                    {task.due_at && (
                       <div className="flex items-center gap-3 mt-2">
-                        {task.due_at && (
-                          <span
-                            className={`inline-flex items-center gap-1 text-[11px] font-medium ${
-                              overdue ? 'text-red-500' : 'text-content-tertiary'
-                            }`}
-                          >
-                            <CalendarDays size={12} />
-                            {formatDue(task.due_at)}
-                          </span>
-                        )}
-                        {task.comments_count > 0 && (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-content-tertiary">
-                            <MessageSquare size={12} />
-                            {task.comments_count}
-                          </span>
-                        )}
+                        <span
+                          className={`inline-flex items-center gap-1 text-[11px] font-medium ${
+                            overdue ? 'text-red-500' : 'text-content-tertiary'
+                          }`}
+                        >
+                          <CalendarDays size={12} />
+                          {formatDue(task.due_at)}
+                        </span>
                       </div>
                     )}
                   </button>

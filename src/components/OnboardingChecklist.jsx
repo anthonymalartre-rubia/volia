@@ -74,7 +74,7 @@ const STEPS = [
     title: 'Importe ta première liste CSV',
     desc: 'Récupère tes contacts depuis Excel ou Notion',
     icon: Upload,
-    cta: { label: 'Importer', href: '/admin/prospection' },
+    cta: { label: 'Importer', href: '/app/campagnes' },
     adminOnly: true,
   },
   {
@@ -82,7 +82,7 @@ const STEPS = [
     title: 'Lance ta première campagne email',
     desc: 'Cold email avec {{first_name}} + footer RGPD auto',
     icon: Send,
-    cta: { label: 'Créer une campagne', href: '/admin/prospection/campaigns/new' },
+    cta: { label: 'Créer une campagne', href: '/app/campagnes/campaigns/new' },
     // Pour les non-admins, on renvoie vers la page produit (pitch + upgrade)
     // au lieu de masquer l'étape ou de buter sur un écran d'erreur d'accès.
     nonAdminHref: '/produits/campagnes',

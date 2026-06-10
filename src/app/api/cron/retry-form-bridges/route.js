@@ -261,7 +261,7 @@ async function notifyOwnerOfAbandon({ supabaseAdmin, form, abandonedResponseIds 
   if (!ownerEmail) return { skipped: true, reason: 'no_owner_email' };
 
   const baseUrl = cleanEnv(process.env.NEXT_PUBLIC_APP_URL) || 'https://volia.fr';
-  const url = `${baseUrl}/admin/forms/${form.id}/responses?bridge_status=failed`;
+  const url = `${baseUrl}/app/formulaires/${form.id}/responses?bridge_status=failed`;
   const n = abandonedResponseIds.length;
 
   const html = `

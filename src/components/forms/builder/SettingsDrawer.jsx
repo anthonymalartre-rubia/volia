@@ -4,7 +4,7 @@
 // SettingsDrawer — Drawer right-side pour réglages rapides du form (P1-5)
 // ─────────────────────────────────────────────────────────────────────
 // Réutilise le pattern visuel de JumpLogicDrawer. Auto-save debounced 1s
-// vers PUT /api/admin/forms/[id]. Pour la config complète (notifications,
+// vers PUT /api/app/formulaires/[id]. Pour la config complète (notifications,
 // bridges, sharing, QR…), un lien renvoie vers la page settings.
 // ─────────────────────────────────────────────────────────────────────
 
@@ -120,7 +120,7 @@ export default function SettingsDrawer({ open, formId, initialForm, onClose, onC
             privacy_url: privacyUrl.trim() || null,
           },
         };
-        const res = await fetch(`/api/admin/forms/${formId}`, {
+        const res = await fetch(`/api/app/formulaires/${formId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -296,7 +296,7 @@ export default function SettingsDrawer({ open, formId, initialForm, onClose, onC
           {/* Lien vers settings complets */}
           <div className="pt-2 border-t border-line">
             <Link
-              href={`/admin/forms/${formId}/settings`}
+              href={`/app/formulaires/${formId}/settings`}
               className="inline-flex items-center gap-1.5 text-xs text-pink-700 hover:text-pink-800"
             >
               <ExternalLink size={11} /> Tous les réglages (notifications, bridges, QR…)

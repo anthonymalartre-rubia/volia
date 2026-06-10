@@ -1,6 +1,6 @@
-// GET /api/admin/prospection/email-campaigns/[id]    → détails + stats
-// POST /api/admin/prospection/email-campaigns/[id]/send → lance l'envoi (queue toutes les lignes en pending)
-// DELETE /api/admin/prospection/email-campaigns/[id]  → supprime (seulement si draft / paused)
+// GET /api/app/campagnes/email-campaigns/[id]    → détails + stats
+// POST /api/app/campagnes/email-campaigns/[id]/send → lance l'envoi (queue toutes les lignes en pending)
+// DELETE /api/app/campagnes/email-campaigns/[id]  → supprime (seulement si draft / paused)
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

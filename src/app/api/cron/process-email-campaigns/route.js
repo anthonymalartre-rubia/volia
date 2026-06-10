@@ -476,7 +476,7 @@ async function handleCron(request) {
     //
     // Conséquence : un user qui n'a pas configuré son propre domaine
     // d'envoi (cf /settings/email-senders) ne peut PAS envoyer de
-    // campagne. L'API POST /api/admin/prospection/email-campaigns
+    // campagne. L'API POST /api/app/campagnes/email-campaigns
     // bloque déjà la création sans email_sender_id verified ; ici on
     // est la dernière ligne de défense pour les campagnes legacy
     // ou en cas de sender supprimé en cours de queue.

@@ -319,7 +319,7 @@ async function buildInbox(supabase) {
     key: 'dogfood_lists',
     label: 'Listes dogfood prêtes à enrichir',
     count: dogfoodReady,
-    href: '/admin/prospection',
+    href: '/app/campagnes',
     icon: 'ListChecks',
     color: 'teal',
     priority: dogfoodReady > 0 ? 4 : 99,

@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────
-// GET  /api/admin/forms        → liste des forms de l'user (paginated)
-// POST /api/admin/forms        → crée un form (gating plan)
+// GET  /api/app/formulaires        → liste des forms de l'user (paginated)
+// POST /api/app/formulaires        → crée un form (gating plan)
 // ─────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
@@ -42,7 +42,7 @@ export async function GET(request) {
 
   const { data, error, count } = await query;
   if (error) {
-    console.error('[api/admin/forms] GET error', error);
+    console.error('[api/app/formulaires] GET error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 
@@ -123,7 +123,7 @@ export async function POST(request) {
     .single();
 
   if (error) {
-    console.error('[api/admin/forms] POST insert error', error);
+    console.error('[api/app/formulaires] POST insert error', error);
     if (error.code === '23505') {
       return NextResponse.json(
         { success: false, error: 'Un formulaire avec ce slug existe déjà' },

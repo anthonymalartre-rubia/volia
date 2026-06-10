@@ -6,7 +6,7 @@
 // Rend la TopBar (avec ModuleSwitcher) + un conteneur enfant.
 // Utilisé par les layouts qui couvrent les routes authentifiées :
 //   - src/app/admin/layout.js         (couvre /admin/*)
-//   - src/app/admin/prospection/layout.js (ajoute la sidebar Campagnes)
+//   - src/app/app/campagnes/layout.js (ajoute la sidebar Campagnes)
 //   - src/app/settings/layout.js      (couvre /settings/*)
 //   - src/app/parrainage/layout.js
 //   - src/app/app/layout.js           (couvre /app/*)

@@ -1267,8 +1267,8 @@ export function useCaseDay1Email(userName) {
  */
 export function templateKillerDay3Email(userName) {
   const name = userName || 'là';
-  const ctaUrl = utmify('/admin/prospection/campaigns/new', 'template_d3');
-  const browseUrl = utmify('/admin/prospection/templates', 'template_d3_browse');
+  const ctaUrl = utmify('/app/campagnes/campaigns/new', 'template_d3');
+  const browseUrl = utmify('/app/campagnes/templates', 'template_d3_browse');
   return {
     subject: 'Le template cold email qui marche le mieux en France',
     html: layout({

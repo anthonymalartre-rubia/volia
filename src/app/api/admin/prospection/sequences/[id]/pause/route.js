@@ -1,4 +1,4 @@
-// POST /api/admin/prospection/sequences/[id]/pause
+// POST /api/app/campagnes/sequences/[id]/pause
 //
 // Met la séquence en pause. Les enrollments restent 'active' mais le cron
 // les ignore tant que la séquence n'est pas 'active'. Reprise = appeler /start

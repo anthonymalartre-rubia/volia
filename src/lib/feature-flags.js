@@ -20,7 +20,7 @@
  *
  * Désactivé pour l'instant — on focus sur l'email.
  * Le code Twilio reste en place (lib/twilio-numbers.js, /api/sms-senders,
- * /api/admin/prospection/sms-campaigns, webhooks Twilio, cron SMS).
+ * /api/app/campagnes/sms-campaigns, webhooks Twilio, cron SMS).
  *
  * Pour réactiver : flip à `true` ci-dessous et redeploy. Tous les menus
  * UI réapparaîtront automatiquement.

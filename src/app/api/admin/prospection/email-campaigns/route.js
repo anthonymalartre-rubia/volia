@@ -1,5 +1,5 @@
-// GET  /api/admin/prospection/email-campaigns       → liste les campagnes
-// POST /api/admin/prospection/email-campaigns       → crée une campagne (draft)
+// GET  /api/app/campagnes/email-campaigns       → liste les campagnes
+// POST /api/app/campagnes/email-campaigns       → crée une campagne (draft)
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';

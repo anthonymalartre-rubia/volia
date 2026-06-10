@@ -14,13 +14,13 @@
 //   - onSuccess?({ list_id, list_name, inserted, skipped }) : callback
 //
 // Flow :
-//   1. Au mount, fetch GET /api/admin/prospection/lists pour proposer
+//   1. Au mount, fetch GET /api/app/campagnes/lists pour proposer
 //      une liste existante (si l'user en a déjà).
 //   2. L'user choisit "nouvelle liste" (input nom) ou "liste existante"
 //      (select).
 //   3. Submit POST /api/prospection/send-to-campagne.
 //   4. Sur succès → écran de résultat avec CTA "Créer la campagne →"
-//      qui redirige vers /admin/prospection/campaigns/new?list=…
+//      qui redirige vers /app/campagnes/campaigns/new?list=…
 // ─────────────────────────────────────────────────────────────────────
 
 import { useEffect, useState } from 'react';
@@ -71,7 +71,7 @@ export default function SendToCampagneModal({
 
     setLoadingLists(true);
     setListsError('');
-    fetch('/api/admin/prospection/lists')
+    fetch('/api/app/campagnes/lists')
       .then((r) => r.json().then((d) => ({ ok: r.ok, status: r.status, d })))
       .then(({ ok, status, d }) => {
         if (!ok) {
@@ -246,7 +246,7 @@ export default function SendToCampagneModal({
                    `campaigns/new/page.js` searchParams.get('list'). Bug
                    fix audit 27 mai 2026 : avant, le wizard arrivait avec
                    liste vide car le param était silencieusement ignoré. */
-                href={`/admin/prospection/campaigns/new?list=${encodeURIComponent(result.list_id)}`}
+                href={`/app/campagnes/campaigns/new?list=${encodeURIComponent(result.list_id)}`}
                 onClick={() => onClose?.()}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 shadow-md shadow-violet-500/20 transition-all"
               >

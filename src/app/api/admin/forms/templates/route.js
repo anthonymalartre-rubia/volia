@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────
-// GET /api/admin/forms/templates — Liste des templates publics (Sprint F7)
+// GET /api/app/formulaires/templates — Liste des templates publics (Sprint F7)
 // ─────────────────────────────────────────────────────────────────
 // Templates partagés à tous les users authentifiés. Lecture publique
 // (RLS policy "form_templates_select_all") mais on exige quand même un
@@ -44,7 +44,7 @@ export async function GET(request) {
 
   const { data, error } = await query;
   if (error) {
-    console.error('[api/admin/forms/templates] GET error', error);
+    console.error('[api/app/formulaires/templates] GET error', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 

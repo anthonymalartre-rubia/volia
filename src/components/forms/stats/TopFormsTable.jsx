@@ -58,7 +58,7 @@ export default function TopFormsTable({ topBySubmissions, topByConversion }) {
           {rows.map((f, i) => (
             <li key={f.id}>
               <Link
-                href={`/admin/forms/${f.id}/analytics`}
+                href={`/app/formulaires/${f.id}/analytics`}
                 className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-surface-elevated transition-colors group"
               >
                 <div className="flex items-center gap-3 min-w-0">

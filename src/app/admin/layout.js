@@ -1,7 +1,7 @@
 'use client';
 
 // Layout pour /admin/* — wrappe avec TopBar (ModuleSwitcher inclus).
-// Les pages /admin/prospection/* ajoutent en plus la CampagnesSidebar
+// Les pages /app/campagnes/* ajoutent en plus la CampagnesSidebar
 // via leur propre layout imbriqué.
 
 import AppShell from '@/components/AppShell';

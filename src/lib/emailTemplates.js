@@ -786,10 +786,10 @@ export function trialExpiringEmail(userName, daysRemaining = 3) {
             <td>
               <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Ce qui sera désactivé</p>
               <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
-                <li>La cascade waterfall complète (vous reviendrez au scraping simple)</li>
-                <li>Le module Campagnes email/SMS</li>
-                <li>La vérification d'emails MillionVerifier</li>
-                <li>Votre quota repassera à 100 prospects/mois (vs 5 000)</li>
+                <li>Les modules <strong>Campagnes, CRM &amp; Formulaires</strong> (inclus dès Pro)</li>
+                <li>1 200 enrichissements email + 1 200 téléphones/mois → retour à 20 + 20</li>
+                <li>2 000 cold emails/mois (warmup inclus) → 0</li>
+                <li>Votre workflow Autopilot</li>
               </ul>
             </td>
           </tr>
@@ -812,6 +812,11 @@ export function trialExpiringEmail(userName, daysRemaining = 3) {
 
         <div align="center">${ctaPrimary('Passer Pro maintenant', `${APP_URL}/pricing?plan=pro`)}</div>
         <div align="center">${ctaSecondary('Comparer les plans', `${APP_URL}/pricing`)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
+          💡 Nouveau : le plan Business inclut aussi <strong style="color:${COLORS.text};">Volia Project</strong> —
+          vos deals gagnés deviennent des projets de livraison, suivis par votre client via un simple lien.
+        </p>
 
         ${signOff()}
       `,
@@ -853,10 +858,10 @@ export function trialExpiredEmail(userName) {
             <td>
               <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Features désactivées</p>
               <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
-                <li>Cascade waterfall complète (Apollo, Findymail, +5 sources)</li>
-                <li>Module Campagnes email/SMS</li>
-                <li>Vérification d'emails MillionVerifier</li>
-                <li>Quota mensuel : 100 prospects (vs 5 000 en Pro)</li>
+                <li>Modules <strong>Campagnes, CRM &amp; Formulaires</strong> (inclus dès Pro)</li>
+                <li>Enrichissements : 20 emails + 20 téléphones/mois (vs 1 200 + 1 200 en Pro)</li>
+                <li>Cold emails : 0 (vs 2 000/mois en Pro, warmup inclus)</li>
+                <li>Workflow Autopilot désactivé</li>
               </ul>
             </td>
           </tr>

@@ -587,6 +587,51 @@ export default function DealDetailDrawer({
               }}
             />
 
+            {/* Engagement email du contact (campagnes envoyées) */}
+            {Array.isArray(deal.engagement) && deal.engagement.length > 0 && (
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-content-tertiary mb-1.5">
+                  Engagement email
+                </label>
+                <div className="space-y-1.5">
+                  {deal.engagement.slice(0, 5).map((e) => {
+                    const hot = e.replied_at || e.clicks_count > 0 || e.opens_count >= 3;
+                    return (
+                      <div
+                        key={e.id}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs ${
+                          hot
+                            ? 'border-emerald-300 bg-emerald-50'
+                            : 'border-line bg-surface-card'
+                        }`}
+                      >
+                        <Mail size={12} className={hot ? 'text-emerald-600' : 'text-content-tertiary'} />
+                        <span className="text-content-secondary truncate flex-1">{e.campaign_name}</span>
+                        <span className="flex items-center gap-2 shrink-0 text-[11px]">
+                          {e.replied_at ? (
+                            <span className="font-semibold text-emerald-700">💬 a répondu</span>
+                          ) : e.clicks_count > 0 ? (
+                            <span className="font-semibold text-emerald-700">🔗 {e.clicks_count} clic{e.clicks_count > 1 ? 's' : ''}</span>
+                          ) : e.opens_count > 0 ? (
+                            <span className={e.opens_count >= 3 ? 'font-semibold text-emerald-700' : 'text-content-tertiary'}>
+                              👀 {e.opens_count} ouverture{e.opens_count > 1 ? 's' : ''}
+                            </span>
+                          ) : (
+                            <span className="text-content-muted">envoyé</span>
+                          )}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {deal.engagement.some((e) => e.replied_at || e.clicks_count > 0 || e.opens_count >= 3) && (
+                  <p className="mt-1.5 text-[11px] text-emerald-700 font-medium">
+                    🔥 Ce contact est chaud — c&apos;est le moment d&apos;appeler.
+                  </p>
+                )}
+              </div>
+            )}
+
             {/* Activity timeline + form (Phase 4) */}
             <div>
               <label className="block text-[10px] font-bold uppercase tracking-wider text-content-tertiary mb-1.5">

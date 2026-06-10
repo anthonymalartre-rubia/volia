@@ -42,19 +42,21 @@ export default async function Image({ params }) {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '950px' }}>
           <div style={{ fontSize: '20px', color: '#a78bfa', fontWeight: 600, marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '2px' }}>
-            🥊 Comparatif 2026
+            Comparatif 2026
           </div>
           <div style={{ fontSize: '72px', fontWeight: 700, color: 'white', lineHeight: 1.05, marginBottom: '24px', display: 'flex' }}>
             Volia <span style={{ color: '#71717a', margin: '0 16px' }}>vs</span> {c.name}
           </div>
           <div style={{ fontSize: '28px', color: '#a1a1aa', lineHeight: 1.3 }}>
-            Économisez jusqu'à {savings}% en passant à Volia. À partir de 19 €/mois — le moins cher du marché français.
+            {/* Un seul nœud texte : satori exige display:flex dès qu'un élément
+                a plusieurs enfants (texte + interpolation = 2 nœuds → image vide). */}
+            {`Économisez jusqu'à ${savings}% en passant à Volia. À partir de 19 €/mois — le moins cher du marché français.`}
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ display: 'flex', gap: '12px' }}>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ {savings}% moins cher</div>
-            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>✓ Conforme RGPD</div>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>{`${savings}% moins cher`}</div>
+            <div style={{ padding: '8px 16px', borderRadius: '8px', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', color: '#22c55e', fontSize: '14px' }}>Conforme RGPD</div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr</div>
         </div>

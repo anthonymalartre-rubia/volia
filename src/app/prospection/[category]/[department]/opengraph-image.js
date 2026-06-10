@@ -81,7 +81,7 @@ export default async function Image({ params }) {
               letterSpacing: '2px',
             }}
           >
-            📍 {subtitle}
+            {subtitle}
           </div>
           <div
             style={{
@@ -126,7 +126,7 @@ export default async function Image({ params }) {
                 fontSize: '14px',
               }}
             >
-              ✓ 80% emails trouvés
+              80% emails trouvés
             </div>
             <div
               style={{
@@ -138,7 +138,7 @@ export default async function Image({ params }) {
                 fontSize: '14px',
               }}
             >
-              💶 À partir de 19 €/mois
+              À partir de 19 €/mois
             </div>
           </div>
           <div style={{ fontSize: '18px', color: '#71717a' }}>volia.fr</div>

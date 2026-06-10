@@ -843,7 +843,7 @@ export default function LandingContent() {
                 <span>Bonus Business 149 €/mois</span>
               </div>
               <h3 className="font-display text-2xl sm:text-3xl font-bold mb-3 text-content-primary">
-                3 modules de plus, inclus dans Business.
+                4 modules de plus, inclus dans Business.
               </h3>
               <p className="text-content-tertiary text-base max-w-2xl mx-auto">
                 Une fois que tu as ta liste de leads, va plus loin : envoie les campagnes,
@@ -852,7 +852,7 @@ export default function LandingContent() {
             </div>
           </MotionInView>
 
-          {/* 3 small bonus cards */}
+          {/* 4 small bonus cards (Campagnes, CRM, Formulaires, Project) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               {
@@ -1029,7 +1029,7 @@ export default function LandingContent() {
                 1 outil au prix d&apos;1. Pas 3 outils au prix de 3.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez les 3 modules Volia.
+                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez toute la suite Volia.
                 Soit <strong className="text-emerald-700">~250 €/mois</strong> dans votre poche. Chaque mois.
               </p>
             </div>

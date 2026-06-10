@@ -101,12 +101,15 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar — ⚠️ pas de `relative` ici : généré APRÈS `fixed` dans la
+          feuille Tailwind, il l'emportait et la sidebar restait en flux sur
+          mobile (256px réservés alors qu'elle est translatée hors écran),
+          écrasant <main> dans une colonne étroite (audit mobile). */}
       <aside className={`
-        relative fixed top-14 left-0 z-40 h-[calc(100vh-3.5rem)] w-64
+        fixed top-14 left-0 z-40 h-[calc(100vh-3.5rem)] w-64
         bg-surface-base/90 backdrop-blur-xl border-r border-line
         transition-transform duration-300 ease-out
-        md:translate-x-0 md:static md:z-auto
+        md:translate-x-0 md:relative md:top-0 md:z-auto
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Hint gradient violet au sommet — signal visuel "premium" subtil */}

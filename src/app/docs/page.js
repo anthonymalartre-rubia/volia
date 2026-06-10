@@ -231,7 +231,10 @@ export default function DocsHub() {
                 <Link
                   key={slug}
                   href={`/docs/${slug}`}
-                  className="flex items-center gap-3 p-3 rounded-xl border border-line bg-surface-card hover:border-violet-500/40 hover:bg-surface-elevated transition group"
+                  // min-w-0 : grid item — sans lui, le titre en `truncate`
+                  // (nowrap) impose sa min-content à la colonne et la page
+                  // scrolle horizontalement sur mobile (audit : 458px/390px)
+                  className="min-w-0 flex items-center gap-3 p-3 rounded-xl border border-line bg-surface-card hover:border-violet-500/40 hover:bg-surface-elevated transition group"
                 >
                   <div className="p-1.5 rounded-md bg-violet-500/10 text-violet-500 dark:text-violet-400 flex-shrink-0">
                     <BookOpen size={14} />

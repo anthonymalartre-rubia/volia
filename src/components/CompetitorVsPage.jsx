@@ -11,10 +11,14 @@ import { LogoIcon } from '@/components/ui';
  */
 export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
   const isAlternative = intent === 'alternative';
-  const savingsPct = Math.max(0, Math.round((competitor.pricing - 49) / competitor.pricing * 100));
+  // Baseline 19€ = plan Solo (même calcul que l'OG image /vs). L'ancienne
+  // baseline 49€ donnait « 0% d'économie » pour tout concurrent < 49€
+  // (Odoo 25€, Zoho 14€…). Le badge ne s'affiche que si l'économie est réelle.
+  const savingsPct = Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100));
+  const showSavings = savingsPct >= 5;
   // Comparison criteria — fixed list of features
   const comparison = [
-    { feature: 'Prix mensuel', volia: '49€', competitor: `${competitor.pricing}${competitor.pricingUnit}`, voliaWins: true },
+    { feature: 'Prix mensuel', volia: 'dès 19€', competitor: `${competitor.pricing}${competitor.pricingUnit}`, voliaWins: true },
     { feature: 'Recherches illimitées', volia: true, competitor: false, voliaWins: true },
     { feature: 'Pas de crédits cachés', volia: true, competitor: false, voliaWins: true },
     { feature: 'Couverture PME françaises', volia: '85%', competitor: '30%', voliaWins: true },
@@ -65,24 +69,27 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             {isAlternative ? (
               <>
                 Tu utilises {competitor.name} et tu trouves que <strong className="text-content-primary">ça coûte cher pour trop peu d&apos;emails français</strong> ?
-                Volia : 49€/mois ({savingsPct}% moins cher, dès 19€ les 3 premiers mois avec ETE2026), cascade waterfall qui trouve ~46% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
+                Volia : dès 19€/mois{showSavings ? ` (${savingsPct}% moins cher)` : ''}, cascade waterfall qui trouve ~46% des emails FR (vs 30-40% chez {competitor.name}), RGPD natif.
                 Tu te poses encore la question ?
               </>
             ) : (
               <>
                 {competitor.description} <strong className="text-content-primary">Volia, c&apos;est l&apos;alternative française</strong> :
-                49€/mois pour la suite complète (dès 19€ avec ETE2026), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
+                dès 19€/mois (suite complète à 49€), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
               </>
             )}
           </p>
 
-          {/* Quick verdict */}
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
-            <TrendingDown size={16} className="text-green-400" />
-            <span className="text-content-secondary">
-              <strong className="text-green-400">Tu économises jusqu&apos;à {savingsPct}%</strong> en {isAlternative ? `switchant de ${competitor.name} vers` : 'passant à'} Volia
-            </span>
-          </div>
+          {/* Quick verdict — masqué quand le concurrent est moins cher que
+              le plan Solo (un « 0% d'économie » ferait fuir, audit mobile) */}
+          {showSavings && (
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
+              <TrendingDown size={16} className="text-green-400" />
+              <span className="text-content-secondary">
+                <strong className="text-green-400">Tu économises jusqu&apos;à {savingsPct}%</strong> en {isAlternative ? `switchant de ${competitor.name} vers` : 'passant à'} Volia
+              </span>
+            </div>
+          )}
         </section>
 
         {/* Section "Pourquoi switcher" — uniquement sur intent alternative */}
@@ -103,8 +110,8 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               />
               <SwitchReason
                 num="2"
-                title={`${savingsPct}% moins cher. Tu fais le calcul.`}
-                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 49€ (Pro, dès 19€ avec ETE2026), 179€ (Business), 499€ (Enterprise). Tous les plans, tous les pays inclus. Pas de "contact sales".`}
+                title={showSavings ? `${savingsPct}% moins cher. Tu fais le calcul.` : 'Un prix flat, pas un prix par siège.'}
+                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = dès 19€ (Solo), 49€ (Pro), 179€ (Business). Prix flat, pas par utilisateur. Tous les plans, tous les pays inclus. Pas de "contact sales".`}
               />
               <SwitchReason
                 num="3"

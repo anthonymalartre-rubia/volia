@@ -306,6 +306,8 @@ export default function ProjectDetailPage() {
       {openTask && (
         <TaskDrawer
           task={openTask}
+          projectId={project?.id}
+          userId={user?.id}
           onClose={() => setOpenTaskId(null)}
           onUpdate={updateTask}
           onDelete={deleteTask}

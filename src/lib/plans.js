@@ -170,6 +170,7 @@ export const PLANS = {
       '10 000 cold emails/mois (warmup auto inclus)',
       '5 000 soumissions de formulaires/mois',
       '⚡ 3 workflows Autopilot + branching conditional',
+      '📁 Volia Project — livraison client + suivi par lien public',
       'Multi-utilisateurs (équipes, RBAC)',
       '🤖 Serveur MCP — pilote Volia depuis Claude, Cursor & agents IA',
       'Accès API REST (Zapier, Make, n8n)',

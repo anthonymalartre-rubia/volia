@@ -83,7 +83,7 @@ const PLANS_EN = [
       'Priority support + onboarding',
     ],
     cta: 'Choose Business',
-    ctaHref: '/signup?plan=business',
+    ctaHref: '/signup?plan=max',
     highlighted: false,
   },
   {

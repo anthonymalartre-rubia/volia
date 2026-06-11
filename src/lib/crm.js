@@ -3,7 +3,6 @@
 // Gating Business plan + utilitaires pipeline/stages/deals.
 // ─────────────────────────────────────────────────────────────────
 
-import { getEffectivePlan } from './trial';
 
 // Default pipeline stages template (créé au 1er accès /app/crm)
 export const DEFAULT_PIPELINE = {
@@ -83,12 +82,18 @@ export const STAGE_PROBABILITIES = [0, 10, 25, 50, 75, 90, 100];
 // Closing types autorisés
 export const CLOSING_TYPES = ['none', 'won', 'lost'];
 
-// Plans autorisés à accéder au module CRM (inclus dès Pro).
-export const CRM_ALLOWED_PLANS = ['pro', 'business', 'enterprise', 'enterprise_legacy'];
+// Pivot freemium (11 juin 2026) : le CRM est ouvert à TOUS les plans.
+// Le différenciateur n'est plus l'accès mais le quota de création
+// (plans.js limits.crm_pipelines : free/prospection = 1 pipeline,
+// MAX = illimité — enforcement dans lib/module-quotas.js).
+export const CRM_ALLOWED_PLANS = [
+  'free', 'prospection', 'max',
+  'solo', 'pro', 'business', 'enterprise', 'enterprise_legacy',
+];
 
 /**
- * Vérifie que l'utilisateur a accès au module CRM (plan Business).
- * Retourne true / false.
+ * Vérifie que l'utilisateur a accès au module CRM.
+ * Freemium : tout user authentifié avec un profil a accès.
  */
 export async function checkCrmAccess(supabase, userId) {
   if (!supabase || !userId) return false;
@@ -97,11 +102,7 @@ export async function checkCrmAccess(supabase, userId) {
     .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
     .eq('id', userId)
     .maybeSingle();
-  if (error || !profile) return false;
-  // getEffectivePlan : si trial Pro actif, le user est "pro" → mais le CRM
-  // est gated Business uniquement. Trial Pro ne donne donc PAS accès au CRM,
-  // ce qui est volontaire (le CRM est un upsell Business, pas Pro).
-  return CRM_ALLOWED_PLANS.includes(getEffectivePlan(profile));
+  return !error && !!profile;
 }
 
 /**

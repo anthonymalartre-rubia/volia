@@ -1,9 +1,8 @@
 // ─────────────────────────────────────────────────────────────────
 // src/lib/forms-gating.js — Gating plan pour Volia Formulaires
 // ─────────────────────────────────────────────────────────────────
-// [1er juin 2026] Décision founder : positionnement Premium Business-only.
-// Volia Formulaires est désormais réservé aux plans Business / Enterprise
-// (149 €/mois promo, 179 €/mois normal). Aligne avec :
+// [11 juin 2026] Pivot freemium : Formulaires ouvert à tous, plafonné
+// à 2 forms publiés hors MAX. Aligne avec :
 //   - plans.js  → business.unlocksModules = true (CRM + Campagnes + Forms)
 //   - ModuleSwitcher.jsx → businessOnly: true sur Formulaires
 //   - PricingContent.jsx → Business = SEUL plan qui débloque la suite
@@ -20,13 +19,19 @@
 
 import { getEffectivePlan } from './trial';
 
+// Pivot freemium (11 juin 2026) : Formulaires ouvert à TOUS les plans.
+//   free / prospection / solo (legacy) → 2 forms publiés
+//   max / pro / business / enterprise → illimité
+// (soumissions plafonnées séparément via form_submissions_per_month)
 export const FORMS_LIMITS = {
-  free: 0,
-  solo: 0,
-  pro: -1,         // Formulaires inclus dès Pro (soumissions plafonnées via form_submissions_per_month)
-  business: -1,    // -1 = illimité
+  free: 2,
+  prospection: 2,
+  solo: 2,
+  pro: -1,
+  business: -1,
+  max: -1,
   enterprise: -1,
-  enterprise_legacy: -1, // ancien Business 99€
+  enterprise_legacy: -1,
 };
 
 /**
@@ -69,11 +74,11 @@ export async function canCreateForm(supabase, userId) {
   const plan = getEffectivePlan(profile);
   const limit = FORMS_LIMITS[plan] ?? 0;
 
-  // Plan free/solo/pro → bloqué d'office (upsell vers Business)
+  // Garde-fou : aucun plan actuel n'a 0, mais on garde la branche
   if (limit === 0) {
     return {
       allowed: false,
-      reason: 'Volia Formulaires est réservé au plan Business (149 €/mois). Upgrade pour créer ton premier formulaire.',
+      reason: 'Votre plan ne permet pas de créer de formulaire. Passez à MAX pour de l\'illimité.',
       limit: 0,
       current: 0,
       plan,
@@ -108,7 +113,7 @@ export async function canCreateForm(supabase, userId) {
   if (current >= limit) {
     return {
       allowed: false,
-      reason: `Quota atteint : ${current}/${limit} formulaires sur le plan ${plan}. Passez à un plan supérieur pour en créer davantage.`,
+      reason: `Quota atteint : ${current}/${limit} formulaires sur votre plan. Passez à MAX pour de l'illimité (code MAX99 : 3 premiers mois à 99 €).`,
       limit,
       current,
       plan,

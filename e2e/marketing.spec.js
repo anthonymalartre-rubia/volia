@@ -17,14 +17,14 @@ test.describe('Marketing pages', () => {
     await expect(page.getByRole('link', { name: /D.marrer gratuitement/i }).first()).toBeVisible();
   });
 
-  test('Pricing : 4 plans (Starter, Solo, Pro, Business) listes', async ({ page }) => {
+  test('Pricing : 3 plans freemium (Gratuit, Prospection, MAX) listes', async ({ page }) => {
     await page.goto('/pricing');
-    // Les 4 plans apparaissent au moins une fois (h3 dans les cards)
-    // .first() car les noms peuvent reapparaitre dans le tableau comparatif
-    await expect(page.getByRole('heading', { name: 'Starter', level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Solo', level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Pro', level: 3 })).toBeVisible();
-    await expect(page.getByRole('heading', { name: 'Business', level: 3 })).toBeVisible();
+    // Pivot freemium (11/06/2026) : Gratuit / Prospection / MAX.
+    await expect(page.getByRole('heading', { name: 'Gratuit', level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Prospection', exact: true, level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'MAX', exact: true, level: 3 })).toBeVisible();
+    // Le code promo MAX99 est affiche
+    await expect(page.getByText('MAX99').first()).toBeVisible();
   });
 
   test('Pricing : toggle Mensuel/Annuel bascule les prix', async ({ page }) => {

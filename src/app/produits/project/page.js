@@ -177,7 +177,7 @@ export default function ProductProjectPage() {
               <strong className="text-orange-700 font-semibold">Volia Business</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=business' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=max' },
           ctaSecondary: { label: 'Voir les fonctionnalités', href: '#features' },
           trust: [
             (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Module LIVE</>),
@@ -201,14 +201,14 @@ export default function ProductProjectPage() {
           label: 'Inclus dans la suite Business — projets et partages illimités',
           subtext: 'Volia Project est réservé au plan Business, aux côtés de la Prospection, des Campagnes, du CRM et des Formulaires. Pas d\'add-on, annulation en 1 clic.',
           cta: 'Passer à Business',
-          ctaHref: '/signup?plan=business',
+          ctaHref: '/signup?plan=max',
         }}
         beforeFaq={null}
         faq={FAQ}
         finalCta={{
           title: 'La signature n\'est que la moitié du travail.',
           subtitle: 'Livrez aussi proprement que vous prospectez. Premier projet en 10 secondes, client impressionné dès le premier lien.',
-          primary: { label: 'Commencer gratuitement', href: '/signup?plan=business' },
+          primary: { label: 'Commencer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir les tarifs', href: '/pricing' },
           trust: 'Inclus dans Business · Suivi client sans compte · Modèles prêts à l\'emploi',
         }}

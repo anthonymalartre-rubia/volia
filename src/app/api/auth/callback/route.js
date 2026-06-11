@@ -79,7 +79,7 @@ export async function GET(request) {
       // Trial Pro 14j sans CB : on l'attribue UNIQUEMENT si le user n'a
       // jamais eu de trial (anti double-dip si jamais on recrée le profil).
       // buildTrialPayload retourne { trial_plan, trial_started_at, trial_ends_at, plan }.
-      const trialPayload = buildTrialPayload('pro');
+      const trialPayload = buildTrialPayload('max');
 
       if (!existingProfile) {
         await supabaseAdmin

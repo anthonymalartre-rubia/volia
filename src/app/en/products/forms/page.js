@@ -95,7 +95,7 @@ export default function EnFormsPage() {
             <strong className="text-content-primary font-semibold">Included in Volia Business at $169/mo</strong> (12-month launch promo, then $199).
           </>
         ),
-        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=business' },
+        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=max' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           '12 field types',
@@ -152,7 +152,7 @@ export default function EnFormsPage() {
       finalCta={{
         title: 'Capture leads. Straight into your CRM.',
         subtitle: 'End the Tally + Zapier + HubSpot circus. Build, publish, embed. Leads land in your pipeline. You close.',
-        primary: { label: 'Get Business $169', href: '/signup?plan=business' },
+        primary: { label: 'Get Business $169', href: '/signup?plan=max' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: 'In Business - Launch promo first 12 months - Native CRM bridges - GDPR by default',
       }}

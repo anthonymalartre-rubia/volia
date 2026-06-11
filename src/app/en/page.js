@@ -69,7 +69,7 @@ const softwareApplicationSchema = {
   ],
   offers: [
     { '@type': 'Offer', name: 'Pro', price: '55', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=pro`, description: 'Full suite: Prospecting + Campaigns + CRM + Forms. 14-day free trial, no card.' },
-    { '@type': 'Offer', name: 'Business', price: '169', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=business`, description: 'Launch promo: first 12 months at $169/mo, then $199/mo. Adds volume, multi-user, MCP server + API.' },
+    { '@type': 'Offer', name: 'Business', price: '169', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=max`, description: 'Launch promo: first 12 months at $169/mo, then $199/mo. Adds volume, multi-user, MCP server + API.' },
     { '@type': 'Offer', name: 'Enterprise', price: '559', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=enterprise`, description: 'Unlimited Autopilot, everything unlimited, white-label, 99.9% SLA.' },
   ],
   publisher: {

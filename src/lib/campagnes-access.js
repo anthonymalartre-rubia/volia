@@ -28,16 +28,22 @@
 // '@/lib/campagnes-access-server'.
 // ─────────────────────────────────────────────────────────────────────
 
-// Plans qui ont accès au module Campagnes (inclus dès Pro).
-export const CAMPAGNES_ALLOWED_PLANS = ['pro', 'business', 'enterprise', 'enterprise_legacy'];
+// Pivot freemium (11 juin 2026) : Campagnes est ouvert à TOUS les plans.
+// Le différenciateur n'est plus l'accès mais les quotas (plans.js limits) :
+//   - free / prospection : 200 emails/mois, 1 séquence
+//   - max (et legacy pro/business) : volumes élevés ou illimités
+// La liste reste exportée pour compat avec le code existant.
+export const CAMPAGNES_ALLOWED_PLANS = [
+  'free', 'prospection', 'max',
+  'solo', 'pro', 'business', 'enterprise', 'enterprise_legacy',
+];
 
 /**
  * Vérifie qu'un plan a accès au module Campagnes (pure function, no IO).
- * Utilisable côté client comme serveur.
+ * Freemium : tout plan résolu a accès — seuls les quotas diffèrent.
  * @param {string | null | undefined} plan
  * @returns {boolean}
  */
 export function isCampagnesAllowedPlan(plan) {
-  if (!plan) return false;
-  return CAMPAGNES_ALLOWED_PLANS.includes(plan.toLowerCase());
+  return !!plan;
 }

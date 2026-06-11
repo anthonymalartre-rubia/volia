@@ -75,7 +75,7 @@ const PLANS = [
     monthlyPromoEur: 149,
     yearlyEur: 1690,
     cta: 'Choose Business',
-    href: '/signup?plan=business',
+    href: '/signup?plan=max',
     inheritsFrom: 'Pro',
     unlocksModules: true,
     promo: {

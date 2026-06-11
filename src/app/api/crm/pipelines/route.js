@@ -9,10 +9,11 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkCrmAccess, getOrCreateDefaultPipeline, PIPELINE_COLORS, CLOSING_TYPES } from '@/lib/crm';
+import { canCreatePipeline, quotaReachedMessage } from '@/lib/module-quotas';
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Profil introuvable' },
     { status: 403 }
   );
 }
@@ -85,6 +86,15 @@ export async function POST(request) {
 
   const hasAccess = await checkCrmAccess(supabase, user.id);
   if (!hasAccess) return forbidden();
+
+  // Freemium : free/prospection = 1 pipeline, MAX = illimité.
+  const quota = await canCreatePipeline(supabase, user.id);
+  if (!quota.allowed) {
+    return NextResponse.json(
+      { success: false, error: quotaReachedMessage('pipeline', quota.limit), upgrade: 'max' },
+      { status: 403 }
+    );
+  }
 
   const body = await request.json().catch(() => ({}));
   const name = typeof body.name === 'string' ? body.name.trim() : '';

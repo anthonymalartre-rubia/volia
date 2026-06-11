@@ -10,13 +10,23 @@ import {
   buildTasksFromTemplate,
   logProjectActivity,
 } from '@/lib/projects';
+import { canCreateProject, quotaReachedMessage } from '@/lib/module-quotas';
 
 export async function POST(request) {
   const { user, supabase } = await getAuthenticatedUser();
   if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   if (!(await checkProjectAccess(supabase, user.id))) {
     return NextResponse.json(
-      { success: false, error: 'Volia Project est réservé au plan Business' },
+      { success: false, error: 'Profil introuvable' },
+      { status: 403 }
+    );
+  }
+
+  // Freemium : free/prospection = 1 projet actif, MAX = illimité.
+  const quota = await canCreateProject(supabase, user.id);
+  if (!quota.allowed) {
+    return NextResponse.json(
+      { success: false, error: quotaReachedMessage('projet actif', quota.limit), upgrade: 'max' },
       { status: 403 }
     );
   }

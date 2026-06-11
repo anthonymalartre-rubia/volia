@@ -10,6 +10,7 @@
 
 import { NextResponse } from 'next/server';
 import { requireCampagnesAccess } from '@/lib/campagnes-access-server';
+import { canCreateSequence, quotaReachedMessage } from '@/lib/module-quotas';
 
 export async function GET() {
   const auth = await requireCampagnesAccess();
@@ -66,6 +67,15 @@ export async function POST(request) {
   const auth = await requireCampagnesAccess();
   if (auth instanceof NextResponse) return auth;
   const { user, supabase } = auth;
+
+  // Freemium : free/prospection = 1 séquence, MAX = illimité.
+  const quota = await canCreateSequence(supabase, user.id);
+  if (!quota.allowed) {
+    return NextResponse.json(
+      { error: quotaReachedMessage('séquence', quota.limit), upgrade: 'max' },
+      { status: 403 }
+    );
+  }
 
   const body = await request.json().catch(() => ({}));
   const name = (body.name || '').trim();

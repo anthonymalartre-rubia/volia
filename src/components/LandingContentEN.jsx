@@ -3,12 +3,13 @@
 // ─────────────────────────────────────────────────────────────────────
 // LandingContentEN — English Volia landing
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of LandingContent.jsx (FR source of truth, May 2026 pivot).
+// Mirror of LandingContent.jsx (FR source of truth, June 2026 freemium
+// pivot). Public lineup: Free / Prospection / MAX.
 //
-// Brand "C" pivot: customer-value first. No more "5x cheaper than
-// Apollo + Lemlist + HubSpot" head-on attack. The product is sold as
-// a B2B email + phone generator (80% of focus). The 3 secondary
-// modules (Campaigns / CRM / Forms) are a Business plan bonus (20%).
+// The suite (Campaigns / CRM / Forms / Project) is FREE for everyone,
+// with limits. Prospection (€19/mo) sells the data. MAX (€179/mo,
+// code MAX99 = first 3 months at €99) sells the unlimited suite +
+// Volia Autopilot. Prices displayed in EUR (billing currency).
 // ─────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link';
@@ -31,103 +32,96 @@ const NAV_LINKS = [
 ];
 
 // ─── Pricing cards data ────────────────────────────────────────────
-// Delta-features pattern : each tier lists ONLY what's added vs the
-// previous one (Solo +1, Pro +2, Business +3). Mirrors FR plans.js.
-// Option B (June 2026): 3 plans shown — Pro / Business / Enterprise.
-// Starter + Solo remain for existing customers (grandfathering) but are
-// no longer offered at purchase.
+// Freemium pivot (June 2026): Free / Prospection / MAX. Mirrors FR
+// plans.js. Solo / Pro / Business / Enterprise remain for existing
+// customers (grandfathering) but are no longer offered at purchase.
 const PLANS_EN = [
   {
-    id: 'pro',
-    name: 'Pro',
-    price: '$55',
-    sub: 'EUR 49/mo billed in EUR',
+    id: 'free',
+    name: 'Free',
+    price: '€0',
+    sub: 'The whole suite included, no card',
     period: '/mo',
-    tagline: 'For SMBs & agencies',
+    tagline: 'The whole suite, to get started',
     inheritsFrom: null,
-    unlocksModules: true,
-    promoLabel: 'Code ETE2026',
-    promoSub: '€19/mo for your first 3 months',
     features: [
-      'CRM, Campaigns & Forms included',
-      '2,000 cold emails / month',
-      '1,000 form submissions / month',
-      '1,200 enrichments + 1,200 phone numbers / month',
-      '1 Autopilot workflow',
-      '14-day free trial — no card',
+      'Campaigns, CRM, Forms & Project included',
+      '200 cold emails / month (your own domain)',
+      '1 CRM pipeline · 2 forms · 1 client project',
+      '25 free Prospection credits / month',
+      'Free forever — no trial clock',
     ],
-    cta: 'Start Pro trial',
-    ctaHref: '/signup?plan=pro',
-    highlighted: true,
+    cta: 'Start for free',
+    ctaHref: '/signup?plan=free',
+    highlighted: false,
+  },
+  {
+    id: 'prospection',
+    name: 'Prospection',
+    price: '€19',
+    sub: 'or €190/yr (2 months free)',
+    period: '/mo',
+    tagline: 'Find B2B emails',
+    inheritsFrom: 'Free',
+    features: [
+      '500 Prospection credits / month (emails found)',
+      '500 phone numbers / month (landline & mobile)',
+      'Waterfall enrichment (scraping + Google)',
+      'Unlimited exports · unlimited folders',
+      'Email verification (MillionVerifier)',
+    ],
+    cta: 'Choose Prospection',
+    ctaHref: '/signup?plan=prospection',
+    highlighted: false,
     badge: 'POPULAR',
   },
   {
-    id: 'business',
-    name: 'Business',
-    // Launch promo: $169/mo for the first 12 months, then $199/mo.
-    price: '$169',
-    priceStrike: '$199',
-    sub: 'EUR 149/mo - then EUR 179',
+    id: 'max',
+    name: 'MAX',
+    // Launch promo: €99/mo for the first 3 months with code MAX99.
+    price: '€99',
+    priceStrike: '€179',
+    sub: 'or €1,690/yr (2 months free)',
     period: '/mo',
-    tagline: 'For outbound teams',
-    inheritsFrom: 'Pro',
+    tagline: 'Your B2B pipeline on autopilot',
+    inheritsFrom: 'Prospection',
     unlocksModules: true,
-    promoLabel: 'Launch promo',
-    promoSub: 'First 12 months - then $199/mo',
+    promoLabel: 'Code MAX99',
+    promoSub: 'First 3 months at €99 — then €179/mo',
     features: [
-      '10,000 enrichments / month',
+      'Volia Autopilot — 3 workflows, IF/ELSE, A/B testing',
+      'UNLIMITED Campaigns, CRM, Forms & Project',
+      '2,000 Prospection credits / month',
       '10,000 cold emails / month (auto warmup)',
-      '3 Autopilot workflows + branching',
-      'Multi-user (teams, RBAC)',
-      'MCP server + REST API',
-      'Priority support + onboarding',
+      'Multi-user (teams, RBAC) + MCP server + API',
+      'Priority support',
     ],
-    cta: 'Choose Business',
+    cta: 'Go MAX',
     ctaHref: '/signup?plan=max',
-    highlighted: false,
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: '$559',
-    sub: 'EUR 499/mo billed in EUR',
-    period: '/mo',
-    tagline: 'For teams that scale',
-    inheritsFrom: 'Business',
-    unlocksModules: true,
-    features: [
-      'Unlimited Autopilot workflows',
-      'A/B subject testing + weekly Claude optimization',
-      'Everything unlimited',
-      '50,000 cold emails / month',
-      'White-label CRM + emails',
-      '99.9% uptime SLA + dedicated Slack',
-    ],
-    cta: 'Choose Enterprise',
-    ctaHref: '/signup?plan=enterprise',
-    highlighted: false,
+    highlighted: true,
   },
 ];
 
-// Modules unlocked per plan — Pro now unlocks the 3 secondary modules.
+// Modules per plan — freemium: all 4 modules included everywhere
+// (Prospection limited to 25 credits on Free).
 const PLAN_MODULES_EN = {
-  pro:        { prospection: true, campaigns: true, crm: true, forms: true },
-  business:   { prospection: true, campaigns: true, crm: true, forms: true },
-  enterprise: { prospection: true, campaigns: true, crm: true, forms: true },
+  free:        { prospection: 'limited', campaigns: true, crm: true, forms: true },
+  prospection: { prospection: true,      campaigns: true, crm: true, forms: true },
+  max:         { prospection: true,      campaigns: true, crm: true, forms: true },
 };
 
 const FAQS_EN = [
   {
     q: 'Does Volia work outside France?',
-    a: 'Our prospecting source is France-only: the entire French B2B landscape accessible via Google Places (live scraping), 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, and Forms modules (Business plan) work everywhere.',
+    a: 'Our prospecting source is France-only: the entire French B2B landscape accessible via Google Places (live scraping), 101 departments. If you target French businesses from London, NYC, or Berlin — Volia is the cheapest way to find their emails AND phone numbers (landline + mobile). The Campaigns, CRM, Forms and Project modules (free for everyone) work everywhere.',
   },
   {
-    q: 'What\'s included in Pro at $55/mo?',
-    a: 'The full suite: Prospecting (1,200 enrichments + 1,200 phone numbers/month, waterfall for emails AND phones), plus Campaigns (cold email + warmup), CRM (Kanban + auto-deals) and Forms — all included. Start with a 14-day free trial (no card). Code ETE2026 gets you €19/mo for the first 3 months.',
+    q: 'What do I get for free?',
+    a: 'The whole suite: Campaigns (200 cold emails/month from your own domain), CRM (1 pipeline), Forms (2 forms, 100 responses/month), Project (1 active project) — plus 25 Prospection credits/month. No card, no trial clock. You pay only to fill the suite (Prospection, €19/mo for 500 credits) or to run it on autopilot (MAX).',
   },
   {
-    q: 'What does Business unlock that Pro doesn\'t?',
-    a: 'Pro already includes the full suite (Prospecting + Campaigns + CRM + Forms). Business adds scale and power: 10,000 enrichments + 10,000 cold emails/month, 3 Autopilot workflows with conditional branching, multi-user (teams/RBAC), the MCP server (drive Volia from Claude, Cursor & AI agents), REST API, and priority support with onboarding.',
+    q: 'What does MAX unlock?',
+    a: 'Everything, with no caps: unlimited Campaigns, CRM, Forms & Project, 2,000 Prospection credits/month, Volia Autopilot (3 workflows, IF/ELSE branching, A/B testing, weekly Claude optimization), decision-maker enrichment, multi-user (teams/RBAC), the MCP server (drive Volia from Claude, Cursor & AI agents) and the REST API. €179/mo — or €99/mo for your first 3 months with code MAX99 at checkout.',
   },
   {
     q: 'Is it GDPR-compliant?',
@@ -179,9 +173,8 @@ export default function LandingContentEN() {
 
       <main>
         {/* ── HERO ── */}
-        {/* Pivot 80/20 May 2026: Volia = a B2B email + phone generator.
-            The 3 other modules (Campaigns / CRM / Forms) are a Business
-            bonus, mentioned at the bottom of the hero, not in the badge. */}
+        {/* Freemium pivot June 2026: the suite is free for everyone.
+            Prospection (€19/mo) fills it, MAX runs it on autopilot. */}
         <section className="relative pt-24 sm:pt-32 pb-20 px-4 sm:px-6 overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-gradient-to-br from-violet-200/40 via-indigo-100/30 to-pink-100/20 rounded-full blur-3xl pointer-events-none -z-0" />
           <div className="absolute top-40 right-[5%] w-96 h-96 bg-violet-300/20 rounded-full blur-3xl pointer-events-none -z-0 animate-pulse" style={{ animationDuration: '6s' }} />
@@ -189,7 +182,7 @@ export default function LandingContentEN() {
           <div className="max-w-6xl mx-auto relative z-10 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-indigo-100 to-violet-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
               <Search size={12} className="text-violet-600" />
-              <span className="text-violet-700 font-bold">B2B EMAIL + PHONE GENERATOR · $21/MO</span>
+              <span className="text-violet-700 font-bold">B2B EMAIL + PHONE GENERATOR · FREE SUITE INCLUDED</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
@@ -202,12 +195,12 @@ export default function LandingContentEN() {
             <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-2xl mx-auto">
               150+ industries, 101 departments, waterfall scraping for{' '}
               <strong className="text-content-primary">email + phone (landline & mobile)</strong>.
-              From <strong className="text-content-primary">$21/mo. No card.</strong>
+              From <strong className="text-content-primary">€19/mo. No card.</strong>
             </p>
 
             <p className="text-sm text-content-tertiary mb-8 italic flex items-start justify-center gap-1.5">
               <Sparkles size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
-              <span><strong className="text-content-secondary not-italic">Business $169 bonus</strong>: Campaigns + CRM + Forms included.</span>
+              <span>🎁 <strong className="text-content-secondary not-italic">CRM, Campaigns, Forms &amp; Project free</strong> for everyone — and MAX at <strong className="text-content-secondary not-italic">€99/month</strong> for your first 3 months, code <strong className="text-content-secondary not-italic">MAX99</strong>.</span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
@@ -241,10 +234,10 @@ export default function LandingContentEN() {
           </div>
         </section>
 
-        {/* ── FLAGSHIP PRODUCT + 3 BUSINESS BONUS MODULES ── */}
+        {/* ── FLAGSHIP PRODUCT + FREE MODULES ── */}
         {/* Mirror of the FR section: a large hero card for the flagship
-            (Prospecting), then 3 smaller cards for the Business bonus
-            modules (Campaigns / CRM / Forms). */}
+            (Prospecting), then smaller cards for the modules included
+            free for everyone (Campaigns / CRM / Forms). */}
         <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
           <div className="max-w-6xl mx-auto">
             {/* Flagship: Prospecting */}
@@ -278,7 +271,7 @@ export default function LandingContentEN() {
                       </div>
                     </div>
                     <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border bg-emerald-100 text-emerald-700 border-emerald-300 mb-4">
-                      LIVE · From $21/mo
+                      LIVE · From €19/mo · 25 free credits
                     </span>
                     <p className="text-sm text-content-secondary leading-relaxed">
                       The heart of Volia. Find <strong className="text-content-primary">emails and phone numbers</strong> (landline & mobile) for any French company.
@@ -308,19 +301,19 @@ export default function LandingContentEN() {
               </Link>
             </MotionInView>
 
-            {/* 3 Business bonus modules */}
+            {/* Free modules (freemium pivot June 2026) */}
             <MotionInView>
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-800 text-xs font-bold uppercase tracking-wider mb-3">
                   <Sparkles size={12} />
-                  <span>Business plan only · $169/mo</span>
+                  <span>Free for everyone</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-bold mb-3 text-content-primary">
-                  3 more modules, included in Business.
+                  Free for everyone — 4 modules included. Unlimited on MAX.
                 </h3>
                 <p className="text-content-tertiary text-base max-w-2xl mx-auto">
-                  Once you have your lead list, go further: send campaigns, track deals, capture inbound.{' '}
-                  <strong className="text-content-secondary">All included in the Business plan</strong>, no add-ons.
+                  Campaigns, CRM, Forms &amp; Project are <strong className="text-content-secondary">included free</strong> —
+                  send campaigns, track deals, capture inbound, deliver client projects. Unlimited on the MAX plan.
                 </p>
               </div>
             </MotionInView>
@@ -368,8 +361,8 @@ export default function LandingContentEN() {
                       href={mod.href}
                       className={`group block h-full p-5 rounded-2xl border ${mod.border} bg-gradient-to-br ${mod.bg} shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative`}
                     >
-                      <span className="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 border border-amber-300">
-                        Business
+                      <span className="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300">
+                        Free
                       </span>
 
                       <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${mod.iconBg} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform mb-3`}>
@@ -411,8 +404,8 @@ export default function LandingContentEN() {
                 { icon: Layers, title: 'Waterfall enrichment', desc: 'Scrape the site. Search Google. Guess the pattern. Stop the second we find a real email — so we don\'t burn your quota.' },
                 { icon: Sparkles, title: 'AI search (Claude)', desc: 'Type "50 SaaS founders in Paris" — get a Google Places query in 2 seconds. No filters to learn.' },
                 { icon: Globe, title: 'Full France coverage', desc: 'Access to the entire French B2B landscape via Google Places (live scraping). We find a verified pro email for ~46% of companies that have a website — landline + mobile too. Apollo and Hunter cover France poorly.' },
-                { icon: Mail, title: 'Native cold email (Business)', desc: '28-day auto warmup, multi-inbox rotation, 94% inbox rate. No Smartlead subscription needed.' },
-                { icon: Zap, title: 'Auto-create deals (Business)', desc: 'Someone replies? A deal shows up in your CRM at Lead stage. No copy-paste, no Zapier, no tabs.' },
+                { icon: Mail, title: 'Native cold email (free)', desc: '200 cold emails/month free from your own domain — 10,000/month with 28-day auto warmup on MAX. No Smartlead subscription needed.' },
+                { icon: Zap, title: 'Auto-create deals (free CRM)', desc: 'Someone replies? A deal shows up in your CRM at Lead stage. No copy-paste, no Zapier, no tabs.' },
                 { icon: Shield, title: 'GDPR by default', desc: 'Personal-email filter, public opt-out, EU hosting, CNIL guidelines. Built-in, not bolted on.' },
               ].map((f, i) => {
                 const Icon = f.icon;
@@ -442,7 +435,7 @@ export default function LandingContentEN() {
                   Honest pricing. No &quot;contact sales&quot;.
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                  USD displayed, EUR billed (your bank converts at market rate). No commitment. Cancel in 1 click.
+                  The suite is free for everyone. Prospection (€19/mo) fills it. MAX runs it on autopilot. No commitment. Cancel in 1 click.
                 </p>
               </div>
             </MotionInView>
@@ -464,7 +457,7 @@ export default function LandingContentEN() {
                     <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
                     <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{plan.tagline}</p>
 
-                    {/* PRICE — Business has a promo strikethrough */}
+                    {/* PRICE — MAX has the MAX99 promo strikethrough */}
                     <div className="flex items-baseline gap-2 mb-1 flex-wrap">
                       <span className="text-4xl font-bold">{plan.price}</span>
                       <span className="text-content-tertiary text-sm">{plan.period}</span>
@@ -498,14 +491,14 @@ export default function LandingContentEN() {
                       {plan.cta}{plan.highlighted ? ' →' : ''}
                     </Link>
 
-                    {/* Business killer feature : unlocks the full suite */}
+                    {/* MAX killer feature : unlimited suite + Autopilot */}
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1">
-                          ★ Unlocks the full suite
+                          ★ UNLIMITED suite + Autopilot
                         </p>
                         <p className="text-[11px] text-violet-700 leading-snug">
-                          CRM · Campaigns · Forms - all included
+                          CRM · Campaigns · Forms · Project, no caps
                         </p>
                       </div>
                     )}
@@ -600,7 +593,7 @@ export default function LandingContentEN() {
               Your first 100 leads. In 30 seconds.
             </h2>
             <p className="text-content-secondary text-lg sm:text-xl mb-10 max-w-xl mx-auto">
-              No credit card. No tricks. 100 prospects free, forever. Built in a French apartment. Used worldwide.
+              No credit card. No tricks. The whole suite free, forever. Built in a French apartment. Used worldwide.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link

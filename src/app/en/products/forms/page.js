@@ -1,9 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────
 // /en/products/forms — Volia Forms (English)
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of /produits/formulaires (FR). Forms is part of the Business
-// plan only ($169/mo launch promo, then $199/mo) — same plan that
-// unlocks Campaigns and CRM.
+// Mirror of /produits/formulaires (FR). Freemium pivot June 2026:
+// Forms is included free for everyone (2 forms, 100 responses/mo) —
+// unlimited on MAX (€179/mo, code MAX99: first 3 months at €99).
 // ─────────────────────────────────────────────────────────────────────
 
 import ProductPageLayout from '@/components/ProductPageLayout';
@@ -15,7 +15,7 @@ const FR_PAGE = `${SITE_URL}/produits/formulaires`;
 export const metadata = {
   title: 'Volia Forms - Forms that feed your CRM, not a spreadsheet',
   description:
-    'Drag-drop builder, multi-step, AND/OR conditional logic, native bridges to CRM and cold email. Included in the Volia Business plan at $169/mo (launch promo, then $199). No more Tally + Zapier + HubSpot. GDPR by default.',
+    'Drag-drop builder, multi-step, AND/OR conditional logic, native bridges to CRM and cold email. Included free for everyone — unlimited on MAX (€179/month, code MAX99: first 3 months at €99). No more Tally + Zapier + HubSpot. GDPR by default.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -27,7 +27,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia Forms - A form builder that talks natively to your CRM',
-    description: 'One tool instead of Typeform + Tally + Zapier. Multi-step, conditional logic, native CRM bridges. Included in Volia Business.',
+    description: 'One tool instead of Typeform + Tally + Zapier. Multi-step, conditional logic, native CRM bridges. Included free for everyone.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -68,9 +68,9 @@ const HOW_IT_WORKS = [
 ];
 
 const FAQ = [
-  { q: 'Which plan includes Forms?', a: 'Forms is part of the Volia Business plan only ($169/mo for the first 12 months, then $199/mo). Business also unlocks Campaigns and CRM — they share the same data layer, which is the whole point: a submission auto-creates a CRM contact and can fire a Campaigns sequence without Zapier.' },
-  { q: 'How is this different from Typeform or Tally?', a: 'Three things. (1) Native bridges to Volia CRM + Cold Email. Typeform and Tally need Zapier. (2) Included in Business at $169/mo — replaces Typeform Business + HubSpot + Zapier. (3) French-built, GDPR by default — IP hashed, EU-hosted, CNIL boilerplate included. If you already run Volia, Forms closes the inbound loop without adding a tool.' },
-  { q: 'How many forms and submissions per plan?', a: 'Business: unlimited forms, unlimited submissions/mo. Soft limit — we email you if you ever hit infrastructure-level thresholds. The other plans (Starter / Solo / Pro) don\'t include Forms.' },
+  { q: 'Which plan includes Forms?', a: 'Every plan — Forms is included free for everyone: 2 published forms, 100 responses/month. MAX (€179/mo, code MAX99: first 3 months at €99) makes it unlimited forms and 5,000 submissions/month. Forms shares the same data layer as CRM and Campaigns, which is the whole point: a submission auto-creates a CRM contact and can fire a Campaigns sequence without Zapier.' },
+  { q: 'How is this different from Typeform or Tally?', a: 'Three things. (1) Native bridges to Volia CRM + Cold Email. Typeform and Tally need Zapier. (2) Included free for everyone — replaces Typeform Business + HubSpot + Zapier (unlimited on MAX). (3) French-built, GDPR by default — IP hashed, EU-hosted, CNIL boilerplate included. If you already run Volia, Forms closes the inbound loop without adding a tool.' },
+  { q: 'How many forms and submissions per plan?', a: 'Free and Prospection: 2 published forms, 100 submissions/month. MAX: unlimited forms, 5,000 submissions/month. We email you before you hit any threshold — never a surprise.' },
   { q: 'Can I embed a Volia form on my website?', a: 'Yes. Every published form has an iframe embed that works anywhere (WordPress, Webflow, Notion, Squarespace, hand-coded). Add ?embed=true and the Volia wordmark + footer disappear. frame-ancestors header allows cross-origin.' },
   { q: 'What happens if the CRM bridge fails?', a: 'Best-effort + auto-retry. Network blip, CRM full, etc.: the submission still saves with bridge_status=failed. Cron retries every 10 min with exponential backoff (20min → 40min → 80min, max 3 tries). 3 failures = email with a link to re-trigger manually from the admin UI.' },
   { q: 'Can I migrate from Typeform / Tally?', a: 'No automated import yet — we\'re honest about it. You\'ll need to rebuild in our builder. Drag-drop UX is fast (Tally-like). Once rebuilt, bridges kill the Zapier middleman forever. Complex form (10+ fields, conditional logic)? Email founder@volia.fr and we rebuild it for you in under an hour.' },
@@ -85,17 +85,17 @@ export default function EnFormsPage() {
       labels={EN_LABELS}
       moduleLabelOverride="Forms"
       hero={{
-        eyebrow: 'Volia Business bonus. Without the Zapier tax.',
+        eyebrow: 'Included free for everyone. Without the Zapier tax.',
         h1Before: 'Forms that feed your',
         h1Highlight: 'CRM.',
         h1After: 'Not a spreadsheet.',
         subtitle: (
           <>
             Drag-drop builder, multi-step, AND/OR conditional logic, <strong className="text-pink-700 font-semibold">native bridges to CRM + Campaigns</strong>.{' '}
-            <strong className="text-content-primary font-semibold">Included in Volia Business at $169/mo</strong> (12-month launch promo, then $199).
+            <strong className="text-content-primary font-semibold">Included free for everyone</strong> — unlimited on MAX (€179/mo, code MAX99: first 3 months at €99).
           </>
         ),
-        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=max' },
+        ctaPrimary: { label: 'Get MAX at €99/mo', href: '/signup?plan=max' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           '12 field types',
@@ -135,16 +135,16 @@ export default function EnFormsPage() {
       features={FEATURES}
       howItWorks={HOW_IT_WORKS}
       crossSell={{
-        subtitle: 'Forms feeds the CRM. Triggers Campaigns sequences. All inside Business. Inbound loop, on autopilot.',
+        subtitle: 'Forms feeds the CRM. Triggers Campaigns sequences. Free for everyone. Inbound loop, on autopilot.',
         otherModules: [
-          { module: 'prospection', direction: 'in', desc: 'Top-of-funnel outbound. all French B2B companies, emails + phones. Available on every paid plan.', cta: 'See Prospecting' },
+          { module: 'prospection', direction: 'in', desc: 'Top-of-funnel outbound. all French B2B companies, emails + phones. 25 free credits/month on every plan.', cta: 'See Prospecting' },
           { module: 'crm', direction: 'out', desc: 'Every submission = a contact at Lead stage. Native Kanban pipeline.', cta: 'See CRM' },
           { module: 'campagnes', direction: 'out', desc: 'Optionally add submissions to a Campaigns list and fire sequences automatically.', cta: 'See Campaigns' },
         ],
       }}
       pricing={{
-        label: 'Business plan only. $169/mo (launch promo, then $199).',
-        subtext: 'All 4 modules together: Prospecting + Campaigns + CRM + Forms. Unlimited forms, unlimited submissions, native bridges. No add-ons. 1-click cancel.',
+        label: 'Included free for everyone — unlimited on MAX (€179/month, code MAX99: first 3 months at €99).',
+        subtext: '2 free forms + 100 responses/month for everyone, native bridges included. MAX: unlimited forms + 5,000 submissions/month. No add-ons. 1-click cancel.',
         cta: 'See full pricing',
         ctaHref: '/en/pricing',
       }}
@@ -152,9 +152,9 @@ export default function EnFormsPage() {
       finalCta={{
         title: 'Capture leads. Straight into your CRM.',
         subtitle: 'End the Tally + Zapier + HubSpot circus. Build, publish, embed. Leads land in your pipeline. You close.',
-        primary: { label: 'Get Business $169', href: '/signup?plan=max' },
+        primary: { label: 'Get MAX at €99/mo', href: '/signup?plan=max' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
-        trust: 'In Business - Launch promo first 12 months - Native CRM bridges - GDPR by default',
+        trust: 'Free for everyone - MAX99: first 3 months at €99 - Native CRM bridges - GDPR by default',
       }}
     />
   );

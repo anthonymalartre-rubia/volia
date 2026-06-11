@@ -20,8 +20,8 @@ const PAGE_URL = `${SITE_URL}/en/products/autopilot`;
 const FR_PAGE = `${SITE_URL}/produits/autopilot`;
 
 export const metadata = {
-  title: 'Volia Autopilot - Your B2B pipeline, on autopilot',
-  description: 'Pick your target. Volia scrapes, enriches, emails, qualifies, and drops hot leads into your CRM. 30+ ready-to-run B2B templates. From $55/mo, EU-hosted, GDPR by default.',
+  title: 'Volia Autopilot - Your B2B pipeline, on autopilot (MAX plan)',
+  description: 'Pick your target. Volia scrapes, enriches, emails, qualifies, and drops hot leads into your CRM. 30+ ready-to-run B2B templates. MAX plan only — €179/mo, code MAX99: first 3 months at €99. EU-hosted, GDPR by default.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -33,7 +33,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia Autopilot - Your B2B pipeline. On autopilot.',
-    description: 'The only SaaS that does scrape → email → form → CRM in one setup. From $55/mo. EU-hosted, GDPR by default.',
+    description: 'The only SaaS that does scrape → email → form → CRM in one setup. MAX plan only (code MAX99: first 3 months at €99). EU-hosted, GDPR by default.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -72,7 +72,7 @@ const WHY_VOLIA_VS_STACK_US = [
   { feature: 'Qualification forms', volia: '✓ Included', stack: '+ Typeform $35/mo' },
   { feature: 'End-to-end auto workflow', volia: '✓ Volia Autopilot', stack: '+ Zapier devops setup' },
   { feature: 'EU hosting / GDPR native', volia: '✓ Frankfurt', stack: '❌ US' },
-  { feature: 'Total monthly cost', volia: '$55-549', stack: '$1,000+' },
+  { feature: 'Total monthly cost', volia: '€99-179 (MAX)', stack: '$1,000+' },
 ];
 
 export default function EnAutopilotProductPage() {
@@ -88,7 +88,7 @@ export default function EnAutopilotProductPage() {
           <div className="relative max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-300 text-xs mb-6 font-medium shadow-sm">
               <Zap size={12} className="text-amber-700" />
-              <span className="text-amber-800 font-bold">NEW · VOLIA AUTOPILOT</span>
+              <span className="text-amber-800 font-bold">VOLIA AUTOPILOT · MAX PLAN ONLY</span>
             </div>
 
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
@@ -108,10 +108,10 @@ export default function EnAutopilotProductPage() {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-12">
               <Link
-                href="/signup?plan=pro"
+                href="/signup?plan=max"
                 className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-semibold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/50 hover:-translate-y-0.5 transition-all text-base"
               >
-                Start free — 14 days
+                Go MAX — €99/mo with MAX99
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
@@ -288,14 +288,14 @@ export default function EnAutopilotProductPage() {
               Done overpaying for Apollo?
             </h2>
             <p className="text-lg opacity-90 mb-8">
-              14-day trial, no card. You set it up in 10 minutes, and see your first leads within 48 hours.
+              MAX plan only — €99/mo for your first 3 months with code MAX99, then €179. You set it up in 10 minutes, and see your first leads within 48 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href="/signup?plan=pro"
+                href="/signup?plan=max"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-amber-700 font-bold hover:bg-amber-50 transition shadow-xl text-base"
               >
-                Start free
+                Go MAX
                 <ArrowRight size={18} />
               </Link>
               <a

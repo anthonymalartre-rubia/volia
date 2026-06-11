@@ -3,20 +3,17 @@
 // ─────────────────────────────────────────────────────────────────────
 // PricingContentEN — English standalone /pricing version (Volia)
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of PricingContent.jsx (FR source of truth, May 2026 pivot).
-// 4 plans (Starter / Solo / Pro / Business). Business = ONLY tier that
-// unlocks the 3 secondary modules (Campaigns + CRM + Forms).
+// Mirror of PricingContent.jsx (FR source of truth, June 2026 freemium
+// pivot). Public lineup: Free / Prospection / MAX.
 //
-// Pricing:
-//   - Starter $0 (forever)
-//   - Solo    $21/mo  (EUR 19)
-//   - Pro     $55/mo  (EUR 49)
-//   - Business $169/mo first 12 months (launch promo), then $199/mo
-//                ≈ EUR 149 promo / EUR 179 normal
-//     Yearly:   $1,799/year (≈ EUR 1,690, ~2 months free)
+//   Free        → the WHOLE suite (Campaigns, CRM, Forms, Project)
+//                 with limits + 25 discovery Prospection credits.
+//   Prospection → €19/mo: the data. 500 enrichment credits/month.
+//   MAX         → €179/mo: unlimited suite + Autopilot + 2,000 credits.
+//                 Code MAX99 = first 3 months at €99.
 //
-// Tone follows the FR "Brand C" pivot: customer-value first, no more
-// "5x cheaper than Apollo + Lemlist + HubSpot" head-on attack.
+// Solo / Pro / Business / Enterprise are legacy (grandfathered, no
+// longer shown). Prices displayed in EUR (billing currency).
 // ─────────────────────────────────────────────────────────────────────
 
 import { useState } from 'react';
@@ -24,194 +21,206 @@ import Link from 'next/link';
 import {
   Check, X, ArrowRight, Sparkles, Crown, Star, Shield, Globe,
   RefreshCw, Calendar, TrendingUp, Headphones, Lock, FileText,
-  ChevronDown,
+  ChevronDown, Zap, Rocket, Building2,
 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui';
 import MotionInView from '@/components/MotionInView';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 
-// ─── Plan model ───────────────────────────────────────────────────
-// USD as the display currency; EUR shown as the billing currency
-// underneath each price. Prices follow plans.js (FR source of truth).
-//   1 EUR ≈ 1.13 USD (rounded to clean numbers)
-//   19 → 21 · 49 → 55 · 149 → 169 (promo) · 179 → 199 · 1690 → 1799
-// Option B (June 2026): only 3 plans shown — Pro / Business / Enterprise.
-// Starter + Solo still exist in plans.js for existing customers
-// (grandfathering) but are no longer offered at purchase.
+// ─── Plan model (EUR, mirrors src/lib/plans.js) ───────────────────
 const PLANS = [
   {
-    id: 'pro',
-    name: 'Pro',
-    tagline: 'For SMBs & agencies',
-    monthlyUsd: 55,
-    yearlyUsd: 555,    // ≈ 490 EUR
-    monthlyEur: 49,
-    yearlyEur: 490,
-    cta: 'Choose Pro',
-    href: '/signup?plan=pro',
+    id: 'free',
+    name: 'Free',
+    tagline: 'The whole suite, to get started',
+    monthlyEur: 0,
+    yearlyEur: 0,
+    cta: 'Start for free',
+    href: '/signup?plan=free',
     inheritsFrom: null,
-    highlight: true,
-    badge: 'POPULAR',
-    unlocksModules: true,
     features: [
-      'CRM, Email Campaigns & Forms included',
-      '2,000 cold emails / month',
-      '1,000 form submissions / month',
-      '1,200 email enrichments / month',
-      '1,200 phone numbers / month',
-      '1 Autopilot workflow',
-      'Unlimited folders + email verification',
-      'Email support (24 h)',
+      'Campaigns, CRM, Forms & Project included',
+      '200 cold emails / month (your own domain)',
+      '1 CRM pipeline · 2 forms · 1 client project',
+      '25 free Prospection credits / month',
+      '101 French departments (all of France)',
     ],
   },
   {
-    id: 'business',
-    name: 'Business',
-    tagline: 'For outbound teams',
-    monthlyUsd: 199,        // standard price after promo
-    monthlyPromoUsd: 169,   // launch promo: first 12 months
-    yearlyUsd: 1799,        // ≈ 1690 EUR, ~2 months free
+    id: 'prospection',
+    name: 'Prospection',
+    tagline: 'Find B2B emails',
+    monthlyEur: 19,
+    yearlyEur: 190,
+    cta: 'Choose Prospection',
+    href: '/signup?plan=prospection',
+    inheritsFrom: 'Free',
+    features: [
+      '500 Prospection credits / month (1 credit = 1 email found)',
+      '500 phone numbers / month (landline & mobile)',
+      'Waterfall enrichment (scraping + Google)',
+      'Unlimited exports · unlimited folders',
+      'Email verification (MillionVerifier)',
+      'Email support (48 h)',
+    ],
+  },
+  {
+    id: 'max',
+    name: 'MAX',
+    tagline: 'Your B2B pipeline, end-to-end auto',
     monthlyEur: 179,
-    monthlyPromoEur: 149,
     yearlyEur: 1690,
-    cta: 'Choose Business',
+    cta: 'Go MAX',
     href: '/signup?plan=max',
-    inheritsFrom: 'Pro',
+    inheritsFrom: 'Prospection',
+    highlight: true,
+    badge: '⚡ AUTOPILOT',
     unlocksModules: true,
     promo: {
-      label: 'Launch promo',
-      sublabel: 'First 12 months - then $199/mo',
-      durationMonths: 12,
+      priceEur: 99,
+      label: 'Code MAX99',
+      sublabel: 'First 3 months at €99 — then €179/mo',
+      code: 'MAX99',
     },
     features: [
-      '10,000 enrichments / month',
-      '10,000 cold emails / month (auto warmup)',
-      '5,000 form submissions / month',
-      '3 Autopilot workflows + conditional branching',
+      '⚡ Volia Autopilot — end-to-end B2B pipeline (3 workflows, IF/ELSE, A/B)',
+      'UNLIMITED Campaigns, CRM, Forms & Project',
+      '2,000 Prospection credits / month',
+      'Decision-maker enrichment (CEO, CMO, Sales, HR)',
+      '10,000 cold emails / month (auto warmup included)',
+      '10,000 phone numbers / month',
       'Multi-user (teams, RBAC)',
-      'MCP server (Claude, Cursor, AI agents)',
-      'REST API (Zapier, Make, n8n)',
-      'Priority support + onboarding',
-    ],
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    tagline: 'For teams that scale',
-    monthlyUsd: 559,        // ≈ 499 EUR
-    yearlyUsd: 5599,        // ≈ 4990 EUR, ~2 months free
-    monthlyEur: 499,
-    yearlyEur: 4990,
-    cta: 'Choose Enterprise',
-    href: '/signup?plan=enterprise',
-    inheritsFrom: 'Business',
-    unlocksModules: true,
-    features: [
-      'Unlimited Autopilot workflows',
-      'A/B subject testing + weekly Claude optimization',
-      'Everything unlimited (prospects, enrichments, phones)',
-      '50,000 cold emails / month',
-      'Unlimited multi-user',
-      'White-label CRM + emails',
-      '99.9% uptime SLA',
-      'Dedicated Slack channel',
+      'MCP server + REST API (Zapier, Make, n8n)',
+      'Priority support',
     ],
   },
 ];
 
-// Modules unlocked per plan. Pro now unlocks CRM + Campaigns + Forms
-// (SMB/agency positioning, June 2026). All 3 shown plans include them.
+// Modules per plan — freemium pivot: all 4 modules are included
+// EVERYWHERE (with limits outside MAX). Autopilot = MAX only.
 const PLAN_MODULES = {
-  pro:        { prospection: true, campaigns: true, crm: true, forms: true },
-  business:   { prospection: true, campaigns: true, crm: true, forms: true },
-  enterprise: { prospection: true, campaigns: true, crm: true, forms: true },
+  free:        { prospection: 'limited', campaigns: true, crm: true, forms: true },
+  prospection: { prospection: true,      campaigns: true, crm: true, forms: true },
+  max:         { prospection: true,      campaigns: true, crm: true, forms: true },
 };
 
 const PLAN_VISUALS = {
-  pro:       { ring: 'border-violet-500 ring-2 ring-violet-500/20', bg: 'bg-gradient-to-b from-violet-50 via-violet-50/60 to-white', accent: 'text-violet-700' },
-  business:  { ring: 'border-indigo-300', bg: 'bg-gradient-to-br from-violet-100/60 via-white to-indigo-100/60', accent: 'text-indigo-700' },
-  enterprise:{ ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700' },
+  free:        { ring: 'border-line', bg: 'bg-surface-card', accent: 'text-content-tertiary' },
+  prospection: { ring: 'border-violet-300', bg: 'bg-violet-50/40', accent: 'text-violet-700' },
+  max:         { ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700' },
 };
 
 // ─── Comparison table ──────────────────────────────────────────────
-// Columns: Pro / Business / Enterprise (3 values per row).
+// Columns: Free / Prospection / MAX (3 values per row) — mirrors the
+// 7 FR sections.
 const COMPARE_SECTIONS = [
   {
-    title: 'Volia Autopilot (auto pipeline)',
+    title: '⚡ Volia Autopilot (auto pipeline)',
     rows: [
-      ['Autopilot workflows', '1', '3', '∞'],
-      ['Full pipeline: scrape → email → qualify → CRM', true, true, true],
-      ['AI-personalized emails (Claude)', true, true, true],
-      ['Auto scoring + Hot / Warm / Cold routing', true, true, true],
-      ['23 ready-to-use pipeline templates', true, true, true],
-      ['Custom branching (IF / ELSE per tier)', false, true, true],
+      ['Autopilot workflows', false, false, '3'],
+      ['Full pipeline: scrape → email → qualify → CRM', false, false, true],
+      ['AI-personalized emails (Claude)', false, false, true],
+      ['Auto scoring + Hot / Warm / Cold routing', false, false, true],
+      ['23 ready-to-use pipeline templates', false, false, true],
+      ['Custom branching (IF / ELSE per tier)', false, false, true],
       ['A/B subject testing + auto winner', false, false, true],
       ['Weekly Claude optimization', false, false, true],
     ],
   },
   {
-    title: 'Prospecting module',
+    title: 'Prospection module (credit-based)',
     rows: [
-      ['Prospects per month', '5,000', '10,000', 'Unlimited'],
-      ['Email enrichments / month', '1,200', '10,000', 'Unlimited'],
-      ['Phone numbers / month', '1,200', '10,000', 'Unlimited'],
-      ['Email verification (MillionVerifier)', '500/mo', '5,000/mo', 'Unlimited'],
+      ['Prospection credits / month (emails found)', '25', '500', '2,000'],
+      ['Phone numbers / month', '25', '500', '10,000'],
+      ['Searches / month', '100', '2,000', '10,000'],
+      ['Email verification (MillionVerifier)', false, '100/mo', '5,000/mo'],
+      ['Decision-maker enrichment (CEO, CMO, Sales…)', false, false, true],
       ['Waterfall enrichment (7 sources)', true, true, true],
       ['AI natural-language search', true, true, true],
-      ['CSV exports', 'Unlimited', 'Unlimited', 'Unlimited'],
-      ['Folders / lists', 'Unlimited', 'Unlimited', 'Unlimited'],
-      ['Entire French B2B landscape', true, true, true],
-      ['101 departments (overseas included)', true, true, true],
-      ['150+ B2B industries', true, true, true],
+      ['CSV exports', '5/mo', 'Unlimited', 'Unlimited'],
+      ['Google Places access (entire French B2B landscape)', true, true, true],
+      ['101 departments (overseas included) · 150+ industries', true, true, true],
     ],
   },
   {
-    title: 'Campaigns module (cold email)',
+    title: 'Campaigns module (cold email) — included everywhere',
     rows: [
-      ['Cold emails / month', '2,000', '10,000', '50,000'],
-      ['Multi-tenant sending domains', true, true, true],
-      ['Auto 28-day warmup', true, true, true],
-      ['B2B email templates', '20+', '20+', '20+'],
-      ['Open / click tracking', true, true, true],
-      ['Auto-replies to CRM', true, true, true],
-      ['SMS (coming Q3 2026)', '-', '-', '-'],
+      ['Cold emails / month', '200', '200', '10,000'],
+      ['Multi-step sequences', '1', '1', 'Unlimited'],
+      ['Multi-tenant sending domains (your domain)', true, true, true],
+      ['Auto 28-day warmup', false, false, true],
+      ['B2B email templates (20+)', true, true, true],
+      ['Open / click tracking + auto-replies to CRM', true, true, true],
     ],
   },
   {
-    title: 'CRM module',
+    title: 'CRM module — included everywhere',
     rows: [
+      ['Pipelines', '1', '1', 'Unlimited'],
       ['Drag-and-drop Kanban', true, true, true],
       ['Auto-create deals from replies', true, true, true],
-      ['360 timeline per contact', true, true, true],
-      ['Activities (notes, calls, meetings)', true, true, true],
-      ['Multi-pipelines (Q4 2026)', '-', '-', '-'],
+      ['360° timeline + activities', true, true, true],
+      ['Automations (won → onboarding, follow-ups)', false, false, true],
     ],
   },
   {
-    title: 'Forms module',
+    title: 'Forms module — included everywhere',
     rows: [
-      ['Number of forms', 'Unlimited', 'Unlimited', 'Unlimited'],
-      ['Submissions / month', '1,000', '5,000', '25,000'],
-      ['Drag-drop builder + multi-step', true, true, true],
-      ['AND/OR conditional logic', true, true, true],
+      ['Published forms', '2', '2', 'Unlimited'],
+      ['Submissions / month', '100', '100', '5,000'],
+      ['Drag-drop builder + multi-step + AND/OR logic', true, true, true],
       ['Native CRM + Campaigns bridges', true, true, true],
-      ['QR code + iframe embed', true, true, true],
-      ['Outbound webhooks', true, true, true],
-      ['Ready-to-use B2B templates', true, true, true],
+      ['QR code + iframe embed + webhooks', true, true, true],
+    ],
+  },
+  {
+    title: 'Project module — included everywhere',
+    rows: [
+      ['Active projects', '1', '1', 'Unlimited'],
+      ['Won deal → project in 1 click', true, true, true],
+      ['Public client tracking link', true, true, true],
+      ['Deliverables + attachments', true, true, true],
     ],
   },
   {
     title: 'Support & guarantees',
     rows: [
-      ['Email support', '24 h', 'Priority', 'Dedicated (Slack)'],
-      ['Personalized onboarding', false, true, true],
-      ['MCP server (Claude, Cursor, AI agents)', false, true, true],
-      ['Public REST API', true, true, true],
-      ['Webhooks + Zapier / Make', true, true, true],
-      ['Multi-user (teams / RBAC)', false, true, 'Unlimited'],
-      ['GDPR-compliant (France)', true, true, true],
-      ['EU data hosting', true, true, true],
+      ['Email support', 'Standard', '48 h', 'Priority'],
+      ['Personalized onboarding', false, false, true],
+      ['MCP server (Claude, Cursor, AI agents)', false, false, true],
+      ['Public REST API + Zapier / Make', false, true, true],
+      ['Multi-user (teams / RBAC)', false, false, true],
+      ['GDPR-compliant (France) · EU data hosting', true, true, true],
     ],
+  },
+];
+
+// ─── Personas — which plan is for you? ─────────────────────────────
+const PERSONAS = [
+  {
+    icon: Rocket,
+    color: 'from-violet-600 to-indigo-600',
+    title: 'I want to structure my sales',
+    plan: 'free',
+    planLabel: 'Free · €0',
+    description: 'CRM + Campaigns + Forms + Project included, for free. Manage your deals, send 200 cold emails/month from your own domain, and give every client a tracking link.',
+  },
+  {
+    icon: Building2,
+    color: 'from-indigo-600 to-blue-600',
+    title: 'I need B2B emails',
+    plan: 'prospection',
+    planLabel: 'Prospection · €19/mo',
+    description: '500 credits/month: target by industry and department, the waterfall cascade finds emails + phone numbers across the French SMB landscape. Cheapest on the market.',
+  },
+  {
+    icon: Sparkles,
+    color: 'from-amber-500 to-orange-600',
+    title: 'I want everything on autopilot',
+    plan: 'max',
+    planLabel: 'MAX · €99/mo for 3 months (code MAX99), then €179',
+    description: 'Volia Autopilot scrapes, enriches, writes (AI), sends, qualifies and pushes hot leads into your CRM. Unlimited suite + 2,000 credits + teams + MCP.',
+    highlight: true,
   },
 ];
 
@@ -230,24 +239,24 @@ const TRUST_SIGNALS = [
 // ─── FAQ ───────────────────────────────────────────────────────────
 const FAQ = [
   {
-    q: 'How does the ETE2026 code work?',
-    a: 'Enter code ETE2026 at checkout and the Pro plan drops to €19/mo for 3 months (instead of €49), then reverts to the standard €49/mo. Valid until September 30, 2026. No hidden fees, 1-click cancellation anytime.',
+    q: 'How does the MAX99 code work?',
+    a: 'Enter code MAX99 at checkout and the MAX plan drops to €99/mo for your first 3 months (instead of €179), then reverts to the standard price. No hidden fees, 1-click cancellation anytime.',
   },
   {
-    q: 'Free trial?',
-    a: '14 days of full Pro access, no credit card (5,000 prospects, waterfall enrichment, campaigns). On day 15 your account drops to the free Starter plan (100 prospects/month, forever). No surprise charge — ever.',
+    q: 'Is there really a free plan?',
+    a: 'Yes — free forever, no credit card. The Free plan includes the whole suite: Campaigns (200 cold emails/mo), CRM (1 pipeline), Forms (2 forms), Project (1 active project), plus 25 Prospection credits every month. No surprise charge — ever.',
   },
   {
     q: 'Can I change plans anytime?',
     a: 'Yes, 1 click from settings. Upgrade or downgrade, pro-rata is calculated automatically — you only pay the difference for the current month.',
   },
   {
-    q: 'What happens if I hit the monthly limit?',
-    a: 'Email alert at 80% and 100%. Beyond that, search pauses until renewal or upgrade. No surprise invoice — ever.',
+    q: 'What happens if I hit a monthly limit?',
+    a: 'Email alert at 80% and 100%. Beyond that, the feature pauses until renewal or upgrade. No surprise invoice — ever.',
   },
   {
     q: 'How does yearly billing work?',
-    a: 'Pay 10 months, get 12. Example Pro: $555/year instead of $660, ~$100 back in your pocket. Billed once (card or wire).',
+    a: 'Pay 10 months, get 12. Prospection: €190/year instead of €228 — €38 back in your pocket. MAX: €1,690/year instead of €2,148, €458 saved. Billed once (card or wire).',
   },
   {
     q: 'How do I cancel?',
@@ -255,19 +264,19 @@ const FAQ = [
   },
   {
     q: 'Wire transfer accepted?',
-    a: 'Yes on annual Business+ plans. Send your VAT/company info to contact@volia.fr and we issue a pro-forma invoice within 24 h.',
+    a: 'Yes on the annual MAX plan. Send your VAT/company info to contact@volia.fr and we issue a pro-forma invoice within 24 h.',
   },
   {
     q: 'Is everything really included in the price?',
     a: 'Yes. Access to the entire French B2B landscape (101 departments x 150+ sectors), waterfall enrichment, CSV exports, transactional emails. No hidden feature behind a paywall.',
   },
   {
-    q: 'Is the CRM really in Business?',
-    a: 'Yes, in full. Drag-and-drop Kanban, deals auto-created from email replies, 360 timeline per contact, activities (notes, calls, meetings). You can uninstall HubSpot.',
+    q: 'Is the CRM really free?',
+    a: 'Yes, in full and for everyone. Drag-and-drop Kanban, deals auto-created from email replies, 360° timeline per contact, activities (notes, calls, meetings). 1 pipeline on Free, unlimited on MAX. You can uninstall HubSpot.',
   },
   {
     q: 'Payment methods?',
-    a: 'Card (Visa, Mastercard, Amex) via Stripe on every plan. SEPA and wire transfer on annual Business+. PayPal on request.',
+    a: 'Card (Visa, Mastercard, Amex) via Stripe on every plan. SEPA and wire transfer on annual MAX. PayPal on request.',
   },
   {
     q: 'Refunds?',
@@ -275,18 +284,14 @@ const FAQ = [
   },
   {
     q: 'Discount for nonprofits / students?',
-    a: '-50% on Solo or Pro for registered nonprofits and students (proof required). Email contact@volia.fr from your institutional address.',
+    a: '-50% on Prospection for registered nonprofits and students (proof required). Email contact@volia.fr from your institutional address.',
   },
 ];
 
 // ─── Helpers ───────────────────────────────────────────────────────
-function formatUsd(amount) {
-  if (amount === 0) return '0';
-  return amount.toLocaleString('en-US');
-}
 function formatEur(amount) {
-  if (amount === 0) return 'EUR 0';
-  return `EUR ${amount.toLocaleString('en-US')}`;
+  if (amount === 0) return '€0';
+  return `€${amount.toLocaleString('en-US')}`;
 }
 
 function Cell({ value }) {
@@ -303,9 +308,8 @@ export default function PricingContentEN() {
 
   // Yearly savings vs paying 12 monthly invoices.
   const yearlySavingsByPlan = {
-    pro: 55 * 12 - 555,              // $105
-    business: 199 * 12 - 1799,       // $589 (vs standard $199/mo)
-    enterprise: 559 * 12 - 5599,     // $1,109
+    prospection: 19 * 12 - 190,   // €38
+    max: 179 * 12 - 1690,         // €458
   };
   const maxSavings = Math.max(...Object.values(yearlySavingsByPlan));
 
@@ -344,12 +348,12 @@ export default function PricingContentEN() {
               Pricing. No bullshit.
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-6">
-              The price of a coffee a day<br />for your main prospecting tool.
+              The price of a coffee a day<br />for a B2B pipeline<br />on autopilot.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              <strong className="text-content-primary">14-day Pro trial</strong>, no credit card.
-              Then <strong className="text-content-primary">$55/mo</strong> for the full suite — Prospecting + Campaigns + CRM + Forms.
-              <strong className="text-amber-600"> Code ETE2026: €19/mo for your first 3 months.</strong>
+              <strong className="text-content-primary">The suite is free</strong> — Campaigns, CRM, Forms &amp; Project included for everyone.
+              You pay to fill it (<strong className="text-content-primary">Prospection, €19/month</strong>) or to run it on autopilot (<strong className="text-content-primary">MAX</strong>).
+              <strong className="text-amber-600"> Code MAX99: €99/month for your first 3 months.</strong>
             </p>
 
             {/* Monthly / Yearly toggle */}
@@ -381,30 +385,30 @@ export default function PricingContentEN() {
 
             <p className="text-sm font-semibold text-emerald-700 mb-2" aria-live="polite">
               {isYearly
-                ? `You save up to $${formatUsd(maxSavings)}/year`
-                : `Switch to yearly and save up to $${formatUsd(maxSavings)}/year`}
+                ? `You save up to ${formatEur(maxSavings)}/year`
+                : `Switch to yearly and save up to ${formatEur(maxSavings)}/year`}
             </p>
             <p className="text-xs text-content-tertiary mb-6">
-              Pro: -$105/yr · Business: -$589/yr · Enterprise: -$1,109/yr
+              Prospection: -€38/yr · MAX: -€458/yr
             </p>
 
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-content-tertiary">
-              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> 14-day Pro trial, no card</span>
+              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Free plan forever, no card</span>
               <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> 1-click cancel</span>
               <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> GDPR France</span>
             </div>
           </MotionInView>
         </section>
 
-        {/* ── 1b. SUMMER 2026 PROMO BANNER ── */}
+        {/* ── 1b. MAX99 PROMO BANNER ── */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-10">
           <MotionInView>
             <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-50 via-orange-50/60 to-amber-50 p-5 sm:p-6 text-center">
               <p className="text-sm sm:text-base font-semibold text-amber-900">
-                🌞 Summer 2026 offer — <span className="font-bold">Pro at €19/mo</span> for your first 3 months (then €49).
+                ⚡ MAX launch offer — <span className="font-bold">€99/month</span> for your first 3 months (then €179).
               </p>
               <p className="text-xs text-amber-800 mt-1.5">
-                Enter code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">ETE2026</code> at checkout · valid until September 30, 2026.
+                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> at checkout · Autopilot + unlimited suite + 2,000 credits/month.
               </p>
             </div>
           </MotionInView>
@@ -416,7 +420,7 @@ export default function PricingContentEN() {
             {PLANS.map((plan, idx) => {
               const visuals = PLAN_VISUALS[plan.id];
               const modules = PLAN_MODULES[plan.id];
-              const isFree = plan.monthlyUsd === 0;
+              const isFree = plan.monthlyEur === 0;
 
               return (
                 <MotionInView key={plan.id} delay={idx * 80}>
@@ -431,48 +435,44 @@ export default function PricingContentEN() {
                     <h3 className={`text-lg font-semibold mb-1 ${visuals.accent}`}>{plan.name}</h3>
                     <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{plan.tagline}</p>
 
-                    {/* PRICE - special handling for Business with launch promo. */}
-                    {plan.id === 'business' && !isYearly && plan.promo ? (
+                    {/* PRICE — special handling for MAX with the MAX99 promo.
+                        Monthly: promo price big + standard price struck.
+                        Yearly: standard yearly price (no promo on annual). */}
+                    {plan.id === 'max' && !isYearly && plan.promo ? (
                       <>
                         <div className="flex items-baseline gap-2 mb-1 flex-wrap">
                           <span className="text-4xl font-bold text-content-primary">
-                            ${formatUsd(plan.monthlyPromoUsd)}
+                            {formatEur(plan.promo.priceEur)}
                           </span>
                           <span className="text-content-tertiary text-sm">/mo</span>
                           <span className="text-lg text-content-muted line-through font-medium">
-                            ${formatUsd(plan.monthlyUsd)}
+                            {formatEur(plan.monthlyEur)}
                           </span>
                         </div>
-                        <p className="text-[11px] font-semibold text-emerald-700 mb-0.5">
-                          {plan.promo.label}
-                        </p>
-                        <p className="text-[11px] text-content-tertiary mb-1">
-                          {plan.promo.sublabel}
+                        <p className="text-[11px] font-semibold text-emerald-700 mb-1">
+                          🎉 {plan.promo.label}
                         </p>
                         <p className="text-[11px] text-content-tertiary mb-5">
-                          {formatEur(plan.monthlyPromoEur)}/mo billed in EUR
+                          {plan.promo.sublabel}
                         </p>
                       </>
-                    ) : plan.id === 'business' && isYearly ? (
+                    ) : plan.id === 'max' && isYearly ? (
                       <>
                         <div className="flex items-baseline gap-1 mb-1">
                           <span className="text-4xl font-bold text-content-primary">
-                            ${formatUsd(plan.yearlyUsd)}
+                            {formatEur(plan.yearlyEur)}
                           </span>
                           <span className="text-content-tertiary text-sm">/yr</span>
                         </div>
-                        <p className="text-[11px] text-emerald-600 font-medium mb-1">
-                          ~${Math.round(plan.yearlyUsd / 12)}/mo · ~2 months free
-                        </p>
-                        <p className="text-[11px] text-content-tertiary mb-5">
-                          {formatEur(plan.yearlyEur)}/yr billed in EUR
+                        <p className="text-[11px] text-emerald-600 font-medium mb-5">
+                          ~€{Math.round(plan.yearlyEur / 12)}/mo · 2 months free
                         </p>
                       </>
                     ) : (
                       <>
                         <div className="flex items-baseline gap-1 mb-1">
                           <span className="text-4xl font-bold text-content-primary">
-                            ${formatUsd(isYearly ? plan.yearlyUsd : plan.monthlyUsd)}
+                            {formatEur(isYearly ? plan.yearlyEur : plan.monthlyEur)}
                           </span>
                           <span className="text-content-tertiary text-sm">
                             {isYearly && !isFree ? '/yr' : '/mo'}
@@ -482,33 +482,23 @@ export default function PricingContentEN() {
                         {isFree ? (
                           <p className="text-[11px] text-content-tertiary mb-5">Forever free, no card</p>
                         ) : isYearly ? (
-                          <>
-                            <p className="text-[11px] text-emerald-600 font-medium mb-1">
-                              ~${Math.round(plan.yearlyUsd / 12)}/mo · save ${formatUsd(yearlySavingsByPlan[plan.id])}
-                            </p>
-                            <p className="text-[11px] text-content-tertiary mb-5">
-                              {formatEur(plan.yearlyEur)}/yr billed in EUR
-                            </p>
-                          </>
+                          <p className="text-[11px] text-emerald-600 font-medium mb-5">
+                            ~€{Math.round(plan.yearlyEur / 12)}/mo · save {formatEur(yearlySavingsByPlan[plan.id])}
+                          </p>
                         ) : (
-                          <>
-                            <p className="text-[11px] text-content-tertiary mb-1">
-                              or ${formatUsd(plan.yearlyUsd)}/yr (save ${formatUsd(yearlySavingsByPlan[plan.id])})
-                            </p>
-                            <p className="text-[11px] text-content-tertiary mb-5">
-                              {formatEur(plan.monthlyEur)}/mo billed in EUR
-                            </p>
-                          </>
+                          <p className="text-[11px] text-content-tertiary mb-5">
+                            or {formatEur(plan.yearlyEur)}/yr (save {formatEur(yearlySavingsByPlan[plan.id])})
+                          </p>
                         )}
                       </>
                     )}
 
                     <Link
-                      href={plan.href}
+                      href={`${plan.href}${!isFree ? `&period=${period}` : ''}`}
                       className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-5 ${
-                        plan.id === 'pro'
-                          ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-500/20'
-                          : plan.id === 'business'
+                        plan.id === 'max'
+                          ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-400 hover:to-orange-500 shadow-lg shadow-amber-500/20'
+                          : plan.id === 'prospection'
                             ? 'bg-content-primary text-surface-base hover:bg-content-secondary'
                             : 'border border-line-hover hover:bg-surface-elevated text-content-secondary'
                       }`}
@@ -516,14 +506,14 @@ export default function PricingContentEN() {
                       {plan.cta}
                     </Link>
 
-                    {/* BUSINESS killer feature : unlocks the full suite. */}
+                    {/* MAX killer feature: unlimited suite + Autopilot */}
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
-                          <Star size={11} fill="currentColor" /> Unlocks the full suite
+                          <Star size={11} fill="currentColor" /> UNLIMITED suite + Autopilot
                         </p>
                         <p className="text-[11px] text-violet-700 leading-snug">
-                          CRM · Campaigns · Forms - all included
+                          CRM · Campaigns · Forms · Project, no caps
                         </p>
                       </div>
                     )}
@@ -537,7 +527,7 @@ export default function PricingContentEN() {
                             ? 'bg-zinc-100 text-zinc-600'
                             : 'bg-zinc-50 text-content-muted'
                       }`}>
-                        ✓ Prospecting{modules.prospection === 'limited' ? ' (limited)' : ''}
+                        ✓ Prospection{modules.prospection === 'limited' ? ' (limited)' : ''}
                       </span>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
                         modules.campaigns ? 'bg-blue-100 text-blue-700' : 'bg-zinc-50 text-content-muted'
@@ -563,13 +553,31 @@ export default function PricingContentEN() {
                       </p>
                     )}
 
+                    {/* Delta features — Autopilot lines (⚡) get the amber
+                        flagship treatment, mirroring the FR pricing page. */}
                     <div className="space-y-2.5 flex-1">
-                      {plan.features.map((f) => (
-                        <div key={f} className="flex items-start gap-2">
-                          <Check size={14} className="text-violet-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
-                        </div>
-                      ))}
+                      {plan.features.map((f) => {
+                        const isAutopilot = f.startsWith('⚡');
+                        if (isAutopilot) {
+                          return (
+                            <div
+                              key={f}
+                              className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-2"
+                            >
+                              <Zap size={14} className="text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" />
+                              <span className="text-xs font-semibold text-amber-900 leading-relaxed">
+                                {f.replace(/^⚡\s*/, '')}
+                              </span>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div key={f} className="flex items-start gap-2">
+                            <Check size={14} className="text-violet-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </MotionInView>
@@ -602,15 +610,15 @@ export default function PricingContentEN() {
               <p className="text-sm sm:text-base text-content-secondary">
                 <Check size={16} className="inline -mt-0.5 mr-1.5 text-emerald-600" />
                 You save up to{' '}
-                <strong className="text-emerald-700">${formatUsd(maxSavings)}/year</strong>{' '}
-                vs monthly billing - that&apos;s ~2 months free.
+                <strong className="text-emerald-700">{formatEur(maxSavings)}/year</strong>{' '}
+                vs monthly billing — that&apos;s 2 months free.
               </p>
             ) : (
               <p className="text-sm sm:text-base text-content-secondary">
                 <Sparkles size={16} className="inline -mt-0.5 mr-1.5 text-violet-600" />
                 Switch to yearly and save up to{' '}
-                <strong className="text-violet-700">${formatUsd(maxSavings)}/year</strong>{' '}
-                (~2 months free on the Business plan).
+                <strong className="text-violet-700">{formatEur(maxSavings)}/year</strong>{' '}
+                (2 months free on the MAX plan).
               </p>
             )}
           </div>
@@ -640,11 +648,7 @@ export default function PricingContentEN() {
                       <th key={plan.id} className="text-center px-3 py-4 w-[15%]">
                         <div className="text-sm font-bold text-content-primary">{plan.name}</div>
                         <div className="text-[11px] text-content-tertiary mt-0.5">
-                          {plan.monthlyUsd === 0
-                            ? 'Free'
-                            : plan.id === 'business'
-                              ? `$${formatUsd(plan.monthlyPromoUsd)}/mo*`
-                              : `$${formatUsd(plan.monthlyUsd)}/mo`}
+                          {plan.monthlyEur === 0 ? 'Free' : `€${plan.monthlyEur}/mo`}
                         </div>
                       </th>
                     ))}
@@ -657,13 +661,70 @@ export default function PricingContentEN() {
                 </tbody>
               </table>
             </div>
-            <p className="text-[11px] text-content-tertiary mt-2 text-center">
-              * Business launch promo: $169/mo first 12 months, then $199/mo.
-            </p>
+
+            {/* MAX99 footnote under the table */}
+            <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-3 text-sm text-amber-900">
+              <Zap size={16} className="flex-shrink-0 mt-0.5 text-amber-600" />
+              <p>
+                <strong>MAX launch offer</strong> — €99/mo for your first 3 months with code{' '}
+                <strong>MAX99</strong> at checkout, then €179/mo.{' '}
+                <Link href="/en/products/autopilot" className="underline font-semibold">See Autopilot →</Link>
+              </p>
+            </div>
           </MotionInView>
         </section>
 
-        {/* ── 5. TRUST STRIP ── */}
+        {/* ── 5. PERSONAS — which plan is for you? ── */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
+          <MotionInView>
+            <div className="text-center mb-10">
+              <p className="text-sm font-semibold text-violet-600 mb-3">WHICH PLAN?</p>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3">
+                Which one is for you?
+              </h2>
+              <p className="text-content-tertiary text-base max-w-xl mx-auto">
+                Go with your gut. Change your mind tomorrow? 1 click and it&apos;s done.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {PERSONAS.map((p, idx) => {
+                const Icon = p.icon;
+                return (
+                  <MotionInView key={p.plan} delay={idx * 80}>
+                    <div className={`h-full p-6 rounded-2xl border transition hover:shadow-lg ${
+                      p.highlight
+                        ? 'border-amber-300 bg-gradient-to-b from-amber-50/60 to-white shadow-md'
+                        : 'border-line bg-surface-card'
+                    }`}>
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${p.color} flex items-center justify-center mb-4 shadow-md`}>
+                        <Icon size={22} className="text-white" />
+                      </div>
+                      <h3 className="text-base font-semibold text-content-primary mb-1">{p.title}</h3>
+                      <p className={`text-xs font-medium mb-3 ${p.highlight ? 'text-amber-700' : 'text-content-tertiary'}`}>
+                        {p.planLabel}
+                        {p.highlight && <span className="ml-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-amber-700"><Star size={9} fill="currentColor" /> POPULAR</span>}
+                      </p>
+                      <p className="text-xs text-content-secondary leading-relaxed mb-5">
+                        {p.description}
+                      </p>
+                      <Link
+                        href={`/signup?plan=${p.plan}&period=${period}`}
+                        className={`inline-flex items-center gap-1.5 text-xs font-semibold transition ${
+                          p.highlight ? 'text-amber-700 hover:text-amber-800' : 'text-content-secondary hover:text-content-primary'
+                        }`}
+                      >
+                        Pick this plan <ArrowRight size={12} />
+                      </Link>
+                    </div>
+                  </MotionInView>
+                );
+              })}
+            </div>
+          </MotionInView>
+        </section>
+
+        {/* ── 6. TRUST STRIP ── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
           <MotionInView>
             <div className="rounded-2xl border border-line bg-surface-card p-6 sm:p-8">
@@ -700,7 +761,7 @@ export default function PricingContentEN() {
           </MotionInView>
         </section>
 
-        {/* ── 6. FAQ ── */}
+        {/* ── 7. FAQ ── */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20" id="faq">
           <MotionInView>
             <div className="text-center mb-10">
@@ -760,22 +821,22 @@ export default function PricingContentEN() {
           </MotionInView>
         </section>
 
-        {/* ── 7. FINAL CTA ── */}
+        {/* ── 8. FINAL CTA ── */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6">
           <MotionInView>
             <div className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-700 to-indigo-700 p-10 sm:p-14 text-center text-white shadow-2xl shadow-violet-500/20">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
-                Try Pro free.<br />14 days, no credit card.
+                Start free.<br />The whole suite, no credit card.
               </h2>
               <p className="text-violet-100 text-base sm:text-lg mb-8 max-w-xl mx-auto">
-                Full access to the suite (Prospecting + Campaigns + CRM + Forms). Code <strong className="text-white">ETE2026</strong>: €19/mo for your first 3 months.
+                Campaigns, CRM, Forms &amp; Project included for everyone. Code <strong className="text-white">MAX99</strong>: MAX at €99/mo for your first 3 months.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
                 <Link
-                  href="/signup?plan=pro&period=monthly"
+                  href="/signup?plan=free"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg w-full sm:w-auto"
                 >
-                  Start the Pro trial (14 days) <ArrowRight size={14} />
+                  Create my free account <ArrowRight size={14} />
                 </Link>
                 <Link
                   href="/en#try-live"

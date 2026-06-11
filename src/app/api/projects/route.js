@@ -1,7 +1,7 @@
 // GET  /api/projects  → liste des projets du user + stats (tâches embarquées light)
 // POST /api/projects  → crée un projet (nom + couleur + template optionnel)
 //
-// Gating Volia Project : plan Business + auth + RLS.
+// Freemium (11/06/2026) : ouvert à tous, quota projets actifs par plan.
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
@@ -13,10 +13,11 @@ import {
   PROJECT_COLORS,
   PROJECT_STATUSES,
 } from '@/lib/projects';
+import { canCreateProject, quotaReachedMessage } from '@/lib/module-quotas';
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'Volia Project est réservé au plan Business' },
+    { success: false, error: 'Profil introuvable' },
     { status: 403 }
   );
 }
@@ -56,6 +57,15 @@ export async function POST(request) {
   const { user, supabase } = await getAuthenticatedUser();
   if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   if (!(await checkProjectAccess(supabase, user.id))) return forbidden();
+
+  // Freemium : free/prospection = 1 projet actif, MAX = illimité.
+  const quota = await canCreateProject(supabase, user.id);
+  if (!quota.allowed) {
+    return NextResponse.json(
+      { success: false, error: quotaReachedMessage('projet actif', quota.limit), upgrade: 'max' },
+      { status: 403 }
+    );
+  }
 
   let body;
   try {

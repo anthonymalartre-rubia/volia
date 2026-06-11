@@ -10,7 +10,8 @@
 //          / trial_converted_at (cf. migration add_trial_fields_to_user_profiles).
 //
 // Comportement :
-//   - Au signup, on set trial_plan='pro', trial_ends_at=now+14d, plan='pro'.
+//   - Au signup, on set trial_plan='max' (pivot freemium 11/06/2026 :
+//     14 jours de MAX = Autopilot + suite illimitée), trial_ends_at=now+14d.
 //   - Tant que trial_ends_at > now → getEffectivePlan() retourne trial_plan.
 //   - À expiration, le cron /api/cron/expire-trials remet plan='free' et
 //     envoie l'email trial_expired.
@@ -110,10 +111,10 @@ export function isTrialExpiringSoon(profile) {
  * Construit le payload de trial à insérer dans user_profiles au signup.
  * Centralisé ici pour ne pas dupliquer le calcul de date d'expiration.
  *
- * @param {string} [planId='pro']
+ * @param {string} [planId='max']
  * @returns {{trial_plan:string, trial_started_at:string, trial_ends_at:string, plan:string}}
  */
-export function buildTrialPayload(planId = 'pro') {
+export function buildTrialPayload(planId = 'max') {
   const now = new Date();
   const endsAt = new Date(now.getTime() + TRIAL_DURATION_DAYS * 24 * 60 * 60 * 1000);
   return {

@@ -41,11 +41,23 @@ async function getUserContact(supabaseAdmin, userId) {
 }
 
 /**
- * Match un price.id Stripe avec un plan local (free/solo/pro/business).
+ * Match un price.id Stripe avec un plan local.
  * Vérifie monthly ET yearly. Renvoie 'free' si aucun match (sécurité).
+ *
+ * ⚠️ Pivot freemium (11/06/2026) : les prices Solo et Business sont
+ * PARTAGÉS avec les nouveaux plans 'prospection' et 'max'. Pour ne
+ * jamais re-mapper un abonné grandfatheré (ex: Business 6000 crédits
+ * → max 2000), si `currentPlan` correspond déjà à ce price, on le
+ * conserve tel quel.
  */
-function planIdFromPriceId(priceId) {
+function planIdFromPriceId(priceId, currentPlan = null) {
   if (!priceId) return 'free';
+  if (currentPlan && PLANS[currentPlan]) {
+    const cp = PLANS[currentPlan];
+    if (cp.stripePriceId === priceId || cp.stripePriceIdYearly === priceId) {
+      return currentPlan;
+    }
+  }
   for (const [id, plan] of Object.entries(PLANS)) {
     // 'enterprise_legacy' est l'ALIAS historique (ancien Business 99€). Il partage
     // STRIPE_BUSINESS_YEARLY_PRICE_ID avec business → on le SKIP de la boucle pour
@@ -333,9 +345,11 @@ export async function POST(request) {
         const userId = profile?.id || subscription.metadata?.supabase_user_id;
         if (!userId) break;
 
-        // Détecte le NOUVEAU plan basé sur le price.id actuel
+        // Détecte le NOUVEAU plan basé sur le price.id actuel.
+        // currentPlan passé pour la stabilité des grandfatherés (prices
+        // Solo/Business partagés avec prospection/max).
         const newPriceId = subscription.items?.data?.[0]?.price?.id;
-        const newPlanId = planIdFromPriceId(newPriceId);
+        const newPlanId = planIdFromPriceId(newPriceId, profile?.plan);
 
         // Si la subscription est marquée pour cancel à la fin de période,
         // on garde le plan actuel jusqu'au period_end (le user a payé).

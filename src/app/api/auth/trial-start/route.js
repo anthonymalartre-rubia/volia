@@ -9,7 +9,7 @@ import { trialStartedEmail } from '@/lib/emailTemplates';
  *
  * Appelé depuis /auth/confirm (signup email) après détection SIGNED_IN.
  * Le trial Pro 14j est déjà attribué par le trigger DB handle_new_user
- * (qui crée le profil avec trial_plan='pro' + trial_ends_at=now+14d).
+ * (qui crée le profil avec trial_plan='max' + trial_ends_at=now+14d (pivot freemium)).
  *
  * Ce endpoint :
  *   1. Vérifie que le user est bien authentifié

@@ -151,7 +151,7 @@ export default function ProjectsHubPage() {
             partage l&apos;avancement avec tes clients — sans aucun outil en plus.
           </p>
           <Link
-            href="/pricing?plan=business"
+            href="/pricing?plan=max"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-semibold shadow-lg shadow-amber-500/30 transition-all"
           >
             Passer au plan Business

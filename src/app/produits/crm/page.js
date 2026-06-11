@@ -337,7 +337,7 @@ function ProblemSolutionSection() {
         <MotionInView delay={300}>
           <div className="mt-12 text-center">
             <Link
-              href="/signup?plan=business"
+              href="/signup?plan=max"
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Zap size={18} className="text-amber-200" />
@@ -775,7 +775,7 @@ export default function CrmProductPage() {
               Kanban drag-drop + auto-create deals depuis replies + <strong className="text-emerald-700 font-semibold">timeline 360° par contact</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Passer à Business 149 €', href: '/signup?plan=business' },
+          ctaPrimary: { label: 'Passer à Business 149 €', href: '/signup?plan=max' },
           ctaSecondary: { label: 'Voir une démo CRM', href: '/#demo' },
           trust: [
             'Kanban natif',
@@ -807,14 +807,14 @@ export default function CrmProductPage() {
           label: 'CRM gated Business — 149 €/mois tout inclus',
           subtext: 'Les 3 modules (Prospection + Campagnes + CRM) ensemble. 10 000 prospects en pipeline, deals illimités. Multi-utilisateurs natif à venir Q3 2026. Aucune licence à 50-100 € par user comme HubSpot ou Salesforce.',
           cta: 'Passer à Business 149 €',
-          ctaHref: '/signup?plan=business',
+          ctaHref: '/signup?plan=max',
         }}
         beforeFaq={<PullQuoteSection />}
         faq={FAQ}
         finalCta={{
           title: 'Le CRM qui se remplit tout seul. 90 €/mois en moins.',
           subtitle: 'Stop le bazar HubSpot + Apollo + Lemlist + Zapier. Volia Business : un produit, un login, une facture. Résiliable en 1 clic.',
-          primary: { label: 'Passer à Business 149 €', href: '/signup?plan=business' },
+          primary: { label: 'Passer à Business 149 €', href: '/signup?plan=max' },
           secondary: { label: 'Voir une démo CRM', href: '/#demo' },
           trust: '149 €/mo tout inclus · 10 000 prospects en pipeline · Annulation 1 clic · RGPD by default',
         }}

@@ -52,24 +52,25 @@ import {
 // les classes Tailwind explicitement — pas de string interpolation
 // dynamique sinon le purge Tailwind les supprime au build.
 // ─────────────────────────────────────────────────────────────────────
-// Badge "Plan Business" (homogène pour les 3 modules gatés).
-// Pas de badge sur Prospection (disponible sur tous les plans).
+// Pivot freemium (11/06/2026) : tous les modules sont ouverts. Seul
+// Autopilot porte le badge "Plan MAX" (le flag businessOnly est
+// conservé comme nom de prop pour éviter un rename invasif).
 const BUSINESS_BADGE = {
-  label: 'Plan Business',
+  label: 'Plan MAX',
   className: 'bg-amber-50 text-amber-700 border-amber-200',
 };
 
 const MODULES = [
   {
-    // ⚡ Volia Autopilot (juin 2026 pivot) — module FLAGSHIP, placé en #1.
+    // ⚡ Volia Autopilot — module FLAGSHIP, placé en #1.
     // Orchestre les 4 autres (Prospection → Campagnes → Forms → CRM).
-    // Gating : Pro (1 workflow) · Business (3) · Enterprise (illimité)
+    // Pivot freemium : Autopilot = plan MAX uniquement.
     id: 'autopilot',
     name: 'Autopilot',
     description: 'Pipeline B2B end-to-end auto',
     href: '/app/autopilot',
     icon: Zap,
-    businessOnly: false, // accessible Pro+
+    businessOnly: true, // badge Plan MAX
     color: 'amber',
     iconGradient: 'from-amber-500 to-orange-600',
     activeBg: 'bg-amber-50',
@@ -98,7 +99,7 @@ const MODULES = [
     description: 'Séquences email automatisées',
     href: '/app/campagnes',
     icon: Mail,
-    businessOnly: true,
+    businessOnly: false, // gratuit pour tous (limites, illimité en MAX)
     color: 'blue',
     iconGradient: 'from-blue-500 to-cyan-600',
     activeBg: 'bg-blue-50',
@@ -112,7 +113,7 @@ const MODULES = [
     description: 'Pipeline commercial',
     href: '/app/crm',
     icon: KanbanSquare,
-    businessOnly: true,
+    businessOnly: false, // gratuit pour tous (limites, illimité en MAX)
     color: 'emerald',
     iconGradient: 'from-emerald-500 to-teal-600',
     activeBg: 'bg-emerald-50',
@@ -126,7 +127,7 @@ const MODULES = [
     description: 'Form builder + bridges',
     href: '/app/formulaires',
     icon: FormInput,
-    businessOnly: true,
+    businessOnly: false, // gratuit pour tous (limites, illimité en MAX)
     color: 'pink',
     iconGradient: 'from-pink-500 to-rose-600',
     activeBg: 'bg-pink-50',
@@ -142,7 +143,7 @@ const MODULES = [
     description: 'Livraison & suivi client',
     href: '/app/projets',
     icon: FolderKanban,
-    businessOnly: true,
+    businessOnly: false, // gratuit pour tous (limites, illimité en MAX)
     color: 'orange',
     iconGradient: 'from-orange-500 to-amber-600',
     activeBg: 'bg-orange-50',
@@ -333,7 +334,7 @@ export default function ModuleSwitcher() {
                         {mod.businessOnly && (
                           <span
                             className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border ${BUSINESS_BADGE.className}`}
-                            title="Module inclus dans le plan Business uniquement"
+                            title="Module inclus dans le plan MAX uniquement"
                           >
                             {BUSINESS_BADGE.label}
                           </span>

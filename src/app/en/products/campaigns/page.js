@@ -92,7 +92,7 @@ export default function EnCampaignsPage() {
             Native cold email + 28-day auto warmup + multi-inbox rotation. <strong className="text-content-primary font-semibold">Included in Volia Business at $169/mo</strong> (12-month launch promo, then $199). Plus <strong className="text-emerald-700 font-semibold">auto-deals in CRM</strong> from every reply.
           </>
         ),
-        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=business' },
+        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=max' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           'Auto 28-day warmup',
@@ -134,7 +134,7 @@ export default function EnCampaignsPage() {
       finalCta={{
         title: 'Cold email that works. Inside your sales suite.',
         subtitle: 'One tool instead of three. Double the deliverability. Templates ready, warmup auto, replies in CRM. You just press send.',
-        primary: { label: 'Get Business $169', href: '/signup?plan=business' },
+        primary: { label: 'Get Business $169', href: '/signup?plan=max' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: 'In Business - Launch promo first 12 months - GDPR by default',
       }}

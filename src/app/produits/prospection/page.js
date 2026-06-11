@@ -576,7 +576,7 @@ function PricingFocusSection() {
       prospects: '10 000 prospects/mois + MCP + multi-utilisateurs',
       audience: 'pour équipes outbound',
       cta: 'Choisir Business',
-      href: '/signup?plan=business',
+      href: '/signup?plan=max',
       popular: false,
     },
     {

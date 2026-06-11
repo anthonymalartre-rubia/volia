@@ -993,12 +993,15 @@ export default function SettingsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  {['solo', 'pro', 'business'].map((pid) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Pivot freemium : upgrade vers Prospection (19€) ou MAX (179€,
+                      MAX99 = 3 mois à 99€). Les legacy solo/pro/business ne sont
+                      plus proposés (grandfathering pour les abonnés existants). */}
+                  {['prospection', 'max'].map((pid) => {
                     const plan = PLANS[pid];
                     const isCurrent = planId === pid;
                     const price = upgradePeriod === 'yearly' ? plan.priceYearly : plan.price;
-                    const isRecommended = pid === 'pro';
+                    const isRecommended = pid === 'max';
                     return (
                       <div
                         key={pid}
@@ -1019,7 +1022,7 @@ export default function SettingsPage() {
                           </span>
                         </div>
                         <p className="text-[10px] text-content-tertiary mb-3 min-h-[28px]">
-                          {plan.limits.searches_per_month.toLocaleString('fr-FR')} prospects · {plan.limits.enrichments_per_month.toLocaleString('fr-FR')} enrich.
+                          {plan.limits.enrichments_per_month.toLocaleString('fr-FR')} crédits Prospection/mois{pid === 'max' ? ' · suite illimitée + Autopilot · MAX99 : 3 mois à 99€' : ''}
                         </p>
                         {isCurrent ? (
                           <button

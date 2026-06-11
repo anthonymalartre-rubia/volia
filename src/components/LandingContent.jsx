@@ -338,11 +338,11 @@ export default function LandingContent() {
                 À partir de <strong className="text-content-primary">49&nbsp;€/mois. Sans CB.</strong>
               </p>
 
-              {/* Bonus mention — offre ÉTÉ 2026 : Pro à 19€/mois les 3 premiers
-                  mois avec le code ETE2026. Essai 14 j sans CB en entrée. */}
+              {/* Pivot freemium : la suite est gratuite, MAX99 = offre de
+                  lancement du plan MAX (99€/mois les 3 premiers mois). */}
               <p className="text-sm text-content-tertiary mb-8 italic flex items-start gap-1.5">
                 <Sparkles size={14} className="text-amber-500 flex-shrink-0 mt-0.5" />
-                <span>🌞 Offre ÉTÉ 2026 : <strong className="text-content-secondary not-italic">Pro à 19&nbsp;€/mois</strong> les 3 premiers mois — code <strong className="text-content-secondary not-italic">ETE2026</strong>.</span>
+                <span>🎁 <strong className="text-content-secondary not-italic">CRM, Campagnes, Formulaires &amp; Project gratuits</strong> pour tous — et MAX à <strong className="text-content-secondary not-italic">99&nbsp;€/mois</strong> les 3 premiers mois, code <strong className="text-content-secondary not-italic">MAX99</strong>.</span>
               </p>
 
               {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
@@ -756,7 +756,7 @@ export default function LandingContent() {
               >
                 Découvrir Volia Autopilot →
               </Link>
-              <p className="text-xs text-content-tertiary mt-3">Inclus dès le plan Pro (49 €/mois) · illimité en Enterprise</p>
+              <p className="text-xs text-content-tertiary mt-3">Inclus dans le plan MAX · 99 €/mois les 3 premiers mois avec MAX99</p>
             </div>
           </MotionInView>
         </div>
@@ -835,19 +835,19 @@ export default function LandingContent() {
             </Link>
           </MotionInView>
 
-          {/* ─── 3 BONUS BUSINESS (cards plus petites + badge) ─── */}
+          {/* ─── 4 MODULES GRATUITS (pivot freemium 11/06/2026) ─── */}
           <MotionInView>
             <div className="text-center mb-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300 text-amber-800 text-xs font-bold uppercase tracking-wider mb-3">
                 <Sparkles size={12} />
-                <span>Bonus Business 149 €/mois</span>
+                <span>Gratuits pour tous</span>
               </div>
               <h3 className="font-display text-2xl sm:text-3xl font-bold mb-3 text-content-primary">
-                4 modules de plus, inclus dans Business.
+                4 modules offerts. Oui, gratuits.
               </h3>
               <p className="text-content-tertiary text-base max-w-2xl mx-auto">
-                Une fois que tu as ta liste de leads, va plus loin : envoie les campagnes,
-                suis les deals, capture l&apos;inbound. <strong className="text-content-secondary">Tout inclus dans le plan Business</strong>, pas de surcoût.
+                Campagnes, CRM, Formulaires et Project sont <strong className="text-content-secondary">inclus gratuitement</strong> —
+                envoie tes campagnes, suis tes deals, capture l&apos;inbound. Illimités en plan MAX.
               </p>
             </div>
           </MotionInView>
@@ -1140,7 +1140,7 @@ export default function LandingContent() {
           <MotionInView delay={400}>
             <div className="mt-10 text-center">
               <Link
-                href="/signup?plan=business"
+                href="/signup?plan=max"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
               >
                 Je prends Business à 149&nbsp;€/mois (promo 12 mois)
@@ -1645,12 +1645,12 @@ export default function LandingContent() {
                         })}
                       </tr>
                     ))}
-                    {/* Price rows : Entry tier (Pro w/ ETE2026) + Pro tier */}
+                    {/* Price rows : Gratuit (suite incluse) + Prospection 19€ */}
                     <tr className="border-t-2 border-line">
                       <td className="py-4 px-4 text-content-secondary font-semibold">Ticket d&apos;entrée</td>
                       <td className="py-4 px-4 text-center">
-                        <span className="text-2xl font-bold text-emerald-400">19&euro;</span>
-                        <div className="text-[10px] text-emerald-400/60 mt-0.5 uppercase tracking-wider font-bold">Pro · ÉTÉ2026</div>
+                        <span className="text-2xl font-bold text-emerald-400">0&euro;</span>
+                        <div className="text-[10px] text-emerald-400/60 mt-0.5 uppercase tracking-wider font-bold">Suite incluse</div>
                       </td>
                       {COMPETITORS.map((c) => (
                         <td key={c.name} className="py-4 px-4 text-center">
@@ -1659,10 +1659,10 @@ export default function LandingContent() {
                       ))}
                     </tr>
                     <tr className="border-t border-line">
-                      <td className="py-4 px-4 text-content-secondary font-semibold">Plan Pro</td>
+                      <td className="py-4 px-4 text-content-secondary font-semibold">Prospection</td>
                       <td className="py-4 px-4 text-center">
-                        <span className="text-2xl font-bold text-violet-400">49&euro;</span>
-                        <div className="text-[10px] text-violet-400/60 mt-0.5 uppercase tracking-wider font-bold">Recommandé</div>
+                        <span className="text-2xl font-bold text-violet-400">19&euro;</span>
+                        <div className="text-[10px] text-violet-400/60 mt-0.5 uppercase tracking-wider font-bold">500 crédits/mois</div>
                       </td>
                       {COMPETITORS.map((c) => (
                         <td key={c.name} className="py-4 px-4 text-center">

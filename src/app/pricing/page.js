@@ -89,7 +89,7 @@ const PRODUCT_JSON_LD = {
         name: 'Business',
         price: '179',
         priceCurrency: 'EUR',
-        url: `${SITE_URL}/signup?plan=business`,
+        url: `${SITE_URL}/signup?plan=max`,
         availability: 'https://schema.org/InStock',
         description: '10 000 prospects + volumes 10× + multi-utilisateurs + serveur MCP + API — pour équipes outbound.',
       },

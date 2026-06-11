@@ -331,7 +331,7 @@ function ComparisonTableSection() {
         <MotionInView delay={300}>
           <div className="mt-10 text-center">
             <a
-              href="/signup?plan=business"
+              href="/signup?plan=max"
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Zap size={18} className="text-amber-200" />
@@ -574,14 +574,14 @@ function PricingFocusSection() {
     {
       name: 'Business', price: '179 €', tag: 'Recommandé · Volume max',
       desc: 'Cold email illimité + warmup + multi-inbox + auto-create CRM depuis replies. Plus Prospection 10k + Formulaires.',
-      cta: 'Choisir Business', href: '/signup?plan=business',
+      cta: 'Choisir Business', href: '/signup?plan=max',
       featured: true,
       bullets: ['Cold email illimité', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Auto-create CRM depuis replies'],
     },
     {
       name: 'Annuel', price: '141 €', tag: '−2 mois offerts',
       desc: 'Même Business, facturé annuellement. 1 690 €/an au lieu de 2 148 €.',
-      cta: 'Choisir Annuel', href: '/signup?plan=business&billing=yearly',
+      cta: 'Choisir Annuel', href: '/signup?plan=max&billing=yearly',
       featured: false,
     },
   ];
@@ -818,7 +818,7 @@ export default function CampagnesProductPage() {
               Lemlist 39 €. Instantly 30 $. <strong className="text-content-primary font-semibold">Volia Campagnes : inclus dans la suite Business 149 €</strong>. Warmup auto 28 jours + multi-inbox + <strong className="text-emerald-700 font-semibold">auto-create CRM depuis les replies</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=business' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=max' },
           ctaSecondary: { label: 'Voir une démo en direct', href: '#demo' },
           trust: [
             (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Warmup 28 jours auto</>),
@@ -861,7 +861,7 @@ export default function CampagnesProductPage() {
         finalCta={{
           title: 'Du cold email qui marche, au prix d\'un café.',
           subtitle: 'Stack divisé par 3, deliverability ×2. Templates prêts, warmup auto, replies qui atterrissent dans le CRM — vous appuyez sur Play.',
-          primary: { label: 'Commencer gratuitement', href: '/signup?plan=business' },
+          primary: { label: 'Commencer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir une démo live', href: '#demo' },
           trust: 'Inclus dans Business 149 € · 14 jours d\'essai · Migration Lemlist offerte · RGPD by default',
         }}

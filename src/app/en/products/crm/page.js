@@ -95,7 +95,7 @@ export default function EnCrmPage() {
             Same data layer as Prospecting + Campaigns + Forms.
           </>
         ),
-        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=business' },
+        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=max' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           'Native Kanban',
@@ -135,13 +135,13 @@ export default function EnCrmPage() {
         label: 'Business plan only. $169/mo all-in (launch promo, then $199).',
         subtext: 'All 4 modules together (Prospecting + Campaigns + CRM + Forms). 10,000 enrichments/mo, multi-user, API access. No $50-100/user license like HubSpot or Salesforce.',
         cta: 'Get Business',
-        ctaHref: '/signup?plan=business',
+        ctaHref: '/signup?plan=max',
       }}
       faq={FAQ}
       finalCta={{
         title: 'A CRM that fills itself. Included in your suite.',
         subtitle: 'End the HubSpot + Apollo + Lemlist + Zapier circus. One product. One login. One bill. Cancel anytime.',
-        primary: { label: 'Get Business $169', href: '/signup?plan=business' },
+        primary: { label: 'Get Business $169', href: '/signup?plan=max' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: '$169/mo all-in - Launch promo first 12 months - 10,000 prospects in pipeline - 1-click cancel - GDPR by default',
       }}

@@ -49,38 +49,33 @@ function formatEuro(cents) {
 // Couleurs / styling par plan
 const PLAN_VISUALS = {
   free:    { ring: 'border-line', bg: 'bg-surface-card', accent: 'text-content-tertiary', badge: null },
-  solo:    { ring: 'border-violet-200', bg: 'bg-violet-50/40', accent: 'text-violet-600', badge: null },
-  pro:     { ring: 'border-violet-500 ring-2 ring-violet-500/20', bg: 'bg-gradient-to-b from-violet-50 via-violet-50/60 to-white', accent: 'text-violet-700', badge: 'POPULAIRE' },
-  business:{ ring: 'border-indigo-300', bg: 'bg-gradient-to-br from-violet-100/60 via-white to-indigo-100/60', accent: 'text-indigo-700', badge: null },
-  enterprise:{ ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700', badge: '⚡ AUTOPILOT' },
+  prospection: { ring: 'border-violet-300', bg: 'bg-violet-50/40', accent: 'text-violet-700', badge: null },
+  max:     { ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700', badge: '⚡ AUTOPILOT' },
 };
 
 const PLAN_TAGLINES = {
-  free: 'Pour découvrir Volia',
-  solo: 'Pour freelances et consultants',
-  pro: 'Pour PME et agences',
-  business: 'Pour équipes outbound',
-  enterprise: 'Pour équipes qui scalent',
+  free: 'Toute la suite, pour démarrer',
+  prospection: 'Trouvez les emails B2B',
+  max: 'Pipeline B2B end-to-end auto',
 };
 
 // Modules inclus par plan : Business + Enterprise débloquent les 4 modules.
 // Enterprise ajoute Volia Autopilot illimité (juin 2026 pivot).
+// Pivot freemium : les 4 modules sont inclus PARTOUT (avec limites hors
+// MAX). Autopilot = MAX uniquement.
 const PLAN_MODULES = {
-  free:       { prospection: 'limitée', campagnes: false, crm: false, formulaires: false, autopilot: false },
-  solo:       { prospection: true,      campagnes: false, crm: false, formulaires: false, autopilot: false },
-  // Pro débloque CRM + Campagnes + Formulaires (positionnement PME/agences, juin 2026).
-  pro:        { prospection: true,      campagnes: true,  crm: true,  formulaires: true,  autopilot: '1 workflow' },
-  business:   { prospection: true,      campagnes: true,  crm: true,  formulaires: true,  autopilot: '3 workflows + branching' },
-  enterprise: { prospection: true,      campagnes: true,  crm: true,  formulaires: true,  autopilot: '∞ + A/B + Claude opt' },
+  free:        { prospection: 'limitée', campagnes: true, crm: true, formulaires: true, autopilot: false },
+  prospection: { prospection: true,      campagnes: true, crm: true, formulaires: true, autopilot: false },
+  max:         { prospection: true,      campagnes: true, crm: true, formulaires: true, autopilot: '3 workflows + IF/ELSE + A/B' },
 };
 
-// Option B (juin 2026) : on n'affiche plus que 3 plans (Pro / Business /
-// Enterprise). Starter + Solo restent définis dans plans.js pour les clients
+// Pivot freemium (11 juin 2026) : Gratuit / Prospection / MAX.
+// Solo, Pro, Business, Enterprise restent dans plans.js pour les clients
 // existants (grandfathering) mais ne sont plus présentés à l'achat.
-const CARD_PLANS = ['pro', 'business', 'enterprise'];
+const CARD_PLANS = ['free', 'prospection', 'max'];
 
 // Tableau comparatif : 3 colonnes alignées sur les cartes.
-const VISIBLE_PLANS_FOR_COMPARE = ['pro', 'business', 'enterprise'];
+const VISIBLE_PLANS_FOR_COMPARE = ['free', 'prospection', 'max'];
 
 // ─── Section 4 : Tableau comparatif — données ───────────────────
 // Sections collapsibles avec rows.
@@ -89,78 +84,80 @@ const COMPARE_SECTIONS = [
   {
     title: '⚡ Volia Autopilot (pipeline auto)',
     rows: [
-      ['Workflows Autopilot', '1', '3', '∞'],
-      ['Pipeline complet : scrap → email → qualif → CRM', true, true, true],
-      ['Emails personnalisés par IA (Claude)', true, true, true],
-      ['Scoring + routing auto Hot / Warm / Cold', true, true, true],
-      ['23 templates de pipeline prêts à l’emploi', true, true, true],
-      ['Branching custom (IF / ELSE par tier)', false, true, true],
+      ['Workflows Autopilot', false, false, '3'],
+      ['Pipeline complet : scrap → email → qualif → CRM', false, false, true],
+      ['Emails personnalisés par IA (Claude)', false, false, true],
+      ['Scoring + routing auto Hot / Warm / Cold', false, false, true],
+      ['23 templates de pipeline prêts à l’emploi', false, false, true],
+      ['Branching custom (IF / ELSE par tier)', false, false, true],
       ['A/B testing objets + winner auto', false, false, true],
       ['Optimisation Claude hebdomadaire', false, false, true],
     ],
   },
   {
-    title: 'Module Prospection',
+    title: 'Module Prospection (au crédit)',
     rows: [
-      ['Prospects par mois', '5 000', '10 000', 'Illimité'],
-      ['Enrichissements email/mois', '1 200', '10 000', 'Illimité'],
-      ['Numéros de téléphone/mois', '1 200', '10 000', 'Illimité'],
-      ['Vérification email (MillionVerifier)', '500/mo', '5 000/mo', 'Illimité'],
+      ['Crédits Prospection / mois (emails trouvés)', '25', '500', '2 000'],
+      ['Numéros de téléphone / mois', '25', '500', '10 000'],
+      ['Recherches / mois', '100', '2 000', '10 000'],
+      ['Vérification email (MillionVerifier)', false, '100/mo', '5 000/mo'],
+      ['🎯 Enrichissement décideur (CEO, CMO, Sales…)', false, false, true],
       ['Cascade waterfall (7 sources)', true, true, true],
       ['Recherche IA langage naturel', true, true, true],
-      ['Exports CSV', 'Illimité', 'Illimité', 'Illimité'],
-      ['Dossiers / listes', 'Illimité', 'Illimité', 'Illimité'],
+      ['Exports CSV', '5/mois', 'Illimité', 'Illimité'],
       ['Accès Google Places (tout le tissu B2B français)', true, true, true],
-      ['101 départements (DROM inclus)', true, true, true],
-      ['150+ catégories B2B', true, true, true],
+      ['101 départements (DROM inclus) · 150+ catégories', true, true, true],
     ],
   },
   {
-    title: 'Module Campagnes (cold email)',
+    title: 'Module Campagnes (cold email) — inclus partout',
     rows: [
-      ['Cold emails / mois', '2 000', '10 000', '50 000'],
-      ['Domaines d’envoi multi-tenant', true, true, true],
-      ['Warmup automatique 28 jours', true, true, true],
-      ['Templates email B2B', '20+', '20+', '20+'],
-      ['Tracking opens / clicks', true, true, true],
-      ['Réponses auto vers CRM', true, true, true],
-      ['SMS (bientôt Q3 2026)', '—', '—', '—'],
+      ['Cold emails / mois', '200', '200', '10 000'],
+      ['Séquences multi-étapes', '1', '1', 'Illimité'],
+      ['Domaines d’envoi multi-tenant (votre domaine)', true, true, true],
+      ['Warmup automatique 28 jours', false, false, true],
+      ['Templates email B2B (20+)', true, true, true],
+      ['Tracking opens / clicks + réponses auto vers CRM', true, true, true],
     ],
   },
   {
-    title: 'Module CRM',
+    title: 'Module CRM — inclus partout',
     rows: [
+      ['Pipelines', '1', '1', 'Illimité'],
       ['Kanban drag & drop', true, true, true],
       ['Auto-create deals depuis replies', true, true, true],
-      ['Timeline 360° par contact', true, true, true],
-      ['Activities (notes, calls, meetings)', true, true, true],
-      ['Multi-pipelines (Q4 2026)', '—', '—', '—'],
+      ['Timeline 360° + activities', true, true, true],
+      ['Automatisations (won→onboarding, relances)', false, false, true],
     ],
   },
   {
-    title: 'Module Formulaires',
+    title: 'Module Formulaires — inclus partout',
     rows: [
-      ['Nombre de formulaires', 'Illimité', 'Illimité', 'Illimité'],
-      ['Submissions / mois', '1 000', '5 000', '25 000'],
-      ['Builder drag-drop + multi-step', true, true, true],
-      ['Logique conditionnelle AND/OR', true, true, true],
+      ['Formulaires publiés', '2', '2', 'Illimité'],
+      ['Soumissions / mois', '100', '100', '5 000'],
+      ['Builder drag-drop + multi-step + logique AND/OR', true, true, true],
       ['Bridges natifs CRM + Campagnes', true, true, true],
-      ['QR code + embed iframe', true, true, true],
-      ['Webhooks sortants', true, true, true],
-      ['Templates B2B prêts à l’emploi', true, true, true],
+      ['QR code + embed iframe + webhooks', true, true, true],
+    ],
+  },
+  {
+    title: 'Module Project — inclus partout',
+    rows: [
+      ['Projets actifs', '1', '1', 'Illimité'],
+      ['Deal gagné → projet en 1 clic', true, true, true],
+      ['Lien de suivi client public', true, true, true],
+      ['Livrables + pièces jointes', true, true, true],
     ],
   },
   {
     title: 'Support & garanties',
     rows: [
-      ['Support email', '24 h', 'Prioritaire', 'Dédié (Slack privé)'],
-      ['Onboarding personnalisé', false, true, true],
-      ['🤖 Serveur MCP (Claude, Cursor, agents IA)', false, true, true],
-      ['API publique REST', true, true, true],
-      ['Webhooks + Zapier / Make', true, true, true],
-      ['Multi-utilisateurs (équipes / RBAC)', false, true, 'Illimité'],
-      ['Conforme RGPD France', true, true, true],
-      ['Données hébergées en Europe', true, true, true],
+      ['Support email', 'Standard', '48 h', 'Prioritaire'],
+      ['Onboarding personnalisé', false, false, true],
+      ['🤖 Serveur MCP (Claude, Cursor, agents IA)', false, false, true],
+      ['API publique REST + Zapier / Make', false, true, true],
+      ['Multi-utilisateurs (équipes / RBAC)', false, false, true],
+      ['Conforme RGPD France · données UE', true, true, true],
     ],
   },
 ];
@@ -170,27 +167,27 @@ const PERSONAS = [
   {
     icon: Rocket,
     color: 'from-violet-600 to-indigo-600',
-    title: 'Je dirige une agence ou PME',
-    plan: 'pro',
-    planLabel: 'Pro · 49 €/mo — 19 €/mo pendant 3 mois (code ETE2026)',
-    description: 'La suite complète : Prospection + Campagnes + CRM + Formulaires + 1 workflow Autopilot. Tout pour lancer ton outbound sans 5 abonnements.',
-    highlight: true,
+    title: 'Je veux structurer mes ventes',
+    plan: 'free',
+    planLabel: 'Gratuit · 0 €',
+    description: 'CRM + Campagnes + Formulaires + Project inclus, gratuitement. Gérez vos deals, envoyez 200 cold emails/mois depuis votre domaine, et donnez un lien de suivi à vos clients.',
   },
   {
     icon: Building2,
     color: 'from-indigo-600 to-blue-600',
-    title: 'Je scale mon outbound',
-    plan: 'business',
-    planLabel: 'Business · 149 €/mo (promo) puis 179 €',
-    description: '10 000 prospects + multi-utilisateurs (équipes/RBAC) + volumes 10× + serveur MCP + API + onboarding perso. Promo lancement : 149 €/mois la 1ʳᵉ année.',
+    title: 'Je cherche des emails B2B',
+    plan: 'prospection',
+    planLabel: 'Prospection · 19 €/mo',
+    description: '500 crédits/mois : ciblez par catégorie et département, la cascade waterfall trouve emails + téléphones du tissu PME français. Le moins cher du marché.',
   },
   {
     icon: Sparkles,
     color: 'from-amber-500 to-orange-600',
     title: 'Je veux tout en autopilote',
-    plan: 'enterprise',
-    planLabel: 'Enterprise · 499 €/mo',
-    description: 'Volia Autopilot illimité : workflows ∞, A/B testing des objets, optimisation Claude hebdo, tout illimité, white-label et SLA 99,9 %.',
+    plan: 'max',
+    planLabel: 'MAX · 99 €/mo les 3 premiers mois (code MAX99), puis 179 €',
+    description: 'Volia Autopilot scrape, enrichit, écrit (IA), envoie, qualifie et pousse les leads chauds dans votre CRM. Suite illimitée + 2 000 crédits + équipes + MCP.',
+    highlight: true,
   },
 ];
 
@@ -218,8 +215,8 @@ const STACK_COMPETITORS = [
 // ─── Section 8 : FAQ pricing ─────────────────────────────────────
 const FAQ_PRICING = [
   {
-    q: 'Le code ETE2026, ça marche comment ?',
-    a: 'Avec le code ETE2026 saisi au paiement, le plan Pro passe à 19 €/mois pendant 3 mois (au lieu de 49 €), puis revient au tarif normal de 49 €/mois. Offre valable jusqu\'au 30 septembre 2026. Pas de frais cachés, annulation en 1 clic à tout moment.',
+    q: 'Le code MAX99, ça marche comment ?',
+    a: 'Avec le code MAX99 saisi au paiement, le plan MAX passe à 99 €/mois pendant 3 mois (au lieu de 179 €), puis revient au tarif normal. Pas de frais cachés, annulation en 1 clic à tout moment.',
   },
   {
     q: 'Essai gratuit ?',
@@ -309,9 +306,9 @@ export default function PricingContent() {
               Le prix d&apos;un café par jour<br />pour ton pipeline B2B<br />en autopilote.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              <strong className="text-content-primary">14 jours d&apos;essai Pro offerts</strong>, sans carte bancaire.
-              Puis <strong className="text-content-primary">49&nbsp;€/mois</strong> pour la suite complète — Prospection + Campagnes + CRM + Formulaires.
-              <strong className="text-amber-600"> Code ETE2026 : 19&nbsp;€/mois les 3 premiers mois.</strong>
+              <strong className="text-content-primary">La suite est gratuite</strong> — Campagnes, CRM, Formulaires et Project inclus pour tous.
+              Vous payez pour la remplir (<strong className="text-content-primary">Prospection, 19&nbsp;€/mois</strong>) ou pour qu&apos;elle tourne toute seule (<strong className="text-content-primary">MAX</strong>).
+              <strong className="text-amber-600"> Code MAX99 : 99&nbsp;€/mois les 3 premiers mois.</strong>
             </p>
 
             {/* Toggle Mensuel / Annuel */}
@@ -357,12 +354,12 @@ export default function PricingContent() {
                 : `Passez à l'annuel et économisez jusqu'à ${formatEuro(maxSavings)}/an`}
             </p>
             <p className="text-xs text-content-tertiary mb-6">
-              Pro : -98 €/an · Business : -458 €/an · Enterprise : -998 €/an
+              Prospection : -38 €/an · MAX : -458 €/an
             </p>
 
             {/* Trust badges */}
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-content-tertiary">
-              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> 14 j d&apos;essai Pro sans CB</span>
+              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> 14 j d&apos;essai MAX sans CB</span>
               <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Annulation 1 clic</span>
               <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> RGPD France</span>
             </div>
@@ -374,10 +371,10 @@ export default function PricingContent() {
           <MotionInView>
             <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-50 via-orange-50/60 to-amber-50 p-5 sm:p-6 text-center">
               <p className="text-sm sm:text-base font-semibold text-amber-900">
-                🌞 Offre ÉTÉ 2026 — <span className="font-bold">Pro à 19&nbsp;€/mois</span> les 3 premiers mois (puis 49&nbsp;€).
+                ⚡ Offre de lancement MAX — <span className="font-bold">99&nbsp;€/mois</span> les 3 premiers mois (puis 179&nbsp;€).
               </p>
               <p className="text-xs text-amber-800 mt-1.5">
-                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">ETE2026</code> à saisir au paiement · valable jusqu&apos;au 30 septembre 2026.
+                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> à saisir au paiement · Autopilot + suite illimitée + 2&nbsp;000 crédits/mois.
               </p>
             </div>
           </MotionInView>
@@ -411,7 +408,7 @@ export default function PricingContent() {
                     {/* PRIX — gestion spéciale Business avec promo lancement.
                         Sur monthly : affiche prix promo en gros + prix normal barré.
                         Sur yearly : affiche prix yearly normal (pas de promo annual). */}
-                    {planId === 'business' && !isYearly && plan.promo ? (
+                    {planId === 'max' && !isYearly && plan.promo ? (
                       <>
                         <div className="flex items-baseline gap-2 mb-1">
                           <span className="text-4xl font-bold text-content-primary">
@@ -430,7 +427,7 @@ export default function PricingContent() {
                           {plan.promo.sublabel}
                         </p>
                       </>
-                    ) : planId === 'business' && isYearly ? (
+                    ) : planId === 'max' && isYearly ? (
                       <>
                         <div className="flex items-baseline gap-1 mb-1">
                           <span className="text-4xl font-bold text-content-primary">
@@ -472,9 +469,9 @@ export default function PricingContent() {
                     <Link
                       href={ctaHref}
                       className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-5 ${
-                        planId === 'pro'
-                          ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-500/20'
-                          : planId === 'business'
+                        planId === 'max'
+                          ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-400 hover:to-orange-500 shadow-lg shadow-amber-500/20'
+                          : planId === 'prospection'
                             ? 'bg-content-primary text-surface-base hover:bg-content-secondary'
                             : 'border border-line-hover hover:bg-surface-elevated text-content-secondary'
                       }`}
@@ -488,10 +485,10 @@ export default function PricingContent() {
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
-                          <Star size={11} fill="currentColor" /> Débloque la suite complète
+                          <Star size={11} fill="currentColor" /> Suite ILLIMITÉE + Autopilot
                         </p>
                         <p className="text-[11px] text-violet-700 leading-snug">
-                          CRM · Campagnes email · Formulaires — tous inclus
+                          CRM · Campagnes · Formulaires · Project sans plafond
                         </p>
                       </div>
                     )}
@@ -923,7 +920,7 @@ export default function PricingContent() {
                 Essayez Pro gratuitement.<br />14 jours, sans carte bancaire.
               </h2>
               <p className="text-violet-100 text-base sm:text-lg mb-8 max-w-xl mx-auto">
-                Accès complet à la suite (Prospection + Campagnes + CRM + Formulaires). Code <strong className="text-white">ETE2026</strong> : 19 €/mois les 3 premiers mois.
+                La suite est gratuite — Campagnes, CRM, Formulaires &amp; Project inclus. Code <strong className="text-white">MAX99</strong> : MAX à 99 €/mois les 3 premiers mois.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
                 <Link

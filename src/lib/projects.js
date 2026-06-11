@@ -6,10 +6,14 @@
 // tâches (jalon = tâche étoilée), livrables, partage client par token.
 // ─────────────────────────────────────────────────────────────────────
 
-import { getEffectivePlan } from './trial';
-
-// Volia Project est un module Business-only (comme le gating "unlocksModules").
-export const PROJECT_ALLOWED_PLANS = ['business', 'enterprise', 'enterprise_legacy'];
+// Pivot freemium (11 juin 2026) : Volia Project est ouvert à TOUS les
+// plans. Différenciateur = quota de projets actifs (plans.js
+// limits.projects_active : free/prospection = 1, MAX = illimité —
+// enforcement dans lib/module-quotas.js).
+export const PROJECT_ALLOWED_PLANS = [
+  'free', 'prospection', 'max',
+  'solo', 'pro', 'business', 'enterprise', 'enterprise_legacy',
+];
 
 export const PROJECT_COLORS = ['violet', 'blue', 'emerald', 'amber', 'rose', 'cyan'];
 
@@ -17,7 +21,8 @@ export const PROJECT_STATUSES = ['active', 'done', 'archived'];
 export const TASK_STATUSES = ['todo', 'doing', 'done'];
 
 /**
- * Vérifie que l'utilisateur a accès à Volia Project (plan Business).
+ * Vérifie que l'utilisateur a accès à Volia Project.
+ * Freemium : tout user authentifié avec un profil a accès.
  */
 export async function checkProjectAccess(supabase, userId) {
   if (!supabase || !userId) return false;
@@ -26,8 +31,7 @@ export async function checkProjectAccess(supabase, userId) {
     .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
     .eq('id', userId)
     .maybeSingle();
-  if (error || !profile) return false;
-  return PROJECT_ALLOWED_PLANS.includes(getEffectivePlan(profile));
+  return !error && !!profile;
 }
 
 /**

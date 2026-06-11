@@ -50,7 +50,7 @@ export async function requireCampagnesAccess() {
   const ok = await checkCampagnesAccess(supabase, user.id);
   if (!ok) {
     return NextResponse.json(
-      { error: 'Forbidden — Campagnes nécessite un plan Solo, Pro ou Business' },
+      { error: 'Forbidden — profil introuvable' },
       { status: 403 }
     );
   }

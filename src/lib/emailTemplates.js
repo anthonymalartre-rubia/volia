@@ -810,6 +810,17 @@ export function trialExpiringEmail(userName, daysRemaining = 3) {
           Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49€/mois</strong> (ou 490€/an, ~2 mois offerts).
         </p>
 
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
+          <tr>
+            <td style="text-align:center;">
+              <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+                ☀️ Offre été : code <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> au paiement
+                = Pro à <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong>. Valable jusqu'au 30 septembre 2026.
+              </p>
+            </td>
+          </tr>
+        </table>
+
         <div align="center">${ctaPrimary('Passer Pro maintenant', `${APP_URL}/pricing?plan=pro`)}</div>
         <div align="center">${ctaSecondary('Comparer les plans', `${APP_URL}/pricing`)}</div>
 
@@ -868,7 +879,9 @@ export function trialExpiredEmail(userName) {
         </table>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Pour réactiver toutes vos features <strong style="color:${COLORS.text};">en 30 secondes</strong>, passez à l'abonnement Pro à 49€/mois.
+          Pour réactiver toutes vos features <strong style="color:${COLORS.text};">en 30 secondes</strong>, passez à l'abonnement Pro à 49€/mois
+          — ou <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong> avec le code
+          <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> (valable jusqu'au 30 septembre 2026).
         </p>
 
         <div align="center">${ctaPrimary('Réactiver Pro', `${APP_URL}/pricing?plan=pro`)}</div>

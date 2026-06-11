@@ -1,10 +1,10 @@
 // ─────────────────────────────────────────────────────────────────────
 // /en — Volia landing (English) for US/UK markets
 // ─────────────────────────────────────────────────────────────────────
-// hreflang fr/en bi-directional, USD prices shown alongside EUR billing.
-// May 2026 pivot: customer-value first (no more "5x cheaper than Apollo
-// + Lemlist + HubSpot"). Volia = a B2B email + phone generator, with
-// 3 secondary modules (Campaigns / CRM / Forms) as a Business bonus.
+// hreflang fr/en bi-directional, EUR prices (billing currency).
+// June 2026 freemium pivot: the suite (Campaigns / CRM / Forms /
+// Project) is free for everyone. Prospection (€19/mo) sells the data,
+// MAX (€179/mo, code MAX99) sells the unlimited suite + Autopilot.
 // ─────────────────────────────────────────────────────────────────────
 
 import LandingContentEN from '@/components/LandingContentEN';
@@ -13,8 +13,8 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/en`;
 
 export const metadata = {
-  title: 'Volia - Find B2B emails and phone numbers in 30 seconds. From $21/mo',
-  description: 'The French B2B lead generator. Access to the entire French B2B landscape via Google Places (live scraping), email + phone (landline & mobile), waterfall enrichment, GDPR by default. From $21 (EUR 19) / month, no card. Business plan ($169/mo) adds Campaigns + CRM + Forms.',
+  title: 'Volia - Find B2B emails and phone numbers in 30 seconds. From €19/mo, free suite included',
+  description: 'The French B2B lead generator. Access to the entire French B2B landscape via Google Places (live scraping), email + phone (landline & mobile), waterfall enrichment, GDPR by default. Campaigns + CRM + Forms + Project free for everyone. Prospection from €19/month, no card.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -25,8 +25,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia - B2B email + phone generator from $21/mo',
-    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape accessible via Google Places. GDPR by default.',
+    title: 'Volia - B2B email + phone generator from €19/mo, free suite included',
+    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape accessible via Google Places. CRM, Campaigns, Forms & Project free for everyone. GDPR by default.',
     url: PAGE_URL,
     siteName: 'Volia',
     locale: 'en_US',
@@ -34,8 +34,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Volia - B2B email + phone generator from $21/mo',
-    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape accessible via Google Places. GDPR by default.',
+    title: 'Volia - B2B email + phone generator from €19/mo, free suite included',
+    description: 'Find verified B2B emails + phone numbers in 30 seconds. the entire French B2B landscape accessible via Google Places. CRM, Campaigns, Forms & Project free for everyone. GDPR by default.',
   },
   robots: {
     index: true,
@@ -43,8 +43,8 @@ export const metadata = {
   },
 };
 
-// JSON-LD : SoftwareApplication schema in EN with USD offers.
-// highPrice = $1,799/yr (Business annual ≈ EUR 1,690).
+// JSON-LD : SoftwareApplication schema in EN with EUR offers.
+// Freemium lineup: Free / Prospection / MAX (€179/mo, MAX99 promo).
 const softwareApplicationSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -52,7 +52,7 @@ const softwareApplicationSchema = {
   applicationCategory: 'BusinessApplication',
   applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
-  description: 'B2B lead generator built in France. Find verified emails and phone numbers (landline + mobile) for the entire French B2B landscape accessible via Google Places (live scraping) + waterfall enrichment. Plus optional Campaigns + CRM + Forms on Business plan. Starts at $21 (EUR 19) per month.',
+  description: 'B2B lead generator built in France. Find verified emails and phone numbers (landline + mobile) for the entire French B2B landscape accessible via Google Places (live scraping) + waterfall enrichment. Campaigns + CRM + Forms + Project included free for everyone. Prospection from €19 per month.',
   url: PAGE_URL,
   inLanguage: 'en-US',
   countriesSupported: ['FR', 'US', 'GB'],
@@ -63,14 +63,14 @@ const softwareApplicationSchema = {
     'AI natural-language search powered by Claude',
     'GDPR-compliant by default (EU hosting)',
     'No commitment, cancel anytime',
-    'Included from Pro: native cold email + 28-day warmup',
-    'Included from Pro: drag-and-drop CRM with auto-deals from replies',
-    'Included from Pro: form builder with native CRM + Campaigns bridges',
+    'Included free for everyone: native cold email (200/mo, your own domain)',
+    'Included free for everyone: drag-and-drop CRM with auto-deals from replies',
+    'Included free for everyone: form builder with native CRM + Campaigns bridges',
   ],
   offers: [
-    { '@type': 'Offer', name: 'Pro', price: '55', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=pro`, description: 'Full suite: Prospecting + Campaigns + CRM + Forms. 14-day free trial, no card.' },
-    { '@type': 'Offer', name: 'Business', price: '169', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=max`, description: 'Launch promo: first 12 months at $169/mo, then $199/mo. Adds volume, multi-user, MCP server + API.' },
-    { '@type': 'Offer', name: 'Enterprise', price: '559', priceCurrency: 'USD', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=enterprise`, description: 'Unlimited Autopilot, everything unlimited, white-label, 99.9% SLA.' },
+    { '@type': 'Offer', name: 'Free', price: '0', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=free`, description: 'The whole suite included with limits + 25 Prospection credits/mo. Free forever, no card.' },
+    { '@type': 'Offer', name: 'Prospection', price: '19', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=prospection`, description: '500 Prospection credits/mo, 500 phone numbers/mo, unlimited exports, waterfall enrichment.' },
+    { '@type': 'Offer', name: 'MAX', price: '179', priceCurrency: 'EUR', availability: 'https://schema.org/InStock', url: `${SITE_URL}/signup?plan=max`, description: 'Unlimited suite + Volia Autopilot + 2,000 credits/mo + teams + MCP server + API. Code MAX99: first 3 months at €99/mo.' },
   ],
   publisher: {
     '@type': 'Organization',

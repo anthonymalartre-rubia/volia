@@ -18,6 +18,7 @@ const API_ROUTES = [
   '/api/admin/prospection/email-campaigns',
   '/api/admin/prospection/sequences',
   '/api/app/autopilot',
+  '/api/stripe/credits-checkout',
   '/api/crm/contacts',
   '/api/projects',
 ];

@@ -10,8 +10,8 @@ const PAGE_URL = `${SITE_URL}/en/products/prospection`;
 const FR_PAGE = `${SITE_URL}/produits/prospection`;
 
 export const metadata = {
-  title: 'Volia Prospecting - French B2B emails + phones, from $21/mo',
-  description: "Find emails AND phone numbers (landline + mobile) for any French B2B company. Access to the entire French B2B landscape via Google Places (live scraping), 150+ industries, 101 departments. Waterfall enrichment, GDPR by default. From $21/mo, no card.",
+  title: 'Volia Prospecting - French B2B emails + phones, from €19/mo',
+  description: "Find emails AND phone numbers (landline + mobile) for any French B2B company. Access to the entire French B2B landscape via Google Places (live scraping), 150+ industries, 101 departments. Waterfall enrichment, GDPR by default. From €19/mo — 25 free credits every month, no card.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -23,7 +23,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia Prospecting - Find B2B emails + phone numbers in 30 seconds',
-    description: 'the entire French B2B landscape via Google Places. Email + landline + mobile. From $21/mo. GDPR by default.',
+    description: 'the entire French B2B landscape via Google Places. Email + landline + mobile. From €19/mo. GDPR by default.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -44,7 +44,7 @@ const EN_LABELS = {
   howItWorksTitle: 'Just 3 steps',
   suitePill: 'Volia Suite',
   suiteTitle: 'Connected to the rest of the Volia suite',
-  suiteSubtitleDefault: 'On Business plan, your data flows between Prospecting, Campaigns, CRM, and Forms. No copy-paste, no export/import.',
+  suiteSubtitleDefault: 'Your data flows between Prospecting, Campaigns, CRM, and Forms — all included free. No copy-paste, no export/import.',
   suiteSource: 'Source',
   suiteDestination: 'Destination',
   suiteCtaDefault: 'Learn more',
@@ -83,11 +83,11 @@ const HOW_IT_WORKS = [
 const FAQ = [
   { q: 'How many emails do I actually get?', a: 'On average, ~46% of companies that have a website come back with a verified professional email (site scraping, then Google search). The rate is higher for digital industries (SaaS, agencies, e-commerce) and lower for less-online trades (local trades, construction). You always see the confidence score before reaching out — and we never guess an email.' },
   { q: 'Where does the data come from?', a: 'Three sources, no purchased lists. (1) Google Places for company identification — name, address, phone, rating. (2) Live website scraping for emails AND phone numbers (Verified). (3) Serper.dev Google search when the site is empty (Google). Fallback: pattern guess like contact@domain.fr (Probable). That\'s it.' },
-  { q: 'Do you get mobile phones too, or just landlines?', a: 'Both. Starter and Solo get landline numbers (when published on the company site). Pro and Business add mobile phone enrichment — same waterfall logic, just more sources tried. You always see the type (landline/mobile) per row.' },
+  { q: 'Do you get mobile phones too, or just landlines?', a: 'Both. The waterfall scrapes landline numbers from the company site and adds mobile enrichment on top — same logic, more sources tried. Free gets 25 phone numbers/month, Prospection 500, MAX 10,000. You always see the type (landline/mobile) per row.' },
   { q: 'Is it GDPR-compliant?', a: 'Yes. Built that way from day one, not bolted on later. Legitimate interest basis, opt-out on every email, public removal page, permanent blocklist. 28 personal-email domains blocked by default. EU hosting. CNIL guidelines. Your DPO will sleep at night.' },
   { q: 'Does it work outside metropolitan France?', a: 'Yes — all 5 overseas departments (Guadeloupe 971, Martinique 972, Guyane 973, Réunion 974, Mayotte 976). Same APIs, same categories, same price. Apollo and Hunter have near-zero coverage there. We don\'t.' },
-  { q: 'How is Volia different from a generic prospecting tool?', a: 'Three things. (1) France-specialized — all French B2B companies accessible via Google Places; we find a verified pro email for ~46% of those with a website. Generalist tools cover France poorly. (2) Phone numbers on every row, landline + mobile (Pro+). (3) Waterfall that stops the second we find an email — your monthly quota is never wasted on useless external API calls.' },
-  { q: 'Is there a daily enrichment limit?', a: 'No daily cap. You get a monthly quota based on your plan (20 / 400 / 1,200 / 10,000 enrichments). Use it all on Monday, spread it across the month — your call.' },
+  { q: 'How is Volia different from a generic prospecting tool?', a: 'Three things. (1) France-specialized — all French B2B companies accessible via Google Places; we find a verified pro email for ~46% of those with a website. Generalist tools cover France poorly. (2) Phone numbers on every row, landline + mobile. (3) Waterfall that stops the second we find an email — your monthly credits are never wasted on useless external API calls.' },
+  { q: 'Is there a daily enrichment limit?', a: 'No daily cap. You get monthly credits based on your plan (25 free / 500 on Prospection / 2,000 on MAX). Use them all on Monday, spread them across the month — your call.' },
 ];
 
 export default function EnProspectionPage() {
@@ -106,10 +106,10 @@ export default function EnProspectionPage() {
         subtitle: (
           <>
             <strong className="text-content-primary font-semibold">the entire French B2B landscape</strong> accessible via Google Places — emails, landlines, and mobile numbers all scraped in cascade.{' '}
-            <strong className="text-emerald-700 font-semibold">From $21/mo</strong>. GDPR by default.
+            <strong className="text-emerald-700 font-semibold">From €19/mo — 25 free credits every month</strong>. GDPR by default.
           </>
         ),
-        ctaPrimary: { label: 'Start Pro trial', href: '/signup?plan=pro' },
+        ctaPrimary: { label: 'Choose Prospection — €19/mo', href: '/signup?plan=prospection' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           (<><strong className="font-mono text-content-secondary">All</strong> French B2B</>),
@@ -137,24 +137,24 @@ export default function EnProspectionPage() {
       features={FEATURES}
       howItWorks={HOW_IT_WORKS}
       crossSell={{
-        subtitle: 'On Business plan, your prospects flow straight into Campaigns to send, then into CRM to close. Forms capture inbound. No copy-paste in between.',
+        subtitle: 'Your prospects flow straight into Campaigns to send, then into CRM to close. Forms capture inbound. All free for everyone. No copy-paste in between.',
         otherModules: [
-          { module: 'campagnes', direction: 'out', desc: 'Send cold email sequences on your extracted prospects. Templates, auto follow-ups, live stats. Business plan only.', cta: 'Learn more' },
-          { module: 'crm', direction: 'out', desc: 'Drag-drop Kanban pipeline to close deals. Auto-created from email replies. Business plan only.', cta: 'Learn more' },
-          { module: 'formulaires', direction: 'out', desc: 'Form builder with native CRM + Campaigns bridges. Capture inbound leads. Business plan only.', cta: 'Learn more' },
+          { module: 'campagnes', direction: 'out', desc: 'Send cold email sequences on your extracted prospects. Templates, auto follow-ups, live stats. Included free for everyone.', cta: 'Learn more' },
+          { module: 'crm', direction: 'out', desc: 'Drag-drop Kanban pipeline to close deals. Auto-created from email replies. Included free for everyone.', cta: 'Learn more' },
+          { module: 'formulaires', direction: 'out', desc: 'Form builder with native CRM + Campaigns bridges. Capture inbound leads. Included free for everyone.', cta: 'Learn more' },
         ],
       }}
       pricing={{
-        label: 'In every plan. Starter is free, forever.',
-        subtext: 'Pro $55/mo (full suite: Prospecting + Campaigns + CRM + Forms) - Business $169 (10,000 + MCP + multi-user) - Enterprise $559 (unlimited Autopilot). 14-day free trial, 1-click cancel.',
+        label: 'In every plan. 25 free credits every month, forever.',
+        subtext: 'Free: 25 credits/month + the whole suite included - Prospection €19/mo: 500 credits + 500 phone numbers + unlimited exports - MAX €179/mo (code MAX99: first 3 months at €99): 2,000 credits + Autopilot. 1-click cancel.',
         cta: 'See full pricing',
         ctaHref: '/en/pricing',
       }}
       faq={FAQ}
       finalCta={{
         title: 'Stop overpaying for prospecting.',
-        subtitle: '100 prospects free. No card. You keep everything you export. Forever.',
-        primary: { label: 'Start Pro trial', href: '/signup?plan=pro' },
+        subtitle: '25 free credits every month. No card. You keep everything you export. Forever.',
+        primary: { label: 'Start for free', href: '/signup?plan=free' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
         trust: 'No card - 1-click cancel - Built in France',
       }}

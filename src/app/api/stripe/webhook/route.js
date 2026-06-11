@@ -132,6 +132,37 @@ export async function POST(request) {
         const userId = session.metadata?.supabase_user_id;
         const planId = session.metadata?.plan_id;
 
+        // ─── Achat de pack de crédits (mode 'payment', pas un abo) ────
+        // Crédite le solde via la RPC idempotente (un retry Stripe ne
+        // crédite pas 2× : unique sur stripe_session_id dans le ledger).
+        if (session.mode === 'payment' && session.metadata?.credit_pack) {
+          const credits = parseInt(session.metadata.credits, 10) || 0;
+          if (!userId || credits <= 0) {
+            console.warn('[webhook] credit pack session invalide', {
+              userId, credits, session: session.id,
+            });
+            break;
+          }
+          const { data: newBalance, error: creditErr } = await supabaseAdmin.rpc(
+            'add_purchased_credits',
+            {
+              p_user_id: userId,
+              p_amount: credits,
+              p_session_id: session.id,
+              p_pack_id: session.metadata.credit_pack,
+            }
+          );
+          if (creditErr) {
+            console.error('[webhook] add_purchased_credits failed', creditErr);
+            // 500 → Stripe retentera (la RPC est idempotente)
+            return NextResponse.json({ error: 'credit grant failed' }, { status: 500 });
+          }
+          console.log(
+            `[webhook] +${credits} crédits (pack ${session.metadata.credit_pack}) pour ${userId} → solde ${newBalance}`
+          );
+          break;
+        }
+
         // Marque tout attempt de recovery comme converti (analytics + stop séquence)
         try {
           const recoveryEmail = session.customer_details?.email || session.customer_email;

@@ -1,8 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────
 // /en/products/campaigns — Volia Campaigns (English)
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of /produits/campagnes (FR). Campaigns is now Business-only
-// ($169/mo launch promo, then $199/mo).
+// Mirror of /produits/campagnes (FR). Freemium pivot June 2026:
+// Campaigns is included free for everyone (200 cold emails/mo) —
+// unlimited on MAX (€179/mo, code MAX99: first 3 months at €99).
 // ─────────────────────────────────────────────────────────────────────
 
 import ProductPageLayout from '@/components/ProductPageLayout';
@@ -13,7 +14,7 @@ const FR_PAGE = `${SITE_URL}/produits/campagnes`;
 
 export const metadata = {
   title: 'Volia Campaigns - Cold email that lands in inbox, not spam',
-  description: 'Native cold email with 28-day auto warmup, multi-tenant Resend, and auto-create deals in CRM from replies. Included in the Volia Business plan at $169/mo (launch promo, then $199). One tool instead of Lemlist + Smartlead + HubSpot.',
+  description: 'Native cold email with 28-day auto warmup, multi-tenant Resend, and auto-create deals in CRM from replies. Included free for everyone — unlimited on MAX (€179/month, code MAX99: first 3 months at €99). One tool instead of Lemlist + Smartlead + HubSpot.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -25,7 +26,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia Campaigns - Cold email that lands. Not in spam.',
-    description: 'Unlimited cold email, auto warmup, auto-deals in CRM. Included in Volia Business ($169/mo, 12-month launch promo).',
+    description: 'Native cold email, auto warmup, auto-deals in CRM. Included free for everyone — unlimited on MAX (code MAX99: first 3 months at €99).',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -66,10 +67,10 @@ const HOW_IT_WORKS = [
 ];
 
 const FAQ = [
-  { q: 'Which plan includes Campaigns?', a: 'Campaigns is part of the Volia Business plan only ($169/mo for the first 12 months, then $199/mo). Business also unlocks the CRM and Forms modules — they share the same data, so a reply in Campaigns auto-creates a deal in CRM. No add-on, no per-seat charge.' },
+  { q: 'Which plan includes Campaigns?', a: 'Every plan — Campaigns is included free for everyone: 200 cold emails/month from your own domain, 1 active sequence. MAX (€179/mo, code MAX99: first 3 months at €99) makes it unlimited: 10,000 cold emails/month, unlimited sequences, 28-day auto warmup. Campaigns shares the same data layer as CRM and Forms, so a reply auto-creates a deal in CRM. No add-on, no per-seat charge.' },
   { q: 'How many emails can I send per day?', a: 'During warmup (28 days): from 10 to 200/day, progressive. After warmup: unlimited (up to ~200/day per domain to stay healthy), with multi-domain support. Real limit = deliverability. Bounce rate > 2%? We auto-pause to protect your domain.' },
   { q: 'How do I stay out of spam?', a: 'Four things: (1) mandatory 28-day warmup. (2) DKIM/SPF/DMARC check before you send. (3) auto-pause if bounce rate > 2%. (4) unified opt-out across all sequences. Beta numbers: 62% open rate, 94% inbox rate.' },
-  { q: 'What is domain warmup?', a: 'Progressively ramping up sends from a new domain so Gmail and Outlook trust it. Without warmup, a fresh domain sending 100 emails on day 1 goes straight to spam. We simulate exchanges and ramp from 10 to 200/day over 28 days. Most competitors charge extra for this. We include it in Business.' },
+  { q: 'What is domain warmup?', a: 'Progressively ramping up sends from a new domain so Gmail and Outlook trust it. Without warmup, a fresh domain sending 100 emails on day 1 goes straight to spam. We simulate exchanges and ramp from 10 to 200/day over 28 days. Most competitors charge extra for this. We include it in MAX.' },
   { q: 'Can I use my own sending domain?', a: 'Required. It IS the product. Connect your-saas.com, we verify DKIM/SPF/DMARC in 5 min, every send leaves from your domain. Your brand, your reputation.' },
   { q: 'How does GDPR opt-out work?', a: 'Unsubscribe link auto-added in every footer — you can\'t turn it off. Opt-out feeds a permanent blocklist: once someone unsubscribes, they\'re never contacted again, no matter the sequence or account. CNIL-compliant boilerplate, legitimate-interest basis documented, opposition register kept automatically.' },
 ];
@@ -83,16 +84,16 @@ export default function EnCampaignsPage() {
       labels={EN_LABELS}
       moduleLabelOverride="Campaigns"
       hero={{
-        eyebrow: 'Volia Business bonus. Built in France.',
+        eyebrow: 'Included free for everyone. Built in France.',
         h1Before: 'Cold email that lands in',
         h1Highlight: 'inbox.',
         h1After: 'Not spam.',
         subtitle: (
           <>
-            Native cold email + 28-day auto warmup + multi-inbox rotation. <strong className="text-content-primary font-semibold">Included in Volia Business at $169/mo</strong> (12-month launch promo, then $199). Plus <strong className="text-emerald-700 font-semibold">auto-deals in CRM</strong> from every reply.
+            Native cold email + 28-day auto warmup + multi-inbox rotation. <strong className="text-content-primary font-semibold">Included free for everyone</strong> — unlimited on MAX (€179/month, code MAX99: first 3 months at €99). Plus <strong className="text-emerald-700 font-semibold">auto-deals in CRM</strong> from every reply.
           </>
         ),
-        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=max' },
+        ctaPrimary: { label: 'Get MAX at €99/mo', href: '/signup?plan=max' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           'Auto 28-day warmup',
@@ -117,16 +118,16 @@ export default function EnCampaignsPage() {
       features={FEATURES}
       howItWorks={HOW_IT_WORKS}
       crossSell={{
-        subtitle: 'Campaigns pulls leads from Prospecting. Pushes replies to CRM. All inside Business. Zero copy-paste.',
+        subtitle: 'Campaigns pulls leads from Prospecting. Pushes replies to CRM. Free for everyone. Zero copy-paste.',
         otherModules: [
-          { module: 'prospection', direction: 'in', desc: 'Where your prospects come from. all French B2B companies, 150+ industries, scored emails + phones. Available on every paid plan.', cta: 'See Prospecting' },
-          { module: 'crm', direction: 'out', desc: 'Replies become deals at Lead stage. Native Kanban pipeline. Also part of Business.', cta: 'See CRM' },
+          { module: 'prospection', direction: 'in', desc: 'Where your prospects come from. all French B2B companies, 150+ industries, scored emails + phones. 25 free credits/month on every plan.', cta: 'See Prospecting' },
+          { module: 'crm', direction: 'out', desc: 'Replies become deals at Lead stage. Native Kanban pipeline. Also free for everyone.', cta: 'See CRM' },
           { module: 'formulaires', direction: 'in', desc: 'Forms submissions can fire a Campaigns sequence automatically. Inbound on autopilot.', cta: 'See Forms' },
         ],
       }}
       pricing={{
-        label: 'Business plan only. $169/mo (launch promo, then $199).',
-        subtext: 'All 4 modules together: Prospecting + Campaigns + CRM + Forms. 10,000 enrichments/mo, multi-user, API access, priority support. 1-click cancel.',
+        label: 'Included free for everyone — unlimited on MAX (€179/month, code MAX99: first 3 months at €99).',
+        subtext: '200 cold emails/month free, from your own domain. MAX: 10,000 emails/month, auto warmup, unlimited sequences, multi-user, MCP + API, priority support. 1-click cancel.',
         cta: 'See full pricing',
         ctaHref: '/en/pricing',
       }}
@@ -134,9 +135,9 @@ export default function EnCampaignsPage() {
       finalCta={{
         title: 'Cold email that works. Inside your sales suite.',
         subtitle: 'One tool instead of three. Double the deliverability. Templates ready, warmup auto, replies in CRM. You just press send.',
-        primary: { label: 'Get Business $169', href: '/signup?plan=max' },
+        primary: { label: 'Get MAX at €99/mo', href: '/signup?plan=max' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
-        trust: 'In Business - Launch promo first 12 months - GDPR by default',
+        trust: 'Free for everyone - MAX99: first 3 months at €99 - GDPR by default',
       }}
     />
   );

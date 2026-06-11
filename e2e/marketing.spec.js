@@ -17,6 +17,14 @@ test.describe('Marketing pages', () => {
     await expect(page.getByRole('link', { name: /D.marrer gratuitement/i }).first()).toBeVisible();
   });
 
+  test('EN pricing : freemium lineup (Free, Prospection, MAX) + MAX99', async ({ page }) => {
+    await page.goto('/en/pricing');
+    await expect(page.getByRole('heading', { name: 'Free', exact: true, level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Prospection', exact: true, level: 3 })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'MAX', exact: true, level: 3 })).toBeVisible();
+    await expect(page.getByText('MAX99').first()).toBeVisible();
+  });
+
   test('Pricing : 3 plans freemium (Gratuit, Prospection, MAX) listes', async ({ page }) => {
     await page.goto('/pricing');
     // Pivot freemium (11/06/2026) : Gratuit / Prospection / MAX.

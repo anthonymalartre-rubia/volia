@@ -1,9 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────
 // /en/products/crm — Volia CRM (English)
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of /produits/crm (FR). CRM is part of the Business plan
-// ($169/mo launch promo, then $199/mo) — same plan that unlocks
-// Campaigns and Forms.
+// Mirror of /produits/crm (FR). Freemium pivot June 2026: the CRM is
+// included free for everyone (1 pipeline) — unlimited pipelines and
+// automations on MAX (€179/mo, code MAX99: first 3 months at €99).
 // ─────────────────────────────────────────────────────────────────────
 
 import ProductPageLayout from '@/components/ProductPageLayout';
@@ -13,8 +13,8 @@ const PAGE_URL = `${SITE_URL}/en/products/crm`;
 const FR_PAGE = `${SITE_URL}/produits/crm`;
 
 export const metadata = {
-  title: 'Volia CRM - Native pipeline included in Business at $169/mo',
-  description: 'Drag-drop Kanban, auto-create deals from email replies, 360 timeline per contact. Native to Prospecting + Campaigns. Not an integration. Included in the Volia Business plan at $169/mo (launch promo, then $199).',
+  title: 'Volia CRM - Native pipeline, included free for everyone',
+  description: 'Drag-drop Kanban, auto-create deals from email replies, 360 timeline per contact. Native to Prospecting + Campaigns. Not an integration. Included free for everyone — unlimited on MAX (€179/month, code MAX99: first 3 months at €99).',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -26,7 +26,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'Volia CRM - A CRM built into your sales tools. Not an integration.',
-    description: 'Drag-drop Kanban + auto-deals from replies + 360 timeline. Included in Volia Business ($169/mo, launch promo).',
+    description: 'Drag-drop Kanban + auto-deals from replies + 360 timeline. Included free for everyone — unlimited pipelines on MAX.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -67,13 +67,13 @@ const HOW_IT_WORKS = [
 ];
 
 const FAQ = [
-  { q: 'Which plan includes CRM?', a: 'CRM is part of the Volia Business plan only ($169/mo for the first 12 months, then $199/mo). Business also unlocks Campaigns and Forms — they share the same data layer. No add-on, no per-seat charge for the basic team setup.' },
+  { q: 'Which plan includes CRM?', a: 'Every plan — the CRM is included free for everyone (1 pipeline). MAX (€179/mo, code MAX99: first 3 months at €99) unlocks unlimited pipelines plus automations (won → onboarding, follow-ups). It shares the same data layer as Campaigns and Forms. No add-on, no per-seat charge.' },
   { q: 'What are the default pipeline stages?', a: '5 stages: Lead (10%), Qualified (25%), Demo (50%), Proposal (75%), Closed (100%). Plus a Lost stage to archive with a reason (no budget, competitor, timing). Weighted pipeline + M+1 forecast recompute every time you move a deal.' },
   { q: 'Can I create custom stages?', a: 'Yes — already live. You can rename, add, or delete stages inline from the Kanban board. Multi-pipelines (run several pipelines for different products) is also shipped. A default 5-stage pipeline is created so you can start in 5 minutes with zero config.' },
   { q: 'How does auto-create from replies work?', a: 'Volia Campaigns classifies replies (positive vs auto-reply vs not interested) via Claude. Positive reply = deal in CRM at Lead stage, with full contact, email history (sent/opened/clicked), reply content, and auto-tag with the sequence name. You do nothing.' },
   { q: 'How is it different from free HubSpot CRM?', a: 'HubSpot CRM free has Kanban + timeline. Sure. But: (1) for outbound you need Marketing Hub ($45/mo+). (2) No native HubSpot ↔ Apollo/Lemlist integration — Zapier costs $30/mo more. (3) Free tier caps at 5 deal pipelines. Volia CRM lives in the same product as prospecting, sending, and forms. No integration to babysit.' },
   { q: 'Can I migrate from Pipedrive or HubSpot?', a: 'Contacts: CSV import is live today (auto column mapping). Deals CSV import is shipping soon. Direct HubSpot/Pipedrive API migration coming Q2 2026 (no CSV). For Salesforce: manual contact CSV export works now. More than 5,000 contacts? We jump on a call.' },
-  { q: 'How many seats does Business include?', a: 'Business ($169/mo) is single-user today (1 account = 1 founder/closer). Native multi-user is on the roadmap for Q3 2026 — every user will get their own dashboard and deals, with no $50-100/user license like HubSpot Pro or Salesforce. Until then, 2-3 person teams typically share the account (most common in beta).' },
+  { q: 'How many seats are included?', a: 'Free and Prospection are single-user (1 account = 1 founder/closer). MAX includes multi-user with teams and RBAC — every user gets their own dashboard and deals, with no $50-100/user license like HubSpot Pro or Salesforce.' },
 ];
 
 export default function EnCrmPage() {
@@ -90,18 +90,18 @@ export default function EnCrmPage() {
         h1Highlight: 'Not an integration.',
         subtitle: (
           <>
-            <strong className="text-content-primary font-semibold">Included in Volia Business at $169/mo</strong> (launch promo, then $199).
+            <strong className="text-content-primary font-semibold">Included free for everyone</strong> — unlimited on MAX (€179/mo, code MAX99: first 3 months at €99).
             Drag-drop Kanban, auto-deals from replies, <strong className="text-emerald-700 font-semibold">360 timeline per contact</strong>.
             Same data layer as Prospecting + Campaigns + Forms.
           </>
         ),
-        ctaPrimary: { label: 'Get Business $169', href: '/signup?plan=max' },
+        ctaPrimary: { label: 'Get MAX at €99/mo', href: '/signup?plan=max' },
         ctaSecondary: { label: 'See pricing', href: '/en/pricing' },
         trust: [
           'Native Kanban',
           'Auto-create from replies',
           '360 timeline',
-          'Included in Business $169',
+          'Included free for everyone',
         ],
         mockup: (
           <div className="rounded-2xl bg-white border border-line shadow-2xl shadow-emerald-500/10 overflow-hidden p-8">
@@ -132,18 +132,18 @@ export default function EnCrmPage() {
         ],
       }}
       pricing={{
-        label: 'Business plan only. $169/mo all-in (launch promo, then $199).',
-        subtext: 'All 4 modules together (Prospecting + Campaigns + CRM + Forms). 10,000 enrichments/mo, multi-user, API access. No $50-100/user license like HubSpot or Salesforce.',
-        cta: 'Get Business',
+        label: 'Included free for everyone — unlimited on MAX (€179/month, code MAX99: first 3 months at €99).',
+        subtext: '1 free pipeline for everyone, auto-deals included. MAX: unlimited pipelines + automations, 2,000 Prospection credits/mo, teams/RBAC, MCP + API. No $50-100/user license like HubSpot or Salesforce.',
+        cta: 'Go MAX',
         ctaHref: '/signup?plan=max',
       }}
       faq={FAQ}
       finalCta={{
         title: 'A CRM that fills itself. Included in your suite.',
         subtitle: 'End the HubSpot + Apollo + Lemlist + Zapier circus. One product. One login. One bill. Cancel anytime.',
-        primary: { label: 'Get Business $169', href: '/signup?plan=max' },
+        primary: { label: 'Get MAX at €99/mo', href: '/signup?plan=max' },
         secondary: { label: 'See pricing', href: '/en/pricing' },
-        trust: '$169/mo all-in - Launch promo first 12 months - 10,000 prospects in pipeline - 1-click cancel - GDPR by default',
+        trust: 'Free for everyone - MAX99: first 3 months at €99 - 1-click cancel - GDPR by default',
       }}
     />
   );

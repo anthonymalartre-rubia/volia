@@ -107,19 +107,34 @@ export async function getUserPlan(supabase, userId) {
 // Multi-utilisateurs (Business) : si l'user appartient à une team, on aggrège
 // l'usage de tous les members. Le quota Business est partagé.
 export async function checkLimit(supabase, userId, action) {
-  const [plan, usage] = await Promise.all([
-    getUserPlan(supabase, userId),
+  const [{ data: profileRow }, usage] = await Promise.all([
+    supabase
+      .from('user_profiles')
+      .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at, credit_balance')
+      .eq('id', userId)
+      .single(),
     getTeamUsageSum(supabase, userId),
   ]);
+  const plan = getPlan(getEffectivePlan(profileRow));
   const limit = plan.limits[`${action}_per_month`];
   const current = usage[action] || 0;
+  const monthlyAllowed = !isLimitReached(limit, current);
+
+  // ─── Crédits achetés (packs one-time, pivot freemium 11/06/2026) ──
+  // Uniquement pour les enrichissements (la donnée a un coût API réel).
+  // Le solde acheté (sans expiration) prend le relais quand le quota
+  // mensuel du plan est épuisé — consommation dans incrementUsage().
+  const creditBalance = action === 'enrichments' ? profileRow?.credit_balance || 0 : 0;
+  const usingPurchasedCredits = !monthlyAllowed && creditBalance > 0;
 
   return {
-    allowed: !isLimitReached(limit, current),
+    allowed: monthlyAllowed || usingPurchasedCredits,
     current,
     limit,
     plan: plan.id,
     remaining: limit === -1 ? -1 : Math.max(0, limit - current),
+    creditBalance,
+    usingPurchasedCredits,
   };
 }
 
@@ -135,6 +150,32 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
     .single();
 
   const previousCount = existing ? (existing[action] || 0) : 0;
+
+  // ─── Crédits achetés : relais après épuisement du quota mensuel ───
+  // Pour les enrichissements uniquement : si le quota du plan est déjà
+  // consommé, on débite le solde acheté (RPC atomique, refuse si
+  // insuffisant) au lieu du compteur mensuel. Pas d'email de seuil :
+  // l'utilisateur est déjà au-delà de 100 % de son quota inclus.
+  if (action === 'enrichments') {
+    const plan = await getUserPlan(supabase, userId);
+    const limit = plan.limits.enrichments_per_month;
+    if (limit !== -1 && previousCount >= limit) {
+      try {
+        const admin = getSupabaseAdmin();
+        const { data: newBalance, error } = await admin.rpc('consume_purchased_credits', {
+          p_user_id: userId,
+          p_amount: amount,
+        });
+        if (!error && (newBalance ?? -1) >= 0) return; // débité sur le solde acheté
+        if (error) console.error('[usage] consume_purchased_credits error', error.message);
+        // Solde insuffisant (-1) ou erreur → fallback compteur mensuel
+        // (l'appel aurait dû être bloqué en amont par checkLimit).
+      } catch (e) {
+        console.error('[usage] consume_purchased_credits threw', e?.message);
+      }
+    }
+  }
+
   const newCount = previousCount + amount;
 
   // Écritures en service-role : RLS n'a pas de policy INSERT/UPDATE sur usage_tracking.

@@ -5,6 +5,7 @@ import { safeStorage } from "@/lib/safe-storage";
 import { useRouter } from 'next/navigation';
 import { getSupabase } from '@/lib/supabase';
 import { PLANS } from '@/lib/plans';
+import { CREDIT_PACKS, CREDIT_PACK_LIST } from '@/lib/credit-packs';
 import {
   User, Lock, CreditCard, Trash2, Shield, Mail, Calendar,
   Eye, EyeOff, ArrowLeft, RefreshCw, AlertTriangle, CheckCircle, X, Sun, Moon,
@@ -132,6 +133,7 @@ export default function SettingsPage() {
 
   // Billing
   const [billingLoading, setBillingLoading] = useState(false);
+  const [creditsLoading, setCreditsLoading] = useState(false);
 
   // Usage data
   const [userUsage, setUserUsage] = useState(null);
@@ -406,6 +408,27 @@ export default function SettingsPage() {
 
   // Compat avec le code existant qui appelait handleUpgradePro()
   const handleUpgradePro = () => handleCheckout('pro', 'monthly');
+
+  /** Achat d'un pack de crédits Prospection (paiement one-time). */
+  async function handleCreditsCheckout(packId) {
+    setCreditsLoading(true);
+    try {
+      const res = await fetch('/api/stripe/credits-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ packId }),
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        showToast(data.error || t('settings.stripeError'), 'error');
+      }
+    } catch {
+      showToast(t('settings.networkError'), 'error');
+    }
+    setCreditsLoading(false);
+  }
 
   async function handleDeleteAccount() {
     if (deleteConfirmText !== 'SUPPRIMER') return;
@@ -1047,6 +1070,55 @@ export default function SettingsPage() {
                       </div>
                     );
                   })}
+                </div>
+
+                {/* ─── Packs de crédits Prospection (one-time) ──────────
+                    Au-delà du quota mensuel inclus, l'utilisateur achète
+                    des crédits ponctuels (sans expiration). Consommés
+                    automatiquement quand le quota du plan est épuisé. */}
+                <div className="mt-6 rounded-xl border border-violet-500/25 bg-violet-500/[0.04] p-4">
+                  <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
+                    <h4 className="text-sm font-semibold text-content-primary flex items-center gap-1.5">
+                      <Zap className="h-4 w-4 text-violet-500" />
+                      Packs de crédits Prospection
+                    </h4>
+                    <span className="text-xs text-content-tertiary">
+                      Solde acheté : <strong className="text-content-primary tabular-nums">{(profile?.credit_balance || 0).toLocaleString('fr-FR')}</strong> crédits
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-content-tertiary mb-3 leading-relaxed">
+                    1 crédit = 1 contact enrichi (email trouvé). Sans expiration — utilisés
+                    automatiquement quand votre quota mensuel est épuisé.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {CREDIT_PACK_LIST.map((pid) => {
+                      const pack = CREDIT_PACKS[pid];
+                      return (
+                        <button
+                          key={pid}
+                          onClick={() => handleCreditsCheckout(pid)}
+                          disabled={creditsLoading}
+                          className={`relative p-3 rounded-lg border text-left transition disabled:opacity-50 ${
+                            pack.popular
+                              ? 'border-violet-500/40 bg-surface-card hover:bg-violet-500/[0.06]'
+                              : 'border-line bg-surface-card hover:bg-surface-elevated'
+                          }`}
+                        >
+                          {pack.popular && (
+                            <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-violet-600 text-white text-[8px] font-bold uppercase tracking-wider">
+                              Populaire
+                            </span>
+                          )}
+                          <p className="text-sm font-bold text-content-primary tabular-nums">
+                            {pack.credits.toLocaleString('fr-FR')} crédits
+                          </p>
+                          <p className="text-xs text-content-tertiary mt-0.5">
+                            {Math.round(pack.price / 100)} € <span className="text-content-muted">· {(pack.price / pack.credits / 100).toFixed(3).replace('.', ',')} €/crédit</span>
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </section>

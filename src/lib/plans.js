@@ -88,6 +88,7 @@ export const PLANS = {
       '500 crédits Prospection/mois (emails trouvés)',
       '500 numéros de téléphone/mois (fixes & mobiles)',
       'Cascade waterfall (scraping + Google)',
+      'Packs de crédits à la demande (dès 9 €)',
       'Exports illimités · dossiers illimités',
       'Vérification email (MillionVerifier)',
       'Support email (48 h)',

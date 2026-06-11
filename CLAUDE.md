@@ -6,7 +6,7 @@ Volia (domaine `volia.fr`) est une suite SaaS française organisée en 3 modules
 - **Volia Campagnes** : envoi de séquences email/SMS automatisées sur les prospects qualifiés.
 - **Volia CRM** : (à venir) pipeline et suivi commercial natif Volia.
 
-Tarification : Starter gratuit (100 prospects) · Solo 19€/mois (1k) · Pro 49€/mois (5k) · Business 99€/mois (10k) — facturation mensuelle ou annuelle (-2 mois).
+Tarification (pivot freemium 11/06/2026) : Gratuit (toute la suite avec limites + 25 crédits Prospection) · Prospection 19€/mois (500 crédits/mois, prices Stripe Solo réutilisés) · MAX 179€/mois (suite illimitée + Autopilot + 2000 crédits, prices Business réutilisés, code MAX99 = 3 premiers mois à 99€). Solo/Pro/Business/Enterprise = legacy grandfathered (résolvables, plus vendus publiquement).
 
 ## Stack technique
 

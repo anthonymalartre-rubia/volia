@@ -17,7 +17,7 @@
 //   { success, data: { list_id, list_name, inserted, skipped, activities_logged } }
 //
 // Logique :
-//   1. Auth + gating Business
+//   1. Auth + gating CRM (checkCrmAccess)
 //   2. Charge les crm_contacts (ownership user_id strictement vérifié)
 //   3. Filtre les contacts sans email (prospect_contacts requiert email OU phone)
 //   4. Crée OU récupère la prospect_list (ownership owner_id vérifié)
@@ -35,7 +35,7 @@ const CHUNK_SIZE = 200;
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }

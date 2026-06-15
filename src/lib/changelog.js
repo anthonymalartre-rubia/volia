@@ -5,11 +5,24 @@
 
 const CHANGELOG = [
   {
+    date: '2026-06-11',
+    version: '5.1',
+    title: 'Nouveau modèle : freemium + crédits + plan MAX',
+    items: [
+      { type: 'feature', tag: 'Tarifs', text: 'Toute la suite (Campagnes, CRM, Formulaires, Project) devient gratuite pour tous — avec des limites. Le plan Gratuit inclut 25 crédits de prospection chaque mois, sans carte bancaire.' },
+      { type: 'feature', tag: 'Tarifs', text: 'Plan Prospection à 19 €/mois : 500 crédits (emails trouvés) + 500 téléphones + 2 000 recherches/mois, exports illimités et API publique.' },
+      { type: 'feature', tag: 'Tarifs', text: 'Plan MAX à 179 €/mois : suite illimitée + Volia Autopilot + équipes + serveur MCP. Code MAX99 : les 3 premiers mois à 99 €.' },
+      { type: 'feature', tag: 'Crédits', text: 'Packs de crédits de prospection achetables à la demande, dès 9 € (100 crédits), disponibles sur tous les plans.' },
+      { type: 'improvement', tag: 'Essai', text: 'L\'essai gratuit passe à 14 jours de MAX (Autopilot inclus), toujours sans carte bancaire.' },
+      { type: 'improvement', tag: 'Clients', text: 'Les abonnés Solo / Pro / Business / Enterprise conservent leur plan et leurs avantages actuels (grandfathering).' },
+    ],
+  },
+  {
     date: '2026-06-10',
     version: '5.0',
     title: 'Volia Project — vos deals gagnés deviennent des projets livrés',
     items: [
-      { type: 'feature', tag: 'Nouveau module', text: 'Volia Project (Business) : gestion de projets de livraison. Kanban 3 colonnes, ajout de tâche en tapant Entrée, jalons ⭐, vue liste.' },
+      { type: 'feature', tag: 'Nouveau module', text: 'Volia Project : gestion de projets de livraison. Kanban 3 colonnes, ajout de tâche en tapant Entrée, jalons ⭐, vue liste.' },
       { type: 'feature', tag: 'CRM', text: 'Pont CRM : un deal gagné devient un projet de livraison en 1 clic (ou automatiquement, en option). Contact client et tâches d\'onboarding pré-remplis.' },
       { type: 'feature', tag: 'Client', text: 'Suivi client par lien public — sans compte : progression, étapes clés, livrables téléchargeables. Révocable à tout moment.' },
       { type: 'feature', tag: 'Templates', text: '5 modèles prêts à l\'emploi : onboarding client, installation/chantier, mission de conseil, lancement, projet libre.' },

@@ -273,7 +273,7 @@ export async function POST(request) {
     const limitCheck = await checkLimit(supabase, user.id, 'enrichments');
     if (!limitCheck.allowed) {
       return Response.json(
-        { error: "Limite d'enrichissements atteinte. Passez au plan Pro.", limitReached: true, ...limitCheck },
+        { error: "Limite de crédits atteinte. Passez à Prospection (19€/mois — 500 crédits) ou prenez un pack de crédits dès 9€.", limitReached: true, ...limitCheck },
         { status: 429 }
       );
     }
@@ -339,7 +339,7 @@ export async function POST(request) {
       } catch { return false; }
     }
 
-    // ─── ÉTAPE DÉCIDEUR (Business+) : contact nominatif > générique ───
+    // ─── ÉTAPE DÉCIDEUR (MAX / legacy Business+) : contact nominatif > générique ───
     // Tentée AVANT la couche 0 / le générique car c'est le contact à plus forte
     // valeur. Gating plan (unlocksDecisionMaker) + rôle valide + domaine requis.
     // Politique zéro-bounce : enrichDecisionMaker ne renvoie qu'un email vérifié.

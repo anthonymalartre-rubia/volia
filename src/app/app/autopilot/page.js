@@ -134,7 +134,7 @@ export default function AutopilotPage() {
           </div>
           {!data.can_create_more && (
             <Link href="/pricing" className="text-xs text-violet-600 hover:underline font-semibold">
-              Passer Business → 3 workflows · Enterprise → illimité
+              Passer à MAX → 3 workflows · code MAX99 : 3 mois à 99 €
             </Link>
           )}
         </div>
@@ -188,7 +188,7 @@ function EmptyState({ canCreate, templateCount }) {
         </Button>
       ) : (
         <Link href="/pricing" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-amber-600 text-white hover:bg-amber-500 font-semibold text-sm">
-          🚀 Passer en Pro (49€/mois) pour débloquer Autopilot
+          🚀 Passer à MAX (code MAX99 : 3 mois à 99 €) pour débloquer Autopilot
         </Link>
       )}
     </div>
@@ -669,7 +669,7 @@ function DetailView({ detail, loading, busy, setBusy, reload, router }) {
         <p className="text-xs text-content-soft mb-4">
           Quand un prospect soumet le formulaire, son score qualif (0-100) le classe en{' '}
           <strong>Hot</strong>, <strong>Warm</strong> ou <strong>Cold</strong>. Chaque tier
-          est routé dans ton CRM avec la stage correspondante (overridable Business+).
+          est routé dans ton CRM avec la stage correspondante (overridable avec MAX).
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {[
@@ -801,7 +801,7 @@ function BranchingModal({ workflow, onClose, onSave, busy }) {
               <Settings size={18} className="text-amber-500" /> Configurer le branching custom
             </h2>
             <p className="text-xs text-content-soft mt-1">
-              Override le routing par défaut pour chaque tier · feature <strong>Business+</strong>
+              Override le routing par défaut pour chaque tier · feature <strong>MAX</strong>
             </p>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-surface-soft">
@@ -921,7 +921,7 @@ function BranchingModal({ workflow, onClose, onSave, busy }) {
             <Lock size={14} className="text-violet-600 flex-shrink-0 mt-0.5" />
             <p className="text-[11px] text-violet-800 leading-relaxed">
               <strong>Note :</strong> Le branching custom est appliqué automatiquement quand un prospect soumet le formulaire de qualification.
-              Plan Pro = lecture seule (les valeurs default s'appliquent). Plan Business / Enterprise = override actif.
+              Sans le plan MAX : lecture seule (les valeurs default s'appliquent). Plan MAX = override actif.
             </p>
           </div>
         </form>

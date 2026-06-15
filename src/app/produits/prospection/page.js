@@ -257,7 +257,7 @@ function ProblemSolutionSection() {
   };
   const after = {
     items: [
-      'Volia Prospection : 19 €/mois pour 1 000 prospects',
+      'Volia Prospection : 19 €/mois pour 500 emails trouvés (crédits)',
       '30 secondes par recherche (waterfall auto)',
       'Email + téléphone à chaque ligne, scorés',
       'Email pro trouvé : ~46 % (entreprises avec site web)',
@@ -453,7 +453,7 @@ function ComparatifSection() {
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <p className="mt-3 text-xs text-content-tertiary">
-              100 prospects gratuits · Sans CB · Annulation 1 clic
+              25 crédits gratuits chaque mois · Sans CB · Annulation 1 clic
             </p>
           </div>
         </MotionInView>
@@ -560,32 +560,32 @@ function UseCasesSection() {
 function PricingFocusSection() {
   const plans = [
     {
-      name: 'Pro',
-      price: '49 €',
+      name: 'Prospection',
+      price: '19 €',
       period: '/mois',
-      prospects: '5 000 prospects/mois + Campagnes + CRM + Forms',
-      audience: 'pour agences & PME · 19 € avec ETE2026',
-      cta: 'Essai Pro 14 j',
+      prospects: '500 crédits/mois (emails trouvés) + 500 téléphones + 2 000 recherches + API publique',
+      audience: 'pour founders, agences & freelances',
+      cta: 'Choisir Prospection',
       href: '/signup?plan=pro',
       popular: true,
     },
     {
-      name: 'Business',
+      name: 'MAX',
       price: '179 €',
       period: '/mois',
-      prospects: '10 000 prospects/mois + MCP + multi-utilisateurs',
-      audience: 'pour équipes outbound',
-      cta: 'Choisir Business',
+      prospects: 'Suite illimitée + Autopilot + 2 000 crédits/mois + équipes + MCP',
+      audience: 'pour équipes outbound · code MAX99 : 3 mois à 99 €',
+      cta: 'Choisir MAX',
       href: '/signup?plan=max',
       popular: false,
     },
     {
-      name: 'Enterprise',
-      price: '499 €',
-      period: '/mois',
-      prospects: 'Tout illimité + Autopilot illimité',
-      audience: 'pour scaleups',
-      cta: 'Choisir Enterprise',
+      name: 'Packs de crédits',
+      price: 'dès 9 €',
+      period: '',
+      prospects: '100 crédits = 9 € · 500 = 29 € · 2 000 = 79 €. Achat one-time, disponible sur tous les plans, même Gratuit.',
+      audience: 'pour les besoins ponctuels',
+      cta: 'Voir les packs',
       href: '/signup?plan=enterprise',
       popular: false,
     },
@@ -798,15 +798,15 @@ const FAQ = [
   },
   {
     q: 'Puis-je faire des recherches en langage naturel ?',
-    a: 'Oui. Tapez par exemple "trouve-moi 50 SaaS B2B à Paris" ou "cabinets d\'avocats fiscalistes Lyon" — Claude (Anthropic) traduit votre requête en termes Google Places exploitables en 2 secondes. Pratique quand vous ne connaissez pas la nomenclature exacte des catégories. Fonctionnalité incluse dans tous les plans, dès Starter gratuit.',
+    a: 'Oui. Tapez par exemple "trouve-moi 50 SaaS B2B à Paris" ou "cabinets d\'avocats fiscalistes Lyon" — Claude (Anthropic) traduit votre requête en termes Google Places exploitables en 2 secondes. Pratique quand vous ne connaissez pas la nomenclature exacte des catégories. Fonctionnalité incluse dans tous les plans, dès le plan Gratuit.',
   },
   {
     q: 'Y a-t-il une limite quotidienne d\'enrichissement ?',
-    a: 'Non. Vous avez un quota mensuel selon votre plan (100, 1k, 5k, 10k prospects/mois), à utiliser comme vous voulez : tout en une fois ou réparti dans le mois. Pas de cap quotidien, pas de rate-limit côté utilisateur. Côté infrastructure, le waterfall s\'arrête dès qu\'un email est trouvé, donc on ne brûle pas vos crédits sur des APIs externes inutiles.',
+    a: 'Non. Vous avez un quota mensuel de crédits selon votre plan (25 en Gratuit, 500 en Prospection, 2 000 en MAX — 1 crédit = 1 email trouvé), à utiliser comme vous voulez : tout en une fois ou réparti dans le mois. Pas de cap quotidien, pas de rate-limit côté utilisateur. Besoin ponctuel ? Packs de crédits à la demande dès 9 €. Côté infrastructure, le waterfall s\'arrête dès qu\'un email est trouvé, donc on ne brûle pas vos crédits sur des APIs externes inutiles.',
   },
   {
     q: 'Export possible vers mon CRM (HubSpot, Salesforce, Pipedrive, Zoho) ?',
-    a: 'Oui. Export CSV standard (compatible HubSpot, Salesforce, Pipedrive, Brevo, Mailjet…) et export pré-mappé Zoho CRM (champs auto-remplis). Mapping inclus : nom, adresse, téléphone, email, site web, score, note Google, nombre d\'avis. Et avec le plan Business, vos prospects filent directement dans Volia Campagnes pour l\'envoi de séquences email/SMS sans étape d\'export.',
+    a: 'Oui. Export CSV standard (compatible HubSpot, Salesforce, Pipedrive, Brevo, Mailjet…) et export pré-mappé Zoho CRM (champs auto-remplis). Mapping inclus : nom, adresse, téléphone, email, site web, score, note Google, nombre d\'avis. Et vos prospects filent directement dans Volia Campagnes pour l\'envoi de séquences email/SMS sans étape d\'export.',
   },
 ];
 
@@ -885,8 +885,8 @@ export default function ProspectionProductPage() {
           ],
         }}
         pricing={{
-          label: 'Inclus dans tous les plans, dès le Starter gratuit',
-          subtext: 'Starter 0 € (100 prospects/mois) · Solo 19 € (1k) · Pro 49 € (5k) · Business 149 € (10k + Campagnes + CRM). Pas d\'engagement, annulation 1 clic.',
+          label: 'Inclus dans tous les plans, dès le plan Gratuit',
+          subtext: 'Gratuit 0 € (25 crédits/mois) · Prospection 19 € (500 crédits + 500 téléphones) · MAX 179 € (2 000 crédits + suite illimitée + Autopilot, code MAX99 : 3 mois à 99 €). Packs de crédits dès 9 €. Pas d\'engagement, annulation 1 clic.',
           cta: 'Voir les tarifs complets',
           ctaHref: '/#pricing',
         }}
@@ -899,7 +899,7 @@ export default function ProspectionProductPage() {
         faq={FAQ}
         finalCta={{
           title: 'Prêt à arrêter de payer Apollo 5× trop cher ?',
-          subtitle: '100 prospects gratuits pour tester, sans carte bancaire. Vous gardez tout ce que vous exportez, pour toujours.',
+          subtitle: '25 crédits offerts chaque mois pour tester, sans carte bancaire. Vous gardez tout ce que vous exportez, pour toujours.',
           primary: { label: 'Démarrer gratuitement', href: '/signup?plan=pro' },
           secondary: { label: 'Voir une démo', href: '/#try-live' },
           trust: 'Sans CB · Annulation 1 clic · Made in France',

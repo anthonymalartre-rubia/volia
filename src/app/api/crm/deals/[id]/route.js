@@ -8,7 +8,7 @@ import { checkCrmAccess } from '@/lib/crm';
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }

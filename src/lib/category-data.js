@@ -95,7 +95,7 @@ const GROUP_DEFAULTS = {
     ],
     objections: [
       { objection: 'On préfère du physique', reponse: 'Vous gardez la main : on vous fournit la liste qualifiée, vous décidez du moyen de contact (email, visite, téléphone).' },
-      { objection: 'Trop cher pour mes marges', reponse: 'À 19 €/mois pour 1 000 prospects, c\'est moins cher qu\'un encart Pages Jaunes.' },
+      { objection: 'Trop cher pour mes marges', reponse: 'À 19 €/mois pour 500 emails trouvés, c\'est moins cher qu\'un encart Pages Jaunes.' },
       { objection: 'On a fait Apollo, ça ne sert à rien', reponse: 'Les bases orientées USA sont moins denses sur le tissu PME français. Nous sommes sur ~46 % de find-rate email spécifiquement sur le marché français.' },
     ],
     pitchHook: 'Bonjour {first_name}, je vois que {company} est bien implanté localement. Comment vous faites pour fidéliser face à la concurrence e-commerce ?',
@@ -425,7 +425,7 @@ const GROUP_DEFAULTS = {
     objections: [
       { objection: 'On est très régulés sur la prospection', reponse: 'Tout à fait — notre outil respecte DDA / MIF2, opt-out 1-clic systématique, traçabilité complète.' },
       { objection: 'Nos clients viennent par recommandation', reponse: 'Vrai pour 70 % des nouveaux. Mais les 30 % restants viennent du digital — c\'est notre canal.' },
-      { objection: 'Le coût client est trop élevé', reponse: 'À 19 €/mois pour 1 000 prospects, vous êtes à 0,02 €/contact. Imbattable.' },
+      { objection: 'Le coût client est trop élevé', reponse: 'À 19 €/mois pour 500 emails trouvés, vous êtes à moins de 0,04 €/contact. Imbattable.' },
     ],
     pitchHook: 'Bonjour {first_name}, en B2B assurance pro, le timing renouvellement est clé. Comment {company} identifie les comptes à 6 mois de l\'échéance ?',
     glossary: [
@@ -517,7 +517,7 @@ const GROUP_DEFAULTS = {
       { slug: 'occitanie', reason: 'Toulouse spatial + Montpellier eHealth' },
     ],
     objections: [
-      { objection: 'On utilise déjà Apollo', reponse: 'Les bases orientées USA sont moins denses sur le tissu PME français. Test gratuit sur 100 prospects FR, comparez les résultats.' },
+      { objection: 'On utilise déjà Apollo', reponse: 'Les bases orientées USA sont moins denses sur le tissu PME français. Testez gratuitement (25 crédits offerts chaque mois), comparez les résultats.' },
       { objection: 'Pas de budget marketing', reponse: '19 €/mois et 0 commitment. Vous coupez quand vous voulez.' },
       { objection: 'On bosse 100 % en inbound', reponse: 'Quand vous voulez accélérer ou cibler des grands comptes, outbound = obligatoire. On vous prépare le terrain.' },
     ],

@@ -154,14 +154,14 @@ function buildStep3Email({ firstName, leadScore, trialEndsAt }) {
     </thead>
     <tbody>
       <tr>
-        <td style="padding:8px;border:1px solid #e5e7eb;"><strong>Pro</strong></td>
-        <td style="padding:8px;border:1px solid #e5e7eb;">49€/mois</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;">1 200 enrichissements + 1 module</td>
+        <td style="padding:8px;border:1px solid #e5e7eb;"><strong>Prospection</strong></td>
+        <td style="padding:8px;border:1px solid #e5e7eb;">19€/mois</td>
+        <td style="padding:8px;border:1px solid #e5e7eb;">500 crédits/mois (emails trouvés) + 500 téléphones + exports illimités</td>
       </tr>
       <tr style="background:#ecfdf5;">
-        <td style="padding:8px;border:1px solid #e5e7eb;"><strong>Business</strong> ⭐</td>
+        <td style="padding:8px;border:1px solid #e5e7eb;"><strong>MAX</strong> ⭐</td>
         <td style="padding:8px;border:1px solid #e5e7eb;">179€/mois</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;">SEUL plan qui débloque les 4 modules (Prospection + Campagnes + CRM + Forms)</td>
+        <td style="padding:8px;border:1px solid #e5e7eb;">Suite illimitée + Autopilot (tout ce que tu as testé pendant ton trial) — code <strong>MAX99</strong> : les 3 premiers mois à 99€</td>
       </tr>
     </tbody>
   </table>
@@ -179,8 +179,8 @@ function buildStep3Email({ firstName, leadScore, trialEndsAt }) {
 
 Ton trial Volia se termine dans ${daysLeft} jours.
 
-Pro    : 49€/mois  — 1200 enrichissements + 1 module
-Business : 179€/mois — SEUL plan qui débloque les 4 modules ⭐
+Prospection : 19€/mois  — 500 crédits/mois (emails trouvés)
+MAX         : 179€/mois — Suite illimitée + Autopilot ⭐ (code MAX99 : 3 mois à 99€)
 
 → Choisir mon plan : https://volia.fr/pricing
 

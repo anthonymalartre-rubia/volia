@@ -87,7 +87,7 @@ export async function getUsage(supabase, userId) {
 }
 
 // Get user plan
-// Inclut le trial : un user en trial 14j voit son plan Pro renvoyé tant que
+// Inclut le trial : un user en trial 14j voit son trial_plan (MAX) renvoyé tant que
 // trial_ends_at est dans le futur. À l'expiration (ou si converti déjà payant),
 // on retombe sur profile.plan.
 export async function getUserPlan(supabase, userId) {
@@ -104,8 +104,8 @@ export async function getUserPlan(supabase, userId) {
 // Avant : 2 roundtrips séquentiels (getUserPlan puis getUsage) = ~300-600ms.
 // Cumulé sur un waterfall de 80 prospects = 24-48s perdus. Maintenant en parallèle.
 //
-// Multi-utilisateurs (Business) : si l'user appartient à une team, on aggrège
-// l'usage de tous les members. Le quota Business est partagé.
+// Multi-utilisateurs (MAX / legacy Business) : si l'user appartient à une team,
+// on aggrège l'usage de tous les members. Le quota du plan est partagé.
 export async function checkLimit(supabase, userId, action) {
   const [{ data: profileRow }, usage] = await Promise.all([
     supabase

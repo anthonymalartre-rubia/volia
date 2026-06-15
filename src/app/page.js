@@ -18,7 +18,7 @@ const trustpilotAggregateRating = trustpilotData
 
 export const metadata = {
   title: 'Volia Autopilot — Ton pipeline B2B automatisé (prospection → email → CRM)',
-  description: 'Volia Autopilot : ton pipeline B2B automatisé de bout en bout. Tu sélectionnes la cible, Volia exécute : scraping Google Places → email personnalisé → formulaire de qualification → scoring → push CRM. Aussi suite de prospection B2B France (emails + téléphones, 101 départements), alternative Apollo. Made in France, RGPD. À partir de 49 €/mois (lead-gen dès 19 €).',
+  description: 'Volia Autopilot : ton pipeline B2B automatisé de bout en bout. Tu sélectionnes la cible, Volia exécute : scraping Google Places → email personnalisé → formulaire de qualification → scoring → push CRM. Aussi suite de prospection B2B France (emails + téléphones, 101 départements), alternative Apollo. Made in France, RGPD. Gratuit pour démarrer · Prospection 19 €/mois · MAX 179 €/mois.',
   alternates: {
     canonical: SITE_URL,
     languages: {
@@ -56,7 +56,7 @@ const softwareApplicationSchema = {
   applicationCategory: 'BusinessApplication',
   applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
-  description: 'Volia Autopilot : pipeline B2B automatisé de bout en bout — tu sélectionnes la cible, Volia exécute (scraping Google Places, email personnalisé, formulaire de qualification, scoring, push CRM), de la cible au lead chaud. Inclut aussi la prospection B2B France : recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade avec scoring de confiance. À partir de 49 €/mois pour l\'Autopilot (lead-gen dès 19 €/mois).',
+  description: 'Volia Autopilot : pipeline B2B automatisé de bout en bout — tu sélectionnes la cible, Volia exécute (scraping Google Places, email personnalisé, formulaire de qualification, scoring, push CRM), de la cible au lead chaud. Inclut aussi la prospection B2B France : recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade avec scoring de confiance. Gratuit pour démarrer, lead-gen dès 19 €/mois, Autopilot inclus dans MAX à 179 €/mois.',
   url: SITE_URL,
   inLanguage: 'fr-FR',
   countriesSupported: 'FR',
@@ -72,8 +72,9 @@ const softwareApplicationSchema = {
     'Conformité RGPD (filtre emails personnels, opt-out public)',
     'Pas d\'engagement, annulation à tout moment',
   ],
-  // AggregateOffer (résumé) sur la homepage — le détail complet des 4 plans
-  // vit sur /pricing (page dédiée), avec son propre JSON-LD Offer détaillé.
+  // AggregateOffer (résumé) sur la homepage — le détail complet des 3 plans
+  // (Gratuit / Prospection / MAX) vit sur /pricing (page dédiée), avec son
+  // propre JSON-LD Offer détaillé.
   //
   // [31 mai 2026] Migration `Offer[]` → `AggregateOffer` pour éliminer la
   // duplication massive de contenu pricing entre `/` et `/pricing`. Google
@@ -86,7 +87,7 @@ const softwareApplicationSchema = {
     priceCurrency: 'EUR',
     lowPrice: '0',
     highPrice: '179',
-    offerCount: '4',
+    offerCount: '3',
     availability: 'https://schema.org/InStock',
     url: `${SITE_URL}/pricing`,
   },

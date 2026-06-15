@@ -70,10 +70,10 @@ function buildEmail({ firstName, leadScore, trialEndsAt }) {
   </p>
 
   <p style="font-size:14px;line-height:1.6;">
-    Ton trial se termine dans ${daysLeftInTrial} jours. Si tu attends la fin du trial, tu repars en plan Starter (100 prospects) — ce qui veut dire qu'il faut reconfigurer tes campagnes etc.
+    Ton trial se termine dans ${daysLeftInTrial} jours. Si tu attends la fin du trial, tu repars en plan Gratuit (25 crédits/mois) — et tu perds l'illimité et l'Autopilot sur tes campagnes.
   </p>
   <p style="font-size:14px;line-height:1.6;">
-    Avec cette promo, tu sécurises ton accès complet et tu économises ${Math.round((49 * 0.5) * 100) / 100}€ sur Pro (ou plus sur Business).
+    Avec cette promo, tu sécurises ton accès complet et tu économises 89,50€ sur MAX (ou 9,50€ sur Prospection).
   </p>
 
   <p style="font-size:14px;line-height:1.6;">Anthony — Fondateur Volia</p>
@@ -89,7 +89,7 @@ Vu comment tu utilises Volia, je pense que ça vaut le coup que tu continues.
 
 Activer : https://volia.fr/pricing?promo=${PROMO_CODE}
 
-Trial fini dans ${daysLeftInTrial}j. Sans upgrade tu repars en Starter (100 prospects).
+Trial fini dans ${daysLeftInTrial}j. Sans upgrade tu repars en Gratuit (25 crédits/mois).
 
 Anthony — Volia`,
   };

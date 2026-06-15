@@ -305,7 +305,7 @@ export function welcomeEmail(userName) {
         <div align="center" style="margin-top:8px;">${ctaSecondary('Ou faire une première recherche', DASHBOARD_URL)}</div>
 
         <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
-          Plan Starter offert : <strong style="color:${COLORS.text};">100 prospects/mois</strong>, sans CB.
+          Plan Gratuit à vie : <strong style="color:${COLORS.text};">25 crédits Prospection/mois</strong>, sans CB.
         </p>
 
         <!-- PS parrainage : touchpoint discret en bas du welcome (push #5) -->
@@ -314,7 +314,7 @@ export function welcomeEmail(userName) {
             <td style="padding:14px 18px;background-color:${COLORS.brandLight};border-left:3px solid ${COLORS.brand};border-radius:8px;">
               <p style="margin:0;font-size:13px;color:${COLORS.text};line-height:1.5;">
                 <strong style="color:${COLORS.brand};">PS</strong> — Vous aimez Volia ? Invitez 3 amis et gagnez
-                <strong style="color:${COLORS.text};">3 mois Pro offerts</strong> (et 1 mois bonus pour eux).
+                <strong style="color:${COLORS.text};">3 mois d'abonnement offerts</strong> (et 1 mois bonus pour eux).
                 <a href="${APP_URL}/parrainage" style="color:${COLORS.brand};font-weight:600;text-decoration:none;">Voir le programme →</a>
               </p>
             </td>
@@ -352,10 +352,11 @@ export function usageWarningEmail(userName, usagePercent, planName, limitType) {
         <p style="margin:8px 0 24px;font-size:12px;color:${COLORS.textMuted};text-align:center;">${usagePercent}% utilisés &middot; ${100 - usagePercent}% restants</p>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Pour ne pas vous faire couper la prospection, <strong style="color:${COLORS.text};">Pro à 49€/mois</strong> = 5 000 prospects + cascade waterfall complète.
+          Pour ne pas vous faire couper la prospection : <strong style="color:${COLORS.text};">Prospection à 19€/mois</strong> (500 crédits)
+          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9€</strong> — et MAX pour l'illimité sur toute la suite.
         </p>
 
-        <div align="center">${ctaPrimary('Passer Pro', SETTINGS_URL)}</div>
+        <div align="center">${ctaPrimary('Voir les options', SETTINGS_URL)}</div>
         <div align="center">${ctaSecondary('Voir le dashboard', DASHBOARD_URL)}</div>
 
         ${signOff()}
@@ -387,10 +388,12 @@ export function usageLimitReachedEmail(userName, planName, limitType) {
         <p style="margin:8px 0 24px;font-size:12px;color:${COLORS.danger};text-align:center;font-weight:600;">100% utilisés &middot; 0% restants</p>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Vos leads existants restent intacts. Pour reprendre <strong style="color:${COLORS.text};">tout de suite</strong>, passez Pro. Sinon, le quota se reset au premier du mois prochain.
+          Vos leads existants restent intacts. Pour reprendre <strong style="color:${COLORS.text};">tout de suite</strong> :
+          pack de crédits dès 9€, Prospection à 19€/mois (500 crédits), ou MAX (code MAX99 : 3 mois à 99€).
+          Sinon, le quota se reset au premier du mois prochain.
         </p>
 
-        <div align="center">${ctaPrimary('Passer Pro · 49€/mois', SETTINGS_URL)}</div>
+        <div align="center">${ctaPrimary('Reprendre maintenant', SETTINGS_URL)}</div>
         <div align="center">${ctaSecondary('Attendre le renouvellement', DASHBOARD_URL)}</div>
 
         ${signOff()}
@@ -471,7 +474,7 @@ export function subscriptionCancelledEmail(userName) {
         ${hero({
           emoji: '👋',
           title: 'Abonnement annulé',
-          greeting: `Salut ${name}, votre abonnement est annulé. Vous repassez sur <strong style="color:${COLORS.text};">Starter (gratuit)</strong>.`,
+          greeting: `Salut ${name}, votre abonnement est annulé. Vous repassez sur <strong style="color:${COLORS.text};">le plan Gratuit</strong>.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border-radius:12px;padding:18px 20px;margin:0 0 24px;">
@@ -608,8 +611,8 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
     subject,
     html: layout({
       preheader: isActive
-        ? `${prospectsFound} prospects récupérés ce mois en gratuit. Avec Pro, c'est illimité pour 49€/mois.`
-        : `Lancez votre première recherche en 30 secondes. 100 prospects offerts.`,
+        ? `${prospectsFound} prospects récupérés ce mois en gratuit. Avec Prospection, 500 crédits/mois pour 19€.`
+        : `Lancez votre première recherche en 30 secondes. 25 crédits offerts chaque mois.`,
       accent: COLORS.brand,
       content: `
         ${hero({
@@ -661,13 +664,13 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
             <tr>
               <td>
                 <p style="margin:0 0 12px;font-size:15px;font-weight:600;color:${COLORS.text};">
-                  ⚡ Avec Pro à 49€/mois vous auriez pu :
+                  ⚡ Avec Prospection à 19€/mois vous auriez pu :
                 </p>
                 <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.8;">
-                  <li>Trouver des <strong style="color:${COLORS.text};">prospects illimités</strong> (vs 100/mois gratuit)</li>
-                  <li>Lancer la cascade waterfall complète (Apollo, Findymail, +5 sources)</li>
-                  <li>Enrichir <strong style="color:${COLORS.text};">500 emails/mois</strong> (vs 20 gratuit)</li>
-                  <li>Exporter sans limite vers votre CRM</li>
+                  <li>Enrichir <strong style="color:${COLORS.text};">500 contacts/mois</strong> (vs 25 crédits gratuits)</li>
+                  <li>Lancer la cascade waterfall complète (7 sources)</li>
+                  <li>Trouver <strong style="color:${COLORS.text};">500 téléphones/mois</strong> (fixes &amp; mobiles)</li>
+                  <li>Exporter sans limite vers votre CRM — et MAX pour l'Autopilot</li>
                 </ul>
               </td>
             </tr>
@@ -695,7 +698,7 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
           </table>
         `}
 
-        <div align="center">${ctaPrimary(isActive ? 'Passer Pro maintenant' : 'Lancer ma première recherche', isActive ? SETTINGS_URL : DASHBOARD_URL)}</div>
+        <div align="center">${ctaPrimary(isActive ? 'Passer à Prospection' : 'Lancer ma première recherche', isActive ? SETTINGS_URL : DASHBOARD_URL)}</div>
         <div align="center">${ctaSecondary(isActive ? 'Voir mon dashboard' : 'Comparer les plans', isActive ? DASHBOARD_URL : PRICING_URL)}</div>
 
         <p style="margin:24px 0 0;font-size:12px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
@@ -722,19 +725,19 @@ export function trialStartedEmail(userName, trialEndsAt) {
     year: 'numeric',
   });
   return {
-    subject: '14 jours de Pro. Sans CB. Go.',
+    subject: '14 jours de MAX. Sans CB. Go.',
     html: layout({
-      preheader: `Trial Pro actif jusqu'au ${endDate}. Aucune carte requise.`,
+      preheader: `Trial MAX actif jusqu'au ${endDate}. Aucune carte requise.`,
       accent: COLORS.brand,
       content: `
         ${hero({
           emoji: '🎉',
-          title: `${name}, 14 jours de Pro. Sans CB.`,
-          greeting: `Accès complet au plan Pro pendant 14 jours. Pas de CB demandée, on coupe pas, on relance pas.`,
+          title: `${name}, 14 jours de MAX. Sans CB.`,
+          greeting: `Accès complet au plan MAX pendant 14 jours — Autopilot inclus. Pas de CB demandée, on coupe pas, on relance pas.`,
         })}
 
         ${receiptCard([
-          { label: 'Plan actif', value: 'Pro (trial)', color: COLORS.brand },
+          { label: 'Plan actif', value: 'MAX (trial)', color: COLORS.brand },
           { label: 'Durée', value: '14 jours' },
           { label: 'Expire le', value: endDate },
           { label: 'Carte requise', value: 'Aucune', color: COLORS.success },
@@ -742,17 +745,17 @@ export function trialStartedEmail(userName, trialEndsAt) {
 
         <p style="margin:24px 0 16px;font-size:13px;font-weight:600;color:${COLORS.text};">Ce qui est débloqué :</p>
         <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
-          <li><strong style="color:${COLORS.text};">5 000 prospects/mois</strong> (vs 100 en gratuit)</li>
-          <li>Cascade waterfall complète (Apollo, Findymail, Enrichly…)</li>
-          <li>Vérification d'emails (MillionVerifier)</li>
-          <li>Module Campagnes email/SMS</li>
-          <li>Exports illimités vers HubSpot, Salesforce, Zoho…</li>
+          <li>⚡ <strong style="color:${COLORS.text};">Volia Autopilot</strong> — pipeline B2B end-to-end auto</li>
+          <li><strong style="color:${COLORS.text};">2 000 crédits Prospection</strong> (vs 25 en gratuit) + cascade waterfall 7 sources</li>
+          <li>Campagnes, CRM, Formulaires &amp; Project <strong style="color:${COLORS.text};">illimités</strong></li>
+          <li>10 000 cold emails/mois (warmup auto inclus)</li>
+          <li>Vérification d'emails, équipes, MCP &amp; API</li>
         </ul>
 
-        <div align="center">${ctaPrimary('Lancer ma 1ère recherche Pro', DASHBOARD_URL)}</div>
+        <div align="center">${ctaPrimary('Lancer mon premier workflow', DASHBOARD_URL)}</div>
 
         <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
-          À la fin des 14 jours, votre compte repasse sur le plan Starter gratuit (vos données sont conservées). Aucun prélèvement, aucune surprise.
+          À la fin des 14 jours, votre compte repasse sur le plan Gratuit — vos modules restent accessibles, seules les limites changent. Aucun prélèvement, aucune surprise.
         </p>
 
         ${signOff()}
@@ -767,29 +770,65 @@ export function trialStartedEmail(userName, trialEndsAt) {
 // (loss aversion > gain framing) : ses dossiers, ses enrichissements
 // en cours, l'accès Campagnes…
 // ───────────────────────────────────────────────────────────────
-export function trialExpiringEmail(userName, daysRemaining = 3) {
+export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max') {
   const name = userName || 'là';
+  // Cohorte legacy (trials Pro démarrés avant le pivot freemium 11/06/2026) :
+  // garde l'offre Pro 49€ + ETE2026 promise dans la campagne en cours.
+  // Nouveaux trials (MAX) : offre MAX 179€ + code MAX99.
+  const isLegacyPro = trialPlan === 'pro';
+  const planLabel = isLegacyPro ? 'Pro' : 'MAX';
+  const lossList = isLegacyPro
+    ? `<li>⚡ Votre workflow Autopilot</li>
+       <li>1 200 enrichissements + 1 200 téléphones/mois → 25 crédits + 25</li>
+       <li>2 000 cold emails/mois (warmup inclus) → 200/mois</li>
+       <li>Campagnes, CRM &amp; Formulaires : retour aux limites du plan Gratuit</li>`
+    : `<li>⚡ <strong>Volia Autopilot</strong> désactivé</li>
+       <li>2 000 crédits Prospection/mois → 25</li>
+       <li>10 000 cold emails/mois (warmup inclus) → 200</li>
+       <li>Suite illimitée → limites du Gratuit (1 pipeline, 2 formulaires, 1 projet)</li>`;
+  const offerBlock = isLegacyPro
+    ? `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
+        Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49€/mois</strong> (ou 490€/an, ~2 mois offerts).
+      </p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
+        <tr><td style="text-align:center;">
+          <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+            ☀️ Offre été : code <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> au paiement
+            = Pro à <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong>. Valable jusqu'au 30 septembre 2026.
+          </p>
+        </td></tr>
+      </table>`
+    : `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
+        Pour garder MAX (Autopilot + suite illimitée), c'est <strong style="color:${COLORS.text};">179€/mois</strong> (ou 1 690€/an, ~2 mois offerts).
+      </p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
+        <tr><td style="text-align:center;">
+          <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+            ⚡ Offre de lancement : code <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong> au paiement
+            = MAX à <strong style="color:${COLORS.text};">99€/mois les 3 premiers mois</strong>.
+          </p>
+        </td></tr>
+      </table>`;
+  const ctaPlanHref = isLegacyPro ? `${APP_URL}/pricing?plan=pro` : `${APP_URL}/pricing?plan=max`;
+
   return {
-    subject: `${daysRemaining} jours de Pro restants`,
+    subject: `${daysRemaining} jours de ${planLabel} restants`,
     html: layout({
-      preheader: `Pour garder cascade waterfall, campagnes et 5000 prospects/mois, c'est maintenant.`,
+      preheader: `Pour garder ${isLegacyPro ? 'la cascade waterfall et vos campagnes' : 'Autopilot et la suite illimitée'}, c'est maintenant.`,
       accent: COLORS.warning,
       content: `
         ${hero({
           emoji: '⏱️',
           title: `${daysRemaining} jours. Après, retour au gratuit.`,
-          greeting: `Salut ${name}, votre trial Pro se termine dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong>. Voici ce que vous gardez ou perdez à l'expiration.`,
+          greeting: `Salut ${name}, votre trial ${planLabel} se termine dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong>. Voici ce que vous gardez ou perdez à l'expiration.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.warningLight};border:1px solid ${COLORS.warning}30;border-radius:12px;padding:18px 20px;margin:0 0 20px;">
           <tr>
             <td>
-              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Ce qui sera désactivé</p>
+              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Ce qui sera réduit</p>
               <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
-                <li>Les modules <strong>Campagnes, CRM &amp; Formulaires</strong> (inclus dès Pro)</li>
-                <li>1 200 enrichissements email + 1 200 téléphones/mois → retour à 20 + 20</li>
-                <li>2 000 cold emails/mois (warmup inclus) → 0</li>
-                <li>Votre workflow Autopilot</li>
+                ${lossList}
               </ul>
             </td>
           </tr>
@@ -800,34 +839,17 @@ export function trialExpiringEmail(userName, daysRemaining = 3) {
             <td>
               <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">✅ Ce qui est gardé dans tous les cas</p>
               <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
-                Vos prospects collectés, vos dossiers, vos tags et vos exports restent intacts.
+                Vos prospects, dossiers, deals, formulaires et projets restent accessibles — la suite est
+                gratuite pour tous, seules les limites changent.
               </p>
             </td>
           </tr>
         </table>
 
-        <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49€/mois</strong> (ou 490€/an, ~2 mois offerts).
-        </p>
+        ${offerBlock}
 
-        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
-          <tr>
-            <td style="text-align:center;">
-              <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
-                ☀️ Offre été : code <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> au paiement
-                = Pro à <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong>. Valable jusqu'au 30 septembre 2026.
-              </p>
-            </td>
-          </tr>
-        </table>
-
-        <div align="center">${ctaPrimary('Passer Pro maintenant', `${APP_URL}/pricing?plan=pro`)}</div>
+        <div align="center">${ctaPrimary(`Passer ${planLabel} maintenant`, ctaPlanHref)}</div>
         <div align="center">${ctaSecondary('Comparer les plans', `${APP_URL}/pricing`)}</div>
-
-        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.6;">
-          💡 Nouveau : le plan Business inclut aussi <strong style="color:${COLORS.text};">Volia Project</strong> —
-          vos deals gagnés deviennent des projets de livraison, suivis par votre client via un simple lien.
-        </p>
 
         ${signOff()}
       `,
@@ -839,18 +861,29 @@ export function trialExpiringEmail(userName, daysRemaining = 3) {
 // trialExpiredEmail — Envoyé à J0 (jour de l'expiration) par le cron
 // expire-trials, juste après le downgrade automatique vers free.
 // ───────────────────────────────────────────────────────────────
-export function trialExpiredEmail(userName) {
+export function trialExpiredEmail(userName, trialPlan = 'max') {
   const name = userName || 'là';
+  const isLegacyPro = trialPlan === 'pro';
+  const planLabel = isLegacyPro ? 'Pro' : 'MAX';
+  const reactivateOffer = isLegacyPro
+    ? `passez à l'abonnement Pro à 49€/mois
+          — ou <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong> avec le code
+          <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> (valable jusqu'au 30 septembre 2026).`
+    : `passez à MAX à 179€/mois
+          — ou <strong style="color:${COLORS.text};">99€/mois les 3 premiers mois</strong> avec le code
+          <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong>.`;
+  const ctaPlanHref = isLegacyPro ? `${APP_URL}/pricing?plan=pro` : `${APP_URL}/pricing?plan=max`;
+
   return {
-    subject: 'Trial Pro terminé. Bilan rapide.',
+    subject: `Trial ${planLabel} terminé. Bilan rapide.`,
     html: layout({
-      preheader: `Vous repassez sur Starter. Reprendre Pro = 1 clic.`,
+      preheader: `Vous repassez sur le plan Gratuit. Reprendre ${planLabel} = 1 clic.`,
       accent: COLORS.danger,
       content: `
         ${hero({
           emoji: '🛑',
           title: 'Trial terminé. Vos données restent.',
-          greeting: `Salut ${name}, vos 14 jours de Pro sont écoulés. Vous repassez sur <strong style="color:${COLORS.text};">Starter (gratuit)</strong>.`,
+          greeting: `Salut ${name}, vos 14 jours de ${planLabel} sont écoulés. Vous repassez sur le plan <strong style="color:${COLORS.text};">Gratuit</strong> — la suite reste accessible, seules les limites changent.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border-radius:12px;padding:18px 20px;margin:0 0 20px;">
@@ -858,7 +891,8 @@ export function trialExpiredEmail(userName) {
             <td>
               <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">📦 Vos données sont conservées</p>
               <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
-                Tous vos prospects, dossiers, tags et historiques de recherche restent accessibles. Vous pouvez continuer à les exporter dans la limite de 5 exports/mois du plan gratuit.
+                Prospects, dossiers, deals CRM, formulaires et projets restent accessibles. Campagnes,
+                CRM, Formulaires &amp; Project sont gratuits pour tous — avec les limites du plan Gratuit.
               </p>
             </td>
           </tr>
@@ -867,24 +901,22 @@ export function trialExpiredEmail(userName) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.warningLight};border-radius:12px;padding:18px 20px;margin:0 0 24px;">
           <tr>
             <td>
-              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Features désactivées</p>
+              <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Limites appliquées</p>
               <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
-                <li>Modules <strong>Campagnes, CRM &amp; Formulaires</strong> (inclus dès Pro)</li>
-                <li>Enrichissements : 20 emails + 20 téléphones/mois (vs 1 200 + 1 200 en Pro)</li>
-                <li>Cold emails : 0 (vs 2 000/mois en Pro, warmup inclus)</li>
-                <li>Workflow Autopilot désactivé</li>
+                <li>⚡ Workflow Autopilot désactivé (réservé MAX)</li>
+                <li>Crédits Prospection : 25/mois (packs dès 9€ si besoin)</li>
+                <li>Cold emails : 200/mois · 1 séquence</li>
+                <li>1 pipeline CRM · 2 formulaires · 1 projet actif</li>
               </ul>
             </td>
           </tr>
         </table>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Pour réactiver toutes vos features <strong style="color:${COLORS.text};">en 30 secondes</strong>, passez à l'abonnement Pro à 49€/mois
-          — ou <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong> avec le code
-          <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> (valable jusqu'au 30 septembre 2026).
+          Pour réactiver toutes vos features <strong style="color:${COLORS.text};">en 30 secondes</strong>, ${reactivateOffer}
         </p>
 
-        <div align="center">${ctaPrimary('Réactiver Pro', `${APP_URL}/pricing?plan=pro`)}</div>
+        <div align="center">${ctaPrimary(`Réactiver ${planLabel}`, ctaPlanHref)}</div>
         <div align="center">${ctaSecondary('Continuer en gratuit', DASHBOARD_URL)}</div>
 
         <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
@@ -1014,9 +1046,9 @@ export function referralPushEmail(userName, referralCode) {
   const name = userName || 'là';
   const referralUrl = `${APP_URL}/signup?ref=${referralCode}`;
   return {
-    subject: '3 mois Pro offerts. Voici comment.',
+    subject: '3 mois d\'abonnement offerts. Voici comment.',
     html: layout({
-      preheader: '3 amis qui passent payant = 3 mois Pro pour vous. Sans plafond.',
+      preheader: '3 amis qui passent payant = 3 mois offerts pour vous. Sans plafond.',
       accent: COLORS.brand,
       content: `
         ${hero({
@@ -1038,14 +1070,14 @@ export function referralPushEmail(userName, referralCode) {
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
           <tr>
             <td style="padding:14px 18px;background-color:#ffffff;border:1px solid ${COLORS.border};border-radius:10px;">
-              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">3 amis payants = 3 mois Pro offerts (147 €)</p>
+              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">3 amis payants = 3 mois d'abonnement offerts</p>
             </td>
           </tr>
         </table>
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0;">
           <tr>
             <td style="padding:14px 18px;background-color:#ffffff;border:1px solid ${COLORS.border};border-radius:10px;">
-              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">5 amis = 5 mois (245 €), 10 amis = 10 mois…</p>
+              <p style="margin:0;font-size:14px;color:${COLORS.text};font-weight:600;">5 amis = 5 mois, 10 amis = 10 mois…</p>
             </td>
           </tr>
         </table>
@@ -1077,7 +1109,7 @@ export function referralRewardEmail(userName, totalBonusMonths) {
   const name = userName || 'là';
   const m = totalBonusMonths || 1;
   return {
-    subject: '+1 mois Pro offert. Merci pour l\'invitation.',
+    subject: '+1 mois d\'abonnement offert. Merci pour l\'invitation.',
     html: layout({
       preheader: `Total cumulé : ${m} mois bonus. Continuez à inviter, ça monte.`,
       accent: COLORS.brand,
@@ -1337,7 +1369,7 @@ export function templateKillerDay3Email(userName) {
 /**
  * Drip J+7 — Trial expiration hint
  *
- * Goal : créer l'urgence chez les users en trial Pro. Stats personnalisées
+ * Goal : créer l'urgence chez les users en trial MAX. Stats personnalisées
  * pour rendre la perte concrète (loss aversion). Si l'user n'est PAS en
  * trial, le cron skip ce step (cf. process-drip-emails).
  *
@@ -1351,17 +1383,17 @@ export function trialExpiringDay7Email(userName, stats = {}) {
     emailsEnriched = 0,
     daysRemaining = 7,
   } = stats;
-  const ctaUrl = utmify('/pricing?plan=pro', 'trial_expiring_d7');
+  const ctaUrl = utmify('/pricing?plan=max', 'trial_expiring_d7');
   return {
-    subject: `Plus que ${daysRemaining} jours de Pro — gardez vos features`,
+    subject: `Plus que ${daysRemaining} jours de MAX — gardez vos features`,
     html: layout({
-      preheader: `${prospectsFound} prospects récupérés, ${emailsEnriched} emails enrichis. Conservez tout en passant Pro.`,
+      preheader: `${prospectsFound} prospects récupérés, ${emailsEnriched} emails enrichis. Conservez tout en passant MAX.`,
       accent: COLORS.warning,
       content: `
         ${hero({
           emoji: '⏱️',
-          title: `Plus que ${daysRemaining} jours de Pro`,
-          greeting: `Bonjour ${name}, votre trial Pro se termine bientôt. Voici ce que vous avez accompli en 1 semaine.`,
+          title: `Plus que ${daysRemaining} jours de MAX`,
+          greeting: `Bonjour ${name}, votre essai MAX se termine bientôt. Voici ce que vous avez accompli en 1 semaine.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="stat-grid" style="width:100%;margin:0 0 24px;">
@@ -1390,15 +1422,16 @@ export function trialExpiringDay7Email(userName, stats = {}) {
         </table>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Sans upgrade, vous repasserez en plan gratuit dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong> :
-          quota limité à 100 prospects/mois, cascade waterfall désactivée, module Campagnes coupé.
+          Sans upgrade, vous repasserez sur le plan Gratuit dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong> :
+          25 crédits Prospection/mois (au lieu de 2 000), Autopilot désactivé, retour aux limites du Gratuit (1 pipeline, 2 formulaires, 200 cold emails/mois).
           <br/><br/>
-          <strong style="color:${COLORS.text};">Gardez Pro pour 49€/mois</strong> et continuez sur votre lancée.
+          <strong style="color:${COLORS.text};">Gardez votre plan actuel</strong> et continuez sur votre lancée.
         </p>
 
-        <div align="center">${ctaPrimary('Garder Pro', ctaUrl)}</div>
+        <div align="center">${ctaPrimary('Garder MAX', ctaUrl)}</div>
 
         <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Code <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong> au paiement : 99€/mois les 3 premiers mois.
           Vous gardez quoi qu'il arrive vos prospects, dossiers et exports déjà réalisés.
         </p>
 
@@ -1461,7 +1494,7 @@ export function finalDemoDay14Email(userName) {
 }
 
 /**
- * Invitation à rejoindre une team Volia Business (multi-utilisateurs).
+ * Invitation à rejoindre une team Volia MAX (multi-utilisateurs).
  *
  * Envoyé après POST /api/teams/invite. Le lien token expire à 7 jours.
  */

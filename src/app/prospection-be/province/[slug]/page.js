@@ -65,7 +65,7 @@ export default async function ProvinceBePage({ params }) {
     },
     {
       question: `Prix pour prospecter en ${province.name} ?`,
-      answer: `À partir de 19 €/mois (1 000 prospects). Tous les pays inclus dans tous les plans.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois), puis 19 €/mois (500 crédits/mois). Tous les pays inclus dans tous les plans.`,
     },
   ];
 

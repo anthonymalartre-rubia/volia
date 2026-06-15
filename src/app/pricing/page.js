@@ -17,9 +17,9 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/pricing`;
 
 export const metadata = {
-  title: 'Tarifs Volia — Suite B2B de prospection, campagnes & CRM à partir de 19 €',
+  title: 'Tarifs Volia — Gratuit · Prospection 19 € · MAX 179 €',
   description:
-    "Plans tarifaires Volia : Starter gratuit, Solo 19 €/mo, Pro 49 €/mo, Business 149 €/mo (3 modules inclus). 5× moins cher qu'Apollo + Lemlist + HubSpot. Sans engagement, RGPD France.",
+    "Plans tarifaires Volia : Gratuit (toute la suite avec limites), Prospection 19 €/mo (500 crédits), MAX 179 €/mo (suite illimitée + Autopilot — 3 mois à 99 € avec le code MAX99). Sans engagement, RGPD France.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -42,9 +42,9 @@ export const metadata = {
     'cold email pas cher',
   ],
   openGraph: {
-    title: 'Tarifs Volia — La suite B2B 5× moins chère',
+    title: 'Tarifs Volia — La suite B2B qui remplace votre stack',
     description:
-      "Prospection + Campagnes + CRM dès 19 €/mo. Économisez ~210 €/mo vs Apollo + Lemlist + HubSpot. Starter gratuit, sans engagement.",
+      "Prospection + Campagnes + CRM gratuits pour démarrer. MAX à 179 €/mo remplace ~316 €/mo d'outils (Apollo + Lemlist + Smartlead + HubSpot + Hunter) : ~137 €/mo économisés. Sans engagement.",
     type: 'website',
     url: PAGE_URL,
     siteName: 'Volia',
@@ -52,13 +52,13 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tarifs Volia — La suite B2B 5× moins chère',
-    description: 'Prospection + Campagnes + CRM dès 19 €/mo. -210 €/mo vs Apollo+Lemlist+HubSpot.',
+    title: 'Tarifs Volia — La suite B2B qui remplace votre stack',
+    description: 'Gratuit pour démarrer · Prospection 19 €/mo · MAX 179 €/mo (~137 €/mo économisés vs stack Apollo+Lemlist+HubSpot).',
   },
 };
 
 // ─── JSON-LD ─────────────────────────────────────────────────────
-// Product schema avec 4 offers (Starter, Solo, Pro, Business) +
+// Product schema avec 3 offers (Gratuit, Prospection, MAX) +
 // BreadcrumbList + FAQPage pour rich snippets.
 const PRODUCT_JSON_LD = {
   '@context': 'https://schema.org',
@@ -71,36 +71,36 @@ const PRODUCT_JSON_LD = {
   offers: {
     '@type': 'AggregateOffer',
     priceCurrency: 'EUR',
-    lowPrice: '49',
-    highPrice: '499',
+    lowPrice: '0',
+    highPrice: '179',
     offerCount: 3,
     offers: [
       {
         '@type': 'Offer',
-        name: 'Pro',
-        price: '49',
+        name: 'Gratuit',
+        price: '0',
         priceCurrency: 'EUR',
-        url: `${SITE_URL}/signup?plan=pro`,
+        url: `${SITE_URL}/signup`,
         availability: 'https://schema.org/InStock',
-        description: 'Suite complète : Prospection + Campagnes + CRM + Formulaires + Project. 14 j d\'essai sans CB. Code ETE2026 : 19 €/mois les 3 premiers mois.',
+        description: 'Toute la suite (Prospection + Campagnes + CRM + Formulaires + Project) avec limites : 25 crédits/mois, 1 séquence, 1 pipeline. Sans carte bancaire, à vie.',
       },
       {
         '@type': 'Offer',
-        name: 'Business',
+        name: 'Prospection',
+        price: '19',
+        priceCurrency: 'EUR',
+        url: `${SITE_URL}/signup?plan=prospection`,
+        availability: 'https://schema.org/InStock',
+        description: '500 crédits/mois (emails trouvés) + 500 téléphones, cascade waterfall 7 sources, exports illimités, API publique + Zapier/Make. Packs de crédits dès 9 €.',
+      },
+      {
+        '@type': 'Offer',
+        name: 'MAX',
         price: '179',
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=max`,
         availability: 'https://schema.org/InStock',
-        description: '10 000 prospects + volumes 10× + multi-utilisateurs + serveur MCP + API — pour équipes outbound.',
-      },
-      {
-        '@type': 'Offer',
-        name: 'Enterprise',
-        price: '499',
-        priceCurrency: 'EUR',
-        url: `${SITE_URL}/signup?plan=enterprise`,
-        availability: 'https://schema.org/InStock',
-        description: 'Volia Autopilot illimité (A/B testing, optimisation Claude), tout illimité, white-label, SLA 99,9 %.',
+        description: 'Suite illimitée + Volia Autopilot (3 workflows, IF/ELSE, A/B testing), 2 000 crédits/mois, 10 000 téléphones, équipes multi-utilisateurs, serveur MCP. Code MAX99 : 99 €/mois les 3 premiers mois.',
       },
     ],
   },
@@ -120,7 +120,7 @@ const FAQ_JSON_LD = {
       name: 'Y a-t-il un essai gratuit ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui : à l\'inscription, vous bénéficiez de 14 jours d\'accès complet au plan Pro sans carte bancaire (5 000 prospects, cascade waterfall, campagnes). À l\'expiration, votre compte passe automatiquement sur le plan Starter gratuit (100 prospects/mois, à vie) — aucun prélèvement.',
+        text: 'Oui : à l\'inscription, vous bénéficiez de 14 jours d\'accès complet au plan MAX sans carte bancaire (Autopilot, 2 000 crédits, suite illimitée). À l\'expiration, votre compte passe automatiquement sur le plan Gratuit à vie (25 crédits/mois, tous les modules avec limites) — aucun prélèvement.',
       },
     },
     {
@@ -136,15 +136,15 @@ const FAQ_JSON_LD = {
       name: 'Comment fonctionne la facturation annuelle ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'En annuel, vous payez 10 mois et accédez à 12 mois. Pro = 490 €/an au lieu de 588 €, soit 2 mois offerts.',
+        text: 'En annuel, vous payez moins et accédez à 12 mois. Prospection = 190 €/an au lieu de 228 € (2 mois offerts), MAX = 1 690 €/an au lieu de 2 148 €, soit 458 € économisés.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Le CRM est-il vraiment inclus dans Business ?',
+      name: 'Le CRM est-il vraiment gratuit ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui, intégralement : Kanban drag & drop, auto-création de deals depuis les replies, timeline 360°, activities (notes, calls, meetings).',
+        text: 'Oui, dès le plan Gratuit : Kanban drag & drop, auto-création de deals depuis les replies, timeline 360°, activities (notes, calls, meetings). 1 pipeline en Gratuit/Prospection, illimité en MAX.',
       },
     },
     {

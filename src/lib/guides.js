@@ -124,7 +124,7 @@ La bonne approche est la suivante :
 3. **Enrichir en temps réel** chaque fiche avec un site web, un téléphone et idéalement un email professionnel
 4. **Filtrer les emails personnels** (RGPD) — un dirigeant qui utilise @gmail à titre pro peut être contacté, mais le risque juridique est plus élevé
 
-C'est exactement ce que fait [Volia](/) avec son [waterfall 7 sources](/blog/cold-emailing-2026) (scraping, Serper, Apollo, Enrichly, Anymail, Findymail, fallback). Vous tapez "restaurants Marseille 7e arrondissement, 50+ avis" et vous récupérez 200 prospects qualifiés enrichis en 90 secondes. Voir aussi le hub dédié [/prospection/restaurant](/prospection/restaurant) qui pré-cadre les recherches typiques.
+C'est exactement ce que fait [Volia](/) avec sa [cascade waterfall 7 sources](/blog/cold-emailing-2026) (scraping intelligent du site, recherche Google, bases spécialisées, patterns de fallback). Vous tapez "restaurants Marseille 7e arrondissement, 50+ avis" et vous récupérez 200 prospects qualifiés enrichis en 90 secondes. Voir aussi le hub dédié [/prospection/restaurant](/prospection/restaurant) qui pré-cadre les recherches typiques.
 
 ### Étape 2 : choisir le bon créneau et le bon canal
 
@@ -224,13 +224,13 @@ Citer ces réseaux dans vos mails ou avoir un partenariat (intervention en webin
 
 | Outil | Usage | Tarif indicatif |
 |---|---|---|
-| [Volia](/) | Sourcing géolocalisé France entière, enrichissement waterfall 7 sources | 49 €/mois Pro |
+| [Volia](/) | Sourcing géolocalisé France entière, enrichissement waterfall 7 sources | 19 €/mois (Prospection) |
 | TheFork Manager | Comprendre la concurrence et les pratiques de réservation | Gratuit (visite) |
 | Google Maps / Business | Audit fiche, photos, avis, posts | Gratuit |
 | LinkedIn Sales Navigator | Recherche dirigeants par taille / segment | 99 €/mois |
 | Instantly / Lemlist | Cadencement et A/B test cold email | 47-99 €/mois |
 
-Pour les SDR débutants sur le secteur, je conseille de coupler [Volia](/signup) (sourcing + enrichissement temps réel France entière) avec Lemlist (cadencement) et un CRM simple type Pipedrive ou HubSpot Starter. Budget total : 200 € par mois pour outiller un commercial qui fait 80 prospects qualifiés par jour.
+Pour les SDR débutants sur le secteur, je conseille de coupler [Volia](/signup) (sourcing + enrichissement temps réel France entière) avec Lemlist (cadencement) et un CRM simple type Pipedrive ou HubSpot Starter. Budget total : moins de 200 € par mois pour outiller un commercial qui fait 80 prospects qualifiés par jour.
 
 ## Les 7 erreurs qui plombent vos taux de conversion
 
@@ -857,7 +857,7 @@ Pourquoi ça marche : actualité réglementaire précise (à vérifier), positio
 
 | Outil | Usage | Tarif |
 |---|---|---|
-| [Volia](/) | Sourcing géolocalisé cabinets, enrichissement waterfall | 49 €/mois Pro |
+| [Volia](/) | Sourcing géolocalisé cabinets, enrichissement waterfall | 19 €/mois (Prospection) |
 | LinkedIn Sales Navigator | Recherche d'associés par cabinet et spécialité | 99 €/mois |
 | Doctrine.fr | Veille jurisprudentielle (pour parler le langage des avocats) | Variable |
 | Legal500 / Décideurs | Identifier les cabinets reconnus par spécialité | Gratuit (annuaire) |
@@ -1131,7 +1131,7 @@ Pourquoi ça marche : audit concret avant pitch, statistique générationnelle v
 
 | Outil | Usage | Tarif indicatif |
 |---|---|---|
-| [Volia](/) | Sourcing France entière agences + mandataires | 49 €/mois Pro |
+| [Volia](/) | Sourcing France entière agences + mandataires | 19 €/mois (Prospection) |
 | LinkedIn Sales Navigator | Recherche dirigeants + directeurs réseaux | 99 €/mois |
 | SeLoger Pro / MeilleursAgents Pro | Comprendre le marché local et le mandat type | Variable |
 | Lemlist / Instantly | Cadencement multi-touch | 47-99 €/mois |
@@ -1445,7 +1445,7 @@ Pourquoi ça marche : question simple qui force la prise de conscience, manque �
 
 | Outil | Usage | Tarif |
 |---|---|---|
-| [Volia](/) | Sourcing commerces par catégorie Google, France entière + DOM | 49 €/mois Pro |
+| [Volia](/) | Sourcing commerces par catégorie Google, France entière + DOM | 19 €/mois (Prospection) |
 | Google Maps Pro | Cartographie rues commerçantes | Gratuit |
 | Lemlist / Instantly | Cadencement cold email | 47-99 €/mois |
 | Brevo / Sendinblue | SMS B2B en volume | À l'envoi |

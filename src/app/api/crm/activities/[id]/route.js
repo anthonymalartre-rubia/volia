@@ -1,7 +1,7 @@
 // PATCH  /api/crm/activities/[id]  → update content, due_at, completed_at
 // DELETE /api/crm/activities/[id]
 //
-// Gating Business plan + auth + RLS. RLS doit garantir que l'user
+// Gating CRM (checkCrmAccess) + auth + RLS. RLS doit garantir que l'user
 // ne peut PATCH/DELETE que ses propres activities (user_id = auth.uid()).
 
 import { NextResponse } from 'next/server';
@@ -10,7 +10,7 @@ import { checkCrmAccess } from '@/lib/crm';
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }

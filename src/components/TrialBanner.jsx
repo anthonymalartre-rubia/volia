@@ -1,10 +1,10 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────
-// TrialBanner — Affiche le countdown du trial Pro 14j sur le dashboard.
+// TrialBanner — Affiche le countdown du trial MAX 14j sur le dashboard.
 // ─────────────────────────────────────────────────────────────────
 // Comportement :
-//   - Trial actif > 3j  → fond emerald, message neutre + CTA Passer Pro
+//   - Trial actif > 3j  → fond emerald, message neutre + CTA Passer MAX
 //   - Trial actif ≤ 3j  → fond amber, message urgence
 //   - Trial expiré      → fond red, message "réactivez"
 //   - Pas de trial      → null (rien affiché)
@@ -68,16 +68,16 @@ export default function TrialBanner({ profile }) {
     icon = '🛑';
     message = (
       <>
-        <strong>Trial terminé.</strong> Passez Pro pour récupérer cascade waterfall,
-        campagnes et 5&nbsp;000 prospects/mois.
+        <strong>Trial terminé.</strong> Passez à MAX pour récupérer Autopilot,
+        la suite illimitée et 2&nbsp;000 crédits/mois. Code MAX99 : 3 mois à 99&nbsp;€.
       </>
     );
     cta = (
       <Link
-        href="/pricing?plan=pro"
+        href="/pricing?plan=max"
         className="inline-flex items-center px-4 py-1.5 rounded-md text-sm font-semibold bg-red-600 hover:bg-red-700 text-white transition-colors"
       >
-        Réactiver Pro
+        Réactiver MAX
       </Link>
     );
   } else if (isUrgent) {
@@ -90,17 +90,17 @@ export default function TrialBanner({ profile }) {
     message = (
       <>
         <strong>
-          {days} {days > 1 ? 'jours' : 'jour'} de Pro restants.
+          {days} {days > 1 ? 'jours' : 'jour'} de MAX restants.
         </strong>{' '}
-        Passez Pro pour garder vos features sans interruption.
+        Passez à MAX pour garder vos features sans interruption — code MAX99 : 3 mois à 99&nbsp;€.
       </>
     );
     cta = (
       <Link
-        href="/pricing?plan=pro"
+        href="/pricing?plan=max"
         className="inline-flex items-center px-4 py-1.5 rounded-md text-sm font-semibold bg-amber-600 hover:bg-amber-700 text-white transition-colors"
       >
-        Passer Pro maintenant
+        Passer à MAX maintenant
       </Link>
     );
   } else {
@@ -112,16 +112,16 @@ export default function TrialBanner({ profile }) {
     icon = '🎉';
     message = (
       <>
-        <strong>Trial Pro actif</strong> — {days} jours restants pour
+        <strong>Trial MAX actif</strong> — {days} jours restants pour
         tester toutes les features.
       </>
     );
     cta = (
       <Link
-        href="/pricing?plan=pro"
+        href="/pricing?plan=max"
         className="inline-flex items-center px-4 py-1.5 rounded-md text-sm font-semibold bg-violet-600 hover:bg-violet-700 text-white transition-colors"
       >
-        Passer à Pro
+        Passer à MAX
       </Link>
     );
   }

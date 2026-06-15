@@ -1,11 +1,11 @@
 // ─────────────────────────────────────────────────────────────────────
-// src/lib/seats.js — Facturation au siège (plan Business)
+// src/lib/seats.js — Facturation au siège (plans avec équipes : MAX / legacy Business)
 // ─────────────────────────────────────────────────────────────────────
-// Business = 1 utilisateur inclus (l'owner), puis +10 €/mois par utilisateur
-// supplémentaire. On facture DÈS L'INVITATION (un siège est réservé tant que
-// l'invite est pending ou que le membre est actif).
+// MAX (et legacy Business) = 1 utilisateur inclus (l'owner), puis +10 €/mois
+// par utilisateur supplémentaire. On facture DÈS L'INVITATION (un siège est
+// réservé tant que l'invite est pending ou que le membre est actif).
 //
-// Mécanique Stripe : à côté de la ligne de base Business (179 €), une 2e ligne
+// Mécanique Stripe : à côté de la ligne de base du plan (179 €), une 2e ligne
 // "Siège supplémentaire" (STRIPE_SEAT_PRICE_ID, 10 €/mois) dont la QUANTITÉ est
 // synchronisée sur le nombre de sièges payants. Proration automatique.
 //
@@ -62,7 +62,7 @@ export async function syncTeamSeats(teamId) {
     const { data: prof } = await supabase
       .from('user_profiles').select('stripe_subscription_id').eq('id', team.owner_id).maybeSingle();
     const subId = prof?.stripe_subscription_id;
-    // Owner sans abonnement Stripe (ex : Business en trial) → pas de facturation
+    // Owner sans abonnement Stripe (ex : trial MAX sans CB) → pas de facturation
     // siège possible pour l'instant. On ne bloque pas l'équipe.
     if (!subId) return { ok: false, reason: 'no_subscription' };
 

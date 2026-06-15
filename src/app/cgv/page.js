@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 export const metadata = {
   title: 'Conditions Générales de Vente — Volia.fr',
   description:
-    'Conditions Générales de Vente (CGV) de Volia.fr : abonnement SaaS B2B, plans Starter, Solo, Pro, Business, paiement Stripe, résiliation, garanties et droit applicable.',
+    'Conditions Générales de Vente (CGV) de Volia.fr : abonnement SaaS B2B, plans Gratuit, Prospection et MAX, paiement Stripe, résiliation, garanties et droit applicable.',
   alternates: { canonical: '/cgv' },
 };
 
@@ -31,7 +31,7 @@ export default function CGVPage() {
         <div className="mb-6 p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
           <p className="text-content-primary font-semibold mb-2">L&apos;essentiel pour les pressés</p>
           <ul className="list-disc pl-5 space-y-1.5">
-            <li>4 plans : Starter (gratuit) · Solo 19€ · Pro 49€ · Business 149€ par mois.</li>
+            <li>3 plans : Gratuit (0€) · Prospection 19€ · MAX 179€ par mois. Packs de crédits ponctuels dès 9€.</li>
             <li>Paiement par Stripe. Annulation en un clic depuis votre espace, à tout moment.</li>
             <li>Pas de remboursement au prorata, mais on étudie les cas particuliers.</li>
             <li>Vos données vous appartiennent. Vous les récupérez en CSV, on les supprime après 30 jours.</li>
@@ -114,7 +114,8 @@ export default function CGVPage() {
               </li>
               <li>
                 <span className="text-content-primary font-medium">Plan</span> : l&apos;offre
-                tarifaire souscrite par le Client (Starter, Solo, Pro, Business),
+                tarifaire souscrite par le Client (Gratuit, Prospection, MAX — ou un
+                ancien plan conservé au titre de la clause d&apos;antériorité),
                 définissant les fonctionnalités et limites d&apos;usage applicables.
               </li>
               <li>
@@ -221,31 +222,40 @@ export default function CGVPage() {
                 <tbody>
                   <tr className="border-b border-line">
                     <td className="py-3 px-4 font-medium text-content-primary">
-                      Starter
+                      Gratuit
                     </td>
-                    <td className="py-3 px-4">Gratuit</td>
-                    <td className="py-3 px-4">100 prospects / mois</td>
+                    <td className="py-3 px-4">0 €</td>
+                    <td className="py-3 px-4">Toute la suite avec limites · 25 crédits / mois</td>
                   </tr>
                   <tr className="border-b border-line">
-                    <td className="py-3 px-4 font-medium text-content-primary">Solo</td>
+                    <td className="py-3 px-4 font-medium text-content-primary">
+                      Prospection
+                    </td>
                     <td className="py-3 px-4">19 €</td>
-                    <td className="py-3 px-4">1 000 prospects / mois</td>
-                  </tr>
-                  <tr className="border-b border-line">
-                    <td className="py-3 px-4 font-medium text-content-primary">Pro</td>
-                    <td className="py-3 px-4">49 €</td>
-                    <td className="py-3 px-4">5 000 prospects / mois</td>
+                    <td className="py-3 px-4">500 crédits / mois · 500 téléphones / mois</td>
                   </tr>
                   <tr>
-                    <td className="py-3 px-4 font-medium text-content-primary">
-                      Business
-                    </td>
-                    <td className="py-3 px-4">149 €</td>
-                    <td className="py-3 px-4">10 000 prospects / mois</td>
+                    <td className="py-3 px-4 font-medium text-content-primary">MAX</td>
+                    <td className="py-3 px-4">179 €</td>
+                    <td className="py-3 px-4">Suite illimitée + Autopilot · 2 000 crédits / mois</td>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <p className="mt-4">
+              <span className="text-content-primary font-medium">Packs de crédits :</span>{' '}
+              des packs de crédits ponctuels (100 crédits : 9 € ; 500 crédits : 29 € ;
+              2 000 crédits : 79 €) peuvent être achetés en complément sur tous les plans.
+              Il s&apos;agit d&apos;un paiement unique, non récurrent.
+            </p>
+            <p className="mt-3">
+              <span className="text-content-primary font-medium">Anciens plans :</span>{' '}
+              les plans Starter, Solo, Pro, Business et Enterprise ne sont plus
+              commercialisés depuis le 11 juin 2026. Les Clients les ayant souscrits
+              avant cette date les conservent aux conditions tarifaires en vigueur au
+              moment de leur souscription (clause d&apos;antériorité), et peuvent les
+              résilier ou migrer vers un plan actuel à tout moment.
+            </p>
             <p className="mt-4">
               <span className="text-content-primary font-medium">Taxes :</span> les prix
               affichés s&apos;entendent toutes taxes comprises (TVA française 20 %) pour
@@ -424,7 +434,8 @@ export default function CGVPage() {
             <p className="mt-3">
               Volia ne garantit pas l&apos;exactitude, l&apos;exhaustivité ni la
               délivrabilité des données issues des sources tierces interrogées par le
-              Service (Google Places, Apollo.io, Serper, etc.).
+              Service (Google Places, moteurs de recherche et fournisseurs de données
+              de la cascade waterfall 7 sources).
             </p>
           </section>
 

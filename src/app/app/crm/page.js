@@ -407,8 +407,8 @@ export default function CrmAppPage() {
                 Volia CRM
               </h1>
               <p className="text-base sm:text-lg text-content-secondary leading-relaxed max-w-xl mx-auto mb-2">
-                Le CRM, c&apos;est sur le plan{' '}
-                <strong className="text-content-primary">Business</strong>.
+                Limite du plan atteinte — le CRM illimité, c&apos;est sur le plan{' '}
+                <strong className="text-content-primary">MAX</strong>.
               </p>
               <p className="text-sm text-content-tertiary">
                 Pipeline Kanban, contacts auto-créés depuis les Campagnes, reporting natif. Zéro saisie manuelle.
@@ -418,23 +418,23 @@ export default function CrmAppPage() {
             <div className="rounded-2xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 via-surface-base to-teal-50 p-8 sm:p-10 text-center shadow-xl shadow-emerald-500/10">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-200 text-emerald-700 text-xs font-semibold uppercase tracking-wider mb-4">
                 <Sparkles size={11} />
-                Plan Business
+                Plan MAX
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold mb-2 text-content-primary">
-                Passer en Business
+                Passer à MAX
               </h2>
               <p className="text-content-secondary text-sm sm:text-base mb-2">
-                <span className="text-3xl font-extrabold text-content-primary">149 €</span>
+                <span className="text-3xl font-extrabold text-content-primary">179 €</span>
                 <span className="text-content-tertiary"> /mois</span>
               </p>
               <p className="text-xs text-content-tertiary mb-6">
-                10 000 prospects/mois · CRM complet · Support prioritaire
+                Suite illimitée · Autopilot · Code MAX99 : 3 mois à 99 €
               </p>
               <Link
                 href="/pricing"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all"
               >
-                Voir le plan Business
+                Voir le plan MAX
               </Link>
             </div>
 

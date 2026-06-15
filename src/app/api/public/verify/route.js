@@ -163,7 +163,7 @@ export async function POST(request) {
         {
           error: 'rate_limit_exceeded',
           message:
-            "Vous avez atteint la limite de vérifications gratuites pour aujourd'hui. Inscrivez-vous (Starter gratuit) pour continuer.",
+            "Vous avez atteint la limite de vérifications gratuites pour aujourd'hui. Inscrivez-vous (plan Gratuit, sans CB) pour continuer.",
           remaining_today: 0,
           reset_in_seconds: resetSec,
         },

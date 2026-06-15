@@ -77,7 +77,7 @@ export default async function CategoryChPage({ params }) {
     },
     {
       question: `Prix pour prospecter en Suisse romande ?`,
-      answer: `À partir de 19 €/mois (1 000 prospects). Tous les pays inclus dans tous les plans.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois), puis 19 €/mois (500 crédits/mois). Tous les pays inclus dans tous les plans.`,
     },
   ];
 

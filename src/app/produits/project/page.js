@@ -14,9 +14,9 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/produits/project`;
 
 export const metadata = {
-  title: 'Volia Project — Gestion de projets de livraison, incluse dans Business',
+  title: 'Volia Project — Gestion de projets de livraison, gratuite pour tous',
   description:
-    'Deal gagné → projet de livraison en 1 clic. Kanban simple, jalons, livrables, et un lien de suivi client sans compte. Trello sans le bazar, branché sur votre CRM. Inclus dans Volia Business.',
+    'Deal gagné → projet de livraison en 1 clic. Kanban simple, jalons, livrables, et un lien de suivi client sans compte. Trello sans le bazar, branché sur votre CRM. Gratuit pour tous, illimité avec Volia MAX.',
   alternates: { canonical: PAGE_URL },
   keywords: [
     'gestion de projet simple',
@@ -31,7 +31,7 @@ export const metadata = {
   openGraph: {
     title: 'Volia Project — vos deals gagnés deviennent des projets livrés',
     description:
-      'Kanban simple, jalons, livrables, lien de suivi client sans compte. Intégré nativement au CRM Volia. Inclus dans Business.',
+      'Kanban simple, jalons, livrables, lien de suivi client sans compte. Intégré nativement au CRM Volia. Gratuit pour tous, illimité avec MAX.',
     url: PAGE_URL,
     type: 'website',
   },
@@ -144,7 +144,7 @@ const FAQ = [
   },
   {
     q: 'Combien de projets puis-je créer ?',
-    a: 'Volia Project est inclus dans la suite Business : projets, tâches et liens de partage illimités. Les fichiers de livrables sont limités à 25 Mo par fichier.',
+    a: 'Volia Project est gratuit pour tous : 1 projet actif sur le plan Gratuit. Avec MAX (179 €/mois), projets, tâches et liens de partage illimités. Les fichiers de livrables sont limités à 25 Mo par fichier.',
   },
 ];
 
@@ -173,15 +173,15 @@ export default function ProductProjectPage() {
             <>
               Vos deals gagnés deviennent des projets de livraison en 1 clic. Kanban simple,
               jalons, livrables — et un <strong className="text-content-primary font-semibold">lien de suivi client sans compte</strong>.
-              Trello sans le bazar, branché sur votre CRM. Inclus dans{' '}
-              <strong className="text-orange-700 font-semibold">Volia Business</strong>.
+              Trello sans le bazar, branché sur votre CRM. Gratuit pour tous — illimité avec{' '}
+              <strong className="text-orange-700 font-semibold">Volia MAX</strong>.
             </>
           ),
           ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=max' },
           ctaSecondary: { label: 'Voir les fonctionnalités', href: '#features' },
           trust: [
             (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Module LIVE</>),
-            'Projets illimités',
+            'Gratuit pour tous',
             'Suivi client sans login',
             'Modèles prêts à l\'emploi',
           ],
@@ -198,9 +198,9 @@ export default function ProductProjectPage() {
           ],
         }}
         pricing={{
-          label: 'Inclus dans la suite Business — projets et partages illimités',
-          subtext: 'Volia Project est réservé au plan Business, aux côtés de la Prospection, des Campagnes, du CRM et des Formulaires. Pas d\'add-on, annulation en 1 clic.',
-          cta: 'Passer à Business',
+          label: 'Gratuit pour tous — 1 projet actif · illimité avec MAX',
+          subtext: 'Volia Project est inclus gratuitement dans tous les comptes Volia, aux côtés de la Prospection, des Campagnes, du CRM et des Formulaires. Passez à MAX (179 €/mois — code MAX99 : 3 mois à 99 €) pour des projets et partages illimités. Pas d\'add-on, annulation en 1 clic.',
+          cta: 'Passer à MAX',
           ctaHref: '/signup?plan=max',
         }}
         beforeFaq={null}
@@ -210,7 +210,7 @@ export default function ProductProjectPage() {
           subtitle: 'Livrez aussi proprement que vous prospectez. Premier projet en 10 secondes, client impressionné dès le premier lien.',
           primary: { label: 'Commencer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir les tarifs', href: '/pricing' },
-          trust: 'Inclus dans Business · Suivi client sans compte · Modèles prêts à l\'emploi',
+          trust: 'Gratuit pour tous · Suivi client sans compte · Modèles prêts à l\'emploi',
         }}
       />
     </>

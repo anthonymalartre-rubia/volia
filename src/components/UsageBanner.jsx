@@ -29,7 +29,7 @@ export default function UsageBanner({ plan, usage, onUpgrade }) {
             onClick={onUpgrade}
             className="flex items-center gap-1 text-xs font-medium text-violet-400 hover:text-violet-300 transition-colors"
           >
-            Passer Pro <ArrowUpRight className="h-3 w-3" />
+            Passer à Prospection <ArrowUpRight className="h-3 w-3" />
           </button>
         )}
       </div>

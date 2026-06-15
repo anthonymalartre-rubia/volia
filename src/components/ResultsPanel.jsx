@@ -356,7 +356,7 @@ function EmailBadge({ method }) {
     return (
       <span className="inline-flex items-center gap-0.5 px-1.5 py-[1px] rounded-full text-[9px] font-semibold bg-blue-500/15 text-blue-400 border border-blue-500/20 whitespace-nowrap">
         <Zap size={8} className="flex-shrink-0" />
-        Apollo
+        Base B2B
       </span>
     );
   }
@@ -1146,10 +1146,10 @@ export default memo(function ResultsPanel({
             <a
               href="/pricing"
               className="hidden md:flex items-center gap-1.5 px-2.5 py-2 rounded-lg border border-line text-xs font-medium text-content-muted hover:text-content-primary hover:bg-surface-elevated transition"
-              title="L'enrichissement décideur (CEO, CMO, Sales…) est inclus à partir du plan Business"
+              title="L'enrichissement décideur (CEO, CMO, Sales…) est inclus avec le plan MAX"
             >
               <Lock size={12} />
-              <span>Décideur · Business</span>
+              <span>Décideur · MAX</span>
             </a>
           )}
           <Button
@@ -1489,7 +1489,7 @@ export default memo(function ResultsPanel({
                   const list = prospects.filter((p) => ids.includes(p.id));
                   onSendToCrm({ prospects: list });
                 }}
-                title={hasCrmAccess ? 'Envoyer ces prospects dans votre CRM' : 'Réservé au plan Business'}
+                title={hasCrmAccess ? 'Envoyer ces prospects dans votre CRM' : 'Limite du plan atteinte — passez à MAX pour l\'illimité'}
                 className={`
                   flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition
                   ${hasCrmAccess

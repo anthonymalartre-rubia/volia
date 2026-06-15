@@ -20,10 +20,10 @@ import { PLANS } from '@/lib/plans';
 
 export const dynamic = 'force-dynamic';
 
-// ─── Gate plan : le serveur MCP est réservé au plan Business (et au-dessus) ──
-// On s'appuie sur `unlocksMcp` (true uniquement sur business / enterprise).
-// NB : distinct de `unlocksModules` (CRM/Campagnes/Forms), qui est désormais
-// aussi inclus sur Pro — le MCP, lui, reste Business+.
+// ─── Gate plan : le serveur MCP est réservé au plan MAX (+ legacy Business/Enterprise) ──
+// On s'appuie sur `unlocksMcp` (flag posé dans plans.js sur les plans concernés).
+// NB : distinct de `unlocksModules` (CRM/Campagnes/Forms), inclus partout
+// depuis le pivot freemium — le MCP, lui, reste une feature MAX.
 async function planGate(request) {
   const auth = await authenticateApiRequest(request);
   if (!auth.ok) return { ok: false, text: `Clé API invalide : ${auth.error}` };
@@ -38,7 +38,7 @@ async function planGate(request) {
   if (!plan.unlocksMcp) {
     return {
       ok: false,
-      text: `🔒 Le serveur MCP de Volia est réservé au plan Business. Ton plan actuel (${plan.name}) n'y donne pas accès. Passe au plan Business pour piloter Volia depuis un agent IA : https://volia.fr/pricing`,
+      text: `🔒 Le serveur MCP de Volia est réservé au plan MAX. Ton plan actuel (${plan.name}) n'y donne pas accès. Passe à MAX (179 €/mois — code MAX99 : 3 mois à 99 €) pour piloter Volia depuis un agent IA : https://volia.fr/pricing`,
     };
   }
   return { ok: true };
@@ -249,7 +249,7 @@ export async function POST(request) {
       if (!TOOLS.some((t) => t.name === toolName)) {
         return rpcError(id, -32602, `Tool inconnu : ${toolName}`);
       }
-      // Gate Business : tous les tools nécessitent un plan Business+
+      // Gate MAX : tous les tools nécessitent un plan MAX (ou legacy équivalent)
       const gate = await planGate(request);
       if (!gate.ok) {
         return rpcResult(id, { content: [{ type: 'text', text: gate.text }], isError: true });

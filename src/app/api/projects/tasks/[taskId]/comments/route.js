@@ -7,7 +7,7 @@ import { checkProjectAccess, logProjectActivity } from '@/lib/projects';
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'Volia Project est réservé au plan Business' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }

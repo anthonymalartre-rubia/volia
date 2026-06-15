@@ -42,7 +42,7 @@ export async function POST(request) {
   const teamData = await getTeamForUser(user.id);
   if (!teamData) {
     return NextResponse.json(
-      { error: 'Aucune équipe trouvée. Passez au plan Business pour inviter des membres.' },
+      { error: 'Aucune équipe trouvée. Passez à MAX (179€/mois — code MAX99 : 3 mois à 99€) pour inviter des membres.' },
       { status: 403 }
     );
   }
@@ -55,11 +55,11 @@ export async function POST(request) {
     );
   }
 
-  // Gating Business
+  // Gating plan équipes
   const allowed = await teamCanInvite(teamData.team.id);
   if (!allowed) {
     return NextResponse.json(
-      { error: 'Le plan Business est requis pour inviter des membres.' },
+      { error: 'Le multi-utilisateurs est réservé au plan MAX. Passez à MAX pour inviter des membres.' },
       { status: 403 }
     );
   }

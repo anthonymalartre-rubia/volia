@@ -89,7 +89,7 @@ export async function POST(request) {
       return NextResponse.json(
         {
           error: 'rate_limit_exceeded',
-          message: `Vous avez essayé le maximum de recherches gratuites aujourd'hui. Inscrivez-vous (Starter gratuit à vie) pour continuer.`,
+          message: `Vous avez essayé le maximum de recherches gratuites aujourd'hui. Inscrivez-vous (plan Gratuit à vie, sans CB) pour continuer.`,
           remaining_today: 0,
           reset_in_seconds: resetSec,
         },

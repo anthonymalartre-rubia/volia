@@ -44,7 +44,7 @@ export const metadata = {
     default: 'Volia Autopilot — Pipeline B2B automatisé & prospection B2B France',
     template: '%s | Volia',
   },
-  description: 'Volia Autopilot : ton pipeline B2B automatisé — tu sélectionnes la cible, Volia exécute (scrap → email perso → qualif → scoring → CRM). Inclut la prospection B2B France via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. Dès 19 €/mois, essai 14 jours sans carte bancaire.',
+  description: 'Volia Autopilot : ton pipeline B2B automatisé — tu sélectionnes la cible, Volia exécute (scrap → email perso → qualif → scoring → CRM). Inclut la prospection B2B France via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. Gratuit pour démarrer, essai 14 jours de MAX sans carte bancaire.',
   keywords: ['Volia Autopilot', 'pipeline B2B automatisé', 'automatisation prospection', 'prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD'],
   authors: [{ name: 'Volia' }],
   creator: 'Volia',
@@ -76,7 +76,7 @@ const organizationSchema = {
   alternateName: ['Volia.fr', 'Volia.fr'],
   url: 'https://volia.fr',
   logo: 'https://volia.fr/icon.svg',
-  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Suite complète (prospection, campagnes, CRM, formulaires) dès 49 €/mois — 19 €/mois les 3 premiers mois avec le code ETE2026.',
+  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Suite complète (prospection, campagnes, CRM, formulaires) gratuite pour démarrer — Prospection 19 €/mois, MAX 179 €/mois.',
   sameAs: ['https://www.linkedin.com/company/volia-saas/'],
   founder: {
     '@type': 'Person',

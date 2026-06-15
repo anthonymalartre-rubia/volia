@@ -1173,7 +1173,7 @@ Cela garantit que l'email appartient bien à l'inscrit (vs simple opt-in où on 
 - **Pricing transparent** en ligne
 - **Upgrade contextuel** dans le produit (au moment où le user atteint une limite)
 
-**Exemples** : Notion, Figma, Slack, Calendly, Loom, Volia (Starter gratuit).
+**Exemples** : Notion, Figma, Slack, Calendly, Loom, Volia (plan Gratuit).
 
 **Avantages** : CAC très bas, scalable sans embauche, viralité naturelle.
 **Inconvénients** : ACV plus bas, conversion plus lente, moins adapté aux deals enterprise.`,

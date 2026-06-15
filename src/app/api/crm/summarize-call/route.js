@@ -35,7 +35,7 @@ export async function POST(request) {
   const hasAccess = await checkCrmAccess(supabase, user.id);
   if (!hasAccess) {
     return NextResponse.json(
-      { success: false, error: 'CRM réservé au plan Business' },
+      { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
       { status: 403 }
     );
   }

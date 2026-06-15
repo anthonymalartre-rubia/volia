@@ -13,11 +13,11 @@ import { AUTOPILOT_TEMPLATES } from '@/lib/autopilot/templates';
 
 export const metadata = {
   title: 'Volia Autopilot — Ton pipeline B2B en autopilot | Volia',
-  description: 'Sélectionne ta cible, Volia exécute : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. 12 templates B2B France, RGPD natif. À partir de 19 €/mois — essai 14 jours, sans carte bancaire.',
+  description: 'Sélectionne ta cible, Volia exécute : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. 12 templates B2B France, RGPD natif. Exclusivité Volia MAX 179 €/mois (code MAX99 : 3 mois à 99 €) — essai 14 jours, sans carte bancaire.',
   alternates: { canonical: 'https://volia.fr/produits/autopilot' },
   openGraph: {
     title: 'Volia Autopilot — Pipeline B2B en autopilot',
-    description: 'Volia exécute ta prospection B2B de bout en bout : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. Made in France, RGPD natif, dès 19 €/mois — essai 14 jours.',
+    description: 'Volia exécute ta prospection B2B de bout en bout : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. Made in France, RGPD natif. Exclusivité MAX 179 €/mois (code MAX99 : 3 mois à 99 €) — essai 14 jours.',
     type: 'website',
   },
 };
@@ -44,7 +44,7 @@ const WHAT_HAPPENS_AUTO = [
   { icon: TrendingUp, text: 'Scoring automatique des leads (0-100)' },
   { icon: KanbanSquare, text: 'Push des leads chauds dans ton CRM avec stage + tag' },
   { icon: Clock, text: 'Relance des non-répondants à J+14' },
-  { icon: Brain, text: 'Apprentissage continu (A/B testing en Enterprise)' },
+  { icon: Brain, text: 'Apprentissage continu (A/B testing inclus)' },
 ];
 
 const WHY_VOLIA_VS_STACK_US = [
@@ -54,7 +54,7 @@ const WHY_VOLIA_VS_STACK_US = [
   { feature: 'Form qualif', volia: '✓ Inclus', stack: '+ Typeform 35$/mo' },
   { feature: 'Workflow auto end-to-end', volia: '✓ Volia Autopilot', stack: '+ Zapier setup devops' },
   { feature: 'Hébergement UE / RGPD natif', volia: '✓ Frankfurt', stack: '❌ US' },
-  { feature: 'Prix total mensuel', volia: '49-499 €', stack: '1 000+ $' },
+  { feature: 'Prix total mensuel', volia: '179 € (MAX, tout inclus — 3 mois à 99 € avec MAX99)', stack: '1 000+ $' },
 ];
 
 export default function AutopilotProductPage() {

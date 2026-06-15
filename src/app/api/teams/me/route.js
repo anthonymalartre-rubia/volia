@@ -27,8 +27,9 @@ export async function GET() {
 
   let teamData = await getTeamForUser(user.id);
 
-  // Auto-heal : si user a un plan Business mais pas de team, on la crée.
-  // Couvre les anciens clients Business pré-feature et les comptes admin manuels.
+  // Auto-heal : si user a un plan qui débloque les équipes mais pas de team,
+  // on la crée. Couvre les anciens clients Business pré-feature et les
+  // comptes admin manuels.
   if (!teamData && teamsAllowed && profile?.plan && planAllowsTeams(profile.plan)) {
     try {
       await ensureTeamForOwner(user.id, user.email);

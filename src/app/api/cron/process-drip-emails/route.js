@@ -81,7 +81,7 @@ const DRIP_STEPS = [
     daysSinceSignup: 7,
     label: 'J+7 Trial expiring',
     /**
-     * Réservé aux users en trial Pro actif :
+     * Réservé aux users en trial (14 jours de MAX) actif :
      *   - trial_ends_at est dans le futur (trial pas encore expiré)
      *   - trial_converted_at est null (pas encore upgradé)
      * Si l'user a déjà converti ou n'a jamais eu de trial → skip.

@@ -23,7 +23,7 @@ async function guard() {
   const { user, supabase } = await getAuthenticatedUser();
   if (!user) return { error: NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 }) };
   const hasAccess = await checkCrmAccess(supabase, user.id);
-  if (!hasAccess) return { error: NextResponse.json({ success: false, error: 'CRM réservé au plan Business' }, { status: 403 }) };
+  if (!hasAccess) return { error: NextResponse.json({ success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' }, { status: 403 }) };
   return { user, supabase };
 }
 

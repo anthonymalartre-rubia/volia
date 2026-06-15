@@ -7,10 +7,9 @@
 //
 // Placement : TopBar, juste après le logo.
 //
-// Badge "Plan Business" : on n'affiche PAS LIVE/BETA/BIENTÔT (vestige
-// pré-launch). À la place, on indique uniquement les modules réservés
-// au plan Business (CRM, Campagnes, Formulaires) — Prospection est
-// disponible sur tous les plans donc aucun badge.
+// Badge "Plan MAX" : on n'affiche PAS LIVE/BETA/BIENTÔT (vestige
+// pré-launch). Pivot freemium : tous les modules sont ouverts à tous
+// (avec limites) ; seul Autopilot, réservé au plan MAX, porte le badge.
 // Cf. lib/plans.js → business.unlocksModules = true.
 //
 // Détection du module actif via usePathname() :

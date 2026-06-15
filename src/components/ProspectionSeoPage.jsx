@@ -449,7 +449,7 @@ export default function ProspectionSeoPage({
               <Zap size={16} />
               Démarrer gratuitement
             </Link>
-            <p className="text-xs text-content-tertiary mt-4">Aucune carte bancaire requise · plan Starter gratuit à vie</p>
+            <p className="text-xs text-content-tertiary mt-4">Aucune carte bancaire requise · plan Gratuit à vie</p>
           </div>
         </section>
         </article>

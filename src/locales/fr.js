@@ -368,8 +368,8 @@ const fr = {
   verifier: {
     title: "Vérification d'emails",
     subtitle: 'Vérifiez la validité de vos emails en masse via SMTP (sans envoyer de message).',
-    upgradeMsg: 'Cette fonctionnalité est réservée au plan Enterprise.',
-    upgradeBtn: 'Passer à Enterprise',
+    upgradeMsg: 'La vérification d\'emails est incluse dès le plan Prospection (100/mois) — 5 000/mois avec MAX.',
+    upgradeBtn: 'Passer à Prospection',
     importTitle: 'Importer des emails',
     importSubtitle: "Importez une liste d'emails pour vérifier leur validité via SMTP — sans envoyer de message.",
     importFile: 'Importer un fichier CSV / TXT',
@@ -431,7 +431,7 @@ const fr = {
     exports: 'exports',
     limitReached: 'Plus de {{type}} ce mois',
     usageWarning: '80% des {{type}} consommés ce mois',
-    upgradePro: 'Passer Pro',
+    upgradePro: 'Passer à Prospection',
   },
 
   // ─── Limit Reached Modal ──────────────────────────────────
@@ -441,15 +441,15 @@ const fr = {
     title: 'Plus de {{metric}} ce mois',
     subtitle: 'Tu as atteint la limite du plan {{plan}}.',
     usageLabel: '{{metric}} ce mois-ci',
-    stoppedAt: "On s'est arrêté à {{processed}} / {{total}}. Il reste {{remaining}} prospects — passe Pro et on reprend tout de suite.",
-    proHeadline: 'Plan Pro · 49 EUR/mois',
-    proBenefitEnrich1: '500 enrichissements / mois (au lieu de 20)',
-    proBenefitEnrich2: 'Cascade waterfall complète, toutes sources',
+    stoppedAt: "On s'est arrêté à {{processed}} / {{total}}. Il reste {{remaining}} prospects — passe à Prospection (ou prends un pack de crédits dès 9 €) et on reprend tout de suite.",
+    proHeadline: 'Plan Prospection · 19 EUR/mois',
+    proBenefitEnrich1: '500 crédits / mois (emails trouvés)',
+    proBenefitEnrich2: 'Cascade waterfall 7 sources',
     proBenefitEnrich3: 'Exports illimités, tous formats',
-    proBenefitSearch1: 'Prospects illimités / mois',
-    proBenefitSearch2: 'Recherche en langage naturel illimitée',
+    proBenefitSearch1: '2 000 recherches / mois',
+    proBenefitSearch2: 'Recherche en langage naturel incluse',
     proBenefitSearch3: 'Exports illimités, tous formats',
-    upgradeCta: 'Passe Pro maintenant',
+    upgradeCta: 'Passe à Prospection — 19 €/mois',
     dismiss: 'Plus tard',
   },
 
@@ -531,8 +531,8 @@ const fr = {
     planLabel: 'Plan',
     renewalOn: 'Renouvellement le',
     used: 'utilisé(s)',
-    upgradeProPrompt: 'Passe Pro. Plus de limite, c\'est moins de prise de tête.',
-    upgradePro: 'Passer Pro',
+    upgradeProPrompt: 'Passe à Prospection — 500 crédits/mois, c\'est moins de prise de tête.',
+    upgradePro: 'Passer à Prospection',
     // Plan & Billing section
     planAndBilling: 'Plan & Facturation',
     planAndBillingDesc: 'Gérez votre abonnement et vos limites',
@@ -541,7 +541,7 @@ const fr = {
     folders: 'Dossiers',
     exportsPerMonth: 'Exports/mois',
     manageSubscription: "Gérer l'abonnement",
-    upgradeToPro: 'Passer au Pro',
+    upgradeToPro: 'Passer à Prospection',
     eurPerMonth: 'EUR/mois',
     // Danger zone
     dangerZone: 'Zone dangereuse',
@@ -657,8 +657,9 @@ const fr = {
     // Hero
     hero: {
       // Repositioning 80/20 (mai 2026) : focus génération de leads en clair.
-      // Les 3 autres modules (Campagnes/CRM/Formulaires) sont du bonus
-      // Business 149 €, mentionné discrètement sous le hero — pas dans le H1.
+      // Pivot freemium 06/2026 : les 3 autres modules (Campagnes/CRM/
+      // Formulaires) sont inclus dès le plan Gratuit (avec limites),
+      // illimités en MAX 179 € — mentionné discrètement sous le hero.
       badge: 'Générateur email + téléphone B2B · 19 €/mois',
       title: 'Trouvez emails et téléphones B2B en 30 secondes.',
       titleLine2: 'Le générateur de leads B2B français.',
@@ -671,7 +672,7 @@ const fr = {
       ctaPrimary: 'Démarrer gratuitement',
       ctaSecondary: 'Voir une démo',
       // Mention discrète des modules bonus pour le plan max
-      bonusBusiness: 'Bonus Business 149 € : Campagnes + CRM + Formulaires inclus.',
+      bonusBusiness: 'Campagnes + CRM + Formulaires inclus dès le plan Gratuit — illimités avec MAX.',
     },
     // Why aggregator
     why: {
@@ -685,7 +686,7 @@ const fr = {
     // Features
     features: {
       label: 'Fonctionnalités',
-      title: 'Ce qu\'on fait, pour 49 EUR/mois',
+      title: 'Ce qu\'on fait, pour 19 EUR/mois',
       desc: 'Scraping, recherche Google, scoring. Un seul outil pour tout.',
       waterfall: 'Enrichissement automatique',
       waterfallDesc: 'On scrape le site, on cherche sur Google, on s\'arrête au premier email trouvé. Gratuit et illimité côté scraping.',
@@ -739,12 +740,12 @@ const fr = {
       countries: 'Pays',
       sources: 'Sources',
       sourcesSub: 'Scraping + Google',
-      vs: '49€',
+      vs: '19€',
       vsSub: 'par mois',
     },
     // Email verification
     emailVerif: {
-      badge: 'Enterprise',
+      badge: 'Dès Prospection',
       title: 'Vérifiez les emails avant d\'envoyer. Pas après.',
       desc: 'Importez votre liste, on vous dit ce qui marche. Vérification SMTP silencieuse — <strong class="text-content-secondary">aucun email envoyé</strong>, aucun bounce.',
       smtp: 'Vérification SMTP silencieuse',
@@ -779,14 +780,14 @@ const fr = {
       monthlyPrice: 'Prix mensuel',
       sevenSources: 'Multi-sources',
       calcTitle: 'Le calcul tient en 3 lignes',
-      calcDesc: 'Apollo : 99 EUR/mois. Hunter : 49 EUR. Snov : 39 EUR. Et vous devez déjà avoir vos prospects. Volia Solo à <strong class="text-emerald-400">19 EUR/mois</strong> fait découverte + enrichissement. Pro à <strong class="text-violet-400">49 EUR/mois</strong> = 5x moins cher qu\'Apollo Basic.<br /><span class="text-emerald-400 font-semibold">Pas de crédits cachés. Annulez en 1 clic.</span>',
+      calcDesc: 'Apollo : 99 EUR/mois. Hunter : 49 EUR. Snov : 39 EUR. Et vous devez déjà avoir vos prospects. Volia Prospection à <strong class="text-emerald-400">19 EUR/mois</strong> fait découverte + enrichissement = <strong class="text-violet-400">5x moins cher</strong> qu\'Apollo Basic.<br /><span class="text-emerald-400 font-semibold">Pas de frais cachés. Annulez en 1 clic.</span>',
       savings: '80 EUR/mois économisés vs Apollo. 960 EUR/an dans votre poche.',
     },
     // Pricing
     pricing: {
       label: 'Tarifs transparents',
       title: 'Les prix (spoiler : moins cher qu\'Apollo)',
-      desc: 'Pas de crédits cachés. Google Places inclus. Démarrage à 19 EUR/mois.',
+      desc: 'Pas de frais cachés. Google Places inclus. Démarrage gratuit, Prospection à 19 EUR/mois.',
       perMonth: '/mois',
       perYear: '/an',
       monthly: 'Mensuel',
@@ -796,9 +797,9 @@ const fr = {
       cheapest: 'Le moins cher',
       // CTAs
       startFree: 'Allez, on essaie',
-      chooseSolo: 'Choisir Solo',
-      choosePro: 'Choisir Pro',
-      chooseBusiness: 'Choisir Business',
+      chooseSolo: 'Choisir Prospection',
+      choosePro: 'Choisir MAX',
+      chooseBusiness: 'Choisir MAX',
       // Comparison vs concurrents
       vsHunter: '60% moins cher que Hunter',
       vsSnov: 'Découverte + enrichissement (Snov fait que l\'un)',
@@ -809,39 +810,39 @@ const fr = {
       proTagline: 'Pour PME et agences',
       businessTagline: 'Pour équipes outbound',
       // Footer pricing section
-      yearlySave: 'Annuel : 2 mois offerts sur tous les plans. Soit ~16% en moins.',
+      yearlySave: 'Annuel : Prospection 190 € (2 mois offerts), MAX 1 690 € (458 € économisés).',
       questions: 'Une question sur les prix ?',
       contactSupport: 'On vous répond',
     },
     // Plan features (libellés concis pour les cards)
+    // Pivot freemium 06/2026 : free = Gratuit, solo = Prospection 19 €,
+    // pro/business = MAX 179 € (clés conservées pour compat i18n).
     planFeatures: {
-      // Free = features de base. Pas d'inheritsFrom — c'est le plan racine.
+      // Gratuit = features de base. Pas d'inheritsFrom — c'est le plan racine.
       free: [
-        '20 enrichissements/mois',
+        '25 crédits/mois (emails trouvés)',
         '5 exports/mois',
         'Scraping email + téléphone (fixe & mobile)',
         '101 départements (France entière)',
       ],
-      // Solo/Pro/Business = delta features uniquement (vs plan precedent)
-      // La card affichera "Tout inclus dans X +" en intro.
       solo: [
-        '400 enrichissements/mois (x20)',
+        '500 crédits/mois + 500 téléphones',
         'Exports illimités',
-        'Cascade waterfall (scraping + Google) — emails ET téléphones',
-        'Support email (48 h)',
+        'Cascade waterfall 7 sources — emails ET téléphones',
+        'API publique + Zapier/Make',
       ],
       pro: [
-        '1 200 enrichissements/mois (x3)',
-        'Dossiers illimités',
-        'Vérification email (MillionVerifier)',
-        'Téléphones mobiles enrichis (vs fixes en Solo)',
-        'Support email (24 h)',
+        '2 000 crédits/mois + 10 000 téléphones',
+        'Suite illimitée + Volia Autopilot',
+        'Vérification email 5 000/mois',
+        'Warmup automatique',
+        'Support prioritaire',
       ],
       business: [
-        '10 000 enrichissements/mois (x8)',
+        'Suite illimitée + Volia Autopilot',
         'Multi-utilisateurs (équipes, RBAC)',
-        'Accès API (à venir)',
-        'Onboarding personnalisé',
+        'Serveur MCP + API',
+        'Enrichissement décideur',
         'Support prioritaire',
       ],
     },

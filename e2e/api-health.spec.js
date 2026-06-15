@@ -53,7 +53,7 @@ test.describe('API protegees (pas de 200 sans auth)', () => {
 
   test('GET /api/crm/deals sans token → 401/403 (ou 500 si env CI incomplete)', async ({ request }) => {
     const res = await request.get('/api/crm/deals');
-    // 401 (pas auth) | 403 (pas de plan Business) | 500 (env CI)
+    // 401 (pas auth) | 403 (accès CRM refusé / limite de plan) | 500 (env CI)
     expect([401, 403, 500]).toContain(res.status());
   });
 

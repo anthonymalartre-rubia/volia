@@ -128,7 +128,7 @@ export default function ComparatifPage({ data }) {
                 </Link>
               </div>
               <p className="mt-3 text-xs text-content-tertiary">
-                100 prospects gratuits · Sans carte bancaire · Annulation 1 clic
+                25 crédits gratuits/mois · Sans carte bancaire · Annulation 1 clic
               </p>
             </MotionInView>
           </div>
@@ -580,7 +580,7 @@ export default function ComparatifPage({ data }) {
                 </div>
                 <p className="mt-3 text-xs text-content-tertiary">
                   <ShieldCheck size={12} className="inline mr-1 text-emerald-600" />
-                  100 prospects gratuits · Sans CB · Annulation 1 clic · Made in France
+                  25 crédits gratuits/mois · Sans CB · Annulation 1 clic · Made in France
                 </p>
               </div>
             </MotionInView>

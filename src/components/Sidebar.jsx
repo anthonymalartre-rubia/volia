@@ -40,11 +40,13 @@ function hasAccess(userPlanId, requiredPlanId) {
   return userLevel >= requiredLevel;
 }
 
-// Métadonnées plans pour les badges et l'encart "next step"
+// Métadonnées plans pour les badges et l'encart "next step".
+// Les clés restent les ids legacy (gating inchangé) ; seuls les libellés
+// affichés reflètent le lineup freemium (Prospection 19€ / MAX 179€).
 const PLAN_META = {
-  solo: { name: 'Solo', price: 19, hint: 'Passe Solo : 10× plus de prospects' },
-  pro: { name: 'Pro', price: 49, hint: 'Passe Pro : vérif emails illimitée' },
-  business: { name: 'Business', price: 99, hint: 'Passe Business : CRM intégré + API' },
+  solo: { name: 'Prospection', price: 19, hint: 'Passe Prospection : 500 crédits/mois' },
+  pro: { name: 'MAX', price: 179, hint: 'Passe MAX : suite illimitée + Autopilot' },
+  business: { name: 'MAX', price: 179, hint: 'Passe MAX : suite illimitée + Autopilot' },
 };
 
 // Plan suivant à proposer dans l'encart de bas de sidebar
@@ -127,7 +129,7 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
 
           {/* Bug fix 27 mai 2026 : zone scrollable principale (nav + settings
               + history) → empêche le chevauchement visuel entre l'historique
-              et le bloc Plan Business en bas. Avant, tout était dans un même
+              et le bloc upgrade en bas. Avant, tout était dans un même
               flex column h-full et le mt-auto du bloc bas se collapsait quand
               le contenu dépassait la viewport. */}
           <div className="flex-1 min-h-0 overflow-y-auto px-4 pt-2 pb-3">
@@ -256,7 +258,7 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
           {/* Search history — scroll natif de la zone parente (pas de max-h
               ni overflow ici). Bug fix 27 mai 2026 : avant max-h-48 +
               overflow-y-auto créait un sous-scroll qui chevauchait visuellement
-              le bloc Plan Business via les fonds gradient à 5% d'opacité. */}
+              le bloc upgrade via les fonds gradient à 5% d'opacité. */}
           <div className="mt-6">
             <h3 className="px-3 text-[10px] font-semibold uppercase tracking-wider text-content-muted mb-2">
               {t('sidebar.history')}

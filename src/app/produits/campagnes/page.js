@@ -4,7 +4,7 @@
 // Positionnement : alternative française à Lemlist + Instantly + Smartlead
 // Couleur dominante : BLUE (cohérent ModuleSwitcher BETA blue)
 // Argument N°1 : deliverability (warmup auto 28j) + auto-create CRM
-// Argument N°2 : tout-en-un à 49€ vs ~108€/mo cumulés concurrents
+// Argument N°2 : suite incluse (gratuite, illimitée avec MAX 179€) vs ~108€/mo cumulés concurrents
 // ─────────────────────────────────────────────────────────────────────
 
 import {
@@ -22,7 +22,7 @@ const PAGE_URL = `${SITE_URL}/produits/campagnes`;
 export const metadata = {
   title: 'Volia Campagnes — Cold email B2B qui finit en Inbox, pas en Spam',
   description:
-    'Alternative française à Lemlist + Instantly + Smartlead. Cold email illimité, warmup automatique 28 jours, multi-tenant Resend, auto-create CRM depuis replies. Inclus dans la suite Business 149 €/mois vs 108€/mo cumulés.',
+    'Alternative française à Lemlist + Instantly + Smartlead. Cold email gratuit pour tous (200/mois), 10 000/mois avec MAX : warmup automatique 28 jours, multi-tenant Resend, auto-create CRM depuis replies. Une seule suite vs 108€/mo cumulés.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -50,7 +50,7 @@ export const metadata = {
   openGraph: {
     title: 'Volia Campagnes — Cold email B2B qui finit en Inbox, pas en Spam',
     description:
-      'Lemlist 39€. Instantly 30$. Volia Campagnes : inclus dans la suite Business à 149€. Warmup auto 28 jours + multi-tenant Resend + auto-create CRM depuis replies.',
+      'Lemlist 39€. Instantly 30$. Volia Campagnes : gratuit pour tous, 10 000 emails/mois avec MAX 179€ (code MAX99 : 3 mois à 99€). Warmup auto 28 jours + multi-tenant Resend + auto-create CRM depuis replies.',
     url: PAGE_URL,
     type: 'website',
   },
@@ -235,7 +235,7 @@ function SocialProofSection() {
 // ─────────────────────────────────────────────────────────────────────
 function ComparisonTableSection() {
   const rows = [
-    { feature: 'Cold email illimité', lemlist: { ok: false, label: '50/jour' }, instantly: { ok: true }, volia: { ok: true } },
+    { feature: 'Cold email gros volume', lemlist: { ok: false, label: '50/jour' }, instantly: { ok: true }, volia: { ok: true, label: '10 000/mois' } },
     { feature: 'Multi-tenant sender (votre domaine)', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
     { feature: 'Warmup automatique 28 j', lemlist: { ok: false, label: '+30€/mo' }, instantly: { ok: true }, volia: { ok: true, label: 'inclus' } },
     { feature: 'Auto-create CRM depuis replies', lemlist: { ok: false }, instantly: { ok: false }, volia: { ok: true } },
@@ -277,7 +277,7 @@ function ComparisonTableSection() {
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
               Lemlist + Instantly + HubSpot = 200 €/mo+.
               <br />
-              <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Volia Business = 149 €/mo, tout inclus.</span>
+              <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent">Volia MAX = 179 €/mo, tout inclus.</span>
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
               Et on est les seuls à faire du multi-tenant Resend natif + auto-create CRM depuis les replies.
@@ -303,8 +303,8 @@ function ComparisonTableSection() {
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white text-[9px] font-bold uppercase tracking-wider shadow-md whitespace-nowrap">
                       Recommandé
                     </div>
-                    Volia Business
-                    <div className="text-[10px] font-mono text-blue-700 normal-case tracking-normal mt-1">149 €/mo</div>
+                    Volia MAX
+                    <div className="text-[10px] font-mono text-blue-700 normal-case tracking-normal mt-1">179 €/mo</div>
                   </th>
                 </tr>
               </thead>
@@ -321,7 +321,7 @@ function ComparisonTableSection() {
                   <td className="px-4 sm:px-6 py-5 font-bold text-content-primary">Stack équivalent</td>
                   <td className="px-4 py-5 text-center font-mono font-bold text-rose-600">108 €/mo total</td>
                   <td className="px-4 py-5 text-center text-content-tertiary"></td>
-                  <td className="px-4 py-5 text-center font-mono font-bold text-emerald-700 text-lg bg-gradient-to-b from-blue-100/60 to-cyan-100/40">149 €/mo (+ CRM + Forms)</td>
+                  <td className="px-4 py-5 text-center font-mono font-bold text-emerald-700 text-lg bg-gradient-to-b from-blue-100/60 to-cyan-100/40">179 €/mo (suite complète)</td>
                 </tr>
               </tbody>
             </table>
@@ -335,11 +335,11 @@ function ComparisonTableSection() {
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Zap size={18} className="text-amber-200" />
-              <span>Économisez 59 €/mois + 1 outil de moins</span>
+              <span>Passer à MAX — code MAX99 : 3 mois à 99 €</span>
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
             <p className="mt-3 text-xs text-content-tertiary">
-              Inclus dans la suite Business 149 € · 14 jours d&apos;essai · Migration depuis Lemlist incluse
+              Inclus dans MAX 179 €/mois · 14 jours d&apos;essai MAX · Migration depuis Lemlist incluse
             </p>
           </div>
         </MotionInView>
@@ -360,7 +360,7 @@ function ProblemSolutionSection() {
     'Replies notées à la main, leads perdus à chaque étape',
   ];
   const after = [
-    '149 €/mois (Business) — cold email illimité, tout inclus + Prospection + CRM + Formulaires',
+    '179 €/mois (MAX, 3 mois à 99 € avec MAX99) — 10 000 cold emails/mois + Prospection + CRM + Formulaires',
     'Warmup automatique 28 jours intégré (10 → 200/jour)',
     'Multi-tenant Resend : envoyez depuis VOTRE domaine vérifié',
     'Auto-create CRM : une reply = un deal créé en stage Lead',
@@ -566,21 +566,21 @@ function UseCasesSection() {
 function PricingFocusSection() {
   const plans = [
     {
-      name: 'Pro', price: '49 €', tag: 'Cold email inclus',
-      desc: 'Cold email (2 000/mois) + warmup + suite complète (Prospection + CRM + Forms). 19 € avec ETE2026.',
-      cta: 'Essai Pro 14 j', href: '/signup?plan=pro',
+      name: 'Gratuit', price: '0 €', tag: 'Pour démarrer',
+      desc: 'Cold email 200/mois + 1 séquence + toute la suite avec limites (Prospection, CRM, Formulaires). Sans carte bancaire.',
+      cta: 'Créer mon compte gratuit', href: '/signup?plan=pro',
       featured: false,
     },
     {
-      name: 'Business', price: '179 €', tag: 'Recommandé · Volume max',
-      desc: 'Cold email illimité + warmup + multi-inbox + auto-create CRM depuis replies. Plus Prospection 10k + Formulaires.',
-      cta: 'Choisir Business', href: '/signup?plan=max',
+      name: 'MAX', price: '179 €', tag: 'Recommandé · Volume max',
+      desc: 'Cold email 10 000/mois + warmup + multi-inbox + auto-create CRM depuis replies. Plus toute la suite illimitée + Autopilot. Code MAX99 : 3 premiers mois à 99 €.',
+      cta: 'Choisir MAX', href: '/signup?plan=max',
       featured: true,
-      bullets: ['Cold email illimité', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Auto-create CRM depuis replies'],
+      bullets: ['10 000 cold emails/mois', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Auto-create CRM depuis replies'],
     },
     {
       name: 'Annuel', price: '141 €', tag: '−2 mois offerts',
-      desc: 'Même Business, facturé annuellement. 1 690 €/an au lieu de 2 148 €.',
+      desc: 'Même MAX, facturé annuellement. 1 690 €/an au lieu de 2 148 €.',
       cta: 'Choisir Annuel', href: '/signup?plan=max&billing=yearly',
       featured: false,
     },
@@ -595,7 +595,7 @@ function PricingFocusSection() {
               Tarification Campagnes
             </span>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              Cold email inclus dès le plan Pro à 49 €.
+              Cold email inclus gratuitement. Volume max avec MAX.
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
               Pas d&apos;add-on, pas de surprise. Annulation 1 clic, migration depuis Lemlist incluse.
@@ -651,7 +651,7 @@ function PricingFocusSection() {
 
         <MotionInView delay={400}>
           <p className="text-center text-xs text-content-tertiary mt-8">
-            Tous les plans : warmup automatique inclus · opt-out RGPD géré · support FR · annulation 1 clic
+            Code MAX99 : 3 premiers mois de MAX à 99 € · opt-out RGPD géré · support FR · annulation 1 clic
           </p>
         </MotionInView>
       </div>
@@ -674,7 +674,7 @@ function PullQuoteSection() {
         </div>
         <blockquote className="text-2xl sm:text-3xl lg:text-4xl font-medium text-content-primary leading-snug tracking-tight">
           <span className="text-blue-400 text-5xl leading-none align-top">“</span>
-          On payait <span className="font-bold">300 €/mois entre Lemlist, Smartlead, un warmup tool et HubSpot CRM</span>. On a tout viré pour Volia Business à <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent font-bold">149 €/mois</span>. La deliverability est <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">meilleure</span>, et chaque reply atterrit directement dans notre pipeline CRM.
+          On payait <span className="font-bold">300 €/mois entre Lemlist, Smartlead, un warmup tool et HubSpot CRM</span>. On a tout viré pour Volia MAX à <span className="bg-gradient-to-br from-blue-600 to-cyan-600 bg-clip-text text-transparent font-bold">179 €/mois</span>. La deliverability est <span className="bg-gradient-to-br from-emerald-600 to-teal-600 bg-clip-text text-transparent font-bold">meilleure</span>, et chaque reply atterrit directement dans notre pipeline CRM.
           <span className="text-blue-400 text-5xl leading-none align-top">”</span>
         </blockquote>
         <div className="mt-8 flex items-center justify-center gap-4">
@@ -706,7 +706,7 @@ const FEATURES = {
     {
       icon: 'Flame',
       title: 'Warmup automatique 28 jours',
-      desc: 'Chauffe progressivement votre domaine (J1 : 10/jour → J28 : 200/jour). Zéro config, zéro tool externe. Lemlist le facture +30 €/mois, chez Volia c\'est inclus.',
+      desc: 'Chauffe progressivement votre domaine (J1 : 10/jour → J28 : 200/jour). Zéro config, zéro tool externe. Lemlist le facture +30 €/mois, chez Volia c\'est inclus avec MAX.',
     },
     {
       icon: 'Repeat',
@@ -740,7 +740,7 @@ const HOW_IT_WORKS = [
 const FAQ = [
   {
     q: 'Combien d\'emails puis-je envoyer par jour ?',
-    a: 'Pendant le warmup (28 jours) : montée progressive de 10 à 200 emails/jour. Une fois warm, le quota dépend de votre plan : Solo 500 emails/mois, Pro illimité (jusqu\'à 200/jour par domaine), Business illimité avec multi-domaines. La limite est avant tout votre deliverability — si le bounce rate dépasse 2 %, Volia met en pause automatiquement.',
+    a: 'Pendant le warmup (28 jours) : montée progressive de 10 à 200 emails/jour. Une fois warm, le quota dépend de votre plan : Gratuit 200 emails/mois, MAX 10 000 emails/mois avec multi-domaines. La limite est avant tout votre deliverability — si le bounce rate dépasse 2 %, Volia met en pause automatiquement.',
   },
   {
     q: 'Comment éviter le spam folder ?',
@@ -748,11 +748,11 @@ const FAQ = [
   },
   {
     q: 'Qu\'est-ce que le warmup d\'un domaine email ?',
-    a: 'Le warmup consiste à augmenter progressivement le volume d\'envoi d\'un nouveau domaine pour que Google / Outlook le considèrent comme légitime. Sans warmup, un domaine neuf qui envoie 100 emails dès J1 finit en spam. Volia simule des échanges et augmente la cadence de 10 à 200 emails/jour sur 28 jours. Lemlist le vend +30 €/mois, Volia l\'inclut dans tous les plans.',
+    a: 'Le warmup consiste à augmenter progressivement le volume d\'envoi d\'un nouveau domaine pour que Google / Outlook le considèrent comme légitime. Sans warmup, un domaine neuf qui envoie 100 emails dès J1 finit en spam. Volia simule des échanges et augmente la cadence de 10 à 200 emails/jour sur 28 jours. Lemlist le vend +30 €/mois ; chez Volia, le warmup automatique est inclus avec MAX.',
   },
   {
     q: 'Quelle différence avec Lemlist ?',
-    a: 'Trois différences majeures : (1) Volia est multi-tenant Resend natif (vous envoyez depuis VOTRE domaine, Lemlist passe par son infra), (2) warmup inclus vs payant en add-on, (3) auto-create CRM depuis replies — exclusivité Volia. Côté prix : Lemlist 39 € pour 50 emails/jour, Volia Business 149 € pour cold email illimité + warmup + tracking + CRM + Formulaires.',
+    a: 'Trois différences majeures : (1) Volia est multi-tenant Resend natif (vous envoyez depuis VOTRE domaine, Lemlist passe par son infra), (2) warmup inclus vs payant en add-on, (3) auto-create CRM depuis replies — exclusivité Volia. Côté prix : Lemlist 39 € pour 50 emails/jour, Volia MAX 179 € pour 10 000 cold emails/mois + warmup + tracking + CRM + Formulaires.',
   },
   {
     q: 'Puis-je utiliser mon propre domaine d\'envoi ?',
@@ -760,7 +760,7 @@ const FAQ = [
   },
   {
     q: 'Comment fonctionne l\'auto-create CRM depuis les replies ?',
-    a: 'Dès qu\'un prospect répond à une séquence, Volia crée automatiquement : (1) un contact dans le CRM avec ses infos enrichies, (2) un deal au stage "Lead" avec la séquence d\'origine en source, (3) une activité "Reply reçue" datée. Vous voyez la conversation complète dans le CRM. Zéro copier-coller, zéro lead qui passe à la trappe. Disponible sur le plan Business.',
+    a: 'Dès qu\'un prospect répond à une séquence, Volia crée automatiquement : (1) un contact dans le CRM avec ses infos enrichies, (2) un deal au stage "Lead" avec la séquence d\'origine en source, (3) une activité "Reply reçue" datée. Vous voyez la conversation complète dans le CRM. Zéro copier-coller, zéro lead qui passe à la trappe. Disponible avec MAX.',
   },
   {
     q: 'Comment fonctionne l\'opt-out RGPD ?',
@@ -772,11 +772,11 @@ const FAQ = [
   },
   {
     q: 'Vous prévoyez du SMS multi-canal ?',
-    a: 'Oui, le module SMS via Twilio arrive en Q3 2026. La phase 1 se concentre exclusivement sur l\'email pour atteindre une deliverability irréprochable. Les comptes Business auront accès en preview dès l\'ouverture beta.',
+    a: 'Oui, le module SMS via Twilio arrive en Q3 2026. La phase 1 se concentre exclusivement sur l\'email pour atteindre une deliverability irréprochable. Les comptes MAX auront accès en preview dès l\'ouverture beta.',
   },
   {
     q: 'Migration depuis Lemlist possible ?',
-    a: 'Oui, en 3 clics : (1) export CSV de vos contacts depuis Lemlist, (2) import dans Volia avec auto-mapping des variables {{firstName}} → {{prenom}}, (3) Volia reconstruit vos séquences existantes à l\'identique. Migration assistée incluse sur Pro et Business — on s\'occupe du transfert pour vous si vous le souhaitez.',
+    a: 'Oui, en 3 clics : (1) export CSV de vos contacts depuis Lemlist, (2) import dans Volia avec auto-mapping des variables {{firstName}} → {{prenom}}, (3) Volia reconstruit vos séquences existantes à l\'identique. Migration assistée incluse avec MAX — on s\'occupe du transfert pour vous si vous le souhaitez.',
   },
 ];
 
@@ -793,9 +793,9 @@ const product = {
   '@context': 'https://schema.org',
   ...productSchema({
     name: 'Volia Campagnes',
-    description: 'Cold email B2B illimité, warmup automatique 28 jours, multi-tenant Resend natif, auto-create CRM depuis replies. Alternative française à Lemlist + Instantly + Smartlead. Inclus dans la suite Business 149 €/mois.',
+    description: 'Cold email B2B, warmup automatique 28 jours, multi-tenant Resend natif, auto-create CRM depuis replies. Alternative française à Lemlist + Instantly + Smartlead. Gratuit pour tous, 10 000 emails/mois avec la suite Volia MAX 179 €/mois.',
     url: PAGE_URL,
-    priceFrom: 149,
+    priceFrom: 0,
   }),
 };
 
@@ -815,7 +815,7 @@ export default function CampagnesProductPage() {
           h1After: 'pas en Spam.',
           subtitle: (
             <>
-              Lemlist 39 €. Instantly 30 $. <strong className="text-content-primary font-semibold">Volia Campagnes : inclus dans la suite Business 149 €</strong>. Warmup auto 28 jours + multi-inbox + <strong className="text-emerald-700 font-semibold">auto-create CRM depuis les replies</strong>.
+              Lemlist 39 €. Instantly 30 $. <strong className="text-content-primary font-semibold">Volia Campagnes : gratuit pour tous, volume max avec MAX 179 €</strong>. Warmup auto 28 jours + multi-inbox + <strong className="text-emerald-700 font-semibold">auto-create CRM depuis les replies</strong>.
             </>
           ),
           ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=max' },
@@ -846,8 +846,8 @@ export default function CampagnesProductPage() {
         }}
         pricingBanner={<ProblemSolutionSection />}
         pricing={{
-          label: 'Inclus dans la suite Business (149 €/mois)',
-          subtext: 'Le module Campagnes (cold email illimité + warmup + tracking + multi-inbox + auto-create deals depuis replies) est réservé au plan Business, aux côtés de Prospection 10k + CRM + Formulaires. Pas d\'add-on caché, annulation 1 clic.',
+          label: 'Gratuit pour tous · volume max avec MAX (179 €/mois)',
+          subtext: 'Le module Campagnes est gratuit pour tous (200 cold emails/mois, 1 séquence). Avec MAX : 10 000 emails/mois + warmup + tracking + multi-inbox + auto-create deals depuis replies, aux côtés de la suite illimitée (Prospection 2 000 crédits + CRM + Formulaires). Code MAX99 : 3 premiers mois à 99 €. Pas d\'add-on caché, annulation 1 clic.',
           cta: 'Voir le détail des plans',
           ctaHref: '#pricing-campagnes',
         }}
@@ -859,11 +859,11 @@ export default function CampagnesProductPage() {
         }
         faq={FAQ}
         finalCta={{
-          title: 'Du cold email qui marche, au prix d\'un café.',
+          title: 'Du cold email qui marche, dès 0 €.',
           subtitle: 'Stack divisé par 3, deliverability ×2. Templates prêts, warmup auto, replies qui atterrissent dans le CRM — vous appuyez sur Play.',
           primary: { label: 'Commencer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir une démo live', href: '#demo' },
-          trust: 'Inclus dans Business 149 € · 14 jours d\'essai · Migration Lemlist offerte · RGPD by default',
+          trust: 'Gratuit pour tous · 14 jours d\'essai MAX · Migration Lemlist offerte · RGPD by default',
         }}
       />
     </>

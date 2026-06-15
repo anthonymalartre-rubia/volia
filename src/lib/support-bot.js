@@ -35,10 +35,10 @@ MODULES VOLIA :
 - Forms (formulaires no-code multi-step → CRM/Campagnes)
 
 LIMITES DES PLANS :
-- Starter : 100 prospects, 1 module
-- Solo : 1 000 prospects
-- Pro : 1 200 enrichissements + 1 module (Prospection OU Campagnes OU CRM OU Forms)
-- Business : SEUL plan qui débloque les 4 modules + multi-utilisateurs
+- Gratuit (0€) : TOUTE la suite avec limites — 25 crédits Prospection/mois, 100 recherches, 200 cold emails/mois, 1 séquence, 1 pipeline CRM, 2 formulaires, 5 exports CSV/mois. Sans CB.
+- Prospection (19€/mois) : 500 crédits/mois + 500 téléphones, 2 000 recherches, exports illimités, API publique + Zapier/Make. Packs de crédits one-time dès 9€ (dispo sur tous les plans).
+- MAX (179€/mois) : suite illimitée + Autopilot, 2 000 crédits/mois, multi-utilisateurs, serveur MCP — code public MAX99 : 3 premiers mois à 99€
+- Anciens plans (Starter/Solo/Pro/Business/Enterprise) : plus vendus, clients existants conservés tels quels (grandfathered)
 
 NAVIGATION VOLIA :
 - /dashboard : home + recherche prospection

@@ -12,7 +12,7 @@ const LIMIT_MAX = 500;
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }
@@ -29,7 +29,7 @@ export async function GET(request) {
   const dealId = url.searchParams.get('deal_id');
   const contactId = url.searchParams.get('contact_id');
   const type = url.searchParams.get('type');
-  const scope = url.searchParams.get('scope'); // 'all' (user-wide, requiert plan Business)
+  const scope = url.searchParams.get('scope'); // 'all' (user-wide)
   const status = url.searchParams.get('status'); // 'open' | 'completed' | 'overdue'
   const withRelations = url.searchParams.get('with_relations') === '1';
   const limitParam = parseInt(url.searchParams.get('limit') || '', 10);

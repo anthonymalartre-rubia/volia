@@ -1,7 +1,7 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// /app/crm/pipelines — Gestion des pipelines custom (Business plan).
+// /app/crm/pipelines — Gestion des pipelines custom (plan MAX).
 // ─────────────────────────────────────────────────────────────────────
 // Liste tous les pipelines de l'user avec actions :
 //   - Modifier (→ /app/crm/pipelines/[id])
@@ -370,15 +370,15 @@ export default function CrmPipelinesPage() {
           </div>
           <h1 className="text-3xl font-bold tracking-tight mb-2">Pipelines</h1>
           <p className="text-content-secondary mb-8">
-            La gestion des pipelines est réservée au plan{' '}
-            <strong className="text-content-primary">Business</strong>.
+            Limite du plan atteinte — les pipelines illimités, c&apos;est sur le plan{' '}
+            <strong className="text-content-primary">MAX</strong>.
           </p>
           <Link
             href="/pricing"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold shadow-lg shadow-emerald-500/30 transition-all"
           >
             <Sparkles size={16} />
-            Voir le plan Business
+            Voir le plan MAX
           </Link>
         </main>
       </div>

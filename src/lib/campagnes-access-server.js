@@ -27,7 +27,8 @@ export async function checkCampagnesAccess(supabase, userId) {
     .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
     .eq('id', userId)
     .maybeSingle();
-  // Le trial Pro donne accès aux Campagnes (Pro = inclus dans la liste).
+  // Le trial (14 jours de MAX) donne accès aux Campagnes — freemium :
+  // tout plan résolu a accès, seuls les quotas diffèrent.
   return isCampagnesAllowedPlan(getEffectivePlan(profile));
 }
 

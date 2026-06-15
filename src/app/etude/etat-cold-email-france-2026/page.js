@@ -756,7 +756,7 @@ export default function EtudeColdEmailPage() {
             <Sparkles size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Lancez vos cold emails avec Volia</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              100 prospects offerts pour tester la plateforme française derrière ce benchmark.
+              25 crédits offerts chaque mois pour tester la plateforme française derrière ce benchmark.
               Prospection waterfall multi-sources + Campagnes. À partir de 19 €/mois.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">

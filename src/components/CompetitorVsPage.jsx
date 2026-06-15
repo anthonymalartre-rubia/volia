@@ -11,14 +11,14 @@ import { LogoIcon } from '@/components/ui';
  */
 export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
   const isAlternative = intent === 'alternative';
-  // Baseline 19€ = plan Solo (même calcul que l'OG image /vs). L'ancienne
+  // Baseline 19€ = plan Prospection (même calcul que l'OG image /vs). L'ancienne
   // baseline 49€ donnait « 0% d'économie » pour tout concurrent < 49€
   // (Odoo 25€, Zoho 14€…). Le badge ne s'affiche que si l'économie est réelle.
   const savingsPct = Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100));
   const showSavings = savingsPct >= 5;
   // Comparison criteria — fixed list of features
   const comparison = [
-    { feature: 'Prix mensuel', volia: 'dès 19€', competitor: `${competitor.pricing}${competitor.pricingUnit}`, voliaWins: true },
+    { feature: 'Prix mensuel', volia: 'Gratuit, puis dès 19€', competitor: `${competitor.pricing}${competitor.pricingUnit}`, voliaWins: true },
     { feature: 'Recherches illimitées', volia: true, competitor: false, voliaWins: true },
     { feature: 'Pas de crédits cachés', volia: true, competitor: false, voliaWins: true },
     { feature: 'Couverture PME françaises', volia: '85%', competitor: '30%', voliaWins: true },
@@ -75,13 +75,13 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             ) : (
               <>
                 {competitor.description} <strong className="text-content-primary">Volia, c&apos;est l&apos;alternative française</strong> :
-                dès 19€/mois (suite complète à 49€), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
+                gratuit pour démarrer, dès 19€/mois (suite illimitée à 179€ avec MAX), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
               </>
             )}
           </p>
 
           {/* Quick verdict — masqué quand le concurrent est moins cher que
-              le plan Solo (un « 0% d'économie » ferait fuir, audit mobile) */}
+              le plan Prospection (un « 0% d'économie » ferait fuir, audit mobile) */}
           {showSavings && (
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
               <TrendingDown size={16} className="text-green-400" />
@@ -111,7 +111,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               <SwitchReason
                 num="2"
                 title={showSavings ? `${savingsPct}% moins cher. Tu fais le calcul.` : 'Un prix flat, pas un prix par siège.'}
-                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = dès 19€ (Solo), 49€ (Pro), 179€ (Business). Prix flat, pas par utilisateur. Tous les plans, tous les pays inclus. Pas de "contact sales".`}
+                desc={`${competitor.name} = ${competitor.pricing}${competitor.pricingUnit}. Volia = 0€ (Gratuit), 19€ (Prospection), 179€ (MAX illimité). Prix flat, pas par utilisateur. Tous les plans, tous les pays inclus. Pas de "contact sales".`}
               />
               <SwitchReason
                 num="3"
@@ -223,7 +223,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
                 Jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}% moins cher
               </h3>
               <p className="text-sm text-content-secondary leading-relaxed">
-                Volia = 49€/mois (Pro, suite complète — dès 19€ les 3 premiers mois avec ETE2026). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
+                Volia = dès 19€/mois (Prospection, 500 crédits) — et la suite illimitée à 179€ avec MAX (3 premiers mois à 99€, code MAX99). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
               </p>
             </div>
             <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">
@@ -296,7 +296,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               Teste Volia. Compare. Tu décides.
             </h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Plan Starter gratuit à vie. Pas de carte bancaire. Tu compares toi-même les résultats avec {competitor.name}.
+              Plan Gratuit à vie + 14 jours d&apos;essai MAX. Pas de carte bancaire. Tu compares toi-même les résultats avec {competitor.name}.
             </p>
             <Link
               href="/signup"

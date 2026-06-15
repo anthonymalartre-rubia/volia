@@ -658,7 +658,7 @@ function PatternsSection() {
             Le moins cher du marché
           </h4>
           <p className="text-base text-content-secondary mb-6 max-w-md mx-auto">
-            100 prospects offerts. 19€/mois ensuite. Cascade waterfall 7 sources.
+            25 crédits offerts. 19€/mois ensuite. Cascade waterfall 7 sources.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button variant="primary" size="lg" icon={Sparkles}>Commencer</Button>
@@ -676,17 +676,17 @@ function PatternsSection() {
               Recommandé
             </div>
             <div className="text-center mb-6">
-              <div className="text-sm text-content-primary/70 mb-1">Pro</div>
+              <div className="text-sm text-content-primary/70 mb-1">Prospection</div>
               <div className="text-4xl font-bold text-content-primary">
-                49<span className="text-xl text-content-primary/60">€/mois</span>
+                19<span className="text-xl text-content-primary/60">€/mois</span>
               </div>
-              <div className="text-xs text-content-primary/60 mt-1">5 000 prospects · cascade waterfall</div>
+              <div className="text-xs text-content-primary/60 mt-1">500 crédits · cascade waterfall</div>
             </div>
             <ul className="space-y-2 mb-6">
               {[
-                '5 000 prospects / mois',
-                'Cascade 7 sources email',
-                'Export CSV + Zoho CRM',
+                '500 crédits / mois',
+                'Cascade waterfall 7 sources',
+                'Exports illimités (CSV + Zoho CRM)',
                 'Filtrage RGPD inclus',
               ].map((f) => (
                 <li key={f} className="flex items-center gap-2 text-sm text-content-primary/90">
@@ -695,7 +695,7 @@ function PatternsSection() {
                 </li>
               ))}
             </ul>
-            <Button variant="primary" fullWidth>Choisir Pro</Button>
+            <Button variant="primary" fullWidth>Choisir Prospection</Button>
           </MarketingCard>
         </div>
       </div>

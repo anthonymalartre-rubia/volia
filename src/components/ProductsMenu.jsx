@@ -42,7 +42,7 @@ const PRODUCTS_FR = [
   {
     slug: 'campagnes',
     name: 'Volia Campagnes',
-    description: 'Séquences email + warmup — réservé plan Business',
+    description: 'Séquences email automatisées — inclus dès le plan Gratuit',
     icon: Mail,
     accent: 'blue',
     badge: 'LIVE',
@@ -51,7 +51,7 @@ const PRODUCTS_FR = [
   {
     slug: 'crm',
     name: 'Volia CRM',
-    description: 'Pipeline kanban — réservé plan Business',
+    description: 'Pipeline kanban — inclus dès le plan Gratuit',
     icon: Users,
     accent: 'emerald',
     badge: 'LIVE',
@@ -99,7 +99,7 @@ const PRODUCTS_EN = [
   {
     slug: 'campaigns',
     name: 'Volia Campaigns',
-    description: 'Email sequences + warmup — Business plan only',
+    description: 'Automated email sequences — included from the Free plan',
     icon: Mail,
     accent: 'blue',
     badge: 'LIVE',
@@ -108,7 +108,7 @@ const PRODUCTS_EN = [
   {
     slug: 'crm',
     name: 'Volia CRM',
-    description: 'Pipeline kanban — Business plan only',
+    description: 'Pipeline kanban — included from the Free plan',
     icon: Users,
     accent: 'emerald',
     badge: 'LIVE',

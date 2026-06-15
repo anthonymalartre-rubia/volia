@@ -53,7 +53,9 @@ export default async function OutilPage({ params }) {
   // Les 13 comparatifs 1-vs-1 où cet outil apparaît
   const pairsForThis = getPairsFor(slug);
 
-  const savingsPct = Math.max(0, Math.round(((c.pricing - 49) / c.pricing) * 100));
+  // Baseline 19 € = plan Prospection (même ancre que /vs) — la copy affichée
+  // compare au « dès 19 €/mois », le % doit être calculé sur la même base.
+  const savingsPct = Math.max(0, Math.round(((c.pricing - 19) / c.pricing) * 100));
   const isExpensive = c.pricing >= 100;
 
   const breadcrumbs = [
@@ -182,7 +184,7 @@ export default async function OutilPage({ params }) {
               <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Principal atout</strong> : {c.strengths[0]}</span></li>
               <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Principale limite</strong> : {c.weaknesses[0]}</span></li>
               {savingsPct > 0 && (
-                <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Alternative française</strong> : Volia à 49 €/mois ({savingsPct}% moins cher · dès 19 € avec ETE2026)</span></li>
+                <li className="flex gap-2"><span className="text-violet-400 flex-shrink-0">→</span><span><strong className="text-content-primary">Alternative française</strong> : Volia dès 19 €/mois ({savingsPct}% moins cher · gratuit pour démarrer)</span></li>
               )}
             </ul>
           </div>
@@ -355,8 +357,8 @@ export default async function OutilPage({ params }) {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              100 prospects offerts pour découvrir l&apos;alternative française à {c.name}.
-              À partir de 19 €/mois pour passer à 1 000 prospects + 400 enrichissements — le ticket d&apos;entrée le moins cher du marché français.
+              Plan Gratuit à vie (25 crédits/mois, sans CB) pour découvrir l&apos;alternative française à {c.name}.
+              À partir de 19 €/mois pour passer à 500 crédits + 2 000 recherches — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
               href="/signup"

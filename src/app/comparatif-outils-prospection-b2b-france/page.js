@@ -30,8 +30,8 @@ const TOOLS = [
     href: 'https://volia.fr',
     isUs: true,
     entryPrice: 19,
-    entryPlan: 'Solo',
-    proPrice: 49,
+    entryPlan: 'Prospection',
+    proPrice: 179,
     discovery: 'Oui (Google Places)',
     enrichment: 'Cascade waterfall',
     franceCoverage: 'Excellent (101 départements)',
@@ -178,11 +178,11 @@ const FAQ = [
   },
   {
     question: 'Quelle est l\'alternative française à Apollo.io ?',
-    answer: 'Volia est l\'alternative française à Apollo : combinaison de découverte (Google Places, 150+ catégories, 101 départements) + enrichissement email, plan Pro à 49 €/mois (soit 19 €/mois les 3 premiers mois avec le code ETE2026, vs 49-99 € Apollo) — et la suite complète incluse (campagnes, CRM, formulaires). Conforme RGPD natif (filtre 28 domaines d\'emails personnels + opt-out public).',
+    answer: 'Volia est l\'alternative française à Apollo : combinaison de découverte (Google Places, 150+ catégories, 101 départements) + enrichissement email, plan Prospection à 19 €/mois (500 crédits/mois, vs 49-99 € Apollo) — et toute la suite (campagnes, CRM, formulaires) accessible gratuitement avec limites, illimitée à 179 €/mois avec MAX. Conforme RGPD natif (filtre 28 domaines d\'emails personnels + opt-out public).',
   },
   {
     question: 'Quel est l\'outil le moins cher pour faire de la prospection B2B en France ?',
-    answer: 'Volia avec son plan Pro à 49 €/mois (5 000 prospects + 2 000 enrichissements, soit 19 €/mois les 3 premiers mois avec le code ETE2026) offre l\'un des meilleurs rapports qualité-prix du marché français — une suite complète (prospection + campagnes + CRM + formulaires) pour le prix d\'un simple outil d\'enrichissement. À titre de comparaison : Dropcontact démarre à 31 €, Snov à 39 €, Hunter à 34 €, Apollo à 49 €, Lemlist à 59 €.',
+    answer: 'Volia avec son plan Prospection à 19 €/mois (500 crédits/mois, cascade waterfall 7 sources) est le ticket d\'entrée le moins cher du marché français — et le plan Gratuit (25 crédits/mois, sans CB) permet de tester toute la suite avant de payer. À titre de comparaison : Dropcontact démarre à 31 €, Snov à 39 €, Hunter à 34 €, Apollo à 49 €, Lemlist à 59 €.',
   },
   {
     question: 'Quels outils sont conformes au RGPD pour la prospection B2B en France ?',
@@ -190,7 +190,7 @@ const FAQ = [
   },
   {
     question: 'Comment combiner ces outils pour un stack complet ?',
-    answer: 'Stack solo (< 50 €/mois) : Volia Solo (19 €) + Smartlead Starter (29 €). Stack PME (~200 €/mois) : Volia Pro (49 €) + Smartlead Pro (94 €) + Folk CRM (39 €). Stack scale-up (~500 €/mois) : Volia Business (149 €) + Lemlist (159 €) + Pipedrive 5 users.',
+    answer: 'Stack solo (< 50 €/mois) : Volia Prospection (19 €) + Smartlead Starter (29 €). Stack PME (~150-200 €/mois) : Volia MAX (179 €, suite complète) ou Prospection (19 €) + Smartlead Pro (94 €) + Folk CRM (39 €). Stack scale-up (~500 €/mois) : Volia MAX (179 €) + Lemlist (159 €) + Pipedrive 5 users.',
   },
 ];
 
@@ -378,11 +378,11 @@ export default function ComparatifPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
             <div className="rounded-2xl border border-line bg-surface-card p-5">
               <h3 className="font-semibold text-violet-300 mb-2 flex items-center gap-2"><Zap size={16} />Freelance / solopreneur</h3>
-              <p className="text-sm text-content-secondary leading-relaxed">Volia Solo (19 €/mois) + outil d&apos;outreach gratuit (Apollo free, Lemlist trial). Setup complet à moins de 25 €/mois.</p>
+              <p className="text-sm text-content-secondary leading-relaxed">Volia Prospection (19 €/mois) — le cadenceur Campagnes est inclus dès le plan Gratuit. Setup complet à moins de 25 €/mois.</p>
             </div>
             <div className="rounded-2xl border border-line bg-surface-card p-5">
               <h3 className="font-semibold text-violet-300 mb-2 flex items-center gap-2"><Globe size={16} />PME française (2-10 salariés)</h3>
-              <p className="text-sm text-content-secondary leading-relaxed">Volia Pro (49 €) + Smartlead Starter (29 €) + Folk CRM gratuit. Stack complet à ~80 €/mois.</p>
+              <p className="text-sm text-content-secondary leading-relaxed">Volia MAX (179 €, suite complète toute l&apos;équipe) — ou Prospection (19 €) + Smartlead Starter (29 €) + Folk CRM gratuit, soit ~50 €/mois.</p>
             </div>
             <div className="rounded-2xl border border-line bg-surface-card p-5">
               <h3 className="font-semibold text-violet-300 mb-2 flex items-center gap-2"><TrendingDown size={16} />Équipe sales multi-pays</h3>
@@ -410,7 +410,7 @@ export default function ComparatifPage() {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              100 prospects offerts pour découvrir la plateforme. À partir de 19 €/mois pour passer à 1 000 prospects + 400 enrichissements — le ticket d&apos;entrée le moins cher du marché français.
+              Plan Gratuit à vie (25 crédits/mois, sans CB) pour découvrir la plateforme. À partir de 19 €/mois pour passer à 500 crédits + 2 000 recherches — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
               href="/signup"

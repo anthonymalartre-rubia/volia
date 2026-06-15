@@ -56,7 +56,7 @@ export default async function CantonChPage({ params }) {
   const faq = [
     { question: `Combien d'entreprises dans le canton ${canton.name} ?`, answer: `Volia couvre toutes les entreprises géolocalisées par Google Places dans le canton ${canton.name}.` },
     { question: `Quels secteurs disponibles ?`, answer: `Les 150 catégories B2B : hôtellerie, restauration, commerce, automobile, santé, BTP, services aux entreprises, immobilier, industrie, finance, éducation, technologie, agriculture.` },
-    { question: `Prix pour prospecter dans ${canton.name} ?`, answer: `À partir de 19 €/mois (1 000 prospects). Tous les pays inclus dans tous les plans.` },
+    { question: `Prix pour prospecter dans ${canton.name} ?`, answer: `Gratuit pour démarrer (25 crédits/mois), puis 19 €/mois (500 crédits/mois). Tous les pays inclus dans tous les plans.` },
   ];
 
   const breadcrumbs = [

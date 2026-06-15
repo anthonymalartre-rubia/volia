@@ -136,7 +136,7 @@ export default function ToolVsToolPage({ a, b }) {
               <li className="flex gap-2">
                 <span className="text-violet-400 flex-shrink-0">→</span>
                 <span>
-                  <strong className="text-content-primary">Alternative française</strong> : Volia à 49 €/mois (dès 19 € avec ETE2026), combine sourcing (Google Places) + enrichissement email + RGPD natif
+                  <strong className="text-content-primary">Alternative française</strong> : Volia dès 19 €/mois (gratuit pour démarrer), combine sourcing (Google Places) + enrichissement email + RGPD natif
                 </span>
               </li>
             </ul>
@@ -263,7 +263,7 @@ export default function ToolVsToolPage({ a, b }) {
             <Zap size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              100 prospects offerts pour découvrir l&apos;alternative française à {a.name} et {b.name}.
+              Plan Gratuit à vie (25 crédits/mois, sans CB) pour découvrir l&apos;alternative française à {a.name} et {b.name}.
               À partir de 19 €/mois — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

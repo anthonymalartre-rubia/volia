@@ -187,7 +187,7 @@ export async function POST(request) {
     const limitCheck = await checkLimit(supabase, user.id, 'enrichments');
     if (!limitCheck.allowed) {
       return Response.json(
-        { error: "Limite d'enrichissements atteinte. Passez au plan Pro.", limitReached: true, ...limitCheck },
+        { error: "Limite de crédits atteinte. Passez à Prospection (19€/mois — 500 crédits) ou prenez un pack de crédits dès 9€.", limitReached: true, ...limitCheck },
         { status: 429 }
       );
     }

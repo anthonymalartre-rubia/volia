@@ -54,7 +54,7 @@ export async function GET(request) {
     // Trials qui expirent dans ≤3 jours, encore actifs, jamais notifiés.
     const { data: expiring } = await supabase
       .from('user_profiles')
-      .select('id, trial_ends_at')
+      .select('id, trial_ends_at, trial_plan')
       .not('trial_ends_at', 'is', null)
       .is('trial_converted_at', null)
       .is('trial_expiring_notified_at', null)
@@ -72,7 +72,7 @@ export async function GET(request) {
         const msRemaining = new Date(profile.trial_ends_at) - now;
         const daysRemaining = Math.max(1, Math.ceil(msRemaining / (1000 * 60 * 60 * 24)));
 
-        const tpl = trialExpiringEmail(fullName, daysRemaining);
+        const tpl = trialExpiringEmail(fullName, daysRemaining, profile.trial_plan);
         const result = await sendEmail({ to: email, subject: tpl.subject, html: tpl.html });
         if (result.success) {
           await supabase
@@ -124,7 +124,7 @@ export async function GET(request) {
         const fullName =
           userData.user.user_metadata?.full_name || userData.user.user_metadata?.name || null;
 
-        const tpl = trialExpiredEmail(fullName);
+        const tpl = trialExpiredEmail(fullName, profile.trial_plan);
         const result = await sendEmail({ to: email, subject: tpl.subject, html: tpl.html });
         if (result.success) {
           stats.expired++;

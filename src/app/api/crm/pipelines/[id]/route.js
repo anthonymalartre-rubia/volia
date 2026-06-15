@@ -2,7 +2,7 @@
 // PATCH  /api/crm/pipelines/[id]  → update name/description/color/position
 // DELETE /api/crm/pipelines/[id]  → delete (reassign deals vers le pipeline default)
 //
-// Toutes les routes : gating Business plan + RLS sur user_id.
+// Toutes les routes : gating CRM (checkCrmAccess) + RLS sur user_id.
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
@@ -10,7 +10,7 @@ import { checkCrmAccess, getOrCreateDefaultPipeline, PIPELINE_COLORS } from '@/l
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }

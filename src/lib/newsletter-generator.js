@@ -36,7 +36,7 @@ const MONTHS_FR = [
   'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre',
 ];
 
-const SYSTEM_PROMPT = `Tu rédiges la newsletter mensuelle de Volia.fr (suite SaaS B2B prospection + campagnes + CRM + forms, plan Business 179€/mois).
+const SYSTEM_PROMPT = `Tu rédiges la newsletter mensuelle de Volia.fr (suite SaaS B2B prospection + campagnes + CRM + forms — freemium : Gratuit, Prospection 19€/mois, MAX 179€/mois avec Autopilot ; code public MAX99 = 3 premiers mois de MAX à 99€).
 
 DESTINATAIRES :
 - Inscrits newsletter (mix prospects froids + clients existants + curieux du marché B2B)

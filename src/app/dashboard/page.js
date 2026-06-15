@@ -470,8 +470,8 @@ export default function Dashboard() {
 
       // Apply profile
       if (profileRes.data) {
-        // Trial Pro 14j : le plan effectif tient compte du trial actif.
-        // Un user free en trial Pro a son userPlan = Pro pour le gating UI.
+        // Trial MAX 14j : le plan effectif tient compte du trial actif.
+        // Un user free en trial MAX a son userPlan = MAX pour le gating UI.
         const { getEffectivePlan } = await import('@/lib/trial');
         setUserPlan(getPlan(getEffectivePlan(profileRes.data)));
         setIsAdmin(!!profileRes.data.is_admin);
@@ -1357,7 +1357,7 @@ export default function Dashboard() {
       const exportLimit = userPlan.limits.exports_per_month;
       const currentExports = userUsage.exports || 0;
       if (exportLimit !== -1 && currentExports >= exportLimit) {
-        alert('Limite d\'exports atteinte pour ce mois. Passez au plan Pro pour continuer.');
+        alert('Limite d\'exports atteinte pour ce mois. Passez à Prospection (19 €/mois) pour des exports illimités.');
         return;
       }
     }
@@ -1458,7 +1458,7 @@ export default function Dashboard() {
                 <span className="text-white text-base">✓</span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-content-primary">Bienvenue sur le plan {upgradeToast.planName?.toUpperCase() || 'Pro'} !</p>
+                <p className="text-sm font-semibold text-content-primary">Bienvenue sur votre nouveau plan{upgradeToast.planName ? ` ${upgradeToast.planName.toUpperCase()}` : ''} !</p>
                 <p className="text-xs text-content-tertiary mt-0.5">Votre abonnement est actif. Un reçu vous a été envoyé par email.</p>
               </div>
               <button onClick={() => setUpgradeToast(null)} className="text-content-muted hover:text-content-primary text-lg leading-none">×</button>
@@ -1523,7 +1523,7 @@ export default function Dashboard() {
         </div>
 
         <main className="flex-1 min-w-0 min-h-[calc(100vh-3.5rem)]">
-          {/* Trial Pro 14j — affiché en sticky top dès qu'un trial est actif ou
+          {/* Trial MAX 14j — affiché en sticky top dès qu'un trial est actif ou
               vient d'expirer. Discreet en mode normal, urgent à J-3, rouge si expiré. */}
           <TrialBanner profile={userProfile} />
           <UpgradeBanner

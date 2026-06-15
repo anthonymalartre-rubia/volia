@@ -23,7 +23,7 @@ const PAGE_URL = `${BASE_URL}/pour/immobilier-entreprise`;
 export const metadata = {
   title: "Volia pour l'immobilier d'entreprise — trouve les entreprises à prospecter",
   description:
-    "Conseils en immobilier d'entreprise : identifiez les sociétés d'une zone, obtenez l'email pro + le téléphone du décideur, contactez-les et suivez tout dans un CRM. Données B2B vérifiées, conforme RGPD, dès 49 €/mois.",
+    "Conseils en immobilier d'entreprise : identifiez les sociétés d'une zone, obtenez l'email pro + le téléphone du décideur, contactez-les et suivez tout dans un CRM. Données B2B vérifiées, conforme RGPD, gratuit pour démarrer puis dès 19 €/mois.",
   alternates: { canonical: PAGE_URL },
   keywords: [
     'prospection immobilier entreprise',
@@ -36,7 +36,7 @@ export const metadata = {
   openGraph: {
     title: "Volia pour l'immobilier d'entreprise",
     description:
-      "Identifiez les entreprises d'une zone, obtenez l'email pro + le téléphone du décideur, prospectez et suivez tout dans un CRM. Conforme RGPD, dès 49 €/mois.",
+      "Identifiez les entreprises d'une zone, obtenez l'email pro + le téléphone du décideur, prospectez et suivez tout dans un CRM. Conforme RGPD, gratuit pour démarrer puis dès 19 €/mois.",
     url: PAGE_URL,
     type: 'website',
   },
@@ -75,7 +75,7 @@ const PROOF = [
   { value: '0', label: "email deviné — 100 % vérifiés" },
   { value: '~46 %', label: "d'email pro trouvé (entreprises avec site)" },
   { value: '150+', label: 'secteurs ciblables · 101 départements' },
-  { value: '49 €', label: "par mois · 19 € les 3 premiers mois (ETE2026)" },
+  { value: '19 €', label: "par mois (Prospection) · démarrage gratuit sans CB" },
 ];
 
 const FAQ = [
@@ -93,7 +93,7 @@ const FAQ = [
   },
   {
     q: "Combien ça coûte ?",
-    a: "Le plan Pro est à 49 €/mois (suite complète : prospection + campagnes + CRM + formulaires), soit 19 €/mois les 3 premiers mois avec le code ETE2026. Essai 14 jours sans carte bancaire. Tu peux aussi tester gratuitement l'outil de recherche avant de créer un compte.",
+    a: "Le plan Gratuit donne accès à toute la suite (prospection + campagnes + CRM + formulaires) avec des limites, sans carte bancaire. Le plan Prospection est à 19 €/mois (500 emails + 500 téléphones/mois). Pour la suite illimitée + l'Autopilot, le plan MAX est à 179 €/mois — code MAX99 : les 3 premiers mois à 99 €. À l'inscription, tu as 14 jours de MAX offerts sans carte bancaire.",
   },
 ];
 
@@ -146,7 +146,7 @@ export default function ImmobilierEntreprisePage() {
           <p className="text-base sm:text-lg text-content-secondary leading-relaxed mb-8 max-w-2xl mx-auto">
             Volia identifie les entreprises d'une zone, te donne l'email pro et le téléphone du décideur,
             et te laisse prospecter puis tout suivre dans un CRM. Données B2B vérifiées, conformes RGPD,
-            dès 49 €/mois (19 € les 3 premiers mois avec ETE2026).
+            gratuit pour démarrer, dès 19 €/mois pour passer à l'échelle.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
@@ -245,7 +245,7 @@ export default function ImmobilierEntreprisePage() {
             <h2 className="text-2xl font-bold mb-2">Teste sur ta zone, gratuitement</h2>
             <p className="text-sm text-content-secondary mb-5 max-w-xl mx-auto">
               Lance une recherche sur ton secteur cible et vois ce que Volia remonte — avant même de créer un compte.
-              Plan Pro à 49 €/mois (19 € les 3 premiers mois avec ETE2026) pour passer à l'échelle.
+              Plan Prospection à 19 €/mois pour passer à l'échelle, MAX à 179 €/mois pour la suite illimitée (code MAX99 : 3 mois à 99 €).
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link

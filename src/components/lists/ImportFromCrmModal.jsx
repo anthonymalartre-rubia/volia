@@ -264,11 +264,11 @@ export default function ImportFromCrmModal({ open, onClose, listId, onSuccess })
                 <Lock size={22} className="text-amber-600" />
               </div>
               <p className="text-base font-bold text-content-primary mb-1">
-                Importer depuis le CRM nécessite le plan Business
+                Limite du plan atteinte — passez à MAX pour l&apos;illimité
               </p>
               <p className="text-sm text-content-tertiary max-w-md mb-4">
-                Le module Volia CRM (contacts, pipelines, deals) est inclus dans le
-                plan Business 149 €/mois.
+                Le CRM illimité (contacts, pipelines, deals) est inclus dans le
+                plan MAX 179 €/mois — code MAX99 : 3 mois à 99 €.
               </p>
               <Link
                 href="/settings?tab=plan"
@@ -276,7 +276,7 @@ export default function ImportFromCrmModal({ open, onClose, listId, onSuccess })
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 shadow-md shadow-amber-500/20 transition-all"
               >
                 <Sparkles size={14} />
-                Passer au plan Business
+                Passer au plan MAX
               </Link>
             </div>
           ) : (

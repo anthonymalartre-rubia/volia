@@ -10,7 +10,7 @@ export async function POST(request) {
       return Response.json({ error: 'Authentification requise' }, { status: 401 });
     }
 
-    // Enterprise-only feature (mais ouvert au trial Pro pendant 14j)
+    // Réservé aux plans payants — ouvert au trial MAX 14j (gating : plan effectif ≠ free)
     const { data: profile } = await supabase
       .from('user_profiles')
       .select('plan, trial_plan, trial_started_at, trial_ends_at, trial_converted_at')
@@ -19,7 +19,7 @@ export async function POST(request) {
 
     if (getEffectivePlan(profile) === 'free') {
       return Response.json(
-        { error: 'Cette fonctionnalite est reservee aux plans Pro et Enterprise.' },
+        { error: 'La vérification email est réservée aux plans payants. Passez à Prospection (19€/mois) pour vérifier vos emails.' },
         { status: 403 }
       );
     }

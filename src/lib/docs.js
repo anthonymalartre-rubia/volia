@@ -71,7 +71,7 @@ export const DOCS_ARTICLES = [
     tags: ['inscription', 'compte', 'oauth', 'google'],
     content: `## Démarrer en moins d'une minute
 
-Volia est gratuit pour commencer : 100 prospects offerts, aucune carte bancaire demandée. Tu peux t'inscrire de deux manières.
+Volia est gratuit pour commencer : toute la suite (Campagnes, CRM, Formulaires) avec des limites + 25 crédits Prospection offerts chaque mois, aucune carte bancaire demandée. Tu peux t'inscrire de deux manières.
 
 ### 1. Inscription par email
 
@@ -94,13 +94,13 @@ Volia est gratuit pour commencer : 100 prospects offerts, aucune carte bancaire 
 
 - Suis l'[onboarding wizard](/docs/onboarding-wizard) (4 étapes guidées, 2 min).
 - Lance ta [première recherche](/docs/premiere-recherche) de prospects.
-- Active ton [essai Pro gratuit 14 jours](/docs/activer-trial-pro) si tu veux tester la cascade waterfall complète.
+- Active ton [essai MAX gratuit 14 jours](/docs/activer-trial-pro) si tu veux tester la suite illimitée et la cascade waterfall complète.
 
 ## FAQ rapide
 
 **Email pas reçu ?** Vérifie tes spams. Si rien après 5 min, retente l'inscription — le système renvoie automatiquement le mail.
 **Email pro vs Gmail ?** Aucune différence côté Volia, mais on recommande un email pro pour la délivrabilité de tes futures campagnes.
-**Carte bancaire demandée ?** Jamais sur le plan gratuit. Uniquement au moment où tu passes Solo / Pro / Business.
+**Carte bancaire demandée ?** Jamais sur le plan Gratuit. Uniquement au moment où tu passes sur Prospection ou MAX.
 
 ## Articles liés
 
@@ -208,35 +208,36 @@ Une fois terminé, utilise les filtres (note Google, présence email…) puis cl
     slug: 'comprendre-plans',
     category: 'getting-started',
     title: 'Comprendre les plans Volia',
-    description: "Free, Solo, Pro, Business : à qui s'adresse quoi et comment switcher.",
-    updatedAt: '2026-05-12',
+    description: "Gratuit, Prospection, MAX : à qui s'adresse quoi et comment switcher.",
+    updatedAt: '2026-06-11',
     tags: ['plans', 'pricing', 'limites', 'quota'],
     content: `## Vue d'ensemble
 
-Volia propose 4 plans, tous facturables au mois ou à l'année (2 mois offerts en annuel).
+Volia propose 3 plans, tous facturables au mois ou à l'année (2 mois offerts en annuel).
 
-| Plan | Prix | Prospects/mois | Idéal pour |
+| Plan | Prix | Crédits Prospection/mois | Idéal pour |
 | --- | --- | --- | --- |
-| **Free** | 0 € | 100 | Tester l'outil |
-| **Solo** | 19 €/mo | 1 000 | Freelances, consultants |
-| **Pro** | 49 €/mo | 5 000 | PME, agences |
-| **Business** | 149 €/mo | 10 000 | Sales teams, scale-ups |
+| **Gratuit** | 0 € | 25 | Tester toute la suite, sans CB |
+| **Prospection** | 19 €/mo | 500 | Freelances, consultants, PME |
+| **MAX** | 179 €/mo | 2 000 | Suite illimitée + Autopilot |
+
+Sur MAX, le code public **MAX99** te donne les 3 premiers mois à 99 €/mois. Besoin de plus de crédits ponctuellement ? Les **packs de crédits** (100 crédits = 9 €, 500 = 29 €, 2 000 = 79 €) s'achètent à la demande sur tous les plans.
 
 ### Ce qui est inclus dans **tous** les plans
 
 - 101 départements (métropole + outre-mer)
 - 150+ catégories B2B
-- Cascade waterfall multi-sources
+- Cascade waterfall 7 sources
 - Filtrage RGPD emails personnels
 - Export CSV + Zoho CRM
-- Module Campagnes Email
-- Module CRM
+- Modules Campagnes, CRM et Formulaires (avec limites sur Gratuit et Prospection)
 
 ### Ce qui change avec le plan
 
-- Le **quota mensuel** de prospects découverts (reset le 1er du mois).
-- Le nombre de **domaines d'envoi** connectables (Free: 1, Solo: 2, Pro: 5, Business: illimité).
-- Le **support** : email pour tous, prioritaire à partir de Pro.
+- Les **crédits Prospection mensuels** (emails trouvés, reset le 1er du mois).
+- Les **limites de la suite** : 1 séquence, 1 pipeline CRM, 2 formulaires et 200 cold emails/mois en Gratuit et Prospection — tout illimité en MAX.
+- **Volia Autopilot** (pipeline B2B end-to-end auto) : MAX uniquement.
+- Le **support** : email pour tous, prioritaire sur MAX.
 
 ## Changer de plan
 
@@ -249,7 +250,7 @@ Plus de détails dans [Changer de plan](/docs/changer-plan).
 
 ## FAQ rapide
 
-**Si je dépasse mon quota ?** Une modale "Limite atteinte" s'affiche et te propose un upgrade. Aucun prospect supplémentaire n'est ajouté tant que tu n'as pas upgradé ou attendu le 1er du mois.
+**Si je dépasse mes crédits ?** Une modale "Limite atteinte" s'affiche et te propose un upgrade ou un pack de crédits (dès 9 €). Aucun prospect supplémentaire n'est ajouté tant que tu n'as pas upgradé, acheté un pack ou attendu le 1er du mois.
 **Le passage Free → payant est instantané ?** Oui, dès validation Stripe.
 **Je peux downgrader ?** Oui, à tout moment depuis Paramètres → Plan. Effectif à la fin de la période payée.
 
@@ -257,43 +258,43 @@ Plus de détails dans [Changer de plan](/docs/changer-plan).
 
 - [Changer de plan](/docs/changer-plan)
 - [Annuler mon abonnement](/docs/annuler-abonnement)
-- [Activer l'essai Pro 14 jours](/docs/activer-trial-pro)
+- [Activer l'essai MAX 14 jours](/docs/activer-trial-pro)
 `,
   },
   {
     slug: 'activer-trial-pro',
     category: 'getting-started',
-    title: "Activer l'essai Pro 14 jours",
-    description: "Comment tester Pro gratuitement sans carte bancaire (sous conditions).",
-    updatedAt: '2026-05-12',
-    tags: ['trial', 'essai', 'pro', 'gratuit'],
-    content: `## Le trial Pro en pratique
+    title: "Activer l'essai MAX 14 jours",
+    description: "Comment tester MAX gratuitement sans carte bancaire (sous conditions).",
+    updatedAt: '2026-06-11',
+    tags: ['trial', 'essai', 'max', 'gratuit'],
+    content: `## Le trial MAX en pratique
 
-Volia offre **14 jours d'essai Pro** (5 000 prospects + cascade waterfall complète + support prioritaire) à tout nouveau compte Free, sans carte bancaire.
+Volia offre **14 jours d'essai MAX** (suite illimitée + Volia Autopilot + 2 000 crédits Prospection + support prioritaire) à tout nouveau compte Gratuit, sans carte bancaire.
 
 ## Comment l'activer
 
 1. Sur ton dashboard, regarde la **TrialBanner** en haut.
-2. Clique sur **Activer mes 14 jours Pro**.
+2. Clique sur **Activer mes 14 jours MAX**.
 3. C'est tout — aucun paiement, aucune CB demandée.
 
-Ton compteur passe à 5 000 prospects pour 14 jours.
+Ton compteur passe à 2 000 crédits Prospection pour 14 jours.
 
 ## Pendant le trial
 
-- Tous les enrichissements premium (waterfall multi-sources) sont actifs.
-- Tu peux connecter jusqu'à 5 domaines d'envoi.
+- Tous les enrichissements premium (cascade waterfall 7 sources) sont actifs.
+- Volia Autopilot est débloqué (3 workflows, IF/ELSE, A/B testing).
 - Le support prioritaire est activé (réponse < 4 h ouvrées).
-- Le module CRM est complètement débloqué.
+- Toute la suite est illimitée : Campagnes, CRM, Formulaires, Project.
 
 ## À la fin du trial
 
 À J+14, si tu n'as rien fait :
-- Ton plan repasse en **Free** (100 prospects/mois).
+- Ton plan repasse en **Gratuit** (25 crédits Prospection/mois).
 - Tes prospects découverts pendant le trial restent dans ta base (jamais supprimés).
-- Tes campagnes en cours continuent jusqu'à épuisement, mais tu ne peux plus en créer de nouvelles tant que tu es Free.
+- Tes campagnes en cours continuent jusqu'à épuisement, et tu repasses aux limites du plan Gratuit (1 séquence active, 200 cold emails/mois).
 
-Pour rester Pro : Paramètres → Plan → Souscrire Pro 49 €/mo.
+Pour rester en MAX : Paramètres → Plan → Souscrire MAX 179 €/mois — avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
 
 ## FAQ rapide
 
@@ -316,7 +317,7 @@ Pour rester Pro : Paramètres → Plan → Souscrire Pro 49 €/mo.
     tags: ['team', 'equipe', 'invitations', 'workspace'],
     content: `## Volia est multi-utilisateurs
 
-À partir du plan **Pro**, tu peux inviter des membres dans ton workspace. Tous partagent la même base de prospects, les mêmes campagnes et le même pipeline CRM.
+Avec le plan **MAX**, tu peux inviter des membres dans ton workspace (multi-utilisateurs, rôles RBAC). Tous partagent la même base de prospects, les mêmes campagnes et le même pipeline CRM.
 
 ## Inviter un membre
 
@@ -334,11 +335,11 @@ Depuis **Paramètres → Équipe**, tu peux changer le rôle d'un membre ou le r
 
 ## Quotas partagés
 
-Le quota mensuel de prospects (5 000 pour Pro, 10 000 pour Business) est **partagé** entre tous les membres. Pas de quota individuel.
+Les crédits Prospection mensuels (2 000 en MAX) sont **partagés** entre tous les membres. Pas de quota individuel.
 
 ## FAQ rapide
 
-**Combien de membres je peux inviter ?** Solo: 1 (toi), Pro: 5, Business: illimité.
+**Combien de membres je peux inviter ?** Gratuit et Prospection : 1 (toi). MAX : illimité.
 **Un membre peut voir mes mots de passe SMTP / API ?** Non, les credentials des domaines d'envoi et clés API ne sont visibles que par les Admins.
 **Et si je retire un membre ?** Ses sessions sont invalidées immédiatement et il perd tout accès au workspace.
 
@@ -605,10 +606,9 @@ Pré-formaté pour un import direct dans Zoho CRM via **Leads → Import**. Les 
 
 | Plan | Export max par jour |
 | --- | --- |
-| Free | 200 lignes |
-| Solo | 2 000 lignes |
-| Pro | 10 000 lignes |
-| Business | illimité |
+| Gratuit | 200 lignes |
+| Prospection | illimité |
+| MAX | illimité |
 
 Les limites se réinitialisent à minuit (heure de Paris).
 
@@ -829,10 +829,9 @@ Volia ne t'envoie pas d'emails depuis **@volia.fr** (mauvais pour la délivrabil
 
 | Plan | Domaines |
 | --- | --- |
-| Free | 1 |
-| Solo | 2 |
-| Pro | 5 |
-| Business | illimité |
+| Gratuit | 1 |
+| Prospection | 2 |
+| MAX | illimité |
 
 Tu peux utiliser **plusieurs adresses d'envoi par domaine** (alex@mail.boite.fr, marie@mail.boite.fr…) sans limite.
 
@@ -1563,10 +1562,9 @@ Ouvre le deal → **Actions → Changer de pipeline** → choisis la nouvelle é
 
 | Plan | Nb pipelines |
 | --- | --- |
-| Free | 1 (default) |
-| Solo | 2 |
-| Pro | 5 |
-| Business | illimité |
+| Gratuit | 1 (default) |
+| Prospection | 1 |
+| MAX | illimité |
 
 ## FAQ rapide
 
@@ -1624,10 +1622,9 @@ Le champ apparaît immédiatement sur tous les contacts/deals.
 
 | Plan | Custom fields contact | Custom fields deal |
 | --- | --- | --- |
-| Free | 3 | 3 |
-| Solo | 10 | 10 |
-| Pro | 25 | 25 |
-| Business | illimité | illimité |
+| Gratuit | 3 | 3 |
+| Prospection | 10 | 10 |
+| MAX | illimité | illimité |
 
 ## Utiliser dans les filtres et exports
 
@@ -1812,9 +1809,9 @@ Génère ta clé API dans **Paramètres → API & intégrations**. Cf. [Clés AP
 
 ## Rate limits
 
-- **60 requêtes / minute** par clé API (Free / Solo).
-- **300 requêtes / minute** (Pro).
-- **1500 requêtes / minute** (Business).
+- **60 requêtes / minute** par clé API (Gratuit).
+- **300 requêtes / minute** (Prospection).
+- **1500 requêtes / minute** (MAX).
 
 Si dépassé : HTTP 429 + header \`Retry-After\`.
 
@@ -1981,7 +1978,7 @@ Si ton endpoint répond ≠ 2xx :
 
 ## FAQ rapide
 
-**Multiples endpoints possibles ?** Oui, illimité (Pro+), 1 (Free).
+**Multiples endpoints possibles ?** Oui : 1 endpoint (Gratuit / Prospection), illimité (MAX).
 **Test endpoint avant prod ?** Utilise [webhook.site](https://webhook.site) pour voir les payloads.
 **Délai max avant timeout ?** Ton endpoint doit répondre en < 10 sec.
 
@@ -2166,7 +2163,7 @@ sk_live_abc123def456...
 1. **Paramètres → API & intégrations**.
 2. Clique **+ Nouvelle clé API**.
 3. Donne-lui un nom (ex: "Zapier prod", "Script Python interne").
-4. (Optionnel) Restreins par **scopes** (Pro+ uniquement) :
+4. (Optionnel) Restreins par **scopes** (MAX uniquement) :
     - \`prospects:read\` / \`prospects:write\`
     - \`campaigns:read\` / \`campaigns:write\`
     - \`deals:read\` / \`deals:write\`
@@ -2196,14 +2193,13 @@ sk_live_abc123def456...
 
 | Plan | Nb clés API actives |
 | --- | --- |
-| Free | 1 |
-| Solo | 3 |
-| Pro | 10 |
-| Business | illimité |
+| Gratuit | 1 |
+| Prospection | 3 |
+| MAX | illimité |
 
 ## Audit log
 
-Sur Pro+, **Paramètres → API → Audit log** :
+Sur MAX, **Paramètres → API → Audit log** :
 - Historique des 30 derniers jours.
 - Filtrable par clé, endpoint, status code, IP.
 - Export CSV.
@@ -2211,7 +2207,7 @@ Sur Pro+, **Paramètres → API → Audit log** :
 ## FAQ rapide
 
 **Une clé compromise = data leak ?** Oui, révoque immédiatement et change ce qui a pu être consulté.
-**Restriction par IP ?** Pas en V1, prévu Q4 2026 (Business only).
+**Restriction par IP ?** Pas en V1, prévu Q4 2026 (MAX only).
 **Sandbox / test mode ?** Pas encore, prévu Q3 2026.
 
 ## Articles liés
@@ -2243,9 +2239,9 @@ Sur Pro+, **Paramètres → API → Audit log** :
 ### Facturation au prorata
 
 Si tu upgrades en cours de mois, Stripe te facture **uniquement le delta** prorata sur les jours restants du cycle. Exemple :
-- 10 du mois, tu passes de Solo (19€) à Pro (49€).
-- Stripe te facture : (49 - 19) × (20 jours restants / 30) ≈ **20 €**.
-- Le mois suivant, facturation normale 49 €.
+- 10 du mois, tu passes de Prospection (19€) à MAX (179€).
+- Stripe te facture : (179 - 19) × (20 jours restants / 30) ≈ **107 €**.
+- Le mois suivant, facturation normale 179 €.
 
 ## Downgrader (passer à un plan inférieur)
 
@@ -2260,10 +2256,9 @@ Si tu upgrades en cours de mois, Stripe te facture **uniquement le delta** prora
 
 ## Passage mensuel ↔ annuel
 
-L'annuel offre **2 mois gratuits** :
-- Solo : 19 €/mo → 190 €/an (au lieu de 228 €).
-- Pro : 49 €/mo → 490 €/an (au lieu de 588 €).
-- Business : 149 €/mo → 1490 €/an (au lieu de 1788 €).
+L'annuel offre **au moins 2 mois gratuits** :
+- Prospection : 19 €/mo → 190 €/an (au lieu de 228 €).
+- MAX : 179 €/mo → 1 690 €/an (au lieu de 2 148 €).
 
 Bascule depuis **Paramètres → Plan & Usage** → onglet **Annuel**. Effet immédiat (Stripe te crédite ce qui a déjà été payé).
 
@@ -2396,7 +2391,7 @@ Modifiable à tout moment dans le portail Stripe.
 
 ## FAQ rapide
 
-**Virement bancaire dispo ?** Oui sur Business uniquement (annual seulement). Contact support@volia.fr.
+**Virement bancaire dispo ?** Oui sur MAX uniquement (annuel seulement). Contact support@volia.fr.
 **Refund possible via Stripe ?** Oui, demande à support@volia.fr — on gère depuis Stripe Dashboard.
 **Facture pour les comptes Free ?** Non (plan gratuit, pas de facture).
 
@@ -2434,9 +2429,9 @@ Le RGPD (Art. 20) te donne le droit de récupérer toutes tes données dans un f
 
 ## Délai de génération
 
-- Compte Free / Solo : < 1 min.
-- Compte Pro : 1-5 min.
-- Compte Business avec > 50 000 prospects : 5-30 min.
+- Compte Gratuit / Prospection : < 1 min.
+- Compte MAX : 1-5 min.
+- Compte MAX avec > 50 000 prospects : 5-30 min.
 
 ## Que faire du fichier ?
 

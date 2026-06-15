@@ -21,7 +21,7 @@ export async function POST(request) {
     const limitCheck = await checkLimit(supabase, user.id, 'searches');
     if (!limitCheck.allowed) {
       return NextResponse.json(
-        { error: 'Limite de prospects atteinte. Passez au plan Pro pour continuer.', limitReached: true, ...limitCheck },
+        { error: 'Limite de recherches atteinte. Passez à Prospection (19€/mois — 2 000 recherches) pour continuer.', limitReached: true, ...limitCheck },
         { status: 429 }
       );
     }

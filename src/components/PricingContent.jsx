@@ -59,8 +59,6 @@ const PLAN_TAGLINES = {
   max: 'Pipeline B2B end-to-end auto',
 };
 
-// Modules inclus par plan : Business + Enterprise débloquent les 4 modules.
-// Enterprise ajoute Volia Autopilot illimité (juin 2026 pivot).
 // Pivot freemium : les 4 modules sont inclus PARTOUT (avec limites hors
 // MAX). Autopilot = MAX uniquement.
 const PLAN_MODULES = {
@@ -79,7 +77,7 @@ const VISIBLE_PLANS_FOR_COMPARE = ['free', 'prospection', 'max'];
 
 // ─── Section 4 : Tableau comparatif — données ───────────────────
 // Sections collapsibles avec rows.
-// Colonnes : Pro / Business / Enterprise (3 valeurs par row).
+// Colonnes : Gratuit / Prospection / MAX (3 valeurs par row).
 const COMPARE_SECTIONS = [
   {
     title: '⚡ Volia Autopilot (pipeline auto)',
@@ -220,7 +218,7 @@ const FAQ_PRICING = [
   },
   {
     q: 'Essai gratuit ?',
-    a: '14 jours d\'accès complet au plan Pro sans CB (5 000 prospects, cascade waterfall, campagnes). À J+14, le compte bascule sur Starter gratuit à vie (100 prospects/mois). Zéro prélèvement automatique sans votre accord explicite.',
+    a: '14 jours d\'accès complet au plan MAX sans CB (Autopilot, 2 000 crédits, suite illimitée). À J+14, le compte bascule sur le plan Gratuit à vie (25 crédits/mois, tous les modules avec limites). Zéro prélèvement automatique sans votre accord explicite.',
   },
   {
     q: 'Je peux changer de plan quand je veux ?',
@@ -232,7 +230,7 @@ const FAQ_PRICING = [
   },
   {
     q: 'Annuel -2 mois, comment ça marche ?',
-    a: 'Vous payez 10 mois, vous accédez 12. Exemple Pro : 490€/an au lieu de 588€, soit 98€ gardés dans votre poche. Facturé en une fois (CB ou virement).',
+    a: 'Vous payez 10 mois, vous accédez 12. Exemple MAX : 1 690€/an au lieu de 2 148€, soit 458€ gardés dans votre poche. Facturé en une fois (CB ou virement).',
   },
   {
     q: 'Comment je résilie ?',
@@ -240,19 +238,19 @@ const FAQ_PRICING = [
   },
   {
     q: 'Virement bancaire possible ?',
-    a: 'Oui sur les plans annuels Business+. Envoyez votre SIRET à contact@volia.fr, on vous fait une facture pro forma sous 24h.',
+    a: 'Oui sur le plan MAX annuel. Envoyez votre SIRET à contact@volia.fr, on vous fait une facture pro forma sous 24h.',
   },
   {
     q: 'Tout est vraiment inclus dans le prix ?',
     a: 'Oui. Accès à tout le tissu B2B français via Google Places (scraping en temps réel sur 101 départements × 150+ secteurs), cascade waterfall multi-sources, exports CSV, emails transactionnels. Aucune option cachée derrière un paywall.',
   },
   {
-    q: 'Le CRM est vraiment dans le plan Business ?',
-    a: 'Oui, intégralement. Kanban drag-and-drop, deals auto-créés depuis vos réponses email, timeline 360° par contact, activities (notes, calls, meetings). Vous pouvez désinstaller HubSpot.',
+    q: 'Le CRM est vraiment gratuit ?',
+    a: 'Oui, intégralement et dès le plan Gratuit. Kanban drag-and-drop, deals auto-créés depuis vos réponses email, timeline 360° par contact, activities (notes, calls, meetings). 1 pipeline en Gratuit/Prospection, illimité en MAX. Vous pouvez désinstaller HubSpot.',
   },
   {
     q: 'Moyens de paiement ?',
-    a: 'CB (Visa, Mastercard, Amex) via Stripe sur tous les plans. SEPA et virement sur l\'annuel Business+. PayPal sur demande.',
+    a: 'CB (Visa, Mastercard, Amex) via Stripe sur tous les plans. SEPA et virement sur l\'annuel MAX. PayPal sur demande.',
   },
   {
     q: 'Remboursement ?',
@@ -260,7 +258,7 @@ const FAQ_PRICING = [
   },
   {
     q: 'Tarif assos / étudiants ?',
-    a: '-50% sur le plan Pro pour les assos loi 1901 et les étudiants (sur justificatif). Écrivez à contact@volia.fr depuis votre email institutionnel.',
+    a: '-50% sur le plan Prospection pour les assos loi 1901 et les étudiants (sur justificatif). Écrivez à contact@volia.fr depuis votre email institutionnel.',
   },
 ];
 
@@ -273,15 +271,14 @@ export default function PricingContent() {
 
   // Économies totales annuelles si l'user prend tous les plans payants en annuel
   const yearlySavingsByPlan = {
-    pro: PLANS.pro.price * 12 - PLANS.pro.priceYearly,
-    business: PLANS.business.price * 12 - PLANS.business.priceYearly,
-    enterprise: PLANS.enterprise.price * 12 - PLANS.enterprise.priceYearly,
+    prospection: PLANS.prospection.price * 12 - PLANS.prospection.priceYearly,
+    max: PLANS.max.price * 12 - PLANS.max.priceYearly,
   };
   const maxSavings = Math.max(...Object.values(yearlySavingsByPlan));
 
   // Stack concurrents : total
   const competitorTotalMo = STACK_COMPETITORS.reduce((acc, c) => acc + c.price, 0);
-  const economyVsStack = competitorTotalMo - 149; // vs Business 149€ (promo) — seul plan qui inclut les 4 modules
+  const economyVsStack = competitorTotalMo - 179; // vs MAX 179€ — suite illimitée + Autopilot
 
   // Helper rendu cellule comparatif
   function renderCell(value) {
@@ -405,7 +402,7 @@ export default function PricingContent() {
                     <h3 className={`text-lg font-semibold mb-1 ${visuals.accent}`}>{plan.name}</h3>
                     <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{PLAN_TAGLINES[planId]}</p>
 
-                    {/* PRIX — gestion spéciale Business avec promo lancement.
+                    {/* PRIX — gestion spéciale MAX avec code MAX99.
                         Sur monthly : affiche prix promo en gros + prix normal barré.
                         Sur yearly : affiche prix yearly normal (pas de promo annual). */}
                     {planId === 'max' && !isYearly && plan.promo ? (
@@ -479,9 +476,9 @@ export default function PricingContent() {
                       {cta}
                     </Link>
 
-                    {/* HIGHLIGHT PRO — la "killer feature" : Pro est le SEUL plan
-                        abordable qui débloque la suite complète. Affiché en card
-                        séparée violette, plus visible que les badges modules. */}
+                    {/* HIGHLIGHT MAX — la "killer feature" : suite illimitée +
+                        Autopilot. Affiché en card séparée violette, plus visible
+                        que les badges modules. */}
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
@@ -604,7 +601,7 @@ export default function PricingContent() {
                 <Sparkles size={16} className="inline -mt-0.5 mr-1.5 text-violet-600" />
                 Passez à l&apos;annuel pour économiser jusqu&apos;à{' '}
                 <strong className="text-violet-700">{formatEuro(maxSavings)}/an</strong>{' '}
-                (2 mois offerts sur le plan Business).
+                (2 mois offerts sur le plan MAX).
               </p>
             )}
           </div>
@@ -648,13 +645,13 @@ export default function PricingContent() {
               </table>
             </div>
 
-            {/* Footnote Enterprise — pas dans les 4 colonnes du tableau */}
+            {/* Footnote sur-mesure — au-delà de MAX (workflows ∞, multi-équipes) */}
             <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-3 text-sm text-amber-900">
               <Zap size={16} className="flex-shrink-0 mt-0.5 text-amber-600" />
               <p>
-                <strong>Plan Enterprise (499 €/mois)</strong> = tout illimité +{' '}
-                <strong>Volia Autopilot illimité</strong> (workflows ∞), A/B testing des objets avec
-                winner auto et optimisation Claude hebdomadaire.{' '}
+                Besoin d&apos;aller au-delà de MAX (workflows Autopilot illimités, multi-équipes,
+                SLA dédié) ? Offre sur-mesure — écrivez à{' '}
+                <a href="mailto:contact@volia.fr" className="underline font-semibold">contact@volia.fr</a>.{' '}
                 <Link href="/produits/autopilot" className="underline font-semibold">Voir Autopilot →</Link>
               </p>
             </div>
@@ -797,19 +794,19 @@ export default function PricingContent() {
                 <p className="text-[11px] text-content-tertiary mt-2">5 outils silotés · 5 abonnements · 5 logins</p>
               </div>
 
-              {/* Volia Business — SEUL plan qui débloque les 4 modules */}
+              {/* Volia MAX — suite illimitée + Autopilot */}
               <div className="p-6 rounded-2xl border border-violet-300 bg-gradient-to-br from-violet-50 via-violet-50/40 to-indigo-50 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
                   <Crown size={14} className="text-violet-600" />
                   <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
-                    Volia Business
+                    Volia MAX
                   </p>
                 </div>
                 <div className="space-y-2.5 mb-4">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-content-secondary">
-                      <strong className="text-content-primary">Prospection</strong>
-                      <span className="text-content-tertiary text-xs ml-2">· 10 000 prospects/mo</span>
+                      <strong className="text-content-primary">Autopilot + Prospection</strong>
+                      <span className="text-content-tertiary text-xs ml-2">· 2 000 crédits/mo</span>
                     </span>
                     <Check size={14} className="text-emerald-500" />
                   </div>
@@ -839,9 +836,9 @@ export default function PricingContent() {
                   <span className="text-sm font-semibold text-content-primary">Total mensuel</span>
                   <div className="text-right">
                     <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                      149 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
+                      179 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
                     </span>
-                    <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">🎉 promo 12 mois (puis 179 €)</div>
+                    <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">⚡ code MAX99 : 3 premiers mois à 99 €</div>
                   </div>
                 </div>
                 <p className="text-[11px] text-emerald-700 font-semibold mt-2">
@@ -917,17 +914,17 @@ export default function PricingContent() {
           <MotionInView>
             <div className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-700 to-indigo-700 p-10 sm:p-14 text-center text-white shadow-2xl shadow-violet-500/20">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
-                Essayez Pro gratuitement.<br />14 jours, sans carte bancaire.
+                Essayez MAX gratuitement.<br />14 jours, sans carte bancaire.
               </h2>
               <p className="text-violet-100 text-base sm:text-lg mb-8 max-w-xl mx-auto">
                 La suite est gratuite — Campagnes, CRM, Formulaires &amp; Project inclus. Code <strong className="text-white">MAX99</strong> : MAX à 99 €/mois les 3 premiers mois.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
                 <Link
-                  href="/signup?plan=pro&period=monthly"
+                  href="/signup?plan=max&period=monthly"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg w-full sm:w-auto"
                 >
-                  Démarrer l&apos;essai Pro (14 j) <ArrowRight size={14} />
+                  Démarrer l&apos;essai MAX (14 j) <ArrowRight size={14} />
                 </Link>
                 <Link
                   href="/#try-live"

@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, Crown, Star, Tag, TrendingDown, X, Sparkles, FormInput, Rocket, FolderKanban } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, TrendingDown, X, Sparkles, FormInput, Rocket, FolderKanban } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
-import { PLANS } from '@/lib/plans';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -17,187 +15,6 @@ import TrustpilotBadge from '@/components/TrustpilotBadge';
 import MotionInView from '@/components/MotionInView';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 
-function formatPrice(cents) {
-  if (cents === 0) return '0';
-  return Math.round(cents / 100).toString();
-}
-
-/**
- * Pricing card pour la landing.
- * Pattern delta features ("Tout inclus dans X +") + Pro killer (encadré
- * "Débloque la suite complète") + Business promo lancement (prix barré).
- */
-
-// Modules débloqués par plan (CRM + Campagnes + Formulaires).
-// Définit ici en local pour éviter de coupler LandingContent avec PricingContent.
-// Modules débloqués par plan : SEUL Business débloque les 4 modules.
-// Starter/Solo/Pro restent sur Prospection uniquement (Pro = juste plus de
-// volume vs Solo). C'est ce qui justifie l'écart Pro 49€ → Business 149€.
-const LANDING_PLAN_MODULES = {
-  free:     { prospection: 'limitée', campagnes: false, crm: false, formulaires: false },
-  solo:     { prospection: true,      campagnes: false, crm: false, formulaires: false },
-  pro:      { prospection: true,      campagnes: false, crm: false, formulaires: false },
-  business: { prospection: true,      campagnes: true,  crm: true,  formulaires: true },
-};
-
-function PricingCard({ plan, tagline, features, cta, ctaHref, badge, highlighted, isYearly, t }) {
-  const isFree = plan.price === 0;
-  const modules = LANDING_PLAN_MODULES[plan.id] || LANDING_PLAN_MODULES.free;
-
-  // Badge colors mapping (Tailwind safe-list ne marche pas avec strings dynamiques)
-  const badgeColors = {
-    violet: 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-violet-500/20',
-    emerald: 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-emerald-500/20',
-  };
-
-  // ─── Gestion du prix : cas spécial Business avec promo ─────────────────
-  // Sur monthly avec promo : prix promo en gros + prix normal barré
-  // Sur yearly Business : displayPriceYearly (179×10=1690€/an)
-  // Sinon : comportement standard (price / priceYearly)
-  const isBusinessWithPromo = plan.id === 'business' && plan.promo;
-  const showBusinessPromoMonthly = isBusinessWithPromo && !isYearly;
-  const showBusinessYearly = plan.id === 'business' && isYearly && plan.displayPriceYearly;
-
-  return (
-    <div className={`relative p-7 rounded-2xl backdrop-blur-sm flex flex-col ${
-      highlighted
-        ? 'border border-violet-500/30 bg-gradient-to-b from-violet-50 via-violet-50/50 to-white'
-        : 'border border-line bg-surface-card/80'
-    }`}>
-      {badge && (
-        <div className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-[11px] font-semibold rounded-full shadow-lg flex items-center gap-1.5 whitespace-nowrap ${badgeColors[badge.color] || badgeColors.violet}`}>
-          {badge.icon && <badge.icon size={11} />}
-          {badge.label}
-        </div>
-      )}
-
-      <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
-      <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{tagline}</p>
-
-      {/* PRIX — affichage conditionnel selon plan + period + promo */}
-      {showBusinessPromoMonthly ? (
-        <>
-          <div className="flex items-baseline gap-2 mb-1 flex-wrap">
-            <span className="text-4xl font-bold">
-              {formatPrice(plan.promo.displayPrice)}<span className="text-2xl text-content-secondary">&euro;</span>
-            </span>
-            <span className="text-content-tertiary text-sm">/mois</span>
-            <span className="text-lg text-content-muted line-through font-medium">
-              {formatPrice(plan.displayPrice)}&nbsp;&euro;
-            </span>
-          </div>
-          <p className="text-[11px] font-semibold text-emerald-700 mb-0.5">
-            🎉 {plan.promo.label}
-          </p>
-          <p className="text-[11px] text-content-tertiary mb-5">
-            {plan.promo.sublabel}
-          </p>
-        </>
-      ) : showBusinessYearly ? (
-        <>
-          <div className="flex items-baseline gap-1 mb-1">
-            <span className="text-4xl font-bold">
-              {formatPrice(plan.displayPriceYearly)}<span className="text-2xl text-content-secondary">&euro;</span>
-            </span>
-            <span className="text-content-tertiary text-sm">/an</span>
-          </div>
-          <p className="text-[11px] text-emerald-600 font-medium mb-5">
-            ~{Math.round(plan.displayPriceYearly / 1200)}&euro;/mois &middot; 2&nbsp;mois offerts
-          </p>
-        </>
-      ) : (
-        <>
-          <div className="flex items-baseline gap-1 mb-1">
-            <span className="text-4xl font-bold">
-              {formatPrice(isYearly ? plan.priceYearly : plan.price)}<span className="text-2xl text-content-secondary">&euro;</span>
-            </span>
-            <span className="text-content-tertiary text-sm">{isYearly ? t('landing.pricing.perYear') : t('landing.pricing.perMonth')}</span>
-          </div>
-          {isYearly && !isFree && (
-            <p className="text-[11px] text-emerald-600 font-medium mb-5">
-              ~{Math.round(plan.priceYearly / 1200)}&euro;/mois en facturation annuelle
-            </p>
-          )}
-          {!isYearly && !isFree && (
-            <p className="text-[11px] text-content-tertiary mb-5">
-              ou {formatPrice(plan.priceYearly)}&euro;/an ({t('landing.pricing.savePercent')})
-            </p>
-          )}
-          {isFree && <p className="text-[11px] text-content-tertiary mb-5">Sans carte bancaire</p>}
-        </>
-      )}
-
-      <Link
-        href={ctaHref}
-        className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-5 ${
-          highlighted
-            ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:from-violet-500 hover:to-indigo-500 shadow-lg shadow-violet-500/20'
-            : 'border border-line-hover hover:bg-surface-elevated text-content-secondary'
-        }`}
-      >
-        {cta}{highlighted ? ' →' : ''}
-      </Link>
-
-      {/* PRO KILLER — encadré violet "Débloque la suite complète".
-          C'est LE message qui doit déclencher l'upgrade Solo→Pro. */}
-      {plan.unlocksModules && (
-        <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
-          <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
-            <Star size={11} fill="currentColor" /> Débloque la suite complète
-          </p>
-          <p className="text-[11px] text-violet-700 leading-snug">
-            CRM &middot; Campagnes email &middot; Formulaires &middot; Project — tous inclus
-          </p>
-        </div>
-      )}
-
-      {/* MODULES BADGES — check/croix selon ce qui est inclus */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-          modules.prospection === true ? 'bg-violet-100 text-violet-700'
-          : modules.prospection === 'limitée' ? 'bg-zinc-100 text-zinc-600'
-          : 'bg-zinc-50 text-content-muted'
-        }`}>
-          ✓ Prospection{modules.prospection === 'limitée' ? ' (limitée)' : ''}
-        </span>
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-          modules.campagnes ? 'bg-blue-100 text-blue-700' : 'bg-zinc-50 text-content-muted'
-        }`}>
-          {modules.campagnes ? '✓' : '✗'} Campagnes
-        </span>
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-          modules.crm ? 'bg-indigo-100 text-indigo-700' : 'bg-zinc-50 text-content-muted'
-        }`}>
-          {modules.crm ? '✓' : '✗'} CRM
-        </span>
-        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-          modules.formulaires ? 'bg-pink-100 text-pink-700' : 'bg-zinc-50 text-content-muted'
-        }`}>
-          {modules.formulaires ? '✓' : '✗'} Formulaires
-          {modules.formulaires === 'pro' ? ' (5)' : ''}
-        </span>
-      </div>
-
-      {/* "Tout inclus dans X +" intro avant les delta features.
-          Simplifie radicalement la lecture cross-plans. */}
-      {plan.inheritsFrom && PLANS[plan.inheritsFrom] && (
-        <p className="text-[11px] font-semibold text-content-secondary mb-3 pb-3 border-b border-line">
-          ✓ Tout inclus dans {PLANS[plan.inheritsFrom].name} +
-        </p>
-      )}
-
-      <div className="space-y-2.5 flex-1">
-        {(Array.isArray(features) ? features : []).map((f) => (
-          <div key={f} className="flex items-start gap-2">
-            <Check size={15} className="text-violet-400 mt-0.5 flex-shrink-0" />
-            <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function LandingContent() {
   const { t } = useI18n();
   // Landing marketing = TOUJOURS en light (override user dark preference)
@@ -206,24 +23,8 @@ export default function LandingContent() {
   // importe le localStorage. Fix bug mai 2026 : un user revenu de /en
   // voyait la page / en EN). Cf src/lib/i18n.js → useForceLocale.
   useForceLocale('fr');
-  // Pricing toggle Monthly / Yearly (UX 2026 standard)
-  const [pricingPeriod, setPricingPeriod] = useState('monthly');
-  const isYearly = pricingPeriod === 'yearly';
-
-  function formatLimit(value) {
-    if (value === -1) return t('landing.unlimited');
-    return value.toLocaleString('fr-FR');
-  }
-
-  const PLAN_FEATURES = {
-    free: t('landing.planFeatures.free'),
-    solo: t('landing.planFeatures.solo'),
-    pro: t('landing.planFeatures.pro'),
-    business: t('landing.planFeatures.business'),
-  };
-
-  // entryPrice = ticket d'entrée payant (pour comparer avec Solo à 19€)
-  // proPrice   = leur plan équivalent à Pro (49€)
+  // entryPrice = ticket d'entrée payant (pour comparer avec Prospection à 19€)
+  // proPrice   = leur plan supérieur (à comparer avec MAX 179€ pour la suite)
   const COMPETITORS = [
     { name: 'Apollo.io',   entryPrice: '49 $',  proPrice: '99 $',  enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '~30' },
     { name: 'Hunter.io',   entryPrice: '49 €',  proPrice: '99 €',  enrichments: '1 source', scoring: false, ai: false, depts: false, categories: '0' },
@@ -308,8 +109,8 @@ export default function LandingContent() {
             <div className="text-left animate-in fade-in slide-in-from-bottom-4 duration-700">
               {/* Badge — repositioning 80/20 (mai 2026) : Volia = générateur
                   email + téléphone B2B. Les 3 autres modules (Campagnes/CRM/
-                  Formulaires) sont du bonus Business 149 € → mentionnés en
-                  bas du hero, pas dans le badge. */}
+                  Formulaires) sont gratuits pour tous depuis le pivot freemium
+                  → mentionnés en bas du hero, pas dans le badge. */}
               {/* Badge pivot juin 2026 : Autopilot = nouvelle proposition de valeur principale.
                   Volia = pipeline B2B end-to-end auto (scrap → email → form → CRM)
                   plutôt qu'un simple générateur de leads. */}
@@ -335,7 +136,7 @@ export default function LandingContent() {
               </p>
               <p className="text-base text-content-secondary mb-6 leading-relaxed max-w-xl">
                 <strong className="text-content-primary">Tu ne touches rien.</strong> 2 semaines plus tard, ton pipeline est plein.
-                À partir de <strong className="text-content-primary">49&nbsp;€/mois. Sans CB.</strong>
+                Démarrage <strong className="text-content-primary">gratuit. Sans CB.</strong>
               </p>
 
               {/* Pivot freemium : la suite est gratuite, MAX99 = offre de
@@ -1015,7 +816,8 @@ export default function LandingContent() {
           COMPARATIF STACK — valeur financière de la suite vs concurrents
           ─────────────────────────────────────────────────────────────
           2 colonnes côte à côte : à gauche stack Apollo + Lemlist +
-          HubSpot avec prix cumulés, à droite Volia Business 149€/mo.
+          HubSpot avec prix cumulés, à droite Volia MAX 179€/mo
+          (99€/mois les 3 premiers mois avec MAX99).
           Pattern "before / after" très visuel, conversion ++.
        */}
       <section className="relative py-24 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-zinc-50 via-white to-emerald-50/30">
@@ -1029,8 +831,8 @@ export default function LandingContent() {
                 1 outil au prix d&apos;1. Pas 3 outils au prix de 3.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez toute la suite Volia.
-                Soit <strong className="text-emerald-700">~250 €/mois</strong> dans votre poche. Chaque mois.
+                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez toute la suite Volia + l&apos;Autopilot
+                pendant 3 mois (code MAX99). Soit <strong className="text-emerald-700">~90 à 170 €/mois</strong> dans votre poche.
               </p>
             </div>
           </MotionInView>
@@ -1087,7 +889,7 @@ export default function LandingContent() {
               <div className="relative h-full p-7 rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-emerald-50 via-white to-violet-50/50 shadow-xl shadow-emerald-500/10">
                 {/* Badge "Recommandé" flottant */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
-                  Recommandé · Volia Business
+                  Recommandé · Volia MAX
                 </div>
 
                 <div className="flex items-center justify-between mb-6 mt-2">
@@ -1100,6 +902,7 @@ export default function LandingContent() {
 
                 <div className="space-y-3 mb-6">
                   {[
+                    { tool: 'Volia Autopilot', desc: 'Pipeline B2B end-to-end auto', color: 'amber' },
                     { tool: 'Volia Prospection', desc: '150+ catégories × 101 départements', color: 'violet' },
                     { tool: 'Volia Campagnes', desc: 'Séquences email + warmup', color: 'blue' },
                     { tool: 'Volia CRM', desc: 'Pipeline Kanban + deals', color: 'emerald' },
@@ -1121,15 +924,15 @@ export default function LandingContent() {
 
                 <div className="pt-4 border-t border-emerald-200">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-sm font-semibold text-content-secondary">Total Volia Business</span>
+                    <span className="text-sm font-semibold text-content-secondary">Total Volia MAX</span>
                     <div className="text-right">
-                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">149 €</span>
+                      <span className="text-4xl font-bold font-mono bg-gradient-to-br from-emerald-600 to-teal-700 bg-clip-text text-transparent tabular-nums">179 €</span>
                       <span className="text-content-tertiary text-sm">/mois</span>
-                      <div className="text-[10px] text-emerald-700 font-semibold mt-0.5">🎉 promo 12 mois (puis 179 €)</div>
+                      <div className="text-[10px] text-emerald-700 font-semibold mt-0.5">⚡ code MAX99 : 3 premiers mois à 99 €</div>
                     </div>
                   </div>
                   <p className="text-xs text-emerald-700 font-semibold mt-2">
-                    ~120 €/mois dans la poche. ~1 400 €/an. Les 4 modules partagent les mêmes données, en direct.
+                    ~90 €/mois dans la poche (~170 € pendant la promo). Les modules partagent les mêmes données, en direct.
                   </p>
                 </div>
               </div>
@@ -1143,7 +946,7 @@ export default function LandingContent() {
                 href="/signup?plan=max"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm"
               >
-                Je prends Business à 149&nbsp;€/mois (promo 12 mois)
+                Je prends MAX à 99&nbsp;€/mois (code MAX99)
                 <ArrowRight size={16} />
               </Link>
               <p className="text-xs text-content-tertiary mt-3">14 jours pour changer d&apos;avis · Annulation en 1 clic, vraiment</p>
@@ -1564,7 +1367,7 @@ export default function LandingContent() {
 
           {/* Trust signal final */}
           <p className="text-xs text-content-tertiary">
-            Sans carte bancaire · 100 prospects gratuits · Annulation en 1 clic
+            Sans carte bancaire · 25 crédits gratuits/mois · Annulation en 1 clic
           </p>
         </MotionInView>
       </section>

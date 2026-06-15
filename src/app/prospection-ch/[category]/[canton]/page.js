@@ -96,7 +96,7 @@ export default async function CategoryCantonChPage({ params }) {
     },
     {
       question: `Combien coûte la prospection en ${canton.name} ?`,
-      answer: `À partir de 19 €/mois (1 000 prospects/mois). Tous les pays inclus.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois), puis 19 €/mois (500 crédits/mois). Tous les pays inclus.`,
     },
   ];
 

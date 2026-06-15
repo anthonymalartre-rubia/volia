@@ -143,7 +143,7 @@ export async function POST(request) {
     if (limits.workflows === 0) {
       return NextResponse.json({
         error: 'plan_does_not_allow_autopilot',
-        message: 'Ton plan actuel n\'inclut pas Volia Autopilot. Passe en Pro 49€ pour 1 workflow.',
+        message: 'Ton plan actuel n\'inclut pas Volia Autopilot. Passe en MAX (179€/mois — code MAX99 : 3 mois à 99€) pour le débloquer.',
         upgrade_url: '/pricing',
       }, { status: 403 });
     }
@@ -156,7 +156,7 @@ export async function POST(request) {
       if (count !== null && count >= limits.workflows) {
         return NextResponse.json({
           error: 'workflow_limit_reached',
-          message: `Ton plan ${plan} limite à ${limits.workflows} workflow(s). Passe en Business pour 3 workflows ou Enterprise pour illimité.`,
+          message: `Ton plan ${plan} limite à ${limits.workflows} workflow(s). Passe en MAX (3 workflows + IF/ELSE + A/B testing — code MAX99 : 3 mois à 99€) ou supprime un workflow existant.`,
           upgrade_url: '/pricing',
         }, { status: 403 });
       }

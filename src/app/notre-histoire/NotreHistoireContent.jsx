@@ -723,7 +723,7 @@ function ForYouSection() {
     {
       icon: Wallet,
       title: 'Prix structurellement bas',
-      desc: "149€/mois pour toute la suite. HubSpot + Apollo + Lemlist + Tally = 270€/mois. Pas de charité — juste une structure de coûts différente.",
+      desc: "Toute la suite en illimité à 179€/mois — 99€/mois les 3 premiers mois avec MAX99. HubSpot + Apollo + Lemlist + Tally = 270€/mois. Pas de charité — juste une structure de coûts différente.",
       gradient: 'from-emerald-500 to-teal-600',
     },
     {
@@ -800,7 +800,7 @@ function AntiFudFaqSection() {
     },
     {
       q: "C'est une démo ou un vrai produit ?",
-      a: "Vrai produit. Clients payants. 4 modules connectés en production. 10 cron jobs qui tournent en autonomie 24/7. Monitoring temps réel. Stripe live. Tu peux t'inscrire au plan Starter gratuit en 30 secondes et tester par toi-même — pas besoin de carte bancaire.",
+      a: "Vrai produit. Clients payants. 4 modules connectés en production. 10 cron jobs qui tournent en autonomie 24/7. Monitoring temps réel. Stripe live. Tu peux t'inscrire au plan Gratuit en 30 secondes et tester par toi-même — pas besoin de carte bancaire.",
     },
     {
       q: 'Pourquoi Marseille ?',
@@ -808,7 +808,7 @@ function AntiFudFaqSection() {
     },
     {
       q: "Auras-je du support si vous êtes seul ?",
-      a: "Oui. Tickets traités sous 24 h ouvrées (souvent sous 2 h en journée FR). Email direct à anthony@volia.fr ou chat in-app. Pas de niveau 1 qui te balade. Pour les clients Business 149€, 30 min de visio onboarding offert sur demande. Quand le volume nécessitera un humain en plus, ce sera un humain support FR — jamais un chatbot frustrant.",
+      a: "Oui. Tickets traités sous 24 h ouvrées (souvent sous 2 h en journée FR). Email direct à anthony@volia.fr ou chat in-app. Pas de niveau 1 qui te balade. Pour les clients MAX, 30 min de visio onboarding offert sur demande. Quand le volume nécessitera un humain en plus, ce sera un humain support FR — jamais un chatbot frustrant.",
     },
   ];
 
@@ -880,7 +880,7 @@ function FinalCtaSection() {
           </span>
         </h2>
         <p className="text-lg text-content-secondary leading-relaxed max-w-2xl mx-auto mb-10">
-          Plan Starter gratuit (100 prospects, sans CB). Ou réserve 15 min avec le founder en personne — pas un BDR,
+          Plan Gratuit (toute la suite + 25 crédits Prospection/mois, sans CB). Ou réserve 15 min avec le founder en personne — pas un BDR,
           pas un chatbot.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

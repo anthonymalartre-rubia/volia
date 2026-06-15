@@ -11,12 +11,12 @@ import ReaderFooter from '@/components/ReaderFooter';
 export const metadata = {
   title: 'Volia MCP — la prospection B2B utilisable par les agents IA (Claude, Cursor…)',
   description:
-    'Volia expose un serveur MCP (Model Context Protocol) : pilote ta prospection B2B depuis Claude Desktop, Cursor ou ton agent IA — cherche des prospects, exporte, suis ton usage. Inclus dans le plan Business, dans la limite de ton forfait, RGPD.',
+    'Volia expose un serveur MCP (Model Context Protocol) : pilote ta prospection B2B depuis Claude Desktop, Cursor ou ton agent IA — cherche des prospects, exporte, suis ton usage. Inclus dans le plan MAX, dans la limite de ton forfait, RGPD.',
   alternates: { canonical: 'https://volia.fr/mcp' },
   keywords: ['Volia MCP', 'serveur MCP prospection', 'Model Context Protocol', 'Volia Claude Desktop', 'agent IA prospection B2B', 'MCP France'],
   openGraph: {
     title: 'Volia MCP — prospection B2B utilisable par les agents IA',
-    description: 'Pilote ta prospection B2B depuis Claude, Cursor ou ton agent IA via le Model Context Protocol. Inclus dans le plan Business Volia.',
+    description: 'Pilote ta prospection B2B depuis Claude, Cursor ou ton agent IA via le Model Context Protocol. Inclus dans le plan MAX Volia.',
     type: 'website',
     url: 'https://volia.fr/mcp',
   },
@@ -94,13 +94,13 @@ export default function McpPage() {
             <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-emerald-500" /> 🇫🇷 RGPD</span>
           </div>
           <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-sm font-semibold text-violet-500">
-            ⭐ Fonctionnalité incluse dans le plan <Link href="/pricing" className="underline underline-offset-2">Business</Link>
+            ⭐ Fonctionnalité incluse dans le plan <Link href="/pricing" className="underline underline-offset-2">MAX</Link>
           </div>
         </section>
 
-        {/* Cas d'usage & valeur Business */}
+        {/* Cas d'usage & valeur MAX */}
         <section className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
-          <h2 className="text-center text-2xl font-bold">Ce que ça change pour une équipe Business</h2>
+          <h2 className="text-center text-2xl font-bold">Ce que ça change pour une équipe MAX</h2>
           <p className="mx-auto mt-2 mb-8 max-w-2xl text-center text-sm text-content-tertiary">
             Tes commerciaux passent déjà leurs journées dans Claude ou Cursor. Le MCP y branche Volia :
             ils prospectent, exportent et pilotent sans jamais ouvrir une autre app.
@@ -158,7 +158,7 @@ export default function McpPage() {
           <ol className="mt-5 space-y-4 text-sm text-content-secondary">
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-bold text-white">1</span>
-              <span>Avec un <strong>compte Business</strong>, crée ta clé API Volia dans <Link href="/settings" className="text-violet-500 hover:underline">tes paramètres</Link> (commence par <code className="rounded bg-surface-raised px-1.5 py-0.5 text-xs">pk_</code>). Le MCP est réservé au plan Business.</span>
+              <span>Avec un <strong>compte MAX</strong>, crée ta clé API Volia dans <Link href="/settings" className="text-violet-500 hover:underline">tes paramètres</Link> (commence par <code className="rounded bg-surface-raised px-1.5 py-0.5 text-xs">pk_</code>). Le serveur MCP est réservé au plan MAX.</span>
             </li>
             <li className="flex gap-3">
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-600 text-xs font-bold text-white">2</span>
@@ -185,7 +185,7 @@ export default function McpPage() {
           <div className="rounded-2xl border border-line bg-surface-raised p-8 text-center">
             <h2 className="text-2xl font-bold">Pas encore de compte Volia ?</h2>
             <p className="mx-auto mt-3 max-w-xl text-content-secondary">
-              Crée ton compte, lance ta première recherche, puis branche ton agent IA. Dès 19 €/mois, essai 14 jours sans carte bancaire.
+              Crée ton compte, lance ta première recherche, puis branche ton agent IA. Le serveur MCP est inclus dans MAX à 179 €/mois (code MAX99 : 3 mois à 99 €) — essai 14 jours de MAX sans carte bancaire.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link href="/signup" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:opacity-95">

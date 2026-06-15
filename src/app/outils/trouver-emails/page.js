@@ -55,7 +55,7 @@ const breadcrumbs = [
 const FAQ = [
   {
     q: 'Cet outil est-il vraiment gratuit ?',
-    a: "Oui. La recherche par secteur + ville et la vérification d'email sont gratuites, sans carte bancaire. L'aperçu affiche un échantillon de résultats anonymisés ; pour voir tous les emails et les exporter en CSV, il suffit de créer un compte (plan gratuit jusqu'à 100 prospects).",
+    a: "Oui. La recherche par secteur + ville et la vérification d'email sont gratuites, sans carte bancaire. L'aperçu affiche un échantillon de résultats anonymisés ; pour voir tous les emails et les exporter en CSV, il suffit de créer un compte (plan Gratuit : 25 crédits offerts chaque mois).",
   },
   {
     q: "D'où viennent les données ?",
@@ -194,7 +194,7 @@ export default function TrouverEmailsPage() {
             <h2 className="text-2xl font-bold mb-2">Allez plus loin gratuitement</h2>
             <p className="text-sm text-content-secondary mb-5 max-w-xl mx-auto">
               101 départements, 150+ secteurs, scoring de confiance et export CSV.
-              Plan gratuit jusqu’à 100 prospects — sans carte bancaire.
+              Plan Gratuit : 25 crédits offerts chaque mois — sans carte bancaire.
             </p>
             <Link
               href="/signup"

@@ -1,6 +1,6 @@
 // GET /api/crm/reports?pipeline_id=  → rapport de performance commerciale (P3-1)
 // Agrégats calculés en base via la RPC crm_pipeline_report (SECURITY INVOKER,
-// donc RLS appliquée). Réservé au plan Business.
+// donc RLS appliquée). Freemium : ouvert à tous les plans (quotas via plans.js).
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
@@ -16,7 +16,7 @@ export async function GET(request) {
   const hasAccess = await checkCrmAccess(supabase, user.id);
   if (!hasAccess) {
     return NextResponse.json(
-      { success: false, error: 'CRM réservé au plan Business' },
+      { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
       { status: 403 }
     );
   }

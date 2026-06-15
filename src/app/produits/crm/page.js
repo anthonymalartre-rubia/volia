@@ -1,9 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────
-// /produits/crm — landing produit Volia CRM (LIVE — gated Business 149 €)
+// /produits/crm — landing produit Volia CRM (LIVE — gratuit pour tous, illimité avec MAX)
 // ─────────────────────────────────────────────────────────────────────
 // Accent : emerald/teal.
 // Positionnement : alternative française à HubSpot Starter / Pipedrive /
-// Salesforce — natif Volia, inclus dans Business 149 € (vs 90-125 €
+// Salesforce — natif Volia, inclus gratuitement pour tous, illimité avec MAX (vs 90-125 €
 // pour HubSpot CRM seul, sans l'enrichment + le sending).
 // ─────────────────────────────────────────────────────────────────────
 
@@ -20,9 +20,9 @@ const SITE_URL = 'https://volia.fr';
 const PAGE_URL = `${SITE_URL}/produits/crm`;
 
 export const metadata = {
-  title: 'Volia CRM — Alternative française à HubSpot, inclus dans Business 149 €',
+  title: 'Volia CRM — Alternative française à HubSpot, gratuit pour tous',
   description:
-    'HubSpot Starter 90 €. Pipedrive 49 €. Salesforce 125 €. Volia CRM : 0 € de plus si vous êtes en Business. Kanban drag-drop, auto-create deals depuis replies, timeline 360°, intégré nativement à Prospection + Campagnes.',
+    'HubSpot Starter 90 €. Pipedrive 49 €. Salesforce 125 €. Volia CRM : 0 €, inclus gratuitement pour tous (illimité avec MAX). Kanban drag-drop, auto-create deals depuis replies, timeline 360°, intégré nativement à Prospection + Campagnes.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -46,9 +46,9 @@ export const metadata = {
     'Volia CRM',
   ],
   openGraph: {
-    title: 'Volia CRM — Alternative française à HubSpot, inclus dans Business 149 €',
+    title: 'Volia CRM — Alternative française à HubSpot, gratuit pour tous',
     description:
-      'Un CRM intégré à votre Prospection + Campagnes. Pas une intégration. Kanban natif, auto-create deals depuis replies, timeline 360°. 149 €/mois tout inclus vs 270 €+ pour HubSpot + Apollo + Lemlist.',
+      'Un CRM intégré à votre Prospection + Campagnes. Pas une intégration. Kanban natif, auto-create deals depuis replies, timeline 360°. Gratuit pour tous · suite MAX 179 €/mois tout inclus vs 270 €+ pour HubSpot + Apollo + Lemlist.',
     url: PAGE_URL,
     type: 'website',
   },
@@ -253,7 +253,7 @@ function ProblemSolutionSection() {
               318 $/mois et toujours du copier-coller.
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-              Le calcul que personne ne fait : ce qu&apos;un setup HubSpot + Apollo + Lemlist + Zapier vous coûte vraiment, vs Volia Business.
+              Le calcul que personne ne fait : ce qu&apos;un setup HubSpot + Apollo + Lemlist + Zapier vous coûte vraiment, vs Volia MAX.
             </p>
           </div>
         </MotionInView>
@@ -305,7 +305,7 @@ function ProblemSolutionSection() {
                   <Check size={20} className="text-white" strokeWidth={3} />
                 </div>
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold">Avec Volia Business</div>
+                  <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold">Avec Volia MAX</div>
                   <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Les 3 modules natifs, 1 facture</h3>
                 </div>
               </div>
@@ -324,7 +324,7 @@ function ProblemSolutionSection() {
               </ul>
               <div className="flex items-center justify-between gap-3 pt-3 border-t-2 border-emerald-200">
                 <span className="text-base font-bold text-content-primary">Total mensuel</span>
-                <span className="text-2xl font-mono font-bold text-emerald-700">149 €/mo</span>
+                <span className="text-2xl font-mono font-bold text-emerald-700">179 €/mo</span>
               </div>
               <p className="mt-4 text-sm text-content-secondary leading-relaxed">
                 <strong className="text-emerald-700">Zéro saisie manuelle.</strong> Un prospect répond à votre séquence ? Il atterrit automatiquement en colonne Lead du Kanban, historique complet inclus.
@@ -341,11 +341,11 @@ function ProblemSolutionSection() {
               className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-xl shadow-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 transition-all text-base"
             >
               <Zap size={18} className="text-amber-200" />
-              <span>Économisez ~220 $/mois en passant à Business</span>
+              <span>Passer à MAX — 179 €/mois tout inclus</span>
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <p className="mt-3 text-xs text-content-tertiary">
-              149 €/mois tout inclus · Annulation 1 clic · Setup en 5 minutes
+              179 €/mois tout inclus (3 mois à 99 € avec MAX99) · Annulation 1 clic · Setup en 5 minutes
             </p>
           </div>
         </MotionInView>
@@ -418,7 +418,7 @@ function ComparisonTableSection() {
                   </th>
                   <th className="px-4 py-5 text-center bg-gradient-to-b from-emerald-100 to-emerald-50">
                     <div className="text-xs font-bold text-emerald-800">Volia CRM</div>
-                    <div className="text-xs text-emerald-700 font-mono mt-0.5">Business — 149 €/mo</div>
+                    <div className="text-xs text-emerald-700 font-mono mt-0.5">Gratuit · illimité avec MAX</div>
                   </th>
                 </tr>
               </thead>
@@ -440,8 +440,8 @@ function ComparisonTableSection() {
                     49 € + Apollo + Lemlist<br /><span className="font-mono text-base text-rose-700">≈ 230 €+/mo</span>
                   </td>
                   <td className="px-4 py-5 text-center bg-emerald-50/60">
-                    <div className="text-xs font-bold uppercase tracking-wider text-emerald-700">Tout inclus</div>
-                    <div className="font-mono text-2xl font-bold text-emerald-700 mt-0.5">149 €/mo</div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-emerald-700">Tout inclus (MAX)</div>
+                    <div className="font-mono text-2xl font-bold text-emerald-700 mt-0.5">179 €/mo</div>
                   </td>
                 </tr>
               </tbody>
@@ -473,7 +473,7 @@ function UseCasesSection() {
               Pour qui c&apos;est fait
             </span>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 tracking-tight bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
-              3 profils qui passent à Volia Business.
+              3 profils qui passent à Volia MAX.
             </h2>
             <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
               Si vous reconnaissez l&apos;un de ces 3 profils, vous économisez du cash et du temps en gardant un CRM intégré plutôt qu&apos;en branchant HubSpot.
@@ -587,9 +587,9 @@ function PricingFocusBanner() {
           <Layers size={22} className="text-white" />
         </div>
         <div>
-          <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold mb-1">CRM gated Business</div>
-          <h4 className="text-xl font-bold text-content-primary">Volia CRM = inclus dans Business 149 €/mois</h4>
-          <p className="text-sm text-content-secondary mt-1">Les 3 modules ensemble (Prospection + Campagnes + CRM). Aucun add-on caché, aucune licence par user.</p>
+          <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold mb-1">CRM inclus pour tous</div>
+          <h4 className="text-xl font-bold text-content-primary">Volia CRM = gratuit pour tous · illimité avec MAX 179 €/mois</h4>
+          <p className="text-sm text-content-secondary mt-1">Le CRM est inclus dans tous les comptes Volia. Avec MAX, toute la suite illimitée (Prospection + Campagnes + Formulaires + Autopilot). Aucun add-on caché, aucune licence par user.</p>
         </div>
       </div>
 
@@ -600,9 +600,9 @@ function PricingFocusBanner() {
           <div className="text-xs text-content-tertiary">+ Apollo (99 $) + Lemlist (99 $) = <span className="font-mono font-bold text-rose-700">≈ 270 €/mo</span></div>
         </div>
         <div className="rounded-xl border-2 border-emerald-300 bg-emerald-50/70 p-4">
-          <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold mb-1">Avec Volia Business</div>
+          <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold mb-1">Avec Volia MAX</div>
           <div className="text-sm font-bold text-content-primary mb-1">CRM + Prospection + Campagnes</div>
-          <div className="text-xs text-content-secondary"><span className="font-mono font-bold text-emerald-700">149 €/mo</span> tout inclus, 1 facture</div>
+          <div className="text-xs text-content-secondary"><span className="font-mono font-bold text-emerald-700">179 €/mo</span> tout inclus, 1 facture — 3 mois à 99 € avec MAX99</div>
         </div>
       </div>
     </div>
@@ -711,7 +711,7 @@ const FAQ = [
   },
   {
     q: 'Combien de contacts et de deals maximum ?',
-    a: 'Plan Business 149 €/mo : 10 000 prospects en pipeline, nombre de deals illimité (un deal peut être lié à un contact existant ou créé à la volée). Au-delà de 10 000 prospects, contactez-nous pour un quota custom. À titre indicatif, une petite équipe sales (1-5 personnes) tient confortablement à 5 000-8 000 contacts actifs.',
+    a: 'Plan Gratuit : 1 pipeline CRM avec vos contacts et deals, de quoi démarrer sereinement. Avec MAX (179 €/mois) : pipelines, prospects et deals illimités. À titre indicatif, une petite équipe sales (1-5 personnes) tient confortablement à 5 000-8 000 contacts actifs.',
   },
   {
     q: 'Timeline 360° par contact, ça veut dire quoi exactement ?',
@@ -722,8 +722,8 @@ const FAQ = [
     a: 'Pas d\'app native iOS/Android pour l\'instant (volontairement — on préfère que le produit web soit excellent avant de fragmenter l\'effort). Le CRM est en revanche entièrement responsive sur mobile : Kanban scrollable horizontalement, drag-drop tactile, notifications push web pour les nouveaux deals créés depuis replies. Une app native est en réflexion pour Q4 2026.',
   },
   {
-    q: 'Le plan Business supporte combien d\'utilisateurs en équipe ?',
-    a: 'Plan Business 149 €/mo : single-user à date (1 compte = 1 founder/closer). Le multi-utilisateurs natif est prévu Q3 2026 — chaque user aura son propre dashboard et ses propres deals, sans licence à 50-100 € par user comme chez HubSpot Pro ou Salesforce. En attendant, les équipes 2-3 personnes partagent le compte (cas le plus courant en beta).',
+    q: 'Combien d\'utilisateurs en équipe ?',
+    a: 'Le multi-utilisateurs est inclus avec MAX (179 €/mois) : chaque membre de l\'équipe a son propre accès, son dashboard et ses deals — sans licence à 50-100 € par user comme chez HubSpot Pro ou Salesforce. Le plan Gratuit reste single-user (1 compte = 1 founder/closer).',
   },
   {
     q: 'C\'est conforme RGPD ?',
@@ -744,12 +744,12 @@ const product = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: 'Volia CRM',
-  description: 'Alternative française à HubSpot CRM. Pipeline Kanban drag-drop, auto-create deals depuis replies, timeline 360° par contact, intégré nativement à Volia Prospection et Campagnes. Inclus dans Volia Business 149 €/mois.',
+  description: 'Alternative française à HubSpot CRM. Pipeline Kanban drag-drop, auto-create deals depuis replies, timeline 360° par contact, intégré nativement à Volia Prospection et Campagnes. Gratuit pour tous, illimité avec la suite Volia MAX.',
   url: PAGE_URL,
   brand: { '@type': 'Brand', name: 'Volia' },
   offers: {
     '@type': 'Offer',
-    price: '149',
+    price: '0',
     priceCurrency: 'EUR',
     availability: 'https://schema.org/InStock',
     url: PAGE_URL,
@@ -771,17 +771,17 @@ export default function CrmProductPage() {
           subtitle: (
             <>
               HubSpot 90 €. Pipedrive 49 €. Salesforce 125 €.{' '}
-              <strong className="text-content-primary font-semibold">Volia CRM : 0 € supplémentaire si vous êtes en Business</strong>.
+              <strong className="text-content-primary font-semibold">Volia CRM : 0 € — gratuit pour tous</strong>.
               Kanban drag-drop + auto-create deals depuis replies + <strong className="text-emerald-700 font-semibold">timeline 360° par contact</strong>.
             </>
           ),
-          ctaPrimary: { label: 'Passer à Business 149 €', href: '/signup?plan=max' },
+          ctaPrimary: { label: 'Démarrer gratuitement', href: '/signup?plan=max' },
           ctaSecondary: { label: 'Voir une démo CRM', href: '/#demo' },
           trust: [
             'Kanban natif',
             'Auto-create depuis replies',
             'Timeline 360°',
-            (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Inclus Business 149 €</>),
+            (<><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Gratuit pour tous</>),
           ],
           mockup: <HeroMockup />,
         }}
@@ -804,19 +804,19 @@ export default function CrmProductPage() {
         }}
         pricingBanner={<PricingFocusBanner />}
         pricing={{
-          label: 'CRM gated Business — 149 €/mois tout inclus',
-          subtext: 'Les 3 modules (Prospection + Campagnes + CRM) ensemble. 10 000 prospects en pipeline, deals illimités. Multi-utilisateurs natif à venir Q3 2026. Aucune licence à 50-100 € par user comme HubSpot ou Salesforce.',
-          cta: 'Passer à Business 149 €',
+          label: 'Gratuit pour tous — 1 pipeline · illimité avec MAX 179 €/mois',
+          subtext: 'Le CRM est inclus gratuitement dans tous les comptes Volia (1 pipeline). Avec MAX : pipelines, prospects et deals illimités, multi-utilisateurs, et toute la suite (Prospection + Campagnes + Formulaires + Autopilot). Code MAX99 : 3 premiers mois à 99 €. Aucune licence à 50-100 € par user comme HubSpot ou Salesforce.',
+          cta: 'Passer à MAX',
           ctaHref: '/signup?plan=max',
         }}
         beforeFaq={<PullQuoteSection />}
         faq={FAQ}
         finalCta={{
           title: 'Le CRM qui se remplit tout seul. 90 €/mois en moins.',
-          subtitle: 'Stop le bazar HubSpot + Apollo + Lemlist + Zapier. Volia Business : un produit, un login, une facture. Résiliable en 1 clic.',
-          primary: { label: 'Passer à Business 149 €', href: '/signup?plan=max' },
+          subtitle: 'Stop le bazar HubSpot + Apollo + Lemlist + Zapier. Volia : un produit, un login, une facture. Résiliable en 1 clic.',
+          primary: { label: 'Démarrer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir une démo CRM', href: '/#demo' },
-          trust: '149 €/mo tout inclus · 10 000 prospects en pipeline · Annulation 1 clic · RGPD by default',
+          trust: 'Gratuit pour tous · illimité avec MAX 179 €/mo · Annulation 1 clic · RGPD by default',
         }}
       />
     </>

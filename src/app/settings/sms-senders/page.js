@@ -371,7 +371,7 @@ export default function SmsSendersPage() {
                         </span>
                       </div>
                       <p className="text-xs text-content-tertiary mt-1">
-                        1€/mois inclus dans le plan Business. Nous provisionnons un numéro mobile français en 1 clic.
+                        1€/mois inclus dans le plan MAX. Nous provisionnons un numéro mobile français en 1 clic.
                       </p>
                       {submitting && (
                         <p className="text-xs text-violet-500 mt-2 inline-flex items-center gap-1.5">

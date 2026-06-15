@@ -122,7 +122,7 @@ export default async function CategoryDepartmentPage({ params }) {
     },
     {
       question: `Puis-je exporter les ${category.labelPlural} du ${dept.name} en CSV ?`,
-      answer: `Oui, exports illimités en CSV standard (Last Name, Company, Email, Phone). Inclus dans tous les plans Volia.`,
+      answer: `Oui, exports en CSV standard (Last Name, Company, Email, Phone). Illimités dès le plan Prospection (5 exports/mois en Gratuit).`,
     },
     {
       question: `Le démarchage des ${category.labelPlural} du ${dept.name} est-il légal ?`,
@@ -130,7 +130,7 @@ export default async function CategoryDepartmentPage({ params }) {
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} dans le ${dept.name} ?`,
-      answer: `À partir de 49 €/mois (plan Pro : 5 000 prospects + 2 000 enrichissements, soit 19 € les 3 premiers mois avec le code ETE2026), 179 €/mois (Business : 10 000 + 10 000) ou 499 €/mois (Enterprise : illimité). Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB). Plan Prospection à 19 €/mois : 500 crédits + 500 téléphones et 2 000 recherches, packs de crédits dès 9 €. Plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) : suite illimitée + Autopilot, 2 000 crédits/mois. Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
     },
   ];
 

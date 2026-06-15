@@ -120,7 +120,7 @@ function buildStep3Email({ firstName }) {
   </p>
   <div style="margin:20px 0;padding:18px;background:#ede9fe;border-left:4px solid #6366f1;border-radius:6px;">
     <p style="margin:0;font-size:16px;font-weight:700;color:#5b21b6;">–50% pendant 3 mois</p>
-    <p style="margin:6px 0 0;font-size:13px;color:#6b21a8;">Soit 89,50€/mois au lieu de 179€ sur le plan Business (les 4 modules débloqués)</p>
+    <p style="margin:6px 0 0;font-size:13px;color:#6b21a8;">Soit 89,50€/mois au lieu de 179€ sur le plan MAX (suite illimitée + Autopilot)</p>
   </div>
   <p style="font-size:14px;line-height:1.6;">
     Code promo : <code style="background:#f3f4f6;padding:4px 8px;border-radius:4px;font-family:monospace;">COMEBACK50</code> (à entrer au checkout).
@@ -144,7 +144,7 @@ Dernier email reactivation, promis.
 Si tu veux retester Volia avec tout ce qu'on a ajouté depuis 3 mois, j'ai mis une promo permanente sur ton compte :
 
 → –50% pendant 3 mois (89,50€/mois au lieu de 179€)
-   Plan Business avec les 4 modules débloqués
+   Plan MAX : suite illimitée + Autopilot
 
 Code promo : COMEBACK50 (à entrer au checkout)
 

@@ -24,13 +24,14 @@ PRODUITS VOLIA :
 - Volia CRM : pipeline drag-drop + suivi deals + activités
 - Volia Forms : formulaires no-code multi-step → CRM/Campagnes auto
 
-TARIFS LIVE :
-- Starter : 0€/mois — 100 prospects (test gratuit)
-- Solo : 19€/mois — 1 000 prospects
-- Pro : 49€/mois — 1 200 enrichissements + 1 module au choix
-- Business : 179€/mois — SEUL plan qui débloque les 4 modules (Prospection + Campagnes + CRM + Forms) + multi-utilisateurs
-- Yearly disponible avec -2 mois offerts
-- Trial Pro 14 jours sans CB
+TARIFS LIVE (pivot freemium) :
+- Gratuit : 0€ — TOUTE la suite (Prospection, Campagnes, CRM, Forms) avec limites : 25 crédits Prospection/mois, 100 recherches, 200 cold emails/mois, 1 séquence, 1 pipeline CRM, 2 formulaires, 1 projet, 5 exports CSV/mois. Sans CB.
+- Prospection : 19€/mois (ou 190€/an) — 500 crédits/mois (emails trouvés), 500 téléphones/mois, 2 000 recherches, cascade waterfall 7 sources, vérification email 100/mois, exports illimités, API publique + Zapier/Make
+- Packs de crédits one-time (disponibles sur tous les plans) : 100 crédits = 9€, 500 = 29€, 2 000 = 79€
+- MAX : 179€/mois (ou 1 690€/an) — suite ILLIMITÉE + Volia Autopilot (pipeline B2B end-to-end auto), 2 000 crédits/mois, 10 000 téléphones, 10 000 cold emails/mois + warmup auto, vérification 5 000/mois, enrichissement décideur, équipes multi-utilisateurs, serveur MCP, support prioritaire
+- Code promo public MAX99 : 99€/mois les 3 premiers mois de MAX
+- Yearly disponible avec ~2 mois offerts
+- Essai gratuit : 14 jours de MAX sans CB
 
 GARDE-FOUS STRICTS (NE PAS ENFREINDRE) :
 1. NE JAMAIS inventer de feature qui n'existe pas

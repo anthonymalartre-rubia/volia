@@ -156,7 +156,7 @@ const PREDICTIONS = [
   {
     icon: TrendingUp,
     title: 'Le ticket d\'entrée s\'effondre pour démocratiser l\'accès',
-    body: "Le marché français a longtemps été cher (49-99 €/mois minimum). En 2026, des acteurs comme Volia cassent ce plancher à 19 €/mois pour 1 000 prospects. Les freelances et TPE qui s'auto-excluaient de l'outbound vont massivement s'y mettre — création estimée de 30-50 k nouveaux \"prospecteurs\" en France d'ici fin 2027.",
+    body: "Le marché français a longtemps été cher (49-99 €/mois minimum). En 2026, des acteurs comme Volia cassent ce plancher à 19 €/mois pour 500 emails trouvés — avec un plan gratuit pour démarrer. Les freelances et TPE qui s'auto-excluaient de l'outbound vont massivement s'y mettre — création estimée de 30-50 k nouveaux \"prospecteurs\" en France d'ici fin 2027.",
   },
 ];
 
@@ -681,8 +681,8 @@ export default function EtudePage() {
             <Sparkles size={32} className="text-violet-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">Essayez Volia gratuitement</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              100 prospects offerts pour découvrir la plateforme française derrière cette étude.
-              À partir de 19 €/mois pour passer à 1 000 prospects — le ticket d&apos;entrée le moins cher du marché français.
+              25 crédits offerts chaque mois pour découvrir la plateforme française derrière cette étude.
+              À partir de 19 €/mois pour 500 crédits (emails trouvés) — le ticket d&apos;entrée le moins cher du marché français.
             </p>
             <Link
               href="/signup"

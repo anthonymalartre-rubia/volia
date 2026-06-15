@@ -1,7 +1,7 @@
 // GET /api/admin/prospection/lists/[id]/sources/crm-contacts
 //
 // Liste les contacts CRM du user (max 200) pour permettre l'import dans
-// une liste prospect_contacts. Gating CRM (plan Business) côté API.
+// une liste prospect_contacts. Gating CRM côté API (checkCrmAccess).
 //
 // Query params : ?q=search & tag=tag & has_email=true
 //
@@ -36,7 +36,7 @@ export async function GET(request, { params }) {
   const hasCrm = await checkCrmAccess(supabase, user.id);
   if (!hasCrm) {
     return NextResponse.json(
-      { error: 'CRM réservé au plan Business', code: 'crm_not_allowed' },
+      { error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité', code: 'crm_not_allowed' },
       { status: 403 }
     );
   }

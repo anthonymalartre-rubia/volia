@@ -12,7 +12,7 @@
 //     accent="emerald"
 //     title="Volia CRM"
 //     sections={[{ items: NAV_ITEMS }, { title: 'Configuration', items: CONFIG_ITEMS }]}
-//     footer={{ title: 'Plan Business', text: '…' }}
+//     footer={{ title: 'Plan MAX', text: '…' }}
 //     isOpen={isOpen} onClose={onClose}
 //   />
 //

@@ -47,7 +47,7 @@ function WonProjectCta({ dealId }) {
         body: JSON.stringify({ deal_id: dealId }),
       });
       const json = await res.json();
-      if (res.status === 403) throw new Error('Réservé au plan Business');
+      if (res.status === 403) throw new Error('Limite du plan atteinte — passez à MAX');
       if (!json.success) throw new Error(json.error || 'Erreur');
       router.push(`/app/projets/${json.data.id}`);
     } catch (e) {

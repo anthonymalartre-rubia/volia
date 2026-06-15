@@ -57,7 +57,15 @@ export async function captureExpiredCheckout({ session, supabase }) {
 
 function planLabel(plan) {
   if (!plan) return 'Volia';
-  const map = { solo: 'Solo (19€/mois)', pro: 'Pro (49€/mois)', business: 'Business (179€/mois)' };
+  const map = {
+    // Lineup freemium (11/06/2026)
+    prospection: 'Prospection (19€/mois)',
+    max: 'MAX (179€/mois)',
+    // Legacy (checkouts abandonnés avant le pivot / parcours grandfathered)
+    solo: 'Solo (19€/mois)',
+    pro: 'Pro (49€/mois)',
+    business: 'Business (179€/mois)',
+  };
   return map[plan] || plan;
 }
 

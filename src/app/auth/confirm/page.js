@@ -97,7 +97,7 @@ export default function AuthConfirmPage() {
         clearTimeout(timeoutId);
         subscription?.unsubscribe();
 
-        // Trial Pro 14j : trigger DB handle_new_user attribue déjà le trial
+        // Trial MAX 14j : trigger DB handle_new_user attribue déjà le trial
         // au signup. /api/auth/trial-start envoie le welcome email (fire &
         // forget côté API).
         try {

@@ -131,7 +131,7 @@ export async function GET(request) {
           createNotification(profile.id, {
             type: NOTIF_TYPES.NEW_FEATURE,
             title: 'Parrainez 3 amis = 3 mois gratuits',
-            body: `Votre code : ${profile.referral_code}. Pour chaque ami payant, 1 mois Pro offert (cumulable, sans limite).`,
+            body: `Votre code : ${profile.referral_code}. Pour chaque ami payant, 1 mois d'abonnement offert (cumulable, sans limite).`,
             link: '/parrainage',
             metadata: { kind: 'referral_push' },
           }).catch((err) => console.warn('[cron/referral-push-emails] notif failed:', err));

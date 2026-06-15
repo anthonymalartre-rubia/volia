@@ -74,7 +74,7 @@ export default function SendToCrmModal({
           if (status === 403) {
             // Le gating Business est déjà en amont ; si on tombe ici c'est
             // une condition de course (downgrade pendant l'usage par ex.)
-            setPipelinesError('CRM réservé au plan Business. Mettez-vous à jour pour continuer.');
+            setPipelinesError('Limite du plan atteinte — passez à MAX pour continuer.');
           } else {
             setPipelinesError(d?.error || 'Erreur chargement pipelines');
           }

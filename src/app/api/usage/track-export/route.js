@@ -30,7 +30,7 @@ export async function POST() {
     const limitCheck = await checkLimit(supabase, user.id, 'exports');
     if (!limitCheck.allowed) {
       return NextResponse.json(
-        { error: 'Limite d\'exports atteinte pour ce mois. Passez au plan Pro pour continuer.', limitReached: true, ...limitCheck },
+        { error: 'Limite d\'exports atteinte pour ce mois. Passez à Prospection (19€/mois — exports illimités) pour continuer.', limitReached: true, ...limitCheck },
         { status: 429 }
       );
     }

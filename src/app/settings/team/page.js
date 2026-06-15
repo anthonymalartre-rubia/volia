@@ -1,7 +1,7 @@
 'use client';
 
 // /settings/team
-// Page Multi-utilisateurs (Business 149€). Liste des members + invitations + modal d'invite.
+// Page Multi-utilisateurs (MAX 179€). Liste des members + invitations + modal d'invite.
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
@@ -81,7 +81,7 @@ export default function TeamSettingsPage() {
     );
   }
 
-  // Pas de team → écran "passez Business"
+  // Pas de team → écran "passez à MAX"
   if (!data?.team) {
     return (
       <div className="p-6 md:p-10 max-w-4xl">
@@ -100,22 +100,23 @@ export default function TeamSettingsPage() {
           <div className="relative">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-700 text-xs font-medium mb-4">
               <Sparkles size={12} />
-              Plan Business 149€/mois
+              Plan MAX 179€/mois
             </div>
             <h2 className="text-xl font-semibold text-content-primary mb-2">
-              Multi-utilisateurs réservé au plan Business
+              Multi-utilisateurs réservé au plan MAX
             </h2>
             <p className="text-sm text-content-tertiary mb-6 max-w-xl leading-relaxed">
-              Le plan <strong className="text-content-primary">Business</strong> débloque les équipes :
-              invitez vos collègues, partagez les 10 000 prospects/mois et gérez les permissions
-              (owner / admin / member).
+              Le plan <strong className="text-content-primary">MAX</strong> débloque les équipes :
+              invitez vos collègues, partagez les 2 000 crédits/mois et gérez les permissions
+              (owner / admin / member). Code <strong className="text-content-primary">MAX99</strong> :
+              vos 3 premiers mois à 99 €/mois.
             </p>
             <Link
               href="/settings#plan"
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium shadow-sm shadow-violet-500/30 active:scale-95 transition-all"
             >
               <Sparkles size={14} />
-              Voir le plan Business
+              Voir le plan MAX
             </Link>
           </div>
         </div>

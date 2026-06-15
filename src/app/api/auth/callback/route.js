@@ -76,7 +76,7 @@ export async function GET(request) {
         .eq('id', user.id)
         .single();
 
-      // Trial Pro 14j sans CB : on l'attribue UNIQUEMENT si le user n'a
+      // Trial MAX 14j sans CB : on l'attribue UNIQUEMENT si le user n'a
       // jamais eu de trial (anti double-dip si jamais on recrée le profil).
       // buildTrialPayload retourne { trial_plan, trial_started_at, trial_ends_at, plan }.
       const trialPayload = buildTrialPayload('max');

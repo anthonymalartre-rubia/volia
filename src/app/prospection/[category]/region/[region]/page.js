@@ -110,11 +110,11 @@ export default async function CategoryRegionPage({ params }) {
     },
     {
       question: `Puis-je exporter les ${category.labelPlural} de ${region.name} en CSV ?`,
-      answer: `Oui, exports illimités en CSV standard (nom, entreprise, email, téléphone, note Google, site web). Inclus dans tous les plans Volia. Compatible avec tous les CRM (HubSpot, Salesforce, Pipedrive…) et outils d'outreach (Lemlist, Apollo, Smartlead…).`,
+      answer: `Oui, exports en CSV standard (nom, entreprise, email, téléphone, note Google, site web). Illimités dès le plan Prospection (5 exports/mois en Gratuit). Compatible avec tous les CRM (HubSpot, Salesforce, Pipedrive…) et outils d'outreach (Lemlist, Apollo, Smartlead…).`,
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} en ${region.name} ?`,
-      answer: `À partir de 49 €/mois (plan Pro : 5 000 prospects + 2 000 enrichissements, soit 19 € les 3 premiers mois avec le code ETE2026), 179 €/mois (Business : 10 000 + 10 000) ou 499 €/mois (Enterprise : illimité). Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB). Plan Prospection à 19 €/mois : 500 crédits + 500 téléphones et 2 000 recherches, packs de crédits dès 9 €. Plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) : suite illimitée + Autopilot, 2 000 crédits/mois. Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
     },
   ];
 

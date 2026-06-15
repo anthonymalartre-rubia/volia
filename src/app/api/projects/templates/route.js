@@ -10,7 +10,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   if (!(await checkProjectAccess(supabase, user.id))) {
     return NextResponse.json(
-      { success: false, error: 'Volia Project est réservé au plan Business' },
+      { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
       { status: 403 }
     );
   }

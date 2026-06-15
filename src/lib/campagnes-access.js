@@ -3,10 +3,11 @@
 // ─────────────────────────────────────────────────────────────────────
 // Constantes + helpers d'accès au module Campagnes.
 //
-// [1er juin 2026] Décision founder : positionnement Premium Business-only.
-// Volia Campagnes est désormais réservé aux plans Business / Enterprise
-// (149 €/mois promo, 179 €/mois normal). Solo et Pro restent dédiés à
-// la Prospection. Aligne avec :
+// [1er juin 2026 — SUPERSÉDÉ par le pivot freemium du 11/06, cf. plus bas]
+// Décision founder de l'époque : positionnement Premium Business-only.
+// Volia Campagnes était alors réservé aux plans Business / Enterprise
+// (149 €/mois promo, 179 €/mois normal). Solo et Pro restaient dédiés à
+// la Prospection. Alignait avec :
 //   - plans.js  → business.unlocksModules = true (CRM + Campagnes + Forms)
 //   - ModuleSwitcher.jsx → businessOnly: true sur Campagnes
 //   - PricingContent.jsx → Business = SEUL plan qui débloque la suite

@@ -209,8 +209,8 @@ export async function POST(request) {
           break;
         }
 
-        // ─── Multi-utilisateurs : auto-create team si plan Business ──
-        // Justifie la marche tarifaire 49→149€ : l'owner peut inviter
+        // ─── Multi-utilisateurs : auto-create team si plan à équipes ──
+        // (MAX / Business legacy / Enterprise) : l'owner peut inviter
         // jusqu'à N teammates (quota partagé, RBAC simple).
         if (planAllowsTeams(planId)) {
           try {
@@ -470,7 +470,7 @@ export async function POST(request) {
         createNotification(userId, {
           type: NOTIF_TYPES.SUBSCRIPTION_CANCELLED,
           title: 'Abonnement annulé',
-          body: 'Vous êtes désormais sur le plan Starter (gratuit). Vos données restent accessibles.',
+          body: 'Vous êtes désormais sur le plan Gratuit. Vos données restent accessibles.',
           link: '/settings#plan',
         }).catch((err) => console.error('[webhook] Notif cancelled failed:', err));
         break;

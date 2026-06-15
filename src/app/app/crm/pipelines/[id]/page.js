@@ -535,12 +535,12 @@ export default function PipelineDetailPage() {
             <Lock size={32} className="text-white" />
           </div>
           <h1 className="text-3xl font-bold mb-2">Pipeline</h1>
-          <p className="text-content-secondary mb-8">Réservé au plan Business.</p>
+          <p className="text-content-secondary mb-8">Limite du plan atteinte — passez à MAX pour l&apos;illimité.</p>
           <Link
             href="/pricing"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold shadow-lg"
           >
-            <Sparkles size={16} /> Voir le plan Business
+            <Sparkles size={16} /> Voir le plan MAX
           </Link>
         </main>
       </div>

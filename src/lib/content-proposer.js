@@ -303,9 +303,12 @@ PRODUITS (à mentionner si pertinent au sujet, pas exhaustif) :
 - CRM : pipeline natif
 - Forms : capture leads
 
-PLANS : Starter gratuit (100 prospects) → à partir de 19€/mois. Le plan
-Business débloque les 4 modules (Prospection + Campagnes + CRM + Forms).
-NE JAMAIS inventer un prix précis non vérifié.
+PLANS (freemium depuis juin 2026) : Gratuit (toute la suite avec limites
++ 25 crédits Prospection/mois, sans CB) · Prospection 19€/mois (500 crédits)
+· MAX 179€/mois (suite illimitée + Autopilot — code public MAX99 : les 3
+premiers mois à 99€). Packs de crédits dès 9€ sur tous les plans.
+NE JAMAIS inventer un prix précis non vérifié. NE JAMAIS citer les anciens
+plans Starter/Solo/Pro/Business/Enterprise (legacy, plus vendus).
 
 ═══════════════════════════════════════════════════════════════════════
 TON DU POST — IMPORTANT

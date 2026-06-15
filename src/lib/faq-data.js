@@ -18,7 +18,7 @@ export const FAQ_ITEMS = [
     category: 'product',
     question: "Concrètement, c'est quoi Volia ?",
     answer:
-      "Un pipeline B2B en autopilot : tu sélectionnes ta cible, Volia exécute la chaîne complète — scrap des boites (Google Places, 150+ catégories, 101 départements), email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans ton CRM. Ça remplace une stack Apollo + Lemlist + HubSpot, en une seule app à 19€/mois : de la cible au lead chaud livré, tu ne touches pas la mécanique.",
+      "Un pipeline B2B en autopilot : tu sélectionnes ta cible, Volia exécute la chaîne complète — scrap des boites (Google Places, 150+ catégories, 101 départements), email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans ton CRM. Ça remplace une stack Apollo + Lemlist + HubSpot, en une seule app — gratuite pour démarrer, dès 19€/mois pour la donnée : de la cible au lead chaud livré, tu ne touches pas la mécanique.",
   },
   {
     category: 'product',
@@ -36,7 +36,7 @@ export const FAQ_ITEMS = [
     category: 'pricing',
     question: 'Autopilot est inclus dans quel plan ?',
     answer:
-      "Autopilot est dispo dès le plan Pro à 49€/mois (1 workflow en parallèle). Le plan Business débloque 3 workflows simultanés, et le plan Enterprise à 499€/mois en propose un nombre illimité. Tu peux changer de plan à tout moment depuis tes paramètres.",
+      "Autopilot est inclus dans le plan MAX à 179€/mois : 3 workflows en parallèle, branches IF/ELSE et A/B testing. Avec le code MAX99, les 3 premiers mois sont à 99€/mois. Et l'essai gratuit de 14 jours te donne MAX complet, sans carte bancaire. Tu peux changer de plan à tout moment depuis tes paramètres.",
   },
   {
     category: 'trust',
@@ -66,7 +66,7 @@ export const FAQ_ITEMS = [
     category: 'pricing',
     question: 'Le plan gratuit, ça couvre quoi ?',
     answer:
-      "Starter = 100 prospects, 20 enrichissements, 5 exports par mois. Pour tester. À 1 000 prospects + 400 enrichissements, c'est Solo à 19€/mois — le moins cher du marché français. Pro à 49€ et Business à 149€ pour les gros volumes.",
+      "Gratuit = toute la suite avec des limites : 25 crédits Prospection/mois, 100 recherches, 200 cold emails, 1 séquence, 1 pipeline CRM, 2 formulaires, 5 exports CSV. Sans CB. Pour la donnée à volume, Prospection à 19€/mois (500 crédits) — le moins cher du marché français. MAX à 179€/mois pour la suite illimitée + Autopilot.",
   },
   {
     category: 'trust',
@@ -90,13 +90,13 @@ export const FAQ_ITEMS = [
     category: 'vs',
     question: 'Et vs HubSpot + Apollo + Lemlist en stack ?',
     answer:
-      "Stack classique B2B = HubSpot + Apollo + Lemlist + un email finder. Total : ~270€/mois. Volia c'est les 4 dans une app à 149€/mois (Business). Les données sont partagées en natif : un lead découvert en Prospection devient contact CRM dès qu'il répond à une campagne. Zéro export/import entre outils.",
+      "Stack classique B2B = HubSpot + Apollo + Lemlist + un email finder. Total : ~270€/mois. Volia c'est les 4 dans une app à 179€/mois (MAX) — et 99€/mois les 3 premiers mois avec le code MAX99. Les données sont partagées en natif : un lead découvert en Prospection devient contact CRM dès qu'il répond à une campagne. Zéro export/import entre outils.",
   },
   {
     category: 'pricing',
     question: 'Je peux prendre que la Prospection ?',
     answer:
-      "Oui. Solo à 19€/mois ne contient que la Prospection — parfait si vous avez déjà Lemlist ou HubSpot. En vrai, 90% de nos clients passent vite sur Business pour les 4 modules connectés : le gain de temps écrase les 80€ d'écart.",
+      "Oui. Le plan Prospection à 19€/mois, c'est la donnée : 500 crédits/mois, 500 téléphones, exports illimités, API publique — parfait si vous avez déjà Lemlist ou HubSpot. Les autres modules restent dispo gratuitement avec des limites, et MAX à 179€/mois passe toute la suite en illimité avec Autopilot.",
   },
   {
     category: 'product',

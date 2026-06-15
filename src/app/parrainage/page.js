@@ -149,7 +149,7 @@ export default function ParrainagePage() {
           <div className="grid sm:grid-cols-3 gap-3">
             <Step num={1} title="Partagez votre lien" desc="Envoyez votre lien personnalisé à vos contacts B2B (LinkedIn, email, Slack...)." />
             <Step num={2} title="Ils s'inscrivent" desc="Quand un ami crée un compte via votre lien, vous voyez la conversion en temps réel ici." />
-            <Step num={3} title="Vous gagnez 1 mois" desc="Dès qu'il devient client payant (Pro, Business ou Enterprise), 1 mois bonus est crédité." />
+            <Step num={3} title="Vous gagnez 1 mois" desc="Dès qu'il devient client payant (Prospection ou MAX), 1 mois bonus est crédité." />
           </div>
         </section>
 
@@ -198,7 +198,7 @@ export default function ParrainagePage() {
             </details>
             <details className="group py-2.5">
               <summary className="cursor-pointer text-sm font-medium text-content-secondary group-open:text-content-primary">Quand mon bonus est-il crédité ?</summary>
-              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Dès que le filleul devient client payant (Pro, Business ou Enterprise). Notification email + in-app instantanée. Vous voyez le total dans le compteur "Mois gagnés".</p>
+              <p className="text-sm text-content-secondary mt-2 leading-relaxed">Dès que le filleul devient client payant (Prospection ou MAX). Notification email + in-app instantanée. Vous voyez le total dans le compteur "Mois gagnés".</p>
             </details>
           </div>
         </section>
@@ -385,7 +385,7 @@ function GuestScreen() {
             </Link>
           </div>
           <p className="text-xs text-content-tertiary mt-4">
-            Plan Starter gratuit à vie · 100 prospects offerts chaque mois sans carte bancaire · le lien apparaît après connexion
+            Plan Gratuit à vie · 25 crédits offerts chaque mois sans carte bancaire · le lien apparaît après connexion
           </p>
         </section>
 
@@ -430,7 +430,7 @@ function GuestScreen() {
               <div>
                 <h2 className="text-2xl font-bold mb-3">Pourquoi c&apos;est rentable</h2>
                 <p className="text-sm text-content-secondary leading-relaxed mb-4">
-                  Volia coûte 19 à 149 €/mois. <strong className="text-content-primary">Chaque ami payant = 19 à 149 € économisés</strong> sur votre prochain renouvellement.
+                  Volia coûte 19 à 179 €/mois. <strong className="text-content-primary">Chaque ami payant = 19 à 179 € économisés</strong> sur votre prochain renouvellement.
                 </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2 text-content-secondary"><CheckCircle2 size={14} className="text-emerald-400 mt-0.5 flex-shrink-0" /> Aucune limite de filleuls</li>
@@ -441,9 +441,9 @@ function GuestScreen() {
               </div>
               {/* Mini scenarios */}
               <div className="space-y-3">
-                <Scenario amis="3" mois="3" total="147 €" plan="Pro" />
-                <Scenario amis="5" mois="5" total="245 €" plan="Pro" featured />
-                <Scenario amis="10" mois="10" total="990 €" plan="Business" />
+                <Scenario amis="3" mois="3" total="57 €" plan="Prospection" />
+                <Scenario amis="5" mois="5" total="95 €" plan="Prospection" featured />
+                <Scenario amis="10" mois="10" total="1 790 €" plan="MAX" />
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 // GET   /api/crm/automations → préférences d'automatisation CRM du user
 // PATCH /api/crm/automations → { won_onboarding?, stale_relance? } (booléens)
-// Réservé au plan Business.
+// Freemium : ouvert à tous les plans (quotas via plans.js).
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 const DEFAULTS = { won_onboarding: true, stale_relance: true, won_project: false };
 
 function forbidden() {
-  return NextResponse.json({ success: false, error: 'CRM réservé au plan Business' }, { status: 403 });
+  return NextResponse.json({ success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' }, { status: 403 });
 }
 
 export async function GET() {

@@ -102,7 +102,7 @@ export default function CrmSidebar({ isOpen, onClose }) {
         { title: 'Configuration', items: CONFIG_ITEMS },
       ]}
       footer={{
-        title: 'Plan Business',
+        title: 'Plan MAX',
         text: 'Pipeline natif, contacts illimités, deals tracking. Tout connecté à la Prospection.',
       }}
       isOpen={isOpen}

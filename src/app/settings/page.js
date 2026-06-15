@@ -1128,7 +1128,7 @@ export default function SettingsPage() {
               <SectionHeader
                 icon={<Gift className="h-5 w-5 text-pink-500" />}
                 title="Programme parrainage"
-                subtitle="Invitez 3 amis = 3 mois Pro offerts (et +1 mois pour eux)."
+                subtitle="Invitez 3 amis = 3 mois d'abonnement offerts (et +1 mois pour eux)."
               />
 
               <div className="mt-4 rounded-2xl border border-violet-500/30 bg-gradient-to-br from-violet-500/[0.05] via-fuchsia-500/[0.04] to-pink-500/[0.05] p-5">

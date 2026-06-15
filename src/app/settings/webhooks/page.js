@@ -1168,9 +1168,9 @@ export default function WebhooksPage() {
       <div className="min-h-screen bg-surface-base text-content-primary flex items-center justify-center p-6">
         <div className="max-w-md text-center rounded-2xl border border-line bg-surface-card p-8">
           <Webhook className="h-10 w-10 text-violet-500 mx-auto mb-3" />
-          <h1 className="text-lg font-semibold mb-2">Webhooks réservés aux plans Pro+</h1>
+          <h1 className="text-lg font-semibold mb-2">Webhooks disponibles dès le plan Prospection</h1>
           <p className="text-sm text-content-secondary mb-4">
-            Les webhooks sortants nécessitent un plan Solo, Pro ou Business.
+            Les webhooks sortants nécessitent un plan Prospection (19 €/mois) ou MAX.
             Connectez Volia à vos outils via Zapier, Make, n8n ou votre app custom.
           </p>
           <Link

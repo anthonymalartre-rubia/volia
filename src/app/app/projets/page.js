@@ -144,17 +144,18 @@ export default function ProjectsHubPage() {
             <Lock size={26} />
           </div>
           <h1 className="text-2xl font-bold text-content-primary mb-3">
-            Volia Project est réservé au plan Business
+            Limite du plan atteinte — passez à MAX pour des projets illimités
           </h1>
           <p className="text-content-secondary mb-6">
             Transforme tes deals gagnés en projets de livraison, suis chaque tâche au kanban et
             partage l&apos;avancement avec tes clients — sans aucun outil en plus.
+            Code MAX99 : tes 3 premiers mois à 99 €/mois.
           </p>
           <Link
             href="/pricing?plan=max"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-semibold shadow-lg shadow-amber-500/30 transition-all"
           >
-            Passer au plan Business
+            Passer au plan MAX
           </Link>
         </main>
       </div>

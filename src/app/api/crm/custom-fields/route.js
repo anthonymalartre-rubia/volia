@@ -9,7 +9,7 @@
 //   body: { entity, field_label, field_type, field_key?, field_options?, required?, position? }
 //   → crée un field. field_key est slug(field_label) si non fourni.
 //
-// Gating Business uniquement. RLS Supabase enforce l'isolation user_id.
+// Gating CRM (checkCrmAccess). RLS Supabase enforce l'isolation user_id.
 // ─────────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
@@ -22,7 +22,7 @@ const VALID_TYPES = ['text', 'number', 'select', 'date', 'boolean'];
 
 function forbidden() {
   return NextResponse.json(
-    { success: false, error: 'CRM réservé au plan Business 149€/mois' },
+    { success: false, error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité' },
     { status: 403 }
   );
 }

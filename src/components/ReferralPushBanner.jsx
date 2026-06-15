@@ -92,7 +92,7 @@ export default function ReferralPushBanner() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-content-primary leading-tight">
-              Invitez 3 amis = <span className="text-pink-400">3 mois Pro offerts</span>
+              Invitez 3 amis = <span className="text-pink-400">3 mois d&apos;abonnement offerts</span>
               <span className="text-content-secondary font-normal"> + 1 mois pour eux</span>
             </p>
             <p className="text-[11px] text-content-tertiary mt-0.5 leading-snug">

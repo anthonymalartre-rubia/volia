@@ -3,7 +3,7 @@
 // Body : { contact_ids: string[] }
 //
 // Importe des crm_contacts dans la liste prospect_contacts. Dedup sur
-// (list_id, email). Gating CRM (plan Business) côté API.
+// (list_id, email). Gating CRM côté API (checkCrmAccess).
 //
 // Réponse : { inserted, skipped, total }
 
@@ -79,7 +79,7 @@ export async function POST(request, { params }) {
   const hasCrm = await checkCrmAccess(supabase, user.id);
   if (!hasCrm) {
     return NextResponse.json(
-      { error: 'CRM réservé au plan Business', code: 'crm_not_allowed' },
+      { error: 'Limite de votre plan atteinte — passez à MAX pour l\'illimité', code: 'crm_not_allowed' },
       { status: 403 }
     );
   }

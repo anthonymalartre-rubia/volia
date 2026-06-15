@@ -37,7 +37,7 @@ export async function POST(request) {
       return NextResponse.json({ error: `Plan inconnu : ${planId}` }, { status: 400 });
     }
     if (planId === 'free') {
-      return NextResponse.json({ error: 'Le plan Starter est gratuit, pas besoin de checkout.' }, { status: 400 });
+      return NextResponse.json({ error: 'Le plan Gratuit ne nécessite pas de checkout.' }, { status: 400 });
     }
     // Pick price ID selon la période (monthly = price, yearly = priceYearly)
     const stripePriceId = cleanEnv(getStripePriceId(planId, period));

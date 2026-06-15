@@ -98,7 +98,7 @@ export default async function CategoryProvinceBePage({ params }) {
     },
     {
       question: `Combien coûte la prospection en ${province.name} ?`,
-      answer: `À partir de 19 €/mois (1 000 prospects/mois). Tous les pays sont inclus dans tous les plans sans supplément.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB), puis 19 €/mois (500 crédits/mois). Tous les pays sont inclus dans tous les plans sans supplément.`,
     },
   ];
 

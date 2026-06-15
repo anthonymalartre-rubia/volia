@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────────
-// src/lib/trial.js — Trial Pro 14 jours sans CB
+// src/lib/trial.js — Trial MAX 14 jours sans CB
 // ─────────────────────────────────────────────────────────────────
-// Volia offre 14 jours d'accès Pro à chaque nouveau signup, sans
+// Volia offre 14 jours d'accès MAX à chaque nouveau signup, sans
 // demande de carte bancaire. Pattern classique des SaaS B2B (Apollo,
 // HubSpot, Pipedrive) : le user expérimente la vraie valeur du
 // produit → meilleure conversion vers le payant.
@@ -35,7 +35,7 @@ const TRIAL_EXPIRING_THRESHOLD_DAYS = 3; // J-3 → message urgence
  * Ne pas utiliser profile.plan directement pour le gating.
  *
  * @param {object|null} profile - row de user_profiles
- * @returns {string} 'free' | 'solo' | 'pro' | 'business' | 'enterprise'
+ * @returns {string} 'free' | 'prospection' | 'max' | legacy ('solo'|'pro'|'business'|'enterprise')
  */
 export function getEffectivePlan(profile) {
   if (!profile) return 'free';

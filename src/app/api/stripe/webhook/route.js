@@ -232,13 +232,21 @@ export async function POST(request) {
           sendEmail({ to: email, subject: tpl.subject, html: tpl.html })
             .catch((err) => console.error('[webhook] Payment email failed:', err));
         }
+        // Attribution UTM (propagée depuis le checkout via session.metadata) :
+        // on la conserve dans la metadata de la notification → trace queryable
+        // de la campagne pub à l'origine de CHAQUE conversion payante (ROAS),
+        // sans migration DB.
+        const conversionUtm = {};
+        for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'channel']) {
+          if (session.metadata?.[k]) conversionUtm[k] = session.metadata[k];
+        }
         // Notification in-app
         createNotification(userId, {
           type: NOTIF_TYPES.PAYMENT_SUCCESS,
           title: `Bienvenue sur le plan ${PLANS[planId]?.name || planId} !`,
           body: 'Votre paiement a été confirmé. Tous les nouveaux quotas sont actifs immédiatement.',
           link: '/dashboard',
-          metadata: { plan_id: planId, session_id: session.id },
+          metadata: { plan_id: planId, session_id: session.id, ...conversionUtm },
         }).catch((err) => console.error('[webhook] Notif success failed:', err));
 
         // Programme de parrainage : qualifier la referral + double-side incentive

@@ -16,6 +16,7 @@ const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgr
 import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { maybeShowAchievement } from '@/lib/use-achievement-toast';
+import { trackPurchase } from '@/lib/track';
 // Pull achievements silencieux (webhook, form public) au mount dashboard.
 // Le dashboard n'utilise pas AppShell, on monte le puller ici directement.
 import AchievementPuller from '@/components/welcome/AchievementPuller';
@@ -300,6 +301,15 @@ export default function Dashboard() {
     }
 
     if (upgrade !== 'success') return;
+
+    // Conversion pub : paiement réussi. value/plan passés par success_url
+    // (montant réellement facturé la 1re période, ex 99 pour MAX99). No-op si
+    // pixels non chargés / pas de consentement marketing.
+    try {
+      const paidPlan = searchParams.get('plan') || undefined;
+      const rawVal = parseFloat(searchParams.get('value') || '');
+      trackPurchase({ value: Number.isFinite(rawVal) ? rawVal : undefined, currency: 'EUR', plan: paidPlan });
+    } catch { /* noop */ }
 
     // Affiche le toast "Paiement reçu, activation en cours..." immédiatement
     setUpgradeToast({ type: 'pending' });

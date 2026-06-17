@@ -53,6 +53,12 @@ export const metadata = {
       'Lemlist 39€. Instantly 30$. Volia Campagnes : gratuit pour tous, 10 000 emails/mois avec MAX 179€ (code MAX99 : 3 mois à 99€). Warmup auto 28 jours + multi-tenant Resend + auto-create CRM depuis replies.',
     url: PAGE_URL,
     type: 'website',
+    // /opengraph-image racine non héritée par /produits/* → référence explicite.
+    images: [{ url: 'https://volia.fr/opengraph-image', width: 1200, height: 630, alt: 'Volia Campagnes — cold email B2B qui finit en inbox' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://volia.fr/opengraph-image'],
   },
 };
 

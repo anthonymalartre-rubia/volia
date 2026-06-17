@@ -54,6 +54,12 @@ export const metadata = {
       'Typeform 25 $. Tally 29 $. Volia Formulaires : gratuit pour tous, illimité avec MAX. Bridges natifs vers CRM et cold email — plus jamais de Tally → Zapier → HubSpot.',
     url: PAGE_URL,
     type: 'website',
+    // /opengraph-image racine non héritée par /produits/* → référence explicite.
+    images: [{ url: 'https://volia.fr/opengraph-image', width: 1200, height: 630, alt: 'Volia Formulaires — form builder B2B avec CRM intégré' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://volia.fr/opengraph-image'],
   },
 };
 

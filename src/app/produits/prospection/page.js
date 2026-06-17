@@ -59,14 +59,15 @@ export const metadata = {
       "Accès à tout le tissu B2B français via Google Places avec emails + téléphones scrappés en cascade. À partir de 19 €/mois. RGPD inclus. L'alternative française à Apollo, Hunter, Lemlist.",
     url: PAGE_URL,
     type: 'website',
-    // Pas de `images` ici : Next.js sert automatiquement /opengraph-image.js
-    // depuis src/app/ comme fallback, et l'asset /og-prospection.png n'existe
-    // pas dans /public (référence cassée qui pénalisait le partage social).
+    // L'image de partage racine (/opengraph-image) n'est PAS héritée par les
+    // routes /produits/* (vérifié sur prod) → on la référence explicitement.
+    images: [{ url: 'https://volia.fr/opengraph-image', width: 1200, height: 630, alt: 'Volia Prospection — prospection B2B France, emails + téléphones' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Volia Prospection — Alternative française à Apollo, 5× moins chère',
     description: 'tout le tissu B2B français, emails + tels, RGPD inclus. À partir de 19 €/mois.',
+    images: ['https://volia.fr/opengraph-image'],
   },
 };
 

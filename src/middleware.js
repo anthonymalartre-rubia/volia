@@ -175,11 +175,19 @@ export async function middleware(request) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // FAIL-CLOSED : si getUser() échoue (Supabase injoignable, blip réseau, env
+  // manquante en CI), on NE laisse PAS passer vers une route protégée — on
+  // redirige vers /login. Sans ce try/catch, une erreur ici renvoyait un 500
+  // sur toutes les routes protégées au lieu d'une redirection propre.
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data?.user || null;
+  } catch {
+    user = null;
+  }
 
-  // If not logged in, redirect to login
+  // If not logged in (ou auth invérifiable), redirect to login
   if (!user) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';

@@ -17,6 +17,7 @@ import { NavAuth } from '@/components/AuthCTA';
 import { LogoIcon } from '@/components/ui';
 import ProductsMenu from '@/components/ProductsMenu';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import MobileNavMenu from '@/components/MobileNavMenu';
 
 const DEFAULT_LABELS_FR = {
   products: 'Produits',
@@ -65,8 +66,9 @@ export default function MarketingHeader({ locale = 'fr', labels }) {
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <LanguageSwitcher />
+            <div className="hidden sm:block"><LanguageSwitcher /></div>
             <NavAuth />
+            <MobileNavMenu locale={locale} />
           </div>
         </div>
       </nav>

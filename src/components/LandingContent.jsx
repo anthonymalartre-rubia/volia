@@ -8,6 +8,7 @@ import ProductsMenu from '@/components/ProductsMenu';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import MobileNavMenu from '@/components/MobileNavMenu';
 import { TestimonialsBlock, BuiltForProfilesBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 import TrustpilotReviewsBlock from '@/components/TrustpilotReviewsBlock';
 import { LogoIcon } from '@/components/ui';
@@ -51,8 +52,9 @@ export default function LandingContent() {
             <Link href="/faq" className="text-sm text-content-tertiary hover:text-content-primary transition">{t('landing.nav.faq')}</Link>
           </div>
           <div className="flex items-center gap-3">
-            <LanguageSwitcher />
+            <div className="hidden sm:block"><LanguageSwitcher /></div>
             <NavAuth />
+            <MobileNavMenu locale="fr" />
           </div>
         </div>
       </nav>

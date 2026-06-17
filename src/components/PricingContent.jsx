@@ -620,7 +620,9 @@ export default function PricingContent() {
               </p>
             </div>
 
-            <div className="overflow-x-auto rounded-2xl border border-line bg-surface-card shadow-sm">
+            {/* ── Desktop : tableau dense (caché sur mobile : 720px illisible
+                   sur un écran de 375px → scroll horizontal pénible) ── */}
+            <div className="hidden md:block overflow-x-auto rounded-2xl border border-line bg-surface-card shadow-sm">
               <table className="w-full min-w-[720px]">
                 <thead className="sticky top-0 bg-surface-card z-10 border-b border-line">
                   <tr>
@@ -643,6 +645,38 @@ export default function PricingContent() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* ── Mobile : mêmes données en cartes empilées (1 section = 1 carte),
+                   chaque ligne = libellé + 3 mini-colonnes Gratuit/Prospection/MAX.
+                   Zéro scroll horizontal, lisible au pouce. ── */}
+            <div className="md:hidden space-y-4">
+              {COMPARE_SECTIONS.map((section) => (
+                <div key={section.title} className="rounded-2xl border border-line bg-surface-card shadow-sm overflow-hidden">
+                  <div className="px-4 py-3 bg-surface-elevated border-b border-line">
+                    <h3 className="text-sm font-bold text-content-primary">{section.title}</h3>
+                  </div>
+                  <div className="divide-y divide-line">
+                    {section.rows.map((row, ri) => (
+                      <div key={ri} className="px-4 py-3">
+                        <div className="text-sm text-content-primary font-medium mb-2">{row[0]}</div>
+                        <div className="grid grid-cols-3 gap-2">
+                          {VISIBLE_PLANS_FOR_COMPARE.map((planId, ci) => (
+                            <div key={planId} className="rounded-lg bg-surface-elevated/60 px-2 py-1.5 text-center">
+                              <div className="text-[10px] uppercase tracking-wider text-content-tertiary mb-0.5">
+                                {PLANS[planId].name}
+                              </div>
+                              <div className="flex items-center justify-center min-h-[20px]">
+                                {renderCell(row[ci + 1])}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Footnote sur-mesure — au-delà de MAX (workflows ∞, multi-équipes) */}

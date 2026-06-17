@@ -45,6 +45,7 @@ async function notifyOwnerOfView(admin, project) {
 }
 
 async function getSharedProject(token) {
+ try {
   // Token = 48 hex chars générés par la DB. On rejette tout le reste
   // avant de toucher la base.
   if (!/^[a-f0-9]{32,64}$/.test(token || '')) return null;
@@ -91,6 +92,12 @@ async function getSharedProject(token) {
   }
 
   return { project, fileUrls };
+ } catch (e) {
+  // Supabase indisponible / mal configuré (ex: clé service-role absente en CI,
+  // blip réseau) → on traite comme un lien invalide (page « Lien expiré »)
+  // plutôt que de crasher la page publique avec une 500.
+  return null;
+ }
 }
 
 export default async function SharedProjectPage({ params }) {

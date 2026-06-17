@@ -195,6 +195,8 @@ export default function SignupPage() {
         setError(t('auth.accountExists'));
       } else if (res.status === 429 || data?.code === 'rate_limited') {
         setError(t('auth.rateLimited'));
+      } else if (res.status === 422 || data?.code === 'weak_password') {
+        setError(t('auth.weakPassword'));
       } else if (data?.code === 'email_send_failed') {
         setError(t('auth.emailSendFailed'));
       } else if (!res.ok || !data?.success) {

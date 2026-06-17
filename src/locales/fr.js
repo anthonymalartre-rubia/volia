@@ -630,6 +630,7 @@ const fr = {
     passwordMismatch: 'Les mots de passe ne correspondent pas.',
     accountExists: 'Un compte existe déjà avec cet email.',
     rateLimited: 'Trop de tentatives. Patiente une minute et réessaie.',
+    weakPassword: 'Mot de passe trop faible ou trop courant. Choisis-en un autre : au moins 12 caractères, avec lettres, chiffres et symboles.',
     serverError: 'Souci de notre côté. Réessaie dans un instant — tes infos sont bonnes.',
     emailSendFailed: 'Compte créé, mais l\'email de confirmation n\'a pas pu partir. Clique sur « Renvoyer l\'email » ou contacte le support.',
     invalidCredentials: 'Email ou mot de passe incorrect.',

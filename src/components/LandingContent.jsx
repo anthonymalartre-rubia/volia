@@ -573,7 +573,7 @@ export default function LandingContent() {
           lead-gen via Solo), mais cadré comme une brique du pipeline,
           plus comme "LE produit".
        */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
+      <section className="hidden md:block py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
         <div className="max-w-6xl mx-auto">
 
           {/* ─── BRIQUE : VOLIA PROSPECTION (large card) ─── */}
@@ -744,7 +744,7 @@ export default function LandingContent() {
           3 timecards (9h05 / 9h12 / 9h15) qui racontent une vraie
           journée. Pas de chiffres bidons : juste le flow naturel.
        */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/30 to-white">
+      <section className="hidden md:block py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/30 to-white">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-14">
@@ -965,7 +965,7 @@ export default function LandingContent() {
           native vs stack séparée (où les données ne se parlent pas).
           Pattern visuel : 3 cards avec flèches entre modules.
        */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/20 to-white">
+      <section className="hidden md:block py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/20 to-white">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-14">
@@ -1059,7 +1059,7 @@ export default function LandingContent() {
           "profils anonymisés". Plus honnête (on ne prétend pas avoir des
           clients qu'on n'a pas), plus utile (lien vers 6 pages persona),
           meilleur SEO (maillage interne /pour/[slug]). */}
-      <BuiltForProfilesBlock />
+      <div className="hidden md:block"><BuiltForProfilesBlock /></div>
 
       {/* ──────────────────────────────────────────────────────────────
           [Retiré 28 mai 2026] 2 sections supprimées sur demande founder :
@@ -1170,7 +1170,7 @@ export default function LandingContent() {
        */}
 
       {/* Email Verification Feature */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line">
+      <section className="hidden md:block py-12 sm:py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left -- Text */}
@@ -1387,7 +1387,7 @@ export default function LandingContent() {
           Après : section optionnelle juste avant le footer pour les
           visiteurs qui veulent comparer volontairement.
        */}
-      <section id="vs-concurrence" className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-zinc-50/40">
+      <section id="vs-concurrence" className="hidden md:block py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-zinc-50/40">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-12">

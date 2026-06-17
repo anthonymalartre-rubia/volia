@@ -105,6 +105,34 @@ export async function POST(request) {
           { status: 429 }
         );
       }
+      // ─── Mot de passe trop faible / compromis (Supabase weak/leaked password) ──
+      // C'est une erreur UTILISATEUR ATTENDUE (HTTP 422), pas un incident prod.
+      // On l'affiche proprement à l'utilisateur et on NE déclenche PAS d'alerte
+      // critique (sinon, sous trafic pub, des centaines de mots de passe faibles
+      // = des centaines de fausses alertes qui noient les vrais incidents).
+      if (
+        linkError.status === 422 ||
+        msg.includes('weak') || msg.includes('pwned') ||
+        msg.includes('leaked') || msg.includes('breach') || msg.includes('compromis')
+      ) {
+        return NextResponse.json(
+          {
+            error: 'Mot de passe trop faible ou trop courant. Choisis-en un autre — idéalement 12 caractères ou plus, avec lettres, chiffres et symboles.',
+            code: 'weak_password',
+          },
+          { status: 422 }
+        );
+      }
+      // Autre erreur cliente 4xx renvoyée par Supabase (validation) → on relaie
+      // sans paniquer : ce n'est pas une panne serveur, donc PAS d'incident.
+      if (typeof linkError.status === 'number' && linkError.status >= 400 && linkError.status < 500) {
+        console.warn('[auth/signup] generateLink 4xx (erreur cliente, pas d\'incident):', linkError);
+        return NextResponse.json(
+          { error: 'Inscription refusée. Vérifie tes informations et réessaie.', code: 'signup_rejected' },
+          { status: linkError.status }
+        );
+      }
+      // Vraie erreur serveur (5xx / réseau / inconnue) → là, c'est un incident.
       console.error('[auth/signup] generateLink error (after retry):', linkError);
       await alertCritical({
         kind: 'signup_500',

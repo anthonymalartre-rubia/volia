@@ -220,8 +220,11 @@ export default function LandingContent() {
             </div>
 
             {/* ─── COLONNE DROITE : Product mockup ─── */}
-            {/* Refonte : 3 cards empilées montrant le flow Prospection → Campagnes → CRM */}
-            <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150">
+            {/* Refonte : 3 cards empilées montrant le flow Prospection → Campagnes → CRM.
+                Masqué sous lg : sur mobile/tablette le mockup s'empile sous le hero et
+                surcharge l'écran (données factices). Il reste la colonne visuelle du hero
+                sur desktop (≥1024px), là où il accompagne le texte. */}
+            <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150 hidden lg:block">
               {/* Floating "live" sticker — reformulé 27 mai 2026 :
                   "Flow en direct · 3 modules" était cryptique. Le pivot
                   80/20 met l'accent sur email + téléphone — le sticker

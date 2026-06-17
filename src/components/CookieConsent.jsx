@@ -209,17 +209,20 @@ function CookieBanner({ t, onAcceptAll, onRejectAll, onCustomize }) {
       role="region"
       aria-label={t.regionAria}
     >
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 pb-3 sm:pb-6 pointer-events-auto animate-[slideUp_0.4s_ease-out]">
-        <div className="p-4 sm:p-5 rounded-2xl border border-line bg-surface-card shadow-2xl shadow-black/20">
-          <div className="flex items-start gap-3 mb-4">
-            <div className="w-9 h-9 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
-              <Cookie size={18} className="text-violet-400" aria-hidden="true" />
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 pb-2 sm:pb-6 pointer-events-auto animate-[slideUp_0.4s_ease-out]">
+        <div className="p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-line bg-surface-card shadow-2xl shadow-black/20">
+          <div className="flex items-start gap-2.5 sm:gap-3 mb-3 sm:mb-4">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center flex-shrink-0">
+              <Cookie size={16} className="text-violet-400 sm:hidden" aria-hidden="true" />
+              <Cookie size={18} className="text-violet-400 hidden sm:block" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-content-primary mb-1">
+              <p className="text-sm font-semibold text-content-primary mb-0.5 sm:mb-1">
                 {t.bannerTitle}
               </p>
-              <p className="text-xs sm:text-[13px] text-content-secondary leading-relaxed">
+              {/* Mobile : texte limité à 2 lignes pour garder le bandeau compact.
+                  Desktop : explication complète + lien de gestion. */}
+              <p className="text-xs sm:text-[13px] text-content-secondary leading-relaxed line-clamp-2 sm:line-clamp-none">
                 {t.bannerBodyA}
                 <Link href="/cookies" className="text-violet-400 hover:text-violet-300 underline-offset-2 hover:underline">
                   {t.manageLink}
@@ -229,8 +232,8 @@ function CookieBanner({ t, onAcceptAll, onRejectAll, onCustomize }) {
             </div>
           </div>
 
-          {/* 3 boutons même poids visuel — conformité CNIL */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          {/* Desktop : 3 boutons de même poids visuel — conformité CNIL */}
+          <div className="hidden sm:grid sm:grid-cols-3 gap-2">
             <button
               type="button"
               onClick={onRejectAll}
@@ -251,6 +254,33 @@ function CookieBanner({ t, onAcceptAll, onRejectAll, onCustomize }) {
               className="px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-lg hover:from-violet-500 hover:to-indigo-500 transition shadow-lg shadow-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-400"
             >
               {t.acceptAll}
+            </button>
+          </div>
+
+          {/* Mobile : Refuser / Accepter de poids égal (CNIL), Personnaliser en lien secondaire */}
+          <div className="sm:hidden">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={onRejectAll}
+                className="px-3 py-2.5 text-sm font-semibold text-content-primary bg-surface-elevated border border-line rounded-lg active:bg-surface-hover transition focus:outline-none focus:ring-2 focus:ring-violet-500/40"
+              >
+                {t.rejectAll}
+              </button>
+              <button
+                type="button"
+                onClick={onAcceptAll}
+                className="px-3 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 rounded-lg active:from-violet-500 active:to-indigo-500 transition shadow-lg shadow-violet-500/20 focus:outline-none focus:ring-2 focus:ring-violet-400"
+              >
+                {t.acceptAll}
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={onCustomize}
+              className="w-full mt-2 py-1.5 text-xs font-medium text-content-secondary underline underline-offset-2 active:text-content-primary transition focus:outline-none focus:ring-2 focus:ring-violet-500/40 rounded"
+            >
+              {t.customize}
             </button>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
 import { safeStorage } from '@/lib/safe-storage';
+import { useCookieConsent } from '@/lib/cookieConsent';
 
 function generateSessionId() {
   // Simple UUID-like (sans Math.random côté server-friendly — c'est client-only OK)
@@ -69,6 +70,12 @@ export default function DemoBotWidget() {
   const [sessionId, setSessionId] = useState(null);
   const [error, setError] = useState(null);
   const scrollRef = useRef(null);
+
+  // Tant que le bandeau cookies attend une réponse, on masque le launcher
+  // pour qu'il ne se superpose pas au bandeau (surtout sur mobile, où le
+  // bandeau occupe le bas de l'écran). Réapparaît dès le choix fait.
+  const { hydrated: consentHydrated, needsConsent } = useCookieConsent();
+  const consentPending = consentHydrated && needsConsent;
 
   // Cache le widget sur l'app authentifiée
   const shouldHide = pathname && HIDDEN_PATH_PREFIXES.some((p) => pathname.startsWith(p));
@@ -139,8 +146,8 @@ export default function DemoBotWidget() {
 
   return (
     <>
-      {/* Floating button */}
-      {!open && (
+      {/* Floating button — masqué tant que le bandeau cookies attend une réponse */}
+      {!open && !consentPending && (
         <button
           onClick={() => setOpen(true)}
           aria-label={t.open}

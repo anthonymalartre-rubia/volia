@@ -146,25 +146,28 @@ export default function LandingContent() {
                 <span>🎁 <strong className="text-content-secondary not-italic">CRM, Campagnes, Formulaires &amp; Project gratuits</strong> pour tous — et MAX à <strong className="text-content-secondary not-italic">99&nbsp;€/mois</strong> les 3 premiers mois, code <strong className="text-content-secondary not-italic">MAX99</strong>.</span>
               </p>
 
-              {/* CTAs — py-5 (plus de présence), shadow plus prononcé */}
-              <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              {/* CTAs — 1 CTA principal mis en avant, démo en secondaire.
+                  Sur mobile : boutons un peu plus compacts (py-4) pour alléger le hero. */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
                 <Link
                   href="/signup"
-                  className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/50 hover:-translate-y-0.5 transition-all text-base"
+                  className="group inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/50 hover:-translate-y-0.5 transition-all text-base"
                 >
                   Démarrer gratuitement
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <a
                   href="#try-live"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl border-2 border-line-hover hover:border-violet-400 hover:bg-violet-50 text-content-primary font-semibold transition-all text-base"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 rounded-xl border-2 border-line-hover hover:border-violet-400 hover:bg-violet-50 text-content-primary font-semibold transition-all text-base"
                 >
                   Voir une démo
                 </a>
               </div>
 
-              {/* CTA tertiaire — booking démo perso founder */}
-              <div className="mb-8">
+              {/* CTA tertiaire — booking démo perso founder.
+                  Masqué sur mobile (le widget chat + la section démo le couvrent déjà,
+                  évite un 3ᵉ CTA concurrent dans le hero). */}
+              <div className="hidden sm:block mb-8">
                 <BookDemoButton
                   label="Tu veux me parler ? 15 min."
                   variant="ghost"
@@ -515,7 +518,7 @@ export default function LandingContent() {
           Prospection/Campagnes/CRM/Forms deviennent les briques que
           l'Autopilot orchestre.
        */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-amber-50/40 via-white to-white">
+      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-amber-50/40 via-white to-white">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-12">
@@ -570,7 +573,7 @@ export default function LandingContent() {
           lead-gen via Solo), mais cadré comme une brique du pipeline,
           plus comme "LE produit".
        */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
+      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
         <div className="max-w-6xl mx-auto">
 
           {/* ─── BRIQUE : VOLIA PROSPECTION (large card) ─── */}
@@ -741,7 +744,7 @@ export default function LandingContent() {
           3 timecards (9h05 / 9h12 / 9h15) qui racontent une vraie
           journée. Pas de chiffres bidons : juste le flow naturel.
        */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/30 to-white">
+      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/30 to-white">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-14">
@@ -820,7 +823,7 @@ export default function LandingContent() {
           (99€/mois les 3 premiers mois avec MAX99).
           Pattern "before / after" très visuel, conversion ++.
        */}
-      <section className="relative py-24 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-zinc-50 via-white to-emerald-50/30">
+      <section className="relative py-12 sm:py-24 px-4 sm:px-6 border-t border-line overflow-hidden bg-gradient-to-br from-zinc-50 via-white to-emerald-50/30">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-rose-100/30 to-emerald-100/30 rounded-full blur-3xl pointer-events-none -z-0" />
 
         <div className="max-w-6xl mx-auto relative z-10">
@@ -962,7 +965,7 @@ export default function LandingContent() {
           native vs stack séparée (où les données ne se parlent pas).
           Pattern visuel : 3 cards avec flèches entre modules.
        */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/20 to-white">
+      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-violet-50/20 to-white">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-14">
@@ -1167,7 +1170,7 @@ export default function LandingContent() {
        */}
 
       {/* Email Verification Feature */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line">
+      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left -- Text */}
@@ -1294,12 +1297,16 @@ export default function LandingContent() {
 
       {/* Pricing */}
       {/* Testimonials — rassure avant la décision d'achat */}
-      <section className="py-24 px-4 sm:px-6 border-t border-line">
+      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line">
         <TestimonialsBlock />
         {/* Bloc Trustpilot — affiché uniquement si activé (Business Unit
             ID set + au moins 1 avis dans trustpilot-data.js). En attendant,
-            les TestimonialsBlock ci-dessus prennent le relais. */}
-        <TrustpilotReviewsBlock />
+            les TestimonialsBlock ci-dessus prennent le relais.
+            Masqué sur mobile : 2 blocs de preuve sociale à la suite = trop
+            long (~4 écrans). Sur mobile, TestimonialsBlock suffit. */}
+        <div className="hidden md:block">
+          <TrustpilotReviewsBlock />
+        </div>
       </section>
 
       {/* Lead magnet teaser — capture les hésitants sur le PDF gratuit */}
@@ -1316,7 +1323,7 @@ export default function LandingContent() {
       {/* ──────────────────────────────────────────────────────────────
           FINAL CTA — gradient mesh hero-like impactant
        */}
-      <section className="relative py-32 px-4 sm:px-6 border-t border-line overflow-hidden">
+      <section className="relative py-16 sm:py-32 px-4 sm:px-6 border-t border-line overflow-hidden">
         {/* Gradient mesh background — wow finish */}
         <div className="absolute inset-0 bg-gradient-to-br from-violet-100 via-indigo-50 to-pink-50 pointer-events-none" />
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-300/30 rounded-full blur-3xl pointer-events-none animate-pulse" style={{ animationDuration: '6s' }} />
@@ -1380,7 +1387,7 @@ export default function LandingContent() {
           Après : section optionnelle juste avant le footer pour les
           visiteurs qui veulent comparer volontairement.
        */}
-      <section id="vs-concurrence" className="py-24 px-4 sm:px-6 border-t border-line bg-zinc-50/40">
+      <section id="vs-concurrence" className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-zinc-50/40">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-12">

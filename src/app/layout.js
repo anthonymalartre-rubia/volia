@@ -10,6 +10,7 @@ import UpgradeContextModal from '@/components/UpgradeContextModal';
 import AffiliateTracker from '@/components/AffiliateTracker';
 import AttributionTracker from '@/components/AttributionTracker';
 import LinkedInInsight from '@/components/LinkedInInsight';
+import MarketingPixels from '@/components/MarketingPixels';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -208,6 +209,8 @@ export default function RootLayout({ children }) {
             <AttributionTracker />
             {/* LinkedIn Insight Tag — conversions + retargeting, gated consentement marketing */}
             <LinkedInInsight />
+            {/* GA4 + Meta Pixel — gated consentement marketing, no-op sans IDs env */}
+            <MarketingPixels />
           </I18nProvider>
         </ThemeProvider>
         <Analytics />

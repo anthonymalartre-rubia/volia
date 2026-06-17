@@ -106,6 +106,7 @@ export async function middleware(request) {
     pathname.startsWith('/reset-password') ||
     pathname.startsWith('/cgu') ||
     pathname.startsWith('/cgv') ||                // CGV B2B
+    pathname.startsWith('/mentions-legales') ||   // Mentions légales (obligation LCEN)
     pathname.startsWith('/dpa') ||                // Data Processing Agreement
     pathname.startsWith('/sous-traitants') ||     // Liste sous-traitants RGPD
     pathname.startsWith('/cookies') ||            // Page détaillée cookies CNIL

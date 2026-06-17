@@ -101,6 +101,41 @@ export async function POST(request) {
     const shouldApplyBusinessPromo =
       planId === 'business' && period === 'monthly' && businessPromoCouponId;
 
+    // ─── Auto-apply MAX99 : MAX mensuel → 99 €/mois les 3 premiers mois ──
+    // Le code MAX99 est mis en avant partout (landing, pricing). On l'applique
+    // AUTOMATIQUEMENT au checkout MAX mensuel → l'utilisateur voit 99 € sans
+    // avoir à taper le code (meilleure conversion). Coupon Stripe 0k6rxEgs
+    // (−80 €/mois, repeating 3 mois), overridable via STRIPE_MAX_PROMO_COUPON_ID.
+    const maxPromoCouponId = cleanEnv(process.env.STRIPE_MAX_PROMO_COUPON_ID || '0k6rxEgs');
+    const shouldApplyMaxPromo =
+      planId === 'max' && period === 'monthly' && Boolean(maxPromoCouponId);
+    const appliedCoupon = shouldApplyBusinessPromo
+      ? businessPromoCouponId
+      : (shouldApplyMaxPromo ? maxPromoCouponId : null);
+
+    // ─── Attribution UTM (first-touch) → metadata Stripe ────────────────
+    // Lit le cookie volia_attr (posé par AttributionTracker) pour rattacher
+    // chaque paiement à sa campagne pub (ROAS visible dans Stripe + base pour
+    // la Conversions API serveur plus tard).
+    const utmMeta = {};
+    try {
+      const rawAttr = request.cookies.get('volia_attr')?.value;
+      if (rawAttr) {
+        const a = JSON.parse(decodeURIComponent(rawAttr));
+        for (const k of ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'channel']) {
+          if (a && a[k]) utmMeta[k] = String(a[k]).slice(0, 200);
+        }
+      }
+    } catch { /* cookie illisible → attribution ignorée */ }
+
+    // Montant facturé la 1re période → transmis au retour pour l'event purchase.
+    const firstPeriodValueEur =
+      period === 'yearly'
+        ? Math.round((plan.priceYearly || plan.price || 0) / 100)
+        : (shouldApplyMaxPromo && plan.promo?.displayPrice
+            ? Math.round(plan.promo.displayPrice / 100)
+            : Math.round((plan.price || 0) / 100));
+
     // ─── Programme apporteurs d'affaires ────────────────────────────
     // Le lien volia.fr/?aff=CODE pose un cookie `volia_aff`. On le récupère
     // ici pour le transmettre en metadata de la session → le webhook
@@ -116,7 +151,7 @@ export async function POST(request) {
       // (qui pré-affiche des cartes d'autres SaaS, source de confusion).
       // Pour réactiver Link plus tard : ['card', 'link'].
       payment_method_types: ['card'],
-      success_url: `${origin}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/dashboard?upgrade=success&plan=${planId}&value=${firstPeriodValueEur}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/dashboard?upgrade=cancelled`,
       // metadata sur la session : disponible dans checkout.session.completed
       metadata: {
@@ -124,20 +159,21 @@ export async function POST(request) {
         plan_id: planId,
         period,
         ...(shouldApplyBusinessPromo ? { business_launch_promo_applied: 'true' } : {}),
+        ...(shouldApplyMaxPromo ? { max99_promo_applied: 'true' } : {}),
         ...(affiliateCode ? { affiliate_code: affiliateCode } : {}),
+        ...utmMeta,
       },
       // subscription_data.metadata : ATTACHÉ À LA SUBSCRIPTION elle-même
       // → retrouvable dans tous les futurs events subscription.updated /
       //   subscription.deleted / invoice.payment_failed sans dépendre de la DB.
       subscription_data: {
-        metadata: { supabase_user_id: user.id, plan_id: planId, period },
+        metadata: { supabase_user_id: user.id, plan_id: planId, period, ...utmMeta },
       },
-      // Coupon promo Business : appliqué via `discounts` (mutuellement exclusif
-      // avec allow_promotion_codes — Stripe refuse les 2 en même temps).
-      // Pour les autres plans, on laisse l'utilisateur entrer un code promo
-      // manuel s'il en a un (allow_promotion_codes: true).
-      ...(shouldApplyBusinessPromo
-        ? { discounts: [{ coupon: businessPromoCouponId }] }
+      // Coupon promo (Business legacy OU MAX99) : appliqué via `discounts`
+      // (mutuellement exclusif avec allow_promotion_codes — Stripe refuse les 2).
+      // Sinon on laisse l'utilisateur saisir un code promo manuel.
+      ...(appliedCoupon
+        ? { discounts: [{ coupon: appliedCoupon }] }
         : { allow_promotion_codes: true }),
       // Email de facturation Stripe directement à l'user
       customer_update: { address: 'auto', name: 'auto' },

@@ -51,6 +51,12 @@ export const metadata = {
       'Un CRM intégré à votre Prospection + Campagnes. Pas une intégration. Kanban natif, auto-create deals depuis replies, timeline 360°. Gratuit pour tous · suite MAX 179 €/mois tout inclus vs 270 €+ pour HubSpot + Apollo + Lemlist.',
     url: PAGE_URL,
     type: 'website',
+    // /opengraph-image racine non héritée par /produits/* → référence explicite.
+    images: [{ url: 'https://volia.fr/opengraph-image', width: 1200, height: 630, alt: 'Volia CRM — alternative française à HubSpot, gratuite' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://volia.fr/opengraph-image'],
   },
 };
 

@@ -1563,11 +1563,13 @@ export default function LandingContent() {
               <span className="text-violet-400 text-[10px] font-semibold">.fr</span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-content-tertiary">
+              <Link href="/mentions-legales" className="hover:text-content-secondary transition">Mentions légales</Link>
               <Link href="/cgu" className="hover:text-content-secondary transition">{t('landing.footer.cgu')}</Link>
               <Link href="/cgv" className="hover:text-content-secondary transition">CGV</Link>
               <Link href="/dpa" className="hover:text-content-secondary transition">DPA</Link>
               <Link href="/confidentialite" className="hover:text-content-secondary transition">{t('landing.footer.privacy')}</Link>
               <Link href="/rgpd" className="hover:text-content-secondary transition">{t('landing.footer.gdpr')}</Link>
+              <Link href="/cookies" className="hover:text-content-secondary transition">Cookies</Link>
               <Link href="/opt-out" className="hover:text-content-secondary transition">{t('landing.footer.optOut')}</Link>
             </div>
             <p className="text-[11px] text-content-muted">

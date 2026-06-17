@@ -10,6 +10,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import AuthBackgroundDecor from '@/components/AuthBackgroundDecor';
 import { GOOGLE_OAUTH_ENABLED } from '@/lib/auth-config';
 import { Button, Input, LogoIcon } from '@/components/ui';
+import { trackSignup } from '@/lib/track';
 
 // SVG inline Google logo officiel — pas dispo dans lucide
 function GoogleIcon() {
@@ -206,6 +207,8 @@ export default function SignupPage() {
         // connexion réussie (cf. trackReferralIfAny appelé depuis le
         // dashboard ou le login post-confirm). On laisse le cookie en place.
         setSuccess(true);
+        // Conversion pub : signup réussi (no-op si pixels non chargés/consentement).
+        try { trackSignup(); } catch { /* noop */ }
       }
     } catch (err) {
       setError(t('auth.genericError'));

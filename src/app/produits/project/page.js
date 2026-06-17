@@ -34,6 +34,12 @@ export const metadata = {
       'Kanban simple, jalons, livrables, lien de suivi client sans compte. Intégré nativement au CRM Volia. Gratuit pour tous, illimité avec MAX.',
     url: PAGE_URL,
     type: 'website',
+    // /opengraph-image racine non héritée par /produits/* → référence explicite.
+    images: [{ url: 'https://volia.fr/opengraph-image', width: 1200, height: 630, alt: 'Volia Project — gestion de projets de livraison' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['https://volia.fr/opengraph-image'],
   },
 };
 

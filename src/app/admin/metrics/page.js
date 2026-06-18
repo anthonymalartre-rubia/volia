@@ -44,11 +44,14 @@ const PLAN_COLORS = {
 };
 
 const PLAN_LABELS = {
-  free: 'Starter',
-  solo: 'Solo',
-  pro: 'Pro',
-  business: 'Business',
-  enterprise: 'Business (legacy)',
+  free: 'Gratuit',
+  prospection: 'Prospection',
+  max: 'MAX',
+  solo: 'Solo (legacy)',
+  pro: 'Pro (legacy)',
+  business: 'Business (legacy)',
+  enterprise: 'Enterprise (legacy)',
+  enterprise_legacy: 'Business 99€ (legacy)',
 };
 
 // ─────────────────────────────────────────────────────────────────────

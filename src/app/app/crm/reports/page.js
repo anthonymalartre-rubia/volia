@@ -14,9 +14,9 @@ import { BarChart3, Loader2, TrendingUp, Percent, Clock, Target, ChevronDown, Za
 import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import { getSupabase } from '@/lib/supabase';
-import { formatDealValue } from '@/lib/crm';
+import { formatDealValue, CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// Gating CRM ouvert à tous depuis le pivot freemium — voir CRM_ALLOWED_PLANS (lib/crm.js).
 
 const STAGE_BAR = {
   sky: 'bg-sky-400', blue: 'bg-blue-400', violet: 'bg-violet-400',

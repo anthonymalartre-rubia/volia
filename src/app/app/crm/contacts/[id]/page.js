@@ -35,7 +35,7 @@ import {
 import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import { getSupabase } from '@/lib/supabase';
-import { formatDealValue } from '@/lib/crm';
+import { formatDealValue, CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 import {
   initials,
   avatarGradient,
@@ -46,7 +46,7 @@ import NewDealModal from '@/components/crm/NewDealModal';
 import ActivityForm from '@/components/crm/ActivityForm';
 import CustomFieldsSection from '@/components/crm/CustomFieldsSection';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// Gating CRM ouvert à tous depuis le pivot freemium — voir CRM_ALLOWED_PLANS (lib/crm.js).
 
 // ───────────────────────────────────────────────────────────
 // InlineField — input/textarea qui PATCH au blur si modifié.

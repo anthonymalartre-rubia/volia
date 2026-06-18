@@ -42,7 +42,8 @@ import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import { getSupabase } from '@/lib/supabase';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// CRM ouvert à tous les plans depuis le pivot freemium (source : lib/crm.js).
+import { CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 
 const TYPE_META = {
   note: { Icon: StickyNote, color: 'text-zinc-600 bg-zinc-100', label: 'Note' },

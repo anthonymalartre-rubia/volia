@@ -104,9 +104,14 @@ export async function POST(request) {
     // ─── Auto-apply MAX99 : MAX mensuel → 99 €/mois les 3 premiers mois ──
     // Le code MAX99 est mis en avant partout (landing, pricing). On l'applique
     // AUTOMATIQUEMENT au checkout MAX mensuel → l'utilisateur voit 99 € sans
-    // avoir à taper le code (meilleure conversion). Coupon Stripe 0k6rxEgs
-    // (−80 €/mois, repeating 3 mois), overridable via STRIPE_MAX_PROMO_COUPON_ID.
-    const maxPromoCouponId = cleanEnv(process.env.STRIPE_MAX_PROMO_COUPON_ID || '0k6rxEgs');
+    // avoir à taper le code (meilleure conversion).
+    // Source : env STRIPE_MAX_PROMO_COUPON_ID ; fallback = ID du coupon Stripe
+    // créé au lancement (−80 €/mois × 3 mois). Ce n'est PAS un secret (un ID de
+    // coupon n'est pas sensible). La création de session est résiliente plus bas :
+    // si ce coupon est un jour supprimé côté Stripe, on retente SANS discount
+    // plutôt que de faire échouer 100 % des checkouts MAX.
+    const MAX99_COUPON_FALLBACK = '0k6rxEgs';
+    const maxPromoCouponId = cleanEnv(process.env.STRIPE_MAX_PROMO_COUPON_ID || MAX99_COUPON_FALLBACK);
     const shouldApplyMaxPromo =
       planId === 'max' && period === 'monthly' && Boolean(maxPromoCouponId);
     const appliedCoupon = shouldApplyBusinessPromo
@@ -180,10 +185,24 @@ export async function POST(request) {
       billing_address_collection: 'auto',
     };
 
-    const session = await stripe.checkout.sessions.create(sessionParams);
+    // Création de la session. Filet de sécurité : si un coupon a été appliqué
+    // mais qu'il a été supprimé/désactivé côté Stripe, la création lève une
+    // erreur (souvent resource_missing). On RETENTE alors sans le discount, avec
+    // saisie manuelle de code promo activée → on ne bloque JAMAIS une vente à
+    // cause d'un coupon obsolète (au pire l'utilisateur ne voit pas l'auto-promo).
+    let session;
+    try {
+      session = await stripe.checkout.sessions.create(sessionParams);
+    } catch (e) {
+      const couponIssue = appliedCoupon && (e?.code === 'resource_missing' || /coupon|promotion/i.test(e?.message || ''));
+      if (!couponIssue) throw e;
+      console.error(`[stripe/checkout] coupon ${appliedCoupon} invalide (${e?.code || e?.message}) — retry sans discount pour ne pas bloquer le paiement`);
+      const { discounts, ...withoutDiscount } = sessionParams;
+      session = await stripe.checkout.sessions.create({ ...withoutDiscount, allow_promotion_codes: true });
+    }
 
-    if (shouldApplyBusinessPromo) {
-      console.log(`[stripe/checkout] Business promo coupon ${businessPromoCouponId} applied for user ${user.id}`);
+    if (appliedCoupon) {
+      console.log(`[stripe/checkout] coupon ${appliedCoupon} appliqué pour user ${user.id} (plan ${planId})`);
     }
 
     return NextResponse.json({ url: session.url });

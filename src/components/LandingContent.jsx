@@ -36,7 +36,7 @@ const HERO_VIDEO = {
 // Vidéo de démo (YouTube) ouverte par le bouton « Voir une démo » du hero.
 // Mettre l'ID YouTube (la partie après v= ou youtu.be/). Vide → le bouton
 // scrolle vers la démo live (#try-live), comme avant. Ex: 'dQw4w9WgXcQ'.
-const DEMO_VIDEO_ID = '';
+const DEMO_VIDEO_ID = 'b7KTsAv7gH8';
 
 export default function LandingContent() {
   const { t } = useI18n();

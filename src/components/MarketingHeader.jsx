@@ -52,15 +52,10 @@ export default function MarketingHeader({ locale = 'fr', labels }) {
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <ProductsMenu label={l.products} locale={locale} />
-            {/* « Fonctionnalités » : la home FR n'a plus de section #features
-                (retirée le 28/05/2026) → l'ancre /#features est morte et le lien
-                fait doublon avec le logo. On ne l'affiche qu'en EN, où la home EN
-                conserve une vraie section #features. */}
-            {isEn && (
-              <Link href={`${home}#features`} className="text-sm text-content-tertiary hover:text-content-primary transition">
-                {l.features}
-              </Link>
-            )}
+            {/* Pas de lien « Fonctionnalités / Features » : la section #features
+                a été retirée de la home FR (28/05/2026) et le menu est harmonisé
+                FR/EN (Produits · Tarifs · Blog · FAQ). Les features sont couvertes
+                par le menu Produits + les pages /produits/*. */}
             <Link href={pricingHref} className="text-sm text-content-tertiary hover:text-content-primary transition">
               {l.pricing}
             </Link>

@@ -222,10 +222,9 @@ function ProductTopNav({ labels = DEFAULT_LABELS_FR, locale = 'fr' }) {
           </Link>
           <div className="hidden sm:flex items-center gap-6">
             <ProductsMenu label={labels.products} locale={locale} />
-            {/* « Fonctionnalités » masqué en FR : ancre /#features morte sur la
-                home FR (section retirée le 28/05/2026). Conservé en EN où la
-                home EN a une vraie section #features. */}
-            {isEn && <Link href={`${home}#features`} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.features}</Link>}
+            {/* Pas de lien « Fonctionnalités / Features » : menu harmonisé FR/EN
+                (Produits · Tarifs · Blog · FAQ), cf. retrait section #features
+                home FR le 28/05/2026. */}
             <Link href={isEn ? '/en/pricing' : '/pricing'} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.pricing}</Link>
             <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.blog}</Link>
             <Link href={`${home}#faq`} className="text-sm text-content-tertiary hover:text-content-primary transition">{labels.faq}</Link>

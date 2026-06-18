@@ -24,6 +24,7 @@ import {
   ChevronDown, Zap, Rocket, Building2,
 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui';
+import MarketingHeader from '@/components/MarketingHeader';
 import MotionInView from '@/components/MotionInView';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 
@@ -315,28 +316,10 @@ export default function PricingContentEN() {
 
   return (
     <div className="min-h-screen bg-surface-base text-content-primary overflow-hidden">
-      {/* ── NAV ── */}
-      <header>
-        <nav className="fixed top-0 w-full z-50 bg-surface-base/70 backdrop-blur-2xl border-b border-line">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <Link href="/en" className="flex items-center gap-1.5">
-              <LogoIcon size="sm" />
-              <span className="text-lg font-bold tracking-tight ml-1">Volia</span>
-              <span className="text-violet-400 text-xs font-semibold">.fr</span>
-            </Link>
-            <div className="hidden sm:flex items-center gap-6">
-              <Link href="/en/products/prospection" className="text-sm text-content-tertiary hover:text-content-primary transition">Products</Link>
-              <Link href="/en/pricing" className="text-sm font-semibold text-content-primary transition">Pricing</Link>
-              <Link href="/blog" className="text-sm text-content-tertiary hover:text-content-primary transition">Blog</Link>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link href="/pricing" className="text-xs text-content-tertiary hover:text-content-primary transition">FR</Link>
-              <Link href="/login" className="text-sm text-content-tertiary hover:text-content-primary transition">Log in</Link>
-              <Link href="/signup" className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold shadow shadow-violet-500/20 hover:shadow-violet-500/40 transition">Sign up</Link>
-            </div>
-          </div>
-        </nav>
-      </header>
+      {/* ── NAV : header marketing partagé (locale EN) — strictement identique
+          à la FR /pricing (PricingContent) → menu harmonisé Products · Pricing ·
+          Blog · FAQ, switcher de langue + auth + menu mobile inclus. ── */}
+      <MarketingHeader locale="en" />
 
       <main className="pt-24 pb-12">
 

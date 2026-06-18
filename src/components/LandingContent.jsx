@@ -7,6 +7,7 @@ import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import HeroVideo from '@/components/HeroVideo';
+import HeroProductDemo from '@/components/HeroProductDemo';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import MobileNavMenu from '@/components/MobileNavMenu';
@@ -236,154 +237,16 @@ export default function LandingContent() {
               </div>
             </div>
 
-            {/* ─── COLONNE DROITE : Product mockup ─── */}
-            {/* Refonte : 3 cards empilées montrant le flow Prospection → Campagnes → CRM.
-                Masqué sous lg : sur mobile/tablette le mockup s'empile sous le hero et
-                surcharge l'écran (données factices). Il reste la colonne visuelle du hero
-                sur desktop (≥1024px), là où il accompagne le texte. */}
+            {/* ─── COLONNE DROITE : Démo produit animée ─── */}
+            {/* HeroProductDemo = parcours Volia rejoué en boucle (prospection →
+                enrichissement → campagnes → CRM), 100% codé, pas de vidéo.
+                Masqué sous lg pour ne pas surcharger le mobile. HERO_VIDEO.enabled
+                bascule sur une vraie vidéo le jour où les assets existent. */}
             <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150 hidden lg:block">
               {HERO_VIDEO.enabled ? (
                 <HeroVideo {...HERO_VIDEO} />
               ) : (
-              <>
-              {/* Floating "live" sticker — reformulé 27 mai 2026 :
-                  "Flow en direct · 3 modules" était cryptique. Le pivot
-                  80/20 met l'accent sur email + téléphone — le sticker
-                  doit refléter ça. */}
-              <div className="absolute -top-4 -left-4 z-20 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 shadow-md flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span className="text-xs font-semibold text-emerald-700">Démo · Email + Téléphone</span>
-              </div>
-
-              <div className="space-y-3">
-
-                {/* CARD 1 — PROSPECTION (violet) */}
-                <div className="relative rounded-2xl bg-white border-2 border-violet-200 shadow-xl shadow-violet-500/10 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 delay-200">
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-violet-50 to-indigo-50 border-b border-violet-100">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
-                        <Search size={13} className="text-white" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-violet-600 font-bold leading-none">1 · Volia Prospection</div>
-                        <div className="text-xs font-semibold text-content-primary mt-0.5">Restaurants · Paris</div>
-                      </div>
-                    </div>
-                    <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold">234 résultats</div>
-                  </div>
-                  {/* Ajout téléphones (fixe + mobile) 27 mai 2026 — aligné
-                      pivot 80/20 "emails ET téléphones" : la démo doit
-                      montrer les 2 valeurs scrapées. Grid 3 colonnes :
-                      Nom | Email | Téléphone (badge couleur fixe/mobile) */}
-                  <div className="px-4 py-3 space-y-2">
-                    {[
-                      { name: 'La Bonne Table', email: 'contact@labonnetable.fr', phone: '01 42 33 87 19', type: 'fixe' },
-                      { name: 'Pasta Roma', email: 'info@pastaroma.fr', phone: '06 78 24 51 09', type: 'mobile' },
-                      { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr', phone: '01 45 88 12 67', type: 'fixe' },
-                    ].map((row, i) => (
-                      <div key={i} className="flex items-center justify-between gap-2 text-xs">
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium text-content-primary truncate">{row.name}</div>
-                          <div className="text-content-tertiary font-mono text-[10px] truncate">{row.email}</div>
-                        </div>
-                        <div className="flex-shrink-0 flex items-center gap-1">
-                          <span className="font-mono text-[10px] text-content-secondary tabular-nums">{row.phone}</span>
-                          <span className={`text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded ${
-                            row.type === 'mobile'
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-blue-100 text-blue-700'
-                          }`}>
-                            {row.type}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Connector arrow */}
-                <div className="flex justify-center -my-1">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-line shadow-sm flex items-center justify-center">
-                    <ArrowRight size={12} className="text-content-tertiary rotate-90" />
-                  </div>
-                </div>
-
-                {/* CARD 2 — CAMPAGNES (blue) */}
-                <div className="relative rounded-2xl bg-white border-2 border-blue-200 shadow-xl shadow-blue-500/10 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 delay-500">
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-sm">
-                        <Mail size={13} className="text-white" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-blue-600 font-bold leading-none">2 · Volia Campagnes</div>
-                        <div className="text-xs font-semibold text-content-primary mt-0.5">Campagne « Resto-Q4 » envoyée</div>
-                      </div>
-                    </div>
-                    <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-bold">234 envois</div>
-                  </div>
-                  <div className="px-4 py-3 grid grid-cols-3 gap-3 text-center">
-                    <div>
-                      <div className="text-base font-bold text-blue-700 tabular-nums">234</div>
-                      <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Envoyés</div>
-                    </div>
-                    <div>
-                      <div className="text-base font-bold text-emerald-600 tabular-nums">47</div>
-                      <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Ouverts</div>
-                    </div>
-                    <div>
-                      <div className="text-base font-bold text-violet-700 tabular-nums">12</div>
-                      <div className="text-[10px] text-content-tertiary uppercase tracking-wider">Réponses</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Connector arrow */}
-                <div className="flex justify-center -my-1">
-                  <div className="w-7 h-7 rounded-full bg-white border-2 border-line shadow-sm flex items-center justify-center">
-                    <ArrowRight size={12} className="text-content-tertiary rotate-90" />
-                  </div>
-                </div>
-
-                {/* CARD 3 — CRM (emerald) */}
-                <div className="relative rounded-2xl bg-white border-2 border-emerald-200 shadow-xl shadow-emerald-500/10 overflow-hidden animate-in fade-in slide-in-from-right-4 duration-700 delay-700">
-                  <div className="flex items-center justify-between px-4 py-2.5 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm">
-                        <Layers size={13} className="text-white" />
-                      </div>
-                      <div>
-                        <div className="text-[10px] uppercase tracking-wider text-emerald-600 font-bold leading-none">3 · Volia CRM</div>
-                        <div className="text-xs font-semibold text-content-primary mt-0.5">Pipeline · 3 deals auto-créés</div>
-                      </div>
-                    </div>
-                    <div className="text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 font-bold">Stage Lead</div>
-                  </div>
-                  <div className="px-4 py-3 flex items-center gap-2">
-                    {['La Bonne Table', 'Pasta Roma', 'Le Petit Bistrot'].map((deal, i) => (
-                      <div key={i} className="flex-1 px-2 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[10px] font-semibold text-emerald-800 text-center truncate">
-                        {deal}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Floating decorative card "100% auto" — visual depth */}
-              <div className="hidden lg:flex absolute -bottom-4 -right-4 z-20 px-4 py-2.5 rounded-xl bg-white border border-line shadow-xl items-center gap-2.5 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000">
-                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 via-blue-500 to-emerald-500 flex items-center justify-center">
-                  <Zap size={16} className="text-white" />
-                </div>
-                <div>
-                  <div className="text-[10px] text-content-tertiary uppercase tracking-wider font-semibold">0 saisie manuelle</div>
-                  <div className="text-xs font-bold text-content-primary">Suite connectée</div>
-                </div>
-              </div>
-              </>
+                <HeroProductDemo />
               )}
             </div>
           </div>

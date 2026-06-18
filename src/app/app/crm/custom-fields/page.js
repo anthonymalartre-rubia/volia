@@ -33,7 +33,8 @@ import CrmSidebar from '@/components/crm/CrmSidebar';
 import CustomFieldEditorModal from '@/components/crm/CustomFieldEditorModal';
 import { getSupabase } from '@/lib/supabase';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// CRM ouvert à tous les plans depuis le pivot freemium (source : lib/crm.js).
+import { CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 
 const TYPE_META = {
   text: { Icon: Type, label: 'Texte', color: 'bg-zinc-100 text-zinc-700 border-zinc-200' },

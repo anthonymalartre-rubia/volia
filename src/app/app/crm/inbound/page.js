@@ -15,10 +15,10 @@ import TopBar from '@/components/TopBar';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import { getSupabase } from '@/lib/supabase';
 
-// Bug fix audit 27 mai 2026 : page n'avait AUCUN gating Business → user free
-// arrivait sur l'UI CRM (contenu vide via RLS mais UX cassée + faux signal).
-// Pattern aligné sur /app/crm/page.js et /app/crm/contacts/page.js.
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// Gating module CRM : depuis le pivot freemium, le CRM est ouvert à TOUS les
+// plans (source de vérité serveur : lib/crm.js CRM_ALLOWED_PLANS). On conserve
+// le nom local BUSINESS_PLANS pour ne pas toucher les usages en aval.
+import { CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 
 function formatDate(iso) {
   if (!iso) return '—';

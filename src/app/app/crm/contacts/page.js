@@ -41,7 +41,8 @@ import AddToCampagneModal from '@/components/crm/AddToCampagneModal';
 import { getSupabase } from '@/lib/supabase';
 import { ConfirmModal } from '@/components/ui';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// CRM ouvert à tous les plans depuis le pivot freemium (source : lib/crm.js).
+import { CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 const PAGE_SIZE = 20;
 const COLUMNS_STORAGE_KEY = 'volia.crm.contacts.customCols.v1';
 

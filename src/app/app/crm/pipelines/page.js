@@ -20,12 +20,12 @@ import {
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
-import { PIPELINE_TEMPLATES } from '@/lib/crm';
+import { PIPELINE_TEMPLATES, CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import NewPipelineModal from '@/components/crm/NewPipelineModal';
 import { ConfirmModal } from '@/components/ui';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// Gating CRM ouvert à tous depuis le pivot freemium — voir CRM_ALLOWED_PLANS (lib/crm.js).
 
 const COLOR_DOT = {
   zinc: 'bg-zinc-400',

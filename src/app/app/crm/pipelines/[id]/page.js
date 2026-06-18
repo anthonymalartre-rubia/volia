@@ -24,9 +24,9 @@ import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import { ConfirmModal } from '@/components/ui';
-import { PIPELINE_COLORS, STAGE_PROBABILITIES } from '@/lib/crm';
+import { PIPELINE_COLORS, STAGE_PROBABILITIES, CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// Gating CRM ouvert à tous depuis le pivot freemium — voir CRM_ALLOWED_PLANS (lib/crm.js).
 
 const COLOR_DOT = {
   zinc: 'bg-zinc-400',

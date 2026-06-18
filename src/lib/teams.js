@@ -21,9 +21,10 @@ export const ROLES = {
   MEMBER: 'member',
 };
 
-// Plans qui débloquent le multi-utilisateurs (Business et au-delà).
-// 'enterprise_legacy' = ancien Business 99€ → garde l'accès équipes.
-export const TEAMS_ENABLED_PLANS = ['business', 'enterprise', 'enterprise_legacy'];
+// Plans qui débloquent le multi-utilisateurs.
+// 'max' = plan phare post-pivot (179€) qui vend explicitement les équipes/RBAC
+// (cf. plans.js features MAX). 'enterprise_legacy' = ancien Business 99€.
+export const TEAMS_ENABLED_PLANS = ['max', 'business', 'enterprise', 'enterprise_legacy'];
 
 /**
  * Vrai si le plan donné débloque le multi-utilisateurs.

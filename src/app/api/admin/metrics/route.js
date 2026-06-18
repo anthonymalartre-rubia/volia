@@ -58,9 +58,13 @@ export async function GET(request) {
     // ─ MRR actuel ─
     // Compte tous les profils avec un plan payant ET stripe_subscription_id non null
     // (un user "free" récemment downgrade n'aura plus de sub).
-    const paidPlans = ['solo', 'pro', 'business', 'enterprise'];
+    // Dérivé de PLANS (tout plan avec price>0) → inclut automatiquement
+    // prospection/max et les legacy, sans liste figée à re-maintenir à chaque
+    // évolution tarifaire (cause de la régression MRR post-pivot du 11/06).
+    const paidPlans = Object.keys(PLANS).filter((k) => (PLANS[k]?.price || 0) > 0);
     let mrrCents = 0;
-    const planCounts = { free: 0, solo: 0, pro: 0, business: 0, enterprise: 0 };
+    const planCounts = Object.fromEntries(Object.keys(PLANS).map((k) => [k, 0]));
+    if (planCounts.free === undefined) planCounts.free = 0;
     let paidCustomers = 0;
 
     for (const p of profiles || []) {

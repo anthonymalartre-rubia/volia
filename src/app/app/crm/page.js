@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import { getSupabase } from '@/lib/supabase';
-import { formatDealValue, calculatePipelineStats } from '@/lib/crm';
+import { formatDealValue, calculatePipelineStats, CRM_ALLOWED_PLANS as BUSINESS_PLANS } from '@/lib/crm';
 import CrmSidebar from '@/components/crm/CrmSidebar';
 import KanbanBoard from '@/components/crm/KanbanBoard';
 import TasksTodayWidget from '@/components/crm/TasksTodayWidget';
@@ -35,7 +35,9 @@ import NewDealModal from '@/components/crm/NewDealModal';
 import DealDetailDrawer from '@/components/crm/DealDetailDrawer';
 import WaitlistForm from './WaitlistForm';
 
-const BUSINESS_PLANS = ['business', 'enterprise'];
+// Gating CRM = CRM_ALLOWED_PLANS (importé ci-dessus). Depuis le pivot freemium,
+// le CRM est ouvert à TOUS les plans (cf. lib/crm.js) ; on garde le nom local
+// BUSINESS_PLANS pour ne pas toucher les usages, mais c'est désormais la liste serveur.
 
 // ─── Skeleton loader pour le Kanban ──────────────────────────
 function KanbanSkeleton() {

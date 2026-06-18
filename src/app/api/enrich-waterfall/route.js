@@ -11,6 +11,11 @@ import { isEmailDeliverable } from '@/lib/email-verify';
 import { getPlan } from '@/lib/plans';
 import { getEffectivePlan } from '@/lib/trial';
 
+// Budget temps de la fonction serverless. Le waterfall (scrape multi-pages +
+// Serper) peut être long ; sans ça, le défaut Vercel tue la fonction en plein
+// scrape sur un site lent (l'email trouvé n'est alors jamais sauvegardé).
+export const maxDuration = 60;
+
 // Client admin réutilisé via le singleton de lib/supabase-admin (P1 perf
 // + immunité aux \n dans les env vars).
 const getAdminSupabase = getSupabaseAdmin;
@@ -107,20 +112,24 @@ async function scrapeForEmail(url) {
   const domain = extractDomain(url);
   if (!domain) return null;
 
-  // Try homepage
-  let html = await fetchPage(url);
-  let emails = html ? extractEmails(html) : [];
+  // 1) Page d'accueil d'abord (cas le plus fréquent).
+  const homeHtml = await fetchPage(url);
+  let emails = homeHtml ? extractEmails(homeHtml) : [];
 
-  // Try common paths
+  // 2) Sinon, on tente TOUS les chemins candidats EN PARALLÈLE — au lieu d'une
+  //    boucle séquentielle qui pouvait prendre jusqu'à ~8s × 8 ≈ 64s pour un
+  //    SEUL prospect. On agrège les emails de toutes les pages récupérées, puis
+  //    le scoring plus bas garde le meilleur.
   if (emails.length === 0) {
-    for (const path of COMMON_PATHS) {
-      const pathUrl = url.replace(/\/+$/, '') + path;
-      html = await fetchPage(pathUrl);
-      if (html) {
-        emails = extractEmails(html);
-        if (emails.length > 0) break;
-      }
+    const base = url.replace(/\/+$/, '');
+    const pages = await Promise.all(
+      COMMON_PATHS.map((path) => fetchPage(base + path, 6000)),
+    );
+    const collected = new Set();
+    for (const pageHtml of pages) {
+      if (pageHtml) for (const e of extractEmails(pageHtml)) collected.add(e);
     }
+    emails = [...collected];
   }
 
   if (emails.length > 0) {

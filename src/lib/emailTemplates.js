@@ -353,7 +353,7 @@ export function usageWarningEmail(userName, usagePercent, planName, limitType) {
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
           Pour ne pas vous faire couper la prospection : <strong style="color:${COLORS.text};">Prospection à 19€/mois</strong> (500 crédits)
-          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9€</strong> — et MAX pour l'illimité sur toute la suite.
+          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9€</strong> — et MAX <span style="color:${COLORS.text};">(code MAX99 : 99€ les 3 premiers mois)</span> pour l'illimité sur toute la suite.
         </p>
 
         <div align="center">${ctaPrimary('Voir les options', SETTINGS_URL)}</div>
@@ -1488,6 +1488,132 @@ export function finalDemoDay14Email(userName) {
           <strong>Anthony Malartre</strong><br/>
           <span style="color:${COLORS.textMuted};font-size:13px;">Fondateur Volia</span>
         </p>
+      `,
+    }),
+  };
+}
+
+/**
+ * Drip J+5 — Cross-module Campagnes
+ *
+ * Goal : faire prendre conscience que la suite (cold email) est INCLUSE dans
+ * le plan gratuit. La perception de valeur de la suite est un moteur d'upgrade.
+ */
+export function crossModuleCampagnesDay5Email(userName) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/app/campagnes', 'crossmodule_campagnes_d5');
+  return {
+    subject: 'Le cold email est inclus. Gratuit.',
+    html: layout({
+      preheader: 'Volia Campagnes est déjà dans votre compte — pas besoin de Lemlist.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '✉️',
+          title: 'Vos prospects → en campagne, direct',
+          greeting: `Bonjour ${name}, un truc que beaucoup ratent : <strong style="color:${COLORS.text};">Volia, ce n'est pas que la prospection.</strong>`,
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${COLORS.text};">
+          Le cold email — séquences, warmup automatique, tracking des ouvertures — est <strong>inclus dans votre plan gratuit</strong>. Vous prospectez ET vous contactez au même endroit.
+        </p>
+
+        <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
+          <li>Vos prospects déjà trouvés partent en campagne <strong style="color:${COLORS.text};">en 1 clic</strong></li>
+          <li>Pas de Lemlist à 39 €, pas d'export CSV à trimballer</li>
+          <li>Les réponses positives reviennent automatiquement dans votre CRM</li>
+        </ul>
+
+        <div align="center">${ctaPrimary('Créer ma 1ère campagne', ctaUrl)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Drip J+8 — Cross-module CRM / Formulaires
+ *
+ * Goal : montrer la boucle intégrée complète (le vrai moat de Volia) et
+ * ancrer l'usage multi-module → meilleure rétention + upgrade naturel vers MAX.
+ */
+export function crossModuleCrmDay8Email(userName) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/app/crm', 'crossmodule_crm_d8');
+  return {
+    subject: 'CRM + formulaires, aussi inclus.',
+    html: layout({
+      preheader: 'Une réponse positive → un deal créé tout seul.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🗂️',
+          title: 'La boucle complète, sous la main',
+          greeting: `Bonjour ${name}, là où la plupart des équipes jonglent avec 3 outils, vous avez tout au même endroit.`,
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${COLORS.text};">
+          <strong>Prospection → Campagnes → CRM → Project.</strong> Un prospect répond ? Un deal se crée automatiquement dans votre CRM (inclus). Vous voulez capturer des leads entrants ? Volia Formulaires (inclus aussi).
+        </p>
+
+        <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:${COLORS.textMuted};">
+          Un seul outil, une seule facture, zéro copier-coller entre apps. C'est ça l'idée.
+        </p>
+
+        <div align="center">${ctaPrimary('Ouvrir mon CRM', ctaUrl)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Drip J+12 — Premier nudge d'upgrade (soft)
+ *
+ * Goal : poser l'option payante AVANT le mur du quota, sans pression.
+ * Réservé aux users encore en gratuit (cf. isEligible côté cron).
+ */
+export function upgradeSoftDay12Email(userName) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/pricing', 'upgrade_soft_d12');
+  return {
+    subject: "25 crédits, c'est court.",
+    html: layout({
+      preheader: 'Le prix d\'un café par jour pour votre pipeline B2B.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '⚡',
+          title: 'Prêt à passer la vitesse supérieure ?',
+          greeting: `Bonjour ${name}, le plan gratuit est parfait pour tester. Pour prospecter sérieusement, voici les deux options :`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 12px;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">Prospection — 19 €/mois</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">500 crédits/mois. Le prix d'un café par jour pour remplir votre pipeline.</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0 0;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">MAX — 179 €/mois <span style="color:${COLORS.brand};">· code MAX99 : 99 € les 3 premiers mois</span></p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Suite illimitée + l'Autopilot qui prospecte, écrit et qualifie à votre place.</p>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Voir les plans', ctaUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
+          Pas pressé ? Vos 25 crédits gratuits se rechargent le mois prochain, sans rien faire.
+        </p>
+
+        ${signOff()}
       `,
     }),
   };

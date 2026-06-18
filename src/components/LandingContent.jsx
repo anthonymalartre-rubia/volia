@@ -6,6 +6,7 @@ import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
+import HeroVideo from '@/components/HeroVideo';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import MobileNavMenu from '@/components/MobileNavMenu';
@@ -15,6 +16,20 @@ import { LogoIcon } from '@/components/ui';
 import TrustpilotBadge from '@/components/TrustpilotBadge';
 import MotionInView from '@/components/MotionInView';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
+
+// Vidéo « démo produit » du hero. Tant que `enabled` est false, le hero garde
+// son mockup 3-cards (aucune régression en prod). Pour activer la vidéo :
+//   1. déposer les assets dans /public/hero/ (loop MP4+WebM, poster WebP)
+//   2. (optionnel) renseigner fullSrc avec le commercial 45s (MP4 ou embed)
+//   3. passer enabled à true
+const HERO_VIDEO = {
+  enabled: false,
+  loopSrc: '/hero/volia-demo-loop.mp4',
+  loopWebm: '/hero/volia-demo-loop.webm',
+  poster: '/hero/volia-demo-poster.webp',
+  fullSrc: '', // ex: '/hero/volia-demo-full.mp4' ou URL Mux/Cloudflare Stream
+  caption: 'Démo · Email + Téléphone',
+};
 
 export default function LandingContent() {
   const { t } = useI18n();
@@ -227,6 +242,10 @@ export default function LandingContent() {
                 surcharge l'écran (données factices). Il reste la colonne visuelle du hero
                 sur desktop (≥1024px), là où il accompagne le texte. */}
             <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150 hidden lg:block">
+              {HERO_VIDEO.enabled ? (
+                <HeroVideo {...HERO_VIDEO} />
+              ) : (
+              <>
               {/* Floating "live" sticker — reformulé 27 mai 2026 :
                   "Flow en direct · 3 modules" était cryptique. Le pivot
                   80/20 met l'accent sur email + téléphone — le sticker
@@ -364,6 +383,8 @@ export default function LandingContent() {
                   <div className="text-xs font-bold text-content-primary">Suite connectée</div>
                 </div>
               </div>
+              </>
+              )}
             </div>
           </div>
 

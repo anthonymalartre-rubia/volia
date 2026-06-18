@@ -17,6 +17,7 @@ import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { maybeShowAchievement } from '@/lib/use-achievement-toast';
 import { trackPurchase } from '@/lib/track';
+import BackgroundEnrichPanel from '@/components/BackgroundEnrichPanel';
 // Pull achievements silencieux (webhook, form public) au mount dashboard.
 // Le dashboard n'utilise pas AppShell, on monte le puller ici directement.
 import AchievementPuller from '@/components/welcome/AchievementPuller';
@@ -1597,6 +1598,10 @@ export default function Dashboard() {
               )}
               {activeView === 'results' && (
                 <>
+                {/* Enrichissement en arrière-plan : s'auto-affiche s'il reste
+                    des prospects à enrichir (site web, pas encore d'email) ou
+                    si un job tourne. L'user lance et peut fermer l'onglet. */}
+                <div className="mb-4"><BackgroundEnrichPanel /></div>
                 <ResultsPanel
                   prospects={prospects}
                   folders={folders}

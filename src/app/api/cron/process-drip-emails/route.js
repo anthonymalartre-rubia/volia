@@ -8,6 +8,9 @@ import {
   templateKillerDay3Email,
   trialExpiringDay7Email,
   finalDemoDay14Email,
+  crossModuleCampagnesDay5Email,
+  crossModuleCrmDay8Email,
+  upgradeSoftDay12Email,
 } from '@/lib/emailTemplates';
 
 /**
@@ -56,6 +59,17 @@ function checkCronAuth(request) {
 }
 
 /**
+ * Vrai si l'user est en gratuit ET pas en essai MAX actif. Cible du nurture
+ * cross-module + 1er nudge upgrade : on ne nag pas un payant ni un user qui
+ * teste déjà MAX (lui, c'est trial_expiring_d7 qui le gère).
+ */
+function isFreeNoActiveTrial(profile) {
+  if (profile.plan !== 'free') return false;
+  if (profile.trial_ends_at && new Date(profile.trial_ends_at).getTime() > Date.now()) return false;
+  return true;
+}
+
+/**
  * Définition des steps de la drip. Ordre important : on les traite dans
  * cet ordre pour que les logs soient lisibles. Le builder reçoit le profile
  * complet pour pouvoir personnaliser (stats trial, etc.).
@@ -101,6 +115,29 @@ const DRIP_STEPS = [
         daysRemaining,
       });
     },
+  },
+  {
+    key: 'crossmodule_campagnes_d5',
+    daysSinceSignup: 5,
+    label: 'J+5 Cross-module Campagnes',
+    /** Nurture suite : réservé aux gratuits hors essai MAX actif. */
+    isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
+    build: ({ fullName }) => crossModuleCampagnesDay5Email(fullName),
+  },
+  {
+    key: 'crossmodule_crm_d8',
+    daysSinceSignup: 8,
+    label: 'J+8 Cross-module CRM/Forms',
+    isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
+    build: ({ fullName }) => crossModuleCrmDay8Email(fullName),
+  },
+  {
+    key: 'upgrade_soft_d12',
+    daysSinceSignup: 12,
+    label: 'J+12 Upgrade soft',
+    /** 1er nudge upgrade : gratuits uniquement (un payant n'a rien à upgrader ici). */
+    isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
+    build: ({ fullName }) => upgradeSoftDay12Email(fullName),
   },
   {
     key: 'final_demo_d14',

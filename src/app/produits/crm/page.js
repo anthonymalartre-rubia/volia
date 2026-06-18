@@ -492,9 +492,6 @@ function UseCasesSection() {
           <MotionInView delay={100} className="lg:col-span-2 lg:row-span-2">
             <div className="group relative h-full p-8 sm:p-10 rounded-3xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 via-white to-teal-50/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
               <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-200/20 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -top-3 left-8 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[10px] font-bold uppercase tracking-wider shadow-md">
-                Cas le plus fréquent
-              </div>
 
               <div className="relative">
                 <div className="flex items-center gap-4 mb-6 mt-2">

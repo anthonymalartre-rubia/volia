@@ -14,6 +14,7 @@ import { trackProductEvent } from '@/lib/track';
  * - ESC + clic en dehors pour fermer, scroll body verrouillé, tracking.
  */
 export default function DemoVideoButton({
+  videoSrc = '',
   youtubeId = '',
   className = '',
   children,
@@ -38,7 +39,7 @@ export default function DemoVideoButton({
     };
   }, [open]);
 
-  if (!youtubeId) {
+  if (!youtubeId && !videoSrc) {
     return <a href={fallbackHref} className={className}>{children}</a>;
   }
 
@@ -64,13 +65,24 @@ export default function DemoVideoButton({
             >
               <X size={18} /> Fermer
             </button>
-            <iframe
-              className="w-full h-full rounded-xl shadow-2xl bg-black"
-              src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`}
-              title="Démo Volia"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+            {videoSrc ? (
+              // MP4 auto-hébergé : marche pour tous (Brave/adblock inclus), 0 cookie tiers.
+              <video
+                className="w-full h-full rounded-xl shadow-2xl bg-black"
+                src={videoSrc}
+                controls
+                autoPlay
+                playsInline
+              />
+            ) : (
+              <iframe
+                className="w-full h-full rounded-xl shadow-2xl bg-black"
+                src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`}
+                title="Démo Volia"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            )}
           </div>
         </div>
       )}

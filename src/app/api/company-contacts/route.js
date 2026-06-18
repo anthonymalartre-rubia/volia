@@ -62,7 +62,7 @@ export async function POST(request) {
               source = 'serper';
             }
           }
-        } catch {}
+        } catch (e) { console.error('[company-contacts] Serper search échec (clé/quota ?):', e?.message || e); }
       }
 
       // Step 2: Apollo People Match (more expensive — only if Serper didn't find email)
@@ -83,7 +83,7 @@ export async function POST(request) {
               }
             }
           }
-        } catch {}
+        } catch (e) { console.error('[company-contacts] Apollo match échec (clé/quota ?):', e?.message || e); }
       }
 
       const contactName = person
@@ -111,7 +111,7 @@ export async function POST(request) {
               email = domainMatch;
             }
           }
-        } catch {}
+        } catch (e) { console.error('[company-contacts] Serper domaine échec (clé/quota ?):', e?.message || e); }
       }
 
       // Step 3: If still no email but we have name + domain, guess email patterns

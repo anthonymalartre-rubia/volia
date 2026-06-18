@@ -188,7 +188,7 @@ async function serperEnrich(name, domain) {
     if (bestEmail) {
       return { email: bestEmail, source: 'serper' };
     }
-  } catch {}
+  } catch (e) { console.error('[enrich-waterfall] Serper enrich échec (clé/quota ?):', e?.message || e); }
   return null;
 }
 

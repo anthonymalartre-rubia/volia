@@ -37,6 +37,11 @@ const HERO_VIDEO = {
 // Mettre l'ID YouTube (la partie après v= ou youtu.be/). Vide → le bouton
 // scrolle vers la démo live (#try-live), comme avant. Ex: 'dQw4w9WgXcQ'.
 const DEMO_VIDEO_ID = 'b7KTsAv7gH8';
+// MP4 auto-hébergé (prioritaire sur YouTube) : marche pour TOUS les visiteurs,
+// y compris Brave / bloqueurs de pub qui bloquent l'iframe YouTube, et sans
+// cookie tiers (RGPD). Déposer le fichier dans /public/ puis mettre son chemin,
+// ex: '/video-commerciale-volia.mp4'. Vide → on retombe sur DEMO_VIDEO_ID.
+const DEMO_VIDEO_MP4 = '';
 
 export default function LandingContent() {
   const { t } = useI18n();
@@ -181,6 +186,7 @@ export default function LandingContent() {
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <DemoVideoButton
+                  videoSrc={DEMO_VIDEO_MP4}
                   youtubeId={DEMO_VIDEO_ID}
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 rounded-xl border-2 border-line-hover hover:border-violet-400 hover:bg-violet-50 text-content-primary font-semibold transition-all text-base cursor-pointer"
                 >

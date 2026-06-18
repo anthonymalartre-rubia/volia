@@ -4,30 +4,24 @@ import { useState, useEffect, useRef } from 'react';
 import { Search, CheckCircle2, Send, Layers, ArrowRight } from 'lucide-react';
 
 /**
- * Démo produit ANIMÉE du hero (alternative codée à une vraie vidéo) — v2.
+ * Démo produit ANIMÉE du hero (alternative codée à une vraie vidéo) — v3.
  *
- * Rejoue en boucle le parcours Volia dans une fausse fenêtre navigateur, avec
- * des détails « screencast » : requête tapée au clavier, compteurs qui montent,
- * curseur animé qui clique, points d'étape qui se remplissent dans le temps.
- *   0. Prospection   — la requête se tape, la liste se remplit, le compteur monte
- *   1. Enrichissement — barre de progression + emails complétés (badge « Vérifié »)
- *   2. Campagnes      — stats d'envoi qui s'incrémentent
- *   3. CRM            — une réponse crée une carte dans le pipeline
+ * Rejoue en boucle le parcours Volia dans une fausse fenêtre navigateur, façon
+ * « screencast » : requête tapée au clavier, compteurs qui montent, points
+ * d'étape temporisés, et un CURSEUR qui glisse pile sur le bouton d'action de
+ * chaque scène puis « clique » (position mesurée au runtime → précise et
+ * responsive, pas de coordonnées en dur).
+ *   0. Prospection   — bouton « Lancer la recherche »
+ *   1. Enrichissement — bouton « Enrichir tout (5) »
+ *   2. Campagnes      — bouton « Voir le rapport »
+ *   3. CRM            — bouton « Ouvrir le deal »
  *
- * 100 % CSS/JS, aucun fichier vidéo. Pause auto hors écran (IntersectionObserver),
- * respecte prefers-reduced-motion (affiche l'état final, sans cycle).
+ * 100 % CSS/JS, aucune dépendance fragile. Pause auto hors écran
+ * (IntersectionObserver), respecte prefers-reduced-motion (état final figé).
  */
 const SCENES = ['Prospection', 'Enrichissement', 'Campagnes', 'CRM'];
 const DOT = ['bg-violet-500', 'bg-blue-500', 'bg-cyan-500', 'bg-emerald-500'];
 const STEP_MS = 4200;
-
-// Cibles du curseur par scène (% de la zone de scène) — réglées au pixel près en preview.
-const CURSOR = [
-  { x: 60, y: 30 },
-  { x: 83, y: 14 },
-  { x: 50, y: 46 },
-  { x: 20, y: 64 },
-];
 
 const ROWS = [
   { name: 'La Bonne Table', email: 'contact@labonnetable.fr', phone: '01 42 33 87 19', type: 'fixe' },
@@ -35,7 +29,6 @@ const ROWS = [
   { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr', phone: '01 45 88 12 67', type: 'fixe' },
 ];
 
-/* Compte de 0 → target (easeOut) quand `active` passe à true. */
 function useCountUp(target, active, duration = 1100) {
   const [val, setVal] = useState(active ? 0 : target);
   useEffect(() => {
@@ -53,7 +46,6 @@ function useCountUp(target, active, duration = 1100) {
   return val;
 }
 
-/* Effet machine à écrire. */
 function useTyping(text, active, speed = 60) {
   const [n, setN] = useState(active ? 0 : text.length);
   useEffect(() => {
@@ -75,13 +67,17 @@ export default function HeroProductDemo() {
   const [fill, setFill] = useState(false);
   const [reduce, setReduce] = useState(false);
   const [visible, setVisible] = useState(true);
+  // Position initiale (bas-centre, là où sont les boutons) pour que le curseur soit
+  // visible dès le 1er paint ; la mesure runtime le recale ensuite pile sur le bouton.
+  const [cursor, setCursor] = useState({ x: 220, y: 282 });
+  const [tapKey, setTapKey] = useState(0);
   const rootRef = useRef(null);
+  const sceneRef = useRef(null);
 
   useEffect(() => {
     setReduce(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches || false);
   }, []);
 
-  // Pause le cycle quand le hero n'est pas à l'écran (perf + batterie).
   useEffect(() => {
     const el = rootRef.current;
     if (!el || typeof IntersectionObserver === 'undefined') return;
@@ -102,6 +98,26 @@ export default function HeroProductDemo() {
       const t = setTimeout(() => setFill(true), 120);
       return () => clearTimeout(t);
     }
+  }, [step, reduce]);
+
+  // Positionne le curseur pile sur le bouton [data-cta] de la scène courante,
+  // mesuré au runtime (responsive). Re-mesure au changement de scène + au resize.
+  useEffect(() => {
+    if (reduce) return;
+    const place = () => {
+      const area = sceneRef.current;
+      const cta = area?.querySelector('[data-cta]');
+      if (!area || !cta) return;
+      const a = area.getBoundingClientRect();
+      const c = cta.getBoundingClientRect();
+      setCursor({ x: c.left - a.left + c.width / 2, y: c.top - a.top + c.height / 2 });
+      setTapKey((k) => k + 1);
+    };
+    // laisse la scène se monter avant de mesurer (setTimeout : fiable même onglet
+    // en arrière-plan, contrairement à requestAnimationFrame qui y est mis en pause)
+    const t = setTimeout(place, 60);
+    window.addEventListener('resize', place);
+    return () => { clearTimeout(t); window.removeEventListener('resize', place); };
   }, [step, reduce]);
 
   return (
@@ -129,14 +145,14 @@ export default function HeroProductDemo() {
         </div>
 
         {/* Zone scène — hauteur fixe pour éviter les sauts de layout */}
-        <div className="relative h-[300px] bg-white px-4 py-4 overflow-hidden">
+        <div ref={sceneRef} className="relative h-[320px] bg-white px-4 py-4 overflow-hidden">
           <div key={step} className="h-full animate-in fade-in slide-in-from-bottom-2 duration-500">
             {step === 0 && <SceneProspection reduce={reduce} />}
             {step === 1 && <SceneEnrich fill={fill} reduce={reduce} />}
             {step === 2 && <SceneCampagnes reduce={reduce} />}
             {step === 3 && <SceneCRM reduce={reduce} />}
           </div>
-          {!reduce && <FakeCursor step={step} />}
+          {!reduce && cursor && <FakeCursor x={cursor.x} y={cursor.y} tapKey={tapKey} />}
         </div>
 
         {/* Pied : module courant + points d'étape qui se remplissent dans le temps */}
@@ -167,7 +183,19 @@ export default function HeroProductDemo() {
   );
 }
 
-/* Remplissage temporisé du point d'étape actif (transition CSS pure, 0 keyframe). */
+/* Bouton d'action factice ciblé par le curseur (data-cta). */
+function CtaButton({ className, children }) {
+  return (
+    <div
+      data-cta=""
+      className={`inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold text-white shadow-sm ${className}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* Remplissage temporisé du point d'étape actif (transition CSS pure). */
 function DotFill({ className, reduce }) {
   const [w, setW] = useState(reduce ? 100 : 0);
   useEffect(() => {
@@ -183,17 +211,16 @@ function DotFill({ className, reduce }) {
   );
 }
 
-/* Curseur animé (SVG inline) qui glisse vers la cible de chaque scène + tap (animate-ping). */
-function FakeCursor({ step }) {
-  const pos = CURSOR[step] || CURSOR[0];
+/* Curseur animé (SVG inline) positionné en px sur le bouton + halo de tap. */
+function FakeCursor({ x, y, tapKey }) {
   return (
     <div
       data-demo-cursor=""
       className="pointer-events-none absolute z-30 transition-all duration-700 ease-out"
-      style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+      style={{ left: `${x}px`, top: `${y}px` }}
     >
       <span className="relative block">
-        <span key={step} className="absolute -left-2 -top-2 h-7 w-7 rounded-full bg-violet-500/20 animate-ping" />
+        <span key={tapKey} className="absolute -left-3 -top-3 h-9 w-9 rounded-full bg-violet-500/25 animate-ping" />
         <svg width="22" height="22" viewBox="0 0 24 24" className="relative drop-shadow-md" aria-hidden="true">
           <path
             d="M5 3 L5 19 L9 15 L11.5 20.5 L13.7 19.4 L11.2 14.2 L17 14 Z"
@@ -234,7 +261,7 @@ function SceneProspection({ reduce }) {
           <div
             key={row.name}
             className="flex items-center justify-between gap-2 text-xs animate-in fade-in slide-in-from-right-2 fill-mode-both"
-            style={reduce ? undefined : { animationDelay: `${500 + i * 380}ms`, animationDuration: '500ms' }}
+            style={reduce ? undefined : { animationDelay: `${500 + i * 360}ms`, animationDuration: '500ms' }}
           >
             <div className="flex-1 min-w-0">
               <div className="font-medium text-content-primary truncate">{row.name}</div>
@@ -252,6 +279,11 @@ function SceneProspection({ reduce }) {
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-auto pt-3 flex justify-center">
+        <CtaButton className="bg-gradient-to-r from-violet-600 to-indigo-600">
+          <Search size={12} /> Lancer la recherche
+        </CtaButton>
       </div>
     </div>
   );
@@ -272,7 +304,6 @@ function SceneEnrich({ fill, reduce }) {
         <div className="text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 font-bold tabular-nums">{count} emails ✓</div>
       </div>
 
-      {/* Barre de progression */}
       <div className="h-2 w-full rounded-full bg-surface-alt overflow-hidden mb-4">
         <div
           className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-500"
@@ -295,6 +326,12 @@ function SceneEnrich({ fill, reduce }) {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-auto pt-3 flex justify-center">
+        <CtaButton className="bg-gradient-to-r from-blue-600 to-cyan-600">
+          <CheckCircle2 size={12} /> Enrichir tout (5)
+        </CtaButton>
       </div>
     </div>
   );
@@ -325,7 +362,7 @@ function SceneCampagnes({ reduce }) {
         <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-bold tabular-nums">{sent} envois</div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-3 mb-3">
         {stats.map((s, i) => (
           <div
             key={s.label}
@@ -338,12 +375,15 @@ function SceneCampagnes({ reduce }) {
         ))}
       </div>
 
-      <div
-        className="mt-auto flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2.5 animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
-        style={reduce ? undefined : { animationDelay: '1100ms', animationDuration: '450ms' }}
-      >
+      <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2">
         <CheckCircle2 size={14} className="text-emerald-600 flex-shrink-0" />
-        <span className="text-xs text-emerald-800 font-medium">12 réponses → ajoutées au CRM automatiquement</span>
+        <span className="text-[11px] text-emerald-800 font-medium">12 réponses → ajoutées au CRM automatiquement</span>
+      </div>
+
+      <div className="mt-auto pt-3 flex justify-center">
+        <CtaButton className="bg-gradient-to-r from-blue-600 to-cyan-600">
+          <Send size={12} /> Voir le rapport
+        </CtaButton>
       </div>
     </div>
   );
@@ -368,7 +408,7 @@ function SceneCRM({ reduce }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 flex-1">
+      <div className="grid grid-cols-3 gap-2">
         {cols.map((col) => (
           <div key={col.name} className="flex flex-col">
             <div className="text-[10px] font-bold uppercase tracking-wider text-content-tertiary mb-1.5 px-1">{col.name}</div>
@@ -392,6 +432,12 @@ function SceneCRM({ reduce }) {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-auto pt-3 flex justify-center">
+        <CtaButton className="bg-gradient-to-r from-emerald-600 to-teal-600">
+          <Layers size={12} /> Ouvrir le deal
+        </CtaButton>
       </div>
     </div>
   );

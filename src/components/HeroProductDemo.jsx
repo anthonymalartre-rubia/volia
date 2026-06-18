@@ -1,27 +1,38 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Search, CheckCircle2, Send, Layers, ArrowRight } from 'lucide-react';
+import { Search, CheckCircle2, Send, Layers, ArrowRight, FormInput, FolderKanban, Bell } from 'lucide-react';
 
 /**
- * Démo produit ANIMÉE du hero (alternative codée à une vraie vidéo) — v3.
+ * Démo produit ANIMÉE du hero (alternative codée à une vraie vidéo) — v4.
  *
- * Rejoue en boucle le parcours Volia dans une fausse fenêtre navigateur, façon
- * « screencast » : requête tapée au clavier, compteurs qui montent, points
- * d'étape temporisés, et un CURSEUR qui glisse pile sur le bouton d'action de
- * chaque scène puis « clique » (position mesurée au runtime → précise et
- * responsive, pas de coordonnées en dur).
- *   0. Prospection   — bouton « Lancer la recherche »
- *   1. Enrichissement — bouton « Enrichir tout (5) »
- *   2. Campagnes      — bouton « Voir le rapport »
- *   3. CRM            — bouton « Ouvrir le deal »
+ * Mise en scène dans un VRAI SHELL D'APP (sidebar de navigation + barre d'app
+ * interne) pour donner l'impression d'être DANS l'outil. Le module actif
+ * s'allume dans la sidebar au fil des scènes ; le curseur se pose au pixel près
+ * sur le bouton d'action de chaque scène.
+ *   0. Prospection (recherche)   1. Prospection (enrichissement)
+ *   2. Campagnes                 3. CRM
  *
- * 100 % CSS/JS, aucune dépendance fragile. Pause auto hors écran
- * (IntersectionObserver), respecte prefers-reduced-motion (état final figé).
+ * 100 % CSS/JS, aucune dépendance fragile. Pause auto hors écran, respecte
+ * prefers-reduced-motion (état final figé).
  */
-const SCENES = ['Prospection', 'Enrichissement', 'Campagnes', 'CRM'];
-const DOT = ['bg-violet-500', 'bg-blue-500', 'bg-cyan-500', 'bg-emerald-500'];
 const STEP_MS = 4200;
+
+// Sidebar : la suite complète. activeKey allumé selon la scène.
+const NAV = [
+  { key: 'prospection', label: 'Prospection', Icon: Search, on: 'bg-violet-100 text-violet-700', dot: 'bg-violet-500' },
+  { key: 'campagnes', label: 'Campagnes', Icon: Send, on: 'bg-blue-100 text-blue-700', dot: 'bg-blue-500' },
+  { key: 'crm', label: 'CRM', Icon: Layers, on: 'bg-emerald-100 text-emerald-700', dot: 'bg-emerald-500' },
+  { key: 'forms', label: 'Formulaires', Icon: FormInput, on: 'bg-amber-100 text-amber-700', dot: 'bg-amber-500' },
+  { key: 'projets', label: 'Projets', Icon: FolderKanban, on: 'bg-cyan-100 text-cyan-700', dot: 'bg-cyan-500' },
+];
+// step → module actif dans la sidebar + fil d'Ariane
+const SCENE = [
+  { active: 'prospection', crumb: 'Recherche' },
+  { active: 'prospection', crumb: 'Enrichissement' },
+  { active: 'campagnes', crumb: 'Campagne « Resto-Q4 »' },
+  { active: 'crm', crumb: 'Pipeline commercial' },
+];
 
 const ROWS = [
   { name: 'La Bonne Table', email: 'contact@labonnetable.fr', phone: '01 42 33 87 19', type: 'fixe' },
@@ -67,10 +78,7 @@ export default function HeroProductDemo() {
   const [fill, setFill] = useState(false);
   const [reduce, setReduce] = useState(false);
   const [visible, setVisible] = useState(true);
-  // Position initiale (bas-centre, là où sont les boutons) pour que le curseur soit
-  // visible dès le 1er paint ; la mesure runtime le recale ensuite pile sur le bouton.
-  const [cursor, setCursor] = useState({ x: 220, y: 282 });
-  const [tapKey, setTapKey] = useState(0);
+  const [cursor, setCursor] = useState({ x: 230, y: 300 });
   const rootRef = useRef(null);
   const sceneRef = useRef(null);
 
@@ -88,7 +96,7 @@ export default function HeroProductDemo() {
 
   useEffect(() => {
     if (reduce || !visible) return;
-    const id = setInterval(() => setStep((s) => (s + 1) % SCENES.length), STEP_MS);
+    const id = setInterval(() => setStep((s) => (s + 1) % SCENE.length), STEP_MS);
     return () => clearInterval(id);
   }, [reduce, visible]);
 
@@ -100,8 +108,7 @@ export default function HeroProductDemo() {
     }
   }, [step, reduce]);
 
-  // Positionne le curseur pile sur le bouton [data-cta] de la scène courante,
-  // mesuré au runtime (responsive). Re-mesure au changement de scène + au resize.
+  // Curseur posé pile sur le bouton [data-cta] de la scène (mesure runtime).
   useEffect(() => {
     if (reduce) return;
     const place = () => {
@@ -111,14 +118,13 @@ export default function HeroProductDemo() {
       const a = area.getBoundingClientRect();
       const c = cta.getBoundingClientRect();
       setCursor({ x: c.left - a.left + c.width / 2, y: c.top - a.top + c.height / 2 });
-      setTapKey((k) => k + 1);
     };
-    // laisse la scène se monter avant de mesurer (setTimeout : fiable même onglet
-    // en arrière-plan, contrairement à requestAnimationFrame qui y est mis en pause)
     const t = setTimeout(place, 60);
     window.addEventListener('resize', place);
     return () => { clearTimeout(t); window.removeEventListener('resize', place); };
   }, [step, reduce]);
+
+  const scene = SCENE[step];
 
   return (
     <div
@@ -137,6 +143,7 @@ export default function HeroProductDemo() {
 
       {/* Fenêtre navigateur */}
       <div className="rounded-2xl bg-white border border-line shadow-2xl shadow-violet-500/10 overflow-hidden">
+        {/* Barre navigateur */}
         <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-line bg-surface-alt">
           <span className="w-2.5 h-2.5 rounded-full bg-red-400"></span>
           <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
@@ -144,27 +151,63 @@ export default function HeroProductDemo() {
           <span className="ml-3 text-[11px] text-content-tertiary font-medium">app.volia.fr</span>
         </div>
 
-        {/* Zone scène — hauteur fixe pour éviter les sauts de layout */}
-        <div ref={sceneRef} className="relative h-[320px] bg-white px-4 py-4 overflow-hidden">
-          <div key={step} className="h-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {step === 0 && <SceneProspection reduce={reduce} />}
-            {step === 1 && <SceneEnrich fill={fill} reduce={reduce} />}
-            {step === 2 && <SceneCampagnes reduce={reduce} />}
-            {step === 3 && <SceneCRM reduce={reduce} />}
-          </div>
-          {!reduce && cursor && <FakeCursor x={cursor.x} y={cursor.y} tapKey={tapKey} />}
-        </div>
+        {/* Shell d'application : sidebar + contenu */}
+        <div className="flex h-[360px]">
+          {/* ─── Sidebar ─── */}
+          <aside className="w-[124px] shrink-0 border-r border-line bg-surface-alt/50 py-3 px-2 flex flex-col gap-0.5">
+            <div className="flex items-center gap-1.5 px-2 mb-3">
+              <span className="w-5 h-5 rounded-md bg-gradient-to-br from-violet-500 via-blue-500 to-emerald-500 flex items-center justify-center text-white text-[10px] font-black">V</span>
+              <span className="text-xs font-bold text-content-primary">Volia</span>
+            </div>
+            {NAV.map((item) => {
+              const isActive = item.key === scene.active;
+              const Icon = item.Icon;
+              return (
+                <div
+                  key={item.key}
+                  className={`relative flex items-center gap-2 rounded-lg px-2 py-1.5 text-[11px] font-medium transition-colors duration-300 ${
+                    isActive ? `${item.on} font-semibold` : 'text-content-tertiary'
+                  }`}
+                >
+                  {isActive && <span className={`absolute left-0 top-1/2 -translate-y-1/2 h-4 w-0.5 rounded-full ${item.dot}`} />}
+                  <Icon size={13} className="flex-shrink-0" />
+                  <span className="truncate">{item.label}</span>
+                </div>
+              );
+            })}
+            <div className="mt-auto flex items-center gap-2 px-2 pt-2 border-t border-line">
+              <span className="w-5 h-5 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-[8px] font-bold">AM</span>
+              <span className="text-[10px] text-content-tertiary truncate">Mon espace</span>
+            </div>
+          </aside>
 
-        {/* Pied : module courant + points d'étape qui se remplissent dans le temps */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-line bg-surface-alt">
-          <span className="text-xs font-bold text-content-primary">{step + 1} · Volia {SCENES[step]}</span>
-          <div className="flex items-center gap-1.5">
-            {SCENES.map((s, i) => (
-              <span key={s} className="relative h-1.5 w-5 rounded-full bg-line overflow-hidden">
-                {i < step && <span className={`absolute inset-0 ${DOT[i]}`} />}
-                {i === step && <DotFill key={step} className={DOT[i]} reduce={reduce} />}
-              </span>
-            ))}
+          {/* ─── Zone principale ─── */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Barre d'app interne : fil d'Ariane + cloche */}
+            <div className="flex items-center justify-between px-4 h-9 border-b border-line">
+              <div className="text-[11px] text-content-tertiary truncate">
+                <span className="font-semibold text-content-secondary capitalize">{scene.active}</span>
+                <span className="mx-1">›</span>
+                {scene.crumb}
+              </div>
+              <Bell size={13} className="text-content-tertiary flex-shrink-0" />
+            </div>
+
+            {/* Scène + curseur */}
+            <div ref={sceneRef} className="relative flex-1 px-4 py-3.5 overflow-hidden">
+              <div key={step} className="h-full animate-in fade-in slide-in-from-bottom-2 duration-500">
+                {step === 0 && <SceneProspection reduce={reduce} />}
+                {step === 1 && <SceneEnrich fill={fill} reduce={reduce} />}
+                {step === 2 && <SceneCampagnes reduce={reduce} />}
+                {step === 3 && <SceneCRM reduce={reduce} />}
+              </div>
+              {!reduce && <FakeCursor x={cursor.x} y={cursor.y} tapKey={step} />}
+            </div>
+
+            {/* Barre de progression de la scène (bas de l'app) */}
+            <div className="h-0.5 w-full bg-line/60 overflow-hidden">
+              <DotFill key={step} className={NAV.find((n) => n.key === scene.active)?.dot || 'bg-violet-500'} reduce={reduce} />
+            </div>
           </div>
         </div>
       </div>
@@ -183,7 +226,6 @@ export default function HeroProductDemo() {
   );
 }
 
-/* Bouton d'action factice ciblé par le curseur (data-cta). */
 function CtaButton({ className, children }) {
   return (
     <div
@@ -195,7 +237,7 @@ function CtaButton({ className, children }) {
   );
 }
 
-/* Remplissage temporisé du point d'étape actif (transition CSS pure). */
+/* Barre de progression temporisée (transition CSS pure). */
 function DotFill({ className, reduce }) {
   const [w, setW] = useState(reduce ? 100 : 0);
   useEffect(() => {
@@ -205,7 +247,7 @@ function DotFill({ className, reduce }) {
   }, [reduce]);
   return (
     <span
-      className={`absolute inset-y-0 left-0 ${className}`}
+      className={`block h-full ${className}`}
       style={{ width: `${w}%`, transition: reduce ? 'none' : `width ${STEP_MS}ms linear` }}
     />
   );
@@ -235,26 +277,22 @@ function FakeCursor({ x, y, tapKey }) {
   );
 }
 
-/* ─── Scène 0 : Prospection ─────────────────────────────────────────────── */
+/* ─── Scène 0 : Prospection (recherche) ─────────────────────────────────── */
 function SceneProspection({ reduce }) {
   const typed = useTyping('Restaurants · Paris', !reduce);
   const count = useCountUp(234, !reduce);
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm flex-shrink-0">
-            <Search size={13} className="text-white" />
-          </div>
-          <div className="min-w-0">
-            <div className="text-[10px] uppercase tracking-wider text-violet-600 font-bold leading-none">Recherche</div>
-            <div className="text-xs font-semibold text-content-primary mt-0.5 truncate">
-              {reduce ? 'Restaurants · Paris' : typed}
-              {!reduce && typed.length < 19 && <span className="inline-block w-0.5 h-3 bg-violet-500 ml-0.5 align-middle animate-pulse" />}
-            </div>
-          </div>
+      <div className="flex items-center justify-between gap-2 mb-3">
+        {/* fausse barre de recherche */}
+        <div className="flex items-center gap-2 flex-1 min-w-0 rounded-lg border border-line bg-surface-alt px-2.5 py-1.5">
+          <Search size={13} className="text-violet-500 flex-shrink-0" />
+          <span className="text-xs text-content-primary truncate">
+            {reduce ? 'Restaurants · Paris' : typed}
+            {!reduce && typed.length < 19 && <span className="inline-block w-0.5 h-3 bg-violet-500 ml-0.5 align-middle animate-pulse" />}
+          </span>
         </div>
-        <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold tabular-nums flex-shrink-0">{count} résultats</div>
+        <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold tabular-nums flex-shrink-0">{count}</div>
       </div>
       <div className="space-y-2">
         {ROWS.map((row, i) => (
@@ -295,12 +333,7 @@ function SceneEnrich({ fill, reduce }) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-sm">
-            <CheckCircle2 size={13} className="text-white" />
-          </div>
-          <div className="text-xs font-semibold text-content-primary">Enrichissement en cours…</div>
-        </div>
+        <div className="text-xs font-semibold text-content-primary">Enrichissement en cours…</div>
         <div className="text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 font-bold tabular-nums">{count} emails ✓</div>
       </div>
 
@@ -319,7 +352,7 @@ function SceneEnrich({ fill, reduce }) {
               className="flex items-center gap-1.5 animate-in fade-in slide-in-from-right-2 fill-mode-both"
               style={reduce ? undefined : { animationDelay: `${700 + i * 480}ms`, animationDuration: '400ms' }}
             >
-              <span className="font-mono text-[10px] text-content-secondary truncate max-w-[120px]">{row.email}</span>
+              <span className="font-mono text-[10px] text-content-secondary truncate max-w-[110px]">{row.email}</span>
               <span className="text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-emerald-100 text-emerald-700 flex items-center gap-0.5">
                 <CheckCircle2 size={8} /> Vérifié
               </span>
@@ -349,35 +382,27 @@ function SceneCampagnes({ reduce }) {
   ];
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-sm">
-            <Send size={13} className="text-white" />
-          </div>
-          <div>
-            <div className="text-[10px] uppercase tracking-wider text-blue-600 font-bold leading-none">Campagne envoyée</div>
-            <div className="text-xs font-semibold text-content-primary mt-0.5">« Resto-Q4 » · cold email</div>
-          </div>
-        </div>
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-xs font-semibold text-content-primary">Campagne envoyée · cold email</div>
         <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-bold tabular-nums">{sent} envois</div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-3">
+      <div className="grid grid-cols-3 gap-2 mb-3">
         {stats.map((s, i) => (
           <div
             key={s.label}
             className="rounded-xl bg-surface-alt border border-line py-3 text-center animate-in fade-in zoom-in-95 fill-mode-both"
             style={reduce ? undefined : { animationDelay: `${150 + i * 200}ms`, animationDuration: '400ms' }}
           >
-            <div className={`text-xl font-bold tabular-nums ${s.color}`}>{s.value}</div>
-            <div className="text-[10px] text-content-tertiary uppercase tracking-wider mt-0.5">{s.label}</div>
+            <div className={`text-lg font-bold tabular-nums ${s.color}`}>{s.value}</div>
+            <div className="text-[9px] text-content-tertiary uppercase tracking-wider mt-0.5">{s.label}</div>
           </div>
         ))}
       </div>
 
       <div className="flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2">
         <CheckCircle2 size={14} className="text-emerald-600 flex-shrink-0" />
-        <span className="text-[11px] text-emerald-800 font-medium">12 réponses → ajoutées au CRM automatiquement</span>
+        <span className="text-[11px] text-emerald-800 font-medium">12 réponses → ajoutées au CRM</span>
       </div>
 
       <div className="mt-auto pt-3 flex justify-center">
@@ -398,20 +423,12 @@ function SceneCRM({ reduce }) {
   ];
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-sm">
-          <Layers size={13} className="text-white" />
-        </div>
-        <div>
-          <div className="text-[10px] uppercase tracking-wider text-emerald-600 font-bold leading-none">Pipeline commercial</div>
-          <div className="text-xs font-semibold text-content-primary mt-0.5">Deals créés automatiquement</div>
-        </div>
-      </div>
+      <div className="text-xs font-semibold text-content-primary mb-3">Deals créés automatiquement</div>
 
       <div className="grid grid-cols-3 gap-2">
         {cols.map((col) => (
           <div key={col.name} className="flex flex-col">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-content-tertiary mb-1.5 px-1">{col.name}</div>
+            <div className="text-[9px] font-bold uppercase tracking-wider text-content-tertiary mb-1.5 px-1">{col.name}</div>
             <div className="flex flex-col gap-1.5">
               {col.deals.map((deal) => (
                 <div

@@ -23,9 +23,11 @@ import { useForceLightTheme } from '@/lib/use-force-light-theme';
 import { useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
+// Menu harmonisé FR/EN : Products · Pricing · Blog · FAQ (pas de « Features »
+// — la section a été retirée de la home FR le 28/05/2026 ; les fonctionnalités
+// sont couvertes par Products + les pages /en/products/*).
 const NAV_LINKS = [
   { href: '/en/products/prospection', label: 'Products' },
-  { href: '#features', label: 'Features' },
   { href: '/en/pricing', label: 'Pricing' },
   { href: '/blog', label: 'Blog' },
   { href: '#faq', label: 'FAQ' },

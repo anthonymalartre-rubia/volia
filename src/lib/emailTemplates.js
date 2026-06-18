@@ -1620,6 +1620,90 @@ export function upgradeSoftDay12Email(userName) {
 }
 
 /**
+ * Post-aha (event-driven) — envoyé peu après la 1ère recherche réussie
+ * (l'user a au moins 1 prospect). But : transformer le 1er résultat en
+ * habitude + amorcer la boucle cross-module. Déclenché par le cron
+ * lifecycle-triggers, idempotent via la clé drip 'post_aha'.
+ */
+export function postAhaEmail(userName, { count } = {}) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/dashboard', 'post_aha');
+  const countLabel = count && count > 0 ? `${count.toLocaleString('fr-FR')} prospects` : 'vos prospects';
+  return {
+    subject: 'Vous avez vos prospects. Et après ?',
+    html: layout({
+      preheader: 'Enrichissez le reste en arrière-plan, puis contactez — sans quitter Volia.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🎯',
+          title: 'Étape 2 : transformez cette liste en RDV',
+          greeting: `Bonjour ${name}, bien joué — votre 1ère liste (${countLabel}) est là. Voici comment en tirer de la valeur tout de suite.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">1. Enrichissez tout le reste en 1 clic</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Lancez l'enrichissement en arrière-plan : fermez l'onglet, Volia récupère les emails manquants et vous prévient par mail à la fin.</p>
+            </td>
+          </tr>
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0 0;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">2. Contactez-les direct</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Vos prospects partent dans Volia Campagnes (cold email inclus) en 1 clic — pas d'export, pas de Lemlist.</p>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Enrichir + contacter', ctaUrl)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Power-user → MAX (event-driven) — envoyé à un user GRATUIT actif sur >= 3
+ * modules de la suite. But : convertir vers MAX (illimité + Autopilot).
+ * Déclenché par le cron lifecycle-triggers, idempotent via 'power_user_max'.
+ */
+export function powerUserMaxEmail(userName, { modulesCount } = {}) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/pricing', 'power_user_max');
+  const modulesLabel = modulesCount && modulesCount > 0 ? `${modulesCount} modules` : 'plusieurs modules';
+  return {
+    subject: 'Vous utilisez déjà toute la suite.',
+    html: layout({
+      preheader: 'MAX la débride + ajoute l\'Autopilot qui prospecte à votre place.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '🚀',
+          title: 'Vous êtes exactement le profil MAX',
+          greeting: `Bonjour ${name}, vous êtes déjà actif sur <strong style="color:${COLORS.text};">${modulesLabel}</strong> de Volia (prospection, campagnes, CRM…). Autant en avoir la version sans limites.`,
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${COLORS.text};">
+          <strong>MAX débride toute la suite</strong> et ajoute l'<strong>Autopilot</strong> : il prospecte, écrit des emails personnalisés, qualifie et remplit votre CRM — pendant que vous faites autre chose.
+        </p>
+
+        <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:${COLORS.textMuted};">
+          <strong style="color:${COLORS.text};">99 € les 3 premiers mois</strong> avec le code <strong style="color:${COLORS.text};">MAX99</strong>, puis 179 €/mois. Sans engagement, résiliable en 1 clic.
+        </p>
+
+        <div align="center">${ctaPrimary('Activer MAX — code MAX99', ctaUrl)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
  * Invitation à rejoindre une team Volia MAX (multi-utilisateurs).
  *
  * Envoyé après POST /api/teams/invite. Le lien token expire à 7 jours.

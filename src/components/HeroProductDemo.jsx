@@ -1,23 +1,33 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, CheckCircle2, Send, Layers, ArrowRight } from 'lucide-react';
 
 /**
- * Démo produit ANIMÉE du hero (alternative codée à une vraie vidéo).
+ * Démo produit ANIMÉE du hero (alternative codée à une vraie vidéo) — v2.
  *
- * Rejoue en boucle le parcours Volia dans une fausse fenêtre navigateur :
- *   0. Prospection  — la liste de prospects se remplit
- *   1. Enrichissement — les emails manquants se complètent (badge « Vérifié »)
- *   2. Campagnes     — campagne envoyée, stats qui s'affichent
- *   3. CRM           — une réponse crée une carte dans le pipeline
+ * Rejoue en boucle le parcours Volia dans une fausse fenêtre navigateur, avec
+ * des détails « screencast » : requête tapée au clavier, compteurs qui montent,
+ * curseur animé qui clique, points d'étape qui se remplissent dans le temps.
+ *   0. Prospection   — la requête se tape, la liste se remplit, le compteur monte
+ *   1. Enrichissement — barre de progression + emails complétés (badge « Vérifié »)
+ *   2. Campagnes      — stats d'envoi qui s'incrémentent
+ *   3. CRM            — une réponse crée une carte dans le pipeline
  *
- * 100 % CSS/JS, aucun fichier vidéo → léger, n'impacte pas le LCP.
- * Respecte prefers-reduced-motion (pas de cycle auto).
+ * 100 % CSS/JS, aucun fichier vidéo. Pause auto hors écran (IntersectionObserver),
+ * respecte prefers-reduced-motion (affiche l'état final, sans cycle).
  */
 const SCENES = ['Prospection', 'Enrichissement', 'Campagnes', 'CRM'];
 const DOT = ['bg-violet-500', 'bg-blue-500', 'bg-cyan-500', 'bg-emerald-500'];
-const STEP_MS = 3600;
+const STEP_MS = 4200;
+
+// Cibles du curseur par scène (% de la zone de scène) — réglées au pixel près en preview.
+const CURSOR = [
+  { x: 60, y: 30 },
+  { x: 83, y: 14 },
+  { x: 50, y: 46 },
+  { x: 20, y: 64 },
+];
 
 const ROWS = [
   { name: 'La Bonne Table', email: 'contact@labonnetable.fr', phone: '01 42 33 87 19', type: 'fixe' },
@@ -25,29 +35,81 @@ const ROWS = [
   { name: 'Boulangerie Maison', email: 'bonjour@boulangerie-m.fr', phone: '01 45 88 12 67', type: 'fixe' },
 ];
 
+/* Compte de 0 → target (easeOut) quand `active` passe à true. */
+function useCountUp(target, active, duration = 1100) {
+  const [val, setVal] = useState(active ? 0 : target);
+  useEffect(() => {
+    if (!active) { setVal(target); return; }
+    let raf, start = null;
+    const tick = (t) => {
+      if (start === null) start = t;
+      const p = Math.min(1, (t - start) / duration);
+      setVal(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [active, target, duration]);
+  return val;
+}
+
+/* Effet machine à écrire. */
+function useTyping(text, active, speed = 60) {
+  const [n, setN] = useState(active ? 0 : text.length);
+  useEffect(() => {
+    if (!active) { setN(text.length); return; }
+    let i = 0;
+    setN(0);
+    const id = setInterval(() => {
+      i += 1;
+      setN(i);
+      if (i >= text.length) clearInterval(id);
+    }, speed);
+    return () => clearInterval(id);
+  }, [active, text, speed]);
+  return text.slice(0, n);
+}
+
 export default function HeroProductDemo() {
   const [step, setStep] = useState(0);
   const [fill, setFill] = useState(false);
+  const [reduce, setReduce] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const rootRef = useRef(null);
 
-  // Cycle automatique entre les 4 scènes (sauf si l'utilisateur réduit les animations).
   useEffect(() => {
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-    if (reduce) return;
-    const id = setInterval(() => setStep((s) => (s + 1) % SCENES.length), STEP_MS);
-    return () => clearInterval(id);
+    setReduce(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches || false);
   }, []);
 
-  // Anime la barre de progression de l'enrichissement à chaque entrée sur la scène 1.
+  // Pause le cycle quand le hero n'est pas à l'écran (perf + batterie).
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.15 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (reduce || !visible) return;
+    const id = setInterval(() => setStep((s) => (s + 1) % SCENES.length), STEP_MS);
+    return () => clearInterval(id);
+  }, [reduce, visible]);
+
   useEffect(() => {
     setFill(false);
-    if (step === 1) {
-      const t = setTimeout(() => setFill(true), 80);
+    if (step === 1 && !reduce) {
+      const t = setTimeout(() => setFill(true), 120);
       return () => clearTimeout(t);
     }
-  }, [step]);
+  }, [step, reduce]);
 
   return (
-    <div className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150">
+    <div
+      ref={rootRef}
+      aria-hidden="true"
+      className="relative animate-in fade-in slide-in-from-right-8 duration-1000 delay-150"
+    >
       {/* Sticker live */}
       <div className="absolute -top-4 -left-4 z-20 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-300 shadow-md flex items-center gap-2">
         <span className="relative flex h-2 w-2">
@@ -69,24 +131,23 @@ export default function HeroProductDemo() {
         {/* Zone scène — hauteur fixe pour éviter les sauts de layout */}
         <div className="relative h-[300px] bg-white px-4 py-4 overflow-hidden">
           <div key={step} className="h-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {step === 0 && <SceneProspection />}
-            {step === 1 && <SceneEnrich fill={fill} />}
-            {step === 2 && <SceneCampagnes />}
-            {step === 3 && <SceneCRM />}
+            {step === 0 && <SceneProspection reduce={reduce} />}
+            {step === 1 && <SceneEnrich fill={fill} reduce={reduce} />}
+            {step === 2 && <SceneCampagnes reduce={reduce} />}
+            {step === 3 && <SceneCRM reduce={reduce} />}
           </div>
+          {!reduce && <FakeCursor step={step} />}
         </div>
 
-        {/* Pied : module courant + points d'étape */}
+        {/* Pied : module courant + points d'étape qui se remplissent dans le temps */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-line bg-surface-alt">
           <span className="text-xs font-bold text-content-primary">{step + 1} · Volia {SCENES[step]}</span>
           <div className="flex items-center gap-1.5">
             {SCENES.map((s, i) => (
-              <span
-                key={s}
-                className={`h-1.5 rounded-full transition-all duration-500 ${
-                  i === step ? `w-5 ${DOT[i]}` : 'w-1.5 bg-line'
-                }`}
-              />
+              <span key={s} className="relative h-1.5 w-5 rounded-full bg-line overflow-hidden">
+                {i < step && <span className={`absolute inset-0 ${DOT[i]}`} />}
+                {i === step && <DotFill key={step} className={DOT[i]} reduce={reduce} />}
+              </span>
             ))}
           </div>
         </div>
@@ -106,28 +167,74 @@ export default function HeroProductDemo() {
   );
 }
 
+/* Remplissage temporisé du point d'étape actif (transition CSS pure, 0 keyframe). */
+function DotFill({ className, reduce }) {
+  const [w, setW] = useState(reduce ? 100 : 0);
+  useEffect(() => {
+    if (reduce) { setW(100); return; }
+    const t = setTimeout(() => setW(100), 40);
+    return () => clearTimeout(t);
+  }, [reduce]);
+  return (
+    <span
+      className={`absolute inset-y-0 left-0 ${className}`}
+      style={{ width: `${w}%`, transition: reduce ? 'none' : `width ${STEP_MS}ms linear` }}
+    />
+  );
+}
+
+/* Curseur animé (SVG inline) qui glisse vers la cible de chaque scène + tap (animate-ping). */
+function FakeCursor({ step }) {
+  const pos = CURSOR[step] || CURSOR[0];
+  return (
+    <div
+      data-demo-cursor=""
+      className="pointer-events-none absolute z-30 transition-all duration-700 ease-out"
+      style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+    >
+      <span className="relative block">
+        <span key={step} className="absolute -left-2 -top-2 h-7 w-7 rounded-full bg-violet-500/20 animate-ping" />
+        <svg width="22" height="22" viewBox="0 0 24 24" className="relative drop-shadow-md" aria-hidden="true">
+          <path
+            d="M5 3 L5 19 L9 15 L11.5 20.5 L13.7 19.4 L11.2 14.2 L17 14 Z"
+            fill="#ffffff"
+            stroke="#1f2937"
+            strokeWidth="1.4"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    </div>
+  );
+}
+
 /* ─── Scène 0 : Prospection ─────────────────────────────────────────────── */
-function SceneProspection() {
+function SceneProspection({ reduce }) {
+  const typed = useTyping('Restaurants · Paris', !reduce);
+  const count = useCountUp(234, !reduce);
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center shadow-sm flex-shrink-0">
             <Search size={13} className="text-white" />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-wider text-violet-600 font-bold leading-none">Recherche</div>
-            <div className="text-xs font-semibold text-content-primary mt-0.5">Restaurants · Paris</div>
+            <div className="text-xs font-semibold text-content-primary mt-0.5 truncate">
+              {reduce ? 'Restaurants · Paris' : typed}
+              {!reduce && typed.length < 19 && <span className="inline-block w-0.5 h-3 bg-violet-500 ml-0.5 align-middle animate-pulse" />}
+            </div>
           </div>
         </div>
-        <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold">234 résultats</div>
+        <div className="text-xs px-2 py-1 rounded-md bg-violet-100 text-violet-700 font-bold tabular-nums flex-shrink-0">{count} résultats</div>
       </div>
       <div className="space-y-2">
         {ROWS.map((row, i) => (
           <div
             key={row.name}
             className="flex items-center justify-between gap-2 text-xs animate-in fade-in slide-in-from-right-2 fill-mode-both"
-            style={{ animationDelay: `${250 + i * 350}ms`, animationDuration: '500ms' }}
+            style={reduce ? undefined : { animationDelay: `${500 + i * 380}ms`, animationDuration: '500ms' }}
           >
             <div className="flex-1 min-w-0">
               <div className="font-medium text-content-primary truncate">{row.name}</div>
@@ -151,7 +258,8 @@ function SceneProspection() {
 }
 
 /* ─── Scène 1 : Enrichissement ──────────────────────────────────────────── */
-function SceneEnrich({ fill }) {
+function SceneEnrich({ fill, reduce }) {
+  const count = useCountUp(3, !reduce, 1600);
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between mb-3">
@@ -161,14 +269,14 @@ function SceneEnrich({ fill }) {
           </div>
           <div className="text-xs font-semibold text-content-primary">Enrichissement en cours…</div>
         </div>
-        <div className="text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 font-bold tabular-nums">3 emails ✓</div>
+        <div className="text-xs px-2 py-1 rounded-md bg-emerald-100 text-emerald-700 font-bold tabular-nums">{count} emails ✓</div>
       </div>
 
       {/* Barre de progression */}
       <div className="h-2 w-full rounded-full bg-surface-alt overflow-hidden mb-4">
         <div
           className="h-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-500"
-          style={{ width: fill ? '100%' : '8%', transition: 'width 2.4s ease-out' }}
+          style={{ width: reduce || fill ? '100%' : '8%', transition: 'width 2.6s ease-out' }}
         />
       </div>
 
@@ -178,7 +286,7 @@ function SceneEnrich({ fill }) {
             <div className="font-medium text-content-primary truncate flex-1 min-w-0">{row.name}</div>
             <div
               className="flex items-center gap-1.5 animate-in fade-in slide-in-from-right-2 fill-mode-both"
-              style={{ animationDelay: `${600 + i * 450}ms`, animationDuration: '400ms' }}
+              style={reduce ? undefined : { animationDelay: `${700 + i * 480}ms`, animationDuration: '400ms' }}
             >
               <span className="font-mono text-[10px] text-content-secondary truncate max-w-[120px]">{row.email}</span>
               <span className="text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 rounded bg-emerald-100 text-emerald-700 flex items-center gap-0.5">
@@ -193,11 +301,14 @@ function SceneEnrich({ fill }) {
 }
 
 /* ─── Scène 2 : Campagnes ───────────────────────────────────────────────── */
-function SceneCampagnes() {
+function SceneCampagnes({ reduce }) {
+  const sent = useCountUp(234, !reduce, 1000);
+  const open = useCountUp(47, !reduce, 1300);
+  const rep = useCountUp(12, !reduce, 1600);
   const stats = [
-    { label: 'Envoyés', value: '234', color: 'text-blue-700' },
-    { label: 'Ouverts', value: '47', color: 'text-emerald-600' },
-    { label: 'Réponses', value: '12', color: 'text-violet-700' },
+    { label: 'Envoyés', value: sent, color: 'text-blue-700' },
+    { label: 'Ouverts', value: open, color: 'text-emerald-600' },
+    { label: 'Réponses', value: rep, color: 'text-violet-700' },
   ];
   return (
     <div className="h-full flex flex-col">
@@ -211,7 +322,7 @@ function SceneCampagnes() {
             <div className="text-xs font-semibold text-content-primary mt-0.5">« Resto-Q4 » · cold email</div>
           </div>
         </div>
-        <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-bold">234 envois</div>
+        <div className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 font-bold tabular-nums">{sent} envois</div>
       </div>
 
       <div className="grid grid-cols-3 gap-3 mb-4">
@@ -219,7 +330,7 @@ function SceneCampagnes() {
           <div
             key={s.label}
             className="rounded-xl bg-surface-alt border border-line py-3 text-center animate-in fade-in zoom-in-95 fill-mode-both"
-            style={{ animationDelay: `${200 + i * 250}ms`, animationDuration: '450ms' }}
+            style={reduce ? undefined : { animationDelay: `${150 + i * 200}ms`, animationDuration: '400ms' }}
           >
             <div className={`text-xl font-bold tabular-nums ${s.color}`}>{s.value}</div>
             <div className="text-[10px] text-content-tertiary uppercase tracking-wider mt-0.5">{s.label}</div>
@@ -229,7 +340,7 @@ function SceneCampagnes() {
 
       <div
         className="mt-auto flex items-center gap-2 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2.5 animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
-        style={{ animationDelay: '1100ms', animationDuration: '450ms' }}
+        style={reduce ? undefined : { animationDelay: '1100ms', animationDuration: '450ms' }}
       >
         <CheckCircle2 size={14} className="text-emerald-600 flex-shrink-0" />
         <span className="text-xs text-emerald-800 font-medium">12 réponses → ajoutées au CRM automatiquement</span>
@@ -239,7 +350,7 @@ function SceneCampagnes() {
 }
 
 /* ─── Scène 3 : CRM ─────────────────────────────────────────────────────── */
-function SceneCRM() {
+function SceneCRM({ reduce }) {
   const cols = [
     { name: 'Lead', accent: 'border-emerald-300 bg-emerald-50 text-emerald-800', deals: ['La Bonne Table'], fresh: true },
     { name: 'Qualifié', accent: 'border-line bg-surface-alt text-content-secondary', deals: ['Pasta Roma'] },
@@ -258,7 +369,7 @@ function SceneCRM() {
       </div>
 
       <div className="grid grid-cols-3 gap-2 flex-1">
-        {cols.map((col, i) => (
+        {cols.map((col) => (
           <div key={col.name} className="flex flex-col">
             <div className="text-[10px] font-bold uppercase tracking-wider text-content-tertiary mb-1.5 px-1">{col.name}</div>
             <div className="flex flex-col gap-1.5">
@@ -266,9 +377,9 @@ function SceneCRM() {
                 <div
                   key={deal}
                   className={`rounded-lg border px-2 py-2 text-[10px] font-semibold text-center ${col.accent} ${
-                    col.fresh ? 'animate-in fade-in slide-in-from-top-2 fill-mode-both' : ''
+                    col.fresh && !reduce ? 'animate-in fade-in slide-in-from-top-2 fill-mode-both' : ''
                   }`}
-                  style={col.fresh ? { animationDelay: '400ms', animationDuration: '500ms' } : undefined}
+                  style={col.fresh && !reduce ? { animationDelay: '450ms', animationDuration: '500ms' } : undefined}
                 >
                   {deal}
                   {col.fresh && (

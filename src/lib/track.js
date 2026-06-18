@@ -46,3 +46,18 @@ export function trackPurchase({ value, currency = 'EUR', plan } = {}) {
   } catch { /* noop */ }
   if (LI_PURCHASE) trackLinkedInConversion(LI_PURCHASE);
 }
+
+/**
+ * Événement PRODUIT générique (activation, première valeur, usage clé) → GA4
+ * custom event + Meta custom event. Sert à mesurer le funnel d'activation par
+ * module (ex: prospection_search_completed, enrichment_completed). No-op si les
+ * pixels ne sont pas chargés (pas de consentement / IDs env non configurés) →
+ * 100 % safe à appeler partout. Garder des noms d'event stables et en snake_case.
+ * @param {string} name  nom de l'event (snake_case)
+ * @param {object} [params]  propriétés additionnelles (valeurs primitives)
+ */
+export function trackProductEvent(name, params = {}) {
+  if (typeof window === 'undefined' || !name) return;
+  try { window.gtag && window.gtag('event', name, params); } catch { /* noop */ }
+  try { window.fbq && window.fbq('trackCustom', name, params); } catch { /* noop */ }
+}

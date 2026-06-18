@@ -16,7 +16,7 @@ const DashboardBackgroundDecor = lazy(() => import('@/components/DashboardBackgr
 import LimitReachedModal from '@/components/LimitReachedModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { maybeShowAchievement } from '@/lib/use-achievement-toast';
-import { trackPurchase } from '@/lib/track';
+import { trackPurchase, trackProductEvent } from '@/lib/track';
 import BackgroundEnrichPanel from '@/components/BackgroundEnrichPanel';
 // Pull achievements silencieux (webhook, form public) au mount dashboard.
 // Le dashboard n'utilise pas AppShell, on monte le puller ici directement.
@@ -803,6 +803,8 @@ export default function Dashboard() {
     }
 
     setSearchProgress((prev) => addLog(prev, `Recherche terminée: ${newProspects.length} nouveaux prospects`));
+    // Activation produit : 1re valeur Prospection livrée (mesure du funnel).
+    try { trackProductEvent('prospection_search_completed', { count: newProspects.length }); } catch { /* noop */ }
 
     if (newProspects.length > 0 && supabase) {
       try {
@@ -1223,6 +1225,7 @@ export default function Dashboard() {
       await new Promise((resolve) => setTimeout(resolve, 200));
     }
 
+    try { trackProductEvent('enrichment_completed', { method: 'waterfall' }); } catch { /* noop */ }
     setIsWaterfallEnriching(false);
   }, [prospects, supabase]);
 

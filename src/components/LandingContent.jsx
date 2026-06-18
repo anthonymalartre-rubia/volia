@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, TrendingDown, X, Sparkles, FormInput, Rocket, FolderKanban } from 'lucide-react';
+import { ArrowRight, Check, Zap, Search, Mail, MapPin, Shield, Layers, Download, TrendingDown, X, Sparkles, FormInput, Rocket, FolderKanban, Play } from 'lucide-react';
 import { NavAuth, HeroCTA, FooterCTA } from '@/components/AuthCTA';
 import BookDemoButton from '@/components/BookDemoButton';
 import ProductsMenu from '@/components/ProductsMenu';
 import HeroSearchWidget from '@/components/HeroSearchWidget';
 import HeroVideo from '@/components/HeroVideo';
 import HeroProductDemo from '@/components/HeroProductDemo';
+import DemoVideoButton from '@/components/DemoVideoButton';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import MobileNavMenu from '@/components/MobileNavMenu';
@@ -31,6 +32,11 @@ const HERO_VIDEO = {
   fullSrc: '', // ex: '/hero/volia-demo-full.mp4' ou URL Mux/Cloudflare Stream
   caption: 'Démo · Email + Téléphone',
 };
+
+// Vidéo de démo (YouTube) ouverte par le bouton « Voir une démo » du hero.
+// Mettre l'ID YouTube (la partie après v= ou youtu.be/). Vide → le bouton
+// scrolle vers la démo live (#try-live), comme avant. Ex: 'dQw4w9WgXcQ'.
+const DEMO_VIDEO_ID = '';
 
 export default function LandingContent() {
   const { t } = useI18n();
@@ -174,12 +180,13 @@ export default function LandingContent() {
                   Démarrer gratuitement
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
-                <a
-                  href="#try-live"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 rounded-xl border-2 border-line-hover hover:border-violet-400 hover:bg-violet-50 text-content-primary font-semibold transition-all text-base"
+                <DemoVideoButton
+                  youtubeId={DEMO_VIDEO_ID}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 rounded-xl border-2 border-line-hover hover:border-violet-400 hover:bg-violet-50 text-content-primary font-semibold transition-all text-base cursor-pointer"
                 >
+                  <Play size={18} className="text-violet-600 fill-violet-600" />
                   Voir une démo
-                </a>
+                </DemoVideoButton>
               </div>
 
               {/* CTA tertiaire — booking démo perso founder.

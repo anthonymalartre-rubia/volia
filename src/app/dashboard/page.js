@@ -289,7 +289,7 @@ export default function Dashboard() {
     // ?upgrade=<planId> = post-signup avec plan pré-sélectionné depuis pricing.
     // On déclenche un checkout Stripe direct (sans demander à l'user de
     // re-cliquer un bouton — il a déjà fait le choix sur la landing).
-    if (['solo', 'pro', 'business'].includes(upgrade)) {
+    if (['prospection', 'max', 'solo', 'pro', 'business'].includes(upgrade)) {
       // Nettoie les cookies qui ont survécu au signup
       document.cookie = 'volia_signup_plan=; path=/; max-age=0';
       document.cookie = 'volia_signup_period=; path=/; max-age=0';

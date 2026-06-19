@@ -86,10 +86,10 @@ export default function SignupPage() {
         document.cookie = `volia_ref=${encodeURIComponent(ref)}; path=/; max-age=2592000; SameSite=Lax`;
       }
 
-      // ?plan=solo|pro|business → user vient d'une card pricing.
-      // On stocke pour déclencher un checkout post-signup automatique.
+      // ?plan=prospection|max (publics) ou solo|pro|business (legacy) → user vient
+      // d'une card pricing. On stocke pour déclencher un checkout post-signup auto.
       const plan = params.get('plan');
-      if (plan && ['solo', 'pro', 'business'].includes(plan)) {
+      if (plan && ['prospection', 'max', 'solo', 'pro', 'business'].includes(plan)) {
         setSelectedPlan(plan);
         document.cookie = `volia_signup_plan=${plan}; path=/; max-age=3600; SameSite=Lax`;
         // ?period=yearly|monthly → on conserve le choix annuel/mensuel de la card
@@ -199,7 +199,11 @@ export default function SignupPage() {
       } else if (res.status === 422 || data?.code === 'weak_password') {
         setError(t('auth.weakPassword'));
       } else if (data?.code === 'email_send_failed') {
-        setError(t('auth.emailSendFailed'));
+        // Le compte EST créé ; seul l'envoi de l'email de confirmation a échoué
+        // (Resend down, quota, etc.). On affiche quand même la page de succès —
+        // qui contient le bouton « Renvoyer l'email » — pour ne pas bloquer l'user.
+        setSuccess(true);
+        try { trackSignup(); } catch { /* noop */ }
       } else if (!res.ok || !data?.success) {
         setError(t('auth.serverError'));
       } else {

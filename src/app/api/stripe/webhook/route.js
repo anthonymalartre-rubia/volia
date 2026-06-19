@@ -390,6 +390,29 @@ export async function POST(request) {
         const newPriceId = subscription.items?.data?.[0]?.price?.id;
         const newPlanId = planIdFromPriceId(newPriceId, profile?.plan);
 
+        // GARDE ANTI-RÉTROGRADATION. planIdFromPriceId() retombe sur 'free'
+        // quand le price n'est PAS reconnu (price renommé, env var manquante,
+        // nouveau price non câblé…). Un subscription.updated ne doit JAMAIS
+        // rétrograder un client qui paie : une vraie résiliation arrive via
+        // customer.subscription.deleted. Si la sub est encore active et qu'on
+        // résout 'free' alors que le profil est payant → c'est un trou de
+        // mapping, PAS un downgrade. On refuse + on alerte (à corriger côté
+        // mapping price→plan), sans toucher au plan du client.
+        const subActive = ['active', 'trialing', 'past_due'].includes(subscription.status);
+        if (
+          newPlanId === 'free' &&
+          subActive &&
+          profile?.plan &&
+          profile.plan !== 'free'
+        ) {
+          console.error(
+            `[webhook] subscription.updated: price "${newPriceId}" NON RECONNU pour user ${userId} ` +
+            `(plan actuel "${profile.plan}", sub ${subscription.id}, status ${subscription.status}). ` +
+            `Rétrogradation en free REFUSÉE — vérifier le mapping price→plan (env vars Stripe).`
+          );
+          break;
+        }
+
         // Si la subscription est marquée pour cancel à la fin de période,
         // on garde le plan actuel jusqu'au period_end (le user a payé).
         // Quand customer.subscription.deleted arrivera, on bascule en free.

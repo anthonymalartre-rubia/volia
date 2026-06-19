@@ -955,7 +955,7 @@ export default function PricingContent() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
                 <Link
-                  href="/signup?plan=max&period=monthly"
+                  href={`/signup?plan=max&period=${period}`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg w-full sm:w-auto"
                 >
                   Démarrer l&apos;essai MAX (14 j) <ArrowRight size={14} />

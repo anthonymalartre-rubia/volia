@@ -97,20 +97,13 @@ export default function AuthConfirmPage() {
         clearTimeout(timeoutId);
         subscription?.unsubscribe();
 
-        // Trial MAX 14j : trigger DB handle_new_user attribue déjà le trial
-        // au signup. /api/auth/trial-start envoie le welcome email (fire &
-        // forget côté API).
-        try {
-          await fetch('/api/auth/trial-start', { method: 'POST' });
-        } catch {
-          // Silent — ne bloque pas l'auth si l'email échoue
-        }
-
         const user = session?.user;
         setFirstName(extractFirstName(user));
 
-        // Si le user a déjà été welcomé (rare, ex: 2e clic sur lien),
-        // skip l'animation et redirect direct.
+        // Freemium pur : plus d'essai. On lit welcomed_at AVANT d'appeler
+        // l'API (qui le pose) → sinon l'animation de bienvenue sauterait
+        // dès le 1er passage. welcomed_at non nul = user déjà accueilli
+        // (ex: 2e clic sur le lien) → on skip l'animation.
         let alreadyWelcomed = false;
         try {
           const { data } = await supabase
@@ -122,6 +115,13 @@ export default function AuthConfirmPage() {
         } catch {
           // Best-effort : si on n'arrive pas à check, on joue quand même
           // l'animation (ce n'est pas grave de la voir 2x).
+        }
+
+        // Envoie le welcome email (idempotent côté API via welcomed_at).
+        try {
+          await fetch('/api/auth/trial-start', { method: 'POST' });
+        } catch {
+          // Silent — ne bloque pas l'auth si l'email échoue
         }
 
         if (alreadyWelcomed) {

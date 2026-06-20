@@ -185,7 +185,7 @@ export default function McpPage() {
           <div className="rounded-2xl border border-line bg-surface-raised p-8 text-center">
             <h2 className="text-2xl font-bold">Pas encore de compte Volia ?</h2>
             <p className="mx-auto mt-3 max-w-xl text-content-secondary">
-              Crée ton compte, lance ta première recherche, puis branche ton agent IA. Le serveur MCP est inclus dans MAX à 179 €/mois (code MAX99 : 3 mois à 99 €) — essai 14 jours de MAX sans carte bancaire.
+              Crée ton compte gratuit (sans carte bancaire), lance ta première recherche, puis passe en MAX quand tu veux pour brancher ton agent IA. Le serveur MCP est inclus dans MAX à 179 €/mois (code MAX99 : 3 mois à 99 €).
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link href="/signup" className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:opacity-95">

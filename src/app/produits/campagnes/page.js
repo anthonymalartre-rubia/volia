@@ -345,7 +345,7 @@ function ComparisonTableSection() {
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
             <p className="mt-3 text-xs text-content-tertiary">
-              Inclus dans MAX 179 €/mois · 14 jours d&apos;essai MAX · Migration depuis Lemlist incluse
+              Inclus dans MAX 179 €/mois · Plan Gratuit à vie, sans carte bancaire · Migration depuis Lemlist incluse
             </p>
           </div>
         </MotionInView>
@@ -869,7 +869,7 @@ export default function CampagnesProductPage() {
           subtitle: 'Stack divisé par 3, deliverability ×2. Templates prêts, warmup auto, replies qui atterrissent dans le CRM — vous appuyez sur Play.',
           primary: { label: 'Commencer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir une démo live', href: '#demo' },
-          trust: 'Gratuit pour tous · 14 jours d\'essai MAX · Migration Lemlist offerte · RGPD by default',
+          trust: 'Gratuit pour tous · sans carte bancaire · Migration Lemlist offerte · RGPD by default',
         }}
       />
     </>

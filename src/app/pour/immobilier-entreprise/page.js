@@ -93,7 +93,7 @@ const FAQ = [
   },
   {
     q: "Combien ça coûte ?",
-    a: "Le plan Gratuit donne accès à toute la suite (prospection + campagnes + CRM + formulaires) avec des limites, sans carte bancaire. Le plan Prospection est à 19 €/mois (500 emails + 500 téléphones/mois). Pour la suite illimitée + l'Autopilot, le plan MAX est à 179 €/mois — code MAX99 : les 3 premiers mois à 99 €. À l'inscription, tu as 14 jours de MAX offerts sans carte bancaire.",
+    a: "Le plan Gratuit donne accès à toute la suite (prospection + campagnes + CRM + formulaires) avec des limites et 25 crédits Prospection/mois, sans carte bancaire — à vie. Le plan Prospection est à 19 €/mois (500 emails + 500 téléphones/mois). Pour la suite illimitée + l'Autopilot, le plan MAX est à 179 €/mois — code MAX99 : les 3 premiers mois à 99 €. Tu montes en gamme quand tu veux, aucun prélèvement automatique.",
   },
 ];
 

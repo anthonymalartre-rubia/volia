@@ -217,8 +217,8 @@ const FAQ_PRICING = [
     a: 'Avec le code MAX99 saisi au paiement, le plan MAX passe à 99 €/mois pendant 3 mois (au lieu de 179 €), puis revient au tarif normal. Pas de frais cachés, annulation en 1 clic à tout moment.',
   },
   {
-    q: 'Essai gratuit ?',
-    a: '14 jours d\'accès complet au plan MAX sans CB (Autopilot, 2 000 crédits, suite illimitée). À J+14, le compte bascule sur le plan Gratuit à vie (25 crédits/mois, tous les modules avec limites). Zéro prélèvement automatique sans votre accord explicite.',
+    q: 'C\'est gratuit pour démarrer ?',
+    a: 'Oui : le plan Gratuit est à vie, sans carte bancaire (25 crédits/mois et tous les modules avec limites — Prospection, Campagnes, CRM, Formulaires, Project). Vous montez en gamme quand vous voulez (Prospection ou MAX), jamais de prélèvement automatique sans votre accord explicite.',
   },
   {
     q: 'Je peux changer de plan quand je veux ?',
@@ -356,7 +356,7 @@ export default function PricingContent() {
 
             {/* Trust badges */}
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-content-tertiary">
-              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> 14 j d&apos;essai MAX sans CB</span>
+              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Plan Gratuit à vie · sans CB</span>
               <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Annulation 1 clic</span>
               <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> RGPD France</span>
             </div>
@@ -948,7 +948,7 @@ export default function PricingContent() {
           <MotionInView>
             <div className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-700 to-indigo-700 p-10 sm:p-14 text-center text-white shadow-2xl shadow-violet-500/20">
               <h2 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
-                Essayez MAX gratuitement.<br />14 jours, sans carte bancaire.
+                Démarrez gratuitement.<br />Sans carte bancaire.
               </h2>
               <p className="text-violet-100 text-base sm:text-lg mb-8 max-w-xl mx-auto">
                 La suite est gratuite — Campagnes, CRM, Formulaires &amp; Project inclus. Code <strong className="text-white">MAX99</strong> : MAX à 99 €/mois les 3 premiers mois.
@@ -958,7 +958,7 @@ export default function PricingContent() {
                   href={`/signup?plan=max&period=${period}`}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg w-full sm:w-auto"
                 >
-                  Démarrer l&apos;essai MAX (14 j) <ArrowRight size={14} />
+                  Démarrer gratuitement <ArrowRight size={14} />
                 </Link>
                 <Link
                   href="/#try-live"

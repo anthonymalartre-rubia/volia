@@ -1912,7 +1912,7 @@ Voici l'ICP que j'utilise pour Volia (résultat de cet exercice fait sur mes 50 
 
 # Économique
 - Budget typique : 19€/mo (Prospection) - parfois 179€/mo (MAX)
-- Cycle de vente médian : 3 jours (signup direct ou essai MAX 14 jours)
+- Cycle de vente médian : 3 jours (signup direct ou plan Gratuit puis upgrade)
 - LTV moyenne : 228€ (12 mois de rétention moyenne sur Prospection)
 
 # Canaux de vente

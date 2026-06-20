@@ -87,7 +87,7 @@ export default function AffiliationPage() {
               <li>💸 Dès 19 €/mois — accessible aux TPE et indépendants</li>
               <li>🤖 L'IA fait la corvée, l'humain garde la décision</li>
               <li>🧩 Suite complète : Prospection · Campagnes · CRM · Forms</li>
-              <li>🎁 Essai 14 jours sans carte bancaire (faible friction)</li>
+              <li>🎁 Plan Gratuit à vie, sans carte bancaire (faible friction)</li>
               <li>📊 Tableau de bord affilié : suis tes gains en temps réel</li>
             </ul>
           </div>

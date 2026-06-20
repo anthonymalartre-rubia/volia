@@ -135,7 +135,7 @@ export default function PersonaPage({ persona }) {
                     Voir les autres plans
                   </Link>
                 </div>
-                <p className="text-xs text-content-tertiary mt-4">Plan Gratuit à vie · sans carte bancaire · essai 14 jours de MAX inclus</p>
+                <p className="text-xs text-content-tertiary mt-4">Plan Gratuit à vie · 25 crédits/mois · sans carte bancaire</p>
               </div>
             </div>
           </section>
@@ -184,7 +184,7 @@ export default function PersonaPage({ persona }) {
           <div className="rounded-2xl bg-gradient-to-br from-violet-600/20 to-indigo-600/20 border border-violet-500/30 p-8 text-center">
             <h2 className="text-2xl font-bold mb-3">Prêt à tester ?</h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Plan Gratuit à vie : toute la suite, sans carte bancaire — avec 14 jours de MAX offerts. Tes campagnes tournent en 5 min.
+              Plan Gratuit à vie : toute la suite, 25 crédits/mois, sans carte bancaire. Tes campagnes tournent en 5 min.
             </p>
             <Link href="/signup" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold transition shadow-lg shadow-violet-500/30">
               <Zap size={16} />

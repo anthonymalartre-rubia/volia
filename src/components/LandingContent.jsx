@@ -395,8 +395,8 @@ export default function LandingContent() {
                 { value: '101', label: 'départements France + Belgique + Suisse romande' },
                 { value: '150+', label: 'catégories B2B (commerce de proximité aux SaaS)' },
                 // Stat factuelle (pas de social proof inventée tant que la base
-                // clients n'est pas significative — on met l'offre d'essai).
-                { value: '14 j', label: 'essai gratuit — sans carte bancaire' },
+                // clients n'est pas significative — on met l'offre freemium).
+                { value: '25', label: 'crédits gratuits/mois — sans carte bancaire' },
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-3xl sm:text-4xl font-bold font-mono tabular-nums text-violet-700 mb-1">

@@ -18,7 +18,7 @@ const TABS = [
 
 function buildDmTemplate({ firstName }) {
   const name = firstName || 'toi';
-  return `Salut ${name}, j'ai vu que tu likes mes posts sur Volia. Curieux d'avoir ton avis si jamais tu testes ? volia.fr/signup (trial 14j sans CB). Anthony`;
+  return `Salut ${name}, j'ai vu que tu likes mes posts sur Volia. Curieux d'avoir ton avis si jamais tu testes ? volia.fr/signup (plan gratuit, sans CB). Anthony`;
 }
 
 function getFirstName(fullName) {

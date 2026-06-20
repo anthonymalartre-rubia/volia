@@ -117,10 +117,10 @@ const FAQ_JSON_LD = {
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'Y a-t-il un essai gratuit ?',
+      name: 'Y a-t-il un plan gratuit ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui : à l\'inscription, vous bénéficiez de 14 jours d\'accès complet au plan MAX sans carte bancaire (Autopilot, 2 000 crédits, suite illimitée). À l\'expiration, votre compte passe automatiquement sur le plan Gratuit à vie (25 crédits/mois, tous les modules avec limites) — aucun prélèvement.',
+        text: 'Oui : un plan Gratuit à vie, sans carte bancaire. Vous accédez à toute la suite (Prospection + Campagnes + CRM + Formulaires + Project) avec des limites : 25 crédits Prospection/mois, 1 séquence, 1 pipeline. Vous montez en gamme quand vous voulez (Prospection 19 €/mois ou MAX 179 €/mois) — aucun prélèvement automatique.',
       },
     },
     {

@@ -2,12 +2,11 @@ import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { sendEmail } from '@/lib/email';
-// Note : welcomeEmail remplacé par trialStartedEmail (msg plus engageant
-// qui annonce les 14j de Pro offerts au lieu du simple welcome neutre).
-import { trialStartedEmail } from '@/lib/emailTemplates';
+// Freemium pur (20/06/2026) : plus d'essai d'office → email de bienvenue neutre
+// (le trial Pro/MAX a été retiré, cf. trigger DB handle_new_user).
+import { welcomeEmail } from '@/lib/emailTemplates';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
-import { buildTrialPayload } from '@/lib/trial';
 
 // Validation anti open-redirect (P1 audit sécurité).
 // On n'accepte que des paths internes commençant par "/" mais pas "//"
@@ -68,44 +67,38 @@ export async function GET(request) {
     const isNewUser = (now - createdAt) < 60_000; // within 60 seconds
 
     if (isNewUser) {
-      // Ensure the user has a profile row
+      // Freemium pur : pas d'essai. On s'assure juste que le profil 'free'
+      // existe (le trigger DB le crée déjà ; ceci couvre le cas edge où il
+      // n'aurait pas encore tourné) et on envoie un welcome email une seule
+      // fois (idempotent via welcomed_at).
       const supabaseAdmin = getSupabaseAdmin();
       const { data: existingProfile } = await supabaseAdmin
         .from('user_profiles')
-        .select('id, trial_started_at')
+        .select('id, welcomed_at')
         .eq('id', user.id)
-        .single();
-
-      // Trial MAX 14j sans CB : on l'attribue UNIQUEMENT si le user n'a
-      // jamais eu de trial (anti double-dip si jamais on recrée le profil).
-      // buildTrialPayload retourne { trial_plan, trial_started_at, trial_ends_at, plan }.
-      const trialPayload = buildTrialPayload('max');
+        .maybeSingle();
 
       if (!existingProfile) {
         await supabaseAdmin
           .from('user_profiles')
-          .insert({
-            id: user.id,
-            ...trialPayload,
-          });
-      } else if (!existingProfile.trial_started_at) {
-        // Profil existant sans trial → on l'active (cas edge : profil créé
-        // par un autre flow, par exemple un import legacy).
-        await supabaseAdmin
-          .from('user_profiles')
-          .update(trialPayload)
-          .eq('id', user.id);
+          .insert({ id: user.id, plan: 'free' });
       }
 
-      // Send trial-started email (remplace l'ancien welcome — annonce les
-      // 14j Pro). Fire and forget pour ne pas bloquer la redirect.
-      const userName = user.user_metadata?.full_name || user.user_metadata?.name || null;
-      const template = trialStartedEmail(userName, trialPayload.trial_ends_at);
-      sendEmail({
-        to: user.email,
-        subject: template.subject,
-        html: template.html,
-      }).catch((err) => console.error('[auth/callback] Trial-started email failed:', err));
+      if (!existingProfile?.welcomed_at) {
+        await supabaseAdmin
+          .from('user_profiles')
+          .update({ welcomed_at: new Date().toISOString() })
+          .eq('id', user.id);
+
+        // Welcome email — fire and forget pour ne pas bloquer la redirect.
+        const userName = user.user_metadata?.full_name || user.user_metadata?.name || null;
+        const template = welcomeEmail(userName);
+        sendEmail({
+          to: user.email,
+          subject: template.subject,
+          html: template.html,
+        }).catch((err) => console.error('[auth/callback] Welcome email failed:', err));
+      }
     }
   } catch (emailErr) {
     // Never block auth flow for an email error

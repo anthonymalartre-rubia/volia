@@ -45,7 +45,7 @@ export const metadata = {
     default: 'Volia Autopilot — Pipeline B2B automatisé & prospection B2B France',
     template: '%s | Volia',
   },
-  description: 'Volia Autopilot : ton pipeline B2B automatisé — tu sélectionnes la cible, Volia exécute (scrap → email perso → qualif → scoring → CRM). Inclut la prospection B2B France via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. Gratuit pour démarrer, essai 14 jours de MAX sans carte bancaire.',
+  description: 'Volia Autopilot : ton pipeline B2B automatisé — tu sélectionnes la cible, Volia exécute (scrap → email perso → qualif → scoring → CRM). Inclut la prospection B2B France via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. Plan Gratuit à vie, sans carte bancaire.',
   keywords: ['Volia Autopilot', 'pipeline B2B automatisé', 'automatisation prospection', 'prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD'],
   authors: [{ name: 'Volia' }],
   creator: 'Volia',

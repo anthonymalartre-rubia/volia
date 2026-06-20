@@ -94,7 +94,7 @@ Volia est gratuit pour commencer : toute la suite (Campagnes, CRM, Formulaires) 
 
 - Suis l'[onboarding wizard](/docs/onboarding-wizard) (4 étapes guidées, 2 min).
 - Lance ta [première recherche](/docs/premiere-recherche) de prospects.
-- Active ton [essai MAX gratuit 14 jours](/docs/activer-trial-pro) si tu veux tester la suite illimitée et la cascade waterfall complète.
+- Découvre les [plans Volia](/docs/comprendre-plans) : Gratuit à vie (25 crédits/mois, sans carte bancaire), puis monte en gamme quand tu veux.
 
 ## FAQ rapide
 
@@ -258,48 +258,46 @@ Plus de détails dans [Changer de plan](/docs/changer-plan).
 
 - [Changer de plan](/docs/changer-plan)
 - [Annuler mon abonnement](/docs/annuler-abonnement)
-- [Activer l'essai MAX 14 jours](/docs/activer-trial-pro)
+- [Démarrer gratuitement avec Volia](/docs/demarrer-gratuit)
 `,
   },
   {
-    slug: 'activer-trial-pro',
+    slug: 'demarrer-gratuit',
     category: 'getting-started',
-    title: "Activer l'essai MAX 14 jours",
-    description: "Comment tester MAX gratuitement sans carte bancaire (sous conditions).",
-    updatedAt: '2026-06-11',
-    tags: ['trial', 'essai', 'max', 'gratuit'],
-    content: `## Le trial MAX en pratique
+    title: "Démarrer gratuitement avec Volia",
+    description: "Le plan Gratuit à vie : toute la suite, 25 crédits/mois, sans carte bancaire.",
+    updatedAt: '2026-06-20',
+    tags: ['gratuit', 'freemium', 'max', 'plan'],
+    content: `## Le plan Gratuit en pratique
 
-Volia offre **14 jours d'essai MAX** (suite illimitée + Volia Autopilot + 2 000 crédits Prospection + support prioritaire) à tout nouveau compte Gratuit, sans carte bancaire.
+Volia est **gratuit à vie**. Dès l'inscription, tu accèdes à toute la suite (Prospection, Campagnes, CRM, Formulaires, Project) avec des limites, plus **25 crédits Prospection offerts chaque mois**. Aucune carte bancaire demandée, aucun prélèvement automatique.
 
-## Comment l'activer
+## Comment en profiter
 
-1. Sur ton dashboard, regarde la **TrialBanner** en haut.
-2. Clique sur **Activer mes 14 jours MAX**.
-3. C'est tout — aucun paiement, aucune CB demandée.
+1. Crée ton compte sur [volia.fr/signup](/signup).
+2. C'est tout — ton plan Gratuit est actif d'office, sans CB.
 
-Ton compteur passe à 2 000 crédits Prospection pour 14 jours.
+Ton compteur affiche 25 crédits Prospection, qui se réinitialisent le 1er de chaque mois.
 
-## Pendant le trial
+## Ce qui est inclus dans le plan Gratuit
 
-- Tous les enrichissements premium (cascade waterfall 7 sources) sont actifs.
-- Volia Autopilot est débloqué (3 workflows, IF/ELSE, A/B testing).
-- Le support prioritaire est activé (réponse < 4 h ouvrées).
-- Toute la suite est illimitée : Campagnes, CRM, Formulaires, Project.
+- 25 crédits Prospection/mois (cascade waterfall complète).
+- Toute la suite avec limites : 1 séquence Campagnes, 1 pipeline CRM, 2 formulaires, 200 cold emails/mois.
+- 101 départements, 150+ catégories B2B, filtrage RGPD, export CSV + Zoho.
+- Tes prospects et données restent dans ta base à vie tant que ton compte existe.
 
-## À la fin du trial
+## Monter en gamme quand tu veux
 
-À J+14, si tu n'as rien fait :
-- Ton plan repasse en **Gratuit** (25 crédits Prospection/mois).
-- Tes prospects découverts pendant le trial restent dans ta base (jamais supprimés).
-- Tes campagnes en cours continuent jusqu'à épuisement, et tu repasses aux limites du plan Gratuit (1 séquence active, 200 cold emails/mois).
+Quand tu as besoin de plus, tu choisis :
+- **Prospection** (19 €/mois) : 500 crédits/mois.
+- **MAX** (179 €/mois) : suite illimitée + Volia Autopilot + 2 000 crédits + support prioritaire. Avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
 
-Pour rester en MAX : Paramètres → Plan → Souscrire MAX 179 €/mois — avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
+Aucun engagement, aucun prélèvement tant que tu n'as pas choisi de passer en payant.
 
 ## FAQ rapide
 
-**Je peux activer plusieurs trials ?** Non, 1 par compte / email / IP.
-**Et si j'upgrade pendant le trial ?** Tu passes en payant immédiatement et tu n'as pas à attendre la fin.
+**Une carte bancaire est-elle demandée ?** Non, jamais sur le plan Gratuit.
+**Mes crédits inutilisés se cumulent ?** Non, ils se réinitialisent le 1er du mois.
 **Mes données sont conservées ?** Oui, à vie tant que ton compte existe.
 
 ## Articles liés

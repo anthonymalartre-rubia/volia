@@ -6,7 +6,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Volia Autopilot — Ta prospection en pilote automatique (à partir de 19 €/mois, essai 14 jours)';
+export const alt = 'Volia Autopilot — Ta prospection en pilote automatique (à partir de 19 €/mois, plan Gratuit sans carte bancaire)';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -140,7 +140,7 @@ export default function Image() {
             fontWeight: 600,
           }}
         >
-          À partir de 19 €/mois — essai 14 jours, sans carte bancaire
+          À partir de 19 €/mois — plan Gratuit à vie, sans carte bancaire
         </div>
       </div>
     ),

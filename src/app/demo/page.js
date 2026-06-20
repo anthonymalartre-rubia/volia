@@ -253,7 +253,7 @@ export default function DemoPage() {
                 Pas envie d&apos;attendre une démo ?
               </p>
               <h3 className="text-xl sm:text-2xl font-bold text-content-primary mb-4">
-                Testez Volia tout de suite — 14 jours de MAX offerts, sans CB.
+                Testez Volia tout de suite — plan Gratuit à vie, sans CB.
               </h3>
               <Link
                 href="/signup?plan=pro&source=demo_page"

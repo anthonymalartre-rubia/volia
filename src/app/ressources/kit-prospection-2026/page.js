@@ -127,7 +127,7 @@ export default function KitProspection2026Page() {
               </Link>
             </div>
             <p className="mt-4 text-xs text-content-tertiary">
-              Dès 19 €/mois · essai 14 jours sans carte bancaire · 🇫🇷 RGPD natif
+              Gratuit pour démarrer · sans carte bancaire · 🇫🇷 RGPD natif
             </p>
           </div>
         </section>

@@ -328,7 +328,7 @@ function ComparisonTableSection() {
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </a>
             <p className="mt-3 text-xs text-content-tertiary">
-              14 jours de MAX offerts · Annulation 1 clic · Données hébergées en France
+              Gratuit pour tous · Sans carte bancaire · Données hébergées en France
             </p>
           </div>
         </MotionInView>
@@ -622,7 +622,7 @@ export default function FormulairesProductPage() {
           subtitle: 'Premier form en 2 min, branché au CRM en 2 clics, partagé partout. Tout dans Volia, gratuitement.',
           primary: { label: 'Commencer gratuitement', href: '/signup?plan=max' },
           secondary: { label: 'Voir les tarifs', href: '/pricing' },
-          trust: 'Gratuit pour tous · 14 jours de MAX offerts · Migration assistée · RGPD by default',
+          trust: 'Gratuit pour tous · Sans carte bancaire · Migration assistée · RGPD by default',
         }}
       />
     </>

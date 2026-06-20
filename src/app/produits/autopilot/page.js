@@ -1,6 +1,6 @@
 // /produits/autopilot — Landing page dédiée Volia Autopilot
 // Pitch B2B end-to-end auto : scrap → email → form → CRM
-// CTA primaire : trial 14j (push Pro) · CTA secondaire : voir démo 90s
+// CTA primaire : démarrer gratuitement (push Pro) · CTA secondaire : voir démo 90s
 
 import Link from 'next/link';
 import {
@@ -13,11 +13,11 @@ import { AUTOPILOT_TEMPLATES } from '@/lib/autopilot/templates';
 
 export const metadata = {
   title: 'Volia Autopilot — Ton pipeline B2B en autopilot | Volia',
-  description: 'Sélectionne ta cible, Volia exécute : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. 12 templates B2B France, RGPD natif. Exclusivité Volia MAX 179 €/mois (code MAX99 : 3 mois à 99 €) — essai 14 jours, sans carte bancaire.',
+  description: 'Sélectionne ta cible, Volia exécute : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. 12 templates B2B France, RGPD natif. Exclusivité Volia MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour démarrer, sans carte bancaire.',
   alternates: { canonical: 'https://volia.fr/produits/autopilot' },
   openGraph: {
     title: 'Volia Autopilot — Pipeline B2B en autopilot',
-    description: 'Volia exécute ta prospection B2B de bout en bout : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. Made in France, RGPD natif. Exclusivité MAX 179 €/mois (code MAX99 : 3 mois à 99 €) — essai 14 jours.',
+    description: 'Volia exécute ta prospection B2B de bout en bout : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. Made in France, RGPD natif. Exclusivité MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour démarrer.',
     type: 'website',
   },
 };
@@ -93,7 +93,7 @@ export default function AutopilotProductPage() {
                 href="/signup?plan=pro"
                 className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-semibold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/50 hover:-translate-y-0.5 transition-all text-base"
               >
-                Démarrer gratuit — 14 jours
+                Démarrer gratuitement
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
@@ -277,7 +277,7 @@ export default function AutopilotProductPage() {
               Prêt à remplir ton pipeline sans y passer tes journées ?
             </h2>
             <p className="text-lg opacity-90 mb-8">
-              Essai 14 jours, sans carte bancaire. Tu configures en 10 minutes — Volia s'occupe du reste.
+              Plan Gratuit à vie, sans carte bancaire. Tu configures en 10 minutes — Volia s'occupe du reste.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link

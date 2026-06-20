@@ -296,7 +296,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
               Teste Volia. Compare. Tu décides.
             </h2>
             <p className="text-content-secondary mb-6 max-w-xl mx-auto">
-              Plan Gratuit à vie + 14 jours d&apos;essai MAX. Pas de carte bancaire. Tu compares toi-même les résultats avec {competitor.name}.
+              Plan Gratuit à vie, 25 crédits/mois. Pas de carte bancaire. Tu compares toi-même les résultats avec {competitor.name}.
             </p>
             <Link
               href="/signup"

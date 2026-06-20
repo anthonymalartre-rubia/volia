@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { cleanEnv } from '@/lib/envClean';
-import { postAhaEmail, powerUserMaxEmail } from '@/lib/emailTemplates';
+import { enrichNudgeEmail, postAhaEmail, powerUserMaxEmail } from '@/lib/emailTemplates';
 
 /**
  * GET /api/cron/lifecycle-triggers
@@ -10,10 +10,14 @@ import { postAhaEmail, powerUserMaxEmail } from '@/lib/emailTemplates';
  * Emails lifecycle EVENT-DRIVEN (vs le drip calendaire de process-drip-emails).
  * Tourne toutes les 3h (cf. vercel.json) pour réagir vite à l'activité user.
  *
- *   A3 'post_aha'        — peu après la 1ère recherche réussie (>= 1 prospect),
- *                          ET une fois le tuto J+1 (use_case_d1) passé → évite
- *                          d'empiler 2 emails le même jour. But : enchaîner aha
- *                          → enrichissement + Campagnes.
+ *   A2.5 'enrich_nudge'  — a sorti des prospects mais 0 email (jamais lancé
+ *                          l'enrichissement = le vrai moment de valeur). But :
+ *                          débloquer l'action n°1 « récupérer les emails ».
+ *                          Prioritaire sur post_aha (mutuellement exclusifs).
+ *   A3 'post_aha'        — une fois >= 1 EMAIL trouvé (vrai aha, pas juste une
+ *                          liste d'entreprises), ET le tuto J+1 (use_case_d1)
+ *                          passé. But : enchaîner aha → enrichir le reste +
+ *                          Campagnes.
  *   B3 'power_user_max'  — user GRATUIT actif sur >= 3 modules de la suite.
  *                          Signal de conversion LENT → évalué 1×/jour seulement
  *                          (run de 3h UTC) pour ne pas re-scanner 8×/jour.
@@ -43,14 +47,59 @@ export async function GET(request) {
 
   const supabase = getSupabaseAdmin();
   const startedAt = new Date().toISOString();
-  const stats = { post_aha: { sent: 0, skipped: 0, failed: 0 }, power_user_max: { sent: 0, skipped: 0, failed: 0 } };
-  // Évite 2 emails au même user dans le même run (ex: power-user tout neuf
-  // éligible aux deux). On priorise post_aha.
+  const stats = {
+    enrich_nudge: { sent: 0, skipped: 0, failed: 0 },
+    post_aha: { sent: 0, skipped: 0, failed: 0 },
+    power_user_max: { sent: 0, skipped: 0, failed: 0 },
+  };
+  // Évite 2 emails au même user dans le même run. Priorité : enrich_nudge >
+  // post_aha > power_user_max.
   const emailedThisRun = new Set();
 
+  // Compte les prospects d'un user (total, ou seulement ceux avec un email).
+  const countProspects = async (userId, onlyWithEmail) => {
+    let q = supabase.from('prospects').select('id', { count: 'exact', head: true }).eq('user_id', userId);
+    if (onlyWithEmail) q = q.not('email', 'is', null);
+    const { count } = await q;
+    return count || 0;
+  };
+
   try {
-    // ─── A3 : post-aha (1ère recherche faite, après le tuto J+1) ──────────
     const sinceIso = new Date(Date.now() - POST_AHA_MAX_AGE_DAYS * 86400 * 1000).toISOString();
+
+    // ─── A2.5 : enrich-nudge (a des prospects mais 0 email → débloque) ─────
+    const { data: nudgeCandidates, error: nudgeErr } = await supabase
+      .from('user_profiles')
+      .select('id, drip_emails_sent')
+      .eq('drip_emails_enabled', true)
+      .gte('created_at', sinceIso)
+      .filter('drip_emails_sent', 'cs', '["use_case_d1"]')   // tuto J+1 passé
+      .not('drip_emails_sent', 'cs', '["enrich_nudge"]')
+      .not('drip_emails_sent', 'cs', '["post_aha"]')         // a déjà eu des emails → pas bloqué
+      .order('created_at', { ascending: false })
+      .limit(BATCH);
+    if (nudgeErr) console.error('[cron/lifecycle] enrich_nudge fetch:', nudgeErr);
+
+    for (const profile of nudgeCandidates || []) {
+      try {
+        const total = await countProspects(profile.id, false);
+        if (total < 1) { stats.enrich_nudge.skipped++; continue; }      // pas encore cherché
+        const withEmail = await countProspects(profile.id, true);
+        if (withEmail > 0) { stats.enrich_nudge.skipped++; continue; }  // a des emails → pas bloqué
+
+        const outcome = await sendLifecycleEmail(supabase, profile, (name) => enrichNudgeEmail(name, { count: total }), 'enrich_nudge');
+        if (outcome === 'sent') stats.enrich_nudge.sent++;
+        else if (outcome === 'failed') stats.enrich_nudge.failed++;
+        else stats.enrich_nudge.skipped++;
+        emailedThisRun.add(profile.id);
+        await new Promise((r) => setTimeout(r, 50));
+      } catch (e) {
+        stats.enrich_nudge.failed++;
+        console.error('[cron/lifecycle] enrich_nudge error', profile.id, e?.message || e);
+      }
+    }
+
+    // ─── A3 : post-aha (>= 1 EMAIL trouvé, après le tuto J+1) ─────────────
     const { data: ahaCandidates, error: ahaErr } = await supabase
       .from('user_profiles')
       .select('id, drip_emails_sent')
@@ -64,14 +113,13 @@ export async function GET(request) {
 
     for (const profile of ahaCandidates || []) {
       try {
-        const { count } = await supabase
-          .from('prospects')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', profile.id);
-        if (!count || count < 1) { stats.post_aha.skipped++; continue; } // pas encore d'aha → on attend
+        if (emailedThisRun.has(profile.id)) { stats.post_aha.skipped++; continue; } // déjà touché (enrich_nudge)
+        const withEmail = await countProspects(profile.id, true);
+        if (withEmail < 1) { stats.post_aha.skipped++; continue; } // pas encore d'email = pas le vrai aha → enrich_nudge gère
+        const total = await countProspects(profile.id, false);    // taille de la liste pour le libellé
 
-        const outcome = await sendLifecycleEmail(supabase, profile, (name) => postAhaEmail(name, { count }), 'post_aha');
-        if (outcome === 'sent') { stats.post_aha.sent++; emailedThisRun.add(profile.id); }
+        const outcome = await sendLifecycleEmail(supabase, profile, (name) => postAhaEmail(name, { count: total }), 'post_aha');
+        if (outcome === 'sent') stats.post_aha.sent++;
         else if (outcome === 'failed') stats.post_aha.failed++;
         else stats.post_aha.skipped++;
         emailedThisRun.add(profile.id); // touché ce run (même si skip) → B3 ne doublonne pas

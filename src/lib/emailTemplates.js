@@ -1620,10 +1620,50 @@ export function upgradeSoftDay12Email(userName) {
 }
 
 /**
- * Post-aha (event-driven) — envoyé peu après la 1ère recherche réussie
- * (l'user a au moins 1 prospect). But : transformer le 1er résultat en
- * habitude + amorcer la boucle cross-module. Déclenché par le cron
- * lifecycle-triggers, idempotent via la clé drip 'post_aha'.
+ * Enrich-nudge (event-driven) — envoyé à un user qui a sorti des prospects
+ * mais N'A AUCUN email (il n'a jamais lancé l'enrichissement = le moment de
+ * valeur). But : débloquer l'action n°1 (récupérer les emails). Déclenché par
+ * le cron lifecycle-triggers AVANT post_aha, idempotent via 'enrich_nudge'.
+ */
+export function enrichNudgeEmail(userName, { count } = {}) {
+  const name = userName || 'là';
+  const ctaUrl = utmify('/dashboard', 'enrich_nudge');
+  const countLabel = count && count > 0 ? `${count.toLocaleString('fr-FR')} entreprises` : 'vos entreprises';
+  return {
+    subject: 'Vous avez les entreprises. Récupérez leurs emails.',
+    html: layout({
+      preheader: `${countLabel} sont là — il manque juste les emails. Un clic suffit.`,
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          emoji: '📧',
+          title: 'Il vous manque les emails',
+          greeting: `Bonjour ${name}, votre recherche a sorti ${countLabel}. Mais sans email, impossible de les contacter — et c'est là toute la valeur. Bonne nouvelle : Volia les trouve pour vous.`,
+        })}
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">Cliquez sur « Enrichir tout »</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia scanne chaque site + des sources publiques (cascade 7 sources) et remplit les emails manquants. En arrière-plan : fermez l'onglet, on vous prévient à la fin.</p>
+            </td>
+          </tr>
+        </table>
+
+        <div align="center">${ctaPrimary('Récupérer mes emails', ctaUrl)}</div>
+
+        ${signOff()}
+      `,
+    }),
+  };
+}
+
+/**
+ * Post-aha (event-driven) — envoyé une fois que l'user a trouvé au moins 1
+ * EMAIL (le vrai moment de valeur, pas juste une liste d'entreprises). But :
+ * transformer le 1er résultat en habitude + amorcer la boucle cross-module
+ * (enrichir le reste → contacter). Déclenché par le cron lifecycle-triggers
+ * APRÈS enrich_nudge, idempotent via la clé drip 'post_aha'.
  */
 export function postAhaEmail(userName, { count } = {}) {
   const name = userName || 'là';

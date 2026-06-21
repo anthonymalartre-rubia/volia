@@ -65,7 +65,6 @@ import { DEPTS } from "@/lib/constants";
 import { computeLeadScore, getScoreLabel } from "@/lib/scoring";
 import { useI18n } from "@/lib/i18n";
 import { Info } from "lucide-react";
-import OnboardingHint from "@/components/OnboardingHint";
 import Button from "@/components/ui/Button";
 // Modal Prospection → Campagnes (lazy : non-critique au render initial)
 const SendToCampagneModal = lazy(() => import("@/components/SendToCampagneModal"));
@@ -1038,10 +1037,38 @@ export default memo(function ResultsPanel({
       </div>
 
       {/* Onboarding hint: enrichment */}
-      {folderProspects.length > 0 && stats.emails === 0 && (
-        <OnboardingHint storageKey="hint_enrich_dismissed" dismissLabel={t('results.understood')}>
-          {t('results.hintEnrich')}
-        </OnboardingHint>
+      {/* Bloc "valeur n°1" — l'user a des entreprises mais AUCUN email : c'est
+          LA seule action qui débloque la valeur (le plus gros drop-off d'activation).
+          Proéminent + NON masquable (disparaît seul dès qu'au moins 1 email est
+          trouvé), avec le bouton « Enrichir tout » intégré. */}
+      {folderProspects.length > 0 && stats.emails === 0 && !isAnyEnriching && (
+        <div className="rounded-2xl border border-violet-500/40 bg-gradient-to-br from-violet-500/15 via-violet-500/5 to-indigo-500/5 p-4 sm:p-5 shadow-lg shadow-violet-500/5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-500/20 text-violet-300">
+              <Mail size={24} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-base font-bold text-content-primary">{t('results.enrichHintTitle')}</div>
+              <div className="text-sm text-content-secondary mt-1">
+                {t('results.enrichHintDesc', { count: prospectsWithoutEmail, sites: prospectsWithoutEmailWithSite })}
+              </div>
+            </div>
+            <Button
+              tone="violet"
+              icon={Zap}
+              onClick={() => onBulkEnrich?.(
+                activeFolder === 'all' ? null : activeFolder,
+                null,
+                null,
+                dmEnabled && hasDecisionMaker ? { decisionMaker: true, role: dmRole } : null
+              )}
+              disabled={prospectsWithoutEmail === 0}
+              className="shrink-0 w-full sm:w-auto min-h-[44px]"
+            >
+              {t('results.enrichAll', { count: prospectsWithoutEmail })}
+            </Button>
+          </div>
+        </div>
       )}
 
       {/* Toolbar */}
@@ -1330,7 +1357,7 @@ export default memo(function ResultsPanel({
       {/* Bannière "étape suivante : enrichir" — guide les nouveaux utilisateurs
           vers la récupération des emails (valeur n°1) juste après une recherche.
           S'affiche dès qu'il reste des prospects sans email ; masquable. */}
-      {!enrichHintDismissed && !isAnyEnriching && folderProspects.length > 0 && prospectsWithoutEmail > 0 && (
+      {!enrichHintDismissed && !isAnyEnriching && folderProspects.length > 0 && prospectsWithoutEmail > 0 && stats.emails > 0 && (
         <div className="flex items-center gap-3 rounded-xl border border-violet-500/30 bg-gradient-to-r from-violet-500/10 to-indigo-500/5 px-4 py-3">
           <div className="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
             <Mail size={18} />

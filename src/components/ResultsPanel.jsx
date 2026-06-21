@@ -1392,24 +1392,42 @@ export default memo(function ResultsPanel({
         </div>
       )}
 
-      {/* UX-3 : étape suivante après enrichissement → lancer une campagne.
-          Prend le relais de la bannière d'enrichissement une fois les emails
-          récupérés (plus de prospects sans email, et au moins 1 email). */}
-      {!campaignHintDismissed && !isAnyEnriching && folderProspects.length > 0
-        && prospectsWithoutEmail === 0 && stats.emails > 0 && (
-        <div className="flex items-center gap-3 rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-teal-500/5 px-4 py-3">
+      {/* UX-3 : étape suivante une fois des emails récupérés. CRM-FIRST (pivot
+          freemium) : le CRM est sans friction (zéro setup) et ouvert à tous →
+          action principale. La campagne exige un domaine d'envoi configuré →
+          option secondaire, présentée honnêtement. S'affiche dès >= 1 email. */}
+      {!campaignHintDismissed && !isAnyEnriching && folderProspects.length > 0 && stats.emails > 0 && (
+        <div className="flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-teal-500/5 px-4 py-3">
           <div className="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-500">
-            <Send size={18} />
+            <KanbanSquare size={18} />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold text-content-primary">{t('results.campaignHintTitle')}</div>
+            <div className="text-sm font-semibold text-content-primary">{t('results.crmHintTitle')}</div>
             <div className="text-xs text-content-tertiary mt-0.5">
-              {t('results.campaignHintDesc', { count: stats.emails })}
+              {t('results.crmHintDesc', { count: stats.emails })}
+            </div>
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
+              {onSendToCrm && hasCrmAccess && (
+                <Button
+                  tone="emerald"
+                  size="sm"
+                  icon={KanbanSquare}
+                  onClick={() => {
+                    const list = folderProspects.filter((p) => p.email);
+                    if (list.length) onSendToCrm({ prospects: list });
+                  }}
+                >
+                  {t('results.crmHintCta')}
+                </Button>
+              )}
+              <button
+                onClick={() => setShowCampagneModal(true)}
+                className="inline-flex items-center gap-1 text-xs font-medium text-violet-400 hover:text-violet-300 transition"
+              >
+                <Send size={12} /> {t('results.crmHintCampaign')}
+              </button>
             </div>
           </div>
-          <Button tone="emerald" size="sm" icon={Send} onClick={() => setShowCampagneModal(true)}>
-            {t('results.campaignHintCta')}
-          </Button>
           <button
             onClick={() => setCampaignHintDismissed(true)}
             className="shrink-0 p-1.5 rounded-md text-content-muted hover:text-content-primary hover:bg-surface-elevated transition"

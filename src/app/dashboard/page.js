@@ -1344,19 +1344,14 @@ export default function Dashboard() {
   }, [supabase]);
 
   // Phase 3 — Envoyer une sélection de prospects vers le CRM.
-  // - Si l'user a Business : ouvre SendToCrmModal avec la liste.
-  // - Sinon : ouvre UpgradeRequiredModal (gate unifié, CTA Business).
-  // Le bouton est rendu par ResultsPanel quand selectedIds.size > 0.
+  // Freemium (pivot 11/06/2026) : le CRM est ouvert à TOUS les plans — le
+  // différenciateur est le quota de pipelines/deals (enforced côté serveur),
+  // plus l'accès. On n'ouvre donc plus l'UpgradeRequiredModal : on envoie
+  // directement vers la modale CRM.
   const handleSendToCrm = useCallback(({ prospects: list }) => {
-    const hasBusinessAccess =
-      userPlan?.id === 'business' || userPlan?.id === 'enterprise';
-    if (!hasBusinessAccess) {
-      setUpgradeCrmOpen(true);
-      return;
-    }
     if (!Array.isArray(list) || list.length === 0) return;
     setSendToCrmList(list);
-  }, [userPlan]);
+  }, []);
 
   // CSV export with injection protection.
   // Signature : (filteredList?). On a retiré le param 'format' qui était
@@ -1636,7 +1631,7 @@ export default function Dashboard() {
                   onDeleteTag={deleteTag}
                   onToggleProspectTag={toggleProspectTag}
                   onSendToCrm={handleSendToCrm}
-                  hasCrmAccess={userPlan?.id === 'business' || userPlan?.id === 'enterprise'}
+                  hasCrmAccess={!!userPlan}
                 />
                 </>
               )}

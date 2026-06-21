@@ -299,6 +299,10 @@ const fr = {
     campaignHintTitle: 'Étape suivante : passez à l\'action',
     campaignHintDesc: '{{count}} prospects avec email, prêts à être contactés. Lancez une campagne en quelques clics.',
     campaignHintCta: 'Lancer une campagne',
+    crmHintTitle: 'Vos leads sont prêts. Rangez-les.',
+    crmHintDesc: '{{count}} contacts avec email. Créez vos deals dans le CRM en 1 clic : suivi pipeline, relances, zéro export.',
+    crmHintCta: 'Envoyer vers le CRM',
+    crmHintCampaign: 'Prêt à les contacter ? Lancez une campagne',
     // Enrichment buttons
     enrichBtn: 'Enrichir',
     enrichAll: 'Enrichir tout ({{count}})',

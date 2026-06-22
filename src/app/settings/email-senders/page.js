@@ -817,11 +817,16 @@ export default function EmailSendersPage() {
                   <DnsTable records={wizardCreated.dns_records} />
                 </div>
 
-                <details className="rounded-lg border border-line bg-surface-base">
+                <details className="rounded-lg border border-line bg-surface-base" open>
                   <summary className="cursor-pointer px-3 py-2 text-xs font-semibold text-content-secondary hover:bg-surface-elevated">
-                    Guides registrar (Infomaniak / OVH / Gandi / Cloudflare)
+                    📍 Où coller ces records ? Guide pas-à-pas par hébergeur
                   </summary>
                   <div className="px-3 py-3 border-t border-line space-y-2 text-xs text-content-tertiary">
+                    <p className="text-content-tertiary">
+                      Connectez-vous chez l&apos;hébergeur de votre <strong>domaine</strong> (là où vous
+                      l&apos;avez acheté), ouvrez la <strong>zone DNS</strong>, et ajoutez chaque record
+                      ci-dessus (Type + Host + Valeur, copiés à l&apos;identique).
+                    </p>
                     <p>
                       <strong className="text-content-secondary">Infomaniak :</strong>{' '}
                       Hébergement &gt; Domaines &gt; votre domaine &gt; Zone DNS &gt; Ajouter une entrée.
@@ -842,8 +847,35 @@ export default function EmailSendersPage() {
                       DNS &gt; Records &gt; Add record. <strong>Désactivez le « proxy »</strong>{' '}
                       (nuage gris) pour les records MX et TXT.
                     </p>
+                    <p>
+                      <strong className="text-content-secondary">IONOS :</strong>{' '}
+                      Menu Domaines &amp; SSL &gt; votre domaine &gt; DNS &gt; Ajouter un enregistrement.
+                    </p>
+                    <p>
+                      <strong className="text-content-secondary">GoDaddy :</strong>{' '}
+                      Mes produits &gt; Domaines &gt; DNS &gt; Ajouter un enregistrement. Pour le host,
+                      GoDaddy ajoute le domaine automatiquement (mettez juste la partie avant).
+                    </p>
+                    <p>
+                      <strong className="text-content-secondary">Squarespace / Google Domains :</strong>{' '}
+                      Paramètres &gt; Domaines &gt; DNS &gt; Ajouter un enregistrement personnalisé.
+                    </p>
                   </div>
                 </details>
+
+                {/* Porte de sortie humaine : la config DNS est LE point d'abandon
+                    des non-techniques → on propose de le faire avec eux. */}
+                <div className="rounded-lg border border-violet-500/25 bg-violet-500/5 p-3 text-xs text-content-secondary">
+                  Bloqué sur cette étape ? C&apos;est la seule un peu technique, et on la fait
+                  volontiers avec vous.{' '}
+                  <a
+                    href="mailto:contact@volia.fr?subject=Aide%20configuration%20domaine%20d'envoi"
+                    className="font-semibold text-violet-500 hover:text-violet-400 underline"
+                  >
+                    Écrivez-nous à contact@volia.fr
+                  </a>{' '}
+                  (ou envoyez-nous vos accès DNS), on configure votre domaine pour vous.
+                </div>
 
                 <div className="flex justify-end gap-2 pt-2">
                   <button

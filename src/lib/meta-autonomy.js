@@ -164,7 +164,7 @@ export async function generateRecommendations() {
   for (const m of metrics) {
     if (!summary[m.action_type]) {
       summary[m.action_type] = {
-        attempted: 0, succeeded: 0, failed: 0, skipped: 0,
+        attempted: 0, succeeded: 0, failed: 0, skipped: 0, pending: 0,
         cost: 0, value: 0,
       };
     }
@@ -172,6 +172,12 @@ export async function generateRecommendations() {
     summary[m.action_type].succeeded += m.succeeded;
     summary[m.action_type].failed += m.failed;
     summary[m.action_type].skipped += m.skipped;
+    // pending = actions en ATTENTE D'APPROBATION humaine (ni exécutées, ni
+    // échouées, ni skippées). Dérivé car non persisté en colonne. NE DOIT PAS
+    // compter comme un échec → sinon le success rate s'effondre à tort.
+    summary[m.action_type].pending += Math.max(
+      0, m.attempted - m.succeeded - m.failed - m.skipped,
+    );
     summary[m.action_type].cost += Number(m.est_cost_eur);
     summary[m.action_type].value += Number(m.est_value_eur);
   }
@@ -190,6 +196,19 @@ Type de reco :
 - OPTIMIZE : améliorer une boucle existante (low ROI, trop d'échecs, etc.)
 - KILL : supprimer une boucle qui consomme sans apporter
 - COMBINE : fusionner 2 boucles redondantes
+
+IMPORTANT — lecture des métriques :
+- "EN ATTENTE D'APPROBATION" = action générée par la boucle MAIS en file
+  d'approbation humaine (jamais exécutée car le founder ne l'a pas encore
+  validée). Ce N'EST PAS un échec : la boucle fonctionne, c'est l'humain qui
+  n'a pas tranché. NE recommande JAMAIS KILL sur la seule base d'un faible
+  success rate dû à des actions en attente. Si une boucle accumule des actions
+  en attente non traitées, recommande plutôt à l'humain de les approuver/rejeter
+  (ou d'auto-exécuter si le risque est faible). Le success rate fourni exclut
+  déjà les actions en attente.
+- "value" est un ESTIMÉ heuristique (pas du revenu réel) — à pondérer : Volia a
+  actuellement ~0 conversion payante. Ne survends pas un ROI de plusieurs
+  milliers de %.
 
 FORMAT JSON strict :
 {
@@ -210,8 +229,12 @@ FORMAT JSON strict :
 ${Object.entries(summary)
   .map(([type, s]) => {
     const roi = s.cost > 0 ? ((s.value - s.cost) / s.cost * 100).toFixed(0) : 'N/A';
-    const successRate = s.attempted > 0 ? ((s.succeeded / s.attempted) * 100).toFixed(0) : '0';
-    return `${type}: ${s.attempted} attempts (${successRate}% success, ${s.failed} fail, ${s.skipped} skip) | cost=${s.cost.toFixed(2)}€ value=${s.value.toFixed(2)}€ ROI=${roi}%`;
+    // Success rate sur les actions RÉSOLUES (exécutées/échouées/skippées),
+    // hors pending (en attente d'approbation humaine).
+    const resolved = s.attempted - s.pending;
+    const successRate = resolved > 0 ? ((s.succeeded / resolved) * 100).toFixed(0) : 'N/A';
+    const pendingNote = s.pending > 0 ? `, ${s.pending} EN ATTENTE D'APPROBATION (pas un échec)` : '';
+    return `${type}: ${s.attempted} attempts (${successRate}% success sur ${resolved} résolues, ${s.failed} fail, ${s.skipped} skip${pendingNote}) | cost=${s.cost.toFixed(2)}€ value=${s.value.toFixed(2)}€ ROI=${roi}%`;
   })
   .join('\n')}
 
@@ -290,10 +313,11 @@ export async function runWeeklyAutonomyReview() {
   let totalValue = 0;
   let totalAttempted = 0;
   let totalSucceeded = 0;
+  let totalPending = 0;
   for (const m of metrics || []) {
     if (!summary[m.action_type]) {
       summary[m.action_type] = {
-        attempted: 0, succeeded: 0, failed: 0, skipped: 0,
+        attempted: 0, succeeded: 0, failed: 0, skipped: 0, pending: 0,
         cost: 0, value: 0,
       };
     }
@@ -302,12 +326,16 @@ export async function runWeeklyAutonomyReview() {
     s.succeeded += m.succeeded;
     s.failed += m.failed;
     s.skipped += m.skipped;
+    // pending = en attente d'approbation humaine (dérivé, non persisté).
+    const mPending = Math.max(0, m.attempted - m.succeeded - m.failed - m.skipped);
+    s.pending += mPending;
     s.cost += Number(m.est_cost_eur);
     s.value += Number(m.est_value_eur);
     totalCost += Number(m.est_cost_eur);
     totalValue += Number(m.est_value_eur);
     totalAttempted += m.attempted;
     totalSucceeded += m.succeeded;
+    totalPending += mPending;
   }
 
   // 2. Génère recommendations Claude
@@ -315,7 +343,9 @@ export async function runWeeklyAutonomyReview() {
   const recos = recosRes.ok ? recosRes.recommendations : [];
 
   // 3. Build email HTML
-  const successRate = totalAttempted > 0 ? Math.round((totalSucceeded / totalAttempted) * 100) : 0;
+  // Success rate sur les actions RÉSOLUES (hors pending = en attente d'approbation).
+  const totalResolved = totalAttempted - totalPending;
+  const successRate = totalResolved > 0 ? Math.round((totalSucceeded / totalResolved) * 100) : 0;
   const roi = totalCost > 0 ? Math.round(((totalValue - totalCost) / totalCost) * 100) : 0;
 
   const html = `<!DOCTYPE html>
@@ -327,7 +357,8 @@ export async function runWeeklyAutonomyReview() {
     <p style="margin:0;font-size:13px;color:#5b21b6;text-transform:uppercase;letter-spacing:0.05em;">Vue d'ensemble</p>
     <p style="margin:8px 0 0;font-size:14px;color:#374151;">
       <strong>${totalAttempted}</strong> actions tentées<br>
-      <strong>${successRate}%</strong> success rate<br>
+      <strong>${successRate}%</strong> success rate (sur ${totalResolved} résolues)<br>
+      ${totalPending > 0 ? `<strong>${totalPending}</strong> en attente de ton approbation<br>` : ''}
       Coût estimé : <strong>${totalCost.toFixed(2)}€</strong><br>
       Valeur estimée : <strong>${totalValue.toFixed(2)}€</strong><br>
       ROI : <strong style="color:${roi > 0 ? '#10b981' : '#ef4444'};">${roi}%</strong>
@@ -341,6 +372,7 @@ export async function runWeeklyAutonomyReview() {
         <th style="padding:6px;text-align:left;border:1px solid #e5e7eb;">Boucle</th>
         <th style="padding:6px;text-align:right;border:1px solid #e5e7eb;">Tent.</th>
         <th style="padding:6px;text-align:right;border:1px solid #e5e7eb;">OK%</th>
+        <th style="padding:6px;text-align:right;border:1px solid #e5e7eb;">Attente</th>
         <th style="padding:6px;text-align:right;border:1px solid #e5e7eb;">Coût</th>
         <th style="padding:6px;text-align:right;border:1px solid #e5e7eb;">Val.</th>
       </tr>
@@ -349,11 +381,13 @@ export async function runWeeklyAutonomyReview() {
       ${Object.entries(summary)
         .sort((a, b) => b[1].value - a[1].value)
         .map(([type, s]) => {
-          const sr = s.attempted > 0 ? Math.round((s.succeeded / s.attempted) * 100) : 0;
+          const resolved = s.attempted - s.pending;
+          const sr = resolved > 0 ? `${Math.round((s.succeeded / resolved) * 100)}%` : '—';
           return `<tr>
             <td style="padding:6px;border:1px solid #e5e7eb;font-family:monospace;">${type}</td>
             <td style="padding:6px;border:1px solid #e5e7eb;text-align:right;">${s.attempted}</td>
-            <td style="padding:6px;border:1px solid #e5e7eb;text-align:right;">${sr}%</td>
+            <td style="padding:6px;border:1px solid #e5e7eb;text-align:right;">${sr}</td>
+            <td style="padding:6px;border:1px solid #e5e7eb;text-align:right;">${s.pending || '—'}</td>
             <td style="padding:6px;border:1px solid #e5e7eb;text-align:right;">${s.cost.toFixed(2)}€</td>
             <td style="padding:6px;border:1px solid #e5e7eb;text-align:right;">${s.value.toFixed(2)}€</td>
           </tr>`;

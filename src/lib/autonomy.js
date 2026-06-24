@@ -153,6 +153,20 @@ export function autonomyDisabledResponse(actionDescription) {
  * @param {string} [options.userId] - user concerné (NULL si global Volia)
  * @returns {Promise<{id: string, status: string}>}
  */
+// Types de contenu "de confiance" AUTO-PUBLIÉS sans approbation humaine
+// (décision 24/06/2026 — option B). Insérés directement en status='approved' :
+// le cron publish-approved-actions les exécute (LinkedIn via publishOn,
+// blog/changelog = INSERT). Restent soumis au master kill-switch (le cron
+// vérifie isAutonomyEnabled) + à l'exécuteur réel (LinkedIn skip proprement si
+// le publisher n'est pas configuré dans /admin/publishers).
+// Pour repasser un type en validation MANUELLE → le retirer de cette liste.
+export const AUTO_APPROVE_ACTION_TYPES = new Set([
+  'blog_post_draft',
+  'changelog_entry',
+  'linkedin_post',
+  'linkedin_founder_post',
+]);
+
 export async function logAutonomousAction({
   actionType,
   source,
@@ -174,14 +188,22 @@ export async function logAutonomousAction({
     );
   }
 
-  // Calcul expires_at (auto-cancel si pas approuvé à temps)
+  // Calcul expires_at (auto-cancel si pas approuvé à temps ; sans effet sur
+  // les actions auto-approuvées, le cancel ne cible que 'pending').
   const expiresAt = expiresInHours
     ? new Date(Date.now() + expiresInHours * 3600 * 1000).toISOString()
     : null;
 
-  // Status initial : 'executed' si autoExecute + low, sinon 'pending'
-  const initialStatus = autoExecute && riskLevel === 'low' ? 'executed' : 'pending';
+  // Status initial :
+  //  - autoExecute + low → 'executed' (consommée inline, hors publish cron)
+  //  - type de confiance → 'approved' (le cron publish-approved-actions publie)
+  //  - sinon → 'pending' (file d'approbation humaine)
+  let initialStatus;
+  if (autoExecute && riskLevel === 'low') initialStatus = 'executed';
+  else if (AUTO_APPROVE_ACTION_TYPES.has(actionType)) initialStatus = 'approved';
+  else initialStatus = 'pending';
   const executedAt = initialStatus === 'executed' ? new Date().toISOString() : null;
+  const approvedAt = initialStatus === 'approved' ? new Date().toISOString() : null;
 
   const { data, error } = await supabase
     .from('autonomous_actions')
@@ -195,6 +217,7 @@ export async function logAutonomousAction({
       rationale,
       expires_at: expiresAt,
       executed_at: executedAt,
+      approved_at: approvedAt,
       user_id: userId,
     })
     .select('id, status')

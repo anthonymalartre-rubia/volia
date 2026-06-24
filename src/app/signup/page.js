@@ -27,7 +27,7 @@ function GoogleIcon() {
 function getPasswordStrength(password) {
   if (!password) return { score: 0, label: '', color: '' };
   let score = 0;
-  if (password.length >= 6) score++;
+  if (password.length >= 8) score++;
   if (password.length >= 10) score++;
   if (/[A-Z]/.test(password)) score++;
   if (/[0-9]/.test(password)) score++;
@@ -68,7 +68,9 @@ export default function SignupPage() {
   }
   function validatePassword(val) {
     if (!val) return 'Mot de passe requis';
-    if (val.length < 6) return 'Minimum 6 caractères';
+    // Aligné sur la règle serveur (/api/auth/signup rejette < 8) : on refuse
+    // dès le form pour ne pas produire une erreur APRÈS le clic.
+    if (val.length < 8) return 'Minimum 8 caractères';
     return null;
   }
 
@@ -180,6 +182,15 @@ export default function SignupPage() {
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
+    // Pré-validation : ne jamais envoyer une requête vouée à l'échec serveur
+    // (le serveur exige >= 8 caractères). On affiche l'erreur inline AVANT le
+    // round-trip réseau, plutôt qu'un « erreur serveur » générique après le clic.
+    const emailErr = validateEmail(email);
+    const pwErr = validatePassword(password);
+    if (emailErr || pwErr) {
+      setFieldErrors((p) => ({ ...p, email: emailErr, password: pwErr }));
+      return;
+    }
     setLoading(true);
 
     try {
@@ -394,7 +405,7 @@ export default function SignupPage() {
                 setFieldErrors((p) => ({ ...p, password: err }));
               }}
               required
-              minLength={6}
+              minLength={8}
               autoComplete="new-password"
               placeholder={t('auth.passwordPlaceholder')}
               leadingIcon={Lock}

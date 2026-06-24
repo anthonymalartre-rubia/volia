@@ -22,6 +22,7 @@ import { markdownToBasicHtml } from './faq-reply-drafter';
 const MAX_PER_RUN = 5;
 const ELIGIBLE_ACTION_TYPES = [
   'linkedin_post',
+  'linkedin_founder_post', // posts founder (payload.linkedin) — gérés par la branche LinkedIn par défaut
   'github_issue_create',
   'faq_reply_proposal',
   'changelog_entry',

@@ -657,22 +657,6 @@ const en = {
       pricing: 'Pricing',
       faq: 'FAQ',
     },
-    // Hero
-    hero: {
-      // 80/20 repositioning (May 2026): lead generation first, modules as bonus.
-      badge: 'B2B email + phone generator · €19/mo',
-      title: 'Find B2B emails and phone numbers in 30 seconds.',
-      titleLine2: 'The French B2B lead generator.',
-      subtitle: '150+ B2B categories, 101 French departments, waterfall scraping — <strong class="text-content-primary">email + landline & mobile phone</strong>. Starting at <strong class="text-content-primary">€19/mo. No credit card.</strong>',
-      price: '€19/mo to start. Cancel anytime, one click.',
-      compare: 'Watch a demo',
-      sourcesLabel: 'Integrated sources:',
-      trustStrip: '150+ industries × 101 departments · email + phone scraped · Made in France · GDPR by default',
-      ctaPrimary: 'Start for free',
-      ctaSecondary: 'Watch a demo',
-      // Subtle mention of bonus modules for max plan
-      bonusBusiness: 'Campaigns + CRM + Forms included from the Free plan — unlimited on MAX.',
-    },
     // Why aggregator
     why: {
       label: 'Why an aggregator?',

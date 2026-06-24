@@ -148,14 +148,15 @@ export default function LandingContent() {
                 <span className="text-amber-800 font-bold">⚡ NOUVEAU · VOLIA AUTOPILOT — PIPELINE B2B AUTO</span>
               </div>
 
-              {/* H1 PIVOT — Volia devient le pipeline auto end-to-end.
-                  Ancien H1 "Trouvez emails et téléphones B2B" → pivoté vers
-                  "Ton pipeline B2B en autopilot" (juin 2026).
-                  La promesse n'est plus juste lead-gen, c'est le pipeline complet. */}
+              {/* H1 — bénéfice concret pour un visiteur froid (juin 2026).
+                  L'ancien "Ton pipeline B2B. En autopilot." était trop abstrait :
+                  un froid ne savait pas CE QUE fait Volia. On nomme le résultat
+                  observable (pipeline rempli) + le bénéfice (zéro prospection
+                  manuelle), tout en gardant l'esprit automatisation. */}
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
-                <span className="text-content-primary">Ton pipeline B2B.</span>
+                <span className="text-content-primary">Remplis ton pipeline B2B</span>
                 <br />
-                <span className="bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">En autopilot.</span>
+                <span className="bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">sans prospecter à la main.</span>
               </h1>
 
               {/* Sous-titre — pitch Autopilot complet en 1 phrase.
@@ -193,18 +194,6 @@ export default function LandingContent() {
                   <Play size={18} className="text-violet-600 fill-violet-600" />
                   Voir une démo
                 </DemoVideoButton>
-              </div>
-
-              {/* CTA tertiaire — booking démo perso founder.
-                  Masqué sur mobile (le widget chat + la section démo le couvrent déjà,
-                  évite un 3ᵉ CTA concurrent dans le hero). */}
-              <div className="hidden sm:block mb-8">
-                <BookDemoButton
-                  label="Tu veux me parler ? 15 min."
-                  variant="ghost"
-                  size="sm"
-                  source="landing_hero"
-                />
               </div>
 
               {/* Trust strip sous hero — 4 signaux factuels (couverture = tout le tissu B2B FR).

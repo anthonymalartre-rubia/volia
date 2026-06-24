@@ -659,26 +659,6 @@ const fr = {
       pricing: 'Pricing',
       faq: 'FAQ',
     },
-    // Hero
-    hero: {
-      // Repositioning 80/20 (mai 2026) : focus génération de leads en clair.
-      // Pivot freemium 06/2026 : les 3 autres modules (Campagnes/CRM/
-      // Formulaires) sont inclus dès le plan Gratuit (avec limites),
-      // illimités en MAX 179 € — mentionné discrètement sous le hero.
-      badge: 'Générateur email + téléphone B2B · 19 €/mois',
-      title: 'Trouvez emails et téléphones B2B en 30 secondes.',
-      titleLine2: 'Le générateur de leads B2B français.',
-      subtitle: '150+ catégories, 101 départements, scraping cascade <strong class="text-content-primary">email + téléphone fixe & mobile</strong>. À partir de <strong class="text-content-primary">19 €/mois. Sans CB.</strong>',
-      price: '19 €/mois pour démarrer. Annulation en 1 clic.',
-      compare: 'Voir une démo',
-      sourcesLabel: 'Sources intégrées :',
-      // Trust strip sous le hero — focus lead gen, modules en bonus
-      trustStrip: '150+ catégories × 101 départements · email + téléphone scrappés · Made in France · RGPD by default',
-      ctaPrimary: 'Démarrer gratuitement',
-      ctaSecondary: 'Voir une démo',
-      // Mention discrète des modules bonus pour le plan max
-      bonusBusiness: 'Campagnes + CRM + Formulaires inclus dès le plan Gratuit — illimités avec MAX.',
-    },
     // Why aggregator
     why: {
       label: 'Pourquoi un agrégateur',

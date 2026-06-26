@@ -38,6 +38,7 @@ RÈGLES (DGCCRF + délivrabilité) :
 - 70 à 120 mots, 3 paragraphes courts : accroche personnalisée → bénéfice concret pour le destinataire → CTA léger (proposer un échange de 15 min).
 - Interdits : "gratuit", "urgent", "cliquez ici", "garanti", "offre limitée", pas de MAJUSCULES sur des mots entiers, pas de "!!!".
 - Si CTA, mentionne en une demi-phrase la base RGPD (intérêt légitime B2B).
+- L'objet (≤ 55 caractères) doit être SPÉCIFIQUE au destinataire : cite le nom de son entreprise OU un bénéfice concret pour lui. JAMAIS un objet générique réutilisable tel quel pour une autre boîte (évite "… à {ville}").
 
 SORTIE : commence par "Objet: ..." puis une ligne vide puis le corps. Pas de signature.`;
 

@@ -20,6 +20,22 @@ function hostOf(url) {
   }
 }
 
+// TLD "normaux" pour lesquels un guess contact@domaine est plausible. Exclut les
+// brand-gTLD bizarres (ex. e.leclerc → TLD "leclerc") qui donnaient des emails faux.
+const GUESS_TLDS = new Set([
+  'fr', 'com', 'net', 'org', 'eu', 'info', 'biz', 'io', 'co',
+  're', 'mq', 'gp', 'gf', 'yt', 'pm', 'nc', 'pf', 'wf',
+  'be', 'ch', 'lu', 'paris',
+]);
+
+function guessEmail(siteWeb) {
+  const h = hostOf(siteWeb);
+  if (!h || !h.includes('.')) return { email: '', method: 'none' };
+  const tld = h.split('.').pop().toLowerCase();
+  if (!GUESS_TLDS.has(tld)) return { email: '', method: 'none' };
+  return { email: `contact@${h}`, method: 'guess' };
+}
+
 async function placesSearch(query) {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   if (!apiKey) return [];
@@ -85,14 +101,28 @@ export async function buildFromDomain(domain, opts = {}) {
       return found;
     })
   );
-  // dédup par place_id, garde ceux avec site web (enrichissables)
+  // dédup par place_id + garde ceux avec site web, puis ÉQUILIBRE par cible
+  // (round-robin entre les termes) pour ne pas que le 1er terme mange tout le quota.
   const seen = new Set();
-  const candidates = perTerm.flat().filter((c) => {
-    if (!c.place_id || seen.has(c.place_id)) return false;
-    seen.add(c.place_id);
-    return true;
-  });
-  const withSite = candidates.filter((c) => c.site_web).slice(0, enrichLimit);
+  const perTermWithSite = perTerm.map((arr) =>
+    arr.filter((c) => {
+      if (!c.place_id || !c.site_web || seen.has(c.place_id)) return false;
+      seen.add(c.place_id);
+      return true;
+    })
+  );
+  const withSite = [];
+  for (let row = 0; withSite.length < enrichLimit; row++) {
+    let addedThisRow = false;
+    for (const arr of perTermWithSite) {
+      if (arr[row]) {
+        withSite.push(arr[row]);
+        addedThisRow = true;
+        if (withSite.length >= enrichLimit) break;
+      }
+    }
+    if (!addedThisRow) break;
+  }
 
   // ③ Enrichissement email (parallèle ; réutilise la waterfall prod)
   await Promise.allSettled(
@@ -103,14 +133,10 @@ export async function buildFromDomain(domain, opts = {}) {
           c.email = r.email;
           c.method = r.method;
         } else {
-          const h = hostOf(c.site_web);
-          c.email = h ? `contact@${h}` : '';
-          c.method = h ? 'guess' : 'none';
+          Object.assign(c, guessEmail(c.site_web));
         }
       } catch {
-        const h = hostOf(c.site_web);
-        c.email = h ? `contact@${h}` : '';
-        c.method = h ? 'guess' : 'none';
+        Object.assign(c, guessEmail(c.site_web));
       }
     })
   );

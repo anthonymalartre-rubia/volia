@@ -118,7 +118,7 @@ const PERSONAS = {
     ],
     useCases: [
       { title: 'Sourcing ciblé', desc: 'Cherche les boîtes qui matchent ton expertise : agences (designers), e-commerce (devs), industries (consultants).' },
-      { title: 'Cold email perso qui marche', desc: 'Templating + 20 modèles testés sur 50 000 envois. Inclus dans le PDF gratuit. Pas un truc générique.' },
+      { title: 'Cold email perso qui marche', desc: 'Templating + 20 modèles cold email prêts à copier. Inclus dans le PDF gratuit. Pas un truc générique.' },
       { title: 'Zéro engagement', desc: 'Annule en 1 clic le mois où ton carnet est plein. Reprends 6 mois plus tard. Personne te rappelle.' },
       { title: 'Compatible CRM léger', desc: 'Export CSV pour Notion, Airtable, Trello. Ou direct dans Volia. Pas besoin de payer HubSpot.' },
     ],

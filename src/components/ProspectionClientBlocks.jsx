@@ -81,7 +81,7 @@ export function LeadMagnetBlock({ category }) {
           Téléchargez 20 templates cold email B2B pour {sectorLabel}
         </h3>
         <p className="text-sm text-content-secondary mb-5 leading-relaxed">
-          PDF de 30 pages : intros qui taquinent la curiosité, accroches qui s&apos;adressent vraiment au secteur, lignes d&apos;objet à fort taux d&apos;ouverture. Testé sur 50 000+ envois.
+          PDF de 30 pages : intros qui taquinent la curiosité, accroches qui s&apos;adressent vraiment au secteur, lignes d&apos;objet à fort taux d&apos;ouverture.
         </p>
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
           <input

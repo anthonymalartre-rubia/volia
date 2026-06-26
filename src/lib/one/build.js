@@ -9,6 +9,8 @@
 
 import { PLACES_API_URL, FIELD_MASK } from '@/lib/constants';
 import { enrichWaterfall } from '@/lib/enrich-waterfall-core';
+import { enrichDecisionMaker } from '@/lib/decision-maker-core';
+import { isEmailDeliverable } from '@/lib/email-verify';
 import { inferIcp } from '@/lib/one/icp';
 import { draftEmail } from '@/lib/one/draft';
 
@@ -85,7 +87,9 @@ function localPart(email) {
 
 function fitScore(l) {
   let s = 0;
-  if (l.email && l.method === 'scrape') s += 50;
+  // Décideur vérifié (email nominatif zéro-bounce) = le meilleur contact possible.
+  if (l.email && l.method === 'decision_maker') s += 60;
+  else if (l.email && l.method === 'scrape') s += 50;
   else if (l.email && l.method === 'serper') s += 40;
   else if (l.email) s += 15;
   // Bonus "décideur" : on remonte les boîtes de direction et les emails
@@ -108,7 +112,16 @@ function fitScore(l) {
  * @returns {Promise<{icp, leads:Array}>}
  */
 export async function buildFromDomain(domain, opts = {}) {
-  const { enrichLimit = 12, draftLimit = 5, maxResults = 20 } = opts;
+  const {
+    enrichLimit = 12,
+    draftLimit = 5,
+    maxResults = 20,
+    // Découverte décideur (Serper LinkedIn + email vérifié zéro-bounce). COÛTEUX
+    // (1 Serper + jusqu'à 2 vérifs / lead) → réservé aux appels connectés (cf.
+    // /api/one/run), jamais sur le chemin anonyme gratuit.
+    findDecisionMakers = false,
+    dmRole = 'direction',
+  } = opts;
 
   // ① ICP
   const icp = await inferIcp(domain);
@@ -159,6 +172,33 @@ export async function buildFromDomain(domain, opts = {}) {
       } catch {
         Object.assign(c, guessEmail(c.site_web));
       }
+
+      // ③bis Upgrade décideur (connectés uniquement) : si on trouve un décideur
+      // nominatif avec email VÉRIFIÉ (zéro-bounce), il remplace l'email générique.
+      // Best-effort : en cas d'échec, on garde l'email normal trouvé ci-dessus.
+      if (findDecisionMakers) {
+        const host = hostOf(c.site_web);
+        if (host) {
+          try {
+            const dm = await enrichDecisionMaker({
+              companyName: c.nom,
+              domain: host,
+              role: dmRole,
+              verifyEmail: isEmailDeliverable,
+              maxToVerify: 2,
+            });
+            if (dm?.email) {
+              c.email = dm.email;
+              c.method = 'decision_maker';
+              c.contact_name = dm.fullName;
+              c.contact_role = dm.title || dm.role;
+              c.linkedin = dm.linkedinUrl || null;
+            }
+          } catch {
+            /* best-effort : on conserve l'email normal */
+          }
+        }
+      }
     })
   );
 
@@ -178,9 +218,12 @@ export async function buildFromDomain(domain, opts = {}) {
 
   const counts = {
     total: ranked.length,
-    email_verified: ranked.filter((l) => l.method === 'scrape' || l.method === 'serper').length,
+    email_verified: ranked.filter(
+      (l) => l.method === 'scrape' || l.method === 'serper' || l.method === 'decision_maker'
+    ).length,
     email_guessed: ranked.filter((l) => l.method === 'guess').length,
     with_phone: ranked.filter((l) => l.telephone).length,
+    decision_makers: ranked.filter((l) => l.method === 'decision_maker').length,
   };
 
   return { icp, leads: ranked, counts };

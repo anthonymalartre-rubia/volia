@@ -89,7 +89,9 @@ export async function POST(request) {
   const sendable = [];
   for (const l of leads) {
     if (!l || !l.email || !l.draft) continue;
-    if (l.method !== 'scrape' && l.method !== 'serper') continue;
+    // Emails envoyables : trouvés sur site (scrape), via Google (serper), ou
+    // décideur vérifié zéro-bounce (decision_maker). Jamais les emails devinés.
+    if (l.method !== 'scrape' && l.method !== 'serper' && l.method !== 'decision_maker') continue;
     const email = String(l.email).trim().toLowerCase();
     if (!email.includes('@') || seenEmail.has(email)) continue;
     const parsed = parseDraft(l.draft);

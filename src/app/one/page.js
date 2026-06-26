@@ -40,6 +40,7 @@ function OneInner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [needSignup, setNeedSignup] = useState(false);
+  const [needUpgrade, setNeedUpgrade] = useState(false); // crédits épuisés (connecté)
   const [data, setData] = useState(null);
   const [openIdx, setOpenIdx] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -48,6 +49,7 @@ function OneInner() {
   const [launchedCampaignId, setLaunchedCampaignId] = useState(null);
   const [statusData, setStatusData] = useState(null);
   const [campaigns, setCampaigns] = useState([]); // historique des envois Volia One (connectés)
+  const [runs, setRuns] = useState([]); // analyses persistées (connectés)
 
   async function loadCampaigns() {
     try {
@@ -59,8 +61,38 @@ function OneInner() {
       /* silencieux */
     }
   }
+  async function loadRuns() {
+    try {
+      const r = await fetch('/api/one/runs');
+      if (!r.ok) return; // 401 anonyme → pas d'analyses persistées
+      const j = await r.json();
+      setRuns(j.runs || []);
+    } catch {
+      /* silencieux */
+    }
+  }
+  // Rouvre une analyse persistée SANS la relancer (donc sans re-consommer de crédits)
+  async function openRun(id) {
+    if (loading) return;
+    setError(null);
+    setNeedSignup(false);
+    setOpenIdx(null);
+    setLaunchMsg(null);
+    setLaunchedCampaignId(null);
+    setStatusData(null);
+    try {
+      const r = await fetch(`/api/one/runs?id=${id}`);
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.error || 'Analyse introuvable');
+      setDomain(j.run.domain || '');
+      setData({ icp: j.run.icp, leads: j.run.leads, counts: j.run.counts });
+    } catch (err) {
+      setError(err.message || 'Erreur');
+    }
+  }
   useEffect(() => {
     loadCampaigns();
+    loadRuns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -77,6 +109,7 @@ function OneInner() {
     setLoading(true);
     setError(null);
     setNeedSignup(false);
+    setNeedUpgrade(false);
     setData(null);
     setOpenIdx(null);
     setLaunchMsg(null);
@@ -93,10 +126,13 @@ function OneInner() {
         const code = json.error;
         if (code === 'rate_limit_exceeded' || code === 'global_quota_exceeded' || code === 'one_unavailable') {
           setNeedSignup(true);
+        } else if (code === 'credits_exhausted') {
+          setNeedUpgrade(true);
         }
         throw new Error(json.message || json.error || 'Erreur');
       }
       setData(json);
+      loadRuns(); // la nouvelle analyse apparaît dans l'historique (connectés)
     } catch (err) {
       setError(err.message || 'Erreur');
     } finally {
@@ -206,6 +242,26 @@ function OneInner() {
           ~20-40s : scrape du site, déduction ICP, recherche Places, enrichissement, rédaction.
         </p>
 
+        {/* Analyses persistées — rouvrir sans relancer (donc sans re-consommer de crédits) */}
+        {runs.length > 0 && (
+          <div className="max-w-xl mx-auto mb-6">
+            <div className="text-xs uppercase tracking-wide text-content-tertiary mb-2">Tes analyses récentes</div>
+            <ul className="space-y-1.5">
+              {runs.map((r) => (
+                <li key={r.id}>
+                  <button
+                    onClick={() => openRun(r.id)}
+                    className="w-full text-left rounded-lg border border-line px-3 py-2 text-sm text-content-secondary hover:bg-surface-elevated transition-colors"
+                  >
+                    <span className="text-content-primary">{r.domain}</span>
+                    <span className="text-content-tertiary"> · {r.counts?.total || 0} leads</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         {/* Historique des envois Volia One (utilisateurs connectés) */}
         {campaigns.length > 0 && (
           <div className="max-w-xl mx-auto mb-6">
@@ -275,6 +331,14 @@ function OneInner() {
                 </a>
               </>
             )}
+            {needUpgrade && (
+              <>
+                {' '}
+                <a href="/pricing" className="underline font-medium">
+                  Recharger des crédits
+                </a>
+              </>
+            )}
           </div>
         )}
 
@@ -299,6 +363,9 @@ function OneInner() {
               <span><strong className="text-content-primary">{data.counts?.with_phone}</strong> avec tél</span>
               {data.counts?.decision_makers > 0 && (
                 <span><strong className="text-content-primary">{data.counts.decision_makers}</strong> décideurs</span>
+              )}
+              {data.credits_charged != null && (
+                <span className="text-content-tertiary">· {data.credits_charged} crédit{data.credits_charged > 1 ? 's' : ''} utilisé{data.credits_charged > 1 ? 's' : ''}</span>
               )}
               <div className="ml-auto">
                 <button

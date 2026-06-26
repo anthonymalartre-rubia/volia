@@ -3,106 +3,145 @@
 // (dossier "run" et non "build" : "build" est ignoré par .gitignore)
 // ─────────────────────────────────────────────────────────────────────
 // Body: { domain }
-// PUBLIC (anonyme autorisé) — c'est le "wow" Volia One sans mur d'inscription.
-// Borné en coût : rate-limit par IP (3/jour) + cap global (150/jour) via Upstash.
-// L'ENVOI réel reste sur /api/one/launch (login + domaine vérifié, jamais ici).
-// Renvoie { success, icp, leads, counts, remaining_today }.
+// Deux régimes :
+//   • ANONYME  → PUBLIC, borné par rate-limit IP (3/j) + cap global (150/j)
+//     via Upstash. Pas de crédits, pas de persistance, pas de décideur.
+//   • CONNECTÉ → gated par les CRÉDITS Prospection (enrichments), pas par l'IP.
+//     1 crédit / lead avec email réel (= 1 contact ramené). Découverte décideur
+//     activée. Run persisté (volia_one_runs) → rouvrable au rechargement.
+// L'ENVOI réel reste sur /api/one/launch.
+// Renvoie { success, icp, leads, counts, ... }.
 // ─────────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
 import { getRedis, getClientIP, oneIpRateLimiter, oneGlobalRateLimiter } from '@/lib/upstash';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { checkLimit, incrementUsage } from '@/lib/usage';
 import { buildFromDomain } from '@/lib/one/build';
 
 // Le pipeline (Places + enrich + Claude) dépasse les 10s par défaut.
 export const maxDuration = 60;
 
-export async function POST(request) {
-  // ① Redis configuré ? (sinon dégradation propre — pas de run non borné)
-  const redis = getRedis();
-  if (!redis) {
-    return NextResponse.json(
-      {
-        error: 'one_unavailable',
-        message:
-          'Volia One est temporairement indisponible. Inscris-toi (gratuit, sans CB) pour accéder à toutes les fonctionnalités.',
-      },
-      { status: 503 }
-    );
-  }
+const VERIFIED_METHODS = ['scrape', 'serper', 'decision_maker'];
 
-  // ② Valider l'input AVANT de consommer un crédit IP (body coûteux)
+export async function POST(request) {
+  // ① Valider l'input AVANT de consommer crédit ou rate-limit
   const { domain } = await request.json().catch(() => ({}));
   if (!domain || typeof domain !== 'string' || domain.length > 120) {
     return NextResponse.json({ error: 'Domaine requis (string, < 120 car.)' }, { status: 400 });
   }
 
-  // ③ Rate-limit par IP (3 runs/jour) + cap global (150/jour)
-  //    Défense : si un limiter ne s'initialise pas (Redis indispo entre-temps),
-  //    on dégrade en 503 plutôt que de crasher sur null.limit().
-  const ipLimiter = oneIpRateLimiter();
-  const globalLimiter = oneGlobalRateLimiter();
-  if (!ipLimiter || !globalLimiter) {
-    return NextResponse.json(
-      { error: 'one_unavailable', message: 'Volia One est temporairement indisponible. Réessaie plus tard.' },
-      { status: 503 }
-    );
-  }
-  const ip = getClientIP(request);
-  const ipResult = await ipLimiter.limit(ip);
-  if (!ipResult.success) {
-    const resetSec = Math.ceil((ipResult.reset - Date.now()) / 1000);
-    return NextResponse.json(
-      {
-        error: 'rate_limit_exceeded',
-        message:
-          "Tu as atteint la limite gratuite du jour. Crée un compte (gratuit, sans carte) pour continuer.",
-        remaining_today: 0,
-        reset_in_seconds: resetSec,
-      },
-      {
-        status: 429,
-        headers: {
-          'Retry-After': String(resetSec),
-          'X-RateLimit-Remaining': '0',
-          'X-RateLimit-Reset': String(ipResult.reset),
-        },
-      }
-    );
-  }
-
-  // ④ Cap global (150 runs/jour — plafond dur anti bombe-à-coûts)
-  const globalResult = await globalLimiter.limit('global');
-  if (!globalResult.success) {
-    return NextResponse.json(
-      {
-        error: 'global_quota_exceeded',
-        message:
-          "Volia One est très demandé aujourd'hui. Réessaie demain, ou crée un compte gratuit.",
-      },
-      { status: 503 }
-    );
-  }
-
-  // ⑤ Build. La découverte décideur (Serper + vérif zéro-bounce, coûteuse) n'est
-  //    activée que pour les utilisateurs CONNECTÉS — l'anonyme garde la version
-  //    gratuite (scrape/serper/guess). Best-effort : si l'auth échoue, anonyme.
-  let isLoggedIn = false;
+  // ② Qui appelle ?
+  let user = null;
+  let supabase = null;
   try {
-    const { user } = await getAuthenticatedUser();
-    isLoggedIn = !!user;
+    ({ user, supabase } = await getAuthenticatedUser());
   } catch {
     /* anonyme */
   }
 
+  // ③ Régime CONNECTÉ : gating par crédits (enrichments). Pas de rate-limit IP.
+  if (user) {
+    let credit;
+    try {
+      credit = await checkLimit(supabase, user.id, 'enrichments');
+    } catch {
+      credit = { allowed: true }; // ne pas bloquer sur une erreur de lecture quota
+    }
+    if (!credit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'credits_exhausted',
+          message:
+            'Crédits épuisés pour ce mois. Recharge des crédits ou passe à un plan supérieur pour continuer.',
+        },
+        { status: 402 }
+      );
+    }
+  } else {
+    // ③bis Régime ANONYME : Redis + rate-limit IP/global (borne le coût)
+    const redis = getRedis();
+    if (!redis) {
+      return NextResponse.json(
+        {
+          error: 'one_unavailable',
+          message:
+            'Volia One est temporairement indisponible. Inscris-toi (gratuit, sans CB) pour accéder à toutes les fonctionnalités.',
+        },
+        { status: 503 }
+      );
+    }
+    const ipLimiter = oneIpRateLimiter();
+    const globalLimiter = oneGlobalRateLimiter();
+    if (!ipLimiter || !globalLimiter) {
+      return NextResponse.json(
+        { error: 'one_unavailable', message: 'Volia One est temporairement indisponible. Réessaie plus tard.' },
+        { status: 503 }
+      );
+    }
+    const ip = getClientIP(request);
+    const ipResult = await ipLimiter.limit(ip);
+    if (!ipResult.success) {
+      const resetSec = Math.ceil((ipResult.reset - Date.now()) / 1000);
+      return NextResponse.json(
+        {
+          error: 'rate_limit_exceeded',
+          message: 'Tu as atteint la limite gratuite du jour. Crée un compte (gratuit, sans carte) pour continuer.',
+          remaining_today: 0,
+          reset_in_seconds: resetSec,
+        },
+        { status: 429, headers: { 'Retry-After': String(resetSec), 'X-RateLimit-Remaining': '0' } }
+      );
+    }
+    const globalResult = await globalLimiter.limit('global');
+    if (!globalResult.success) {
+      return NextResponse.json(
+        {
+          error: 'global_quota_exceeded',
+          message: "Volia One est très demandé aujourd'hui. Réessaie demain, ou crée un compte gratuit.",
+        },
+        { status: 503 }
+      );
+    }
+  }
+
+  // ④ Build (découverte décideur réservée aux connectés)
   try {
-    const result = await buildFromDomain(domain, { findDecisionMakers: isLoggedIn });
-    return NextResponse.json({
-      success: true,
-      ...result,
-      remaining_today: ipResult.remaining,
-      decision_makers_enabled: isLoggedIn,
-    });
+    const result = await buildFromDomain(domain, { findDecisionMakers: !!user });
+
+    // ⑤ Connecté : facturation en crédits + persistance du run (best-effort,
+    //    ne jamais faire échouer la réponse là-dessus).
+    if (user && supabase) {
+      const creditsCharged = (result.leads || []).filter(
+        (l) => l.email && VERIFIED_METHODS.includes(l.method)
+      ).length;
+      if (creditsCharged > 0) {
+        try {
+          await incrementUsage(supabase, user.id, 'enrichments', creditsCharged);
+        } catch (e) {
+          console.warn('[one/run] incrementUsage failed:', e?.message);
+        }
+      }
+      try {
+        const { data: row } = await supabase
+          .from('volia_one_runs')
+          .insert({
+            owner_id: user.id,
+            domain,
+            icp: result.icp,
+            leads: result.leads,
+            counts: result.counts,
+          })
+          .select('id')
+          .single();
+        if (row?.id) result.run_id = row.id;
+      } catch (e) {
+        console.warn('[one/run] persist run failed:', e?.message);
+      }
+      result.credits_charged = creditsCharged;
+    }
+
+    return NextResponse.json({ success: true, ...result, decision_makers_enabled: !!user });
   } catch (e) {
     console.error('[one/run] échec:', e?.message || e);
     return NextResponse.json({ error: e?.message || 'Erreur Volia One' }, { status: 500 });

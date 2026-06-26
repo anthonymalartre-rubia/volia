@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Check, X, Zap, ArrowRight, TrendingDown, Award, Shield, Globe, AlertTriangle, LogOut } from 'lucide-react';
-import { TestimonialsBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
+import { ResourceTeaserBlock } from '@/components/MarketingBlocks';
 import { LogoIcon } from '@/components/ui';
 
 /**
@@ -280,13 +280,6 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
           subtitle="20 templates cold email + checklist warmup domaine. Tu reprends tes envois en 24h sans perte de délivrabilité. PDF 30 pages, gratuit."
           resourceSlug="templates-cold-email-b2b-fr"
           cta="Je récupère le guide"
-        />
-
-        {/* Témoignages de migration (réutilise le pool, focus B2B) */}
-        <TestimonialsBlock
-          limit={3}
-          title={`Ils ont quitté ${competitor.name} pour Volia. Voilà pourquoi.`}
-          subtitle="Commerciaux et fondateurs B2B qui ont fait le switch. Témoignages bruts, pas filtrés."
         />
 
         {/* CTA */}

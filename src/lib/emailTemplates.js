@@ -1317,13 +1317,13 @@ export function templateKillerDay3Email(userName) {
   return {
     subject: 'Le template cold email qui marche le mieux en France',
     html: layout({
-      preheader: '8-12% de taux de réponse. Le subject line le plus performant testé sur 50k emails B2B FR.',
+      preheader: 'Le template cold email B2B qui revient le plus souvent chez nos utilisateurs.',
       accent: COLORS.brand,
       content: `
         ${hero({
           emoji: '✉️',
           title: `${name}, voici LE template qui convertit`,
-          greeting: `Notre équipe a analysé <strong style="color:${COLORS.text};">50 000 cold emails B2B</strong> envoyés via Volia ces 6 derniers mois. Un template ressort très clairement : <strong style="color:${COLORS.text};">8 à 12% de taux de réponse</strong>.`,
+          greeting: `Parmi les cold emails B2B envoyés via Volia, un template revient souvent en tête côté réponses. Le voici.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">

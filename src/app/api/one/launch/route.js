@@ -20,6 +20,8 @@
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { getEffectivePlan } from '@/lib/trial';
+import { PLANS } from '@/lib/plans';
 
 export const maxDuration = 30;
 
@@ -47,17 +49,14 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Authentification requise' }, { status: 401 });
   }
 
+  // Plan effectif (pour le quota d'envoi). Plus de gate admin : l'envoi est
+  // ouvert à tout utilisateur connecté AYANT un domaine vérifié, borné par le
+  // quota emails du plan (free 200 → MAX 10 000 / mois, appliqué aussi par le cron).
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('is_admin')
+    .select('plan, trial_plan, trial_ends_at, trial_converted_at')
     .eq('id', user.id)
     .maybeSingle();
-  if (!profile?.is_admin) {
-    return NextResponse.json(
-      { error: 'Réservé admin pendant la phase de test Volia One.' },
-      { status: 403 }
-    );
-  }
 
   const { domain, icp, leads } = await request.json().catch(() => ({}));
   if (!domain || typeof domain !== 'string' || !Array.isArray(leads) || leads.length === 0) {
@@ -114,6 +113,37 @@ export async function POST(request) {
       },
       { status: 400 }
     );
+  }
+
+  // ②bis Quota d'envoi mensuel (même base que le hard-cap du cron). On refuse
+  //      proprement si épuisé, et on PLAFONNE au reste disponible (le cron reste
+  //      le backstop, mais autant être transparent côté UI).
+  const planId = getEffectivePlan(profile);
+  const monthlyLimit = PLANS[planId]?.limits?.emails_sent_per_month ?? 0;
+  let cappedTo = null;
+  if (monthlyLimit !== -1) {
+    const month = new Date().toISOString().slice(0, 7); // YYYY-MM
+    const { data: usageRow } = await supabase
+      .from('usage_tracking')
+      .select('emails_sent')
+      .eq('user_id', user.id)
+      .eq('month', month)
+      .maybeSingle();
+    const used = usageRow?.emails_sent || 0;
+    const remaining = Math.max(0, monthlyLimit - used);
+    if (remaining <= 0) {
+      return NextResponse.json(
+        {
+          error: 'email_quota_exceeded',
+          message: `Quota d'emails atteint pour ce mois (${monthlyLimit}/mois sur le plan ${PLANS[planId]?.name || planId}). Passe à un plan supérieur pour envoyer davantage.`,
+        },
+        { status: 402 }
+      );
+    }
+    if (sendable.length > remaining) {
+      sendable.length = remaining; // plafonne au reste disponible
+      cappedTo = remaining;
+    }
   }
 
   const stamp = new Date().toISOString().slice(0, 16).replace('T', ' ');
@@ -212,5 +242,6 @@ export async function POST(request) {
     list_id: list.id,
     queued: sendsPayload.length,
     sender_domain: sender.domain,
+    capped_to: cappedTo,
   });
 }

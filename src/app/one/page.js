@@ -114,14 +114,16 @@ function OneInner() {
       if (!res.ok) {
         let text = json.message || json.error || 'Échec du lancement';
         if (res.status === 401) text = 'Connecte-toi (gratuit) pour lancer ta campagne.';
-        else if (res.status === 403) text = "L'envoi automatique est en accès anticipé pour l'instant.";
         throw new Error(text);
       }
       setConfirmOpen(false);
       setLaunchedCampaignId(json.campaign_id);
+      const cappedNote = json.capped_to != null
+        ? ` (plafonné à ${json.capped_to} selon ton quota du mois)`
+        : '';
       setLaunchMsg({
         ok: true,
-        text: `${json.queued} email${json.queued > 1 ? 's' : ''} en file — envoi depuis ${json.sender_domain} dans les minutes qui suivent.`,
+        text: `${json.queued} email${json.queued > 1 ? 's' : ''} en file — envoi depuis ${json.sender_domain} dans les minutes qui suivent${cappedNote}.`,
       });
     } catch (err) {
       setLaunchMsg({ ok: false, text: err.message || 'Échec du lancement' });
@@ -256,6 +258,14 @@ function OneInner() {
                     {' '}
                     <a href="/signup" className="underline font-medium">
                       Créer un compte
+                    </a>
+                  </>
+                )}
+                {!launchMsg.ok && launchMsg.text.toLowerCase().includes('plan') && (
+                  <>
+                    {' '}
+                    <a href="/pricing" className="underline font-medium">
+                      Voir les plans
                     </a>
                   </>
                 )}

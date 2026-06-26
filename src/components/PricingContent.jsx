@@ -221,6 +221,10 @@ const FAQ_PRICING = [
     a: 'Oui : le plan Gratuit est à vie, sans carte bancaire (25 crédits/mois et tous les modules avec limites — Prospection, Campagnes, CRM, Formulaires, Project). Vous montez en gamme quand vous voulez (Prospection ou MAX), jamais de prélèvement automatique sans votre accord explicite.',
   },
   {
+    q: 'C\'est quoi un crédit, exactement ?',
+    a: '1 crédit = 1 contact B2B ramené (email + téléphone d\'une entreprise). Le plan Gratuit en donne 25/mois, Prospection 500, MAX 2 000. Un crédit n\'est consommé que quand on vous trouve un contact — jamais pour une recherche à vide.',
+  },
+  {
     q: 'Je peux changer de plan quand je veux ?',
     a: 'Oui, en 1 clic depuis les paramètres. Upgrade ou downgrade, le pro-rata se calcule tout seul — vous payez juste la différence du mois en cours.',
   },
@@ -955,7 +959,7 @@ export default function PricingContent() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
                 <Link
-                  href={`/signup?plan=max&period=${period}`}
+                  href="/signup"
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg w-full sm:w-auto"
                 >
                   Démarrer gratuitement <ArrowRight size={14} />

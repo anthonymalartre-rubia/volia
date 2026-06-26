@@ -312,6 +312,16 @@ export default function SignupPage() {
           </p>
         </div>
 
+        {/* Réassurance freemium quand l'user arrive sans plan (trafic froid) */}
+        {!selectedPlan && (
+          <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/5 px-3 py-2 text-xs">
+            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+            <span className="text-content-secondary">
+              <strong className="text-content-primary">Gratuit, sans carte bancaire</strong> — 25 crédits offerts pour tester.
+            </span>
+          </div>
+        )}
+
         {/* Bandeau "plan sélectionné" si l'user vient d'une card pricing */}
         {selectedPlan && (
           <div className="flex items-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/5 px-3 py-2 text-xs">

@@ -113,6 +113,18 @@ async function scrapeForEmail(url) {
   return null;
 }
 
+// Filtre anti-bruit pour les emails extraits de snippets Serper : domaines de
+// tracking (sentry.wixpress.com…), local-parts d'1 caractère collées à un
+// numéro de tel, etc. Complète le look-behind d'EMAIL_REGEX.
+function isCleanSerperEmail(e) {
+  const [local, dom] = (e || '').split('@');
+  if (!local || !dom || local.length < 2) return false;
+  if (PERSONAL_DOMAINS.has(dom) || dom === 'example.com') return false;
+  if (/sentry|wixpress|cloudflare|gstatic|googleapis|\.wix\./.test(dom)) return false;
+  if (local.includes('noreply') || local.includes('mailer-daemon')) return false;
+  return true;
+}
+
 async function serperEnrich(name, domain) {
   const apiKey = process.env.SERPER_API_KEY;
   if (!apiKey) return null;
@@ -130,13 +142,12 @@ async function serperEnrich(name, domain) {
     if (!res.ok) return null;
     const data = await res.json();
     const allText = (data.organic || []).map((r) => `${r.title || ''} ${r.snippet || ''}`).join(' ');
-    const emailRegex = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
-    const foundEmails = [...new Set((allText.match(emailRegex) || []).map((e) => e.toLowerCase()))];
-    const domainEmails = domain ? foundEmails.filter((e) => e.includes(domain)) : [];
-    const bestEmail = domainEmails[0] || foundEmails.find((e) => {
-      const emailDomain = e.split('@')[1];
-      return !PERSONAL_DOMAINS.has(emailDomain) && emailDomain !== 'example.com';
-    });
+    // EMAIL_REGEX (look-behind) + filtre anti-bruit : évite "..42contact@" et
+    // les domaines de tracking que la regex naïve laissait passer.
+    const foundEmails = [...new Set((allText.match(EMAIL_REGEX) || []).map((e) => e.toLowerCase()))]
+      .filter(isCleanSerperEmail);
+    const domainEmails = domain ? foundEmails.filter((e) => e.split('@')[1].includes(domain)) : [];
+    const bestEmail = domainEmails[0] || foundEmails[0];
     if (bestEmail) return { email: bestEmail, source: 'serper' };
   } catch { /* serper best-effort */ }
   return null;

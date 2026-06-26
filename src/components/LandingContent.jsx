@@ -13,6 +13,7 @@ import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import MobileNavMenu from '@/components/MobileNavMenu';
 import { BuiltForProfilesBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
+import VoliaOneTeaser from '@/components/VoliaOneTeaser';
 import TrustpilotReviewsBlock from '@/components/TrustpilotReviewsBlock';
 import { LogoIcon } from '@/components/ui';
 import TrustpilotBadge from '@/components/TrustpilotBadge';
@@ -1190,6 +1191,9 @@ export default function LandingContent() {
       {/* Preuve sociale (témoignages + Trustpilot) retirée tant qu'il n'y a pas
           de vrais avis clients sourçables (accord écrit). À réintégrer via
           Trustpilot quand de vrais avis existent. */}
+
+      {/* Volia One — teaser "entre ton domaine" (route vers /one, sans fetch ici) */}
+      <VoliaOneTeaser />
 
       {/* Lead magnet teaser — capture les hésitants sur le PDF gratuit */}
       <section className="py-12 px-4 sm:px-6">

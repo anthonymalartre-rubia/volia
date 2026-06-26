@@ -837,6 +837,13 @@ const fr = {
       desc: 'Scraping + Google, scoring IA, 150+ catégories, 101 départements. Un seul outil.',
       sub: '30 secondes pour créer le compte. Pas de carte bancaire.',
     },
+    voliaOne: {
+      label: 'Nouveau · Volia One',
+      title: 'Entre ton domaine, vois tes prospects',
+      desc: 'Ton site → on déduit ta cible, on trouve des entreprises à démarcher en France (email + téléphone) et on rédige un cold email pour chacune. Gratuit, sans carte.',
+      placeholder: 'ton-domaine.fr',
+      button: 'Voir mes prospects',
+    },
     // Footer
     footer: {
       cgu: 'CGU',

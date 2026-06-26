@@ -1,12 +1,15 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// /one — Volia One (Phase 1, banc de test admin)
+// /one — Volia One (public)
 // Tape un domaine → ICP déduit → leads FR (email+tél) → emails rédigés.
-// La route /api/one/build est admin-only.
+//   - /api/one/run  : PUBLIC, rate-limité (le "wow" sans inscription)
+//   - /api/one/launch : envoi RÉEL, gardé (login + domaine vérifié)
+// Supporte ?domain=… (auto-lance), et un feed d'activité live après envoi.
 // ─────────────────────────────────────────────────────────────────────
 
-import { useState, Fragment } from 'react';
+import { Suspense, useState, useEffect, useRef, Fragment } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const methodBadge = {
   scrape: { label: 'vérifié (site)', cls: 'bg-emerald-500/15 text-emerald-600' },
@@ -15,15 +18,34 @@ const methodBadge = {
   none: { label: '—', cls: 'bg-surface-elevated text-content-tertiary' },
 };
 
-export default function VoliaOnePage() {
+// Statut d'un lead dans le feed d'activité (après "Tout lancer")
+const statusBadge = {
+  pending: { label: 'en file', cls: 'bg-surface-elevated text-content-tertiary' },
+  sent: { label: 'envoyé', cls: 'bg-blue-500/15 text-blue-600' },
+  delivered: { label: 'délivré', cls: 'bg-sky-500/15 text-sky-600' },
+  opened: { label: 'ouvert', cls: 'bg-violet-500/15 text-violet-600' },
+  clicked: { label: 'cliqué', cls: 'bg-fuchsia-500/15 text-fuchsia-600' },
+  replied: { label: 'répondu', cls: 'bg-emerald-500/15 text-emerald-600' },
+  bounced: { label: 'rejeté', cls: 'bg-amber-500/15 text-amber-600' },
+  failed: { label: 'échec', cls: 'bg-red-500/15 text-red-600' },
+};
+const FEED_ORDER = ['pending', 'sent', 'delivered', 'opened', 'clicked', 'replied', 'bounced', 'failed'];
+
+function OneInner() {
+  const sp = useSearchParams();
+  const autoRan = useRef(false);
+
   const [domain, setDomain] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  const [needSignup, setNeedSignup] = useState(false);
   const [data, setData] = useState(null);
   const [openIdx, setOpenIdx] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [launching, setLaunching] = useState(false);
   const [launchMsg, setLaunchMsg] = useState(null); // { ok, text }
+  const [launchedCampaignId, setLaunchedCampaignId] = useState(null);
+  const [statusData, setStatusData] = useState(null);
 
   // Leads réellement envoyables : email fiable (site/Google) + email rédigé.
   // (mêmes critères que la route /api/one/launch côté serveur)
@@ -31,15 +53,18 @@ export default function VoliaOnePage() {
     (l) => l.draft && l.email && (l.method === 'scrape' || l.method === 'serper')
   );
 
-  async function run(e) {
-    e?.preventDefault();
-    const d = domain.trim();
+  async function run(e, domainOverride) {
+    e?.preventDefault?.();
+    const d = (typeof domainOverride === 'string' ? domainOverride : domain).trim();
     if (!d || loading) return;
     setLoading(true);
-    setError('');
+    setError(null);
+    setNeedSignup(false);
     setData(null);
     setOpenIdx(null);
     setLaunchMsg(null);
+    setLaunchedCampaignId(null);
+    setStatusData(null);
     try {
       const res = await fetch('/api/one/run', {
         method: 'POST',
@@ -47,7 +72,13 @@ export default function VoliaOnePage() {
         body: JSON.stringify({ domain: d }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Erreur');
+      if (!res.ok) {
+        const code = json.error;
+        if (code === 'rate_limit_exceeded' || code === 'global_quota_exceeded' || code === 'one_unavailable') {
+          setNeedSignup(true);
+        }
+        throw new Error(json.message || json.error || 'Erreur');
+      }
       setData(json);
     } catch (err) {
       setError(err.message || 'Erreur');
@@ -55,6 +86,18 @@ export default function VoliaOnePage() {
       setLoading(false);
     }
   }
+
+  // Auto-lance si on arrive avec ?domain= (depuis le teaser landing)
+  useEffect(() => {
+    if (autoRan.current) return;
+    const d = sp.get('domain');
+    if (d) {
+      autoRan.current = true;
+      setDomain(d);
+      run(null, d);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sp]);
 
   async function launch() {
     if (launching || !data || sendable.length === 0) return;
@@ -67,8 +110,14 @@ export default function VoliaOnePage() {
         body: JSON.stringify({ domain: domain.trim(), icp: data.icp, leads: data.leads }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.message || json.error || 'Échec du lancement');
+      if (!res.ok) {
+        let text = json.message || json.error || 'Échec du lancement';
+        if (res.status === 401) text = 'Connecte-toi (gratuit) pour lancer ta campagne.';
+        else if (res.status === 403) text = "L'envoi automatique est en accès anticipé pour l'instant.";
+        throw new Error(text);
+      }
       setConfirmOpen(false);
+      setLaunchedCampaignId(json.campaign_id);
       setLaunchMsg({
         ok: true,
         text: `${json.queued} email${json.queued > 1 ? 's' : ''} en file — envoi depuis ${json.sender_domain} dans les minutes qui suivent.`,
@@ -80,17 +129,42 @@ export default function VoliaOnePage() {
     }
   }
 
+  // Feed d'activité live : poll le statut de la campagne après lancement
+  useEffect(() => {
+    if (!launchedCampaignId) return;
+    let active = true;
+    let polls = 0;
+    const tick = async () => {
+      polls += 1;
+      try {
+        const r = await fetch(`/api/one/status?campaign_id=${launchedCampaignId}`);
+        if (!active) return;
+        const j = await r.json();
+        if (r.ok) setStatusData(j);
+      } catch {
+        /* on retentera au prochain tick */
+      }
+      if (polls >= 60) clearInterval(iv); // ~5 min de feed live puis stop
+    };
+    tick();
+    const iv = setInterval(tick, 5000);
+    return () => {
+      active = false;
+      clearInterval(iv);
+    };
+  }, [launchedCampaignId]);
+
   return (
     <div className="min-h-screen bg-surface-base px-4 py-12">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 text-xs font-medium mb-4">
-            Volia One · banc de test
+            Volia One
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-content-primary mb-2">
             Entre ton domaine
           </h1>
-          <p className="text-content-secondary">Je recherche ta boîte et je trouve à qui vendre.</p>
+          <p className="text-content-secondary">Je trouve à qui vendre, et je rédige le 1er email. Gratuit.</p>
         </div>
 
         <form onSubmit={run} className="flex gap-2 max-w-xl mx-auto mb-2">
@@ -115,6 +189,14 @@ export default function VoliaOnePage() {
         {error && (
           <div className="max-w-xl mx-auto rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 px-4 py-3 text-sm">
             {error}
+            {needSignup && (
+              <>
+                {' '}
+                <a href="/signup" className="underline font-medium">
+                  Créer un compte gratuit
+                </a>
+              </>
+            )}
           </div>
         )}
 
@@ -165,6 +247,45 @@ export default function VoliaOnePage() {
                     </a>
                   </>
                 )}
+                {!launchMsg.ok && launchMsg.text.toLowerCase().includes('connecte-toi') && (
+                  <>
+                    {' '}
+                    <a href="/signup" className="underline font-medium">
+                      Créer un compte
+                    </a>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Feed d'activité live (après lancement) */}
+            {statusData && (
+              <div className="rounded-xl border border-line bg-surface-card p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="text-xs uppercase tracking-wide text-content-tertiary">Activité en direct</div>
+                  <div className="flex items-center gap-1.5 text-xs text-content-tertiary">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    live
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {FEED_ORDER.filter((k) => (statusData.stats?.[k] || 0) > 0).map((k) => (
+                    <span key={k} className={`px-2.5 py-1 rounded-md text-xs font-medium ${statusBadge[k].cls}`}>
+                      {statusData.stats[k]} {statusBadge[k].label}
+                    </span>
+                  ))}
+                </div>
+                <ul className="divide-y divide-line/60">
+                  {(statusData.leads || []).map((l, i) => {
+                    const b = statusBadge[l.status] || statusBadge.pending;
+                    return (
+                      <li key={i} className="flex items-center justify-between py-2 text-sm">
+                        <span className="text-content-secondary">{l.email}</span>
+                        <span className={`px-1.5 py-0.5 rounded text-[11px] ${b.cls}`}>{b.label}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             )}
 
@@ -251,5 +372,13 @@ export default function VoliaOnePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function VoliaOnePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface-base" />}>
+      <OneInner />
+    </Suspense>
   );
 }

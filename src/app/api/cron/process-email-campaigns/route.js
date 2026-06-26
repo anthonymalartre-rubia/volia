@@ -128,7 +128,7 @@ async function handleCron(request) {
   const nowIso = new Date().toISOString();
   const { data: sends, error: fetchErr } = await supabase
     .from('email_sends')
-    .select('id, campaign_id, contact_id, email')
+    .select('id, campaign_id, contact_id, email, subject_override, body_override')
     .eq('status', 'pending')
     .or(`scheduled_for.is.null,scheduled_for.lte.${nowIso}`)
     .order('created_at', { ascending: true })
@@ -457,8 +457,15 @@ async function handleCron(request) {
 
     // Templating + spintax : {a|b|c} résolu par destinataire → variété d'envoi
     // (moins de "même mail 500x" = meilleure réputation/délivrabilité).
-    const subject = expandSpintax(applyTemplate(rawSubject, contact, ''));
-    let html = expandSpintax(applyTemplate(campaign.body_html, contact, ''));
+    // Volia One : si le send porte un objet/corps pré-rédigés (voix du client),
+    // on les envoie tels quels (pas de template/spintax partagé). Sinon →
+    // comportement campagne standard (template + spintax).
+    const subject = send.subject_override
+      ? send.subject_override
+      : expandSpintax(applyTemplate(rawSubject, contact, ''));
+    let html = send.body_override
+      ? send.body_override
+      : expandSpintax(applyTemplate(campaign.body_html, contact, ''));
 
     // Ajoute le lien opt-out RGPD
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://volia.fr';

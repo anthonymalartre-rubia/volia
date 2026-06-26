@@ -4,7 +4,7 @@ import { getAllCompetitors } from '@/lib/competitors';
 import { breadcrumbSchema } from '@/lib/seo-helpers';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
-import { TestimonialsBlock, ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
+import { ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
 
 export const metadata = {
   title: 'Tous les outils de prospection B2B en 2026 — Volia',
@@ -179,13 +179,6 @@ export default function OutilsIndex() {
           <div className="mb-12">
             <CompetitorMiniBlock />
           </div>
-
-          {/* Témoignages */}
-          <TestimonialsBlock
-            limit={3}
-            title="Pourquoi ils ont choisi Volia"
-            subtitle="Vu de l'intérieur — feedbacks de commerciaux et fondateurs B2B."
-          />
 
           {/* Lead magnet */}
           <ResourceTeaserBlock

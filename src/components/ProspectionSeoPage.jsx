@@ -15,7 +15,7 @@ import {
   MarketSizeBlock, KpiBlock, PersonaBlock, SeasonalityBlock, BestApproachBlock,
   PitchBlock, ObjectionBlock, GlossaryBlock, PainPointsBlock, TopRegionsBlock,
   DeptContextBlock, RegionContextBlock, DeptOverviewBlock, SiblingCitiesBlock,
-  SocialProofBlock, CompetitorInlineBlock, AuthoritiesBlock,
+  CompetitorInlineBlock, AuthoritiesBlock,
   TrustBadgesBlock, DemoCtaBlock, SamplePreviewBlock, DensityChartBlock,
   InseeStatsBlock, FlagshipCompaniesBlock,
 } from './ProspectionContentBlocks';
@@ -197,7 +197,6 @@ export default function ProspectionSeoPage({
         <TrustBadgesBlock />
 
         {/* Social proof juste après les stats — moment de confiance */}
-        <SocialProofBlock department={department} region={region} category={category} />
 
         {/* Sample preview produit (5 entreprises anonymisées) — pousse signup */}
         <div id="apercu" className="scroll-mt-24">

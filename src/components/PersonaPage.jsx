@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Check, Zap, AlertTriangle, Target, BarChart3, Shield, Star } from 'lucide-react';
-import { TestimonialsBlock, ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
+import { ResourceTeaserBlock, CompetitorMiniBlock } from '@/components/MarketingBlocks';
 import { getAllPersonas } from '@/lib/personas';
 import { LogoIcon } from '@/components/ui';
 
@@ -141,17 +141,9 @@ export default function PersonaPage({ persona }) {
           </section>
         )}
 
-        {/* Testimonials filtrés sur le secteur de ce persona */}
-        <TestimonialsBlock
-          sector={persona.testimonialSector}
-          limit={3}
-          title="Ils te ressemblent. Ils utilisent Volia."
-          subtitle="Profils basés sur des feedbacks NPS internes. Pas inventés."
-        />
-
         {/* Lead magnet */}
         <ResourceTeaserBlock
-          title="20 templates cold email B2B. Testés sur 50 000 envois."
+          title="20 templates cold email B2B prêts à copier."
           subtitle="Le PDF gratuit pour démarrer tes campagnes sans te poser de questions : intros, objets, séquences en 3 touches."
         />
 

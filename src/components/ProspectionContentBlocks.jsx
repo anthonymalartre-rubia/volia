@@ -317,7 +317,7 @@ export function PitchBlock({ data, category }) {
           <Quote size={22} className="text-violet-400 flex-shrink-0" />
           <div>
             <h2 className="text-lg font-bold mb-1">Exemple d&apos;accroche cold email</h2>
-            <p className="text-xs text-content-secondary">Adapté au profil {category?.label || 'cible'} — testé sur 1 000+ envois.</p>
+            <p className="text-xs text-content-secondary">Adapté au profil {category?.label || 'cible'}.</p>
           </div>
         </div>
         <blockquote className="rounded-xl border border-line bg-surface-base/30 p-4 text-sm text-content-secondary leading-relaxed italic">
@@ -666,7 +666,6 @@ export function SamplePreviewBlock({ category, department, stats }) {
               <tr>
                 <th className="text-left px-4 py-3 font-semibold">Entreprise</th>
                 <th className="text-left px-4 py-3 font-semibold">Localité</th>
-                <th className="text-center px-4 py-3 font-semibold">Note</th>
                 <th className="text-center px-4 py-3 font-semibold hidden sm:table-cell">Email</th>
                 <th className="text-center px-4 py-3 font-semibold hidden sm:table-cell">Téléphone</th>
               </tr>
@@ -679,10 +678,6 @@ export function SamplePreviewBlock({ category, department, stats }) {
                     <div className="text-[10px] text-content-tertiary mt-0.5">ID #{(1000 + i + offset).toString(36).toUpperCase()}</div>
                   </td>
                   <td className="px-4 py-3 text-content-secondary">{s.city}</td>
-                  <td className="px-4 py-3 text-center">
-                    <span className="text-amber-700 font-medium tabular-nums">★ {s.rating}</span>
-                    <div className="text-[10px] text-content-tertiary tabular-nums">{s.reviews} avis</div>
-                  </td>
                   <td className="px-4 py-3 text-center hidden sm:table-cell">
                     {s.hasEmail ? (
                       <span className="inline-block px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 text-[10px] font-mono select-none" style={{ filter: 'blur(3px)' }}>

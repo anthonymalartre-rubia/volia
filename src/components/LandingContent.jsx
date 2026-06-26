@@ -12,7 +12,7 @@ import DemoVideoButton from '@/components/DemoVideoButton';
 import { useI18n, useForceLocale } from '@/lib/i18n';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import MobileNavMenu from '@/components/MobileNavMenu';
-import { TestimonialsBlock, BuiltForProfilesBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
+import { BuiltForProfilesBlock, ResourceTeaserBlock } from '@/components/MarketingBlocks';
 import TrustpilotReviewsBlock from '@/components/TrustpilotReviewsBlock';
 import { LogoIcon } from '@/components/ui';
 import TrustpilotBadge from '@/components/TrustpilotBadge';
@@ -1187,24 +1187,15 @@ export default function LandingContent() {
           dès l'arrivée. */}
 
       {/* Pricing */}
-      {/* Testimonials — rassure avant la décision d'achat */}
-      <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line">
-        <TestimonialsBlock />
-        {/* Bloc Trustpilot — affiché uniquement si activé (Business Unit
-            ID set + au moins 1 avis dans trustpilot-data.js). En attendant,
-            les TestimonialsBlock ci-dessus prennent le relais.
-            Masqué sur mobile : 2 blocs de preuve sociale à la suite = trop
-            long (~4 écrans). Sur mobile, TestimonialsBlock suffit. */}
-        <div className="hidden md:block">
-          <TrustpilotReviewsBlock />
-        </div>
-      </section>
+      {/* Preuve sociale (témoignages + Trustpilot) retirée tant qu'il n'y a pas
+          de vrais avis clients sourçables (accord écrit). À réintégrer via
+          Trustpilot quand de vrais avis existent. */}
 
       {/* Lead magnet teaser — capture les hésitants sur le PDF gratuit */}
       <section className="py-12 px-4 sm:px-6">
         <ResourceTeaserBlock
           title="Pas prêt à signer ? Récupérez 20 templates cold email B2B"
-          subtitle="PDF 30 pages : intros qui taquinent, lignes d'objet à fort taux d'ouverture, séquences en 3 touches. Testé sur 50 000 envois."
+          subtitle="PDF 30 pages : intros qui taquinent, lignes d'objet à fort taux d'ouverture, séquences en 3 touches."
         />
       </section>
 

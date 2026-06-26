@@ -11,6 +11,7 @@
 
 import { NextResponse } from 'next/server';
 import { getRedis, getClientIP, oneIpRateLimiter, oneGlobalRateLimiter } from '@/lib/upstash';
+import { getAuthenticatedUser } from '@/lib/auth';
 import { buildFromDomain } from '@/lib/one/build';
 
 // Le pipeline (Places + enrich + Claude) dépasse les 10s par défaut.
@@ -83,10 +84,25 @@ export async function POST(request) {
     );
   }
 
-  // ⑤ Build (anonyme : buildFromDomain n'a besoin d'aucun contexte user)
+  // ⑤ Build. La découverte décideur (Serper + vérif zéro-bounce, coûteuse) n'est
+  //    activée que pour les utilisateurs CONNECTÉS — l'anonyme garde la version
+  //    gratuite (scrape/serper/guess). Best-effort : si l'auth échoue, anonyme.
+  let isLoggedIn = false;
   try {
-    const result = await buildFromDomain(domain);
-    return NextResponse.json({ success: true, ...result, remaining_today: ipResult.remaining });
+    const { user } = await getAuthenticatedUser();
+    isLoggedIn = !!user;
+  } catch {
+    /* anonyme */
+  }
+
+  try {
+    const result = await buildFromDomain(domain, { findDecisionMakers: isLoggedIn });
+    return NextResponse.json({
+      success: true,
+      ...result,
+      remaining_today: ipResult.remaining,
+      decision_makers_enabled: isLoggedIn,
+    });
   } catch (e) {
     console.error('[one/run] échec:', e?.message || e);
     return NextResponse.json({ error: e?.message || 'Erreur Volia One' }, { status: 500 });

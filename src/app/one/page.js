@@ -12,6 +12,7 @@ import { Suspense, useState, useEffect, useRef, Fragment } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 const methodBadge = {
+  decision_maker: { label: 'décideur ✓', cls: 'bg-violet-600/15 text-violet-700' },
   scrape: { label: 'vérifié (site)', cls: 'bg-emerald-500/15 text-emerald-600' },
   serper: { label: 'trouvé (Google)', cls: 'bg-blue-500/15 text-blue-600' },
   guess: { label: 'deviné', cls: 'bg-amber-500/15 text-amber-600' },
@@ -50,7 +51,7 @@ function OneInner() {
   // Leads réellement envoyables : email fiable (site/Google) + email rédigé.
   // (mêmes critères que la route /api/one/launch côté serveur)
   const sendable = (data?.leads || []).filter(
-    (l) => l.draft && l.email && (l.method === 'scrape' || l.method === 'serper')
+    (l) => l.draft && l.email && (l.method === 'scrape' || l.method === 'serper' || l.method === 'decision_maker')
   );
 
   async function run(e, domainOverride) {
@@ -219,6 +220,9 @@ function OneInner() {
               <span><strong className="text-content-primary">{data.counts?.email_verified}</strong> emails fiables</span>
               <span><strong className="text-content-primary">{data.counts?.email_guessed}</strong> devinés</span>
               <span><strong className="text-content-primary">{data.counts?.with_phone}</strong> avec tél</span>
+              {data.counts?.decision_makers > 0 && (
+                <span><strong className="text-content-primary">{data.counts.decision_makers}</strong> décideurs</span>
+              )}
               <div className="ml-auto">
                 <button
                   onClick={() => setConfirmOpen(true)}
@@ -307,7 +311,14 @@ function OneInner() {
                       <Fragment key={i}>
                         <tr className="border-b border-line/60">
                           <td className="px-4 py-3 text-content-secondary tabular-nums">{l.fit}</td>
-                          <td className="px-4 py-3 text-content-primary">{l.nom}</td>
+                          <td className="px-4 py-3 text-content-primary">
+                            {l.nom}
+                            {l.contact_name && (
+                              <div className="text-xs text-content-tertiary mt-0.5">
+                                {l.contact_name}{l.contact_role ? ` · ${l.contact_role}` : ''}
+                              </div>
+                            )}
+                          </td>
                           <td className="px-4 py-3 text-content-secondary">{l.telephone || '—'}</td>
                           <td className="px-4 py-3">
                             <span className="text-content-primary">{l.email || '—'}</span>

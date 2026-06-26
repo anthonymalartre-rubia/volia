@@ -218,7 +218,7 @@ export function ClientLogosStrip({ title = 'Ils prospectent avec Volia' }) {
 // Pour capture email avec form, utiliser <LeadMagnetBlock> client component.
 export function ResourceTeaserBlock({
   title = 'Boostez vos cold emails',
-  subtitle = '20 templates testés sur 50 000 envois, formats Boomerang, ROI, Tease, Reverse...',
+  subtitle = '20 templates cold email B2B, formats Boomerang, ROI, Tease, Reverse...',
   resourceSlug = 'templates-cold-email-b2b-fr',
   cta = 'Voir le PDF gratuit',
 }) {

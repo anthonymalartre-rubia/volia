@@ -47,6 +47,22 @@ function OneInner() {
   const [launchMsg, setLaunchMsg] = useState(null); // { ok, text }
   const [launchedCampaignId, setLaunchedCampaignId] = useState(null);
   const [statusData, setStatusData] = useState(null);
+  const [campaigns, setCampaigns] = useState([]); // historique des envois Volia One (connectés)
+
+  async function loadCampaigns() {
+    try {
+      const r = await fetch('/api/one/campaigns');
+      if (!r.ok) return; // 401 anonyme → pas d'historique
+      const j = await r.json();
+      setCampaigns(j.campaigns || []);
+    } catch {
+      /* silencieux */
+    }
+  }
+  useEffect(() => {
+    loadCampaigns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Leads réellement envoyables : email fiable (site/Google) + email rédigé.
   // (mêmes critères que la route /api/one/launch côté serveur)
@@ -118,6 +134,7 @@ function OneInner() {
       }
       setConfirmOpen(false);
       setLaunchedCampaignId(json.campaign_id);
+      loadCampaigns(); // l'envoi apparaît aussitôt dans l'historique
       const cappedNote = json.capped_to != null
         ? ` (plafonné à ${json.capped_to} selon ton quota du mois)`
         : '';
@@ -188,6 +205,64 @@ function OneInner() {
         <p className="text-center text-xs text-content-tertiary mb-8">
           ~20-40s : scrape du site, déduction ICP, recherche Places, enrichissement, rédaction.
         </p>
+
+        {/* Historique des envois Volia One (utilisateurs connectés) */}
+        {campaigns.length > 0 && (
+          <div className="max-w-xl mx-auto mb-6">
+            <div className="text-xs uppercase tracking-wide text-content-tertiary mb-2">Tes envois Volia One</div>
+            <ul className="space-y-1.5">
+              {campaigns.map((c) => (
+                <li key={c.id}>
+                  <button
+                    onClick={() => setLaunchedCampaignId(c.id)}
+                    className={`w-full text-left rounded-lg border px-3 py-2 text-sm transition-colors ${
+                      launchedCampaignId === c.id
+                        ? 'border-violet-500 bg-violet-500/5 text-content-primary'
+                        : 'border-line text-content-secondary hover:bg-surface-elevated'
+                    }`}
+                  >
+                    {c.name.replace(/^Volia One — /, '')}
+                    <span className="text-content-tertiary"> · {c.total_recipients} env.</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Feed d'activité live (nouvel envoi OU envoi rouvert depuis l'historique) */}
+        {statusData && (
+          <div className="max-w-2xl mx-auto mb-6 rounded-xl border border-line bg-surface-card p-5">
+            <div className="flex items-center justify-between mb-1">
+              <div className="text-xs uppercase tracking-wide text-content-tertiary">Activité en direct</div>
+              <div className="flex items-center gap-1.5 text-xs text-content-tertiary">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                live
+              </div>
+            </div>
+            {statusData.campaign?.name && (
+              <div className="text-sm text-content-primary mb-3">{statusData.campaign.name.replace(/^Volia One — /, '')}</div>
+            )}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {FEED_ORDER.filter((k) => (statusData.stats?.[k] || 0) > 0).map((k) => (
+                <span key={k} className={`px-2.5 py-1 rounded-md text-xs font-medium ${statusBadge[k].cls}`}>
+                  {statusData.stats[k]} {statusBadge[k].label}
+                </span>
+              ))}
+            </div>
+            <ul className="divide-y divide-line/60">
+              {(statusData.leads || []).map((l, i) => {
+                const b = statusBadge[l.status] || statusBadge.pending;
+                return (
+                  <li key={i} className="flex items-center justify-between py-2 text-sm">
+                    <span className="text-content-secondary">{l.email}</span>
+                    <span className={`px-1.5 py-0.5 rounded text-[11px] ${b.cls}`}>{b.label}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
 
         {error && (
           <div className="max-w-xl mx-auto rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 px-4 py-3 text-sm">
@@ -269,37 +344,6 @@ function OneInner() {
                     </a>
                   </>
                 )}
-              </div>
-            )}
-
-            {/* Feed d'activité live (après lancement) */}
-            {statusData && (
-              <div className="rounded-xl border border-line bg-surface-card p-5">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="text-xs uppercase tracking-wide text-content-tertiary">Activité en direct</div>
-                  <div className="flex items-center gap-1.5 text-xs text-content-tertiary">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    live
-                  </div>
-                </div>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {FEED_ORDER.filter((k) => (statusData.stats?.[k] || 0) > 0).map((k) => (
-                    <span key={k} className={`px-2.5 py-1 rounded-md text-xs font-medium ${statusBadge[k].cls}`}>
-                      {statusData.stats[k]} {statusBadge[k].label}
-                    </span>
-                  ))}
-                </div>
-                <ul className="divide-y divide-line/60">
-                  {(statusData.leads || []).map((l, i) => {
-                    const b = statusBadge[l.status] || statusBadge.pending;
-                    return (
-                      <li key={i} className="flex items-center justify-between py-2 text-sm">
-                        <span className="text-content-secondary">{l.email}</span>
-                        <span className={`px-1.5 py-0.5 rounded text-[11px] ${b.cls}`}>{b.label}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
               </div>
             )}
 

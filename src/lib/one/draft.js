@@ -1,0 +1,63 @@
+// ─────────────────────────────────────────────────────────────────────
+// lib/one/draft.js — Volia One : rédaction d'un cold email AU NOM DU CLIENT
+// ─────────────────────────────────────────────────────────────────────
+// ⚠️ Différent de lib/autopilot/claude-writer.js : celui-là écrit "au nom de
+// Volia". Ici on écrit au nom de l'entreprise de l'utilisateur (son ICP), vers
+// un prospect (PME locale). Garde-fous DGCCRF + délivrabilité conservés.
+// ─────────────────────────────────────────────────────────────────────
+
+import Anthropic from '@anthropic-ai/sdk';
+
+const CLAUDE_MODEL = 'claude-sonnet-4-6';
+
+const FORBIDDEN = [
+  /\b0\s*humain\b/i,
+  /\b100\s*%?\s*autonome\b/i,
+  /\bsans\s*humain\b/i,
+  /cliquez\s*ici/i,
+  /\bgaranti\b/i,
+];
+
+function cityOf(lead, icp) {
+  const m = (lead.adresse || '').match(/\d{5}\s+([^,]+)/);
+  return (m && m[1] ? m[1].trim() : '') || icp.ville || '';
+}
+
+/**
+ * Écrit un cold email perso (objet + corps) pour un lead, au nom de l'entreprise (icp).
+ * @returns {Promise<string|null>} "Objet: ...\n\n<corps>" ou null si échec/pattern interdit
+ */
+export async function draftEmail(lead, icp) {
+  if (!process.env.ANTHROPIC_API_KEY) return null;
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const system = `Tu écris UN cold email B2B en français, au nom d'une entreprise qui vend : "${icp.activite}" (proposition de valeur : "${icp.value_prop}").
+
+RÈGLES (DGCCRF + délivrabilité) :
+- Ton ${icp.ton || 'professionnel'}, naturel et humain — jamais promotionnel.
+- 70 à 120 mots, 3 paragraphes courts : accroche personnalisée → bénéfice concret pour le destinataire → CTA léger (proposer un échange de 15 min).
+- Interdits : "gratuit", "urgent", "cliquez ici", "garanti", "offre limitée", pas de MAJUSCULES sur des mots entiers, pas de "!!!".
+- Si CTA, mentionne en une demi-phrase la base RGPD (intérêt légitime B2B).
+
+SORTIE : commence par "Objet: ..." puis une ligne vide puis le corps. Pas de signature.`;
+
+  const ville = cityOf(lead, icp);
+  const user = `Destinataire : ${lead.nom}${ville ? ` (${ville})` : ''} — un(e) ${lead.term || 'entreprise locale'}.
+Écris l'email.`;
+
+  try {
+    const res = await client.messages.create({
+      model: CLAUDE_MODEL,
+      max_tokens: 500,
+      system,
+      messages: [{ role: 'user', content: user }],
+    });
+    let text = (res.content?.[0]?.text || '').trim();
+    if (!text) return null;
+    if (FORBIDDEN.some((p) => p.test(text))) return null;
+    text = text.replace(/^```\w*\n?/gm, '').replace(/\n?```$/gm, '');
+    return text;
+  } catch {
+    return null;
+  }
+}

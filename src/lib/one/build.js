@@ -70,11 +70,32 @@ async function placesSearch(query) {
   }
 }
 
+// Boîtes qui atteignent un décideur (leadership) vs réception générique.
+const DM_INBOXES = new Set([
+  'direction', 'gerance', 'gerant', 'dirigeant', 'presidence', 'pdg', 'ceo', 'president',
+]);
+const GENERIC_INBOXES = new Set([
+  'contact', 'info', 'hello', 'bonjour', 'accueil', 'sav', 'support', 'service',
+  'commercial', 'communication', 'marketing', 'rdv', 'devis', 'clients', 'client',
+  'secretariat', 'administration', 'contactez', 'noreply', 'no-reply',
+]);
+function localPart(email) {
+  return String(email || '').split('@')[0].toLowerCase();
+}
+
 function fitScore(l) {
   let s = 0;
   if (l.email && l.method === 'scrape') s += 50;
   else if (l.email && l.method === 'serper') s += 40;
   else if (l.email) s += 15;
+  // Bonus "décideur" : on remonte les boîtes de direction et les emails
+  // nominatifs (prenom.nom@) au-dessus des contact@/info@ génériques.
+  if (l.email) {
+    const lp = localPart(l.email);
+    if (DM_INBOXES.has(lp)) s += 14;
+    else if (/^[a-zà-ÿ]+[.\-][a-zà-ÿ]+/.test(lp) && !GENERIC_INBOXES.has(lp)) s += 12;
+    else if (!GENERIC_INBOXES.has(lp)) s += 4;
+  }
   if (l.telephone) s += 15;
   if (l.note) s += Math.min(20, l.note * 4);
   if (l.nb_avis) s += Math.min(15, Math.log10(l.nb_avis + 1) * 8);

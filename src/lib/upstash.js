@@ -95,6 +95,54 @@ export function globalRateLimiter() {
 }
 
 /**
+ * Volia One — rate limiter par IP : 3 runs/IP/jour.
+ *
+ * Un run /api/one/run est COÛTEUX (Google Places ×3 + Serper ×~12 + Claude ×5
+ * ≈ 0,10-0,15 €). Limiteur séparé du preview (préfixe + quota dédiés) car le
+ * coût unitaire est bien plus élevé qu'une recherche Places seule.
+ *
+ * Usage :
+ *   const { success, remaining, reset } = await oneIpRateLimiter().limit(ip);
+ */
+let oneIpLimiterInstance = null;
+export function oneIpRateLimiter() {
+  if (oneIpLimiterInstance) return oneIpLimiterInstance;
+  const redis = getRedis();
+  if (!redis) return null;
+
+  oneIpLimiterInstance = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(3, '1 d'),
+    prefix: 'rl:one:ip',
+    analytics: true,
+  });
+  return oneIpLimiterInstance;
+}
+
+/**
+ * Volia One — cap global : 150 runs/jour total (plafond dur ≈ 15-22 €/jour).
+ * Anti bombe-à-coûts pour l'endpoint public anonyme. Tunable si la demande
+ * légitime sature (augmenter = plus cher).
+ *
+ * Usage :
+ *   const { success } = await oneGlobalRateLimiter().limit('global');
+ */
+let oneGlobalLimiterInstance = null;
+export function oneGlobalRateLimiter() {
+  if (oneGlobalLimiterInstance) return oneGlobalLimiterInstance;
+  const redis = getRedis();
+  if (!redis) return null;
+
+  oneGlobalLimiterInstance = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(150, '1 d'),
+    prefix: 'rl:one:global',
+    analytics: true,
+  });
+  return oneGlobalLimiterInstance;
+}
+
+/**
  * Extrait l'IP du request pour le rate limiting.
  * - Vercel injecte x-forwarded-for et x-real-ip
  * - On prend la première IP (proxy chain)

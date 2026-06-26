@@ -115,6 +115,7 @@ export async function middleware(request) {
     pathname.startsWith('/opt-out') ||
     pathname.startsWith('/f/') ||             // Volia Forms — renderer public (/f/[slug]) + embed
     pathname.startsWith('/p/') ||             // Volia Project — suivi client public (/p/[token], sans compte)
+    pathname === '/one' ||                    // Volia One — page publique (API run rate-limitée ; launch reste gardé)
     pathname.startsWith('/prospection') ||  // FR (matche aussi /prospection-be et /prospection-ch grâce au startsWith)
     pathname.startsWith('/pour') ||           // Pages personas
     pathname.startsWith('/parrainage') ||     // Programme parrainage (a son propre auth check côté client)

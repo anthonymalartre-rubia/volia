@@ -830,6 +830,13 @@ const en = {
       desc: 'Scraping + Google, AI scoring, 150+ categories, 101 departments.',
       sub: 'Create your account in 30 seconds — no credit card required.',
     },
+    voliaOne: {
+      label: 'New · Volia One',
+      title: 'Enter your domain, see your prospects',
+      desc: 'Your website → we infer your target, find companies to reach in France (email + phone) and draft a cold email for each one. Free, no card.',
+      placeholder: 'your-domain.com',
+      button: 'See my prospects',
+    },
     // Footer
     footer: {
       cgu: 'Terms',

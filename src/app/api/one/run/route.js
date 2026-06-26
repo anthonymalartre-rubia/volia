@@ -1,47 +1,94 @@
 // ─────────────────────────────────────────────────────────────────────
-// POST /api/one/run — Volia One (Phase 1, test) : domaine → leads + emails
+// POST /api/one/run — Volia One : domaine → leads + emails
 // (dossier "run" et non "build" : "build" est ignoré par .gitignore)
 // ─────────────────────────────────────────────────────────────────────
 // Body: { domain }
-// Authz : admin uniquement (phase de validation — contrôle des coûts).
-// Renvoie { success, icp, leads, counts }.
+// PUBLIC (anonyme autorisé) — c'est le "wow" Volia One sans mur d'inscription.
+// Borné en coût : rate-limit par IP (3/jour) + cap global (150/jour) via Upstash.
+// L'ENVOI réel reste sur /api/one/launch (login + domaine vérifié, jamais ici).
+// Renvoie { success, icp, leads, counts, remaining_today }.
 // ─────────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
-import { getAuthenticatedUser } from '@/lib/auth';
+import { getRedis, getClientIP, oneIpRateLimiter, oneGlobalRateLimiter } from '@/lib/upstash';
 import { buildFromDomain } from '@/lib/one/build';
 
 // Le pipeline (Places + enrich + Claude) dépasse les 10s par défaut.
 export const maxDuration = 60;
 
 export async function POST(request) {
-  const { user, supabase } = await getAuthenticatedUser();
-  if (!user) {
-    return NextResponse.json({ error: 'Authentification requise' }, { status: 401 });
-  }
-
-  const { data: profile } = await supabase
-    .from('user_profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .maybeSingle();
-  if (!profile?.is_admin) {
+  // ① Redis configuré ? (sinon dégradation propre — pas de run non borné)
+  const redis = getRedis();
+  if (!redis) {
     return NextResponse.json(
-      { error: 'Réservé admin pendant la phase de test Volia One.' },
-      { status: 403 }
+      {
+        error: 'one_unavailable',
+        message:
+          'Volia One est temporairement indisponible. Inscris-toi (gratuit, sans CB) pour accéder à toutes les fonctionnalités.',
+      },
+      { status: 503 }
     );
   }
 
+  // ② Valider l'input AVANT de consommer un crédit IP (body coûteux)
   const { domain } = await request.json().catch(() => ({}));
   if (!domain || typeof domain !== 'string' || domain.length > 120) {
     return NextResponse.json({ error: 'Domaine requis (string, < 120 car.)' }, { status: 400 });
   }
 
+  // ③ Rate-limit par IP (3 runs/jour) + cap global (150/jour)
+  //    Défense : si un limiter ne s'initialise pas (Redis indispo entre-temps),
+  //    on dégrade en 503 plutôt que de crasher sur null.limit().
+  const ipLimiter = oneIpRateLimiter();
+  const globalLimiter = oneGlobalRateLimiter();
+  if (!ipLimiter || !globalLimiter) {
+    return NextResponse.json(
+      { error: 'one_unavailable', message: 'Volia One est temporairement indisponible. Réessaie plus tard.' },
+      { status: 503 }
+    );
+  }
+  const ip = getClientIP(request);
+  const ipResult = await ipLimiter.limit(ip);
+  if (!ipResult.success) {
+    const resetSec = Math.ceil((ipResult.reset - Date.now()) / 1000);
+    return NextResponse.json(
+      {
+        error: 'rate_limit_exceeded',
+        message:
+          "Tu as atteint la limite gratuite du jour. Crée un compte (gratuit, sans carte) pour continuer.",
+        remaining_today: 0,
+        reset_in_seconds: resetSec,
+      },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(resetSec),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(ipResult.reset),
+        },
+      }
+    );
+  }
+
+  // ④ Cap global (150 runs/jour — plafond dur anti bombe-à-coûts)
+  const globalResult = await globalLimiter.limit('global');
+  if (!globalResult.success) {
+    return NextResponse.json(
+      {
+        error: 'global_quota_exceeded',
+        message:
+          "Volia One est très demandé aujourd'hui. Réessaie demain, ou crée un compte gratuit.",
+      },
+      { status: 503 }
+    );
+  }
+
+  // ⑤ Build (anonyme : buildFromDomain n'a besoin d'aucun contexte user)
   try {
     const result = await buildFromDomain(domain);
-    return NextResponse.json({ success: true, ...result });
+    return NextResponse.json({ success: true, ...result, remaining_today: ipResult.remaining });
   } catch (e) {
-    console.error('[one/build] échec:', e?.message || e);
+    console.error('[one/run] échec:', e?.message || e);
     return NextResponse.json({ error: e?.message || 'Erreur Volia One' }, { status: 500 });
   }
 }

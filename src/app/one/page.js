@@ -21,6 +21,15 @@ export default function VoliaOnePage() {
   const [error, setError] = useState('');
   const [data, setData] = useState(null);
   const [openIdx, setOpenIdx] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [launching, setLaunching] = useState(false);
+  const [launchMsg, setLaunchMsg] = useState(null); // { ok, text }
+
+  // Leads réellement envoyables : email fiable (site/Google) + email rédigé.
+  // (mêmes critères que la route /api/one/launch côté serveur)
+  const sendable = (data?.leads || []).filter(
+    (l) => l.draft && l.email && (l.method === 'scrape' || l.method === 'serper')
+  );
 
   async function run(e) {
     e?.preventDefault();
@@ -30,6 +39,7 @@ export default function VoliaOnePage() {
     setError('');
     setData(null);
     setOpenIdx(null);
+    setLaunchMsg(null);
     try {
       const res = await fetch('/api/one/run', {
         method: 'POST',
@@ -43,6 +53,30 @@ export default function VoliaOnePage() {
       setError(err.message || 'Erreur');
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function launch() {
+    if (launching || !data || sendable.length === 0) return;
+    setLaunching(true);
+    setLaunchMsg(null);
+    try {
+      const res = await fetch('/api/one/launch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain: domain.trim(), icp: data.icp, leads: data.leads }),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.message || json.error || 'Échec du lancement');
+      setConfirmOpen(false);
+      setLaunchMsg({
+        ok: true,
+        text: `${json.queued} email${json.queued > 1 ? 's' : ''} en file — envoi depuis ${json.sender_domain} dans les minutes qui suivent.`,
+      });
+    } catch (err) {
+      setLaunchMsg({ ok: false, text: err.message || 'Échec du lancement' });
+    } finally {
+      setLaunching(false);
     }
   }
 
@@ -98,12 +132,41 @@ export default function VoliaOnePage() {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-4 text-sm text-content-secondary">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-content-secondary">
               <span><strong className="text-content-primary">{data.counts?.total}</strong> leads</span>
               <span><strong className="text-content-primary">{data.counts?.email_verified}</strong> emails fiables</span>
               <span><strong className="text-content-primary">{data.counts?.email_guessed}</strong> devinés</span>
               <span><strong className="text-content-primary">{data.counts?.with_phone}</strong> avec tél</span>
+              <div className="ml-auto">
+                <button
+                  onClick={() => setConfirmOpen(true)}
+                  disabled={sendable.length === 0 || launching}
+                  className="rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-2.5 transition-colors"
+                >
+                  Tout lancer ({sendable.length})
+                </button>
+              </div>
             </div>
+
+            {launchMsg && (
+              <div
+                className={`rounded-xl border px-4 py-3 text-sm ${
+                  launchMsg.ok
+                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700'
+                    : 'border-red-500/30 bg-red-500/10 text-red-600'
+                }`}
+              >
+                {launchMsg.text}
+                {!launchMsg.ok && launchMsg.text.toLowerCase().includes('domaine') && (
+                  <>
+                    {' '}
+                    <a href="/settings/email-senders" className="underline font-medium">
+                      Configurer un domaine
+                    </a>
+                  </>
+                )}
+              </div>
+            )}
 
             <div className="rounded-xl border border-line bg-surface-card overflow-hidden">
               <table className="w-full text-sm">
@@ -152,6 +215,37 @@ export default function VoliaOnePage() {
                   })}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {confirmOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+            <div className="w-full max-w-md rounded-2xl border border-line bg-surface-card p-6 shadow-xl">
+              <h2 className="text-lg font-bold text-content-primary mb-2">Envoyer pour de vrai ?</h2>
+              <p className="text-sm text-content-secondary mb-4 leading-relaxed">
+                Tu vas envoyer <strong className="text-content-primary">{sendable.length} cold email{sendable.length > 1 ? 's' : ''}</strong> réel{sendable.length > 1 ? 's' : ''}, un par entreprise (objet + texte déjà rédigés).
+                Départ échelonné par le moteur d&apos;envoi (warmup, opt-out RGPD et anti-spam appliqués), depuis ton domaine vérifié.
+              </p>
+              <p className="text-xs text-content-tertiary mb-5">
+                Seuls les leads avec un email fiable sont inclus. Les emails devinés sont ignorés.
+              </p>
+              <div className="flex gap-2 justify-end">
+                <button
+                  onClick={() => setConfirmOpen(false)}
+                  disabled={launching}
+                  className="rounded-xl border border-line px-4 py-2.5 text-sm font-medium text-content-secondary hover:bg-surface-elevated transition-colors"
+                >
+                  Annuler
+                </button>
+                <button
+                  onClick={launch}
+                  disabled={launching}
+                  className="rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2.5 transition-colors"
+                >
+                  {launching ? 'Envoi…' : `Confirmer l'envoi (${sendable.length})`}
+                </button>
+              </div>
             </div>
           </div>
         )}

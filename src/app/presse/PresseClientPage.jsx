@@ -155,10 +155,11 @@ function HeroSection() {
           </h1>
 
           <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-3xl mb-8">
-            Volia Autopilot, le pipeline B2B automatisé de bout en bout : l&apos;humain
-            choisit la cible, l&apos;IA exécute la chaîne, sous supervision. Tout le matériel
-            presse pour la raconter : visuels HD, chiffres clés, bio founder, communiqués,
-            quotes prêtes à citer.
+            Volia One : tu entres ton domaine, l&apos;IA trouve tes prospects (email + tél),
+            écrit et envoie tes cold emails et remplit ton pipeline — l&apos;humain choisit
+            la cible, l&apos;IA exécute la chaîne, sous supervision (et en pilote automatique
+            24/7 avec le plan MAX). Tout le matériel presse pour la raconter : visuels HD,
+            chiffres clés, bio founder, communiqués, quotes prêtes à citer.
           </p>
 
           <div className="flex flex-wrap gap-3">

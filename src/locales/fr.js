@@ -818,13 +818,13 @@ const fr = {
       ],
       pro: [
         '2 000 crédits/mois + 10 000 téléphones',
-        'Suite illimitée + Volia Autopilot',
+        'Suite complète + Volia One en pilote automatique (Autopilot 24/7)',
         'Vérification email 5 000/mois',
         'Warmup automatique',
         'Support prioritaire',
       ],
       business: [
-        'Suite illimitée + Volia Autopilot',
+        'Suite complète + Volia One en pilote automatique (Autopilot 24/7)',
         'Multi-utilisateurs (équipes, RBAC)',
         'Serveur MCP + API',
         'Enrichissement décideur',

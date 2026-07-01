@@ -219,7 +219,7 @@ Volia propose 3 plans, tous facturables au mois ou à l'année (2 mois offerts e
 | --- | --- | --- | --- |
 | **Gratuit** | 0 € | 25 | Tester toute la suite, sans CB |
 | **Prospection** | 19 €/mo | 500 | Freelances, consultants, PME |
-| **MAX** | 179 €/mo | 2 000 | Suite illimitée + Autopilot |
+| **MAX** | 179 €/mo | 2 000 | Suite complète + Autopilot |
 
 Sur MAX, le code public **MAX99** te donne les 3 premiers mois à 99 €/mois. Besoin de plus de crédits ponctuellement ? Les **packs de crédits** (100 crédits = 9 €, 500 = 29 €, 2 000 = 79 €) s'achètent à la demande sur tous les plans.
 
@@ -290,7 +290,7 @@ Ton compteur affiche 25 crédits Prospection, qui se réinitialisent le 1er de c
 
 Quand tu as besoin de plus, tu choisis :
 - **Prospection** (19 €/mois) : 500 crédits/mois.
-- **MAX** (179 €/mois) : suite illimitée + Volia Autopilot + 2 000 crédits + support prioritaire. Avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
+- **MAX** (179 €/mois) : suite complète + Volia Autopilot + 2 000 crédits + support prioritaire. Avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
 
 Aucun engagement, aucun prélèvement tant que tu n'as pas choisi de passer en payant.
 

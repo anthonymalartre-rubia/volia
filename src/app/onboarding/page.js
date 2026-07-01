@@ -580,7 +580,7 @@ export default function OnboardingPage() {
                 <h2 className="text-lg font-semibold text-content-primary">Ton premier pipeline, en vrai</h2>
               </div>
               <p className="text-xs text-content-tertiary mb-5">
-                Voici de vrais prospects <span className="text-content-primary font-medium">{targetCategory}</span> ({cityForSearch}) + un email que l&apos;IA a écrit pour le premier. C&apos;est exactement ce que Volia Autopilot fait pour toi, en boucle.
+                Voici de vrais prospects <span className="text-content-primary font-medium">{targetCategory}</span> ({cityForSearch}) + un email que l&apos;IA a écrit pour le premier. C&apos;est exactement ce que Volia One fait pour toi — et en pilote automatique 24/7 avec le plan MAX.
               </p>
 
               {previewLoading && (

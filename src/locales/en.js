@@ -762,9 +762,9 @@ const en = {
       googlePlaces: 'Google Places integrated',
       monthlyPrice: 'Monthly price',
       sevenSources: 'Multi-source',
-      calcTitle: 'The math is simple',
-      calcDesc: 'Volia Prospecting at <strong class="text-emerald-400">EUR 19/month</strong> does discovery + enrichment in one tool \u2014 500 emails AND 500 phone numbers a month, email verification included. MAX at <strong class="text-violet-400">EUR 179/month</strong> (code MAX99: first 3 months at EUR 99) unlocks the unlimited suite \u2014 Campaigns + CRM + Forms + Autopilot.<br /><span class="text-emerald-400 font-semibold">No hidden fees, cancel anytime.</span>',
-      savings: 'From EUR 19/month \u2014 the cheapest paid entry on the B2B market.',
+      calcTitle: 'The math fits in 3 lines',
+      calcDesc: 'Apollo: EUR 99/month. Hunter: EUR 49. Snov: EUR 39. And you still need your prospects. Volia Prospecting at <strong class="text-emerald-400">EUR 19/month</strong> does discovery + enrichment = <strong class="text-violet-400">5x cheaper</strong> than Apollo Basic.<br /><span class="text-emerald-400 font-semibold">No hidden fees, cancel in 1 click.</span>',
+      savings: 'EUR 80/month saved vs Apollo. EUR 960/year back in your pocket.',
     },
     // Pricing
     pricing: {
@@ -811,13 +811,13 @@ const en = {
       ],
       pro: [
         '2,000 credits/month + 10,000 phone numbers',
-        'Unlimited suite + Volia Autopilot',
+        'Complete suite + Volia One on autopilot (Autopilot 24/7)',
         'Email verification 5,000/mo',
         'Automatic warmup',
         'Priority support',
       ],
       business: [
-        'Unlimited suite + Volia Autopilot',
+        'Complete suite + Volia One on autopilot (Autopilot 24/7)',
         'Multi-users (teams, RBAC)',
         'MCP server + API',
         'Decision-maker enrichment',

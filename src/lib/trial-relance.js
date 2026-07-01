@@ -161,7 +161,7 @@ function buildStep3Email({ firstName, leadScore, trialEndsAt }) {
       <tr style="background:#ecfdf5;">
         <td style="padding:8px;border:1px solid #e5e7eb;"><strong>MAX</strong> ⭐</td>
         <td style="padding:8px;border:1px solid #e5e7eb;">179€/mois</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;">Suite illimitée + Autopilot (tout ce que tu as testé pendant ton trial) — code <strong>MAX99</strong> : les 3 premiers mois à 99€</td>
+        <td style="padding:8px;border:1px solid #e5e7eb;">Suite complète + Autopilot (tout ce que tu as testé pendant ton trial) — code <strong>MAX99</strong> : les 3 premiers mois à 99€</td>
       </tr>
     </tbody>
   </table>
@@ -180,7 +180,7 @@ function buildStep3Email({ firstName, leadScore, trialEndsAt }) {
 Ton trial Volia se termine dans ${daysLeft} jours.
 
 Prospection : 19€/mois  — 500 crédits/mois (emails trouvés)
-MAX         : 179€/mois — Suite illimitée + Autopilot ⭐ (code MAX99 : 3 mois à 99€)
+MAX         : 179€/mois — Suite complète + Autopilot ⭐ (code MAX99 : 3 mois à 99€)
 
 → Choisir mon plan : https://volia.fr/pricing
 

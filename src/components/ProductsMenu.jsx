@@ -1,7 +1,7 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// ProductsMenu — dropdown "Produits" exposant les 3 modules de la suite
+// ProductsMenu — dropdown "Produits" : Volia One (héros) + les 5 modules de la suite
 // ─────────────────────────────────────────────────────────────────────
 // Utilisé dans la nav top des pages marketing (landing /, /produits/*,
 // /pricing, etc.). Avant on avait un lien direct → /produits/prospection
@@ -23,9 +23,10 @@ import { ChevronDown, Search, Mail, Users, FormInput, Zap, FolderKanban } from '
 
 const PRODUCTS_FR = [
   {
-    slug: 'autopilot',
-    name: 'Volia Autopilot',
-    description: 'Ton pipeline B2B de A à Z : scrap → email → qualif → CRM',
+    slug: 'one',
+    href: '/one',
+    name: 'Volia One',
+    description: 'De ton domaine à ton pipeline : prospects → cold emails → CRM',
     icon: Zap,
     accent: 'amber',
     badge: 'FLAGSHIP',
@@ -79,13 +80,13 @@ const PRODUCTS_FR = [
 
 const PRODUCTS_EN = [
   {
-    slug: 'autopilot',
-    name: 'Volia Autopilot',
-    description: 'Your B2B pipeline end-to-end: scrape → email → qualify → CRM',
+    slug: 'one',
+    href: '/one',
+    name: 'Volia One',
+    description: 'From your domain to your pipeline: prospects → cold emails → CRM',
     icon: Zap,
     accent: 'amber',
     badge: 'FLAGSHIP',
-    // page EN dédiée (basePath /en/products → /en/products/autopilot)
   },
   {
     slug: 'prospection',

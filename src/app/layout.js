@@ -42,11 +42,11 @@ const fraunces = Fraunces({
 export const metadata = {
   metadataBase: new URL('https://volia.fr'),
   title: {
-    default: 'Volia Autopilot — Pipeline B2B automatisé & prospection B2B France',
+    default: 'Volia One — ton pipeline B2B en pilote auto · prospection + cold email France',
     template: '%s | Volia',
   },
-  description: 'Volia Autopilot : ton pipeline B2B automatisé — tu sélectionnes la cible, Volia exécute (scrap → email perso → qualif → scoring → CRM). Inclut la prospection B2B France via Google Places (150+ catégories, 101 départements) + enrichissement email automatique. Plan Gratuit à vie, sans carte bancaire.',
-  keywords: ['Volia Autopilot', 'pipeline B2B automatisé', 'automatisation prospection', 'prospection B2B', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD'],
+  description: 'Volia One : entre ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails, et remplit ton pipeline. Sous le capot, 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) et la prospection B2B France via Google Places (150+ catégories, 101 départements). Le mode Autopilot 24/7 est débloqué au plan MAX. Gratuit pour démarrer, sans carte bancaire.',
+  keywords: ['Volia One', 'pipeline B2B', 'cold email France', 'prospection B2B France', 'enrichissement email', 'scraping email', 'leads B2B France', 'Google Places', '101 départements', 'export CSV', 'email professionnel', 'outil prospection pas cher', 'alternative Apollo France', 'prospection RGPD', 'Autopilot MAX'],
   authors: [{ name: 'Volia' }],
   creator: 'Volia',
   openGraph: {
@@ -77,7 +77,7 @@ const organizationSchema = {
   alternateName: ['Volia.fr', 'Volia.fr'],
   url: 'https://volia.fr',
   logo: 'https://volia.fr/icon.svg',
-  description: 'Plateforme française de prospection B2B automatisée. Recherche d\'entreprises via Google Places + enrichissement email en cascade. Suite complète (prospection, campagnes, CRM, formulaires) gratuite pour démarrer — Prospection 19 €/mois, MAX 179 €/mois.',
+  description: 'Volia One : entre ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails et remplit ton pipeline. Sous le capot, 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) + prospection B2B France via Google Places et enrichissement email en cascade. Gratuit pour démarrer — Prospection 19 €/mois, MAX 179 €/mois (mode Autopilot 24/7 inclus).',
   sameAs: ['https://www.linkedin.com/company/volia-saas/'],
   founder: {
     '@type': 'Person',

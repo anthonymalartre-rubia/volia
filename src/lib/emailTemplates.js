@@ -785,7 +785,7 @@ export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max
     : `<li>⚡ <strong>Volia Autopilot</strong> désactivé</li>
        <li>2 000 crédits Prospection/mois → 25</li>
        <li>10 000 cold emails/mois (warmup inclus) → 200</li>
-       <li>Suite illimitée → limites du Gratuit (1 pipeline, 2 formulaires, 1 projet)</li>`;
+       <li>Suite complète → limites du Gratuit (1 pipeline, 2 formulaires, 1 projet)</li>`;
   const offerBlock = isLegacyPro
     ? `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
         Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49€/mois</strong> (ou 490€/an, ~2 mois offerts).
@@ -799,7 +799,7 @@ export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max
         </td></tr>
       </table>`
     : `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-        Pour garder MAX (Autopilot + suite illimitée), c'est <strong style="color:${COLORS.text};">179€/mois</strong> (ou 1 690€/an, ~2 mois offerts).
+        Pour garder MAX (Autopilot + suite complète), c'est <strong style="color:${COLORS.text};">179€/mois</strong> (ou 1 690€/an, ~2 mois offerts).
       </p>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
         <tr><td style="text-align:center;">
@@ -814,7 +814,7 @@ export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max
   return {
     subject: `${daysRemaining} jours de ${planLabel} restants`,
     html: layout({
-      preheader: `Pour garder ${isLegacyPro ? 'la cascade waterfall et vos campagnes' : 'Autopilot et la suite illimitée'}, c'est maintenant.`,
+      preheader: `Pour garder ${isLegacyPro ? 'la cascade waterfall et vos campagnes' : 'Autopilot et la suite complète'}, c'est maintenant.`,
       accent: COLORS.warning,
       content: `
         ${hero({
@@ -1602,7 +1602,7 @@ export function upgradeSoftDay12Email(userName) {
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
               <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">MAX — 179 €/mois <span style="color:${COLORS.brand};">· code MAX99 : 99 € les 3 premiers mois</span></p>
-              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Suite illimitée + l'Autopilot qui prospecte, écrit et qualifie à votre place.</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Suite complète + l'Autopilot qui prospecte, écrit et qualifie à votre place.</p>
             </td>
           </tr>
         </table>

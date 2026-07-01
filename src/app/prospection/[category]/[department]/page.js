@@ -130,7 +130,7 @@ export default async function CategoryDepartmentPage({ params }) {
     },
     {
       question: `Combien coûte la prospection des ${category.labelPlural} dans le ${dept.name} ?`,
-      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB). Plan Prospection à 19 €/mois : 500 crédits + 500 téléphones et 2 000 recherches, packs de crédits dès 9 €. Plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) : suite illimitée + Autopilot, 2 000 crédits/mois. Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB). Plan Prospection à 19 €/mois : 500 crédits + 500 téléphones et 2 000 recherches, packs de crédits dès 9 €. Plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) : suite complète + Autopilot, 2 000 crédits/mois. Tous les départements et catégories sont inclus dans chaque plan, sans supplément.`,
     },
   ];
 

@@ -1,16 +1,17 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// ModuleSwitcher — dropdown HubSpot-style pour switcher entre les 4
-// modules de la suite Volia (Prospection / Campagnes / CRM / Forms).
+// ModuleSwitcher — dropdown HubSpot-style pour switcher entre les 5
+// modules qui font tourner Volia One (Prospection / Campagnes / CRM /
+// Formulaires / Project), plus l'accès au mode Autopilot.
 // ─────────────────────────────────────────────────────────────────────
 //
 // Placement : TopBar, juste après le logo.
 //
 // Badge "Plan MAX" : on n'affiche PAS LIVE/BETA/BIENTÔT (vestige
 // pré-launch). Pivot freemium : tous les modules sont ouverts à tous
-// (avec limites) ; seul Autopilot, réservé au plan MAX, porte le badge.
-// Cf. lib/plans.js → business.unlocksModules = true.
+// (avec limites) ; seul le mode Autopilot de Volia One, réservé au plan
+// MAX, porte le badge. Cf. lib/plans.js → business.unlocksModules = true.
 //
 // Détection du module actif via usePathname() :
 //   - /dashboard*       OR /app/prospection* → Prospection (violet)
@@ -47,13 +48,15 @@ import {
 // ─────────────────────────────────────────────────────────────────────
 // Catalogue des modules
 // ─────────────────────────────────────────────────────────────────────
-// On garde la liste statique (3 modules connus) et on déclare TOUTES
-// les classes Tailwind explicitement — pas de string interpolation
-// dynamique sinon le purge Tailwind les supprime au build.
+// On garde la liste statique (5 modules — le moteur sous le capot de
+// Volia One) et on déclare TOUTES les classes Tailwind explicitement —
+// pas de string interpolation dynamique sinon le purge Tailwind les
+// supprime au build.
 // ─────────────────────────────────────────────────────────────────────
-// Pivot freemium (11/06/2026) : tous les modules sont ouverts. Seul
-// Autopilot porte le badge "Plan MAX" (le flag businessOnly est
-// conservé comme nom de prop pour éviter un rename invasif).
+// Pivot freemium (11/06/2026) : tous les modules sont ouverts. Seul le
+// mode Autopilot de Volia One porte le badge "Plan MAX" (le flag
+// businessOnly est conservé comme nom de prop pour éviter un rename
+// invasif).
 const BUSINESS_BADGE = {
   label: 'Plan MAX',
   className: 'bg-amber-50 text-amber-700 border-amber-200',
@@ -61,12 +64,13 @@ const BUSINESS_BADGE = {
 
 const MODULES = [
   {
-    // ⚡ Volia Autopilot — module FLAGSHIP, placé en #1.
-    // Orchestre les 4 autres (Prospection → Campagnes → Forms → CRM).
-    // Pivot freemium : Autopilot = plan MAX uniquement.
+    // ⚡ Autopilot — le mode 24/7 de Volia One, placé en #1.
+    // Enchaîne les 5 modules (Prospection → Campagnes → Formulaires →
+    // CRM → Project) pour toi, en boucle. Pivot freemium : le mode
+    // Autopilot est débloqué au plan MAX uniquement.
     id: 'autopilot',
-    name: 'Autopilot',
-    description: 'Pipeline B2B end-to-end auto',
+    name: 'One · Autopilot',
+    description: 'Volia One en pilote automatique 24/7',
     href: '/app/autopilot',
     icon: Zap,
     businessOnly: true, // badge Plan MAX
@@ -333,7 +337,7 @@ export default function ModuleSwitcher() {
                         {mod.businessOnly && (
                           <span
                             className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded-full border ${BUSINESS_BADGE.className}`}
-                            title="Module inclus dans le plan MAX uniquement"
+                            title="Le mode Autopilot de Volia One — inclus dans le plan MAX"
                           >
                             {BUSINESS_BADGE.label}
                           </span>

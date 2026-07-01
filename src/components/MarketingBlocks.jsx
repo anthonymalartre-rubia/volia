@@ -101,7 +101,7 @@ const BUILT_FOR_PROFILES = [
     icon: Target,
     label: 'Sales Managers & DC',
     pitch: 'Outillez 3-10 SDR sans exploser le budget. Plan MAX à 179 €/mois pour toute l\'équipe (3 mois à 99 € avec MAX99).',
-    metric: 'Suite illimitée',
+    metric: 'Suite complète',
     gradient: 'from-fuchsia-500/15 to-pink-500/15',
     iconColor: 'text-fuchsia-300',
   },

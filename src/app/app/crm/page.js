@@ -430,7 +430,7 @@ export default function CrmAppPage() {
                 <span className="text-content-tertiary"> /mois</span>
               </p>
               <p className="text-xs text-content-tertiary mb-6">
-                Suite illimitée · Autopilot · Code MAX99 : 3 mois à 99 €
+                Suite complète · Autopilot · Code MAX99 : 3 mois à 99 €
               </p>
               <Link
                 href="/pricing"

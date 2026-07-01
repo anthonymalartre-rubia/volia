@@ -93,7 +93,7 @@ const FAQ = [
   },
   {
     q: "Combien ça coûte ?",
-    a: "Le plan Gratuit donne accès à toute la suite (prospection + campagnes + CRM + formulaires) avec des limites et 25 crédits Prospection/mois, sans carte bancaire — à vie. Le plan Prospection est à 19 €/mois (500 emails + 500 téléphones/mois). Pour la suite illimitée + l'Autopilot, le plan MAX est à 179 €/mois — code MAX99 : les 3 premiers mois à 99 €. Tu montes en gamme quand tu veux, aucun prélèvement automatique.",
+    a: "Le plan Gratuit donne accès à toute la suite (prospection + campagnes + CRM + formulaires) avec des limites et 25 crédits Prospection/mois, sans carte bancaire — à vie. Le plan Prospection est à 19 €/mois (500 emails + 500 téléphones/mois). Pour la suite complète + l'Autopilot, le plan MAX est à 179 €/mois — code MAX99 : les 3 premiers mois à 99 €. Tu montes en gamme quand tu veux, aucun prélèvement automatique.",
   },
 ];
 
@@ -245,7 +245,7 @@ export default function ImmobilierEntreprisePage() {
             <h2 className="text-2xl font-bold mb-2">Teste sur ta zone, gratuitement</h2>
             <p className="text-sm text-content-secondary mb-5 max-w-xl mx-auto">
               Lance une recherche sur ton secteur cible et vois ce que Volia remonte — avant même de créer un compte.
-              Plan Prospection à 19 €/mois pour passer à l'échelle, MAX à 179 €/mois pour la suite illimitée (code MAX99 : 3 mois à 99 €).
+              Plan Prospection à 19 €/mois pour passer à l'échelle, MAX à 179 €/mois pour la suite complète (code MAX99 : 3 mois à 99 €).
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link

@@ -19,7 +19,7 @@ const PAGE_URL = `${SITE_URL}/pricing`;
 export const metadata = {
   title: 'Tarifs Volia — Gratuit · Prospection 19 € · MAX 179 €',
   description:
-    "Plans tarifaires Volia : Gratuit (toute la suite avec limites), Prospection 19 €/mo (500 crédits), MAX 179 €/mo (suite illimitée + Autopilot — 3 mois à 99 € avec le code MAX99). Sans engagement, RGPD France.",
+    "Volia One en 3 intensités : Gratuit (essaie — tape ton domaine, vois leads + emails), Prospection 19 €/mo (500 crédits, en solo), MAX 179 €/mo (Volia One en pilote automatique 24/7 + suite complète, 2 000 crédits/mois inclus — 3 mois à 99 € avec le code MAX99). Sans engagement, RGPD France.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -63,9 +63,9 @@ export const metadata = {
 const PRODUCT_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'Product',
-  name: 'Volia — Suite B2B Prospection + Campagnes + CRM',
+  name: 'Volia One — Prospection + Campagnes + CRM + Formulaires + Project',
   description:
-    'Suite SaaS française tout-en-un : prospection B2B (tout le tissu B2B français), cold email avec warmup auto, CRM intégré. À partir de 0 €/mois.',
+    'Volia One : tape ton domaine, Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails et remplit ton pipeline. 5 modules sous le capot (Prospection, Campagnes, CRM, Formulaires, Project). À partir de 0 €/mois.',
   url: PAGE_URL,
   brand: { '@type': 'Brand', name: 'Volia' },
   offers: {
@@ -82,7 +82,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup`,
         availability: 'https://schema.org/InStock',
-        description: 'Toute la suite (Prospection + Campagnes + CRM + Formulaires + Project) avec limites : 25 crédits/mois, 1 séquence, 1 pipeline. Sans carte bancaire, à vie.',
+        description: 'Essaie Volia One : tape ton domaine, vois tes premiers leads + emails. Les 5 modules (Prospection + Campagnes + CRM + Formulaires + Project) avec limites : 25 crédits/mois, 1 séquence, 1 pipeline. Sans carte bancaire, à vie.',
       },
       {
         '@type': 'Offer',
@@ -91,7 +91,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=prospection`,
         availability: 'https://schema.org/InStock',
-        description: '500 crédits/mois (emails trouvés) + 500 téléphones, cascade waterfall 7 sources, exports illimités, API publique + Zapier/Make. Packs de crédits dès 9 €.',
+        description: 'Volia One en solo : 500 crédits/mois (emails trouvés) + 500 téléphones, cascade waterfall 7 sources, exports illimités, API publique + Zapier/Make. Packs de crédits dès 9 €.',
       },
       {
         '@type': 'Offer',
@@ -100,7 +100,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=max`,
         availability: 'https://schema.org/InStock',
-        description: 'Suite illimitée + Volia Autopilot (3 workflows, IF/ELSE, A/B testing), 2 000 crédits/mois, 10 000 téléphones, équipes multi-utilisateurs, serveur MCP. Code MAX99 : 99 €/mois les 3 premiers mois.',
+        description: 'Volia One en pilote automatique 24/7 (mode Autopilot : 3 workflows, IF/ELSE, A/B testing) + suite complète, 2 000 crédits/mois inclus, 10 000 téléphones, équipes multi-utilisateurs, serveur MCP. Code MAX99 : 99 €/mois les 3 premiers mois.',
       },
     ],
   },
@@ -120,7 +120,7 @@ const FAQ_JSON_LD = {
       name: 'Y a-t-il un plan gratuit ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui : un plan Gratuit à vie, sans carte bancaire. Vous accédez à toute la suite (Prospection + Campagnes + CRM + Formulaires + Project) avec des limites : 25 crédits Prospection/mois, 1 séquence, 1 pipeline. Vous montez en gamme quand vous voulez (Prospection 19 €/mois ou MAX 179 €/mois) — aucun prélèvement automatique.',
+        text: 'Oui : un plan Gratuit à vie, sans carte bancaire, pour essayer Volia One. Vous accédez aux 5 modules (Prospection + Campagnes + CRM + Formulaires + Project) avec des limites : 25 crédits Prospection/mois, 1 séquence, 1 pipeline. Vous montez en intensité quand vous voulez (Prospection 19 €/mois en solo, ou MAX 179 €/mois en pilote automatique 24/7) — aucun prélèvement automatique.',
       },
     },
     {

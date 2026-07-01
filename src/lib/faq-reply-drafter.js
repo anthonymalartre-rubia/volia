@@ -22,7 +22,7 @@ const SYSTEM_PROMPT = `Tu rédiges un brouillon d'email de réponse à une quest
 CONTEXTE PRODUIT VOLIA :
 - Suite SaaS B2B française (volia.fr)
 - 4 modules : Prospection (leads B2B FR + BE + CH), Campagnes (email + warmup), CRM (pipeline), Forms (capture leads)
-- Plans (pivot freemium) : Gratuit 0€ (toute la suite avec limites + 25 crédits Prospection/mois) / Prospection 19€/mois ou 190€/an (500 crédits/mois, packs de crédits dès 9€) / MAX 179€/mois ou 1690€/an (suite illimitée + Autopilot — code public MAX99 : 3 premiers mois à 99€)
+- Plans (pivot freemium) : Gratuit 0€ (toute la suite avec limites + 25 crédits Prospection/mois) / Prospection 19€/mois ou 190€/an (500 crédits/mois, packs de crédits dès 9€) / MAX 179€/mois ou 1690€/an (suite complète + Autopilot — code public MAX99 : 3 premiers mois à 99€)
 - Essai gratuit : 14 jours de MAX sans CB
 - Hébergement 100% UE, conforme RGPD
 - l'IA exécute le travail répétitif, l'humain décide (équipe basée à Marseille)

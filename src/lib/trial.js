@@ -11,7 +11,7 @@
 //
 // Comportement :
 //   - Au signup, on set trial_plan='max' (pivot freemium 11/06/2026 :
-//     14 jours de MAX = Autopilot + suite illimitée), trial_ends_at=now+14d.
+//     14 jours de MAX = Autopilot + suite complète), trial_ends_at=now+14d.
 //   - Tant que trial_ends_at > now → getEffectivePlan() retourne trial_plan.
 //   - À expiration, le cron /api/cron/expire-trials remet plan='free' et
 //     envoie l'email trial_expired.

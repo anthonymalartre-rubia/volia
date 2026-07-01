@@ -574,7 +574,7 @@ function PricingFocusSection() {
       name: 'MAX',
       price: '179 €',
       period: '/mois',
-      prospects: 'Suite illimitée + Autopilot + 2 000 crédits/mois + équipes + MCP',
+      prospects: 'Suite complète + Autopilot + 2 000 crédits/mois + équipes + MCP',
       audience: 'pour équipes outbound · code MAX99 : 3 mois à 99 €',
       cta: 'Choisir MAX',
       href: '/signup?plan=max',
@@ -887,7 +887,7 @@ export default function ProspectionProductPage() {
         }}
         pricing={{
           label: 'Inclus dans tous les plans, dès le plan Gratuit',
-          subtext: 'Gratuit 0 € (25 crédits/mois) · Prospection 19 € (500 crédits + 500 téléphones) · MAX 179 € (2 000 crédits + suite illimitée + Autopilot, code MAX99 : 3 mois à 99 €). Packs de crédits dès 9 €. Pas d\'engagement, annulation 1 clic.',
+          subtext: 'Gratuit 0 € (25 crédits/mois) · Prospection 19 € (500 crédits + 500 téléphones) · MAX 179 € (2 000 crédits + suite complète + Autopilot, code MAX99 : 3 mois à 99 €). Packs de crédits dès 9 €. Pas d\'engagement, annulation 1 clic.',
           cta: 'Voir les tarifs complets',
           ctaHref: '/#pricing',
         }}

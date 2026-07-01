@@ -4,13 +4,18 @@
 // PricingContentEN — English standalone /pricing version (Volia)
 // ─────────────────────────────────────────────────────────────────────
 // Mirror of PricingContent.jsx (FR source of truth, June 2026 freemium
-// pivot). Public lineup: Free / Prospection / MAX.
+// pivot). The 3 plans are 3 INTENSITIES of Volia One (domain → leads +
+// emails → pipeline). Public lineup: Free / Prospection / MAX.
 //
-//   Free        → the WHOLE suite (Campaigns, CRM, Forms, Project)
-//                 with limits + 25 discovery Prospection credits.
-//   Prospection → €19/mo: the data. 500 enrichment credits/month.
-//   MAX         → €179/mo: unlimited suite + Autopilot + 2,000 credits.
+//   Free        → try Volia One: type your domain, see leads + emails.
+//                 The WHOLE suite (5 modules) with limits + 25 credits.
+//   Prospection → €19/mo: Volia One for solo. 500 credits/month.
+//   MAX         → €179/mo: Volia One on 24/7 autopilot + complete suite
+//                 + 2,000 credits/mo included + packs.
 //                 Code MAX99 = first 3 months at €99.
+//
+// 5 modules (Prospection, Campaigns, CRM, Forms, Project) = the engine
+// under the hood of Volia One. Autopilot = the 24/7 mode, MAX only.
 //
 // Solo / Pro / Business / Enterprise are legacy (grandfathered, no
 // longer shown). Prices displayed in EUR (billing currency).
@@ -33,14 +38,15 @@ const PLANS = [
   {
     id: 'free',
     name: 'Free',
-    tagline: 'The whole suite, to get started',
+    tagline: 'Try Volia One: your domain → leads',
     monthlyEur: 0,
     yearlyEur: 0,
     cta: 'Start for free',
     href: '/signup?plan=free',
     inheritsFrom: null,
     features: [
-      'Campaigns, CRM, Forms & Project included',
+      'Type your domain, see your leads + emails',
+      'Prospection, Campaigns, CRM, Forms & Project included',
       '200 cold emails / month (your own domain)',
       '1 CRM pipeline · 2 forms · 1 client project',
       '25 free Prospection credits / month',
@@ -50,7 +56,7 @@ const PLANS = [
   {
     id: 'prospection',
     name: 'Prospection',
-    tagline: 'Find B2B emails',
+    tagline: 'Volia One for solo — fill your pipeline',
     monthlyEur: 19,
     yearlyEur: 190,
     cta: 'Choose Prospection',
@@ -68,7 +74,7 @@ const PLANS = [
   {
     id: 'max',
     name: 'MAX',
-    tagline: 'Your B2B pipeline, end-to-end auto',
+    tagline: 'Volia One on 24/7 autopilot',
     monthlyEur: 179,
     yearlyEur: 1690,
     cta: 'Go MAX',
@@ -84,9 +90,9 @@ const PLANS = [
       code: 'MAX99',
     },
     features: [
-      '⚡ Volia Autopilot — end-to-end B2B pipeline (3 workflows, IF/ELSE, A/B)',
-      'UNLIMITED Campaigns, CRM, Forms & Project',
-      '2,000 Prospection credits / month',
+      '⚡ 24/7 Autopilot mode — Volia One runs your pipeline end-to-end (3 workflows, IF/ELSE, A/B)',
+      'Complete suite: Campaigns, CRM, Forms & Project (unlimited sequences, pipelines, forms & projects)',
+      '2,000 Prospection credits / month included + packs',
       'Decision-maker enrichment (CEO, CMO, Sales, HR)',
       '10,000 cold emails / month (auto warmup included)',
       '10,000 phone numbers / month',
@@ -97,8 +103,10 @@ const PLANS = [
   },
 ];
 
-// Modules per plan — freemium pivot: all 4 modules are included
-// EVERYWHERE (with limits outside MAX). Autopilot = MAX only.
+// Modules per plan — Volia One runs on 5 modules (Prospection,
+// Campaigns, CRM, Forms, Project), all included EVERYWHERE (with limits
+// outside MAX). The badges below surface 4; Project ships on every plan
+// too. Autopilot = the 24/7 mode, MAX only.
 const PLAN_MODULES = {
   free:        { prospection: 'limited', campaigns: true, crm: true, forms: true },
   prospection: { prospection: true,      campaigns: true, crm: true, forms: true },
@@ -116,7 +124,7 @@ const PLAN_VISUALS = {
 // 7 FR sections.
 const COMPARE_SECTIONS = [
   {
-    title: '⚡ Volia Autopilot (auto pipeline)',
+    title: '⚡ Volia One on autopilot — 24/7 mode (MAX)',
     rows: [
       ['Autopilot workflows', false, false, '3'],
       ['Full pipeline: scrape → email → qualify → CRM', false, false, true],
@@ -220,7 +228,7 @@ const PERSONAS = [
     title: 'I want everything on autopilot',
     plan: 'max',
     planLabel: 'MAX · €99/mo for 3 months (code MAX99), then €179',
-    description: 'Volia Autopilot scrapes, enriches, writes (AI), sends, qualifies and pushes hot leads into your CRM. Unlimited suite + 2,000 credits + teams + MCP.',
+    description: 'Volia One on 24/7 autopilot: it scrapes, enriches, writes (AI), sends, qualifies and pushes hot leads into your CRM. Complete suite + 2,000 credits/mo included + packs + teams + MCP.',
     highlight: true,
   },
 ];
@@ -241,11 +249,11 @@ const TRUST_SIGNALS = [
 const FAQ = [
   {
     q: 'How does the MAX99 code work?',
-    a: 'Enter code MAX99 at checkout and the MAX plan drops to €99/mo for your first 3 months (instead of €179), then reverts to the standard price. No hidden fees, 1-click cancellation anytime.',
+    a: 'Enter code MAX99 at checkout and MAX (Volia One on 24/7 autopilot) drops to €99/mo for your first 3 months (instead of €179), then reverts to the standard price. No hidden fees, 1-click cancellation anytime.',
   },
   {
     q: 'Is there really a free plan?',
-    a: 'Yes — free forever, no credit card. The Free plan includes the whole suite: Campaigns (200 cold emails/mo), CRM (1 pipeline), Forms (2 forms), Project (1 active project), plus 25 Prospection credits every month. No surprise charge — ever.',
+    a: 'Yes — free forever, no credit card. On Free you can try Volia One right away: type your domain and see your leads + emails. It includes the whole suite: Campaigns (200 cold emails/mo), CRM (1 pipeline), Forms (2 forms), Project (1 active project), plus 25 Prospection credits every month. No surprise charge — ever.',
   },
   {
     q: 'Can I change plans anytime?',
@@ -334,8 +342,8 @@ export default function PricingContentEN() {
               The price of a coffee a day<br />for a B2B pipeline<br />on autopilot.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              <strong className="text-content-primary">The suite is free</strong> — Campaigns, CRM, Forms &amp; Project included for everyone.
-              You pay to fill it (<strong className="text-content-primary">Prospection, €19/month</strong>) or to run it on autopilot (<strong className="text-content-primary">MAX</strong>).
+              <strong className="text-content-primary">Volia One in 3 intensities.</strong> Start free — type your domain, see your leads + emails, the whole suite included.
+              Then fill your pipeline solo (<strong className="text-content-primary">Prospection, €19/month</strong>) or put it on 24/7 autopilot (<strong className="text-content-primary">MAX</strong>).
               <strong className="text-amber-600"> Code MAX99: €99/month for your first 3 months.</strong>
             </p>
 
@@ -391,7 +399,7 @@ export default function PricingContentEN() {
                 ⚡ MAX launch offer — <span className="font-bold">€99/month</span> for your first 3 months (then €179).
               </p>
               <p className="text-xs text-amber-800 mt-1.5">
-                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> at checkout · Autopilot + unlimited suite + 2,000 credits/month.
+                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> at checkout · Volia One on 24/7 autopilot + complete suite + 2,000 credits/month included + packs.
               </p>
             </div>
           </MotionInView>
@@ -489,14 +497,14 @@ export default function PricingContentEN() {
                       {plan.cta}
                     </Link>
 
-                    {/* MAX killer feature: unlimited suite + Autopilot */}
+                    {/* MAX killer feature: complete suite + 24/7 Autopilot mode */}
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
-                          <Star size={11} fill="currentColor" /> UNLIMITED suite + Autopilot
+                          <Star size={11} fill="currentColor" /> Volia One on 24/7 autopilot
                         </p>
                         <p className="text-[11px] text-violet-700 leading-snug">
-                          CRM · Campaigns · Forms · Project, no caps
+                          Complete suite — CRM · Campaigns · Forms · Project, unlimited
                         </p>
                       </div>
                     )}
@@ -651,7 +659,7 @@ export default function PricingContentEN() {
               <p>
                 <strong>MAX launch offer</strong> — €99/mo for your first 3 months with code{' '}
                 <strong>MAX99</strong> at checkout, then €179/mo.{' '}
-                <Link href="/en/products/autopilot" className="underline font-semibold">See Autopilot →</Link>
+                <Link href="/en/products/autopilot" className="underline font-semibold">See the 24/7 Autopilot mode →</Link>
               </p>
             </div>
           </MotionInView>

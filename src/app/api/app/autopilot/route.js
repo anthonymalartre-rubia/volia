@@ -143,7 +143,7 @@ export async function POST(request) {
     if (limits.workflows === 0) {
       return NextResponse.json({
         error: 'plan_does_not_allow_autopilot',
-        message: 'Ton plan actuel n\'inclut pas Volia Autopilot. Passe en MAX (179€/mois — code MAX99 : 3 mois à 99€) pour le débloquer.',
+        message: 'Ton plan actuel n\'inclut pas le mode Autopilot de Volia One. Passe en MAX (179€/mois — code MAX99 : 3 mois à 99€) pour le débloquer.',
         upgrade_url: '/pricing',
       }, { status: 403 });
     }

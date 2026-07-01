@@ -18,13 +18,13 @@ export const FAQ_ITEMS = [
     category: 'product',
     question: "Concrètement, c'est quoi Volia ?",
     answer:
-      "Un pipeline B2B en autopilot : tu sélectionnes ta cible, Volia exécute la chaîne complète — scrap des boites (Google Places, 150+ catégories, 101 départements), email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans ton CRM. Ça remplace une stack Apollo + Lemlist + HubSpot, en une seule app — gratuite pour démarrer, dès 19€/mois pour la donnée : de la cible au lead chaud livré, tu ne touches pas la mécanique.",
+      "Volia One : tu entres ton domaine, Volia trouve tes prospects (email + téléphone), rédige et envoie tes cold emails, et remplit ton pipeline. Sous le capot, 5 modules connectés (Prospection, Campagnes, CRM, Formulaires, Project) exécutent la chaîne complète — scrap des boites (Google Places, 150+ catégories, 101 départements), email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans ton CRM. Ça remplace une stack Apollo + Lemlist + HubSpot, en une seule app — gratuite pour démarrer, dès 19€/mois pour la donnée : de la cible au lead chaud livré, tu ne touches pas la mécanique.",
   },
   {
     category: 'product',
-    question: 'Comment marche Volia Autopilot ?',
+    question: 'Comment marche Volia One ?',
     answer:
-      "C'est le pipeline B2B automatisé de bout en bout. Tu choisis ta cible (secteur + zone) et un template d'email, puis Volia enchaîne tout seul : scrap des entreprises, enrichissement des emails, envoi d'un email personnalisé par IA, formulaire de qualification, scoring du lead, et push dans ton CRM. De la cible au lead chaud livré, automatisé — tu suis juste les résultats.",
+      "Tu entres ton domaine sur /one et Volia One exécute la chaîne B2B de bout en bout : scrap des entreprises, enrichissement des emails, envoi d'un email personnalisé par IA, formulaire de qualification, scoring du lead, et push dans ton CRM. Sur le plan MAX, tu débloques le mode Autopilot 24/7 : Volia One tourne en pilote automatique, sans que tu touches la mécanique. De la cible au lead chaud livré — tu suis juste les résultats.",
   },
   {
     category: 'product',
@@ -34,9 +34,9 @@ export const FAQ_ITEMS = [
   },
   {
     category: 'pricing',
-    question: 'Autopilot est inclus dans quel plan ?',
+    question: 'Le mode Autopilot est inclus dans quel plan ?',
     answer:
-      "Autopilot est inclus dans le plan MAX à 179€/mois : 3 workflows en parallèle, branches IF/ELSE et A/B testing. Avec le code MAX99, les 3 premiers mois sont à 99€/mois. Et l'essai gratuit de 14 jours te donne MAX complet, sans carte bancaire. Tu peux changer de plan à tout moment depuis tes paramètres.",
+      "Le mode Autopilot 24/7 de Volia One est inclus dans le plan MAX à 179€/mois : Volia One tourne en pilote automatique, avec 3 workflows en parallèle, branches IF/ELSE et A/B testing. Avec le code MAX99, les 3 premiers mois sont à 99€/mois. Sur le plan Gratuit, tu peux déjà tester Volia One : tape ton domaine, vois tes leads + tes emails, avec des limites. Tu peux changer de plan à tout moment depuis tes paramètres.",
   },
   {
     category: 'trust',
@@ -66,7 +66,7 @@ export const FAQ_ITEMS = [
     category: 'pricing',
     question: 'Le plan gratuit, ça couvre quoi ?',
     answer:
-      "Gratuit = toute la suite avec des limites : 25 crédits Prospection/mois, 100 recherches, 200 cold emails, 1 séquence, 1 pipeline CRM, 2 formulaires, 5 exports CSV. Sans CB. Pour la donnée à volume, Prospection à 19€/mois (500 crédits) — le moins cher du marché français. MAX à 179€/mois pour la suite complète + Autopilot.",
+      "Gratuit = toute la suite avec des limites : 25 crédits Prospection/mois, 100 recherches, 200 cold emails, 1 séquence, 1 pipeline CRM, 2 formulaires, 5 exports CSV. Sans CB. Tu peux déjà tester Volia One : tape ton domaine, vois tes leads + tes emails. Pour la donnée à volume, Prospection à 19€/mois (500 crédits) — le moins cher du marché français. MAX à 179€/mois pour la suite complète + Volia One en mode Autopilot 24/7.",
   },
   {
     category: 'trust',
@@ -90,13 +90,13 @@ export const FAQ_ITEMS = [
     category: 'vs',
     question: 'Et vs HubSpot + Apollo + Lemlist en stack ?',
     answer:
-      "Stack classique B2B = HubSpot + Apollo + Lemlist + un email finder. Total : ~270€/mois. Volia c'est les 4 dans une app à 179€/mois (MAX) — et 99€/mois les 3 premiers mois avec le code MAX99. Les données sont partagées en natif : un lead découvert en Prospection devient contact CRM dès qu'il répond à une campagne. Zéro export/import entre outils.",
+      "Stack classique B2B = HubSpot + Apollo + Lemlist + un email finder. Total : ~270€/mois. Volia c'est les 5 modules dans une app à 179€/mois (MAX), pilotés par Volia One en mode Autopilot 24/7 — et 99€/mois les 3 premiers mois avec le code MAX99. Les données sont partagées en natif : un lead découvert en Prospection devient contact CRM dès qu'il répond à une campagne. Zéro export/import entre outils.",
   },
   {
     category: 'pricing',
     question: 'Je peux prendre que la Prospection ?',
     answer:
-      "Oui. Le plan Prospection à 19€/mois, c'est la donnée : 500 crédits/mois, 500 téléphones, exports illimités, API publique — parfait si vous avez déjà Lemlist ou HubSpot. Les autres modules restent dispo gratuitement avec des limites, et MAX à 179€/mois passe toute la suite en illimité avec Autopilot.",
+      "Oui. Le plan Prospection à 19€/mois, c'est la donnée : 500 crédits/mois, 500 téléphones, exports illimités, API publique — parfait si vous avez déjà Lemlist ou HubSpot. Les autres modules restent dispo gratuitement avec des limites, et MAX à 179€/mois débloque la suite complète (2 000 crédits/mois + packs) avec Volia One en mode Autopilot 24/7.",
   },
   {
     category: 'product',

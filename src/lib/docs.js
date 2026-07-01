@@ -219,7 +219,7 @@ Volia propose 3 plans, tous facturables au mois ou à l'année (2 mois offerts e
 | --- | --- | --- | --- |
 | **Gratuit** | 0 € | 25 | Tester toute la suite, sans CB |
 | **Prospection** | 19 €/mo | 500 | Freelances, consultants, PME |
-| **MAX** | 179 €/mo | 2 000 | Suite complète + Autopilot |
+| **MAX** | 179 €/mo | 2 000 | Suite complète + Volia One en mode Autopilot 24/7 |
 
 Sur MAX, le code public **MAX99** te donne les 3 premiers mois à 99 €/mois. Besoin de plus de crédits ponctuellement ? Les **packs de crédits** (100 crédits = 9 €, 500 = 29 €, 2 000 = 79 €) s'achètent à la demande sur tous les plans.
 
@@ -230,13 +230,13 @@ Sur MAX, le code public **MAX99** te donne les 3 premiers mois à 99 €/mois. B
 - Cascade waterfall 7 sources
 - Filtrage RGPD emails personnels
 - Export CSV + Zoho CRM
-- Modules Campagnes, CRM et Formulaires (avec limites sur Gratuit et Prospection)
+- Les 5 modules connectés (Prospection, Campagnes, CRM, Formulaires, Project) qui font tourner Volia One — avec limites sur Gratuit et Prospection
 
 ### Ce qui change avec le plan
 
-- Les **crédits Prospection mensuels** (emails trouvés, reset le 1er du mois).
-- Les **limites de la suite** : 1 séquence, 1 pipeline CRM, 2 formulaires et 200 cold emails/mois en Gratuit et Prospection — tout illimité en MAX.
-- **Volia Autopilot** (pipeline B2B end-to-end auto) : MAX uniquement.
+- Les **crédits Prospection mensuels** (emails trouvés, reset le 1er du mois) : 25 en Gratuit, 500 en Prospection, 2 000 en MAX (+ packs de crédits à la demande).
+- Les **limites de la suite** : 1 séquence, 1 pipeline CRM, 2 formulaires et 200 cold emails/mois en Gratuit et Prospection — séquences, pipelines et formulaires illimités en MAX.
+- **Volia One en mode Autopilot 24/7** (pipeline B2B end-to-end auto) : MAX uniquement.
 - Le **support** : email pour tous, prioritaire sur MAX.
 
 ## Changer de plan
@@ -290,7 +290,7 @@ Ton compteur affiche 25 crédits Prospection, qui se réinitialisent le 1er de c
 
 Quand tu as besoin de plus, tu choisis :
 - **Prospection** (19 €/mois) : 500 crédits/mois.
-- **MAX** (179 €/mois) : suite complète + Volia Autopilot + 2 000 crédits + support prioritaire. Avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
+- **MAX** (179 €/mois) : suite complète + Volia One en mode Autopilot 24/7 + 2 000 crédits/mois (+ packs) + support prioritaire. Avec le code **MAX99**, les 3 premiers mois sont à 99 €/mois.
 
 Aucun engagement, aucun prélèvement tant que tu n'as pas choisi de passer en payant.
 

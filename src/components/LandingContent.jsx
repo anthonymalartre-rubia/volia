@@ -137,37 +137,34 @@ export default function LandingContent() {
 
             {/* ─── COLONNE GAUCHE : Copy ─── */}
             <div className="text-left animate-in fade-in slide-in-from-bottom-4 duration-700">
-              {/* Badge — repositioning 80/20 (mai 2026) : Volia = générateur
-                  email + téléphone B2B. Les 3 autres modules (Campagnes/CRM/
-                  Formulaires) sont gratuits pour tous depuis le pivot freemium
-                  → mentionnés en bas du hero, pas dans le badge. */}
-              {/* Badge pivot juin 2026 : Autopilot = nouvelle proposition de valeur principale.
-                  Volia = pipeline B2B end-to-end auto (scrap → email → form → CRM)
-                  plutôt qu'un simple générateur de leads. */}
+              {/* Badge — pivot "Volia One" (juillet 2026) : le produit héros
+                  est Volia One (entre ton domaine → leads email+tél → cold
+                  emails écrits & envoyés → pipeline rempli). Les 5 modules
+                  (Prospection/Campagnes/CRM/Formulaires/Project) sont le moteur
+                  sous le capot. Autopilot = le mode 24/7 de Volia One (plan MAX),
+                  pas une marque à part. */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-300 text-xs mb-6 font-medium shadow-sm shadow-amber-500/10">
                 <Sparkles size={12} className="text-amber-700" />
-                <span className="text-amber-800 font-bold">⚡ NOUVEAU · VOLIA AUTOPILOT — PIPELINE B2B AUTO</span>
+                <span className="text-amber-800 font-bold">⚡ NOUVEAU · VOLIA ONE — DE TON DOMAINE À TON PIPELINE</span>
               </div>
 
-              {/* H1 — bénéfice concret pour un visiteur froid (juin 2026).
-                  L'ancien "Ton pipeline B2B. En autopilot." était trop abstrait :
-                  un froid ne savait pas CE QUE fait Volia. On nomme le résultat
-                  observable (pipeline rempli) + le bénéfice (zéro prospection
-                  manuelle), tout en gardant l'esprit automatisation. */}
+              {/* H1 — bénéfice concret pour un visiteur froid. Ligne forte
+                  conservée (audit OK). On nomme le résultat observable (pipeline
+                  rempli) + le bénéfice (zéro prospection manuelle). */}
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
                 <span className="text-content-primary">Remplis ton pipeline B2B</span>
                 <br />
                 <span className="bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">sans prospecter à la main.</span>
               </h1>
 
-              {/* Sous-titre — pitch Autopilot complet en 1 phrase.
-                  Volia fait TOUT le pipeline. Le user ne touche rien. */}
+              {/* Sous-titre — pitch Volia One en 1 phrase.
+                  Entre ton domaine → Volia One trouve tes prospects, écrit et
+                  envoie tes cold emails, et remplit ton pipeline. */}
               <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-xl">
-                Sélectionne ta cible. Volia <strong className="text-content-primary">scrap, enrichit, contacte, qualifie</strong> et livre les leads chauds dans ton CRM.
+                Entre ton domaine. <strong className="text-content-primary">Volia One</strong> trouve tes prospects (email + tél), <strong className="text-content-primary">écrit et envoie</strong> tes cold emails et remplit ton pipeline.
               </p>
               <p className="text-base text-content-secondary mb-6 leading-relaxed max-w-xl">
-                <strong className="text-content-primary">Tu ne touches rien.</strong> 2 semaines plus tard, ton pipeline est plein.
-                Démarrage <strong className="text-content-primary">gratuit. Sans CB.</strong>
+                <strong className="text-content-primary">Tu ne touches rien.</strong> En MAX, Volia One tourne en <strong className="text-content-primary">pilote automatique 24/7</strong>. Démarrage <strong className="text-content-primary">gratuit. Sans CB.</strong>
               </p>
 
               {/* Pivot freemium : la suite est gratuite, MAX99 = offre de
@@ -177,14 +174,15 @@ export default function LandingContent() {
                 <span>🎁 <strong className="text-content-secondary not-italic">CRM, Campagnes, Formulaires &amp; Project gratuits</strong> pour tous — et MAX à <strong className="text-content-secondary not-italic">99&nbsp;€/mois</strong> les 3 premiers mois, code <strong className="text-content-secondary not-italic">MAX99</strong>.</span>
               </p>
 
-              {/* CTAs — 1 CTA principal mis en avant, démo en secondaire.
-                  Sur mobile : boutons un peu plus compacts (py-4) pour alléger le hero. */}
+              {/* CTAs — 1 CTA principal mis en avant (entrée Volia One → /one),
+                  démo en secondaire. Sur mobile : boutons un peu plus compacts
+                  (py-4) pour alléger le hero. */}
               <div className="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
                 <Link
-                  href="/signup"
+                  href="/one"
                   className="group inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/50 hover:-translate-y-0.5 transition-all text-base"
                 >
-                  Démarrer gratuitement
+                  Entre ton domaine
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <DemoVideoButton
@@ -403,24 +401,25 @@ export default function LandingContent() {
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          VOLIA AUTOPILOT — PRODUIT FLAGSHIP (juin 2026)
+          VOLIA ONE — PRODUIT HÉROS (juillet 2026)
           ─────────────────────────────────────────────────────────────
-          Le pipeline B2B de bout en bout est désormais le héros du corps
-          de la landing : cible → email perso → form qualif → CRM.
-          Prospection/Campagnes/CRM/Forms deviennent les briques que
-          l'Autopilot orchestre.
+          Volia One = l'expérience phare : entre ton domaine → leads
+          (email + tél) → cold emails écrits & envoyés → pipeline rempli.
+          Les 5 modules (Prospection/Campagnes/CRM/Formulaires/Project)
+          sont le moteur sous le capot que Volia One orchestre. Le mode
+          Autopilot 24/7 est la super-capacité du plan MAX.
        */}
       <section className="py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-amber-50/40 via-white to-white">
         <div className="max-w-6xl mx-auto">
           <MotionInView>
             <div className="text-center mb-12">
-              <p className="text-sm font-semibold text-amber-600 mb-3 uppercase tracking-wider">⚡ Le produit phare</p>
+              <p className="text-sm font-semibold text-amber-600 mb-3 uppercase tracking-wider">⚡ Le produit héros</p>
               <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">
-                Volia Autopilot.
+                Volia One.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Tu choisis ta cible. Volia <strong className="text-content-secondary">scrape, écrit, qualifie</strong> et livre les leads chauds dans ton CRM.
-                Le pipeline B2B complet, en autopilote.
+                Entre ton domaine. Volia One <strong className="text-content-secondary">trouve tes prospects, écrit et envoie</strong> tes cold emails et remplit ton pipeline.
+                En MAX, il tourne en <strong className="text-content-secondary">pilote automatique 24/7</strong>.
               </p>
             </div>
           </MotionInView>
@@ -429,8 +428,8 @@ export default function LandingContent() {
           <MotionInView delay={100}>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
               {[
-                { n: '1', t: 'Cible', d: 'Tu sélectionnes secteur + zone + template' },
-                { n: '2', t: 'Email perso', d: 'Volia scrape, enrichit et écrit (IA) chaque email' },
+                { n: '1', t: 'Domaine', d: 'Tu entres ton domaine (ou secteur + zone)' },
+                { n: '2', t: 'Email perso', d: 'Volia One scrape, enrichit et écrit (IA) chaque email' },
                 { n: '3', t: 'Qualif', d: 'Formulaire + scoring auto Hot / Warm / Cold' },
                 { n: '4', t: 'CRM', d: 'Les leads chauds atterrissent dans ton pipeline' },
               ].map((s, i) => (
@@ -447,23 +446,23 @@ export default function LandingContent() {
           <MotionInView delay={200}>
             <div className="text-center mb-24">
               <Link
-                href="/produits/autopilot"
+                href="/one"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:from-amber-600 hover:to-orange-700 transition shadow-lg shadow-amber-500/20"
               >
-                Découvrir Volia Autopilot →
+                Essaie Volia One →
               </Link>
-              <p className="text-xs text-content-tertiary mt-3">Inclus dans le plan MAX · 99 €/mois les 3 premiers mois avec MAX99</p>
+              <p className="text-xs text-content-tertiary mt-3">Le mode Autopilot 24/7 est débloqué en MAX · 99 €/mois les 3 premiers mois avec MAX99</p>
             </div>
           </MotionInView>
         </div>
       </section>
 
       {/* ──────────────────────────────────────────────────────────────
-          VOLIA PROSPECTION — la brique moteur de l'Autopilot
+          VOLIA PROSPECTION — la brique moteur de Volia One
           ─────────────────────────────────────────────────────────────
           Prospection reste détaillé (SEO + ceux qui veulent juste le
-          lead-gen via Solo), mais cadré comme une brique du pipeline,
-          plus comme "LE produit".
+          lead-gen via Solo), mais cadré comme un module du moteur sous
+          le capot de Volia One, plus comme "LE produit".
        */}
       <section className="hidden md:block py-12 sm:py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
         <div className="max-w-6xl mx-auto">
@@ -476,7 +475,7 @@ export default function LandingContent() {
                 Volia Prospection.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Le moteur de données qui alimente l&apos;Autopilot — et dispo seul si tu veux juste les contacts.
+                Le moteur de données qui alimente Volia One — et dispo seul si tu veux juste les contacts.
                 <strong className="text-content-secondary"> Email et téléphone</strong> scrappés en temps réel via Google Places + cascade waterfall.
               </p>
             </div>
@@ -726,7 +725,7 @@ export default function LandingContent() {
                 1 outil au prix d&apos;1. Pas 3 outils au prix de 3.
               </h2>
               <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez toute la suite Volia + l&apos;Autopilot
+                Pour le prix d&apos;Apollo tout seul (~99 $/mo), vous avez Volia One en pilote automatique + la suite complète
                 pendant 3 mois (code MAX99). Soit <strong className="text-emerald-700">~90 à 170 €/mois</strong> dans votre poche.
               </p>
             </div>
@@ -797,7 +796,7 @@ export default function LandingContent() {
 
                 <div className="space-y-3 mb-6">
                   {[
-                    { tool: 'Volia Autopilot', desc: 'Pipeline B2B end-to-end auto', color: 'amber' },
+                    { tool: 'Volia One (Autopilot 24/7)', desc: 'Domaine → leads → cold emails → pipeline', color: 'amber' },
                     { tool: 'Volia Prospection', desc: '150+ catégories × 101 départements', color: 'violet' },
                     { tool: 'Volia Campagnes', desc: 'Séquences email + warmup', color: 'blue' },
                     { tool: 'Volia CRM', desc: 'Pipeline Kanban + deals', color: 'emerald' },
@@ -1386,7 +1385,7 @@ export default function LandingContent() {
               <h3 className="text-xs font-semibold text-content-secondary uppercase tracking-wider mb-3">Produit</h3>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/" className="text-content-tertiary hover:text-violet-400 transition">Accueil</Link></li>
-                <li><Link href="/produits/autopilot" className="text-amber-500 font-medium hover:text-amber-400 transition">⚡ Volia Autopilot</Link></li>
+                <li><Link href="/one" className="text-amber-500 font-medium hover:text-amber-400 transition">⚡ Volia One</Link></li>
                 <li><Link href="/signup" className="text-content-tertiary hover:text-violet-400 transition">Inscription</Link></li>
                 <li><Link href="/login" className="text-content-tertiary hover:text-violet-400 transition">Connexion</Link></li>
                 <li><Link href="/pricing" className="text-content-tertiary hover:text-violet-400 transition">Tarifs</Link></li>

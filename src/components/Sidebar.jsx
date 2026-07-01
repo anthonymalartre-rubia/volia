@@ -45,8 +45,8 @@ function hasAccess(userPlanId, requiredPlanId) {
 // affichés reflètent le lineup freemium (Prospection 19€ / MAX 179€).
 const PLAN_META = {
   solo: { name: 'Prospection', price: 19, hint: 'Passe Prospection : 500 crédits/mois' },
-  pro: { name: 'MAX', price: 179, hint: 'Passe MAX : suite illimitée + Autopilot' },
-  business: { name: 'MAX', price: 179, hint: 'Passe MAX : suite illimitée + Autopilot' },
+  pro: { name: 'MAX', price: 179, hint: 'Passe MAX : suite complète + Autopilot' },
+  business: { name: 'MAX', price: 179, hint: 'Passe MAX : suite complète + Autopilot' },
 };
 
 // Plan suivant à proposer dans l'encart de bas de sidebar

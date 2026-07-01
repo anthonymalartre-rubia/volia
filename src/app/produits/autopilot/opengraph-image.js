@@ -6,7 +6,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Volia Autopilot — Ta prospection en pilote automatique (à partir de 19 €/mois, plan Gratuit sans carte bancaire)';
+export const alt = 'Autopilot — Volia One en pilote automatique 24/7 (débloqué au plan MAX, plan Gratuit pour essayer sans carte bancaire)';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -70,8 +70,8 @@ export default function Image() {
               <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
             </svg>
           </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-            <span style={{ fontSize: '36px', fontWeight: 700, color: 'white' }}>Volia</span>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span style={{ fontSize: '36px', fontWeight: 700, color: 'white' }}>Volia One</span>
             <span style={{ fontSize: '24px', fontWeight: 600, color: '#a78bfa' }}>Autopilot</span>
           </div>
         </div>
@@ -88,7 +88,7 @@ export default function Image() {
             marginBottom: '24px',
           }}
         >
-          Ta prospection. En pilote automatique.
+          Volia One. En pilote automatique.
         </div>
 
         {/* Sous-titre */}
@@ -102,7 +102,7 @@ export default function Image() {
             marginBottom: '40px',
           }}
         >
-          Volia trouve les entreprises, écrit l'email, qualifie, score et livre les leads chauds dans ton CRM. Toi, tu valides et tu signes.
+          Entre ton domaine : Volia One trouve les entreprises, écrit l'email, qualifie, score et remplit ton pipeline — 24/7. Toi, tu valides et tu signes.
         </div>
 
         {/* Badges pipeline */}
@@ -140,7 +140,7 @@ export default function Image() {
             fontWeight: 600,
           }}
         >
-          À partir de 19 €/mois — plan Gratuit à vie, sans carte bancaire
+          Débloqué au plan MAX 179 €/mois — plan Gratuit à vie pour essayer, sans carte bancaire
         </div>
       </div>
     ),

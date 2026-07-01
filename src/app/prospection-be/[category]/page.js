@@ -82,7 +82,7 @@ export default async function CategoryBePage({ params }) {
     },
     {
       question: `Quel est le prix pour prospecter en Belgique ?`,
-      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB), puis 19 €/mois avec le plan Prospection (500 crédits + 500 téléphones). Le plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) débloque la suite illimitée. Tous les pays couverts, sans supplément.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois, sans CB), puis 19 €/mois avec le plan Prospection (500 crédits + 500 téléphones). Le plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) débloque la suite complète. Tous les pays couverts, sans supplément.`,
     },
   ];
 

@@ -1045,7 +1045,7 @@ export default function SettingsPage() {
                           </span>
                         </div>
                         <p className="text-[10px] text-content-tertiary mb-3 min-h-[28px]">
-                          {plan.limits.enrichments_per_month.toLocaleString('fr-FR')} crédits Prospection/mois{pid === 'max' ? ' · suite illimitée + Autopilot · MAX99 : 3 mois à 99€' : ''}
+                          {plan.limits.enrichments_per_month.toLocaleString('fr-FR')} crédits Prospection/mois{pid === 'max' ? ' · suite complète + Autopilot · MAX99 : 3 mois à 99€' : ''}
                         </p>
                         {isCurrent ? (
                           <button

@@ -312,7 +312,7 @@ function ProblemSolutionSection() {
                 </div>
                 <div>
                   <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold">Avec Volia MAX</div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Les 3 modules natifs, 1 facture</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-content-primary">Les 5 modules natifs, 1 facture</h3>
                 </div>
               </div>
               <ul className="space-y-3 mb-5">
@@ -320,7 +320,9 @@ function ProblemSolutionSection() {
                   { label: 'Volia Prospection (101 départements)', price: 'Inclus' },
                   { label: 'Volia Campagnes (séquences + warmup)', price: 'Inclus' },
                   { label: 'Volia CRM (Kanban + auto-create)', price: 'Inclus' },
-                  { label: 'Intégrations natives entre les 3 modules', price: 'Inclus' },
+                  { label: 'Volia Formulaires (capture de leads)', price: 'Inclus' },
+                  { label: 'Volia Project (pilotage des projets)', price: 'Inclus' },
+                  { label: 'Intégrations natives entre les 5 modules', price: 'Inclus' },
                 ].map((item, i) => (
                   <li key={i} className="flex items-center justify-between gap-3 py-2 border-b border-emerald-100 last:border-0">
                     <span className="text-sm text-content-primary font-medium">{item.label}</span>
@@ -592,7 +594,7 @@ function PricingFocusBanner() {
         <div>
           <div className="text-[11px] uppercase tracking-wider text-emerald-700 font-bold mb-1">CRM inclus pour tous</div>
           <h4 className="text-xl font-bold text-content-primary">Volia CRM = gratuit pour tous · illimité avec MAX 179 €/mois</h4>
-          <p className="text-sm text-content-secondary mt-1">Le CRM est inclus dans tous les comptes Volia. Avec MAX, toute la suite illimitée (Prospection + Campagnes + Formulaires + Autopilot). Aucun add-on caché, aucune licence par user.</p>
+          <p className="text-sm text-content-secondary mt-1">Le CRM est inclus dans tous les comptes Volia. Avec MAX, toute la suite complète (Prospection + Campagnes + Formulaires + Autopilot). Aucun add-on caché, aucune licence par user.</p>
         </div>
       </div>
 

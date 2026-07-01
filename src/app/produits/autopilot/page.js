@@ -1,6 +1,7 @@
-// /produits/autopilot — Landing page dédiée Volia Autopilot
+// /produits/autopilot — Landing page du mode Autopilot de Volia One
+// Autopilot = Volia One en pilote automatique 24/7, débloqué au plan MAX
 // Pitch B2B end-to-end auto : scrap → email → form → CRM
-// CTA primaire : démarrer gratuitement (push Pro) · CTA secondaire : voir démo 90s
+// CTA primaire : démarrer gratuitement (push MAX) · CTA secondaire : voir démo 15 min
 
 import Link from 'next/link';
 import {
@@ -12,12 +13,12 @@ import ReaderFooter from '@/components/ReaderFooter';
 import { AUTOPILOT_TEMPLATES } from '@/lib/autopilot/templates';
 
 export const metadata = {
-  title: 'Volia Autopilot — Ton pipeline B2B en autopilot | Volia',
-  description: 'Sélectionne ta cible, Volia exécute : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. 12 templates B2B France, RGPD natif. Exclusivité Volia MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour démarrer, sans carte bancaire.',
+  title: 'Autopilot — Volia One en pilote automatique 24/7 | Volia',
+  description: 'Autopilot, c\'est Volia One en pilote automatique : tu entres ton domaine, Volia One trouve tes prospects (email + tél), écrit et envoie tes cold emails, qualifie, score et remplit ton pipeline — 24/7, sans que tu lèves le petit doigt. 12 templates B2B France, RGPD natif. Débloqué au plan MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour essayer, sans carte bancaire.',
   alternates: { canonical: 'https://volia.fr/produits/autopilot' },
   openGraph: {
-    title: 'Volia Autopilot — Pipeline B2B en autopilot',
-    description: 'Volia exécute ta prospection B2B de bout en bout : scraping ciblé, email personnalisé, qualification, scoring et leads chauds livrés dans ton CRM. Made in France, RGPD natif. Exclusivité MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour démarrer.',
+    title: 'Autopilot — Volia One en pilote automatique 24/7',
+    description: 'Autopilot, c\'est Volia One qui tourne tout seul : à partir de ton domaine, Volia One trouve tes prospects (email + tél), écrit et envoie tes cold emails, qualifie, score et remplit ton pipeline. Made in France, RGPD natif. Débloqué au plan MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour essayer.',
     type: 'website',
   },
 };
@@ -52,9 +53,9 @@ const WHY_VOLIA_VS_STACK_US = [
   { feature: 'Séquences email', volia: '✓ Inclus', stack: '+ Lemlist 99$/mo' },
   { feature: 'CRM intégré', volia: '✓ Inclus', stack: '+ HubSpot 800$/mo' },
   { feature: 'Form qualif', volia: '✓ Inclus', stack: '+ Typeform 35$/mo' },
-  { feature: 'Workflow auto end-to-end', volia: '✓ Volia Autopilot', stack: '+ Zapier setup devops' },
+  { feature: 'Workflow auto end-to-end', volia: '✓ Volia One en Autopilot', stack: '+ Zapier setup devops' },
   { feature: 'Hébergement UE / RGPD natif', volia: '✓ Frankfurt', stack: '❌ US' },
-  { feature: 'Prix total mensuel', volia: '179 € (MAX, tout inclus — 3 mois à 99 € avec MAX99)', stack: '1 000+ $' },
+  { feature: 'Prix total mensuel', volia: '179 € (MAX — suite complète, 2000 crédits/mois inclus, 3 mois à 99 € avec MAX99)', stack: '1 000+ $' },
 ];
 
 export default function AutopilotProductPage() {
@@ -70,19 +71,19 @@ export default function AutopilotProductPage() {
           <div className="relative max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-300 text-xs mb-6 font-medium shadow-sm">
               <Zap size={12} className="text-amber-700" />
-              <span className="text-amber-800 font-bold">NOUVEAU · VOLIA AUTOPILOT</span>
+              <span className="text-amber-800 font-bold">LE MODE AUTOPILOT DE VOLIA ONE · PLAN MAX</span>
             </div>
 
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
-              <span className="block text-content-primary">Ton pipeline B2B.</span>
+              <span className="block text-content-primary">Volia One.</span>
               <span className="block bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">
-                En autopilot.
+                En pilote automatique.
               </span>
             </h1>
 
             <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-3xl mx-auto">
-              Sélectionne ta cible. Volia trouve tes prospects, les enrichit, les contacte
-              et livre les leads chauds dans ton CRM. <strong className="text-content-primary">Tu gardes la main, Volia fait le reste.</strong>
+              Entre ton domaine. Volia One trouve tes prospects (email + tél), écrit et envoie tes cold emails,
+              qualifie, score et remplit ton pipeline. <strong className="text-content-primary">L&apos;Autopilot, c&apos;est Volia One qui tourne tout seul, 24/7 — débloqué au plan MAX.</strong>
             </p>
             <p className="text-base text-content-tertiary mb-10 italic">
               Toi, tu te concentres sur le closing.
@@ -90,7 +91,7 @@ export default function AutopilotProductPage() {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-5">
               <Link
-                href="/signup?plan=pro"
+                href="/signup?plan=max"
                 className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white font-semibold shadow-xl shadow-amber-500/30 hover:shadow-2xl hover:shadow-amber-500/50 hover:-translate-y-0.5 transition-all text-base"
               >
                 Démarrer gratuitement
@@ -116,7 +117,7 @@ export default function AutopilotProductPage() {
             {/* Pipeline visualization */}
             <div className="bg-surface-card border border-line rounded-2xl p-6 sm:p-8 max-w-4xl mx-auto shadow-lg">
               <p className="text-xs uppercase tracking-widest font-semibold text-amber-600 mb-6">
-                Le pipeline complet — automatisé end-to-end
+                Le moteur de Volia One — automatisé end-to-end en Autopilot
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-2">
                 {PIPELINE_STEPS.map((step, idx) => {
@@ -151,7 +152,7 @@ export default function AutopilotProductPage() {
               </div>
               <h2 className="text-3xl font-bold tracking-tight mb-3">10 minutes chrono</h2>
               <p className="text-content-secondary mb-6">
-                Setup express. Choisis ton template parmi 12, configure ton ICP, et active.
+                Setup express du mode Autopilot. Choisis ton template parmi 12, configure ton ICP, et active Volia One en 24/7.
               </p>
               <ul className="space-y-3">
                 {CONFIGURATION_TIME_BREAKDOWN.map((item, i) => (
@@ -167,11 +168,11 @@ export default function AutopilotProductPage() {
             </div>
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-semibold mb-4">
-                <Zap size={12} /> Ce qui se passe en autopilot
+                <Zap size={12} /> Ce qui se passe en Autopilot
               </div>
-              <h2 className="text-3xl font-bold tracking-tight mb-3">24/7, en pilote auto</h2>
+              <h2 className="text-3xl font-bold tracking-tight mb-3">Volia One tourne 24/7</h2>
               <p className="text-content-secondary mb-6">
-                Tu fermes l'ordi. Volia continue.
+                Tu fermes l'ordi. Volia One continue en pilote automatique.
               </p>
               <ul className="space-y-2.5">
                 {WHAT_HAPPENS_AUTO.map((item, i) => {
@@ -193,10 +194,10 @@ export default function AutopilotProductPage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-                Volia Autopilot vs la stack US
+                Volia One en Autopilot vs la stack US
               </h2>
               <p className="text-base text-content-secondary max-w-2xl mx-auto">
-                Apollo + Lemlist + HubSpot + Typeform + Zapier devops, ou Volia tout-en-un.
+                Apollo + Lemlist + HubSpot + Typeform + Zapier devops, ou Volia One tout-en-un.
               </p>
             </div>
             <div className="bg-surface-card border border-line rounded-2xl overflow-hidden">
@@ -206,7 +207,7 @@ export default function AutopilotProductPage() {
                     <th className="text-left p-4 font-semibold text-content-primary">Feature</th>
                     <th className="text-left p-4 font-semibold text-amber-700">
                       <div className="flex items-center gap-2">
-                        <Zap size={14} /> Volia Autopilot
+                        <Zap size={14} /> Volia One (Autopilot)
                       </div>
                     </th>
                     <th className="text-left p-4 font-semibold text-content-soft">Stack US classique</th>
@@ -274,14 +275,15 @@ export default function AutopilotProductPage() {
         <section className="py-20 px-4 sm:px-6 bg-gradient-to-br from-amber-600 to-orange-700 text-white">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-              Prêt à remplir ton pipeline sans y passer tes journées ?
+              Prêt à laisser Volia One remplir ton pipeline pour toi ?
             </h2>
             <p className="text-lg opacity-90 mb-8">
-              Plan Gratuit à vie, sans carte bancaire. Tu configures en 10 minutes — Volia s'occupe du reste.
+              Essaie Volia One gratuitement, sans carte bancaire : tape ton domaine, vois tes leads + emails.
+              Passe le tout en Autopilot 24/7 avec le plan MAX — 179 €/mois (3 mois à 99 € avec MAX99).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href="/signup?plan=pro"
+                href="/signup?plan=max"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-amber-700 font-bold hover:bg-amber-50 transition shadow-xl text-base"
               >
                 Démarrer gratuit

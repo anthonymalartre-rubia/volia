@@ -1,12 +1,16 @@
 # Volia — Suite SaaS de growth B2B (anciennement Prospectia)
 
-Volia (domaine `volia.fr`) est une suite SaaS française organisée en 3 modules style HubSpot :
+Volia (domaine `volia.fr`) est une suite SaaS française dont l'expérience phare est **Volia One** : tu entres ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails, et remplit ton pipeline (point d'entrée = `/one`). Volia One est propulsé par **5 modules** — « le moteur sous le capot » — plus le mode **Autopilot** (One en pilote automatique 24/7, débloqué au plan MAX) :
 
 - **Volia Prospection** : génération de leads B2B France (101 départements) via Google Places + cascade waterfall multi-sources (scraping intelligent du site web → recherche Google via Serper → fallback patterns) avec scoring de confiance.
 - **Volia Campagnes** : envoi de séquences email/SMS automatisées sur les prospects qualifiés.
 - **Volia CRM** : (à venir) pipeline et suivi commercial natif Volia.
+- **Volia Formulaires** : capture de leads via formulaires natifs.
+- **Volia Project** : suivi et pilotage des projets/tâches commerciales.
 
-Tarification (pivot freemium 11/06/2026) : Gratuit (toute la suite avec limites + 25 crédits Prospection) · Prospection 19€/mois (500 crédits/mois, prices Stripe Solo réutilisés) · MAX 179€/mois (suite illimitée + Autopilot + 2000 crédits, prices Business réutilisés, code MAX99 = 3 premiers mois à 99€). Solo/Pro/Business/Enterprise = legacy grandfathered (résolvables, plus vendus publiquement).
+Autopilot n'est pas un produit concurrent : c'est le mode 24/7 de Volia One débloqué au plan MAX.
+
+Tarification (pivot freemium 11/06/2026) — 3 intensités de Volia One : Gratuit (essaie : tape ton domaine, vois leads + emails, avec limites + 25 crédits Prospection) · Prospection 19€/mois (One en solo, 500 crédits/mois, prices Stripe Solo réutilisés) · MAX 179€/mois (One en pilote automatique 24/7 + suite complète + 2000 crédits/mois inclus + packs, prices Business réutilisés, code MAX99 = 3 premiers mois à 99€). Solo/Pro/Business/Enterprise = legacy grandfathered (résolvables, plus vendus publiquement).
 
 ## Stack technique
 

@@ -18,8 +18,11 @@ import Link from 'next/link';
 import { Menu, X, Search, Mail, Users, FormInput, Zap, FolderKanban } from 'lucide-react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
+// Volia One = le produit héros (domaine → leads + emails + pipeline).
+// Son point d'entrée est /one (route top-level, pas /produits/*), d'où le
+// `href` explicite. Les 5 modules qui font tourner One vivent sous /produits/*.
 const PRODUCTS_FR = [
-  { slug: 'autopilot', name: 'Volia Autopilot', icon: Zap, accent: 'text-amber-600 bg-amber-100' },
+  { slug: 'one', href: '/one', name: 'Volia One', icon: Zap, accent: 'text-amber-600 bg-amber-100' },
   { slug: 'prospection', name: 'Volia Prospection', icon: Search, accent: 'text-violet-600 bg-violet-100' },
   { slug: 'campagnes', name: 'Volia Campagnes', icon: Mail, accent: 'text-blue-600 bg-blue-100' },
   { slug: 'crm', name: 'Volia CRM', icon: Users, accent: 'text-emerald-600 bg-emerald-100' },
@@ -28,7 +31,7 @@ const PRODUCTS_FR = [
 ];
 
 const PRODUCTS_EN = [
-  { slug: 'autopilot', name: 'Volia Autopilot', icon: Zap, accent: 'text-amber-600 bg-amber-100' },
+  { slug: 'one', href: '/one', name: 'Volia One', icon: Zap, accent: 'text-amber-600 bg-amber-100' },
   { slug: 'prospection', name: 'Volia Prospection', icon: Search, accent: 'text-violet-600 bg-violet-100' },
   { slug: 'campaigns', name: 'Volia Campaigns', icon: Mail, accent: 'text-blue-600 bg-blue-100' },
   { slug: 'crm', name: 'Volia CRM', icon: Users, accent: 'text-emerald-600 bg-emerald-100' },
@@ -100,7 +103,7 @@ export default function MobileNavMenu({ locale = 'fr' }) {
                 return (
                   <Link
                     key={p.slug}
-                    href={`${basePath}/${p.slug}`}
+                    href={p.href || `${basePath}/${p.slug}`}
                     onClick={close}
                     className="flex items-center gap-3 px-2 py-2.5 rounded-xl hover:bg-surface-elevated transition"
                   >

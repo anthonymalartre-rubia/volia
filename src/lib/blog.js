@@ -191,7 +191,7 @@ est vérifiable : tout est public.
 
 Volia est positionné aujourd'hui en freemium : **Gratuit** (toute la
 suite avec limites + 25 crédits Prospection), **Prospection à 19 €/mois**
-(500 crédits) et **MAX à 179 €/mois** pour la suite illimitée + Autopilot
+(500 crédits) et **MAX à 179 €/mois** pour la suite complète + Autopilot
 (code MAX99 : 3 premiers mois à 99 €). Cible :
 
 - **Founders SaaS B2B** (1-3 personnes) qui font leur propre sales 
@@ -734,7 +734,7 @@ Dans cet article, je passe en revue **10 alternatives sérieuses** à Apollo en 
 
 ## 10. Volia — l'alternative française complète
 
-**Prix** : gratuit (25 crédits/mois), 19€/mo (Prospection, 500 crédits), 179€/mo (MAX, suite illimitée)
+**Prix** : gratuit (25 crédits/mois), 19€/mo (Prospection, 500 crédits), 179€/mo (MAX, suite complète)
 
 **Forces** :
 - **Cascade waterfall 7 sources** (scraping intelligent du site, recherche Google, patterns vérifiés... on s'arrête dès qu'un email est trouvé)
@@ -5125,7 +5125,7 @@ Packs de crédits one-time dès 9 € (100 crédits), disponibles sur tous les p
 ### Pour qui ?
 - **Freelance / consultant FR** : Prospection à 19 € imbattable
 - **PME / agence FR** : Prospection à 19 € + packs de crédits selon le volume
-- **Équipes outbound FR** : MAX à 179 € avec 2 000 crédits/mois et la suite illimitée (code MAX99 : 3 mois à 99 €)
+- **Équipes outbound FR** : MAX à 179 € avec 2 000 crédits/mois et la suite complète (code MAX99 : 3 mois à 99 €)
 
 ## Tableau récapitulatif final
 
@@ -6231,7 +6231,7 @@ Pour ceux qui veulent **discovery + enrichment automatisé sans setup complexe**
 - **Total : ~190-250 €/mois**
 
 ### Scale-up (5-20 SDR)
-- **Volia MAX (179 €)** pour la discovery FR + suite illimitée
+- **Volia MAX (179 €)** pour la discovery FR + suite complète
 - **Captain Data Solo (99 $)** pour les workflows custom
 - **Apollo (149 $)** pour les data internationales
 - **Outreach.io (~100 $/user)** pour le cadenceur
@@ -8787,7 +8787,7 @@ Pourtant, **80 % des SaaS B2B sous-tarifient** (étude Pavilion 2024). Il faut s
 
 ### 5. Hybride (modèle 2026 dominant)
 - Combinaison user + features + usage
-- **Exemple** : Volia : Gratuit (25 crédits/mois) / Prospection 19 € (500 crédits) / MAX 179 € (suite illimitée + 2 000 crédits)
+- **Exemple** : Volia : Gratuit (25 crédits/mois) / Prospection 19 € (500 crédits) / MAX 179 € (suite complète + 2 000 crédits)
 - **Avantages** : flexibilité, segmentation client, montée en gamme naturelle
 - **Inconvénients** : complexité de présentation
 
@@ -9356,7 +9356,7 @@ Le choix dépend de **ta cible** (FR vs US), **ton volume** (50 vs 5 000/mois) e
 ### Tarifs Volia 2026
 - Gratuit : 0 € (25 crédits + 100 recherches/mois, toute la suite avec limites)
 - Prospection : 19 €/mo (500 crédits, 2 000 recherches)
-- MAX : 179 €/mo (2 000 crédits, suite illimitée + Autopilot — code MAX99 : 3 mois à 99 €)
+- MAX : 179 €/mo (2 000 crédits, suite complète + Autopilot — code MAX99 : 3 mois à 99 €)
 - Packs de crédits one-time dès 9 € (100 crédits), sur tous les plans
 
 ## Comparatif détaillé 2026
@@ -10641,7 +10641,7 @@ Pour la curiosité oui. Pour prospecter : 60 crédits/mois = 1-2 jours d'activit
 Org plan : 1 490 $/mo affiché + 800-1 500 $ addons = ~2 500 $/mois réel.
 
 **Volia coûte combien à volume équivalent ?**
-Prospection 19 €/mo pour 500 crédits. Pour une équipe de 10 SDR : MAX à 179 €/mois (2 000 crédits + suite illimitée, multi-utilisateurs inclus) — code MAX99 : 3 mois à 99 €.
+Prospection 19 €/mo pour 500 crédits. Pour une équipe de 10 SDR : MAX à 179 €/mois (2 000 crédits + suite complète, multi-utilisateurs inclus) — code MAX99 : 3 mois à 99 €.
 
 ## Conclusion
 

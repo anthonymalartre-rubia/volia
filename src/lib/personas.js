@@ -146,7 +146,7 @@ const PERSONAS = {
       { title: 'Reporting consolidé', desc: 'Vue d\'équipe : campagnes envoyées, taux d\'ouverture, RDV générés. Sans bidouiller Looker pendant 3 jours.' },
       { title: 'Conformité légale auditée', desc: 'Filtre RGPD, opt-out tracé, registre des traitements. Ton DPO arrête de te courir après.' },
     ],
-    idealPlan: { name: 'MAX', price: '179', why: 'Suite illimitée + Autopilot, équipes multi-utilisateurs, 2 000 crédits + 10 000 téléphones/mois. Code MAX99 : 3 premiers mois à 99€.' },
+    idealPlan: { name: 'MAX', price: '179', why: 'Suite complète + Autopilot, équipes multi-utilisateurs, 2 000 crédits + 10 000 téléphones/mois. Code MAX99 : 3 premiers mois à 99€.' },
     testimonialSector: 'Services aux entreprises',
     ctaLabel: 'J\'équipe mon équipe sales',
   },

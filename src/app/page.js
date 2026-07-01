@@ -17,8 +17,8 @@ const trustpilotAggregateRating = trustpilotData
   : null;
 
 export const metadata = {
-  title: 'Volia Autopilot — Ton pipeline B2B automatisé (prospection → email → CRM)',
-  description: 'Volia Autopilot : ton pipeline B2B automatisé de bout en bout. Tu sélectionnes la cible, Volia exécute : scraping Google Places → email personnalisé → formulaire de qualification → scoring → push CRM. Aussi suite de prospection B2B France (emails + téléphones, 101 départements), alternative Apollo. Made in France, RGPD. Gratuit pour démarrer · Prospection 19 €/mois · MAX 179 €/mois.',
+  title: 'Volia One — ton pipeline B2B en pilote auto · prospection + cold email France',
+  description: 'Volia One : entre ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails, et remplit ton pipeline. Sous le capot : 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) via Google Places → email personnalisé → qualification → scoring → push CRM. Prospection B2B France (emails + téléphones, 101 départements), alternative Apollo. Made in France, RGPD. Gratuit pour démarrer · Prospection 19 €/mois · MAX 179 €/mois (mode Autopilot 24/7).',
   alternates: {
     canonical: SITE_URL,
     languages: {
@@ -29,8 +29,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia Autopilot — Ton pipeline B2B automatisé (prospection → email → CRM)',
-    description: 'Volia Autopilot : tu sélectionnes la cible, Volia exécute le pipeline B2B — scraping Google Places, email personnalisé, formulaire de qualification, scoring et push CRM. Aussi prospection B2B France (emails + téléphones), alternative Apollo. Made in France, RGPD.',
+    title: 'Volia One — ton pipeline B2B en pilote auto · prospection + cold email France',
+    description: 'Volia One : entre ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails, et remplit ton pipeline. 5 modules sous le capot (Prospection, Campagnes, CRM, Formulaires, Project). Prospection B2B France, alternative Apollo. Made in France, RGPD. Mode Autopilot 24/7 au plan MAX.',
     url: SITE_URL,
     siteName: 'Volia',
     locale: 'fr_FR',
@@ -38,8 +38,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Volia Autopilot — Pipeline B2B automatisé (prospection → email → CRM)',
-    description: 'Tu sélectionnes la cible, Volia exécute : scrap → email perso → qualif → scoring → CRM. Aussi prospection B2B France, alternative Apollo. RGPD.',
+    title: 'Volia One — ton pipeline B2B en pilote auto (prospection + cold email France)',
+    description: 'Entre ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails, et remplit ton pipeline. Prospection B2B France, alternative Apollo. RGPD. Autopilot 24/7 au plan MAX.',
   },
   robots: {
     index: true,
@@ -56,7 +56,7 @@ const softwareApplicationSchema = {
   applicationCategory: 'BusinessApplication',
   applicationSubCategory: 'SalesIntelligence',
   operatingSystem: 'Web',
-  description: 'Volia Autopilot : pipeline B2B automatisé de bout en bout — tu sélectionnes la cible, Volia exécute (scraping Google Places, email personnalisé, formulaire de qualification, scoring, push CRM), de la cible au lead chaud. Inclut aussi la prospection B2B France : recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade avec scoring de confiance. Gratuit pour démarrer, lead-gen dès 19 €/mois, Autopilot inclus dans MAX à 179 €/mois.',
+  description: 'Volia One : entre ton domaine → Volia trouve tes prospects (email + tél), écrit et envoie tes cold emails, et remplit ton pipeline. 5 modules sous le capot (Prospection, Campagnes, CRM, Formulaires, Project) : recherche d\'entreprises via Google Places (150+ catégories, 101 départements) + enrichissement email en cascade avec scoring de confiance → email personnalisé → qualification → scoring → push CRM. Gratuit pour démarrer, Prospection dès 19 €/mois, mode Autopilot 24/7 inclus dans MAX à 179 €/mois.',
   url: SITE_URL,
   inLanguage: 'fr-FR',
   countriesSupported: 'FR',

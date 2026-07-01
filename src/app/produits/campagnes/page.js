@@ -579,7 +579,7 @@ function PricingFocusSection() {
     },
     {
       name: 'MAX', price: '179 €', tag: 'Recommandé · Volume max',
-      desc: 'Cold email 10 000/mois + warmup + multi-inbox + auto-create CRM depuis replies. Plus toute la suite illimitée + Autopilot. Code MAX99 : 3 premiers mois à 99 €.',
+      desc: 'Cold email 10 000/mois + warmup + multi-inbox + auto-create CRM depuis replies. Plus toute la suite complète + Autopilot. Code MAX99 : 3 premiers mois à 99 €.',
       cta: 'Choisir MAX', href: '/signup?plan=max',
       featured: true,
       bullets: ['10 000 cold emails/mois', 'Warmup 28 jours auto', 'Multi-inbox rotation', 'Auto-create CRM depuis replies'],
@@ -853,7 +853,7 @@ export default function CampagnesProductPage() {
         pricingBanner={<ProblemSolutionSection />}
         pricing={{
           label: 'Gratuit pour tous · volume max avec MAX (179 €/mois)',
-          subtext: 'Le module Campagnes est gratuit pour tous (200 cold emails/mois, 1 séquence). Avec MAX : 10 000 emails/mois + warmup + tracking + multi-inbox + auto-create deals depuis replies, aux côtés de la suite illimitée (Prospection 2 000 crédits + CRM + Formulaires). Code MAX99 : 3 premiers mois à 99 €. Pas d\'add-on caché, annulation 1 clic.',
+          subtext: 'Le module Campagnes est gratuit pour tous (200 cold emails/mois, 1 séquence). Avec MAX : 10 000 emails/mois + warmup + tracking + multi-inbox + auto-create deals depuis replies, aux côtés de la suite complète (Prospection 2 000 crédits + CRM + Formulaires). Code MAX99 : 3 premiers mois à 99 €. Pas d\'add-on caché, annulation 1 clic.',
           cta: 'Voir le détail des plans',
           ctaHref: '#pricing-campagnes',
         }}

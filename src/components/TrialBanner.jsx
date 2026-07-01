@@ -69,7 +69,7 @@ export default function TrialBanner({ profile }) {
     message = (
       <>
         <strong>Trial terminé.</strong> Passez à MAX pour récupérer Autopilot,
-        la suite illimitée et 2&nbsp;000 crédits/mois. Code MAX99 : 3 mois à 99&nbsp;€.
+        la suite complète et 2&nbsp;000 crédits/mois. Code MAX99 : 3 mois à 99&nbsp;€.
       </>
     );
     cta = (

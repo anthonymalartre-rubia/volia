@@ -140,7 +140,7 @@ export default function KitImprimable() {
               L&apos;humain choisit la cible, l&apos;IA exécute la chaîne, sous supervision.
               Au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires).
               Gamme freemium : Gratuit (toute la suite avec limites) · Prospection 19 €
-              (500 crédits) · MAX 179 € (suite illimitée + Autopilot, A/B testing,
+              (500 crédits) · MAX 179 € (suite complète + Autopilot, A/B testing,
               optimisation Claude) — code MAX99 : les 3 premiers mois de MAX à 99 €/mois.
             </p>
           </header>

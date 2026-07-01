@@ -136,7 +136,7 @@ export default function CGVPage() {
               4. Description du Service
             </h2>
             <p>
-              Volia est une suite SaaS de growth B2B structurée en trois modules :
+              Volia est une suite SaaS de growth B2B structurée en cinq modules :
             </p>
             <ul className="list-disc pl-6 mt-3 space-y-2">
               <li>
@@ -237,7 +237,7 @@ export default function CGVPage() {
                   <tr>
                     <td className="py-3 px-4 font-medium text-content-primary">MAX</td>
                     <td className="py-3 px-4">179 €</td>
-                    <td className="py-3 px-4">Suite illimitée + Autopilot · 2 000 crédits / mois</td>
+                    <td className="py-3 px-4">Suite complète + Autopilot · 2 000 crédits / mois</td>
                   </tr>
                 </tbody>
               </table>

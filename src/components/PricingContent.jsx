@@ -50,13 +50,14 @@ function formatEuro(cents) {
 const PLAN_VISUALS = {
   free:    { ring: 'border-line', bg: 'bg-surface-card', accent: 'text-content-tertiary', badge: null },
   prospection: { ring: 'border-violet-300', bg: 'bg-violet-50/40', accent: 'text-violet-700', badge: null },
-  max:     { ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700', badge: '⚡ AUTOPILOT' },
+  max:     { ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700', badge: '⚡ AUTOPILOT 24/7' },
 };
 
+// Les 3 plans = 3 intensités de Volia One.
 const PLAN_TAGLINES = {
-  free: 'Toute la suite, pour démarrer',
-  prospection: 'Trouvez les emails B2B',
-  max: 'Pipeline B2B end-to-end auto',
+  free: 'Essaie Volia One — tape ton domaine',
+  prospection: 'Volia One en solo',
+  max: 'Volia One en pilote automatique 24/7',
 };
 
 // Pivot freemium : les 4 modules sont inclus PARTOUT (avec limites hors
@@ -80,7 +81,7 @@ const VISIBLE_PLANS_FOR_COMPARE = ['free', 'prospection', 'max'];
 // Colonnes : Gratuit / Prospection / MAX (3 valeurs par row).
 const COMPARE_SECTIONS = [
   {
-    title: '⚡ Volia Autopilot (pipeline auto)',
+    title: '⚡ Volia One en pilote automatique (mode Autopilot — plan MAX)',
     rows: [
       ['Workflows Autopilot', false, false, '3'],
       ['Pipeline complet : scrap → email → qualif → CRM', false, false, true],
@@ -165,15 +166,15 @@ const PERSONAS = [
   {
     icon: Rocket,
     color: 'from-violet-600 to-indigo-600',
-    title: 'Je veux structurer mes ventes',
+    title: 'Je veux essayer Volia One',
     plan: 'free',
     planLabel: 'Gratuit · 0 €',
-    description: 'CRM + Campagnes + Formulaires + Project inclus, gratuitement. Gérez vos deals, envoyez 200 cold emails/mois depuis votre domaine, et donnez un lien de suivi à vos clients.',
+    description: 'Tape ton domaine, vois tes premiers leads + emails, structure tes ventes. Les 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) inclus, gratuitement, avec limites.',
   },
   {
     icon: Building2,
     color: 'from-indigo-600 to-blue-600',
-    title: 'Je cherche des emails B2B',
+    title: 'Je veux Volia One en solo',
     plan: 'prospection',
     planLabel: 'Prospection · 19 €/mo',
     description: '500 crédits/mois : ciblez par catégorie et département, la cascade waterfall trouve emails + téléphones du tissu PME français. Le moins cher du marché.',
@@ -181,10 +182,10 @@ const PERSONAS = [
   {
     icon: Sparkles,
     color: 'from-amber-500 to-orange-600',
-    title: 'Je veux tout en autopilote',
+    title: 'Je veux Volia One en autopilote',
     plan: 'max',
     planLabel: 'MAX · 99 €/mo les 3 premiers mois (code MAX99), puis 179 €',
-    description: 'Volia Autopilot scrape, enrichit, écrit (IA), envoie, qualifie et pousse les leads chauds dans votre CRM. Suite illimitée + 2 000 crédits + équipes + MCP.',
+    description: 'Le mode Autopilot de Volia One scrape, enrichit, écrit (IA), envoie, qualifie et pousse les leads chauds dans votre CRM, 24/7. Suite complète + 2 000 crédits/mois inclus + équipes + MCP.',
     highlight: true,
   },
 ];
@@ -282,7 +283,7 @@ export default function PricingContent() {
 
   // Stack concurrents : total
   const competitorTotalMo = STACK_COMPETITORS.reduce((acc, c) => acc + c.price, 0);
-  const economyVsStack = competitorTotalMo - 179; // vs MAX 179€ — suite illimitée + Autopilot
+  const economyVsStack = competitorTotalMo - 179; // vs MAX 179€ — suite complète + Autopilot 24/7
 
   // Helper rendu cellule comparatif
   function renderCell(value) {
@@ -307,8 +308,10 @@ export default function PricingContent() {
               Le prix d&apos;un café par jour<br />pour ton pipeline B2B<br />en autopilote.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              <strong className="text-content-primary">La suite est gratuite</strong> — Campagnes, CRM, Formulaires et Project inclus pour tous.
-              Vous payez pour la remplir (<strong className="text-content-primary">Prospection, 19&nbsp;€/mois</strong>) ou pour qu&apos;elle tourne toute seule (<strong className="text-content-primary">MAX</strong>).
+              3 intensités d&apos;une même expérience, <strong className="text-content-primary">Volia One</strong>.
+              <strong className="text-content-primary"> Gratuit</strong> pour l&apos;essayer (tape ton domaine, vois leads + emails),
+              <strong className="text-content-primary"> Prospection à 19&nbsp;€/mois</strong> pour l&apos;utiliser en solo,
+              <strong className="text-content-primary"> MAX</strong> pour la laisser tourner en pilote automatique 24/7.
               <strong className="text-amber-600"> Code MAX99 : 99&nbsp;€/mois les 3 premiers mois.</strong>
             </p>
 
@@ -375,7 +378,7 @@ export default function PricingContent() {
                 ⚡ Offre de lancement MAX — <span className="font-bold">99&nbsp;€/mois</span> les 3 premiers mois (puis 179&nbsp;€).
               </p>
               <p className="text-xs text-amber-800 mt-1.5">
-                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> à saisir au paiement · Autopilot + suite illimitée + 2&nbsp;000 crédits/mois.
+                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> à saisir au paiement · Volia One en pilote automatique 24/7 + suite complète + 2&nbsp;000 crédits/mois inclus.
               </p>
             </div>
           </MotionInView>
@@ -480,13 +483,13 @@ export default function PricingContent() {
                       {cta}
                     </Link>
 
-                    {/* HIGHLIGHT MAX — la "killer feature" : suite illimitée +
-                        Autopilot. Affiché en card séparée violette, plus visible
-                        que les badges modules. */}
+                    {/* HIGHLIGHT MAX — la "killer feature" : Volia One en
+                        pilote automatique 24/7 + suite complète. Affiché en card
+                        séparée violette, plus visible que les badges modules. */}
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
-                          <Star size={11} fill="currentColor" /> Suite ILLIMITÉE + Autopilot
+                          <Star size={11} fill="currentColor" /> Volia One en Autopilot 24/7 + suite complète
                         </p>
                         <p className="text-[11px] text-violet-700 leading-snug">
                           CRM · Campagnes · Formulaires · Project sans plafond
@@ -690,7 +693,7 @@ export default function PricingContent() {
                 Besoin d&apos;aller au-delà de MAX (workflows Autopilot illimités, multi-équipes,
                 SLA dédié) ? Offre sur-mesure — écrivez à{' '}
                 <a href="mailto:contact@volia.fr" className="underline font-semibold">contact@volia.fr</a>.{' '}
-                <Link href="/produits/autopilot" className="underline font-semibold">Voir Autopilot →</Link>
+                <Link href="/produits/autopilot" className="underline font-semibold">Voir le mode Autopilot →</Link>
               </p>
             </div>
           </MotionInView>
@@ -802,7 +805,7 @@ export default function PricingContent() {
                 1 outil au lieu de 5
               </h2>
               <p className="text-content-tertiary text-base max-w-xl mx-auto">
-                Prospection + Campagnes + CRM dans la même app — pour 3× moins cher.
+                Volia One réunit les 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) dans la même app — pour 3× moins cher.
               </p>
             </div>
 
@@ -832,7 +835,7 @@ export default function PricingContent() {
                 <p className="text-[11px] text-content-tertiary mt-2">5 outils silotés · 5 abonnements · 5 logins</p>
               </div>
 
-              {/* Volia MAX — suite illimitée + Autopilot */}
+              {/* Volia MAX — Volia One en Autopilot 24/7 + suite complète */}
               <div className="p-6 rounded-2xl border border-violet-300 bg-gradient-to-br from-violet-50 via-violet-50/40 to-indigo-50 shadow-md">
                 <div className="flex items-center gap-2 mb-4">
                   <Crown size={14} className="text-violet-600" />

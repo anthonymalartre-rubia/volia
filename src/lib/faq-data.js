@@ -66,7 +66,7 @@ export const FAQ_ITEMS = [
     category: 'pricing',
     question: 'Le plan gratuit, ça couvre quoi ?',
     answer:
-      "Gratuit = toute la suite avec des limites : 25 crédits Prospection/mois, 100 recherches, 200 cold emails, 1 séquence, 1 pipeline CRM, 2 formulaires, 5 exports CSV. Sans CB. Pour la donnée à volume, Prospection à 19€/mois (500 crédits) — le moins cher du marché français. MAX à 179€/mois pour la suite illimitée + Autopilot.",
+      "Gratuit = toute la suite avec des limites : 25 crédits Prospection/mois, 100 recherches, 200 cold emails, 1 séquence, 1 pipeline CRM, 2 formulaires, 5 exports CSV. Sans CB. Pour la donnée à volume, Prospection à 19€/mois (500 crédits) — le moins cher du marché français. MAX à 179€/mois pour la suite complète + Autopilot.",
   },
   {
     category: 'trust',

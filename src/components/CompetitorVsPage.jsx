@@ -75,7 +75,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
             ) : (
               <>
                 {competitor.description} <strong className="text-content-primary">Volia, c&apos;est l&apos;alternative française</strong> :
-                gratuit pour démarrer, dès 19€/mois (suite illimitée à 179€ avec MAX), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
+                gratuit pour démarrer, dès 19€/mois (suite complète à 179€ avec MAX), scraping intelligent + Google Places, et 2× plus d&apos;emails PME françaises.
               </>
             )}
           </p>
@@ -223,7 +223,7 @@ export default function CompetitorVsPage({ competitor, intent = 'vs' }) {
                 Jusqu&apos;à {Math.max(0, Math.round((competitor.pricing - 19) / competitor.pricing * 100))}% moins cher
               </h3>
               <p className="text-sm text-content-secondary leading-relaxed">
-                Volia = dès 19€/mois (Prospection, 500 crédits) — et la suite illimitée à 179€ avec MAX (3 premiers mois à 99€, code MAX99). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
+                Volia = dès 19€/mois (Prospection, 500 crédits) — et la suite complète à 179€ avec MAX (3 premiers mois à 99€, code MAX99). {competitor.name} = {competitor.pricing}{competitor.pricingUnit} avec des crédits qui s&apos;épuisent. Tu fais le calcul.
               </p>
             </div>
             <div className="rounded-xl border border-line bg-surface-elevated/40 p-6">

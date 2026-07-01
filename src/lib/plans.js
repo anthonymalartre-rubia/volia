@@ -7,7 +7,7 @@ import { cleanEnv } from './envClean';
 //                 avec des limites + 25 crédits Prospection de découverte.
 //   Prospection → 19 €/mois : la donnée. 500 crédits d'enrichissement/mois
 //                 (réutilise les prices Stripe du plan Solo, 19€/190€).
-//   MAX         → 179 €/mois : suite illimitée + Autopilot + 2 000 crédits
+//   MAX         → 179 €/mois : suite complète + Autopilot + 2 000 crédits
 //                 (réutilise les prices Stripe du plan Business).
 //                 Code MAX99 = 3 premiers mois à 99 €.
 //
@@ -95,7 +95,7 @@ export const PLANS = {
     ],
   },
 
-  // ─── MAX : suite illimitée + Autopilot ───────────────────────────────
+  // ─── MAX : suite complète + Autopilot ───────────────────────────────
   // Réutilise les prices Stripe Business (179 €/mois, 1 690 €/an).
   // Code MAX99 (Stripe, restreint au produit MAX) : 3 premiers mois à 99 €.
   max: {
@@ -127,7 +127,7 @@ export const PLANS = {
       folders: -1,
       exports_per_month: -1,
       verifications_per_month: 5000,
-      // Suite illimitée* (caps anti-abus larges, voir Business pour le détail)
+      // Suite complète* (caps anti-abus larges, voir Business pour le détail)
       emails_sent_per_month: 10000,
       form_submissions_per_month: 5000,
       forms_published: -1,
@@ -140,7 +140,7 @@ export const PLANS = {
       autopilot_claude_optimization: true,
     },
     features: [
-      '⚡ Volia Autopilot — pipeline B2B end-to-end auto (3 workflows, IF/ELSE, A/B)',
+      '⚡ Volia One en pilote automatique 24/7 — pipeline B2B end-to-end (3 workflows, IF/ELSE, A/B)',
       'Campagnes, CRM, Formulaires & Project ILLIMITÉS',
       '2 000 crédits Prospection/mois',
       '🎯 Enrichissement décideur (CEO, CMO, Sales, RH)',

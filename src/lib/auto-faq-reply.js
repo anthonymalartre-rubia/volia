@@ -34,7 +34,7 @@ CONTEXTE PRODUIT VOLIA :
 - Volia Campagnes : email automation
 - Volia CRM : pipeline + suivi deals
 - Volia Forms : formulaires no-code
-- Plans : Gratuit 0€ (toute la suite avec limites + 25 crédits Prospection/mois) / Prospection 19€/mois (500 crédits/mois, packs de crédits dès 9€) / MAX 179€/mois (suite illimitée + Autopilot — code MAX99 : 3 premiers mois à 99€)
+- Plans : Gratuit 0€ (toute la suite avec limites + 25 crédits Prospection/mois) / Prospection 19€/mois (500 crédits/mois, packs de crédits dès 9€) / MAX 179€/mois (suite complète + Autopilot — code MAX99 : 3 premiers mois à 99€)
 - Essai gratuit : 14 jours de MAX sans CB
 - Support : contact@volia.fr
 - Démo : https://cal.com/anthony-volia/15min

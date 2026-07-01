@@ -97,7 +97,7 @@ export default async function DepartmentPage({ params }) {
     },
     {
       question: `Quel est le prix pour prospecter dans le ${dept.name} ?`,
-      answer: `Gratuit pour démarrer (25 crédits/mois, toute la suite avec limites, sans CB). Le plan Prospection à 19 €/mois donne 500 crédits (emails trouvés) + 500 téléphones et 2 000 recherches, avec des packs de crédits dès 9 €. Le plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) débloque la suite illimitée + Autopilot avec 2 000 crédits/mois. Tous les départements et toutes les catégories sont inclus, sans supplément.`,
+      answer: `Gratuit pour démarrer (25 crédits/mois, toute la suite avec limites, sans CB). Le plan Prospection à 19 €/mois donne 500 crédits (emails trouvés) + 500 téléphones et 2 000 recherches, avec des packs de crédits dès 9 €. Le plan MAX à 179 €/mois (code MAX99 : 3 premiers mois à 99 €) débloque la suite complète + Autopilot avec 2 000 crédits/mois. Tous les départements et toutes les catégories sont inclus, sans supplément.`,
     },
   ];
 

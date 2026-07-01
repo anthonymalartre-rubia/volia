@@ -213,10 +213,10 @@ function OneInner() {
   }, [launchedCampaignId]);
 
   return (
-    <div className="min-h-screen bg-surface-base">
+    <div className="min-h-screen bg-surface-base flex flex-col">
       <ReaderHeader />
 
-      <main className="pt-24 pb-12 px-4">
+      <main className="flex-1 pt-24 pb-12 px-4">
         <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 text-xs font-medium mb-4">

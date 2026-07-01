@@ -10,6 +10,8 @@
 
 import { Suspense, useState, useEffect, useRef, Fragment } from 'react';
 import { useSearchParams } from 'next/navigation';
+import ReaderHeader from '@/components/ReaderHeader';
+import ReaderFooter from '@/components/ReaderFooter';
 
 const methodBadge = {
   decision_maker: { label: 'décideur ✓', cls: 'bg-violet-600/15 text-violet-700' },
@@ -50,7 +52,6 @@ function OneInner() {
   const [statusData, setStatusData] = useState(null);
   const [campaigns, setCampaigns] = useState([]); // historique des envois Volia One (connectés)
   const [runs, setRuns] = useState([]); // analyses persistées (connectés)
-  const [authed, setAuthed] = useState(false); // utilisateur connecté ? (déduit des fetchs)
 
   async function loadCampaigns() {
     try {
@@ -65,11 +66,7 @@ function OneInner() {
   async function loadRuns() {
     try {
       const r = await fetch('/api/one/runs');
-      if (!r.ok) {
-        setAuthed(false); // 401 anonyme → pas d'analyses persistées
-        return;
-      }
-      setAuthed(true);
+      if (!r.ok) return; // 401 anonyme → pas d'analyses persistées
       const j = await r.json();
       setRuns(j.runs || []);
     } catch {
@@ -216,25 +213,10 @@ function OneInner() {
   }, [launchedCampaignId]);
 
   return (
-    <div className="min-h-screen bg-surface-base flex flex-col">
-      <header className="border-b border-line">
-        <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          <a href="/" className="font-display text-lg font-bold text-content-primary">Volia</a>
-          <nav className="flex items-center gap-4 text-sm">
-            <a href="/produits/prospection" className="hidden sm:inline text-content-secondary hover:text-content-primary transition-colors">Le produit</a>
-            {authed ? (
-              <a href="/dashboard" className="text-content-secondary hover:text-content-primary transition-colors">Tableau de bord</a>
-            ) : (
-              <>
-                <a href="/login" className="text-content-secondary hover:text-content-primary transition-colors">Se connecter</a>
-                <a href="/signup" className="rounded-lg bg-violet-600 hover:bg-violet-500 text-white px-3 py-1.5 font-medium transition-colors">Créer un compte</a>
-              </>
-            )}
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-surface-base">
+      <ReaderHeader />
 
-      <main className="flex-1 px-4 py-12">
+      <main className="pt-24 pb-12 px-4">
         <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 text-xs font-medium mb-4">
@@ -528,17 +510,7 @@ function OneInner() {
         </div>
       </main>
 
-      <footer className="border-t border-line">
-        <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-content-tertiary">
-          <span>© Volia — Prospection B2B France</span>
-          <nav className="flex items-center gap-4">
-            <a href="/mentions-legales" className="hover:text-content-secondary transition-colors">Mentions légales</a>
-            <a href="/confidentialite" className="hover:text-content-secondary transition-colors">Confidentialité</a>
-            <a href="/cgu" className="hover:text-content-secondary transition-colors">CGU</a>
-            <a href="/opt-out" className="hover:text-content-secondary transition-colors">Désinscription</a>
-          </nav>
-        </div>
-      </footer>
+      <ReaderFooter />
     </div>
   );
 }

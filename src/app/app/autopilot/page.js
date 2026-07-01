@@ -100,10 +100,10 @@ export default function AutopilotPage() {
         <div>
           <h1 className="text-3xl font-bold text-content-strong flex items-center gap-2">
             <Zap className="text-violet-500" size={28} />
-            Volia Autopilot
+            Volia One · Autopilot
           </h1>
           <p className="text-sm text-content-soft mt-1">
-            Ton pipeline B2B en autopilot — scrap, qualifie, livre les leads chauds dans ton CRM.
+            Volia One en mode Autopilot 24/7 — scrap, qualifie, livre les leads chauds dans ton CRM.
           </p>
         </div>
         <div className="flex gap-2">

@@ -13,23 +13,25 @@
 //     ~70 mots, ~180 mots. Modifier prudemment (impact PR).
 //
 // POSITIONNEMENT (juin 2026) :
-//   « Volia Autopilot, le pipeline B2B automatisé de bout en bout
-//   (cible → email personnalisé par IA → formulaire de qualification →
-//   scoring → CRM). L'humain choisit la cible, l'IA exécute la chaîne,
-//   sous supervision. » Suite SaaS française supervisée par Anthony
-//   Malartre (responsable produit + sales + service client).
+//   « Volia One : tu entres ton domaine, Volia trouve tes prospects
+//   (email + téléphone), rédige et envoie tes cold emails, et remplit
+//   ton pipeline. » Point d'entrée : /one. Sous le capot, 5 modules
+//   connectés (Prospection, Campagnes, CRM, Formulaires, Project). Sur
+//   le plan MAX, Volia One passe en mode Autopilot 24/7 (pilote auto).
+//   Suite SaaS française supervisée par Anthony Malartre (responsable
+//   produit + sales + service client).
 // ─────────────────────────────────────────────────────────────────────
 
 // ─── BOILERPLATE — 3 longueurs prêtes à copier pour les journalistes ──
 export const BOILERPLATE = {
   short:
-    "Volia Autopilot est le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → formulaire de qualification → scoring → CRM) : l'humain choisit la cible, l'IA exécute la chaîne, sous supervision.",
+    "Volia One : tu entres ton domaine, Volia trouve tes prospects (email + téléphone), rédige et envoie tes cold emails, et remplit ton pipeline. Sur le plan MAX, Volia One passe en mode Autopilot 24/7 — l'humain choisit la cible, l'IA exécute la chaîne, sous supervision.",
 
   medium:
-    "Volia met en avant Volia Autopilot, le pipeline B2B automatisé de bout en bout : l'utilisateur choisit sa cible, et l'IA exécute la chaîne — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM, sous supervision humaine. Autopilot s'appuie sur quatre modules connectés (Prospection, Campagnes, CRM, Formulaires) en un seul abonnement. Gamme freemium : Gratuit (toute la suite avec limites) · Prospection 19 €/mois (500 crédits) · MAX 179 €/mois (suite complète + Autopilot, A/B testing, optimisation Claude — 99 €/mois les 3 premiers mois avec le code MAX99). Suite SaaS française conforme RGPD et hébergée en Union européenne, supervisée par son founder Anthony Malartre : l'humain valide, l'IA exécute.",
+    "Volia met en avant Volia One : l'utilisateur entre son domaine, et Volia exécute la chaîne B2B de bout en bout — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM, sous supervision humaine. Sous le capot, Volia One s'appuie sur cinq modules connectés (Prospection, Campagnes, CRM, Formulaires, Project) en un seul abonnement. Sur le plan MAX, Volia One passe en mode Autopilot 24/7 (pilote automatique). Gamme freemium : Gratuit (teste Volia One + toute la suite avec limites) · Prospection 19 €/mois (500 crédits) · MAX 179 €/mois (suite complète + Volia One en mode Autopilot 24/7, A/B testing, optimisation Claude, 2 000 crédits/mois + packs — 99 €/mois les 3 premiers mois avec le code MAX99). Suite SaaS française conforme RGPD et hébergée en Union européenne, supervisée par son founder Anthony Malartre : l'humain valide, l'IA exécute.",
 
   long:
-    "Volia (volia.fr) met en avant son produit phare, Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → formulaire de qualification → scoring → push CRM) : l'utilisateur sélectionne sa cible, Volia exécute la chaîne sous supervision humaine — l'humain choisit la cible, l'IA exécute. Autopilot s'appuie sur quatre modules connectés : Prospection (des centaines de milliers d'entreprises françaises accessibles via Google Places sur 101 départements, enrichissement waterfall multi-sources), Campagnes (séquences email/SMS automatisées), CRM (pipeline commercial natif) et Formulaires (capture de leads). La gamme tarifaire freemium couvre tous les besoins : Gratuit (toute la suite avec limites + 25 crédits Prospection/mois) · Prospection 19 €/mois (500 crédits) · MAX 179 €/mois (suite complète + Autopilot avec A/B testing et optimisation Claude) ; le code public MAX99 ramène MAX à 99 €/mois les 3 premiers mois. En production, 16 boucles d'agents IA orchestrent les opérations 24/7 : rédaction de posts LinkedIn, articles SEO hebdomadaires, newsletter mensuelle, séquence de réactivation des clients perdus, relance personnalisée des trials, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et réponses FAQ automatiques, chat pré-vente et support in-app. Une boucle de méta-autonomie analyse chaque semaine le ROI de toutes les autres et propose de nouvelles automatisations à créer. Plus de 400 commits publics documentent le fonctionnement. Hébergée en Union européenne (Supabase Frankfurt) et conforme RGPD par conception, Volia couvre 8 pays européens (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie). Anthony Malartre reste responsable produit, sales et service client — l'humain valide, l'IA exécute.",
+    "Volia (volia.fr) met en avant son produit phare, Volia One : l'utilisateur entre son domaine, et Volia trouve ses prospects (email + téléphone), rédige et envoie ses cold emails, et remplit son pipeline (cible → email personnalisé par IA → formulaire de qualification → scoring → push CRM), sous supervision humaine — l'humain choisit la cible, l'IA exécute. Sous le capot, Volia One s'appuie sur cinq modules connectés : Prospection (des centaines de milliers d'entreprises françaises accessibles via Google Places sur 101 départements, enrichissement waterfall multi-sources), Campagnes (séquences email/SMS automatisées), CRM (pipeline commercial natif), Formulaires (capture de leads) et Project (suivi des projets et tâches commerciales). Sur le plan MAX, Volia One passe en mode Autopilot 24/7 (pilote automatique du pipeline B2B). La gamme tarifaire freemium couvre tous les besoins : Gratuit (teste Volia One + toute la suite avec limites + 25 crédits Prospection/mois) · Prospection 19 €/mois (500 crédits) · MAX 179 €/mois (suite complète + Volia One en mode Autopilot 24/7 avec A/B testing et optimisation Claude, 2 000 crédits/mois + packs) ; le code public MAX99 ramène MAX à 99 €/mois les 3 premiers mois. En production, 16 boucles d'agents IA orchestrent les opérations 24/7 : rédaction de posts LinkedIn, articles SEO hebdomadaires, newsletter mensuelle, séquence de réactivation des clients perdus, relance personnalisée des trials, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et réponses FAQ automatiques, chat pré-vente et support in-app. Une boucle de méta-autonomie analyse chaque semaine le ROI de toutes les autres et propose de nouvelles automatisations à créer. Plus de 400 commits publics documentent le fonctionnement. Hébergée en Union européenne (Supabase Frankfurt) et conforme RGPD par conception, Volia couvre 8 pays européens (France, Belgique, Suisse, Luxembourg, Allemagne, Royaume-Uni, Espagne, Italie). Anthony Malartre reste responsable produit, sales et service client — l'humain valide, l'IA exécute.",
 };
 
 // ─── KEY_NUMBERS — chiffres clés (cards page presse) ──────────────────
@@ -37,15 +39,15 @@ export const BOILERPLATE = {
 // gradient (Tailwind) et iconName (mappé côté UI vers Lucide).
 export const KEY_NUMBERS = [
   {
-    value: 'Autopilot',
-    label: 'pipeline B2B automatisé de bout en bout',
-    sub: 'cible → email IA → qualification → scoring → CRM',
+    value: 'Volia One',
+    label: 'domaine → prospects, cold emails, pipeline rempli',
+    sub: 'tu entres ton domaine, l\'IA exécute la chaîne B2B',
     gradient: 'from-violet-500 to-fuchsia-600',
     iconName: 'Zap',
   },
   {
     value: '23',
-    label: 'templates de pipeline Autopilot',
+    label: 'templates Volia One',
     sub: 'prêts à l\'emploi : cible → email → qualification → CRM',
     gradient: 'from-violet-500 to-fuchsia-600',
     iconName: 'Zap',
@@ -58,9 +60,9 @@ export const KEY_NUMBERS = [
     iconName: 'Wallet',
   },
   {
-    value: '4',
-    label: 'modules connectés',
-    sub: 'Prospection · Campagnes · CRM · Formulaires',
+    value: '5',
+    label: 'modules connectés (le moteur de Volia One)',
+    sub: 'Prospection · Campagnes · CRM · Formulaires · Project',
     gradient: 'from-violet-500 to-indigo-600',
     iconName: 'Layers',
   },
@@ -154,8 +156,8 @@ export const FOUNDER_QUOTES = [
     context: "Sur l'organisation interne de Volia",
   },
   {
-    text: "Volia Autopilot remplace une stack Apollo + Lemlist + HubSpot par un seul pipeline : l'humain choisit la cible, l'IA exécute toute la chaîne jusqu'au lead chaud livré dans le CRM.",
-    context: "Sur le positionnement produit de Volia Autopilot",
+    text: "Volia One remplace une stack Apollo + Lemlist + HubSpot par un seul produit : tu entres ton domaine, l'IA trouve tes prospects, écrit et envoie tes cold emails, et remplit ton pipeline. Sur MAX, ça tourne en mode Autopilot 24/7.",
+    context: "Sur le positionnement produit de Volia One",
   },
   {
     text: "Le futur des entreprises B2B, c'est l'humain augmenté par l'IA : il décide, les agents exécutent la corvée.",
@@ -191,10 +193,10 @@ export const FOUNDER_QUOTES = [
 export const PRESS_ANGLES = [
   {
     slug: 'volia-autopilot-pipeline-b2b-automatise',
-    title: "Volia Autopilot : de la cible au lead chaud, en un seul setup",
+    title: "Volia One : entre ton domaine, récupère tes leads et ton pipeline rempli",
     audience: 'Presse business & growth B2B (Maddyness, FrenchWeb, BFM Tech, Welcome to the Jungle)',
     pitch:
-      "Le 1er pipeline B2B français qui va de la cible au lead chaud livré dans le CRM, en un seul setup. L'utilisateur sélectionne sa cible et un template (23 disponibles), et Volia Autopilot exécute toute la chaîne sous supervision humaine — scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM. Produit phare de la suite Volia, il remplace une stack Apollo + Lemlist + HubSpot. Gamme freemium : Gratuit (toute la suite avec limites) · Prospection 19 € (500 crédits) · MAX 179 € (suite complète + Autopilot, A/B testing, optimisation Claude) — code MAX99 : les 3 premiers mois de MAX à 99 €/mois.",
+      "Le 1er produit B2B français où tu entres ton domaine et où l'IA trouve tes prospects (email + téléphone), rédige et envoie tes cold emails, et remplit ton pipeline — en un seul setup. L'utilisateur choisit sa cible et un template (23 disponibles), et Volia One exécute toute la chaîne sous supervision humaine : scrap des entreprises, email personnalisé par IA, formulaire de qualification, scoring, puis push du lead chaud dans le CRM. Sous le capot, 5 modules connectés. Il remplace une stack Apollo + Lemlist + HubSpot. Gamme freemium : Gratuit (teste Volia One + toute la suite avec limites) · Prospection 19 € (500 crédits) · MAX 179 € (suite complète + Volia One en mode Autopilot 24/7, A/B testing, optimisation Claude) — code MAX99 : les 3 premiers mois de MAX à 99 €/mois.",
     // CP disponible en page HTML dédiée (pas de PDF) → lien "Lire le communiqué"
     htmlUrl: '/presse/cp/volia-autopilot-pipeline-b2b-automatise',
     iconName: 'Zap',
@@ -216,7 +218,7 @@ export const PRESS_ANGLES = [
     title: "L'alternative française à la stack US",
     audience: 'Presse business & souveraineté (Les Echos, BFM Tech, La Tribune)',
     pitch:
-      "Apollo, HubSpot, Lemlist, Typeform : la stack growth des PME françaises est 100 % américaine, facturée en dollars, hébergée hors UE. Volia propose en 2026 la première alternative souveraine complète : Volia Autopilot au-dessus de 4 modules connectés, hébergement Frankfurt, RGPD natif, support FR. Gamme freemium : Gratuit (toute la suite avec limites) · Prospection 19 € (500 crédits) · MAX 179 € (suite complète + Autopilot, A/B testing, optimisation Claude — code MAX99 : 3 mois à 99 €).",
+      "Apollo, HubSpot, Lemlist, Typeform : la stack growth des PME françaises est 100 % américaine, facturée en dollars, hébergée hors UE. Volia propose en 2026 la première alternative souveraine complète : Volia One (domaine → leads + cold emails + pipeline) au-dessus de 5 modules connectés, hébergement Frankfurt, RGPD natif, support FR. Gamme freemium : Gratuit (teste Volia One + toute la suite avec limites) · Prospection 19 € (500 crédits) · MAX 179 € (suite complète + Volia One en mode Autopilot 24/7, A/B testing, optimisation Claude — code MAX99 : 3 mois à 99 €).",
     // Pas (encore) de communiqué dédié → pas de lien (CP sur demande presse)
     htmlUrl: null,
     iconName: 'Flag',
@@ -428,10 +430,10 @@ export const PRESS_RELEASES = [
     date: '2026-06-02',
     dateLabel: '2 juin 2026',
     title:
-      "Volia lance Autopilot : le pipeline B2B qui va de la cible au lead chaud, en un seul setup",
+      "Volia lance Volia One : entre ton domaine, récupère tes leads et ton pipeline rempli",
     slug: 'volia-autopilot-pipeline-b2b-automatise',
     summary:
-      "Volia lance son produit phare, Volia Autopilot : un pipeline B2B automatisé de bout en bout (scrap → email IA → formulaire de qualification → scoring → CRM). L'humain choisit la cible, l'IA exécute la chaîne. 23 templates, RGPD et hébergement européen, gamme freemium de Gratuit à MAX 179 €/mois. Autopilot remplace une stack Apollo + Lemlist + HubSpot.",
+      "Volia lance son produit phare, Volia One : tu entres ton domaine, et l'IA trouve tes prospects (email + téléphone), rédige et envoie tes cold emails, et remplit ton pipeline (scrap → email IA → formulaire de qualification → scoring → CRM). Sous le capot, 5 modules connectés. 23 templates, RGPD et hébergement européen, gamme freemium de Gratuit à MAX 179 €/mois (avec Volia One en mode Autopilot 24/7). Volia One remplace une stack Apollo + Lemlist + HubSpot.",
     pdfUrl: '/presse/cp/volia-autopilot-pipeline-b2b-automatise',
   },
   {
@@ -441,7 +443,7 @@ export const PRESS_RELEASES = [
       "Volia lance une nouvelle catégorie d'entreprise SaaS B2B pilotée par IA",
     slug: 'lancement-entreprise-autonome',
     summary:
-      "Volia officialise le lancement d'une nouvelle catégorie d'entreprise : une suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires) supervisée par son founder à Marseille — l'humain valide, les agents IA exécutent. Pas d'équipe, pas de levée, pas d'investisseurs.",
+      "Volia officialise le lancement d'une nouvelle catégorie d'entreprise : une suite SaaS B2B complète (Prospection, Campagnes, CRM, Formulaires, Project) supervisée par son founder à Marseille — l'humain valide, les agents IA exécutent. Pas d'équipe, pas de levée, pas d'investisseurs.",
     // Pas de page HTML ni de PDF disponible → aucun lien de téléchargement
     pdfUrl: null,
   },
@@ -472,13 +474,13 @@ export const PRESS_CONTACT = {
 // ─── FOUNDER_BIO — 3 versions ─────────────────────────────────────────
 export const FOUNDER_BIO = {
   short:
-    "Anthony Malartre, founder de Volia, suite SaaS B2B française dont le produit phare Volia Autopilot automatise le pipeline B2B de bout en bout, sous supervision humaine.",
+    "Anthony Malartre, founder de Volia, suite SaaS B2B française dont le produit phare Volia One transforme un domaine en prospects, cold emails et pipeline rempli, sous supervision humaine.",
 
   medium:
-    "Anthony Malartre est le founder de Volia (volia.fr), suite SaaS B2B française dont le produit phare est Volia Autopilot, le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM). Basé à Marseille, ex-fondateur de plusieurs projets B2B, il a bâti Volia avec Claude, l'IA agentique d'Anthropic : 4 modules connectés, 400+ commits publics, 16 boucles d'agents IA en production qui orchestrent marketing, code, vente et support 24/7. Une couche de méta-autonomie analyse chaque semaine le ROI de toutes les boucles et propose les prochaines automatisations à créer. Sa philosophie : l'humain valide, l'IA exécute.",
+    "Anthony Malartre est le founder de Volia (volia.fr), suite SaaS B2B française dont le produit phare est Volia One : l'utilisateur entre son domaine, et l'IA trouve ses prospects (email + téléphone), rédige et envoie ses cold emails, et remplit son pipeline (cible → email personnalisé par IA → qualification → scoring → CRM). Basé à Marseille, ex-fondateur de plusieurs projets B2B, il a bâti Volia avec Claude, l'IA agentique d'Anthropic : 5 modules connectés sous le capot de Volia One, 400+ commits publics, 16 boucles d'agents IA en production qui orchestrent marketing, code, vente et support 24/7. Sur le plan MAX, Volia One passe en mode Autopilot 24/7. Une couche de méta-autonomie analyse chaque semaine le ROI de toutes les boucles et propose les prochaines automatisations à créer. Sa philosophie : l'humain valide, l'IA exécute.",
 
   long:
-    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'humain confiait le travail répétitif à des agents IA, sous supervision permanente, pour se concentrer sur la vision et les décisions ? Volia est la réponse. En bootstrap, il livre Volia Autopilot — le pipeline B2B automatisé de bout en bout (cible → email personnalisé par IA → qualification → scoring → CRM) — au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires), conformes RGPD, hébergés en Union européenne. La gamme freemium va de Gratuit (toute la suite, avec limites) à MAX 179 €/mois (suite complète + Autopilot, A/B testing, optimisation Claude), en passant par Prospection à 19 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client : l'humain valide, l'IA exécute. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
+    "Anthony Malartre est le founder de Volia (volia.fr), basé à Marseille. Après plusieurs années à fonder des projets B2B SaaS dans des structures plus traditionnelles, il décide en 2026 de tester une hypothèse : et si l'humain confiait le travail répétitif à des agents IA, sous supervision permanente, pour se concentrer sur la vision et les décisions ? Volia est la réponse. En bootstrap, il livre Volia One — tu entres ton domaine, et l'IA trouve tes prospects (email + téléphone), rédige et envoie tes cold emails, et remplit ton pipeline (cible → email personnalisé par IA → qualification → scoring → CRM) — au-dessus de 5 modules connectés (Prospection, Campagnes, CRM, Formulaires, Project), conformes RGPD, hébergés en Union européenne. La gamme freemium va de Gratuit (teste Volia One + toute la suite, avec limites) à MAX 179 €/mois (suite complète + Volia One en mode Autopilot 24/7, A/B testing, optimisation Claude, 2 000 crédits/mois + packs), en passant par Prospection à 19 €/mois. Le développement entier est documenté publiquement : 400+ commits Git, ADR, CONTEXT.md évolutif. En production, 16 boucles d'agents IA orchestrent 24/7 : rédaction LinkedIn, articles SEO hebdomadaires, newsletter mensuelle générée puis envoyée, séquences de réactivation client (J+30/60/90), relance personnalisée des trials selon un score de lead recalculé chaque nuit, prospection sortante auto-générée (Volia utilise Volia pour vendre Volia), détection d'erreurs prod et création de pull requests de correction par Claude, classification des emails entrants et auto-réponse FAQ pour les questions à confiance élevée, deux chatbots IA (pré-vente sur landing, support sur dashboard). Une couche de méta-autonomie agrège chaque nuit les métriques de toutes les boucles, calcule le ROI estimé par action, et envoie chaque mardi un email avec un dashboard détaillé et 3 recommandations Claude pour la semaine suivante. Anthony reste personnellement responsable du produit, du sales et du service client : l'humain valide, l'IA exécute. Sa vision : la souveraineté SaaS européenne passera par des entreprises bootstrap, lisibles, exigeantes — et par une nouvelle catégorie d'entrepreneurs : les founders augmentés.",
 };
 
 // ─── PRESS_RELEASE_FULL — contenu complet des communiqués de presse ──
@@ -493,8 +495,8 @@ export const PRESS_RELEASES_FULL = {
     dateLabel: '2 juin 2026',
     location: 'Marseille',
     eyebrow: 'COMMUNIQUÉ DE PRESSE',
-    title: "Volia lance Autopilot : le pipeline B2B qui va de la cible au lead chaud, en un seul setup",
-    lead: "Volia (volia.fr), suite SaaS française pour la croissance B2B, lance Volia Autopilot, son produit phare : un pipeline B2B automatisé de bout en bout qui mène de la cible au lead chaud livré dans le CRM. L'utilisateur choisit sa cible et un template, et l'IA exécute toute la chaîne — sous supervision humaine. Autopilot remplace une stack fragmentée Apollo + Lemlist + HubSpot par un seul abonnement.",
+    title: "Volia lance Volia One : entre ton domaine, récupère tes leads et ton pipeline rempli",
+    lead: "Volia (volia.fr), suite SaaS française pour la croissance B2B, lance Volia One, son produit phare : tu entres ton domaine, et l'IA trouve tes prospects (email + téléphone), rédige et envoie tes cold emails, et remplit ton pipeline — de la cible au lead chaud livré dans le CRM. L'utilisateur choisit sa cible et un template, et l'IA exécute toute la chaîne, sous supervision humaine. Volia One remplace une stack fragmentée Apollo + Lemlist + HubSpot par un seul abonnement.",
     sections: [
       {
         heading: "Le problème : une stack growth fragmentée",
@@ -506,8 +508,8 @@ export const PRESS_RELEASES_FULL = {
       {
         heading: "La solution : un pipeline automatisé de bout en bout",
         paragraphs: [
-          "Volia Autopilot unifie toute cette chaîne en un seul pipeline. L'utilisateur sélectionne sa cible (secteur, zone géographique sur 101 départements) et un template parmi 23 disponibles. Volia exécute ensuite l'enchaînement complet : scrap des entreprises via Google Places, enrichissement waterfall multi-sources, rédaction d'un email personnalisé par IA, formulaire de qualification, scoring du lead, puis push automatique du lead chaud dans le CRM natif.",
-          "Le principe est constant : l'humain choisit la cible et valide, l'IA exécute la chaîne. Les actions à risque restent soumises à supervision et à des garde-fous explicites. Autopilot s'appuie sur les quatre modules connectés de la suite Volia — Prospection, Campagnes, CRM et Formulaires — réunis en un seul abonnement.",
+          "Volia One unifie toute cette chaîne en un seul produit. L'utilisateur entre son domaine, choisit sa cible (secteur, zone géographique sur 101 départements) et un template parmi 23 disponibles. Volia exécute ensuite l'enchaînement complet : scrap des entreprises via Google Places, enrichissement waterfall multi-sources, rédaction d'un email personnalisé par IA, formulaire de qualification, scoring du lead, puis push automatique du lead chaud dans le CRM natif.",
+          "Le principe est constant : l'humain choisit la cible et valide, l'IA exécute la chaîne. Les actions à risque restent soumises à supervision et à des garde-fous explicites. Sous le capot, Volia One s'appuie sur les cinq modules connectés de la suite Volia — Prospection, Campagnes, CRM, Formulaires et Project — réunis en un seul abonnement. Sur le plan MAX, Volia One passe en mode Autopilot 24/7 (pilote automatique).",
         ],
       },
       {
@@ -520,13 +522,13 @@ export const PRESS_RELEASES_FULL = {
       {
         heading: "Une gamme tarifaire complète",
         paragraphs: [
-          "Volia se décline en trois plans : Gratuit (toute la suite avec des limites + 25 crédits Prospection/mois, sans carte bancaire), Prospection à 19 €/mois (500 crédits d'enrichissement, packs de crédits dès 9 €), et MAX à 179 €/mois (suite complète + Autopilot avec A/B testing et optimisation par Claude). Le code public MAX99 ramène MAX à 99 €/mois les 3 premiers mois.",
+          "Volia se décline en trois plans, trois intensités de Volia One : Gratuit (teste Volia One — tape ton domaine, vois tes leads et tes emails — + toute la suite avec des limites + 25 crédits Prospection/mois, sans carte bancaire), Prospection à 19 €/mois (500 crédits d'enrichissement, packs de crédits dès 9 €), et MAX à 179 €/mois (suite complète + Volia One en mode Autopilot 24/7 avec A/B testing et optimisation par Claude, 2 000 crédits/mois + packs). Le code public MAX99 ramène MAX à 99 €/mois les 3 premiers mois.",
           "Là où une stack équivalente cumule plusieurs abonnements facturés en dollars et hébergés hors UE, Volia propose une alternative souveraine unifiée, facturée en euros, avec un support en français.",
         ],
       },
     ],
     quote: {
-      text: "Volia Autopilot remplace une stack Apollo + Lemlist + HubSpot par un seul pipeline. L'humain choisit la cible, l'IA exécute toute la chaîne jusqu'au lead chaud livré dans le CRM. C'est le premier pipeline B2B français qui va de la cible au lead chaud, en un seul setup.",
+      text: "Volia One remplace une stack Apollo + Lemlist + HubSpot par un seul produit. Tu entres ton domaine, l'IA trouve tes prospects, écrit et envoie tes cold emails, et remplit ton pipeline. C'est le premier produit B2B français qui va du domaine au lead chaud, en un seul setup — et sur MAX, il tourne en mode Autopilot 24/7.",
       author: 'Anthony Malartre',
       authorRole: 'Fondateur de Volia',
     },

@@ -1,15 +1,21 @@
 'use client';
 
 // ─────────────────────────────────────────────────────────────────────
-// LandingContentEN — English Volia landing
+// LandingContentEN — English Volia One landing
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of LandingContent.jsx (FR source of truth, June 2026 freemium
-// pivot). Public lineup: Free / Prospection / MAX.
+// Mirror of LandingContent.jsx (FR source of truth). Hero product =
+// Volia One: enter your domain → Volia finds your prospects (email +
+// phone), writes & sends your cold emails, fills your pipeline. Powered
+// by 5 modules under the hood (Prospection / Campaigns / CRM / Forms /
+// Project). Public lineup = 3 intensities of Volia One: Free /
+// Prospection / MAX.
 //
 // The suite (Campaigns / CRM / Forms / Project) is FREE for everyone,
-// with limits. Prospection (€19/mo) sells the data. MAX (€179/mo,
-// code MAX99 = first 3 months at €99) sells the unlimited suite +
-// Volia Autopilot. Prices displayed in EUR (billing currency).
+// with limits. Prospection (€19/mo) fills it (the data). MAX (€179/mo,
+// code MAX99 = first 3 months at €99) runs Volia One on 24/7 autopilot
+// + the complete suite (2,000 credits/mo). Prices in EUR (billing
+// currency). "Autopilot" is the MAX superpower — the 24/7 mode of
+// Volia One, NOT a separate product.
 // ─────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link';
@@ -85,14 +91,14 @@ const PLANS_EN = [
     priceStrike: '€179',
     sub: 'or €1,690/yr (2 months free)',
     period: '/mo',
-    tagline: 'Your B2B pipeline on autopilot',
+    tagline: 'Volia One on 24/7 autopilot',
     inheritsFrom: 'Prospection',
     unlocksModules: true,
     promoLabel: 'Code MAX99',
     promoSub: 'First 3 months at €99 — then €179/mo',
     features: [
-      'Volia Autopilot — 3 workflows, IF/ELSE, A/B testing',
-      'UNLIMITED Campaigns, CRM, Forms & Project',
+      'Volia One on autopilot — 24/7 mode, 3 workflows, IF/ELSE, A/B testing',
+      'Unlimited Campaigns, CRM, Forms & Project',
       '2,000 Prospection credits / month',
       '10,000 cold emails / month (auto warmup)',
       'Multi-user (teams, RBAC) + MCP server + API',
@@ -123,7 +129,7 @@ const FAQS_EN = [
   },
   {
     q: 'What does MAX unlock?',
-    a: 'Everything, with no caps: unlimited Campaigns, CRM, Forms & Project, 2,000 Prospection credits/month, Volia Autopilot (3 workflows, IF/ELSE branching, A/B testing, weekly Claude optimization), decision-maker enrichment, multi-user (teams/RBAC), the MCP server (drive Volia from Claude, Cursor & AI agents) and the REST API. €179/mo — or €99/mo for your first 3 months with code MAX99 at checkout.',
+    a: 'Volia One on 24/7 autopilot — the complete suite, hands-free: unlimited Campaigns, CRM, Forms & Project, 2,000 Prospection credits/month, the 24/7 Autopilot mode (3 workflows, IF/ELSE branching, A/B testing, weekly Claude optimization), decision-maker enrichment, multi-user (teams/RBAC), the MCP server (drive Volia from Claude, Cursor & AI agents) and the REST API. €179/mo — or €99/mo for your first 3 months with code MAX99 at checkout.',
   },
   {
     q: 'Is it GDPR-compliant?',
@@ -175,29 +181,33 @@ export default function LandingContentEN() {
 
       <main>
         {/* ── HERO ── */}
-        {/* Freemium pivot June 2026: the suite is free for everyone.
-            Prospection (€19/mo) fills it, MAX runs it on autopilot. */}
+        {/* Hero product = Volia One: enter your domain → Volia finds your
+            prospects (email + phone), writes & sends your cold emails, and
+            fills your pipeline. The 5 modules (Prospection / Campaigns /
+            CRM / Forms / Project) are the engine under the hood. Autopilot
+            = the 24/7 mode of Volia One (MAX plan), not a separate brand. */}
         <section className="relative pt-24 sm:pt-32 pb-20 px-4 sm:px-6 overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-gradient-to-br from-violet-200/40 via-indigo-100/30 to-pink-100/20 rounded-full blur-3xl pointer-events-none -z-0" />
           <div className="absolute top-40 right-[5%] w-96 h-96 bg-violet-300/20 rounded-full blur-3xl pointer-events-none -z-0 animate-pulse" style={{ animationDuration: '6s' }} />
 
           <div className="max-w-6xl mx-auto relative z-10 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-100 via-indigo-100 to-violet-100 border-2 border-violet-300 text-xs mb-6 font-medium shadow-sm shadow-violet-500/10">
-              <Search size={12} className="text-violet-600" />
-              <span className="text-violet-700 font-bold">B2B EMAIL + PHONE GENERATOR · FREE SUITE INCLUDED</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-300 text-xs mb-6 font-medium shadow-sm shadow-amber-500/10">
+              <Sparkles size={12} className="text-amber-700" />
+              <span className="text-amber-800 font-bold">⚡ NEW · VOLIA ONE — FROM YOUR DOMAIN TO YOUR PIPELINE</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
-              <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">Find B2B emails and phone numbers</span>
-              <span className="text-content-primary"> in 30 seconds.</span>
+              <span className="text-content-primary">Fill your B2B pipeline</span>
               <br />
-              <span className="text-content-primary text-3xl sm:text-4xl lg:text-5xl">The French B2B lead generator.</span>
+              <span className="bg-gradient-to-br from-violet-600 via-indigo-600 to-violet-700 bg-clip-text text-transparent">without prospecting by hand.</span>
             </h1>
 
             <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-2xl mx-auto">
-              150+ industries, 101 departments, waterfall scraping for{' '}
-              <strong className="text-content-primary">email + phone (landline & mobile)</strong>.
-              From <strong className="text-content-primary">€19/mo. No card.</strong>
+              Enter your domain. <strong className="text-content-primary">Volia One</strong> finds your prospects (email + phone), <strong className="text-content-primary">writes and sends</strong> your cold emails, and fills your pipeline.
+            </p>
+
+            <p className="text-base text-content-secondary mb-6 leading-relaxed max-w-2xl mx-auto">
+              <strong className="text-content-primary">You touch nothing.</strong> On MAX, Volia One runs on <strong className="text-content-primary">24/7 autopilot</strong>. Start <strong className="text-content-primary">free. No card.</strong>
             </p>
 
             <p className="text-sm text-content-tertiary mb-8 italic flex items-start justify-center gap-1.5">
@@ -207,10 +217,10 @@ export default function LandingContentEN() {
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
               <Link
-                href="/signup"
+                href="/one"
                 className="group inline-flex items-center justify-center gap-2 px-8 py-5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold shadow-xl shadow-violet-500/30 hover:shadow-2xl hover:shadow-violet-500/50 hover:-translate-y-0.5 transition-all text-base"
               >
-                Start free
+                Enter your domain
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
@@ -242,15 +252,15 @@ export default function LandingContentEN() {
             free for everyone (Campaigns / CRM / Forms). */}
         <section className="py-24 px-4 sm:px-6 border-t border-line bg-gradient-to-b from-white via-zinc-50/50 to-white">
           <div className="max-w-6xl mx-auto">
-            {/* Flagship: Prospecting */}
+            {/* Flagship module: Prospecting (the engine that finds the leads) */}
             <MotionInView>
               <div className="text-center mb-12">
-                <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">The product</p>
+                <p className="text-sm font-semibold text-violet-600 mb-3 uppercase tracking-wider">The engine under Volia One</p>
                 <h2 className="text-3xl sm:text-5xl font-bold mb-4 bg-gradient-to-b from-zinc-900 to-zinc-600 bg-clip-text text-transparent">
                   Volia Prospecting.
                 </h2>
                 <p className="text-content-tertiary text-lg max-w-2xl mx-auto">
-                  The cheapest B2B lead generator on the French market.
+                  How Volia One finds your leads — the cheapest B2B prospecting on the French market.
                   <strong className="text-content-secondary"> Email and phone</strong> scraped live via Google Places + waterfall cascade.
                 </p>
               </div>
@@ -493,11 +503,11 @@ export default function LandingContentEN() {
                       {plan.cta}{plan.highlighted ? ' →' : ''}
                     </Link>
 
-                    {/* MAX killer feature : unlimited suite + Autopilot */}
+                    {/* MAX killer feature : Volia One on 24/7 autopilot + complete suite */}
                     {plan.unlocksModules && (
                       <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
                         <p className="text-[11px] font-bold text-violet-900 mb-1">
-                          ★ UNLIMITED suite + Autopilot
+                          ★ Volia One on 24/7 autopilot + complete suite
                         </p>
                         <p className="text-[11px] text-violet-700 leading-snug">
                           CRM · Campaigns · Forms · Project, no caps

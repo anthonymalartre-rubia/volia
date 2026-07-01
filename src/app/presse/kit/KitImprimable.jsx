@@ -133,14 +133,15 @@ export default function KitImprimable() {
               </div>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-content-primary mb-3">
-              Volia Autopilot, le pipeline B2B automatisé de bout en bout
+              Volia One : entre ton domaine, récupère tes leads et ton pipeline rempli
             </h1>
             <p className="text-base text-content-secondary leading-relaxed">
-              Cible → email personnalisé par IA → formulaire de qualification → scoring → CRM.
+              Tu entres ton domaine → l&apos;IA trouve tes prospects (email + téléphone),
+              rédige et envoie tes cold emails, et remplit ton pipeline.
               L&apos;humain choisit la cible, l&apos;IA exécute la chaîne, sous supervision.
-              Au-dessus de 4 modules connectés (Prospection, Campagnes, CRM, Formulaires).
-              Gamme freemium : Gratuit (toute la suite avec limites) · Prospection 19 €
-              (500 crédits) · MAX 179 € (suite complète + Autopilot, A/B testing,
+              Sous le capot, 5 modules connectés (Prospection, Campagnes, CRM, Formulaires, Project).
+              Gamme freemium : Gratuit (teste Volia One + toute la suite avec limites) · Prospection 19 €
+              (500 crédits) · MAX 179 € (suite complète + Volia One en mode Autopilot 24/7, A/B testing,
               optimisation Claude) — code MAX99 : les 3 premiers mois de MAX à 99 €/mois.
             </p>
           </header>

@@ -1,9 +1,10 @@
 // ─────────────────────────────────────────────────────────────────────
-// /en/products/autopilot — Volia Autopilot (English)
+// /en/products/autopilot — Volia One on autopilot (English)
 // ─────────────────────────────────────────────────────────────────────
-// Mirror of /produits/autopilot (FR): B2B pipeline end-to-end on autopilot.
-// Target → AI email → qualify → CRM. Custom standalone page (not the
-// shared ProductPageLayout — the FR original is fully bespoke too).
+// Mirror of /produits/autopilot (FR): the 24/7 Autopilot mode of Volia One,
+// unlocked on the MAX plan. Target → AI email → qualify → CRM, hands-off.
+// Custom standalone page (not the shared ProductPageLayout — the FR
+// original is fully bespoke too).
 // ─────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link';
@@ -20,8 +21,8 @@ const PAGE_URL = `${SITE_URL}/en/products/autopilot`;
 const FR_PAGE = `${SITE_URL}/produits/autopilot`;
 
 export const metadata = {
-  title: 'Volia Autopilot - Your B2B pipeline, on autopilot (MAX plan)',
-  description: 'Pick your target. Volia scrapes, enriches, emails, qualifies, and drops hot leads into your CRM. 30+ ready-to-run B2B templates. MAX plan only — €179/mo, code MAX99: first 3 months at €99. EU-hosted, GDPR by default.',
+  title: 'Volia One on autopilot - the 24/7 Autopilot mode (MAX plan)',
+  description: 'Turn Volia One to autopilot: it scrapes, enriches, emails, qualifies, and drops hot leads into your CRM around the clock. 30+ ready-to-run B2B templates. Autopilot mode unlocks on the MAX plan — €179/mo, code MAX99: first 3 months at €99. EU-hosted, GDPR by default.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -32,8 +33,8 @@ export const metadata = {
     },
   },
   openGraph: {
-    title: 'Volia Autopilot - Your B2B pipeline. On autopilot.',
-    description: 'The only SaaS that does scrape → email → form → CRM in one setup. MAX plan only (code MAX99: first 3 months at €99). EU-hosted, GDPR by default.',
+    title: 'Volia One on autopilot - your B2B pipeline, hands-off (MAX)',
+    description: 'The 24/7 Autopilot mode of Volia One: scrape → email → form → CRM in one setup. Unlocks on the MAX plan (code MAX99: first 3 months at €99). EU-hosted, GDPR by default.',
     url: PAGE_URL,
     type: 'website',
     locale: 'en_US',
@@ -62,7 +63,7 @@ const WHAT_HAPPENS_AUTO = [
   { icon: TrendingUp, text: 'Automatic lead scoring (0-100)' },
   { icon: KanbanSquare, text: 'Hot leads pushed to your CRM with stage + tag' },
   { icon: Clock, text: 'Non-responders re-engaged at D+14' },
-  { icon: Brain, text: 'Continuous learning (A/B testing on Enterprise)' },
+  { icon: Brain, text: 'Continuous learning (A/B testing on the MAX plan)' },
 ];
 
 const WHY_VOLIA_VS_STACK_US = [
@@ -70,7 +71,7 @@ const WHY_VOLIA_VS_STACK_US = [
   { feature: 'Email sequences', volia: '✓ Included', stack: '+ Lemlist $99/mo' },
   { feature: 'Built-in CRM', volia: '✓ Included', stack: '+ HubSpot $800/mo' },
   { feature: 'Qualification forms', volia: '✓ Included', stack: '+ Typeform $35/mo' },
-  { feature: 'End-to-end auto workflow', volia: '✓ Volia Autopilot', stack: '+ Zapier devops setup' },
+  { feature: 'End-to-end auto workflow', volia: '✓ Volia One on autopilot', stack: '+ Zapier devops setup' },
   { feature: 'EU hosting / GDPR native', volia: '✓ Frankfurt', stack: '❌ US' },
   { feature: 'Total monthly cost', volia: '€99-179 (MAX)', stack: '$1,000+' },
 ];
@@ -88,19 +89,19 @@ export default function EnAutopilotProductPage() {
           <div className="relative max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-100 via-orange-100 to-amber-100 border-2 border-amber-300 text-xs mb-6 font-medium shadow-sm">
               <Zap size={12} className="text-amber-700" />
-              <span className="text-amber-800 font-bold">VOLIA AUTOPILOT · MAX PLAN ONLY</span>
+              <span className="text-amber-800 font-bold">VOLIA ONE · 24/7 AUTOPILOT MODE · MAX PLAN</span>
             </div>
 
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-[64px] font-bold tracking-tight leading-[1.05] mb-6">
-              <span className="block text-content-primary">Your B2B pipeline.</span>
+              <span className="block text-content-primary">Volia One,</span>
               <span className="block bg-gradient-to-br from-amber-600 via-orange-600 to-amber-700 bg-clip-text text-transparent">
-                On autopilot.
+                on autopilot.
               </span>
             </h1>
 
             <p className="text-lg sm:text-xl text-content-secondary mb-4 leading-relaxed max-w-3xl mx-auto">
-              Pick your target. Volia scrapes, enriches, reaches out, qualifies, and drops the
-              hot leads into your CRM. <strong className="text-content-primary">You don&apos;t lift a finger.</strong>
+              Flip Volia One to autopilot. It scrapes, enriches, reaches out, qualifies, and drops the
+              hot leads into your CRM — 24/7. <strong className="text-content-primary">You don&apos;t lift a finger.</strong>
             </p>
             <p className="text-base text-content-tertiary mb-10 italic">
               Two weeks later, your pipeline is full.
@@ -204,7 +205,7 @@ export default function EnAutopilotProductPage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
-                Volia Autopilot vs the US stack
+                Volia One on autopilot vs the US stack
               </h2>
               <p className="text-base text-content-secondary max-w-2xl mx-auto">
                 Apollo + Lemlist + HubSpot + Typeform + Zapier devops, or Volia all-in-one.
@@ -217,7 +218,7 @@ export default function EnAutopilotProductPage() {
                     <th className="text-left p-4 font-semibold text-content-primary">Feature</th>
                     <th className="text-left p-4 font-semibold text-amber-700">
                       <div className="flex items-center gap-2">
-                        <Zap size={14} /> Volia Autopilot
+                        <Zap size={14} /> Volia One (autopilot)
                       </div>
                     </th>
                     <th className="text-left p-4 font-semibold text-content-soft">Typical US stack</th>

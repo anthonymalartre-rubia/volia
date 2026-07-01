@@ -745,7 +745,7 @@ export function trialStartedEmail(userName, trialEndsAt) {
 
         <p style="margin:24px 0 16px;font-size:13px;font-weight:600;color:${COLORS.text};">Ce qui est débloqué :</p>
         <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
-          <li>⚡ <strong style="color:${COLORS.text};">Volia Autopilot</strong> — pipeline B2B end-to-end auto</li>
+          <li>⚡ <strong style="color:${COLORS.text};">Volia One en mode Autopilot 24/7</strong> — pipeline B2B end-to-end auto</li>
           <li><strong style="color:${COLORS.text};">2 000 crédits Prospection</strong> (vs 25 en gratuit) + cascade waterfall 7 sources</li>
           <li>Campagnes, CRM, Formulaires &amp; Project <strong style="color:${COLORS.text};">illimités</strong></li>
           <li>10 000 cold emails/mois (warmup auto inclus)</li>
@@ -782,7 +782,7 @@ export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max
        <li>1 200 enrichissements + 1 200 téléphones/mois → 25 crédits + 25</li>
        <li>2 000 cold emails/mois (warmup inclus) → 200/mois</li>
        <li>Campagnes, CRM &amp; Formulaires : retour aux limites du plan Gratuit</li>`
-    : `<li>⚡ <strong>Volia Autopilot</strong> désactivé</li>
+    : `<li>⚡ <strong>Volia One en mode Autopilot 24/7</strong> désactivé</li>
        <li>2 000 crédits Prospection/mois → 25</li>
        <li>10 000 cold emails/mois (warmup inclus) → 200</li>
        <li>Suite complète → limites du Gratuit (1 pipeline, 2 formulaires, 1 projet)</li>`;

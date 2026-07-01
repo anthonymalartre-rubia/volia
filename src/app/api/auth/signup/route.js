@@ -164,7 +164,7 @@ export async function POST(request) {
 
     // 3. Envoyer l'email brandé via Resend
     const { subject, html } = authSignupConfirm({ confirmUrl, email: normalizedEmail });
-    const sendResult = await sendEmail({ to: normalizedEmail, subject, html });
+    const sendResult = await sendEmail({ to: normalizedEmail, subject, html, critical: true });
 
     if (!sendResult.success) {
       // L'utilisateur EST déjà créé en base. On log + retourne une 500

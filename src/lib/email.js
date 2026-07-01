@@ -31,10 +31,14 @@ const FALLBACK_FROM = 'Volia <onboarding@resend.dev>';
  *      retentative depuis onboarding@resend.dev (sandbox Resend qui marche
  *      toujours, mais limité à l'email du compte Resend en mode dev).
  *
- * @param {{ to, subject, html, replyTo?, from? }} options
+ * @param {{ to, subject, html, replyTo?, from?, tags?, critical? }} options
+ *   critical:true → transactionnel sensible (auth, paiement) : PAS de fallback
+ *   vers le sandbox onboarding@resend.dev. Si le domaine custom est refusé, on
+ *   ÉCHOUE bruyamment (log erreur) plutôt que d'envoyer un email de reset/paiement
+ *   depuis un domaine sandbox (spam/non brandé = pire qu'un échec détecté).
  * @returns {Promise<{ success, id?, error?, fromUsed?, fallbackUsed?, status? }>}
  */
-export async function sendEmail({ to, subject, html, replyTo, from, tags }) {
+export async function sendEmail({ to, subject, html, replyTo, from, tags, critical = false }) {
   const apiKey = cleanEnv(process.env.RESEND_API_KEY);
   if (!apiKey) {
     console.warn('[email] RESEND_API_KEY not configured — skipping email');
@@ -71,7 +75,19 @@ export async function sendEmail({ to, subject, html, replyTo, from, tags }) {
     return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false };
   }
 
-  console.warn(`[email] Primary sender ${primaryFrom} refused (${firstAttempt.error}). Retrying with ${FALLBACK_FROM}...`);
+  // Transactionnel critique (auth, paiement) : on NE bascule PAS sur le sandbox
+  // (un email de reset/paiement depuis onboarding@resend.dev = non brandé, spam,
+  // pire qu'un échec). On échoue BRUYAMMENT → détecté en monitoring, pas silencieux.
+  if (critical) {
+    console.error(
+      `[email] CRITICAL refusé par ${primaryFrom} (${firstAttempt.error}) — PAS de fallback sandbox. Email "${subject}" → ${to} NON envoyé. Vérifier la vérification domaine Resend (volia.fr).`
+    );
+    return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false, critical: true };
+  }
+
+  // Non critique (marketing/ressources) : fallback sandbox toléré, mais LOGGÉ EN
+  // ERREUR (fini le warn silencieux) → visible en monitoring si le domaine casse.
+  console.error(`[email] Primary sender ${primaryFrom} refusé (${firstAttempt.error}). Fallback → ${FALLBACK_FROM} (délivrabilité dégradée).`);
   const fallbackAttempt = await callResend({ apiKey, from: FALLBACK_FROM, to, subject, html, replyTo, tags });
 
   // Conserve la trace du primary error même si le fallback marche, et

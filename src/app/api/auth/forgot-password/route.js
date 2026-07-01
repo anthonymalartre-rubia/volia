@@ -62,7 +62,7 @@ export async function POST(request) {
 
     // Envoi de l'email brandé
     const { subject, html } = authPasswordReset({ resetUrl, email: normalizedEmail });
-    const sendResult = await sendEmail({ to: normalizedEmail, subject, html });
+    const sendResult = await sendEmail({ to: normalizedEmail, subject, html, critical: true });
 
     if (!sendResult.success) {
       console.error('[auth/forgot-password] Resend send failed for', normalizedEmail, sendResult.error);

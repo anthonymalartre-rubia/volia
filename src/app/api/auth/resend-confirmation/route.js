@@ -54,7 +54,7 @@ export async function POST(request) {
 
     const confirmUrl = linkData.properties.action_link;
     const { subject, html } = authResendConfirmation({ confirmUrl, email: normalizedEmail });
-    const sendResult = await sendEmail({ to: normalizedEmail, subject, html });
+    const sendResult = await sendEmail({ to: normalizedEmail, subject, html, critical: true });
 
     if (!sendResult.success) {
       console.error('[auth/resend-confirmation] Resend send failed for', normalizedEmail, sendResult.error);

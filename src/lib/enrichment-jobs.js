@@ -147,6 +147,27 @@ async function processJob(supabase, job) {
       supabase.from('enrichment_jobs').select('status').eq('id', job.id).maybeSingle(), 'recheck-status');
     if (!fresh || fresh.status === 'canceled') return { processed, found, ended: 'canceled' };
 
+    // GARDE ANTI-BOUCLE (incident 02/07/2026, job ecf50b46) : la sélection du
+    // lot repose sur `email IS NULL` — un prospect dont le waterfall ne trouve
+    // RIEN reste sans email et serait re-sélectionné (re-scrapé, re-Serper,
+    // RE-FACTURÉ via incrementUsage) à chaque itération et à chaque tick,
+    // indéfiniment. `job.total` = taille du périmètre au lancement : une fois
+    // `processed >= total` tentatives cumulées (≈ une passe complète), on
+    // termine honnêtement avec le vrai `found` au lieu de tourner en rond.
+    if (job.total && processed >= job.total) {
+      await withTimeout(supabase.from('enrichment_jobs')
+        .update({ status: 'done', processed, found, finished_at: new Date().toISOString(), last_tick_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .eq('id', job.id), 'mark-done-onepass');
+      const to = await getUserEmail(supabase, job.user_id);
+      if (to) {
+        try {
+          const tpl = completionEmail({ job: { ...job, processed }, total: job.total, found });
+          await sendEmail({ to, subject: tpl.subject, html: tpl.html, text: tpl.text });
+        } catch { /* email best-effort */ }
+      }
+      return { processed, found, ended: 'done' };
+    }
+
     // Quota
     const lim = await withTimeout(checkLimit(supabase, job.user_id, 'enrichments'), 'checkLimit');
     if (!lim.allowed || (lim.remaining !== -1 && lim.remaining <= 0)) {

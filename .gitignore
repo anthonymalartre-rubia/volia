@@ -52,3 +52,7 @@ Thumbs.db
 
 # Documents stratégiques internes (ne JAMAIS pousser sur le repo public)
 business/
+
+# Stratégie marketing privée (repo public — ne jamais committer)
+marketing-prive/
+audit-prive/

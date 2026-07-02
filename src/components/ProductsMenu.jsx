@@ -124,6 +124,16 @@ const PRODUCTS_EN = [
     badge: 'LIVE',
     badgeColor: 'bg-emerald-100 text-emerald-700 border-emerald-200',
   },
+  {
+    slug: 'project',
+    href: '/produits/project', // pas encore de page EN dédiée — route FR
+    name: 'Volia Project',
+    description: 'Won deal → delivered project, client tracking by link',
+    icon: FolderKanban,
+    accent: 'orange',
+    badge: 'NEW',
+    badgeColor: 'bg-orange-100 text-orange-700 border-orange-200',
+  },
 ];
 
 const ACCENT_STYLES = {

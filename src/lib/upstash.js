@@ -143,6 +143,32 @@ export function oneGlobalRateLimiter() {
 }
 
 /**
+ * Volia One — rate limiter par UTILISATEUR connecté : 30 runs/user/jour.
+ *
+ * Garde-fou anti-boucle : les connectés sont gated par les crédits, mais un
+ * run à 0 lead vérifié consomme quand même des appels API réels (Places,
+ * Serper, Claude, MillionVerifier). 30/jour borne le coût d'un compte qui
+ * tournerait en boucle.
+ *
+ * Usage :
+ *   const { success } = await oneUserRateLimiter().limit(userId);
+ */
+let oneUserLimiterInstance = null;
+export function oneUserRateLimiter() {
+  if (oneUserLimiterInstance) return oneUserLimiterInstance;
+  const redis = getRedis();
+  if (!redis) return null;
+
+  oneUserLimiterInstance = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(30, '1 d'),
+    prefix: 'rl:one:user',
+    analytics: true,
+  });
+  return oneUserLimiterInstance;
+}
+
+/**
  * Extrait l'IP du request pour le rate limiting.
  * - Vercel injecte x-forwarded-for et x-real-ip
  * - On prend la première IP (proxy chain)

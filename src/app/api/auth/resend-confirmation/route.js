@@ -3,6 +3,7 @@ import { checkRateLimit } from '@/lib/rateLimit';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { authResendConfirmation } from '@/lib/emailTemplates';
+import { alertCritical } from '@/lib/critical-alert';
 
 /**
  * POST /api/auth/resend-confirmation
@@ -58,6 +59,14 @@ export async function POST(request) {
 
     if (!sendResult.success) {
       console.error('[auth/resend-confirmation] Resend send failed for', normalizedEmail, sendResult.error);
+      // On répond quand même success (pas de leak), mais alerte critique
+      // immédiate côté admin — un renvoi de confirmation qui échoue = user bloqué.
+      await alertCritical({
+        kind: 'resend_confirmation_email_failed',
+        message: 'L\'email de confirmation (renvoi) n\'a pas pu être envoyé (Resend).',
+        error: sendResult.error,
+        context: { route: '/api/auth/resend-confirmation', stage: 'send_confirmation', email: normalizedEmail },
+      });
     }
 
     return NextResponse.json({ success: true });

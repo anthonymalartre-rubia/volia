@@ -8,8 +8,7 @@
 // Supporte ?domain=… (auto-lance), et un feed d'activité live après envoi.
 // ─────────────────────────────────────────────────────────────────────
 
-import { Suspense, useState, useEffect, useRef, Fragment } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
 
@@ -35,7 +34,6 @@ const statusBadge = {
 const FEED_ORDER = ['pending', 'sent', 'delivered', 'opened', 'clicked', 'replied', 'bounced', 'failed'];
 
 function OneInner() {
-  const sp = useSearchParams();
   const autoRan = useRef(false);
 
   const [domain, setDomain] = useState('');
@@ -142,17 +140,20 @@ function OneInner() {
     }
   }
 
-  // Auto-lance si on arrive avec ?domain= (depuis le teaser landing)
+  // Auto-lance si on arrive avec ?domain= (depuis le teaser landing).
+  // Lu via window.location plutôt que useSearchParams : le hook à la racine
+  // forçait toute la page en CSR (body SSR vide → invisible pour les
+  // crawlers non-JS), alors que l'auto-run est de toute façon client-only.
   useEffect(() => {
     if (autoRan.current) return;
-    const d = sp.get('domain');
+    const d = new URLSearchParams(window.location.search).get('domain');
     if (d) {
       autoRan.current = true;
       setDomain(d);
       run(null, d);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sp]);
+  }, []);
 
   async function launch() {
     if (launching || !data || sendable.length === 0) return;
@@ -515,10 +516,8 @@ function OneInner() {
   );
 }
 
+// Plus de wrapper <Suspense> : sans useSearchParams, la page est
+// entièrement prerendable (SSR complet, bon pour crawlers + LCP).
 export default function VoliaOnePage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-surface-base" />}>
-      <OneInner />
-    </Suspense>
-  );
+  return <OneInner />;
 }

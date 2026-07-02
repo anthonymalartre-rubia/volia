@@ -353,7 +353,7 @@ export function usageWarningEmail(userName, usagePercent, planName, limitType) {
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
           Pour ne pas vous faire couper la prospection : <strong style="color:${COLORS.text};">Prospection à 19€/mois</strong> (500 crédits)
-          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9€</strong> — et MAX <span style="color:${COLORS.text};">(code MAX99 : 99€ les 3 premiers mois)</span> pour l'illimité sur toute la suite.
+          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9€</strong> — et MAX <span style="color:${COLORS.text};">(code MAX99 : 99€ les 3 premiers mois)</span> pour Volia One en Autopilot 24/7, la suite complète et 2&nbsp;000 crédits/mois inclus (+ packs).
         </p>
 
         <div align="center">${ctaPrimary('Voir les options', SETTINGS_URL)}</div>
@@ -604,7 +604,7 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
 
   const isActive = prospectsFound > 0 || emailsEnriched > 0;
   const subject = isActive
-    ? `${prospectsFound > 0 ? prospectsFound : emailsEnriched} prospects ce mois. Imagine en illimité.`
+    ? `${prospectsFound > 0 ? prospectsFound : emailsEnriched} prospects ce mois. Imagine avec 500 crédits.`
     : `Tu n'as pas encore essayé. C'est dommage.`;
 
   return {

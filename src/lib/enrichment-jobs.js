@@ -257,10 +257,13 @@ export async function runEnrichmentBatch() {
   // version de supabase-js, combiné au filtre .in(), il renvoie 0 ligne quand
   // la colonne est entièrement NULL (jobs jamais tickés) → jobs bloqués en file.
   // On trie en JS à la place (jamais-tické d'abord, puis last_tick le + ancien).
+  // NB 2 : .in('status', […]) lui-même s'est avéré silencieusement vide en prod
+  // (job 'queued' jamais sélectionné pendant 46h) → on passe par .or(), la
+  // famille de workarounds déjà documentée ci-dessus.
   const { data: jobs, error: selectErr } = await supabase
     .from('enrichment_jobs')
     .select('*')
-    .in('status', ['queued', 'running'])
+    .or('status.eq.queued,status.eq.running')
     .limit(10);
 
   if (selectErr) {
@@ -268,8 +271,22 @@ export async function runEnrichmentBatch() {
     return { ok: false, error: `select failed: ${selectErr.message || selectErr}`, startedAt };
   }
 
+  // Log INCONDITIONNEL à chaque tick : le silence devient impossible à rater.
+  const activeCount = jobs?.length || 0;
+  console.log(`[enrichment] tick — ${activeCount} job(s) actifs${activeCount > 0 ? ` (premier: ${jobs[0].id})` : ''}`);
+
   if (!jobs || jobs.length === 0) {
     return { ok: true, processedJobs: 0, startedAt };
+  }
+
+  // Garde anti-zombie : un job encore 'queued' 30 min après sa création sans
+  // jamais avoir démarré = symptôme de file morte → on le signale bruyamment
+  // (le traitement ci-dessous le prend ensuite en charge normalement).
+  const staleThreshold = Date.now() - 30 * 60 * 1000;
+  for (const j of jobs) {
+    if (j.status === 'queued' && !j.started_at && j.created_at && new Date(j.created_at).getTime() < staleThreshold) {
+      console.error(`[enrichment] STALE job ${j.id} — queued depuis ${Math.round((Date.now() - new Date(j.created_at).getTime()) / 60000)} min sans démarrage (created_at=${j.created_at})`);
+    }
   }
 
   // Tri équitable : les jobs jamais tickés (last_tick_at null) en premier,

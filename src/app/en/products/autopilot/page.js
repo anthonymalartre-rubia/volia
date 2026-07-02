@@ -22,7 +22,7 @@ const FR_PAGE = `${SITE_URL}/produits/autopilot`;
 
 export const metadata = {
   title: 'Volia One on autopilot - the 24/7 Autopilot mode (MAX plan)',
-  description: 'Turn Volia One to autopilot: it scrapes, enriches, emails, qualifies, and drops hot leads into your CRM around the clock. 30+ ready-to-run B2B templates. Autopilot mode unlocks on the MAX plan — €179/mo, code MAX99: first 3 months at €99. EU-hosted, GDPR by default.',
+  description: 'Turn Volia One to autopilot: it scrapes, enriches, emails, qualifies, and drops hot leads into your CRM around the clock. 23 ready-to-run B2B templates. Autopilot mode unlocks on the MAX plan — €179/mo, code MAX99: first 3 months at €99. EU-hosted, GDPR by default.',
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -50,7 +50,7 @@ const PIPELINE_STEPS = [
 
 const CONFIGURATION_TIME_BREAKDOWN = [
   { label: 'Pick your ICP target (industry + area)', time: '2 min' },
-  { label: 'Choose a template from 30+', time: '1 min' },
+  { label: `Choose a template from ${AUTOPILOT_TEMPLATES.length}`, time: '1 min' },
   { label: 'Tune frequency + volume', time: '1 min' },
   { label: 'Turn it on', time: '1 click' },
 ];
@@ -163,7 +163,7 @@ export default function EnAutopilotProductPage() {
               </div>
               <h2 className="text-3xl font-bold tracking-tight mb-3">10 minutes flat</h2>
               <p className="text-content-secondary mb-6">
-                Express setup. Pick one of 30+ templates, set your ICP, and turn it on.
+                Express setup. Pick one of {AUTOPILOT_TEMPLATES.length} templates, set your ICP, and turn it on.
               </p>
               <ul className="space-y-3">
                 {CONFIGURATION_TIME_BREAKDOWN.map((item, i) => (

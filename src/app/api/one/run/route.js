@@ -6,15 +6,23 @@
 // Deux régimes :
 //   • ANONYME  → PUBLIC, borné par rate-limit IP (3/j) + cap global (150/j)
 //     via Upstash. Pas de crédits, pas de persistance, pas de décideur.
-//   • CONNECTÉ → gated par les CRÉDITS Prospection (enrichments), pas par l'IP.
-//     1 crédit / lead avec email réel (= 1 contact ramené). Découverte décideur
-//     activée. Run persisté (volia_one_runs) → rouvrable au rechargement.
+//   • CONNECTÉ → gated par les CRÉDITS Prospection (enrichments), pas par l'IP,
+//     + garde-fou 30 runs/user/jour (anti-boucle). 1 crédit / lead avec email
+//     réel (= 1 contact ramené), minimum 1 crédit / run (un run à vide consomme
+//     quand même des appels API réels). Découverte décideur activée. Run
+//     persisté (volia_one_runs) → rouvrable au rechargement.
 // L'ENVOI réel reste sur /api/one/launch.
 // Renvoie { success, icp, leads, counts, ... }.
 // ─────────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
-import { getRedis, getClientIP, oneIpRateLimiter, oneGlobalRateLimiter } from '@/lib/upstash';
+import {
+  getRedis,
+  getClientIP,
+  oneIpRateLimiter,
+  oneGlobalRateLimiter,
+  oneUserRateLimiter,
+} from '@/lib/upstash';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { buildFromDomain } from '@/lib/one/build';
@@ -40,8 +48,31 @@ export async function POST(request) {
     /* anonyme */
   }
 
-  // ③ Régime CONNECTÉ : gating par crédits (enrichments). Pas de rate-limit IP.
+  // ③ Régime CONNECTÉ : garde-fou 30 runs/jour + gating par crédits
+  //    (enrichments). Pas de rate-limit IP.
   if (user) {
+    // Garde-fou anti-boucle par utilisateur. FAIL-OPEN volontaire (Redis absent
+    // ou en erreur → on laisse passer) : les connectés restent gated par les
+    // crédits, pas de raison de couper le service sur un incident Upstash.
+    try {
+      const userLimiter = oneUserRateLimiter();
+      if (userLimiter) {
+        const userResult = await userLimiter.limit(user.id);
+        if (!userResult.success) {
+          return NextResponse.json(
+            {
+              error: 'rate_limited_user',
+              message:
+                "Tu as atteint la limite de runs Volia One pour aujourd'hui. Réessaie demain, ou passe sur un plan supérieur.",
+            },
+            { status: 429 }
+          );
+        }
+      }
+    } catch {
+      /* fail-open : voir commentaire ci-dessus */
+    }
+
     let credit;
     try {
       credit = await checkLimit(supabase, user.id, 'enrichments');
@@ -80,7 +111,17 @@ export async function POST(request) {
       );
     }
     const ip = getClientIP(request);
-    const ipResult = await ipLimiter.limit(ip);
+    // FAIL-CLOSED pour les anonymes : une erreur Upstash (token invalide,
+    // réseau) → même 503 que Redis absent, pas un 500 générique.
+    let ipResult;
+    try {
+      ipResult = await ipLimiter.limit(ip);
+    } catch {
+      return NextResponse.json(
+        { error: 'one_unavailable', message: 'Volia One est temporairement indisponible. Réessaie plus tard.' },
+        { status: 503 }
+      );
+    }
     if (!ipResult.success) {
       const resetSec = Math.ceil((ipResult.reset - Date.now()) / 1000);
       return NextResponse.json(
@@ -93,7 +134,15 @@ export async function POST(request) {
         { status: 429, headers: { 'Retry-After': String(resetSec), 'X-RateLimit-Remaining': '0' } }
       );
     }
-    const globalResult = await globalLimiter.limit('global');
+    let globalResult;
+    try {
+      globalResult = await globalLimiter.limit('global');
+    } catch {
+      return NextResponse.json(
+        { error: 'one_unavailable', message: 'Volia One est temporairement indisponible. Réessaie plus tard.' },
+        { status: 503 }
+      );
+    }
     if (!globalResult.success) {
       return NextResponse.json(
         {
@@ -112,15 +161,18 @@ export async function POST(request) {
     // ⑤ Connecté : facturation en crédits + persistance du run (best-effort,
     //    ne jamais faire échouer la réponse là-dessus).
     if (user && supabase) {
-      const creditsCharged = (result.leads || []).filter(
+      // 1 crédit / lead vérifié, avec un MINIMUM de 1 crédit par run : un run
+      // qui ne ramène rien a quand même consommé des appels API réels (Places,
+      // Serper, Claude). Sans plancher, les runs à vide seraient gratuits en
+      // boucle infinie.
+      const verifiedLeads = (result.leads || []).filter(
         (l) => l.email && VERIFIED_METHODS.includes(l.method)
       ).length;
-      if (creditsCharged > 0) {
-        try {
-          await incrementUsage(supabase, user.id, 'enrichments', creditsCharged);
-        } catch (e) {
-          console.warn('[one/run] incrementUsage failed:', e?.message);
-        }
+      const creditsCharged = Math.max(1, verifiedLeads);
+      try {
+        await incrementUsage(supabase, user.id, 'enrichments', creditsCharged);
+      } catch (e) {
+        console.warn('[one/run] incrementUsage failed:', e?.message);
       }
       try {
         const { data: row } = await supabase
@@ -143,7 +195,15 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true, ...result, decision_makers_enabled: !!user });
   } catch (e) {
-    console.error('[one/run] échec:', e?.message || e);
-    return NextResponse.json({ error: e?.message || 'Erreur Volia One' }, { status: 500 });
+    const msg = e?.message || 'Erreur Volia One';
+    // Erreurs "input utilisateur" levées par icp.js (domaine vide/invalide,
+    // site injoignable) → 422, pas 500 : le message est affiché tel quel par /one.
+    const isInputError =
+      msg.startsWith('Site injoignable') || msg.startsWith('Domaine vide') || msg.startsWith('Domaine invalide');
+    if (isInputError) {
+      return NextResponse.json({ error: msg }, { status: 422 });
+    }
+    console.error('[one/run] échec:', msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

@@ -21,7 +21,7 @@
 import Link from 'next/link';
 import {
   ArrowRight, Check, Zap, Search, Mail, Layers, Globe, Sparkles, X,
-  FormInput, Shield,
+  FormInput, Shield, FolderKanban,
 } from 'lucide-react';
 import { LogoIcon } from '@/components/ui';
 import MotionInView from '@/components/MotionInView';
@@ -330,7 +330,7 @@ export default function LandingContentEN() {
               </div>
             </MotionInView>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
                   name: 'Campaigns',
@@ -364,6 +364,17 @@ export default function LandingContentEN() {
                   iconBg: 'from-pink-500 to-rose-600',
                   href: '/en/products/forms',
                   status: 'LIVE',
+                },
+                {
+                  name: 'Project',
+                  tagline: 'Won deal → delivered project, client tracking link',
+                  icon: FolderKanban,
+                  color: 'orange',
+                  bg: 'from-orange-50/70 via-white to-amber-50/40',
+                  border: 'border-orange-200',
+                  iconBg: 'from-orange-500 to-amber-600',
+                  href: '/produits/project', // pas encore de page EN dédiée — route FR
+                  status: 'NEW',
                 },
               ].map((mod, i) => {
                 const Icon = mod.icon;

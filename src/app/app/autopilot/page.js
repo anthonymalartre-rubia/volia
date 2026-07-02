@@ -4,7 +4,7 @@
 // 3 modes : list (default) · new (builder wizard) · view (runtime detail)
 // Switch via ?view=list|new|view&id=X
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import TopBar from '@/components/TopBar';
@@ -42,7 +42,17 @@ const STATUS_COLORS = {
   archived: 'bg-zinc-100 text-zinc-500',
 };
 
+// useSearchParams() impose un boundary <Suspense> pour le prerender statique
+// (même pattern que /opt-out et /one).
 export default function AutopilotPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface-base" />}>
+      <AutopilotInner />
+    </Suspense>
+  );
+}
+
+function AutopilotInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const view = searchParams.get('view') || 'list';

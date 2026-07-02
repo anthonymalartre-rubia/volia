@@ -3,6 +3,7 @@ import { checkRateLimit } from '@/lib/rateLimit';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { authPasswordReset } from '@/lib/emailTemplates';
+import { alertCritical } from '@/lib/critical-alert';
 
 /**
  * POST /api/auth/forgot-password
@@ -67,7 +68,14 @@ export async function POST(request) {
     if (!sendResult.success) {
       console.error('[auth/forgot-password] Resend send failed for', normalizedEmail, sendResult.error);
       // Même cas — on ne dit pas à l'utilisateur que l'envoi a foiré pour
-      // ne pas leaker. Mais on log côté serveur pour debug.
+      // ne pas leaker. Mais on log côté serveur + alerte critique immédiate
+      // (sinon l'incident reste invisible, cf. incident signup Denell 06/2026).
+      await alertCritical({
+        kind: 'password_reset_email_failed',
+        message: 'L\'email de réinitialisation de mot de passe n\'a pas pu être envoyé (Resend).',
+        error: sendResult.error,
+        context: { route: '/api/auth/forgot-password', stage: 'send_reset', email: normalizedEmail },
+      });
     }
 
     return NextResponse.json({ success: true });

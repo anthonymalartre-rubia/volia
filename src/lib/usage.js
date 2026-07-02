@@ -123,7 +123,10 @@ export async function checkLimit(supabase, userId, action) {
   // ─── Crédits achetés (packs one-time, pivot freemium 11/06/2026) ──
   // Uniquement pour les enrichissements (la donnée a un coût API réel).
   // Le solde acheté (sans expiration) prend le relais quand le quota
-  // mensuel du plan est épuisé — consommation dans incrementUsage().
+  // mensuel du plan est épuisé — consommation dans incrementUsage() via
+  // le RPC increment_usage_atomic (débit PARTIEL, plancher 0). Le solde
+  // draine donc réellement à chaque appel : plus de « allowed » infini
+  // quand le solde résiduel est inférieur au montant demandé.
   const creditBalance = action === 'enrichments' ? profileRow?.credit_balance || 0 : 0;
   const usingPurchasedCredits = !monthlyAllowed && creditBalance > 0;
 
@@ -132,75 +135,61 @@ export async function checkLimit(supabase, userId, action) {
     current,
     limit,
     plan: plan.id,
-    remaining: limit === -1 ? -1 : Math.max(0, limit - current),
+    // Quand on tourne sur les crédits achetés, `remaining` reflète le solde
+    // réel restant (et non 0) : les callers qui plafonnent leurs lots dessus
+    // (ex. enrichment-jobs) continuent tant qu'il reste des crédits.
+    remaining: limit === -1
+      ? -1
+      : usingPurchasedCredits
+        ? creditBalance
+        : Math.max(0, limit - current),
     creditBalance,
     usingPurchasedCredits,
   };
 }
 
 // Increment usage counter and send warning emails if thresholds are crossed
+// ⚠️ Incrément ATOMIQUE via le RPC increment_usage_atomic : l'ancien
+// read-modify-write JS (SELECT count puis UPDATE) perdait des écritures en cas
+// d'appels parallèles (waterfall, jobs, one/run) → l'utilisateur n'était
+// facturé qu'une fois au lieu de N. Le RPC gère aussi le relais crédits
+// achetés dans la MÊME transaction : la part de l'incrément qui dépasse le
+// quota mensuel est débitée PARTIELLEMENT du solde (drainé jusqu'à 0, jamais
+// négatif) — uniquement pour les enrichissements, règle encodée côté SQL.
+// Corrige aussi le chevauchement de borne : à 24/25, un incrément de 8 débite
+// désormais 7 crédits au lieu d'écrire 32 sans toucher au solde.
 export async function incrementUsage(supabase, userId, action, amount = 1) {
   const month = getCurrentMonth();
 
-  const { data: existing } = await supabase
-    .from('usage_tracking')
-    .select('id, ' + action)
-    .eq('user_id', userId)
-    .eq('month', month)
-    .single();
+  // Plan (trial inclus) : la limite mensuelle est passée au RPC pour qu'il
+  // calcule lui-même le dépassement à débiter du solde acheté (-1 = illimité,
+  // aucun débit). Réutilisée plus bas pour les emails de seuil.
+  const plan = await getUserPlan(supabase, userId);
+  const limit = plan.limits[`${action}_per_month`] ?? -1;
 
-  const previousCount = existing ? (existing[action] || 0) : 0;
-
-  // ─── Crédits achetés : relais après épuisement du quota mensuel ───
-  // Pour les enrichissements uniquement : si le quota du plan est déjà
-  // consommé, on débite le solde acheté (RPC atomique, refuse si
-  // insuffisant) au lieu du compteur mensuel. Pas d'email de seuil :
-  // l'utilisateur est déjà au-delà de 100 % de son quota inclus.
-  if (action === 'enrichments') {
-    const plan = await getUserPlan(supabase, userId);
-    const limit = plan.limits.enrichments_per_month;
-    if (limit !== -1 && previousCount >= limit) {
-      try {
-        const admin = getSupabaseAdmin();
-        const { data: newBalance, error } = await admin.rpc('consume_purchased_credits', {
-          p_user_id: userId,
-          p_amount: amount,
-        });
-        if (!error && (newBalance ?? -1) >= 0) return; // débité sur le solde acheté
-        if (error) console.error('[usage] consume_purchased_credits error', error.message);
-        // Solde insuffisant (-1) ou erreur → fallback compteur mensuel
-        // (l'appel aurait dû être bloqué en amont par checkLimit).
-      } catch (e) {
-        console.error('[usage] consume_purchased_credits threw', e?.message);
-      }
-    }
-  }
-
-  const newCount = previousCount + amount;
-
-  // Écritures en service-role : RLS n'a pas de policy INSERT/UPDATE sur usage_tracking.
+  // Écriture en service-role : RLS n'a pas de policy INSERT/UPDATE sur
+  // usage_tracking, et le RPC n'est exécutable que par service_role (un user
+  // authentifié ne doit pas pouvoir incrémenter/drainer un autre compte).
   const writeDb = getWriteClient(supabase);
-  if (existing) {
-    const { error: upErr } = await writeDb
-      .from('usage_tracking')
-      .update({ [action]: newCount, updated_at: new Date().toISOString() })
-      .eq('id', existing.id);
-    if (upErr) console.error('[usage] incrementUsage update error', upErr.message);
-  } else {
-    const { error: insErr } = await writeDb
-      .from('usage_tracking')
-      .insert({ user_id: userId, month, [action]: amount });
-    if (insErr) console.error('[usage] incrementUsage insert error', insErr.message);
+  const { data: rpcResult, error: rpcErr } = await writeDb.rpc('increment_usage_atomic', {
+    p_user_id: userId,
+    p_month: month,
+    p_action: action,
+    p_amount: amount,
+    p_monthly_limit: limit,
+  });
+  if (rpcErr) {
+    console.error('[usage] increment_usage_atomic error', rpcErr.message);
+    return; // pas de compteur fiable → pas d'email de seuil
   }
+
+  const newCount = rpcResult?.new_count ?? 0;
+  const previousCount = Math.max(0, newCount - amount);
 
   // ─── Usage warning emails ──────────────────────────────────────────────────
   // Send emails when crossing the 80% or 100% threshold.
   // We check that the previous count was below the threshold to avoid duplicates.
   try {
-    const plan = await getUserPlan(supabase, userId);
-    const limitKey = `${action}_per_month`;
-    const limit = plan.limits[limitKey];
-
     // Skip for unlimited plans
     if (limit === -1) return;
 

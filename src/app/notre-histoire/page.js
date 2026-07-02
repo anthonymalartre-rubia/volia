@@ -27,7 +27,7 @@ const PAGE_URL = `${SITE_URL}/notre-histoire`;
 export const metadata = {
   title: "Volia, une entreprise d'un nouveau genre — l'IA exécute, l'humain décide",
   description:
-    "Volia est construit autrement : l'IA exécute le travail répétitif, l'humain décide. Suite de prospection B2B française, 4 modules connectés, RGPD natif, à partir de 19 €/mois. Depuis Marseille.",
+    "Volia est construit autrement : l'IA exécute le travail répétitif, l'humain décide. Volia One (entre ton domaine → prospects → cold emails → pipeline) propulsé par 5 modules connectés, RGPD natif, à partir de 19 €/mois. Depuis Marseille.",
   alternates: {
     canonical: PAGE_URL,
     languages: {
@@ -52,7 +52,7 @@ export const metadata = {
   openGraph: {
     title: "Volia — Une entreprise d'un nouveau genre",
     description:
-      "Construit autrement : l'IA exécute le travail répétitif, l'humain décide. 4 modules connectés, RGPD natif, depuis Marseille.",
+      "Construit autrement : l'IA exécute le travail répétitif, l'humain décide. 5 modules connectés, RGPD natif, depuis Marseille.",
     url: PAGE_URL,
     type: 'article',
     siteName: 'Volia',
@@ -61,7 +61,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Volia — Une entreprise d'un nouveau genre",
-    description: "L'IA exécute, l'humain décide. Prospection B2B française, RGPD, 4 modules. Depuis Marseille.",
+    description: "L'IA exécute, l'humain décide. Prospection B2B française, RGPD, 5 modules. Depuis Marseille.",
   },
   robots: { index: true, follow: true },
 };
@@ -79,7 +79,7 @@ const articleSchema = {
   '@type': 'Article',
   headline: "Volia — Une entreprise d'un nouveau genre : l'IA exécute, l'humain décide",
   description:
-    "Volia, suite de prospection B2B française construite autrement : l'IA exécute le travail répétitif, l'humain garde la vision et les décisions. 4 modules connectés (Prospection, Campagnes, CRM, Forms), RGPD natif, depuis Marseille.",
+    "Volia, suite de prospection B2B française construite autrement : l'IA exécute le travail répétitif, l'humain garde la vision et les décisions. Volia One propulsé par 5 modules connectés (Prospection, Campagnes, CRM, Formulaires, Project), RGPD natif, depuis Marseille.",
   url: PAGE_URL,
   mainEntityOfPage: { '@type': 'WebPage', '@id': PAGE_URL },
   datePublished: '2026-06-01',

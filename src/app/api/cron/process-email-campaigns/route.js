@@ -154,6 +154,25 @@ async function handleCron(request) {
   const campaignMap = new Map((campaigns || []).map((c) => [c.id, c]));
   const contactMap = new Map((contacts || []).map((c) => [c.id, c]));
 
+  // RGPD — blocklist globale opt_out_list (ceinture-bretelles). Le flag
+  // contact.opt_out est vérifié plus bas, mais un email peut figurer sur la
+  // blocklist publique (/opt-out) SANS que le contact porte le flag (listes
+  // créées avant l'opt-out, imports, Volia One…). UNE seule requête pour tout
+  // le batch (pas de N+1) — emails normalisés lowercase des deux côtés.
+  const batchEmails = [...new Set(
+    [...sends.map((s) => s.email), ...(contacts || []).map((c) => c.email)]
+      .filter(Boolean)
+      .map((e) => String(e).trim().toLowerCase())
+  )];
+  let globalOptOutSet = new Set();
+  if (batchEmails.length > 0) {
+    const { data: optOutRows } = await supabase
+      .from('opt_out_list')
+      .select('email')
+      .in('email', batchEmails);
+    globalOptOutSet = new Set((optOutRows || []).map((r) => String(r.email).trim().toLowerCase()));
+  }
+
   // 3.bis) Bulk fetch des email_senders verified référencés par ces campaigns.
   // On ne charge QUE les senders status='verified' : un sender supprimé ou non
   // vérifié provoquera un fail explicite du send (cf. plus bas).
@@ -407,6 +426,10 @@ async function handleCron(request) {
     }
     if (contact.opt_out) {
       return updateSendStatus(supabase, send.id, 'failed', { error: 'Contact opt-out' });
+    }
+    // Blocklist globale RGPD (opt_out_list) — même traitement que le flag contact.
+    if (globalOptOutSet.has(String(contact.email || '').trim().toLowerCase())) {
+      return updateSendStatus(supabase, send.id, 'failed', { error: 'Email in global opt-out list (RGPD)' });
     }
 
     // ─── HARD-CAP QUOTA EMAILS (anti-bombe à coûts — task #328) ──

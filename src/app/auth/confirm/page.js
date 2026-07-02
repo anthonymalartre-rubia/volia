@@ -28,7 +28,7 @@
 //   - Erreurs (lien expiré) → fallback historique.
 // ─────────────────────────────────────────────────────────────────────
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { getSupabase } from '@/lib/supabase';
@@ -59,7 +59,7 @@ function capitalize(s) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
 
-export default function AuthConfirmPage() {
+function AuthConfirmInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   // 'processing' | 'welcome' | 'success' | 'error'
@@ -215,5 +215,15 @@ export default function AuthConfirmPage() {
         )}
       </div>
     </main>
+  );
+}
+
+// useSearchParams() impose un boundary <Suspense> pour le prerender statique
+// (même pattern que /opt-out et /one).
+export default function AuthConfirmPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-surface-base" />}>
+      <AuthConfirmInner />
+    </Suspense>
   );
 }

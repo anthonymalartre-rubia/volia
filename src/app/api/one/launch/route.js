@@ -15,11 +15,15 @@
 //   3. des leads envoyables = email FIABLE (scrape/serper) + email rédigé.
 //
 // L'envoi réel est délégué au cron (toutes les ~5 min) : warmup, quota,
-// opt-out RGPD, reply-to inbound → CRM s'appliquent automatiquement.
+// reply-to inbound → CRM s'appliquent automatiquement. L'opt-out RGPD
+// (blocklist globale opt_out_list, promesse de la page /opt-out) est
+// filtré ICI avant création des contacts (cf. ②bis), puis revérifié par
+// le cron (flag contact + blocklist) en ceinture-bretelles.
 // ─────────────────────────────────────────────────────────────────────
 
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { getEffectivePlan } from '@/lib/trial';
 import { PLANS } from '@/lib/plans';
 
@@ -85,7 +89,7 @@ export async function POST(request) {
   // ② Ne garde que les leads envoyables : email FIABLE + email rédigé.
   //    (on n'envoie jamais sur un email "deviné" → délivrabilité + RGPD)
   const seenEmail = new Set();
-  const sendable = [];
+  let sendable = [];
   for (const l of leads) {
     if (!l || !l.email || !l.draft) continue;
     // Emails envoyables : trouvés sur site (scrape), via Google (serper), ou
@@ -115,7 +119,47 @@ export async function POST(request) {
     );
   }
 
-  // ②bis Quota d'envoi mensuel (même base que le hard-cap du cron). On refuse
+  // ②bis RGPD : blocklist globale opt_out_list (promesse de la page publique
+  //      /opt-out : « suppression automatique + blocklist permanente »).
+  //      On retire du lot tout email opt-out AVANT de créer contacts/campagne.
+  //      Lecture via le client admin (table non exposée aux users). Les emails
+  //      de `sendable` sont déjà lowercase ; on normalise aussi le retour DB
+  //      (certains chemins d'insertion historiques ne lowercasent pas).
+  let skippedOptOut = 0;
+  {
+    const { data: optOutRows, error: optOutErr } = await getSupabaseAdmin()
+      .from('opt_out_list')
+      .select('email')
+      .in('email', sendable.map((s) => s.email));
+    if (optOutErr) {
+      // Fail-closed : sans lecture fiable de la blocklist, on n'envoie rien
+      // (garantie légale > disponibilité).
+      return NextResponse.json(
+        { error: 'opt_out_check_failed', message: "Vérification de la liste d'opposition impossible. Réessaie dans quelques instants." },
+        { status: 500 }
+      );
+    }
+    const blocked = new Set((optOutRows || []).map((r) => String(r.email).trim().toLowerCase()));
+    if (blocked.size > 0) {
+      const before = sendable.length;
+      sendable = sendable.filter((s) => !blocked.has(s.email));
+      skippedOptOut = before - sendable.length;
+    }
+  }
+
+  if (sendable.length === 0) {
+    return NextResponse.json(
+      {
+        error: 'all_opt_out',
+        message:
+          "Tous les destinataires figurent sur la liste d'opposition (opt-out RGPD). Aucun envoi possible.",
+        skipped_opt_out: skippedOptOut,
+      },
+      { status: 409 }
+    );
+  }
+
+  // ②ter Quota d'envoi mensuel (même base que le hard-cap du cron). On refuse
   //      proprement si épuisé, et on PLAFONNE au reste disponible (le cron reste
   //      le backstop, mais autant être transparent côté UI).
   const planId = getEffectivePlan(profile);
@@ -243,5 +287,6 @@ export async function POST(request) {
     queued: sendsPayload.length,
     sender_domain: sender.domain,
     capped_to: cappedTo,
+    skipped_opt_out: skippedOptOut,
   });
 }

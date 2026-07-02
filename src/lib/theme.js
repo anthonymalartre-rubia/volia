@@ -56,9 +56,14 @@ export function ThemeProvider({ children }) {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   }, []);
 
-  // Prevent flash of wrong theme
-  if (!mounted) return null;
-
+  // NB : on ne gate PLUS le rendu sur `mounted` (ex-`if (!mounted) return null`).
+  // Ce guard anti-flash rendait null côté serveur → TOUT le contenu du site
+  // disparaissait du HTML prerendu (SSR body vide, P2 SEO/LCP : crawlers
+  // non-JS, reader modes). L'anti-FOUC est déjà assuré par le script inline
+  // dans layout.js (classe `light` posée sur <html> avant le paint) — les
+  // tokens CSS dépendent de cette classe, pas du state React. Pas de
+  // mismatch d'hydratation : serveur et 1er rendu client partent tous deux
+  // de theme='light'.
   return (
     <ThemeContext.Provider value={{ theme, toggle }}>
       {children}

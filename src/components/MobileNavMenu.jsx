@@ -36,6 +36,8 @@ const PRODUCTS_EN = [
   { slug: 'campaigns', name: 'Volia Campaigns', icon: Mail, accent: 'text-blue-600 bg-blue-100' },
   { slug: 'crm', name: 'Volia CRM', icon: Users, accent: 'text-emerald-600 bg-emerald-100' },
   { slug: 'forms', name: 'Volia Forms', icon: FormInput, accent: 'text-pink-600 bg-pink-100' },
+  // Volia Project — pas encore de page EN dédiée, href FR explicite
+  { slug: 'project', href: '/produits/project', name: 'Volia Project', icon: FolderKanban, accent: 'text-orange-600 bg-orange-100' },
 ];
 
 const STR = {

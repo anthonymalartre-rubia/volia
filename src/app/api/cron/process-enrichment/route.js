@@ -16,7 +16,9 @@ export async function GET(request) {
   }
   try {
     const result = await runEnrichmentBatch();
-    return NextResponse.json(result);
+    // ok:false = échec du select des jobs actifs → 500 (sinon le cron reste
+    // vert alors que la file est morte, cf. incident job bloqué 46h).
+    return NextResponse.json(result, { status: result?.ok === false ? 500 : 200 });
   } catch (err) {
     console.error('[cron/process-enrichment] unhandled', err);
     return NextResponse.json({ ok: false, error: err.message || String(err) }, { status: 500 });

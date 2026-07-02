@@ -14,7 +14,7 @@ import { AUTOPILOT_TEMPLATES } from '@/lib/autopilot/templates';
 
 export const metadata = {
   title: 'Autopilot — Volia One en pilote automatique 24/7 | Volia',
-  description: 'Autopilot, c\'est Volia One en pilote automatique : tu entres ton domaine, Volia One trouve tes prospects (email + tél), écrit et envoie tes cold emails, qualifie, score et remplit ton pipeline — 24/7, sans que tu lèves le petit doigt. 12 templates B2B France, RGPD natif. Débloqué au plan MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour essayer, sans carte bancaire.',
+  description: 'Autopilot, c\'est Volia One en pilote automatique : tu entres ton domaine, Volia One trouve tes prospects (email + tél), écrit et envoie tes cold emails, qualifie, score et remplit ton pipeline — 24/7, sans que tu lèves le petit doigt. 23 templates B2B France, RGPD natif. Débloqué au plan MAX 179 €/mois (code MAX99 : 3 mois à 99 €). Plan Gratuit à vie pour essayer, sans carte bancaire.',
   alternates: { canonical: 'https://volia.fr/produits/autopilot' },
   openGraph: {
     title: 'Autopilot — Volia One en pilote automatique 24/7',
@@ -32,7 +32,7 @@ const PIPELINE_STEPS = [
 
 const CONFIGURATION_TIME_BREAKDOWN = [
   { label: 'Choisir ta cible ICP (catégorie + zone géo)', time: '2 min' },
-  { label: 'Choisir un template parmi 12', time: '1 min' },
+  { label: `Choisir un template parmi ${AUTOPILOT_TEMPLATES.length}`, time: '1 min' },
   { label: 'Personnaliser fréquence + volume', time: '1 min' },
   { label: 'Activer ', time: '1 clic' },
 ];
@@ -152,7 +152,7 @@ export default function AutopilotProductPage() {
               </div>
               <h2 className="text-3xl font-bold tracking-tight mb-3">10 minutes chrono</h2>
               <p className="text-content-secondary mb-6">
-                Setup express du mode Autopilot. Choisis ton template parmi 12, configure ton ICP, et active Volia One en 24/7.
+                Setup express du mode Autopilot. Choisis ton template parmi {AUTOPILOT_TEMPLATES.length}, configure ton ICP, et active Volia One en 24/7.
               </p>
               <ul className="space-y-3">
                 {CONFIGURATION_TIME_BREAKDOWN.map((item, i) => (

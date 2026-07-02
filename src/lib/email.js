@@ -30,12 +30,18 @@ const FALLBACK_FROM = 'Volia <onboarding@resend.dev>';
  *   2. Si Resend refuse avec "domain not verified" ou "validation_error" ou 403,
  *      retentative depuis onboarding@resend.dev (sandbox Resend qui marche
  *      toujours, mais limité à l'email du compte Resend en mode dev).
+ *      Exception : jamais de fallback si critical:true OU si un `from` explicite
+ *      a été fourni (cf. ci-dessous).
  *
  * @param {{ to, subject, html, replyTo?, from?, tags?, critical? }} options
  *   critical:true → transactionnel sensible (auth, paiement) : PAS de fallback
  *   vers le sandbox onboarding@resend.dev. Si le domaine custom est refusé, on
  *   ÉCHOUE bruyamment (log erreur) plutôt que d'envoyer un email de reset/paiement
  *   depuis un domaine sandbox (spam/non brandé = pire qu'un échec détecté).
+ *   from explicite → même comportement que critical : un `from` fourni par
+ *   l'appelant (sender tenant, ex. campagnes) ne doit JAMAIS retomber sur une
+ *   identité Volia sandbox — invariant strict-sender multi-tenant (on n'envoie
+ *   jamais le mail d'un tenant depuis une identité Volia).
  * @returns {Promise<{ success, id?, error?, fromUsed?, fallbackUsed?, status? }>}
  */
 export async function sendEmail({ to, subject, html, replyTo, from, tags, critical = false }) {
@@ -75,14 +81,16 @@ export async function sendEmail({ to, subject, html, replyTo, from, tags, critic
     return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false };
   }
 
-  // Transactionnel critique (auth, paiement) : on NE bascule PAS sur le sandbox
-  // (un email de reset/paiement depuis onboarding@resend.dev = non brandé, spam,
-  // pire qu'un échec). On échoue BRUYAMMENT → détecté en monitoring, pas silencieux.
-  if (critical) {
+  // Transactionnel critique (auth, paiement) OU `from` explicite (sender tenant
+  // multi-tenant, ex. campagnes) : on NE bascule PAS sur le sandbox. Un reset/
+  // paiement depuis onboarding@resend.dev = non brandé, spam ; un email tenant
+  // depuis une identité Volia = violation de l'invariant strict-sender. On
+  // échoue BRUYAMMENT → détecté en monitoring, pas silencieux.
+  if (critical || from) {
     console.error(
-      `[email] CRITICAL refusé par ${primaryFrom} (${firstAttempt.error}) — PAS de fallback sandbox. Email "${subject}" → ${to} NON envoyé. Vérifier la vérification domaine Resend (volia.fr).`
+      `[email] ${critical ? 'CRITICAL' : 'Sender explicite'} refusé par ${primaryFrom} (${firstAttempt.error}) — PAS de fallback sandbox. Email "${subject}" → ${to} NON envoyé. Vérifier la vérification domaine Resend.`
     );
-    return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false, critical: true };
+    return { ...firstAttempt, fromUsed: primaryFrom, fallbackUsed: false, critical };
   }
 
   // Non critique (marketing/ressources) : fallback sandbox toléré, mais LOGGÉ EN

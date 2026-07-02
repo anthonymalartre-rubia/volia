@@ -88,7 +88,7 @@ function HeroSection() {
           <div className="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-10">
             {[
               { value: '101', label: 'départements FR', icon: Zap },
-              { value: '4', label: 'modules connectés', icon: Layers },
+              { value: '5', label: 'modules connectés', icon: Layers },
               { value: '0', label: 'levée', icon: Wallet },
               { value: '1', label: 'humain aux commandes', icon: User },
               { value: 'Marseille', label: '', icon: MapPin, mono: false },
@@ -287,7 +287,8 @@ function ExperienceSection() {
               emails transactionnels, cron jobs automatisés.
             </p>
             <p className="text-lg text-content-secondary leading-relaxed mb-6">
-              4 modules connectés (Prospection, Campagnes, CRM, Forms), tout le tissu B2B français accessible, couverture sur 8 pays.
+              Volia One (entre ton domaine → prospects → cold emails → pipeline), propulsé par 5 modules connectés
+              (Prospection, Campagnes, CRM, Formulaires, Project), tout le tissu B2B français accessible, couverture sur 8 pays.
               Une vraie suite produit, livrée vite et itérée en continu — sans armée de développeurs.
             </p>
             <div className="my-8 px-6 py-5 rounded-xl bg-gradient-to-br from-violet-50 via-white to-indigo-50 border-l-4 border-violet-500">
@@ -310,7 +311,7 @@ function ExperienceSection() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
             { value: '0', sub: 'email deviné (100% vérifiés)', icon: Zap, gradient: 'from-violet-600 to-indigo-600' },
-            { value: '4', sub: 'modules connectés', icon: Layers, gradient: 'from-indigo-600 to-blue-600' },
+            { value: '5', sub: 'modules connectés', icon: Layers, gradient: 'from-indigo-600 to-blue-600' },
             { value: '150+', sub: 'secteurs B2B FR', icon: TargetIcon, gradient: 'from-blue-600 to-cyan-600' },
             { value: '8', sub: 'pays couverts', icon: Globe, gradient: 'from-emerald-600 to-teal-600' },
           ].map((s, i) => {
@@ -800,7 +801,7 @@ function AntiFudFaqSection() {
     },
     {
       q: "C'est une démo ou un vrai produit ?",
-      a: "Vrai produit. Clients payants. 4 modules connectés en production. 10 cron jobs qui tournent en autonomie 24/7. Monitoring temps réel. Stripe live. Tu peux t'inscrire au plan Gratuit en 30 secondes et tester par toi-même — pas besoin de carte bancaire.",
+      a: "Vrai produit. Clients payants. Volia One et ses 5 modules connectés en production. 10 cron jobs qui tournent en autonomie 24/7. Monitoring temps réel. Stripe live. Tu peux t'inscrire au plan Gratuit en 30 secondes et tester par toi-même — pas besoin de carte bancaire.",
     },
     {
       q: 'Pourquoi Marseille ?',

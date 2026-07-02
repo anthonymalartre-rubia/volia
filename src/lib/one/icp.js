@@ -7,6 +7,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import Anthropic from '@anthropic-ai/sdk';
+import { validateUrl } from '@/lib/url-validation';
 
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
@@ -42,6 +43,13 @@ async function fetchSiteText(url, timeout = 10000) {
 export async function inferIcp(domain) {
   const clean = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '').trim();
   if (!clean) throw new Error('Domaine vide');
+
+  // Anti-SSRF : même validation que les routes enrich (hosts internes, IP
+  // privées, credentials). Ports non standards refusés d'office (':' dans
+  // le host = tentative host:port ou IPv6 → on rejette).
+  if (clean.includes(':')) throw new Error(`Domaine invalide : ${clean}`);
+  const validation = validateUrl(`https://${clean}`);
+  if (!validation.valid) throw new Error(`Domaine invalide : ${clean}`);
 
   let text = await fetchSiteText(`https://${clean}`);
   if (text.length < 300) {

@@ -1,18 +1,19 @@
-# Auto-deploy Vercel à chaque push sur main.
+# Filet de déploiement Vercel (fallback), gaté par les tests E2E.
 #
-# Pourquoi cette action ? L'intégration native GitHub↔Vercel (via la GitHub
-# App "Vercel") ne fonctionne pas tant que la GitHub App n'est pas installée
-# sur l'organisation `anthonymalartre-rubia` (ce qui n'est pas le cas
-# actuellement et nécessite une intervention manuelle dans GitHub UI).
+# NB (03/07/2026) : le canal de déploiement PRIMAIRE est désormais
+# l'intégration Git native GitHub↔Vercel (déploiements `⎇ main`). Ce workflow
+# ne sert plus que de FILET : il ne se déclenche qu'après le workflow
+# « E2E Tests » et seulement s'il a réussi (cf. `if:` du job). Si le git natif
+# est bien branché sur la team, ce fallback reste inactif (tests rouges → skip).
+# Historiquement il existait pour contourner l'absence de la GitHub App Vercel.
 #
-# Cette GitHub Action contourne ce problème en utilisant directement le token
-# Vercel pour déclencher un deploy. Elle reproduit exactement ce que
-# fait `npx vercel deploy --prod --yes` en local.
+# Cette GitHub Action reproduit `npx vercel deploy --prebuilt --prod` via le
+# token Vercel.
 #
-# Pré-requis (secrets GitHub à créer une seule fois) :
+# Pré-requis (secrets GitHub) :
 #   VERCEL_TOKEN     : généré sur https://vercel.com/account/tokens
 #                      (scope : Full Access, expiration : longue ou No expiration)
-#   VERCEL_ORG_ID    : team_4M1Wikjut46HKehbRQY0T5wc
+#   VERCEL_ORG_ID    : team_EABea3clj4h5wQbA0JIuIFF8   (team « SU » — MAJ post-transfert 03/07/2026)
 #   VERCEL_PROJECT_ID: prj_v60RedBGprQZHZAPwCsOClOezcIf
 
 name: Deploy to Vercel (production)

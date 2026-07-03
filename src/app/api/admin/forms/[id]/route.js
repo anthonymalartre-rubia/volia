@@ -161,7 +161,31 @@ export async function PUT(request, { params }) {
   }
 
   if (body.campagnes_list_id !== undefined) {
-    updates.campagnes_list_id = body.campagnes_list_id || null;
+    if (body.campagnes_list_id) {
+      // WS4 (injection cross-tenant) : la liste DOIT appartenir à l'user.
+      // Sans ce contrôle, un user pointe son form vers la liste d'un autre
+      // tenant, et le bridge public (submit) y injecte des contacts en
+      // service_role (RLS bypass). Le client `supabase` est RLS-scopé, donc
+      // une liste non possédée renvoie 0 ligne → refus.
+      const { data: ownedList, error: listErr } = await supabase
+        .from('prospect_lists')
+        .select('id')
+        .eq('id', body.campagnes_list_id)
+        .eq('user_id', user.id)
+        .maybeSingle();
+      if (listErr) {
+        return NextResponse.json({ success: false, error: listErr.message }, { status: 500 });
+      }
+      if (!ownedList) {
+        return NextResponse.json(
+          { success: false, error: 'Liste de campagne introuvable ou non autorisée' },
+          { status: 400 }
+        );
+      }
+      updates.campagnes_list_id = body.campagnes_list_id;
+    } else {
+      updates.campagnes_list_id = null;
+    }
   }
 
   if (Object.keys(updates).length === 0) {

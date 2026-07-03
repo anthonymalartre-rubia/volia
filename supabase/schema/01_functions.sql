@@ -148,18 +148,31 @@ $function$
 
 -- ============================================================
 -- FUNCTION: freeze_privileged_profile_columns()
--- ⭐ Garde-fou anti-élévation de privilèges : fige is_admin + plan pour les
---    rôles client (authenticated/anon). Neutralise la policy user_profiles
---    "anyone_update_own" qui n'a PAS de WITH CHECK (cf. 02_rls_policies.sql).
+-- ⭐ Garde-fou anti-élévation de privilèges + anti-auto-crédit : fige
+--    is_admin + plan + credit_balance pour les rôles client (authenticated/
+--    anon), sur INSERT ET UPDATE. Neutralise la policy user_profiles
+--    "anyone_update_own" et l'INSERT forgé. Les RPC de facturation
+--    (increment_usage_atomic, add/consume_purchased_credits) et handle_new_user
+--    sont SECURITY DEFINER → current_user = owner → NON affectés (ils ajustent
+--    credit_balance/plan légitimement).
+--    MAJ WS1 (audit adversarial — migration 20260704_ws1_lock_credit_balance).
 -- ============================================================
 CREATE OR REPLACE FUNCTION public.freeze_privileged_profile_columns()
  RETURNS trigger
  LANGUAGE plpgsql
+ SET search_path = ''
 AS $function$
 begin
   if current_user in ('authenticated', 'anon') then
-    new.is_admin := old.is_admin;
-    new.plan     := old.plan;
+    if tg_op = 'INSERT' then
+      new.is_admin       := false;
+      new.plan           := 'free';
+      new.credit_balance := 0;
+    else
+      new.is_admin       := old.is_admin;
+      new.plan           := old.plan;
+      new.credit_balance := old.credit_balance;
+    end if;
   end if;
   return new;
 end;

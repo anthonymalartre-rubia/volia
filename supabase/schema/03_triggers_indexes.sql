@@ -19,8 +19,10 @@ CREATE TRIGGER refresh_list_counts_trigger AFTER INSERT OR DELETE OR UPDATE ON p
 CREATE TRIGGER publisher_credentials_updated_at_trigger BEFORE UPDATE ON public.publisher_credentials FOR EACH ROW EXECUTE FUNCTION update_publisher_credentials_updated_at();
 CREATE TRIGGER trg_teams_updated_at BEFORE UPDATE ON public.teams FOR EACH ROW EXECUTE FUNCTION teams_set_updated_at();
 CREATE TRIGGER trg_assign_referral_code BEFORE INSERT ON public.user_profiles FOR EACH ROW EXECUTE FUNCTION assign_referral_code();
--- ⭐ garde-fou anti-élévation de privilèges (cf. 01_functions.sql)
-CREATE TRIGGER trg_freeze_privileged_profile_columns BEFORE UPDATE ON public.user_profiles FOR EACH ROW EXECUTE FUNCTION freeze_privileged_profile_columns();
+-- ⭐ garde-fou anti-élévation de privilèges + anti-auto-crédit (cf. 01_functions.sql)
+-- WS1 : BEFORE INSERT OR UPDATE (couvre aussi l'INSERT forgé) + contrainte anti-solde-négatif.
+CREATE TRIGGER trg_freeze_privileged_profile_columns BEFORE INSERT OR UPDATE ON public.user_profiles FOR EACH ROW EXECUTE FUNCTION freeze_privileged_profile_columns();
+ALTER TABLE public.user_profiles ADD CONSTRAINT user_profiles_credit_balance_nonneg CHECK (credit_balance >= 0);
 CREATE TRIGGER trg_touch_warmup_peer_pool BEFORE UPDATE ON public.warmup_peer_pool FOR EACH ROW EXECUTE FUNCTION touch_warmup_peer_pool_updated_at();
 
 -- ─────────────────────────── INDEX ───────────────────────────

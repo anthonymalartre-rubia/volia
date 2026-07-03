@@ -155,8 +155,10 @@ CREATE POLICY users_read_own_profile   ON public.profiles FOR SELECT TO public U
 CREATE POLICY users_update_own_profile ON public.profiles FOR UPDATE TO public USING ((auth.uid() = id));
 ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY anyone_insert           ON public.user_profiles FOR INSERT TO public WITH CHECK ((auth.uid() = id));
--- ⚠️ pas de WITH CHECK ci-dessous — neutralisé par trigger freeze_privileged_profile_columns
-CREATE POLICY anyone_update_own       ON public.user_profiles FOR UPDATE TO public USING ((auth.uid() = id));
+-- WS1 : WITH CHECK ajouté (empêche de repointer sa ligne vers un autre id) ;
+-- le gel de is_admin/plan/credit_balance est fait par le trigger
+-- trg_freeze_privileged_profile_columns (cf. 01_functions.sql / 03).
+CREATE POLICY anyone_update_own       ON public.user_profiles FOR UPDATE TO public USING ((auth.uid() = id)) WITH CHECK ((auth.uid() = id));
 CREATE POLICY users_select_own_profile ON public.user_profiles FOR SELECT TO public USING ((auth.uid() = id));
 
 -- project_* (owner via projects.user_id)

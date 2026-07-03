@@ -140,13 +140,15 @@ export async function POST(request) {
     if (places.length > 0) {
       await incrementUsage(supabase, user.id, 'searches', places.length);
       // Incrémente le compteur phones uniquement avec ce qui a réellement
-      // été attribué (best-effort, ne JAMAIS bloquer la réponse search).
+      // été attribué. AWAIT (audit M8) : en serverless, une promesse non
+      // awaitée avant la réponse peut être gelée par la plateforme → compteur
+      // droppé « parfois » (sous-facturation). +1 round-trip DB assumé.
       if (phonesAttributed > 0) {
-        incrementUsage(supabase, user.id, 'phones', phonesAttributed).catch((err) =>
+        await incrementUsage(supabase, user.id, 'phones', phonesAttributed).catch((err) =>
           console.warn('[places] phones increment failed:', err.message)
         );
       }
-      // Onboarding : marque first_search (fire-and-forget)
+      // Onboarding : marque first_search (fire-and-forget, non facturant)
       trackOnboardingStep(user.id, 'first_search');
 
       // Achievement : first_search (best-effort, ne JAMAIS bloquer la réponse)

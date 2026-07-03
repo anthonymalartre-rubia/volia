@@ -526,9 +526,10 @@ export async function POST(request, { params }) {
   }
   const responseId = response.id;
 
-  // Incrémente le compteur quota DB (task #328) — fire-and-forget,
-  // ne JAMAIS bloquer la réponse au visiteur sur un échec stats.
-  incrementUsage(supabaseAdmin, form.user_id, 'form_submissions', 1).catch((err) =>
+  // Incrémente le compteur quota DB (task #328). AWAIT (audit M8) : une
+  // promesse non awaitée avant la réponse peut être gelée en serverless →
+  // form_submissions droppé « parfois » (sous-facturation anti-bombe-à-coûts).
+  await incrementUsage(supabaseAdmin, form.user_id, 'form_submissions', 1).catch((err) =>
     console.warn('[forms/submit] form_submissions increment failed:', err.message)
   );
 

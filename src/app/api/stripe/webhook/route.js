@@ -13,6 +13,7 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { createNotification, NOTIF_TYPES } from '@/lib/notifications';
 import { ensureTeamForOwner, planAllowsTeams } from '@/lib/teams';
 import { reportError } from '@/lib/errorReporting';
+import { alertCritical } from '@/lib/critical-alert';
 
 function getStripe() {
   return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY));
@@ -154,6 +155,15 @@ export async function POST(request) {
           );
           if (creditErr) {
             console.error('[webhook] add_purchased_credits failed', creditErr);
+            // Argent encaissé, crédits NON accordés → alerte immédiate (audit M7/H7).
+            // (La dédup d'idempotence peut empêcher le retry Stripe de rejouer →
+            //  ce mail est le filet qui évite un client "j'ai payé, rien reçu".)
+            await alertCritical({
+              kind: 'stripe_credit_grant_failed',
+              message: 'Pack de crédits payé mais NON crédité (add_purchased_credits a échoué).',
+              error: creditErr,
+              context: { userId, credits, pack: session.metadata.credit_pack, session: session.id },
+            });
             // 500 → Stripe retentera (la RPC est idempotente)
             return NextResponse.json({ error: 'credit grant failed' }, { status: 500 });
           }
@@ -206,6 +216,14 @@ export async function POST(request) {
 
         if (updateError) {
           console.error('[webhook] checkout.session.completed update failed:', updateError);
+          // Abonnement payé mais plan NON activé (le client reste en free) →
+          // alerte immédiate (audit M7). Récupération = update manuel du profil.
+          await alertCritical({
+            kind: 'stripe_plan_activation_failed',
+            message: 'Abonnement payé mais plan NON activé (update user_profiles a échoué).',
+            error: updateError,
+            context: { userId, planId, session: session.id },
+          });
           break;
         }
 
@@ -554,6 +572,14 @@ export async function POST(request) {
       webhook: 'stripe',
       eventType: event.type,
       eventId: event.id,
+    });
+    // Un event Stripe consommé sur un crash = opération perdue (dédup bloque le
+    // replay) → alerte immédiate (audit M7). Récupération = chirurgie DB.
+    await alertCritical({
+      kind: 'stripe_webhook_crashed',
+      message: `Handler webhook Stripe a crashé sur ${event.type} — event consommé, opération potentiellement perdue.`,
+      error: err,
+      context: { eventType: event.type, eventId: event.id },
     });
   }
 

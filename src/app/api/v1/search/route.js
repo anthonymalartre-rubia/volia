@@ -155,7 +155,8 @@ export async function POST(request) {
   if (saved > 0) {
     await incrementUsage(supabase, userId, 'searches', saved);
     if (phonesAttributed > 0) {
-      incrementUsage(supabase, userId, 'phones', phonesAttributed).catch(() => {});
+      // AWAIT (audit M8) : sinon compteur droppé « parfois » en serverless.
+      await incrementUsage(supabase, userId, 'phones', phonesAttributed).catch(() => {});
     }
   }
 

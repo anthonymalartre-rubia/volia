@@ -38,10 +38,13 @@ const CLAUDE_WRITES_PER_WORKFLOW_PER_MONTH = 1500;
  * Compose un email du template + variables prospect.
  * Phase 2 : tente Claude generation, fallback sur body_summary si échec.
  */
-async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl, workflowMetricsCache, allowClaude = true }) {
+async function composeEmail({ template, stepIndex, prospect, workflowId, executionId, baseUrl, workflowMetricsCache, senderIdentity, allowClaude = true }) {
   const step = template.sequence[stepIndex];
   const firstName = prospect.contact_name || prospect.nom?.split(' ')[0] || 'toi';
   const company = prospect.nom || prospect.company || 'votre entreprise';
+  // Signature expéditeur (multi-tenant) : omise si non configurée — on
+  // n'écrit JAMAIS "Anthony/Volia" dans le mail d'un client.
+  const signature = senderIdentity?.signature || '';
 
   // ─── Phase 3.1 : A/B subject variant picker ───────────────────
   // Si step.subject est un array de variants, on pick le bon variant
@@ -65,7 +68,7 @@ async function composeEmail({ template, stepIndex, prospect, workflowId, executi
   let bodyMethod = allowClaude ? 'fallback_summary' : 'quota_capped';
   if (allowClaude) {
     try {
-      const claudeBody = await generateEmailBody({ template, stepIndex, prospect });
+      const claudeBody = await generateEmailBody({ template, stepIndex, prospect, senderIdentity });
       if (claudeBody) {
         bodyText = claudeBody;
         bodyMethod = 'claude';
@@ -82,8 +85,11 @@ async function composeEmail({ template, stepIndex, prospect, workflowId, executi
   const formLink = step.includes_form_link
     ? `${baseUrl}/forms/autopilot/${workflowId}?exec=${executionId}`
     : null;
-  const calcomLink = step.includes_calcom
-    ? 'https://cal.com/anthony-volia/15min'
+  // Lien Cal.com du CLIENT (workflow.config.calcom_link) — jamais celui de
+  // Volia en dur. Si le template veut un CTA RDV mais qu'aucun lien n'est
+  // configuré, on n'affiche pas de bouton (plutôt qu'un mauvais lien).
+  const calcomLink = step.includes_calcom && senderIdentity?.calcomLink
+    ? senderIdentity.calcomLink
     : null;
 
   const htmlBody = `<!DOCTYPE html>
@@ -96,7 +102,7 @@ async function composeEmail({ template, stepIndex, prospect, workflowId, executi
   ${calcomLink ? `<p style="font-size:14px;line-height:1.6;text-align:center;margin:24px 0;">
     <a href="${calcomLink}" style="display:inline-block;padding:12px 28px;background:#10b981;color:white;text-decoration:none;border-radius:8px;font-weight:600;">Réserver 15 min ensemble →</a>
   </p>` : ''}
-  <p style="font-size:14px;line-height:1.6;">Anthony — Fondateur Volia</p>
+  ${signature ? `<p style="font-size:14px;line-height:1.6;">${signature}</p>` : ''}
   <p style="font-size:11px;color:#9ca3af;margin-top:24px;border-top:1px solid #e5e7eb;padding-top:12px;">
     Vous recevez ce mail dans le cadre d'une démarche commerciale B2B (intérêt légitime RGPD).
     Pour ne plus recevoir ce type de mail : <a href="${baseUrl}/opt-out" style="color:#9ca3af;">se désinscrire</a>.
@@ -106,9 +112,7 @@ async function composeEmail({ template, stepIndex, prospect, workflowId, executi
   const textBody = `Salut ${firstName},
 
 ${bodyText}
-${formLink ? `\n→ Répondre aux questions : ${formLink}\n` : ''}${calcomLink ? `\n→ Réserver 15 min : ${calcomLink}\n` : ''}
-
-Anthony — Volia`;
+${formLink ? `\n→ Répondre aux questions : ${formLink}\n` : ''}${calcomLink ? `\n→ Réserver 15 min : ${calcomLink}\n` : ''}${signature ? `\n${signature}` : ''}`;
 
   return {
     subject,
@@ -123,8 +127,9 @@ Anthony — Volia`;
 /**
  * Avance 1 execution selon son current_step.
  * @param {string} [fromHeader] - sender résolu (workflow.config.email_sender_id)
+ * @param {{signature?:string, calcomLink?:string, personaName?:string, company?:string}} [senderIdentity]
  */
-async function advanceExecution(supabase, execution, template, workflow, baseUrl, fromHeader, allowClaude = true) {
+async function advanceExecution(supabase, execution, template, workflow, baseUrl, fromHeader, senderIdentity, allowClaude = true) {
   const stepLog = (step, meta = {}) => ({
     step,
     at: new Date().toISOString(),
@@ -274,6 +279,7 @@ async function advanceExecution(supabase, execution, template, workflow, baseUrl
         executionId: execution.id,
         baseUrl,
         workflowMetricsCache: workflow.metrics_cache,
+        senderIdentity,
         allowClaude,
       });
       claudeUsed = email.bodyMethod === 'claude'; // coût Claude payé (même si l'envoi échoue ensuite)
@@ -385,6 +391,8 @@ export async function runStepper() {
     // un email_sender vérifié, les emails partent de SON domaine (meilleure
     // deliverability + branding). Sinon fallback défaut Volia dans email.js.
     let fromHeader;
+    let resolvedSenderName = null;
+    let resolvedDomain = null;
     const senderId = workflow.config?.email_sender_id;
     if (senderId) {
       const { data: sender } = await supabase
@@ -393,9 +401,36 @@ export async function runStepper() {
         .eq('id', senderId)
         .maybeSingle();
       if (sender?.status === 'verified' && sender.domain) {
-        fromHeader = `${sender.from_name || 'Volia'} <noreply@${sender.domain}>`;
+        resolvedSenderName = sender.from_name || null;
+        resolvedDomain = sender.domain;
       }
     }
+
+    // ─── Identité expéditeur (multi-tenant) ─────────────────────────
+    // JAMAIS de "Anthony/Volia" en dur : un client MAX envoie depuis SON
+    // identité. Nom d'en-tête "De", signature, lien Cal.com et persona Claude
+    // viennent de workflow.config, avec repli sur le from_name de l'expéditeur
+    // vérifié — JAMAIS sur "Volia". Si rien n'est configuré, on OMET la
+    // signature/le CTA plutôt que d'afficher une fausse identité.
+    const cfg = workflow.config || {};
+    const personaName = cfg.sender_name || resolvedSenderName || null;
+    const personaCompany = cfg.company_name || resolvedSenderName || null;
+    const signature = cfg.email_signature
+      || (personaName && personaCompany && personaName !== personaCompany
+        ? `${personaName} — ${personaCompany}`
+        : (personaName || personaCompany || null));
+    if (resolvedDomain) {
+      // Nom affiché dans l'en-tête "De" : repli neutre sur le domaine du
+      // client si aucun nom configuré — plus jamais le mot "Volia".
+      const fromName = resolvedSenderName || personaCompany || personaName || resolvedDomain;
+      fromHeader = `${fromName} <noreply@${resolvedDomain}>`;
+    }
+    const senderIdentity = {
+      signature,                     // string | null (omise si null)
+      calcomLink: cfg.calcom_link || null,
+      personaName,                   // pour le persona Claude
+      company: personaCompany,
+    };
 
     // Quota Claude mensuel par workflow (Phase 3) : on lit l'usage du mois
     // courant, reset si le mois a changé. allowClaude tombe à false une fois
@@ -410,7 +445,7 @@ export async function runStepper() {
       processed++;
       try {
         const allowClaude = (claudeUsage.count + claudeUsedThisRun) < claudeCap;
-        const res = await advanceExecution(supabase, exec, template, workflow, baseUrl, fromHeader, allowClaude);
+        const res = await advanceExecution(supabase, exec, template, workflow, baseUrl, fromHeader, senderIdentity, allowClaude);
         if (res.claudeUsed) claudeUsedThisRun++;
         if (res.updated) advanced++;
         else skipped++;

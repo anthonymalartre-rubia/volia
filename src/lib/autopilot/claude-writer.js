@@ -22,7 +22,7 @@
 // retry suivant — acceptable car le quota cap plafonne le coût total.
 // ─────────────────────────────────────────────────────────────────────
 
-import Anthropic from '@anthropic-ai/sdk';
+import { getAnthropic } from '../anthropic';
 
 // Aligné sur le reste du repo prod (parse-search, blog-writer, etc.).
 // ⚠️ NE PAS utiliser 'claude-sonnet-4-5' (string invalide → 404 silencieux
@@ -30,21 +30,15 @@ import Anthropic from '@anthropic-ai/sdk';
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 const FORBIDDEN_PATTERNS = [
-  // DGCCRF
+  // DGCCRF — génériques, s'appliquent à TOUS les tenants.
+  // (Les anciens bans "marque Volia" — Bordeaux/Lyon/Paris, 287 000, 12 mois,
+  //  1 founder+IA — ont été retirés : ils rejetaient à tort les emails
+  //  légitimes des clients Autopilot mentionnant leur vraie ville / leurs
+  //  vrais chiffres. Autopilot est multi-tenant, pas un canal Volia-only.)
   /\b0\s*humain\b/i,
   /\b100\s*%?\s*autonome\b/i,
   /\bsans\s*humain\b/i,
   /\bremplace\s*les\s*humains?\b/i,
-  // Brand (location)
-  /\bbordeaux\b/i,
-  /\blyon\b/i,
-  /\b(à|de|sur)\s*paris\b/i,
-  // Brand (claims)
-  /\b12\s*mois\b/i,
-  /\b287[\s.,]000\b/i,
-  // Storytelling banni
-  /1\s*founder\s*\+?\s*ia/i,
-  /6\s*semaines\s*pour/i,
 ];
 
 function sanitizeOutput(text) {
@@ -61,15 +55,22 @@ function sanitizeOutput(text) {
   return cleaned;
 }
 
-const SYSTEM_PROMPT = `Tu es Anthony Malartre, fondateur de Volia (volia.fr), suite SaaS B2B française de pipeline outbound.
+// Persona multi-tenant : l'Autopilot écrit au nom du CLIENT, pas de Volia.
+// L'identité vient de senderIdentity (workflow.config / expéditeur vérifié).
+// Repli neutre si non fournie — JAMAIS "Anthony Malartre / Volia" en dur.
+function buildSystemPrompt(senderIdentity) {
+  const who = senderIdentity?.personaName || senderIdentity?.company || null;
+  const company = senderIdentity?.company || null;
+  const identity = who
+    ? `Tu écris au nom de ${who}${company && company !== who ? ` (${company})` : ''}, dans le cadre de sa prospection commerciale B2B.`
+    : `Tu écris un email cold B2B professionnel au nom de l'expéditeur (une entreprise B2B qui prospecte).`;
+  return `${identity}
 
-Tu écris UN email cold B2B en français pour une séquence Autopilot. Le destinataire est un prospect scrappé via Google Places + enrichi par Volia.
+Tu écris UN email cold B2B en français pour une séquence outbound. Le destinataire est un prospect B2B.
 
-RÈGLES INVIOLABLES (DGCCRF + brand) :
+RÈGLES INVIOLABLES (conformité DGCCRF + délivrabilité) :
 - JAMAIS dire "0 humain", "100% autonome", "sans humain", "remplace les humains"
-- JAMAIS mentionner Bordeaux / Lyon / Paris comme localisation (Volia = Marseille)
-- JAMAIS mentionner "12 mois pour construire" ou "287 000 entreprises"
-- JAMAIS de storytelling type "1 founder + IA" / "6 semaines pour bâtir"
+- Ne JAMAIS inventer de chiffres, de lieux, de références clients ou de faits non fournis dans le brief
 - Tutoiement OU vouvoiement selon le ton du template (précisé plus bas)
 - Pas d'emoji dans le sujet (max 1 dans le body si ton sympathique)
 - DÉLIVRABILITÉ : éviter les déclencheurs de spam → pas de "gratuit", "urgent",
@@ -82,7 +83,8 @@ STRUCTURE :
 - 3 paragraphes : accroche perso (1 ligne) → corps (2-4 lignes) → CTA implicite/explicite
 - Si lien form ou Cal.com fourni, le mentionner naturellement, pas avec un placeholder
 
-SORTIE : uniquement le body texte de l'email. Pas de "Subject:", pas de salutation "Salut X" (gérée par le template), pas de signature "Anthony - Volia" (gérée par le template). Juste les paragraphes du corps.`;
+SORTIE : uniquement le body texte de l'email. Pas de "Subject:", pas de salutation, pas de signature (gérées par le template). Juste les paragraphes du corps.`;
+}
 
 /**
  * Génère le body d'un email Autopilot via Claude.
@@ -91,11 +93,14 @@ SORTIE : uniquement le body texte de l'email. Pas de "Subject:", pas de salutati
  * @param {object} args.template - Template autopilot complet
  * @param {number} args.stepIndex - Index dans template.sequence (0/1/2)
  * @param {object} args.prospect - { nom, first_name, telephone, email, departement, ... }
+ * @param {object} [args.senderIdentity] - { personaName, company } pour le persona multi-tenant
  * @returns {Promise<string|null>} body texte ou null si fallback nécessaire
  */
-export async function generateEmailBody({ template, stepIndex, prospect }) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return null;
+export async function generateEmailBody({ template, stepIndex, prospect, senderIdentity }) {
+  // Factory getAnthropic (finding M8) : timeout court + 1 retry — évite le
+  // 504 quand le stepper (cron) enchaîne les appels Claude en boucle.
+  const client = getAnthropic({ timeout: 20_000 });
+  if (!client) return null;
 
   const step = template.sequence?.[stepIndex];
   if (!step) return null;
@@ -125,11 +130,10 @@ ${step.includes_calcom ? '- Un lien Cal.com (15 min) sera ajouté automatiquemen
 Écris UNIQUEMENT le corps de l'email (90-140 mots). Pas de salutation, pas de signature.`;
 
   try {
-    const client = new Anthropic({ apiKey });
     const response = await client.messages.create({
       model: CLAUDE_MODEL,
       max_tokens: 600,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(senderIdentity),
       messages: [{ role: 'user', content: userPrompt }],
     });
 

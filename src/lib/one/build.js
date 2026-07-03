@@ -38,6 +38,74 @@ function guessEmail(siteWeb) {
   return { email: `contact@${h}`, method: 'guess' };
 }
 
+// ── Garde-temps (audit H9) ────────────────────────────────────────────
+// La waterfall du core enchaîne jusqu'à 8 COMMON_PATHS SÉQUENTIELS à 8 s
+// (~72 s pour UN lead pathologique) → faisait sauter le maxDuration=60 de
+// /api/one/run (504 sur le produit héros). On borne chaque appel externe, et
+// comme les leads tournent en parallèle (allSettled), borner CHAQUE lead borne
+// TOUTE la phase (temps mur = lead le plus lent, pas la somme). Budget global
+// en filet ultime.
+const PER_LEAD_WATERFALL_MS = 14000; // scrape + Serper d'un lead
+const PER_LEAD_DM_MS = 9000;         // découverte décideur d'un lead (connectés)
+const GLOBAL_ENRICH_MS = 42000;      // budget dur de toute la phase ③
+const TIMED_OUT = Symbol('one_timed_out');
+
+// Course promesse vs délai : résout au sentinel TIMED_OUT si dépassement,
+// sans jamais rejeter de son fait (une rejection de `promise` se propage,
+// l'appelant la catch). Nettoie le timer dans tous les cas.
+function withDeadline(promise, ms) {
+  let timer;
+  const timeout = new Promise((resolve) => {
+    timer = setTimeout(() => resolve(TIMED_OUT), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
+// Enrichit UN lead (waterfall + upgrade décideur), chaque appel externe borné.
+// Mute `c` en place. Ne throw jamais (retombe sur guessEmail).
+async function enrichOneLead(c, { findDecisionMakers, dmRole }) {
+  try {
+    const r = await withDeadline(enrichWaterfall(c.nom, c.site_web), PER_LEAD_WATERFALL_MS);
+    if (r && r !== TIMED_OUT && r.email) {
+      c.email = r.email;
+      c.method = r.method;
+    } else {
+      Object.assign(c, guessEmail(c.site_web));
+    }
+  } catch {
+    Object.assign(c, guessEmail(c.site_web));
+  }
+
+  // ③bis Upgrade décideur (connectés uniquement) : email nominatif vérifié
+  // zéro-bounce remplace le générique. Best-effort + borné.
+  if (findDecisionMakers) {
+    const host = hostOf(c.site_web);
+    if (host) {
+      try {
+        const dm = await withDeadline(
+          enrichDecisionMaker({
+            companyName: c.nom,
+            domain: host,
+            role: dmRole,
+            verifyEmail: isEmailDeliverable,
+            maxToVerify: 2,
+          }),
+          PER_LEAD_DM_MS
+        );
+        if (dm && dm !== TIMED_OUT && dm.email) {
+          c.email = dm.email;
+          c.method = 'decision_maker';
+          c.contact_name = dm.fullName;
+          c.contact_role = dm.title || dm.role;
+          c.linkedin = dm.linkedinUrl || null;
+        }
+      } catch {
+        /* best-effort : on conserve l'email normal */
+      }
+    }
+  }
+}
+
 async function placesSearch(query) {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
   if (!apiKey) return [];
@@ -158,49 +226,18 @@ export async function buildFromDomain(domain, opts = {}) {
     if (!addedThisRow) break;
   }
 
-  // ③ Enrichissement email (parallèle ; réutilise la waterfall prod)
-  await Promise.allSettled(
-    withSite.map(async (c) => {
-      try {
-        const r = await enrichWaterfall(c.nom, c.site_web);
-        if (r?.email) {
-          c.email = r.email;
-          c.method = r.method;
-        } else {
-          Object.assign(c, guessEmail(c.site_web));
-        }
-      } catch {
-        Object.assign(c, guessEmail(c.site_web));
-      }
-
-      // ③bis Upgrade décideur (connectés uniquement) : si on trouve un décideur
-      // nominatif avec email VÉRIFIÉ (zéro-bounce), il remplace l'email générique.
-      // Best-effort : en cas d'échec, on garde l'email normal trouvé ci-dessus.
-      if (findDecisionMakers) {
-        const host = hostOf(c.site_web);
-        if (host) {
-          try {
-            const dm = await enrichDecisionMaker({
-              companyName: c.nom,
-              domain: host,
-              role: dmRole,
-              verifyEmail: isEmailDeliverable,
-              maxToVerify: 2,
-            });
-            if (dm?.email) {
-              c.email = dm.email;
-              c.method = 'decision_maker';
-              c.contact_name = dm.fullName;
-              c.contact_role = dm.title || dm.role;
-              c.linkedin = dm.linkedinUrl || null;
-            }
-          } catch {
-            /* best-effort : on conserve l'email normal */
-          }
-        }
-      }
-    })
+  // ③ Enrichissement email (parallèle ; réutilise la waterfall prod).
+  // Chaque lead est borné en interne ; la phase entière a un budget dur en
+  // filet (cf. withDeadline / H9). Un débordement rend ce qu'on a — le
+  // fit-score gère très bien les leads sans email (score tél/note).
+  const enrichPhase = Promise.allSettled(
+    withSite.map((c) => enrichOneLead(c, { findDecisionMakers, dmRole }))
   );
+  await withDeadline(enrichPhase, GLOBAL_ENRICH_MS);
+  // Filet : tout lead resté sans email (coupé par le budget global) reçoit un guess.
+  for (const c of withSite) {
+    if (!c.email) Object.assign(c, guessEmail(c.site_web));
+  }
 
   // ④ Fit-score + ranking
   const ranked = withSite

@@ -6,7 +6,7 @@
 // Modèle aligné sur le reste du repo (parse-search, claude-writer).
 // ─────────────────────────────────────────────────────────────────────
 
-import Anthropic from '@anthropic-ai/sdk';
+import { getAnthropic } from '@/lib/anthropic';
 import { validateUrl } from '@/lib/url-validation';
 
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
@@ -58,8 +58,9 @@ export async function inferIcp(domain) {
   }
   if (!text) throw new Error(`Site injoignable : ${clean}`);
 
-  if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY non configurée');
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  // Timeout court (25 s) : on est sur le chemin /api/one/run (maxDuration 60).
+  const client = getAnthropic({ timeout: 25_000 });
+  if (!client) throw new Error('ANTHROPIC_API_KEY non configurée');
 
   const message = await client.messages.create({
     model: CLAUDE_MODEL,

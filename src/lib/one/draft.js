@@ -6,7 +6,7 @@
 // un prospect (PME locale). Garde-fous DGCCRF + délivrabilité conservés.
 // ─────────────────────────────────────────────────────────────────────
 
-import Anthropic from '@anthropic-ai/sdk';
+import { getAnthropic } from '@/lib/anthropic';
 
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
@@ -28,8 +28,9 @@ function cityOf(lead, icp) {
  * @returns {Promise<string|null>} "Objet: ...\n\n<corps>" ou null si échec/pattern interdit
  */
 export async function draftEmail(lead, icp) {
-  if (!process.env.ANTHROPIC_API_KEY) return null;
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  // Timeout court (25 s) : chemin /api/one/run (maxDuration 60). null si pas de clé.
+  const client = getAnthropic({ timeout: 25_000 });
+  if (!client) return null;
 
   const system = `Tu écris UN cold email B2B en français, au nom d'une entreprise qui vend : "${icp.activite}" (proposition de valeur : "${icp.value_prop}").
 

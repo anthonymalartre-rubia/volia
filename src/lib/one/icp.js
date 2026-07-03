@@ -7,7 +7,7 @@
 // ─────────────────────────────────────────────────────────────────────
 
 import { getAnthropic } from '@/lib/anthropic';
-import { validateUrl } from '@/lib/url-validation';
+import { assertPublicUrl } from '@/lib/url-validation';
 
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
@@ -44,11 +44,12 @@ export async function inferIcp(domain) {
   const clean = String(domain || '').replace(/^https?:\/\//, '').replace(/\/.*$/, '').trim();
   if (!clean) throw new Error('Domaine vide');
 
-  // Anti-SSRF : même validation que les routes enrich (hosts internes, IP
-  // privées, credentials). Ports non standards refusés d'office (':' dans
-  // le host = tentative host:port ou IPv6 → on rejette).
+  // Anti-SSRF FORTE (WS9) : validation syntaxique + RÉSOLUTION DNS (bloque le
+  // DNS-rebinding — domaine public qui résout vers une IP privée/metadata).
+  // Ce chemin est atteignable par un ANONYME via /api/one/run → critique.
+  // Ports non standards refusés d'office (':' dans le host = host:port ou IPv6).
   if (clean.includes(':')) throw new Error(`Domaine invalide : ${clean}`);
-  const validation = validateUrl(`https://${clean}`);
+  const validation = await assertPublicUrl(`https://${clean}`);
   if (!validation.valid) throw new Error(`Domaine invalide : ${clean}`);
 
   let text = await fetchSiteText(`https://${clean}`);

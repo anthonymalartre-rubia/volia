@@ -11,18 +11,17 @@ import { breadcrumbSchema, estimateStats, serviceSchema } from '@/lib/seo-helper
 import { getCategoryData } from '@/lib/category-data';
 import { getRegionData } from '@/lib/region-data';
 
-// Generate static pages : 14 régions × ~150 catégories ≈ 2 100 URLs
+// ⚡ Perf build (audit M11/F6) : ces pages sont NOINDEX (cf. generateMetadata) et
+// ne servent qu'à transmettre du PageRank via follow — inutile de les prébuilder.
+// Elles pesaient 1 960 pages (57 % du build, ~400 Mo) pour zéro valeur SEO.
+// On rend [] au build + ISR à la demande (revalidate 24h, dynamicParams défaut).
+// Même pattern que [category]/[department] qui ne prébuild que le top populaire.
 export async function generateStaticParams() {
-  const cats = getAllCategories();
-  const regions = getAllRegions();
-  const params = [];
-  for (const cat of cats) {
-    for (const r of regions) {
-      params.push({ category: cat.slug, region: r.slug });
-    }
-  }
-  return params;
+  return [];
 }
+
+// Rendu à la demande + cache 24h (les données région/catégorie sont statiques).
+export const revalidate = 86400;
 
 // [1er juin 2026] noindex + follow appliqué (cf. Option C SEO).
 // Cette route programmatique tail-of-tail (catégorie × région) génère

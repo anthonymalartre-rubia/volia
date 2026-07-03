@@ -60,6 +60,9 @@ export async function getSitemapEntries(id) {
       // Search Console « URL envoyée bloquée par robots.txt ». Le CTA d'inscription
       // reste accessible partout (header, landing, cards pricing).
       { url: `${baseUrl}/demo`, priority: 0.9, changeFrequency: 'monthly', lastModified: now },
+      // Volia One = point d'entrée produit héros (repositionnement 01/07). Était
+      // absent du sitemap alors que /produits/autopilot (legacy) y était en 0.9.
+      { url: `${baseUrl}/one`, priority: 0.9, changeFrequency: 'weekly', lastModified: now },
       { url: `${baseUrl}/ressources/kit-prospection-2026`, priority: 0.8, changeFrequency: 'monthly', lastModified: now },
       { url: `${baseUrl}/faq`, priority: 0.6, changeFrequency: 'monthly', lastModified: now },
       // Landing verticale immobilier d'entreprise (page autonome, hors /pour/[persona])

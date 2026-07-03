@@ -18,9 +18,16 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 import { useEffect, useState, useCallback } from 'react';
-import * as Icons from 'lucide-react';
+// ⚡ Perf (audit H8) : PAS de `import * as Icons from 'lucide-react'`. Ce
+// composant est monté dans le layout racine → un namespace import embarquait
+// lucide-react ENTIER (143 Ko gzip) sur les ~3 468 pages, y compris tout le
+// funnel SEO. On importe uniquement les icônes réellement référençables par un
+// achievement (src/lib/achievements.js) + le fallback Trophy + X.
+import { FormInput, MessageCircle, Search, Send, Trophy, Zap, X } from 'lucide-react';
 import Mascot from './Mascot';
 import ConfettiExplosion from './ConfettiExplosion';
+
+const ICON_MAP = { FormInput, MessageCircle, Search, Send, Trophy, Zap };
 
 const EVENT_NAME = 'volia:achievement';
 const AUTO_DISMISS_MS = 5000;
@@ -51,9 +58,9 @@ const COLOR_BG = {
 };
 
 function resolveIcon(name) {
-  // lucide-react expose chaque icône en PascalCase. Fallback Trophy.
-  const Component = (name && Icons[name]) || Icons.Trophy;
-  return Component;
+  // Map statique (cf. import ci-dessus) au lieu du namespace lucide complet.
+  // Fallback Trophy si l'achievement référence une icône hors map.
+  return (name && ICON_MAP[name]) || Trophy;
 }
 
 export default function AchievementToast() {
@@ -124,7 +131,7 @@ export default function AchievementToast() {
               aria-label="Fermer"
               className="absolute top-2 right-2 w-6 h-6 rounded-md text-content-tertiary hover:text-content-primary hover:bg-surface-elevated transition flex items-center justify-center"
             >
-              <Icons.X size={12} />
+              <X size={12} />
             </button>
 
             <style jsx>{`

@@ -117,10 +117,6 @@
       "schedule": "*/5 * * * *"
     },
     {
-      "path": "/api/cron/process-sms-campaigns",
-      "schedule": "*/5 * * * *"
-    },
-    {
       "path": "/api/cron/process-sequences",
       "schedule": "*/5 * * * *"
     },

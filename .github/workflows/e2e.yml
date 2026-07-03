@@ -25,8 +25,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # ─── Tests unitaires (Jest) — filet rapide, gate du reste ───────────
+  # Ajouté 02/07/2026 (Étape 0 refacto, finding H2 : `npm test` n'était
+  # branché nulle part et pourrissait). Si les unitaires rougissent, l'E2E
+  # est skippé → ce workflow échoue → le deploy (gaté dessus via workflow_run)
+  # ne part pas.
+  unit:
+    name: Unit tests (Jest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Jest
+        run: npm test
+
   e2e:
     name: Playwright (chromium)
+    needs: unit
     runs-on: ubuntu-latest
     timeout-minutes: 20
 

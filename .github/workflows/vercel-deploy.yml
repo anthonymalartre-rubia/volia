@@ -18,10 +18,16 @@
 name: Deploy to Vercel (production)
 
 on:
-  push:
-    branches:
-      - main
+  # GATE (Étape 0 refacto, finding H2) : le deploy ne part plus directement
+  # sur push. Il se déclenche APRÈS le workflow « E2E Tests » (unit Jest +
+  # build + Playwright) — et seulement si celui-ci a RÉUSSI (cf. `if:` du job
+  # deploy). Un commit qui casse les tests ne va donc plus en prod.
+  workflow_run:
+    workflows: ["E2E Tests"]
+    types: [completed]
+    branches: [main]
   # Permet aussi de déclencher manuellement depuis l'UI GitHub Actions
+  # (override d'urgence — bypass le gate en connaissance de cause).
   workflow_dispatch:
 
 # Concurrence : un seul deploy à la fois. Si un push arrive pendant un
@@ -35,6 +41,9 @@ jobs:
     name: Build and deploy
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Ne déploie que si les tests ont réussi (workflow_run.conclusion), OU
+    # si déclenché manuellement (override assumé).
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -69,4 +78,4 @@ jobs:
         run: vercel deploy --prebuilt --prod --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Output deploy URL
-        run: echo "Production deploy live on https://prospectia.cloud"
+        run: echo "Production deploy live on https://volia.fr"

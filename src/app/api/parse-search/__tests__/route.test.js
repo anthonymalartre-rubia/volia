@@ -9,6 +9,20 @@ jest.mock('@anthropic-ai/sdk', () => {
   }))
 })
 
+// La route exige désormais une auth + un check de quota AVANT la validation de
+// requête (durcissement P0 : la route était anonyme et brûlait le crédit
+// Anthropic). Les tests doivent donc mocker auth + usage, sinon getAuthenticatedUser
+// lève et tout tombe en 500 (c'est ce qui rendait la suite rouge — audit H2).
+let mockUser = { id: 'test-user' }
+jest.mock('@/lib/auth', () => ({
+  getAuthenticatedUser: jest.fn(async () => ({ user: mockUser, supabase: {} })),
+}))
+let mockLimit = { allowed: true, remaining: 100 }
+jest.mock('@/lib/usage', () => ({
+  checkLimit: jest.fn(async () => mockLimit),
+}))
+jest.mock('@/lib/apiCosts', () => ({ trackApiCall: jest.fn() }))
+
 // Mock NextResponse
 jest.mock('next/server', () => ({
   NextResponse: {
@@ -28,10 +42,26 @@ describe('POST /api/parse-search', () => {
 
   beforeEach(() => {
     process.env = { ...originalEnv, ANTHROPIC_API_KEY: 'test-key' }
+    mockUser = { id: 'test-user' }
+    mockLimit = { allowed: true, remaining: 100 }
   })
 
   afterAll(() => {
     process.env = originalEnv
+  })
+
+  test('returns 401 when not authenticated', async () => {
+    mockUser = null
+    const request = { json: async () => ({ query: 'restaurants italiens' }) }
+    const response = await POST(request)
+    expect(response._status).toBe(401)
+  })
+
+  test('returns 429 when search quota exhausted', async () => {
+    mockLimit = { allowed: false, remaining: 0 }
+    const request = { json: async () => ({ query: 'restaurants italiens' }) }
+    const response = await POST(request)
+    expect(response._status).toBe(429)
   })
 
   test('returns 400 for empty query', async () => {

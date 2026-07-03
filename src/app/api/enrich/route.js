@@ -209,7 +209,11 @@ export async function POST(request) {
     const filterPersonal = userProfile?.filter_personal_emails !== false;
 
     const result = await enrichEmail(validation.url, filterPersonal);
-    await incrementUsage(supabase, user.id, 'enrichments');
+    // WS8 : ne facturer que si on a trouvé un VRAI email (scrape/pattern
+    // scoré), pas un simple contact@domain deviné (method 'guess') → 0 crédit.
+    if (result?.email && result.method && result.method !== 'guess') {
+      await incrementUsage(supabase, user.id, 'enrichments');
+    }
     return Response.json(result);
   } catch (error) {
     console.error('Enrich API route error:', error);

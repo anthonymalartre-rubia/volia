@@ -460,7 +460,14 @@ export async function POST(request) {
     }
 
     const result = await deepEnrich(validation.url);
-    await incrementUsage(supabase, user.id, 'enrichments');
+    // WS8 : ne facturer que si on a livré un email exploitable — un email
+    // RÉELLEMENT scrapé, ou un candidat pattern MX-vérifié. Pas de crédit pour
+    // un guess non vérifié ni pour un résultat vide.
+    const hasScraped = Array.isArray(result?.scrapedEmails) && result.scrapedEmails.length > 0;
+    const hasVerified = Array.isArray(result?.generatedEmails) && result.generatedEmails.some((g) => g?.verified);
+    if (hasScraped || hasVerified) {
+      await incrementUsage(supabase, user.id, 'enrichments');
+    }
     return Response.json(result);
   } catch (error) {
     console.error('Deep enrich error:', error);

@@ -56,3 +56,7 @@ business/
 # Stratégie marketing privée (repo public — ne jamais committer)
 marketing-prive/
 audit-prive/
+
+# Fichiers generes par scripts/migrate-env.sh (secrets — JAMAIS committer, repo public)
+.env.vercel-prod
+.env.to-import

@@ -88,6 +88,12 @@ export async function createProjectOnWon(supabase, deal) {
       .limit(1);
     if (existing && existing.length > 0) return { skipped: 'exists' };
 
+    // WS12 : respecte le quota de projets actifs (free/prospection = 1, MAX = illimité)
+    // — une automatisation ne doit pas contourner le gating produit.
+    const { canCreateProject } = await import('./module-quotas');
+    const quota = await canCreateProject(supabase, deal.user_id);
+    if (!quota.allowed) return { skipped: 'quota', limit: quota.limit };
+
     const { buildTasksFromTemplate } = await import('./projects');
     const { data: template } = await supabase
       .from('project_templates')

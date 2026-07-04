@@ -424,6 +424,19 @@ export function getStripePriceId(planId, period = 'monthly') {
  */
 export const VISIBLE_PLANS = ['free', 'prospection', 'max'];
 
+/**
+ * WS11 — Plans "payants" (tout sauf Gratuit). SOURCE UNIQUE pour le gating des
+ * features réservées aux payants (reply-AI, drip conversion, etc.). Corrige les
+ * gates codés en dur ['pro','business','enterprise'] qui excluaient à tort les
+ * plans freemium payants ACTUELS (prospection 19€, max 179€).
+ */
+export const PAID_PLANS = ['prospection', 'max', 'solo', 'pro', 'business', 'enterprise', 'enterprise_legacy'];
+
+/** True si le plan est payant (n'importe quel plan résolu autre que 'free'). */
+export function isPaidPlan(planId) {
+  return typeof planId === 'string' && planId !== '' && planId !== 'free';
+}
+
 // ═════════════════════════════════════════════════════════════════════
 // Volia Autopilot — limites par plan (juin 2026 pivot)
 // ═════════════════════════════════════════════════════════════════════

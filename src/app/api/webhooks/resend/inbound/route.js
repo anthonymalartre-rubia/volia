@@ -18,6 +18,7 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { cleanEnv } from '@/lib/envClean';
 import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
 import { webhookSecretRequired } from '@/lib/webhooks/require-secret';
+import { isPaidPlan } from '@/lib/plans';
 import { autoCreateFromReply } from '@/lib/crm-auto-create';
 import { parseCampaignReplyAddress, parseSequenceReplyAddress, isInboundDomain, buildCampaignReplyAddress } from '@/lib/inbound-domain';
 import { logAutonomousAction } from '@/lib/autonomy';
@@ -464,7 +465,9 @@ async function handleInbound(request) {
         .eq('id', ownerId)
         .maybeSingle();
       const plan = (prof?.plan || 'free').toLowerCase();
-      const planAllowed = ['pro', 'business', 'enterprise'].includes(plan);
+      // WS11 : source unique — inclut les plans freemium payants (prospection, max)
+      // que le hardcode ['pro','business','enterprise'] excluait à tort.
+      const planAllowed = isPaidPlan(plan);
 
       if (planAllowed) {
         // Résout le sender VÉRIFIÉ depuis lequel on pourra répondre : d'abord

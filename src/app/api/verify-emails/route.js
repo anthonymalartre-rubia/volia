@@ -30,9 +30,6 @@ export async function POST(request) {
       return Response.json({ error: 'Liste d\'emails requise' }, { status: 400 });
     }
 
-    // Limit batch size to 100 at a time
-    const batch = emails.slice(0, 100);
-
     // Check usage limit for verifications
     const limitCheck = await checkLimit(supabase, user.id, 'verifications');
     if (!limitCheck.allowed) {
@@ -41,6 +38,11 @@ export async function POST(request) {
         { status: 429 }
       );
     }
+
+    // WS12 : cappe le batch sur le quota RESTANT (pas seulement 100) — sinon un
+    // seul appel pouvait dépasser franchement la limite mensuelle (comme places.js).
+    const maxBatch = Math.max(0, Math.min(100, limitCheck.remaining ?? 100));
+    const batch = emails.slice(0, maxBatch);
 
     // Verify emails in parallel (batches of 10 to avoid rate limits)
     const results = [];

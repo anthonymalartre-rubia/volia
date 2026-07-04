@@ -75,15 +75,20 @@ export async function rollupAutonomyMetrics({ daysBack = 1 } = {}) {
   const targetDate = new Date(now);
   targetDate.setDate(targetDate.getDate() - daysBack);
   const dateStr = targetDate.toISOString().slice(0, 10);
+  // WS14 : borne demi-ouverte [dayStart, nextDayStart) — évite le trou
+  // 23:59:59.xxx et le double-comptage à la frontière de journée.
+  const nextDate = new Date(targetDate);
+  nextDate.setDate(nextDate.getDate() + 1);
+  const nextDateStr = nextDate.toISOString().slice(0, 10);
 
   const dayStart = `${dateStr}T00:00:00Z`;
-  const dayEnd = `${dateStr}T23:59:59Z`;
+  const nextDayStart = `${nextDateStr}T00:00:00Z`;
 
   const { data: actions, error } = await supabase
     .from('autonomous_actions')
     .select('action_type, status')
     .gte('created_at', dayStart)
-    .lte('created_at', dayEnd);
+    .lt('created_at', nextDayStart);
 
   if (error) return { ok: false, error: error.message, startedAt };
 

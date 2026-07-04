@@ -122,7 +122,7 @@ export async function POST(request) {
     phone: typeof body.phone === 'string' ? body.phone.trim().slice(0, 50) : null,
     company: typeof body.company === 'string' ? body.company.trim().slice(0, 200) : null,
     position: typeof body.position === 'string' ? body.position.trim().slice(0, 200) : null,
-    notes: typeof body.notes === 'string' ? body.notes.trim() : null,
+    notes: typeof body.notes === 'string' ? body.notes.trim().slice(0, 10000) : null,
     source,
     source_ref_id: typeof body.source_ref_id === 'string' ? body.source_ref_id : null,
   };

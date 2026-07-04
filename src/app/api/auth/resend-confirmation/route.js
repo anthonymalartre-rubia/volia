@@ -45,7 +45,9 @@ export async function POST(request) {
       type: 'signup',
       email: normalizedEmail,
       options: {
-        redirectTo: `${origin}/dashboard`,
+        // WS14 : même cible que /api/auth/signup — /auth/confirm échange le token
+        // puis redirige. Rediriger direct vers /dashboard n'établit pas la session.
+        redirectTo: `${origin}/auth/confirm?next=/dashboard`,
       },
     });
 

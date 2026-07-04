@@ -348,7 +348,7 @@ async function handleInbound(request) {
         .from('email_sends')
         .select('id, campaign_id, contact_id, email, provider_id')
         .eq('campaign_id', matchedCampaignId)
-        .ilike('email', from)
+        .eq('email', from)
         .order('sent_at', { ascending: false })
         .limit(1)
         .maybeSingle();

@@ -36,16 +36,14 @@ const ALL_CATEGORIES = [
 
 // Mêmes garde-fous DGCCRF/marque que claude-writer : si le brouillon contient
 // un terme interdit, on le jette (pas de brouillon plutôt qu'un brouillon risqué).
+// WS14 : aligné sur claude-writer (garde DGCCRF uniquement). Les bans marque
+// géographiques (bordeaux/lyon/paris) et chiffrés (12 mois, 287 000) rejetaient
+// à tort des brouillons de reply légitimes mentionnant une ville ou une durée.
 const FORBIDDEN_PATTERNS = [
   /\b0\s*humain\b/i,
   /\b100\s*%?\s*autonome\b/i,
   /\bsans\s*humain\b/i,
   /\bremplace\s*les\s*humains?\b/i,
-  /\bbordeaux\b/i,
-  /\blyon\b/i,
-  /\b(à|de|sur)\s*paris\b/i,
-  /\b12\s*mois\b/i,
-  /\b287[\s.,]000\b/i,
 ];
 
 function draftIsSafe(text) {

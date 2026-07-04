@@ -92,7 +92,9 @@ export async function autoCreateFromReply({
         .eq('user_id', ownerId);
 
       if (isEmail) {
-        query = query.ilike('email', fromEmail);
+        // WS14 : égalité stricte sur email normalisé (lowercase). ilike traiterait
+        // un '_' de l'adresse (valide en local-part) comme un wildcard SQL.
+        query = query.eq('email', fromEmail);
       } else {
         query = query.eq('phone', fromPhone);
       }

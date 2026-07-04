@@ -15,6 +15,8 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
 const LIMIT_DEFAULT = 50;
 const LIMIT_MAX = 100;
+// WS14 : borne l'offset pour éviter une pagination profonde pathologique (scan coûteux).
+const OFFSET_MAX = 100000;
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: apiCorsHeaders() });
@@ -31,7 +33,7 @@ export async function GET(request) {
   const url = new URL(request.url);
 
   const limit = Math.min(LIMIT_MAX, Math.max(1, parseInt(url.searchParams.get('limit') || LIMIT_DEFAULT, 10) || LIMIT_DEFAULT));
-  const offset = Math.max(0, parseInt(url.searchParams.get('offset') || '0', 10) || 0);
+  const offset = Math.min(OFFSET_MAX, Math.max(0, parseInt(url.searchParams.get('offset') || '0', 10) || 0));
   const hasEmail = url.searchParams.get('has_email');
   const department = url.searchParams.get('department');
   const searchSessionId = url.searchParams.get('search_session_id');

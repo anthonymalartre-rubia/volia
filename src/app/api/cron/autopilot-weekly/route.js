@@ -8,13 +8,11 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function GET(request) {
-  // Auth simple via CRON_SECRET (Vercel cron)
+  // Auth via CRON_SECRET (Vercel cron). WS7 : fail-closed — refuse si secret absent.
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const auth = request.headers.get('authorization');
-    if (auth !== `Bearer ${cronSecret}`) {
-      return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 });
-    }
+  const auth = request.headers.get('authorization');
+  if (!cronSecret || auth !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 });
   }
 
   try {

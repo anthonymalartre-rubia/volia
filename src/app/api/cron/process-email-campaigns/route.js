@@ -103,7 +103,7 @@ async function handleCron(request) {
   // Auth via CRON_SECRET
   const expected = cleanEnv(process.env.CRON_SECRET);
   const provided = request.headers.get('authorization');
-  if (expected && provided !== `Bearer ${expected}`) {
+  if (!expected || provided !== `Bearer ${expected}`) { // WS7 : fail-closed — refuse si CRON_SECRET absent
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

@@ -12,7 +12,7 @@ export const maxDuration = 600; // 10 min — Claude long-form sur code source
 export async function GET(request) {
   const expected = cleanEnv(process.env.CRON_SECRET);
   const provided = request.headers.get('authorization');
-  if (expected && provided !== `Bearer ${expected}`) {
+  if (!expected || provided !== `Bearer ${expected}`) { // WS7 : fail-closed — refuse si CRON_SECRET absent
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

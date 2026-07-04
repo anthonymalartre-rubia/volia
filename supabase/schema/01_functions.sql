@@ -156,6 +156,9 @@ $function$
 --    sont SECURITY DEFINER → current_user = owner → NON affectés (ils ajustent
 --    credit_balance/plan légitimement).
 --    MAJ WS1 (audit adversarial — migration 20260704_ws1_lock_credit_balance).
+--    MAJ WS1b : gel étendu à referral_bonus_months + stripe_* + trial_* après
+--    bascule de leurs écritures client en service-role (migration
+--    20260704_ws1b_freeze_stripe_referral_trial).
 -- ============================================================
 CREATE OR REPLACE FUNCTION public.freeze_privileged_profile_columns()
  RETURNS trigger
@@ -165,13 +168,27 @@ AS $function$
 begin
   if current_user in ('authenticated', 'anon') then
     if tg_op = 'INSERT' then
-      new.is_admin       := false;
-      new.plan           := 'free';
-      new.credit_balance := 0;
+      new.is_admin              := false;
+      new.plan                  := 'free';
+      new.credit_balance        := 0;
+      new.referral_bonus_months := 0;
+      new.stripe_customer_id     := null;
+      new.stripe_subscription_id := null;
+      new.trial_plan            := null;
+      new.trial_started_at      := null;
+      new.trial_ends_at         := null;
+      new.trial_converted_at    := null;
     else
-      new.is_admin       := old.is_admin;
-      new.plan           := old.plan;
-      new.credit_balance := old.credit_balance;
+      new.is_admin              := old.is_admin;
+      new.plan                  := old.plan;
+      new.credit_balance        := old.credit_balance;
+      new.referral_bonus_months := old.referral_bonus_months;
+      new.stripe_customer_id     := old.stripe_customer_id;
+      new.stripe_subscription_id := old.stripe_subscription_id;
+      new.trial_plan            := old.trial_plan;
+      new.trial_started_at      := old.trial_started_at;
+      new.trial_ends_at         := old.trial_ends_at;
+      new.trial_converted_at    := old.trial_converted_at;
     end if;
   end if;
   return new;

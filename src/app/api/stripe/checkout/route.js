@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { PLANS, getStripePriceId } from '@/lib/plans';
 import { cleanEnv } from '@/lib/envClean';
 
@@ -71,7 +72,9 @@ export async function POST(request) {
         { idempotencyKey: `customer-create-${user.id}` }
       );
       customerId = customer.id;
-      await supabase
+      // WS1b : stripe_customer_id est gelé côté client (trigger freeze) — l'écriture
+      // passe en service-role pour rester légitime après le gel.
+      await getSupabaseAdmin()
         .from('user_profiles')
         .update({ stripe_customer_id: customerId })
         .eq('id', user.id);

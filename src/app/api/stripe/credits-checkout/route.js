@@ -10,6 +10,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
+import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { getCreditPack } from '@/lib/credit-packs';
 import { cleanEnv } from '@/lib/envClean';
 
@@ -63,7 +64,8 @@ export async function POST(request) {
         { idempotencyKey: `customer-create-${user.id}` }
       );
       customerId = customer.id;
-      await supabase
+      // WS1b : écriture stripe_customer_id en service-role (colonne gelée côté client).
+      await getSupabaseAdmin()
         .from('user_profiles')
         .update({ stripe_customer_id: customerId })
         .eq('id', user.id);

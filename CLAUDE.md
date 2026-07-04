@@ -17,23 +17,23 @@ Tarification (pivot freemium 11/06/2026) — 3 intensités de Volia One : Gratui
 - **Frontend** : Next.js 14 (App Router) + React 18 + Tailwind CSS 3
 - **Backend** : API Routes Next.js (serverless sur Vercel)
 - **Base de données** : Supabase (projet `kqrarrrojdtxijkhejhg`)
-- **Paiements** : Stripe (3 plans : Free, Pro 49€/mo, Enterprise 149€/mo)
+- **Paiements** : Stripe — source de vérité unique = `src/lib/plans.js` (lineup freemium Gratuit 0€ / Prospection 19€ / MAX 179€ + Solo/Pro/Business/Enterprise legacy grandfathered). Ne PAS se fier à des prix codés en dur ailleurs.
 - **IA** : Anthropic SDK (Claude) pour recherche en langage naturel
 - **Emails transactionnels** : Resend API
 - **Analytics** : Vercel Analytics + Speed Insights
 - **Déploiement** : Vercel (auto-deploy sur push `main`)
-- **Repo GitHub** : `Anthonyezdrive/scraping-dom-ezdrive`
-- **URL production** : https://scraping-dom-ezdrive.vercel.app
+- **Repo GitHub** : `anthonymalartre-rubia/volia`
+- **URL production** : https://volia.fr
 
 ## Architecture
 
 ```
 src/
+├── middleware.js               # Rate limiting auth routes (src/middleware.js, PAS sous app/) + lib/envClean
 ├── app/
 │   ├── layout.js              # Layout racine (ThemeProvider, CookieConsent, Analytics)
 │   ├── page.js                # Landing page marketing (typewriter, particules, comparatif)
 │   ├── globals.css            # Tailwind + CSS variables (dark/light theme)
-│   ├── middleware.js           # Rate limiting auth routes
 │   ├── error.js               # Error boundary global
 │   ├── not-found.js           # Page 404
 │   ├── dashboard/
@@ -95,6 +95,8 @@ src/
 
 ## Base de données Supabase
 
+> ⚠️ Cette section ne documente qu'un **sous-ensemble** des ~82 tables (celles du cœur Prospection). Le schéma versionné complet (CRM, campagnes, forms, projets, autopilot, referrals, etc.) vit dans `supabase/schema/*.sql` + `supabase/migrations/` — source de vérité.
+
 ### Table `prospects`
 Colonnes : id (UUID), place_id (TEXT UNIQUE), nom, adresse, telephone, email, email_method ('scrape'|'guess'|'waterfall'|'apollo'|'deep'|'manual'), site_web, note (NUMERIC), nb_avis (INT), type ('b2b'|'copro'|'custom'), departement (TEXT — regex `^(0[1-9]|[1-8][0-9]|9[0-5]|2[AB]|97[1-6])$`), search_session_id (FK), created_at, updated_at.
 
@@ -123,12 +125,11 @@ STRIPE_WEBHOOK_SECRET=           # Stripe webhook signing secret
 STRIPE_PRO_PRICE_ID=             # ID prix Stripe plan Pro
 STRIPE_ENTERPRISE_PRICE_ID=      # ID prix Stripe plan Enterprise
 SERPER_API_KEY=                  # Serper.dev (recherche Google)
-APOLLO_API_KEY=                  # Apollo.io (enrichissement)
-ENRICHLY_API_KEY=                # Enrichly
-ANYMAIL_API_KEY=                 # Anymail Finder
-FINDYMAIL_API_KEY=               # Findymail
+APOLLO_API_KEY=                  # Apollo.io (enrichissement, optionnel)
+MILLIONVERIFIER_API_KEY=         # Vérification email waterfall
 RESEND_API_KEY=                  # Resend (emails transactionnels)
 ```
+> ⚠️ Liste partielle et illustrative. La **source de vérité complète** des env vars est [.env.example](.env.example) (régénéré depuis `grep process.env`). Les clés Enrichly/Anymail/Findymail mentionnées dans d'anciennes versions n'existent PAS dans le code (waterfall = scraping + Serper + patterns + MillionVerifier).
 
 ## Fonctionnalités
 

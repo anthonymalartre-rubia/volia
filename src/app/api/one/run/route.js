@@ -26,6 +26,7 @@ import {
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
 import { buildFromDomain } from '@/lib/one/build';
+import { anonymizeEmail, anonymizePhone, anonymizeName } from '@/lib/anonymize';
 
 // Le pipeline (Places + enrich + Claude) dépasse les 10s par défaut.
 export const maxDuration = 60;
@@ -191,6 +192,23 @@ export async function POST(request) {
         console.warn('[one/run] persist run failed:', e?.message);
       }
       result.credits_charged = creditsCharged;
+    }
+
+    // ⑥ ANONYME (WS3) : ne JAMAIS renvoyer les données actionnables en clair à
+    //    un visiteur non connecté — sinon on offre gratuitement une base de
+    //    prospects B2B (emails + tél) + les cold emails déjà rédigés. On masque
+    //    email/tél/décideur et on retire les brouillons (teaser). Le contenu
+    //    complet reste réservé aux comptes (gratuits) qui paient le crédit.
+    if (!user) {
+      result.leads = (result.leads || []).map((l) => ({
+        ...l,
+        email: l.email ? anonymizeEmail(l.email) : null,
+        telephone: l.telephone ? anonymizePhone(l.telephone) : null,
+        contact_name: l.contact_name ? anonymizeName(l.contact_name) : null,
+        draft: undefined,          // pas de cold email rédigé offert
+        draft_locked: !!l.draft,   // la UI affiche "Inscris-toi pour voir l'email"
+        anonymized: true,
+      }));
     }
 
     return NextResponse.json({ success: true, ...result, decision_makers_enabled: !!user });

@@ -17,6 +17,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { cleanEnv } from '@/lib/envClean';
 import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
+import { webhookSecretRequired } from '@/lib/webhooks/require-secret';
 import { autoCreateFromReply } from '@/lib/crm-auto-create';
 import { parseCampaignReplyAddress, parseSequenceReplyAddress, isInboundDomain, buildCampaignReplyAddress } from '@/lib/inbound-domain';
 import { logAutonomousAction } from '@/lib/autonomy';
@@ -80,8 +81,13 @@ async function handleInbound(request) {
       // 200 pour éviter les retries Resend qui n'aident pas
       return NextResponse.json({ received: true, error: 'invalid_signature' }, { status: 200 });
     }
+  } else if (webhookSecretRequired()) {
+    // WS6 : fail-closed en prod — pas de secret = pas de preuve d'authenticité,
+    // on rejette au lieu d'accepter un reply potentiellement forgé (faux contact CRM).
+    console.error('[resend-inbound] RESEND_INBOUND_WEBHOOK_SECRET absent en prod — rejet fail-closed');
+    return NextResponse.json({ received: true, error: 'webhook_not_configured' }, { status: 401 });
   } else {
-    console.warn('[resend-inbound] RESEND_INBOUND_WEBHOOK_SECRET non configuré — verification skip');
+    console.warn('[resend-inbound] RESEND_INBOUND_WEBHOOK_SECRET non configuré — verification skip (dev)');
   }
 
   // 2) Parse payload

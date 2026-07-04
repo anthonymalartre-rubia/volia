@@ -24,6 +24,7 @@ import { classifyEmail } from '@/lib/feedback-classifier';
 import { draftFaqReply } from '@/lib/faq-reply-drafter';
 import { logAutonomousAction, isAutonomyEnabled } from '@/lib/autonomy';
 import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
+import { webhookSecretRequired } from '@/lib/webhooks/require-secret';
 import { cleanEnv } from '@/lib/envClean';
 
 export const dynamic = 'force-dynamic';
@@ -47,8 +48,13 @@ export async function POST(request) {
       // mais on log + skip le traitement
       return NextResponse.json({ ok: true, ignored: 'invalid_signature' });
     }
+  } else if (webhookSecretRequired()) {
+    // WS6 : fail-closed en prod — sans secret on ne peut pas prouver l'authenticité,
+    // on refuse plutôt que d'ingérer un email de feedback potentiellement forgé.
+    console.error('[inbound/contact] RESEND_INBOUND_CONTACT_SECRET absent en prod — rejet fail-closed');
+    return NextResponse.json({ ok: false, reason: 'webhook_not_configured' }, { status: 401 });
   } else {
-    console.warn('[inbound/contact] RESEND_INBOUND_CONTACT_SECRET non configuré, skip signature check');
+    console.warn('[inbound/contact] RESEND_INBOUND_CONTACT_SECRET non configuré, skip signature check (dev)');
   }
 
   // 3. Parse JSON

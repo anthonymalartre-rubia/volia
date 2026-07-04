@@ -26,6 +26,7 @@ import { incrementSubmissionCount, schemaFieldsToRendererFields, normalizeSchema
 import { checkRateLimit } from '@/lib/rateLimit';
 import { sendEmail } from '@/lib/email';
 import { cleanEnv } from '@/lib/envClean';
+import { webhookSecretRequired } from '@/lib/webhooks/require-secret';
 import { emitWebhookEvent } from '@/lib/webhooks/emitter';
 import { unlockAchievement } from '@/lib/achievements';
 import { incrementUsage } from '@/lib/usage';
@@ -122,7 +123,14 @@ function extractContactInfo(answers, fields) {
 async function verifyCaptcha(token) {
   const secret = cleanEnv(process.env.RECAPTCHA_SECRET_KEY);
   if (!secret) {
-    console.warn('[forms/submit] RECAPTCHA_SECRET_KEY not configured — skipping captcha');
+    // WS6 : fail-closed en prod. Un formulaire avec captcha_enabled=true attend une
+    // protection anti-spam ; si le secret manque en prod, on refuse (400) plutôt que
+    // de laisser passer silencieusement — la misconfiguration doit être bruyante.
+    if (webhookSecretRequired()) {
+      console.error('[forms/submit] captcha activé mais RECAPTCHA_SECRET_KEY absent en prod — rejet fail-closed');
+      return false;
+    }
+    console.warn('[forms/submit] RECAPTCHA_SECRET_KEY not configured — skipping captcha (dev)');
     return true;
   }
   if (!token) return false;

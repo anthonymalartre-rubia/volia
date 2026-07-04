@@ -19,6 +19,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { cleanEnv } from '@/lib/envClean';
 import { verifyTwilioSignature } from '@/lib/webhooks/twilio-verify';
+import { webhookSecretRequired } from '@/lib/webhooks/require-secret';
 import { decryptSecret } from '@/lib/crypto';
 import { autoCreateFromReply } from '@/lib/crm-auto-create';
 
@@ -155,8 +156,14 @@ export async function POST(request) {
       console.warn('[twilio-inbound] signature verify exception', e.message);
       return twimlResponse();
     }
+  } else if (webhookSecretRequired()) {
+    // WS6 : fail-closed en prod — sans authToken/signature on ne peut pas prouver
+    // que l'appel vient bien de Twilio. On répond TwiML 200 (pas de retry) mais on
+    // NE traite PAS le message (pas de création CRM sur reply forgé).
+    console.error('[twilio-inbound] authToken/signature absents en prod — rejet fail-closed');
+    return twimlResponse();
   } else {
-    console.warn('[twilio-inbound] missing authToken or signature — verification skipped');
+    console.warn('[twilio-inbound] missing authToken or signature — verification skipped (dev)');
   }
 
   // 5) Best-effort lookup du SMS original

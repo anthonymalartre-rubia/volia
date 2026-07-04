@@ -22,6 +22,7 @@ import { NextResponse } from 'next/server';
 import { setAutonomyEnabled } from '@/lib/autonomy';
 import { sendEmail } from '@/lib/email';
 import { verifyResendSignature } from '@/lib/webhooks/resend-verify';
+import { webhookSecretRequired } from '@/lib/webhooks/require-secret';
 import { cleanEnv } from '@/lib/envClean';
 
 export const dynamic = 'force-dynamic';
@@ -50,8 +51,15 @@ export async function POST(request) {
       console.warn('[inbound/stop] signature invalide', err.message);
       return NextResponse.json({ error: 'invalid_signature', detail: err.message }, { status: 401 });
     }
+  } else if (webhookSecretRequired()) {
+    // WS6 : fail-closed en prod. Le kill-switch pilote l'autopilot (STOP/RESUME).
+    // La whitelist d'expéditeurs ne suffit PAS : le From d'un email est trivialement
+    // spoofable. Sans signature valide, un « RESUME » forgé réactiverait l'envoi
+    // automatique → on refuse tant que le secret n'est pas configuré.
+    console.error('[inbound/stop] RESEND_INBOUND_STOP_SECRET absent en prod — rejet fail-closed');
+    return NextResponse.json({ error: 'webhook_not_configured' }, { status: 401 });
   } else {
-    console.warn('[inbound/stop] RESEND_INBOUND_STOP_SECRET non configuré, skip signature check');
+    console.warn('[inbound/stop] RESEND_INBOUND_STOP_SECRET non configuré, skip signature check (dev)');
   }
 
   // 3. Parse JSON après vérif signature

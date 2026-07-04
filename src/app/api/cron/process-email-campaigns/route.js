@@ -291,6 +291,30 @@ async function handleCron(request) {
     });
   }
 
+  // ─── WS5 : CLAIM ATOMIQUE (anti-double-envoi concurrent) ──────────
+  // Deux invocations du cron peuvent SELECT le même batch 'pending'. On pose
+  // claimed_at atomiquement : seuls les sends que CETTE invocation a flippés
+  // (encore 'pending' + non claimés récemment) sont traités. Postgres verrouille
+  // les lignes → sous-ensembles DISJOINTS entre crons concurrents. Un claim
+  // périmé (cron crashé mid-envoi) est repris après 15 min (statut resté pending).
+  const claimStaleIso = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+  const { data: claimedRows, error: claimErr } = await supabase
+    .from('email_sends')
+    .update({ claimed_at: new Date().toISOString() })
+    .in('id', sendsToProcess.map((s) => s.id))
+    .eq('status', 'pending')
+    .or(`claimed_at.is.null,claimed_at.lt.${claimStaleIso}`)
+    .select('id');
+  if (claimErr) {
+    console.error('[cron/email-campaigns] claim error', claimErr);
+    return NextResponse.json({ error: claimErr.message }, { status: 500 });
+  }
+  const claimedIds = new Set((claimedRows || []).map((r) => r.id));
+  const claimedSends = sendsToProcess.filter((s) => claimedIds.has(s.id));
+  if (claimedSends.length === 0) {
+    return NextResponse.json({ ok: true, processed: 0, message: 'Batch déjà claimé par un run concurrent.' });
+  }
+
   // ─── QUOTA EMAILS (anti-bombe à coûts Resend — task #328) ────────
   // Pré-charge le budget mensuel `emails_sent` restant pour chaque owner
   // du batch. Décrémenté en mémoire à chaque send pendant la boucle ci-dessous.
@@ -414,7 +438,7 @@ async function handleCron(request) {
   // 4) Envoie chaque send (filtré par warmup quota)
   //    Throttling : CONCURRENCY=5 parallèles max (respecte Resend ~10/sec)
   //    + retry exponentiel sur 429/5xx (cf withResendRetry en haut du fichier).
-  const results = await runWithLimit(sendsToProcess, async (send) => {
+  const results = await runWithLimit(claimedSends, async (send) => {
     const campaign = campaignMap.get(send.campaign_id);
     const contact = contactMap.get(send.contact_id);
 
@@ -682,7 +706,7 @@ async function handleCron(request) {
 
   return NextResponse.json({
     ok: true,
-    processed: sendsToProcess.length,
+    processed: claimedSends.length,
     succeeded,
     failed,
     warmup_throttled: warmupThrottled,

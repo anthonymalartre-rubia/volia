@@ -121,6 +121,8 @@ CREATE INDEX idx_email_senders_user_id ON public.email_senders USING btree (user
 CREATE UNIQUE INDEX email_sends_campaign_contact_unique ON public.email_sends USING btree (campaign_id, contact_id) WHERE ((campaign_id IS NOT NULL) AND (contact_id IS NOT NULL));
 CREATE INDEX email_sends_campaign_idx ON public.email_sends USING btree (campaign_id, status);
 CREATE INDEX email_sends_pending_idx ON public.email_sends USING btree (status, created_at) WHERE (status = 'pending'::text);
+-- WS5 : claim atomique anti-double-envoi (colonne email_sends.claimed_at ajoutée par migration 20260704_ws5_email_sends_claim)
+CREATE INDEX idx_email_sends_pending_claim ON public.email_sends USING btree (claimed_at) WHERE (status = 'pending'::text);
 CREATE UNIQUE INDEX email_sends_pkey ON public.email_sends USING btree (id);
 CREATE INDEX email_sends_provider_idx ON public.email_sends USING btree (provider_id) WHERE (provider_id IS NOT NULL);
 CREATE INDEX idx_email_sends_provider_id ON public.email_sends USING btree (provider_id) WHERE (provider_id IS NOT NULL);

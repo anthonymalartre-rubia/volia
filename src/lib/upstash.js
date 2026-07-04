@@ -20,6 +20,7 @@
 
 import { Redis } from '@upstash/redis';
 import { Ratelimit } from '@upstash/ratelimit';
+import { checkRateLimit } from '@/lib/rateLimit';
 
 let redisInstance = null;
 
@@ -169,10 +170,69 @@ export function oneUserRateLimiter() {
 }
 
 /**
+ * WS7-A — Rate limiter DISTRIBUÉ générique (Upstash Redis), partagé entre toutes
+ * les instances serverless, avec DÉGRADATION GRACIEUSE.
+ *
+ * Remplace checkRateLimit() (Map in-memory, propre à chaque instance warm : un
+ * attaquant qui répartit ses requêtes sur les cold starts / instances concurrentes
+ * multiplie la limite). Ici le compteur vit dans Redis → limite réellement globale.
+ *
+ * Robustesse : si Upstash n'est pas configuré (getRedis()===null) ou tombe en
+ * panne, on RETOMBE sur le limiter in-memory plutôt que de bloquer les vrais
+ * utilisateurs (fail-open contrôlé : on garde une protection dégradée, jamais un
+ * lock-out total à cause d'une panne Redis).
+ *
+ * @param {string} identifier - clé (typiquement l'IP client via getClientIP)
+ * @param {{max:number, windowSec:number, prefix:string}} opts
+ * @returns {Promise<{success:boolean, remaining:number, resetAt:Date, backend:string}>}
+ *   Même forme que checkRateLimit() (champ .success) → remplacement drop-in.
+ */
+const distributedLimiters = new Map();
+
+function getDistributedLimiter({ max, windowSec, prefix }) {
+  const redis = getRedis();
+  if (!redis) return null;
+  const cacheKey = `${prefix}:${max}:${windowSec}`;
+  let limiter = distributedLimiters.get(cacheKey);
+  if (!limiter) {
+    limiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(max, `${windowSec} s`),
+      prefix,
+      analytics: false,
+    });
+    distributedLimiters.set(cacheKey, limiter);
+  }
+  return limiter;
+}
+
+export async function distributedRateLimit(identifier, { max, windowSec, prefix }) {
+  const limiter = getDistributedLimiter({ max, windowSec, prefix });
+  if (limiter) {
+    try {
+      const res = await limiter.limit(identifier);
+      return {
+        success: res.success,
+        remaining: res.remaining,
+        resetAt: new Date(res.reset),
+        backend: 'upstash',
+      };
+    } catch (err) {
+      console.warn('[rate-limit] Upstash indisponible, fallback in-memory:', err?.message);
+    }
+  }
+  // Fallback dégradé : compteur in-memory (par instance). Moins strict mais > rien.
+  const res = checkRateLimit(`${prefix}:${identifier}`, max, windowSec * 1000);
+  return { ...res, backend: 'memory' };
+}
+
+/**
  * Extrait l'IP du request pour le rate limiting.
- * - Vercel injecte x-forwarded-for et x-real-ip
- * - On prend la première IP (proxy chain)
- * - Fallback "unknown" si rien → tous les "unknown" partagent le bucket
+ * - Sur Vercel, x-forwarded-for est ÉCRASÉ par la plateforme avec l'IP réelle du
+ *   client et les valeurs fournies par le client sont jetées (anti-spoofing, cf.
+ *   https://vercel.com/docs/headers/request-headers). Le premier élément est donc
+ *   fiable ici — hors "trusted proxy" Enterprise, non activé chez nous.
+ * - Fallback x-real-ip puis "unknown" (tous les "unknown" partagent le bucket).
  */
 export function getClientIP(request) {
   const xff = request.headers.get('x-forwarded-for');

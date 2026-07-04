@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkRateLimit } from '@/lib/rateLimit';
+import { distributedRateLimit, getClientIP } from '@/lib/upstash';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { authResendConfirmation } from '@/lib/emailTemplates';
@@ -19,8 +19,9 @@ import { alertCritical } from '@/lib/critical-alert';
  */
 export async function POST(request) {
   try {
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
-    const rate = checkRateLimit(`auth-resend:${ip}`, 3, 10 * 60 * 1000);
+    // Rate-limit DISTRIBUÉ, plus strict que /signup : 3 tentatives / 10 min par IP (WS7-A)
+    const ip = getClientIP(request);
+    const rate = await distributedRateLimit(ip, { max: 3, windowSec: 10 * 60, prefix: 'rl:auth:resend' });
     if (!rate.success) {
       return NextResponse.json(
         { error: 'Trop de demandes. Réessayez dans 10 minutes.' },

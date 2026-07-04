@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { checkRateLimit } from '@/lib/rateLimit';
+import { distributedRateLimit, getClientIP } from '@/lib/upstash';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { authSignupConfirm } from '@/lib/emailTemplates';
@@ -21,9 +21,9 @@ import { alertCritical } from '@/lib/critical-alert';
  */
 export async function POST(request) {
   try {
-    // Rate-limit anti-abuse : 5 tentatives / 15 min par IP
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
-    const rate = checkRateLimit(`auth-signup:${ip}`, 5, 15 * 60 * 1000);
+    // Rate-limit anti-abuse DISTRIBUÉ : 5 tentatives / 15 min par IP (WS7-A)
+    const ip = getClientIP(request);
+    const rate = await distributedRateLimit(ip, { max: 5, windowSec: 15 * 60, prefix: 'rl:auth:signup' });
     if (!rate.success) {
       return NextResponse.json(
         { error: 'Trop de tentatives d\'inscription. Réessayez dans 15 minutes.', code: 'rate_limited' },

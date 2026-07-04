@@ -194,10 +194,9 @@ BEGIN
   VALUES (NEW.id, 'free')
   ON CONFLICT (id) DO NOTHING;
 
-  IF NEW.email_confirmed_at IS NULL THEN
-    UPDATE auth.users SET email_confirmed_at = now() WHERE id = NEW.id;
-  END IF;
-
+  -- WS2 (audit) : plus d'auto-confirmation de l'email (proof of possession
+  -- requise). Le flux api/auth/signup crée l'user non confirmé et envoie le
+  -- lien de confirmation via Resend. Cf. migration 20260704_ws2_stop_email_autoconfirm.
   RETURN NEW;
 END;
 $function$

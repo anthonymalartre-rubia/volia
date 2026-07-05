@@ -3,19 +3,27 @@
 // ─────────────────────────────────────────────────────────────────────
 // /pricing — page tarification standalone Volia (client component)
 // ─────────────────────────────────────────────────────────────────────
-// Page riche dédiée au SEO ("tarifs volia", "pricing volia",
-// "comparatif plans") + landing pour ads/footers/blog.
+// Copy intégrée depuis audit-prive/copy-one-pricing-volia.md (section
+// « PAGE /pricing »), conforme à la Bible de marque Volia. Tutoiement,
+// « 19 €/mois » (espace avant €), un seul ✈️ (CTA final), zéro lexique
+// banni.
 //
-// Sections :
-//   1. Hero + toggle Mensuel/Annuel
-//   2. 4 cards plans
-//   3. Banner économies estimées
-//   4. Tableau comparatif détaillé (le killer)
-//   5. Guide "Quel plan pour vous ?" (4 personas)
-//   6. Strip trust signals communs
-//   7. Comparatif stack concurrents
-//   8. FAQ pricing
-//   9. CTA final
+// Structure (doc source) :
+//   1. Hero (variante 2 « medium » par défaut) + barre de réassurance
+//   2. Les 3 cartes (Gratuit / Prospection / MAX) — MAX en 3e position,
+//      badge factuel « Pour un flux régulier »
+//   3. Ligne d'appui + encart MAX99 + anti-vente
+//   4. Un crédit c'est quoi · Ce que Volia ne fait pas · Prospection ou
+//      MAX · tableau comparatif · On prospecte dans les règles · Et les
+//      outils américains
+//   5. FAQ tarifaire (8 Q/R)
+//   6. CTA final (seul ✈️ de la page)
+//
+// NOTE : la copy des cartes (prix, promesse, features, CTA) est LOCALE
+// (verbatim du doc source), PAS tirée de lib/plans.js — plans.js.features
+// est consommé par d'autres surfaces (settings, admin, webhook,
+// PricingContentEN…) et son wording diffère de cette copy marketing. Les
+// montants (0 € / 19 € / 179 € / MAX99) restent alignés sur plans.js.
 //
 // Forcé en light mode (cohérence pages marketing Volia).
 // ─────────────────────────────────────────────────────────────────────
@@ -23,272 +31,133 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import {
-  Check, X, Crown, Star, Shield, Zap, ChevronDown, ArrowRight,
-  Sparkles, Rocket, Building2, TrendingUp,
-  RefreshCw, Globe,
-  Headphones, Calendar, Lock, FileText,
+  Check, ChevronDown, ArrowRight, Sparkles,
 } from 'lucide-react';
-import { PLANS } from '@/lib/plans';
 import { useForceLightTheme } from '@/lib/use-force-light-theme';
 import MotionInView from '@/components/MotionInView';
 import MarketingHeader from '@/components/MarketingHeader';
 import ReaderFooter from '@/components/ReaderFooter';
-import BookDemoButton from '@/components/BookDemoButton';
 
-// ─── Helpers ────────────────────────────────────────────────────
-function formatPrice(cents) {
-  if (cents === 0) return '0';
-  return Math.round(cents / 100).toString();
-}
-
-function formatEuro(cents) {
-  if (cents === 0) return '0 €';
-  return `${Math.round(cents / 100).toLocaleString('fr-FR')} €`;
-}
-
-// Couleurs / styling par plan
-const PLAN_VISUALS = {
-  free:    { ring: 'border-line', bg: 'bg-surface-card', accent: 'text-content-tertiary', badge: null },
-  prospection: { ring: 'border-violet-300', bg: 'bg-violet-50/40', accent: 'text-violet-700', badge: null },
-  max:     { ring: 'border-amber-400 ring-2 ring-amber-400/30', bg: 'bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50', accent: 'text-amber-700', badge: '⚡ AUTOPILOT 24/7' },
-};
-
-// Les 3 plans = 3 intensités de Volia One.
-const PLAN_TAGLINES = {
-  free: 'Essaie Volia One — tape ton domaine',
-  prospection: 'Volia One en solo',
-  max: 'Volia One en pilote automatique 24/7',
-};
-
-// Pivot freemium : les 4 modules sont inclus PARTOUT (avec limites hors
-// MAX). Autopilot = MAX uniquement.
-const PLAN_MODULES = {
-  free:        { prospection: 'limitée', campagnes: true, crm: true, formulaires: true, autopilot: false },
-  prospection: { prospection: true,      campagnes: true, crm: true, formulaires: true, autopilot: false },
-  max:         { prospection: true,      campagnes: true, crm: true, formulaires: true, autopilot: '3 workflows + IF/ELSE + A/B' },
-};
-
-// Pivot freemium (11 juin 2026) : Gratuit / Prospection / MAX.
-// Solo, Pro, Business, Enterprise restent dans plans.js pour les clients
-// existants (grandfathering) mais ne sont plus présentés à l'achat.
-const CARD_PLANS = ['free', 'prospection', 'max'];
-
-// Tableau comparatif : 3 colonnes alignées sur les cartes.
-const VISIBLE_PLANS_FOR_COMPARE = ['free', 'prospection', 'max'];
-
-// ─── Section 4 : Tableau comparatif — données ───────────────────
-// Sections collapsibles avec rows.
-// Colonnes : Gratuit / Prospection / MAX (3 valeurs par row).
-const COMPARE_SECTIONS = [
+// ─── Les 3 cartes (bloc de décision) ────────────────────────────
+// Copy verbatim du doc source. MAX en 3e position (crescendo voir →
+// piloter → déléguer), badge factuel « Pour un flux régulier »
+// (jamais « Populaire » : aucun chiffre publié ne le prouve).
+const CARDS = [
   {
-    title: '⚡ Volia One en pilote automatique (mode Autopilot — plan MAX)',
-    rows: [
-      ['Workflows Autopilot', false, false, '3'],
-      ['Pipeline complet : scrap → email → qualif → CRM', false, false, true],
-      ['Emails personnalisés par IA (Claude)', false, false, true],
-      ['Scoring + routing auto Hot / Warm / Cold', false, false, true],
-      ['23 templates de pipeline prêts à l’emploi', false, false, true],
-      ['Branching custom (IF / ELSE par tier)', false, false, true],
-      ['A/B testing objets + winner auto', false, false, true],
-      ['Optimisation Claude hebdomadaire', false, false, true],
+    id: 'free',
+    name: 'Gratuit',
+    price: '0 €',
+    promise: 'Tape ton domaine. Vois tes vrais leads. Juge sur pièces.',
+    features: [
+      'Tape ton domaine : tes leads s’affichent, emails complets débloqués.',
+      '25 crédits Prospection pour tester sur ton vrai marché, pas sur une démo.',
+      'Chaque email arrive avec son score de confiance : Vérifié, Google ou Probable. Tu sais ce que tu tiens.',
+      'Les 5 modules ouverts, avec quotas. Assez pour te faire un avis.',
+      'Filtre RGPD des emails personnels activé d’office. Tu prospectes propre dès le premier jour.',
     ],
+    cta: 'Voir mes leads — 0 €',
+    microcopy: '0 €. Et ça reste gratuit.',
+    href: '/signup?plan=free',
+    badge: null,
   },
   {
-    title: 'Module Prospection (au crédit)',
-    rows: [
-      ['Crédits Prospection / mois (emails trouvés)', '25', '500', '2 000'],
-      ['Numéros de téléphone / mois', '25', '500', '10 000'],
-      ['Recherches / mois', '100', '2 000', '10 000'],
-      ['Vérification email (MillionVerifier)', false, '100/mo', '5 000/mo'],
-      ['🎯 Enrichissement décideur (CEO, CMO, Sales…)', false, false, true],
-      ['Cascade waterfall (7 sources)', true, true, true],
-      ['Recherche IA langage naturel', true, true, true],
-      ['Exports CSV', '5/mois', 'Illimité', 'Illimité'],
-      ['Accès Google Places (tout le tissu B2B français)', true, true, true],
-      ['101 départements (DROM inclus) · 150+ catégories', true, true, true],
+    id: 'prospection',
+    name: 'Prospection',
+    price: '19 €/mois',
+    promise: 'Volia One en solo : il trouve et rédige, tu pilotes.',
+    features: [
+      '500 crédits par mois : de quoi alimenter ton pipeline chaque semaine.',
+      'L’IA rédige tes cold emails à partir de ton activité. Tu modifies, tu valides, tu signes — c’est ton nom en bas.',
+      'Email + téléphone + score de confiance, sur 101 départements et 150+ catégories.',
+      'Warmup progressif de ton domaine : tes envois montent en puissance proprement.',
+      'Sans engagement. Tu annules en 2 clics, depuis ton compte.',
     ],
+    cta: 'Prospecter à 19 €/mois',
+    microcopy: 'Sans engagement. Moins cher que ton forfait mobile.',
+    href: '/signup?plan=prospection',
+    badge: null,
   },
   {
-    title: 'Module Campagnes (cold email) — inclus partout',
-    rows: [
-      ['Cold emails / mois', '200', '200', '10 000'],
-      ['Séquences multi-étapes', '1', '1', 'Illimité'],
-      ['Domaines d’envoi multi-tenant (votre domaine)', true, true, true],
-      ['Warmup automatique 28 jours', false, false, true],
-      ['Templates email B2B (20+)', true, true, true],
-      ['Tracking opens / clicks + réponses auto vers CRM', true, true, true],
+    id: 'max',
+    name: 'MAX',
+    price: '179 €/mois',
+    promise: 'Pendant que tu bosses, Volia prospecte. L’Autopilot fait tourner One 24/7, selon tes règles.',
+    features: [
+      'Autopilot : tu écris les règles — ton, secteurs, exclusions, plafonds. One les applique, jour et nuit.',
+      '2 000 crédits par mois. Un gros mois ? Ajoute un pack ponctuel, sans changer de plan.',
+      'Toute la suite : Prospection, Campagnes, CRM, Formulaires, Project. Un seul login.',
+      'Une réponse reçue = un contact créé dans ton CRM. Tu ne recopies plus rien.',
+      'L’Autopilot suit tes règles. Il ne décide jamais à ta place.',
     ],
-  },
-  {
-    title: 'Module CRM — inclus partout',
-    rows: [
-      ['Pipelines', '1', '1', 'Illimité'],
-      ['Kanban drag & drop', true, true, true],
-      ['Auto-create deals depuis replies', true, true, true],
-      ['Timeline 360° + activities', true, true, true],
-      ['Automatisations (won→onboarding, relances)', false, false, true],
-    ],
-  },
-  {
-    title: 'Module Formulaires — inclus partout',
-    rows: [
-      ['Formulaires publiés', '2', '2', 'Illimité'],
-      ['Soumissions / mois', '100', '100', '5 000'],
-      ['Builder drag-drop + multi-step + logique AND/OR', true, true, true],
-      ['Bridges natifs CRM + Campagnes', true, true, true],
-      ['QR code + embed iframe + webhooks', true, true, true],
-    ],
-  },
-  {
-    title: 'Module Project — inclus partout',
-    rows: [
-      ['Projets actifs', '1', '1', 'Illimité'],
-      ['Deal gagné → projet en 1 clic', true, true, true],
-      ['Lien de suivi client public', true, true, true],
-      ['Livrables + pièces jointes', true, true, true],
-    ],
-  },
-  {
-    title: 'Support & garanties',
-    rows: [
-      ['Support email', 'Standard', '48 h', 'Prioritaire'],
-      ['Onboarding personnalisé', false, false, true],
-      ['🤖 Serveur MCP (Claude, Cursor, agents IA)', false, false, true],
-      ['API publique REST + Zapier / Make', false, true, true],
-      ['Multi-utilisateurs (équipes / RBAC)', false, false, true],
-      ['Conforme RGPD France · données UE', true, true, true],
-    ],
+    cta: 'Activer l’Autopilot',
+    microcopy: 'Code MAX99 : 3 premiers mois à 99 € au lieu de 179 €.',
+    href: '/signup?plan=max',
+    badge: 'Pour un flux régulier',
   },
 ];
 
-// ─── Section 5 : Personas ────────────────────────────────────────
-const PERSONAS = [
-  {
-    icon: Rocket,
-    color: 'from-violet-600 to-indigo-600',
-    title: 'Je veux essayer Volia One',
-    plan: 'free',
-    planLabel: 'Gratuit · 0 €',
-    description: 'Tape ton domaine, vois tes premiers leads + emails, structure tes ventes. Les 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) inclus, gratuitement, avec limites.',
-  },
-  {
-    icon: Building2,
-    color: 'from-indigo-600 to-blue-600',
-    title: 'Je veux Volia One en solo',
-    plan: 'prospection',
-    planLabel: 'Prospection · 19 €/mo',
-    description: '500 crédits/mois : ciblez par catégorie et département, la cascade waterfall trouve emails + téléphones du tissu PME français. Le moins cher du marché.',
-  },
-  {
-    icon: Sparkles,
-    color: 'from-amber-500 to-orange-600',
-    title: 'Je veux Volia One en autopilote',
-    plan: 'max',
-    planLabel: 'MAX · 99 €/mo les 3 premiers mois (code MAX99), puis 179 €',
-    description: 'Le mode Autopilot de Volia One scrape, enrichit, écrit (IA), envoie, qualifie et pousse les leads chauds dans votre CRM, 24/7. Suite complète + 2 000 crédits/mois inclus + équipes + MCP.',
-    highlight: true,
-  },
+// ─── Tableau comparatif ──────────────────────────────────────────
+// « Des faits en lignes, pas des coches marketing. »
+// Cellule modules du plan Prospection = « One en solo » (doc source).
+const COMPARE_ROWS = [
+  ['Prix', '0 €', '19 €/mois', '179 €/mois'],
+  ['Crédits Prospection', '25', '500 / mois', '2 000 / mois'],
+  ['Volia One (domaine → leads + emails)', true, true, true],
+  ['Score de confiance (Vérifié / Google / Probable)', true, true, true],
+  ['Email + téléphone (101 dépts, 150+ catégories)', true, true, true],
+  ['L’IA rédige, tu valides et tu signes', true, true, true],
+  ['Autopilot 24/7 selon tes règles', false, false, true],
+  ['Les 5 modules', 'Avec quotas', 'One en solo', 'Suite complète'],
+  ['Warmup progressif du domaine', true, true, true],
+  ['Filtre RGPD, opt-out public, DPA', true, true, true],
+  ['Sans engagement, annulable en 2 clics', true, true, true],
 ];
 
-// ─── Section 6 : Trust strip ─────────────────────────────────────
-const TRUST_SIGNALS = [
-  { icon: Shield, label: 'Conforme RGPD France' },
-  { icon: Globe, label: 'Données hébergées dans l’UE' },
-  { icon: RefreshCw, label: 'Annulation en 1 clic' },
-  { icon: Calendar, label: 'Sans engagement de durée' },
-  { icon: TrendingUp, label: 'Mise à jour du plan à tout moment' },
-  { icon: Headphones, label: 'Support en français' },
-  { icon: FileText, label: 'CGV claires + DPA disponible', href: '/dpa' },
-  { icon: Lock, label: 'Stripe sécurisé (PCI DSS)' },
-];
-
-// ─── Section 7 : Stack concurrents ───────────────────────────────
-const STACK_COMPETITORS = [
-  { name: 'Apollo.io',     price: 99,  usage: 'Prospection' },
-  { name: 'Lemlist',       price: 39,  usage: 'Cold email' },
-  { name: 'Smartlead',     price: 39,  usage: 'Warmup' },
-  { name: 'HubSpot Starter', price: 90, usage: 'CRM' },
-  { name: 'Hunter',        price: 49,  usage: 'Email finder' },
-];
-
-// ─── Section 8 : FAQ pricing ─────────────────────────────────────
+// ─── FAQ tarifaire — 8 Q/R (doc source) ──────────────────────────
 const FAQ_PRICING = [
   {
-    q: 'Le code MAX99, ça marche comment ?',
-    a: 'Avec le code MAX99 saisi au paiement, le plan MAX passe à 99 €/mois pendant 3 mois (au lieu de 179 €), puis revient au tarif normal. Pas de frais cachés, annulation en 1 clic à tout moment.',
+    q: '« Sans engagement », c’est vraiment sans engagement ?',
+    a: 'Oui. Abonnement mensuel, annulable en 2 clics depuis ton compte. Pas de préavis, pas d’email à envoyer, personne à convaincre au téléphone. Tu gardes l’accès jusqu’à la fin du mois payé. Tu annules, ça s’arrête. C’est tout.',
   },
   {
-    q: 'C\'est gratuit pour démarrer ?',
-    a: 'Oui : le plan Gratuit est à vie, sans carte bancaire (25 crédits/mois et tous les modules avec limites — Prospection, Campagnes, CRM, Formulaires, Project). Vous montez en gamme quand vous voulez (Prospection ou MAX), jamais de prélèvement automatique sans votre accord explicite.',
+    q: 'Un crédit, c’est quoi exactement ?',
+    a: 'L’unité qui paie le travail de recherche d’un prospect : l’entreprise, l’email, le téléphone, le score de confiance. On cherche d’abord sur leur site. Pas trouvé ? On fouille Google. Toujours rien ? On teste les formats classiques — et on te marque « Probable ». 25 crédits en Gratuit, 500 par mois en Prospection, 2 000 par mois en MAX.',
   },
   {
-    q: 'C\'est quoi un crédit, exactement ?',
-    a: '1 crédit = 1 contact B2B ramené (email + téléphone d\'une entreprise). Le plan Gratuit en donne 25/mois, Prospection 500, MAX 2 000. Un crédit n\'est consommé que quand on vous trouve un contact — jamais pour une recherche à vide.',
+    q: 'Il me faut plus de crédits ce mois-ci. Je fais quoi ?',
+    a: 'Tu ajoutes un pack ponctuel. Paiement unique, pas un deuxième abonnement. Ton plan ne bouge pas, ton prix mensuel non plus. Le prix du pack est affiché au moment de l’achat.',
   },
   {
-    q: 'Je peux changer de plan quand je veux ?',
-    a: 'Oui, en 1 clic depuis les paramètres. Upgrade ou downgrade, le pro-rata se calcule tout seul — vous payez juste la différence du mois en cours.',
+    q: 'MAX99, où est l’entourloupe ?',
+    a: 'Il n’y en a pas, et voilà les termes complets : 3 premiers mois de MAX à 99 € au lieu de 179 €. Au 4e mois, 179 €/mois, le prix normal. Tu peux annuler avant, pendant, après — en 2 clics. On te le dit ici pour que tu ne le découvres jamais sur une facture.',
   },
   {
-    q: 'Et si j\'atteins la limite mensuelle ?',
-    a: 'Alerte email à 80% et 100%. Au-delà, la recherche se met en pause jusqu\'au renouvellement ou jusqu\'à l\'upgrade. Pas de facture surprise, jamais.',
+    q: 'Prospection ou MAX : la vraie différence ?',
+    a: 'Le pilote. Avec Prospection, tu lances One quand tu veux : il trouve, il rédige, tu valides. Avec MAX, l’Autopilot fait tourner One 24/7 selon tes règles — ton, secteurs, exclusions, plafonds. Plus 2 000 crédits au lieu de 500, et toute la suite. Si tu as le temps de piloter chaque semaine, Prospection te suffit. On te le dit franchement.',
   },
   {
-    q: 'Annuel -2 mois, comment ça marche ?',
-    a: 'Vous payez 10 mois, vous accédez 12. Exemple MAX : 1 690€/an au lieu de 2 148€, soit 458€ gardés dans votre poche. Facturé en une fois (CB ou virement).',
+    q: 'Et si le gratuit me suffit ?',
+    a: 'Alors reste gratuit, sans culpabilité. Ce plan n’est pas un appât, c’est notre argument commercial : voir avant de croire. Le jour où tes 25 crédits ne suffisent plus, tu sauras exactement pourquoi tu passes à 19 €/mois. Et si ce jour n’arrive pas, tu n’auras rien payé pour l’apprendre.',
   },
   {
-    q: 'Comment je résilie ?',
-    a: 'Paramètres > Plan > "Gérer mon abonnement". 1 clic, sans justification, sans email passif-agressif. L\'accès reste actif jusqu\'à la fin de la période payée.',
+    q: 'Comment je paie ? Comment j’annule ?',
+    a: 'Carte bancaire, paiement sécurisé par Stripe — on ne voit jamais ton numéro. Tes factures sont dans ton espace. Pour annuler : ton compte, 2 clics, à tout moment. Tu changes de plan dans les deux sens, quand tu veux. Pas de rétention déguisée, pas de « appelez-nous pour résilier ».',
   },
   {
-    q: 'Virement bancaire possible ?',
-    a: 'Oui sur le plan MAX annuel. Envoyez votre SIRET à contact@volia.fr, on vous fait une facture pro forma sous 24h.',
-  },
-  {
-    q: 'Tout est vraiment inclus dans le prix ?',
-    a: 'Oui. Accès à tout le tissu B2B français via Google Places (scraping en temps réel sur 101 départements × 150+ secteurs), cascade waterfall multi-sources, exports CSV, emails transactionnels. Aucune option cachée derrière un paywall.',
-  },
-  {
-    q: 'Le CRM est vraiment gratuit ?',
-    a: 'Oui, intégralement et dès le plan Gratuit. Kanban drag-and-drop, deals auto-créés depuis vos réponses email, timeline 360° par contact, activities (notes, calls, meetings). 1 pipeline en Gratuit/Prospection, illimité en MAX. Vous pouvez désinstaller HubSpot.',
-  },
-  {
-    q: 'Moyens de paiement ?',
-    a: 'CB (Visa, Mastercard, Amex) via Stripe sur tous les plans. SEPA et virement sur l\'annuel MAX. PayPal sur demande.',
-  },
-  {
-    q: 'Remboursement ?',
-    a: 'Satisfait ou remboursé 14 jours sur le premier paiement, sans justification — un email à contact@volia.fr suffit. Au-delà, la résiliation 1 clic vous laisse profiter de la période payée.',
-  },
-  {
-    q: 'Tarif assos / étudiants ?',
-    a: '-50% sur le plan Prospection pour les assos loi 1901 et les étudiants (sur justificatif). Écrivez à contact@volia.fr depuis votre email institutionnel.',
+    q: 'Et le RGPD, concrètement ?',
+    a: 'La prospection B2B est légale en France (base : intérêt légitime). Volia est construit pour rester dans les clous : données professionnelles uniquement, filtre automatique des emails personnels, page d’opt-out publique, DPA téléchargeable. Ton juriste veut vérifier ? Le DPA se télécharge, il n’y a rien à nous demander. Quel que soit ton plan.',
   },
 ];
 
 // ─── Composant principal ─────────────────────────────────────────
 export default function PricingContent() {
   useForceLightTheme();
-  const [period, setPeriod] = useState('monthly'); // 'monthly' | 'yearly'
   const [openFaq, setOpenFaq] = useState(null);
-  const isYearly = period === 'yearly';
 
-  // Économies totales annuelles si l'user prend tous les plans payants en annuel
-  const yearlySavingsByPlan = {
-    prospection: PLANS.prospection.price * 12 - PLANS.prospection.priceYearly,
-    max: PLANS.max.price * 12 - PLANS.max.priceYearly,
-  };
-  const maxSavings = Math.max(...Object.values(yearlySavingsByPlan));
-
-  // Stack concurrents : total
-  const competitorTotalMo = STACK_COMPETITORS.reduce((acc, c) => acc + c.price, 0);
-  const economyVsStack = competitorTotalMo - 179; // vs MAX 179€ — suite complète + Autopilot 24/7
-
-  // Helper rendu cellule comparatif
+  // Helper rendu cellule comparatif (fait booléen ou valeur texte)
   function renderCell(value) {
     if (value === true) return <Check size={16} className="text-emerald-500 mx-auto" aria-label="Inclus" />;
-    if (value === false) return <X size={16} className="text-content-muted mx-auto" aria-label="Non inclus" />;
+    if (value === false) return <span className="text-content-muted mx-auto" aria-hidden="true">—</span>;
     return <span className="text-xs text-content-secondary">{value}</span>;
   }
 
@@ -298,6 +167,22 @@ export default function PricingContent() {
 
       <main className="pt-24 pb-12">
         {/* ─── 1. HERO ───────────────────────────────────────── */}
+        {/* Variante 2 « medium » = défaut (signature n°10 de la bible).
+            Variantes A/B en réserve (ne pas décommenter sans instrumenter) :
+
+            Variante 1 — sobre :
+            H1 : « Trois plans. Zéro piège. »
+            Sous-titre : « Gratuit pour voir tes leads. 19 €/mois pour
+            prospecter. 179 €/mois pour que ça tourne selon tes règles, 24/7. »
+            CTA : « Voir mes leads — 0 € » · Microcopy : « Ton domaine
+            suffit. Tu juges sur pièces. »
+
+            Variante 3 — audacieuse :
+            H1 : « Tu cherches le piège. C'est normal. »
+            Sous-titre : « Alors on a tout mis à plat : prix, crédits,
+            annulation, RGPD. Et même ce que Volia ne sait pas faire. »
+            CTA : « Chercher le piège — c'est gratuit » · Microcopy :
+            « Spoiler : il n'y en a pas. Vérifie quand même. » */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 text-center mb-12">
           <MotionInView>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 border border-violet-200 text-xs font-medium text-violet-700 mb-6">
@@ -305,269 +190,95 @@ export default function PricingContent() {
               Les prix. Sans bullshit.
             </div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05] mb-6">
-              Le prix d&apos;un café par jour<br />pour ton pipeline B2B<br />en autopilote.
+              0 € pour voir.<br />19 € pour prospecter.<br />179 € pour ne plus y penser.
             </h1>
             <p className="text-lg sm:text-xl text-content-secondary leading-relaxed max-w-2xl mx-auto mb-8">
-              3 intensités d&apos;une même expérience, <strong className="text-content-primary">Volia One</strong>.
-              <strong className="text-content-primary"> Gratuit</strong> pour l&apos;essayer (tape ton domaine, vois leads + emails),
-              <strong className="text-content-primary"> Prospection à 19&nbsp;€/mois</strong> pour l&apos;utiliser en solo,
-              <strong className="text-content-primary"> MAX</strong> pour la laisser tourner en pilote automatique 24/7.
-              <strong className="text-amber-600"> Code MAX99 : 99&nbsp;€/mois les 3 premiers mois.</strong>
+              Tape ton domaine. Volia trouve tes prospects, écrit tes emails,
+              remplit ton pipeline. Toi, tu choisis la cadence.
             </p>
 
-            {/* Toggle Mensuel / Annuel */}
-            <div className="inline-flex items-center gap-1 p-1 rounded-full border border-line bg-surface-card shadow-sm mb-6">
-              <button
-                type="button"
-                onClick={() => setPeriod('monthly')}
-                className={`px-5 py-2 text-sm font-medium rounded-full transition ${
-                  !isYearly
-                    ? 'bg-violet-600 text-white shadow-sm'
-                    : 'text-content-tertiary hover:text-content-primary'
-                }`}
-              >
-                Mensuel
-              </button>
-              <button
-                type="button"
-                onClick={() => setPeriod('yearly')}
-                className={`px-5 py-2 text-sm font-medium rounded-full transition flex items-center gap-2 ${
-                  isYearly
-                    ? 'bg-violet-600 text-white shadow-sm'
-                    : 'text-content-tertiary hover:text-content-primary'
-                }`}
-              >
-                Annuel
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                  isYearly ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700'
-                }`}>
-                  -2 MOIS
-                </span>
-              </button>
-            </div>
-
-            {/* Label économies CONCRET sous le toggle — chiffres en euros
-                réels par plan (vs "-2 mois" abstrait). Boost conversion
-                annuel attendu : +5-10%. */}
-            <p
-              className="text-sm font-semibold text-emerald-700 mb-2"
-              aria-live="polite"
+            <Link
+              href="/one"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition shadow-lg shadow-violet-500/20"
             >
-              {isYearly
-                ? `Vous économisez jusqu'à ${formatEuro(maxSavings)}/an`
-                : `Passez à l'annuel et économisez jusqu'à ${formatEuro(maxSavings)}/an`}
-            </p>
-            <p className="text-xs text-content-tertiary mb-6">
-              Prospection : -38 €/an · MAX : -458 €/an
+              Je tape mon domaine <ArrowRight size={14} />
+            </Link>
+            <p className="text-xs text-content-tertiary mt-3 mb-8">
+              30 secondes. 0 €. Tu juges sur pièces.
             </p>
 
-            {/* Trust badges */}
+            {/* Barre de réassurance sous le hero — 3 items, une ligne */}
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-content-tertiary">
-              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Plan Gratuit à vie · sans CB</span>
-              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Annulation 1 clic</span>
-              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> RGPD France</span>
+              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Sans engagement, annulable en 2 clics</span>
+              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> RGPD par construction</span>
+              <span className="flex items-center gap-1.5"><Check size={12} className="text-emerald-500" /> Gratuit pour vérifier avant de croire</span>
             </div>
           </MotionInView>
         </section>
 
-        {/* ─── 1b. BANNER PROMO ÉTÉ 2026 ──────────────────────── */}
-        <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-10">
-          <MotionInView>
-            <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-50 via-orange-50/60 to-amber-50 p-5 sm:p-6 text-center">
-              <p className="text-sm sm:text-base font-semibold text-amber-900">
-                ⚡ Offre de lancement MAX — <span className="font-bold">99&nbsp;€/mois</span> les 3 premiers mois (puis 179&nbsp;€).
-              </p>
-              <p className="text-xs text-amber-800 mt-1.5">
-                Code <code className="px-1.5 py-0.5 rounded bg-amber-200/70 font-bold tracking-wide">MAX99</code> à saisir au paiement · Volia One en pilote automatique 24/7 + suite complète + 2&nbsp;000 crédits/mois inclus.
-              </p>
-            </div>
-          </MotionInView>
-        </section>
-
-        {/* ─── 2. CARDS PLANS ────────────────────────────────── */}
+        {/* ─── 2. LES 3 CARTES (bloc de décision) ─────────────── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
-            {CARD_PLANS.map((planId, idx) => {
-              const plan = PLANS[planId];
-              const visuals = PLAN_VISUALS[planId];
-              const modules = PLAN_MODULES[planId];
-              const price = isYearly ? plan.priceYearly : plan.price;
-              const isFree = plan.price === 0;
-              const cta = isFree ? 'Commencer gratuitement' : `Commencer avec ${plan.name}`;
-              const ctaHref = `/signup?plan=${planId}${!isFree ? `&period=${period}` : ''}`;
-
+            {CARDS.map((card, idx) => {
+              const isMax = card.id === 'max';
               return (
-                <MotionInView key={planId} delay={idx * 80}>
-                  <div className={`relative h-full p-6 rounded-2xl border ${visuals.ring} ${visuals.bg} flex flex-col`}>
-                    {visuals.badge && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-[11px] font-semibold rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg flex items-center gap-1.5 whitespace-nowrap">
-                        <Crown size={11} />
-                        {visuals.badge}
+                <MotionInView key={card.id} delay={idx * 80}>
+                  <div
+                    className={`relative h-full p-6 rounded-2xl border flex flex-col ${
+                      isMax
+                        ? 'border-amber-400 ring-2 ring-amber-400/30 bg-gradient-to-br from-amber-50 via-orange-50/40 to-amber-50 md:-mt-2 md:mb-2 shadow-lg shadow-amber-500/10'
+                        : card.id === 'prospection'
+                          ? 'border-violet-300 bg-violet-50/40'
+                          : 'border-line bg-surface-card'
+                    }`}
+                  >
+                    {/* Badge factuel — jamais « Populaire » */}
+                    {card.badge && (
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-[11px] font-semibold rounded-full bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg whitespace-nowrap">
+                        {card.badge}
                       </div>
                     )}
 
-                    <h3 className={`text-lg font-semibold mb-1 ${visuals.accent}`}>{plan.name}</h3>
-                    <p className="text-xs text-content-tertiary mb-5 min-h-[32px]">{PLAN_TAGLINES[planId]}</p>
+                    <h3 className={`text-lg font-semibold mb-1 ${
+                      isMax ? 'text-amber-700' : card.id === 'prospection' ? 'text-violet-700' : 'text-content-tertiary'
+                    }`}>
+                      {card.name}
+                    </h3>
 
-                    {/* PRIX — gestion spéciale MAX avec code MAX99.
-                        Sur monthly : affiche prix promo en gros + prix normal barré.
-                        Sur yearly : affiche prix yearly normal (pas de promo annual). */}
-                    {planId === 'max' && !isYearly && plan.promo ? (
-                      <>
-                        <div className="flex items-baseline gap-2 mb-1">
-                          <span className="text-4xl font-bold text-content-primary">
-                            {formatPrice(plan.promo.displayPrice)}
-                            <span className="text-2xl text-content-secondary">€</span>
-                          </span>
-                          <span className="text-content-tertiary text-sm">/mois</span>
-                          <span className="text-lg text-content-muted line-through font-medium">
-                            {formatPrice(plan.displayPrice)} €
-                          </span>
-                        </div>
-                        <p className="text-[11px] font-semibold text-emerald-700 mb-1">
-                          🎉 {plan.promo.label}
-                        </p>
-                        <p className="text-[11px] text-content-tertiary mb-5">
-                          {plan.promo.sublabel}
-                        </p>
-                      </>
-                    ) : planId === 'max' && isYearly ? (
-                      <>
-                        <div className="flex items-baseline gap-1 mb-1">
-                          <span className="text-4xl font-bold text-content-primary">
-                            {formatPrice(plan.displayPriceYearly)}
-                            <span className="text-2xl text-content-secondary">€</span>
-                          </span>
-                          <span className="text-content-tertiary text-sm">/an</span>
-                        </div>
-                        <p className="text-[11px] text-emerald-600 font-medium mb-5">
-                          ~{Math.round(plan.displayPriceYearly / 1200)} €/mois · 2 mois offerts
-                        </p>
-                      </>
-                    ) : (
-                      <>
-                        <div className="flex items-baseline gap-1 mb-1">
-                          <span className="text-4xl font-bold text-content-primary">
-                            {formatPrice(price)}
-                            <span className="text-2xl text-content-secondary">€</span>
-                          </span>
-                          <span className="text-content-tertiary text-sm">
-                            {isYearly && !isFree ? '/an' : '/mois'}
-                          </span>
-                        </div>
+                    <div className="flex items-baseline gap-1 mb-3">
+                      <span className="text-4xl font-bold text-content-primary">{card.price}</span>
+                    </div>
 
-                        {isYearly && !isFree ? (
-                          <p className="text-[11px] text-emerald-600 font-medium mb-5">
-                            ~{Math.round(plan.priceYearly / 1200)} €/mois · économisez {formatEuro(yearlySavingsByPlan[planId])}
-                          </p>
-                        ) : !isFree ? (
-                          <p className="text-[11px] text-content-tertiary mb-5">
-                            ou {formatPrice(plan.priceYearly)} €/an (économisez {formatEuro(yearlySavingsByPlan[planId])})
-                          </p>
-                        ) : (
-                          <p className="text-[11px] text-content-tertiary mb-5">Sans carte bancaire</p>
-                        )}
-                      </>
-                    )}
+                    <p className="text-sm font-medium text-content-primary mb-5 min-h-[48px]">
+                      {card.promise}
+                    </p>
 
                     <Link
-                      href={ctaHref}
-                      className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-5 ${
-                        planId === 'max'
+                      href={card.href}
+                      className={`block w-full py-3 text-center text-sm font-semibold rounded-xl transition mb-1.5 ${
+                        isMax
                           ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:from-amber-400 hover:to-orange-500 shadow-lg shadow-amber-500/20'
-                          : planId === 'prospection'
+                          : card.id === 'prospection'
                             ? 'bg-content-primary text-surface-base hover:bg-content-secondary'
                             : 'border border-line-hover hover:bg-surface-elevated text-content-secondary'
                       }`}
                     >
-                      {cta}
+                      {card.cta}
                     </Link>
+                    <p className="text-[11px] text-content-tertiary mb-5 text-center">
+                      {card.microcopy}
+                    </p>
 
-                    {/* HIGHLIGHT MAX — la "killer feature" : Volia One en
-                        pilote automatique 24/7 + suite complète. Affiché en card
-                        séparée violette, plus visible que les badges modules. */}
-                    {plan.unlocksModules && (
-                      <div className="mb-4 p-3 rounded-xl bg-gradient-to-br from-violet-100 to-indigo-100 border border-violet-300">
-                        <p className="text-[11px] font-bold text-violet-900 mb-1 flex items-center gap-1">
-                          <Star size={11} fill="currentColor" /> Volia One en Autopilot 24/7 + suite complète
-                        </p>
-                        <p className="text-[11px] text-violet-700 leading-snug">
-                          CRM · Campagnes · Formulaires · Project sans plafond
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Modules débloqués — version simplifiée (badges courts) */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        modules.prospection === true
-                          ? 'bg-violet-100 text-violet-700'
-                          : modules.prospection === 'limitée'
-                            ? 'bg-zinc-100 text-zinc-600'
-                            : 'bg-zinc-50 text-content-muted'
-                      }`}>
-                        ✓ Prospection{modules.prospection === 'limitée' ? ' (limitée)' : ''}
-                      </span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        modules.campagnes
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-zinc-50 text-content-muted'
-                      }`}>
-                        {modules.campagnes ? '✓' : '✗'} Campagnes
-                      </span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        modules.crm
-                          ? 'bg-indigo-100 text-indigo-700'
-                          : 'bg-zinc-50 text-content-muted'
-                      }`}>
-                        {modules.crm ? '✓' : '✗'} CRM
-                      </span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        modules.formulaires
-                          ? 'bg-pink-100 text-pink-700'
-                          : 'bg-zinc-50 text-content-muted'
-                      }`}>
-                        {modules.formulaires ? '✓' : '✗'} Formulaires
-                        {modules.formulaires === 'solo' ? ' (1)' : modules.formulaires === 'pro' ? ' (5)' : ''}
-                      </span>
-                    </div>
-
-                    {/* "Tout inclus dans X +" intro avant les delta features.
-                        Le pattern simplifie radicalement la lecture cross-plans :
-                        plus besoin de comparer les 4 colonnes, on voit juste
-                        ce qui s'ajoute. */}
-                    {plan.inheritsFrom && PLANS[plan.inheritsFrom] && (
-                      <p className="text-[11px] font-semibold text-content-secondary mb-3 pb-3 border-b border-line">
-                        ✓ Tout inclus dans {PLANS[plan.inheritsFrom].name} +
-                      </p>
-                    )}
-
-                    {/* Delta features list — court et focalisé.
-                        Les lignes Autopilot (⚡/🚀) sont mises en avant dans un
-                        encart amber : c'est la valeur flagship du produit. */}
-                    <div className="space-y-2.5 flex-1">
-                      {plan.features.map((f) => {
-                        const isAutopilot = f.startsWith('⚡') || f.startsWith('🚀');
-                        if (isAutopilot) {
-                          return (
-                            <div
-                              key={f}
-                              className="flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-2"
-                            >
-                              <Zap size={14} className="text-amber-500 mt-0.5 flex-shrink-0" fill="currentColor" />
-                              <span className="text-xs font-semibold text-amber-900 leading-relaxed">
-                                {f.replace(/^[⚡🚀]\s*/, '')}
-                              </span>
-                            </div>
-                          );
-                        }
-                        return (
-                          <div key={f} className="flex items-start gap-2">
-                            <Check size={14} className="text-violet-500 mt-0.5 flex-shrink-0" />
-                            <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
-                          </div>
-                        );
-                      })}
+                    <div className="space-y-2.5 flex-1 pt-4 border-t border-line">
+                      {card.features.map((f) => (
+                        <div key={f} className="flex items-start gap-2">
+                          <Check
+                            size={14}
+                            className={`mt-0.5 flex-shrink-0 ${isMax ? 'text-amber-500' : 'text-violet-500'}`}
+                          />
+                          <span className="text-xs text-content-secondary leading-relaxed">{f}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </MotionInView>
@@ -575,109 +286,190 @@ export default function PricingContent() {
             })}
           </div>
 
-          {/* Help line sous les cards — booking démo si hésitation */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
-            <p className="text-sm text-content-secondary">
-              Vous hésitez sur le plan adapté à votre besoin ?
-            </p>
-            <BookDemoButton
-              label="Une question ? Réservez une démo"
-              variant="secondary"
-              size="sm"
-              source="pricing_cards"
-            />
-          </div>
+          {/* Ligne d'appui sous la grille */}
+          <p className="mt-8 text-center text-sm text-content-secondary max-w-2xl mx-auto">
+            19 €, c’est toi qui prospectes avec Volia. 179 €, c’est Volia qui
+            prospecte selon tes règles.
+          </p>
         </section>
 
-        {/* ─── 3. BANNER ÉCONOMIES ─────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
-          <div className={`rounded-2xl border p-5 sm:p-6 text-center transition ${
-            isYearly
-              ? 'border-emerald-200 bg-emerald-50/60'
-              : 'border-violet-200 bg-violet-50/60'
-          }`}>
-            {isYearly ? (
-              <p className="text-sm sm:text-base text-content-secondary">
-                <Check size={16} className="inline -mt-0.5 mr-1.5 text-emerald-600" />
-                Vous économisez jusqu&apos;à{' '}
-                <strong className="text-emerald-700">{formatEuro(maxSavings)}/an</strong>{' '}
-                vs la facturation mensuelle — soit 2 mois offerts.
-              </p>
-            ) : (
-              <p className="text-sm sm:text-base text-content-secondary">
-                <Sparkles size={16} className="inline -mt-0.5 mr-1.5 text-violet-600" />
-                Passez à l&apos;annuel pour économiser jusqu&apos;à{' '}
-                <strong className="text-violet-700">{formatEuro(maxSavings)}/an</strong>{' '}
-                (2 mois offerts sur le plan MAX).
-              </p>
-            )}
-          </div>
-        </section>
-
-        {/* ─── 4. TABLEAU COMPARATIF DÉTAILLÉ ──────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
+        {/* ─── 3. ENCART MAX99 + ANTI-VENTE ───────────────────── */}
+        {/* Une ligne, pas une bannière. DGCCRF-proof : pas de prix barré,
+            pas de compte à rebours, le prix du 4e mois annoncé maintenant. */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-20">
           <MotionInView>
-            <div className="text-center mb-10">
-              <p className="text-sm font-semibold text-violet-600 mb-3">COMPARATIF DÉTAILLÉ</p>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-                Tout, plan par plan.
-              </h2>
-              <p className="text-content-tertiary text-base max-w-xl mx-auto">
-                Zéro feature cachée derrière un paywall. Si c&apos;est dans le tableau, c&apos;est dans le plan.
+            <div className="rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-50 via-orange-50/60 to-amber-50 p-5 sm:p-6">
+              <p className="text-sm sm:text-base text-amber-900">
+                <strong>Code MAX99</strong> : les 3 premiers mois de MAX à
+                99 € au lieu de 179 €. Au 4e mois, tarif normal : 179 €/mois —
+                on te le dit maintenant, pas sur la facture. Trois mois pour
+                juger l’Autopilot sur pièces. Tu annules quand tu veux, en
+                2 clics.
+              </p>
+              <p className="text-xs text-amber-800/90 italic mt-3">
+                Pas sûr d’avoir besoin de MAX ? Alors tu n’en as pas besoin
+                aujourd’hui. Commence gratuit, passe à 19 €/mois, et monte quand
+                tes soirées n’y suffisent plus.
+              </p>
+            </div>
+          </MotionInView>
+        </section>
+
+        {/* ─── 4a. UN CRÉDIT, C'EST QUOI ? ────────────────────── */}
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20">
+          <MotionInView>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-5">Un crédit, c’est quoi ?</h2>
+            <div className="space-y-3 text-content-secondary leading-relaxed">
+              <p>
+                C’est l’unité qui paie le travail de recherche d’un prospect :
+                l’entreprise, l’email, le téléphone, le score de confiance.
+              </p>
+              <p>
+                On cherche d’abord sur leur site. Pas trouvé ? On fouille Google.
+                Toujours rien ? On teste les formats classiques — et on te marque
+                « Probable ».
+              </p>
+              <p>
+                Ils se rechargent chaque mois : 500 en Prospection, 2 000 en MAX.
+                Le compte gratuit en donne 25 — assez pour tester sur ton vrai
+                marché.
+              </p>
+              <p>
+                Un gros mois ? Des packs ponctuels existent, sans changer
+                d’abonnement. Prix affiché au moment de l’achat.
+              </p>
+            </div>
+          </MotionInView>
+        </section>
+
+        {/* ─── 4b. CE QUE VOLIA NE FAIT PAS ───────────────────── */}
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-20">
+          <MotionInView>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-8">Ce que Volia ne fait pas</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="p-6 rounded-2xl border border-line bg-surface-card">
+                <h3 className="text-base font-semibold text-content-primary mb-3">Volia n’envoie rien sans toi.</h3>
+                <p className="text-sm text-content-secondary leading-relaxed">
+                  L’IA rédige des brouillons de cold emails. Toi, tu modifies, tu
+                  valides, tu signes. C’est ton nom en bas. Même l’Autopilot suit
+                  tes règles : ton ton, tes secteurs, tes exclusions, tes plafonds.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl border border-line bg-surface-card">
+                <h3 className="text-base font-semibold text-content-primary mb-3">Volia ne garantit pas tes résultats.</h3>
+                <p className="text-sm text-content-secondary leading-relaxed">
+                  Personne d’honnête ne le fait. Ni l’inbox garantie, d’ailleurs.
+                  Ce qu’on fait : des prospects joignables, un warmup progressif
+                  de ton domaine, un envoi dans les règles. Signer, c’est ton métier.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl border border-line bg-surface-card">
+                <h3 className="text-base font-semibold text-content-primary mb-3">Volia ne trouve pas tout.</h3>
+                <p className="text-sm text-content-secondary leading-relaxed">
+                  Sur une niche très étroite, il y a parfois peu de résultats. On
+                  préfère te le montrer gratuitement que te le faire payer. Et
+                  « Probable » veut dire probable : chaque email affiche son score
+                  de confiance.
+                </p>
+              </div>
+            </div>
+          </MotionInView>
+        </section>
+
+        {/* ─── 4c. PROSPECTION OU MAX ? ───────────────────────── */}
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20">
+          <MotionInView>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2">Prospection ou MAX ?</h2>
+            <p className="text-content-tertiary mb-6">Choisis le moins cher qui te suffit.</p>
+
+            <div className="space-y-2.5 mb-6">
+              <p className="text-content-secondary">
+                Tu veux vérifier que ça marche sur ton secteur → <strong className="text-content-primary">Gratuit</strong>.
+              </p>
+              <p className="text-content-secondary">
+                Tu veux prospecter chaque semaine en gardant la main → <strong className="text-content-primary">Prospection</strong>.
+              </p>
+              <p className="text-content-secondary">
+                Tu veux un flux régulier sans y passer tes soirées → <strong className="text-content-primary">MAX</strong>.
               </p>
             </div>
 
-            {/* ── Desktop : tableau dense (caché sur mobile : 720px illisible
-                   sur un écran de 375px → scroll horizontal pénible) ── */}
+            <div className="space-y-3 text-content-secondary leading-relaxed mb-6">
+              <p>
+                Sur Prospection, c’est toi qui appuies. Chaque recherche, chaque
+                envoi : ta main, ta validation.
+              </p>
+              <p>
+                Sur MAX, tu écris les règles une fois : ton, secteurs, exclusions,
+                plafonds. L’Autopilot les applique, jour et nuit. Une réponse
+                arrive ? Le contact est créé dans ton CRM. Toi, tu réponds aux
+                intéressés. Pendant que tu bosses, Volia prospecte.
+              </p>
+              <p>
+                179 €/mois, c’est cher ? Compare au stack qu’il remplace : Apollo
+                + Lemlist + intégrations. En dollars, en anglais, en plusieurs
+                logins. Ou à une demi-journée de commercial.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-violet-200 bg-violet-50/50 p-5">
+              <p className="text-content-primary font-semibold mb-1">
+                Tu hésites entre deux ? Prends le moins cher.
+              </p>
+              <p className="text-sm text-content-secondary">
+                On préfère que tu montes en gamme par besoin, pas par peur de
+                rater quelque chose.
+              </p>
+            </div>
+          </MotionInView>
+        </section>
+
+        {/* ─── 4d. TABLEAU COMPARATIF ─────────────────────────── */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-20">
+          <MotionInView>
+            <div className="mb-8">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-2">Le détail, pour ceux qui vérifient.</h2>
+              <p className="text-content-tertiary">Tu veux le détail ? Le voilà.</p>
+            </div>
+
+            {/* Desktop : tableau dense */}
             <div className="hidden md:block overflow-x-auto rounded-2xl border border-line bg-surface-card shadow-sm">
-              <table className="w-full min-w-[720px]">
-                <thead className="sticky top-0 bg-surface-card z-10 border-b border-line">
+              <table className="w-full min-w-[640px]">
+                <thead className="bg-surface-card border-b border-line">
                   <tr>
-                    <th className="text-left text-xs font-semibold text-content-tertiary uppercase tracking-wider px-5 py-4 w-[40%]">
-                      Fonctionnalités
-                    </th>
-                    {VISIBLE_PLANS_FOR_COMPARE.map((planId) => (
-                      <th key={planId} className="text-center px-3 py-4 w-[15%]">
-                        <div className="text-sm font-bold text-content-primary">{PLANS[planId].name}</div>
-                        <div className="text-[11px] text-content-tertiary mt-0.5">
-                          {PLANS[planId].price === 0 ? 'Gratuit' : `${formatPrice(PLANS[planId].price)} €/mo`}
-                        </div>
-                      </th>
-                    ))}
+                    <th className="text-left text-xs font-semibold text-content-tertiary uppercase tracking-wider px-5 py-4 w-[40%]" />
+                    <th className="text-center text-sm font-bold text-content-primary px-3 py-4 w-[20%]">Gratuit</th>
+                    <th className="text-center text-sm font-bold text-content-primary px-3 py-4 w-[20%]">Prospection</th>
+                    <th className="text-center text-sm font-bold text-content-primary px-3 py-4 w-[20%]">MAX</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {COMPARE_SECTIONS.map((section) => (
-                    <ComparisonSection key={section.title} section={section} renderCell={renderCell} />
+                  {COMPARE_ROWS.map((row, ri) => (
+                    <tr
+                      key={row[0]}
+                      className={`border-b border-line/60 ${ri % 2 === 1 ? 'bg-surface-elevated/30' : ''}`}
+                    >
+                      <td className="px-5 py-3 text-sm text-content-secondary">{row[0]}</td>
+                      <td className="px-3 py-3 text-center">{renderCell(row[1])}</td>
+                      <td className="px-3 py-3 text-center">{renderCell(row[2])}</td>
+                      <td className="px-3 py-3 text-center">{renderCell(row[3])}</td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            {/* ── Mobile : mêmes données en cartes empilées (1 section = 1 carte),
-                   chaque ligne = libellé + 3 mini-colonnes Gratuit/Prospection/MAX.
-                   Zéro scroll horizontal, lisible au pouce. ── */}
-            <div className="md:hidden space-y-4">
-              {COMPARE_SECTIONS.map((section) => (
-                <div key={section.title} className="rounded-2xl border border-line bg-surface-card shadow-sm overflow-hidden">
-                  <div className="px-4 py-3 bg-surface-elevated border-b border-line">
-                    <h3 className="text-sm font-bold text-content-primary">{section.title}</h3>
-                  </div>
-                  <div className="divide-y divide-line">
-                    {section.rows.map((row, ri) => (
-                      <div key={ri} className="px-4 py-3">
-                        <div className="text-sm text-content-primary font-medium mb-2">{row[0]}</div>
-                        <div className="grid grid-cols-3 gap-2">
-                          {VISIBLE_PLANS_FOR_COMPARE.map((planId, ci) => (
-                            <div key={planId} className="rounded-lg bg-surface-elevated/60 px-2 py-1.5 text-center">
-                              <div className="text-[10px] uppercase tracking-wider text-content-tertiary mb-0.5">
-                                {PLANS[planId].name}
-                              </div>
-                              <div className="flex items-center justify-center min-h-[20px]">
-                                {renderCell(row[ci + 1])}
-                              </div>
-                            </div>
-                          ))}
+            {/* Mobile : lignes empilées, 3 mini-colonnes */}
+            <div className="md:hidden space-y-2">
+              {COMPARE_ROWS.map((row) => (
+                <div key={row[0]} className="rounded-xl border border-line bg-surface-card px-4 py-3">
+                  <div className="text-sm text-content-primary font-medium mb-2">{row[0]}</div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {['Gratuit', 'Prospection', 'MAX'].map((label, ci) => (
+                      <div key={label} className="rounded-lg bg-surface-elevated/60 px-2 py-1.5 text-center">
+                        <div className="text-[10px] uppercase tracking-wider text-content-tertiary mb-0.5">{label}</div>
+                        <div className="flex items-center justify-center min-h-[20px]">
+                          {renderCell(row[ci + 1])}
                         </div>
                       </div>
                     ))}
@@ -685,222 +477,65 @@ export default function PricingContent() {
                 </div>
               ))}
             </div>
+          </MotionInView>
+        </section>
 
-            {/* Footnote sur-mesure — au-delà de MAX (workflows ∞, multi-équipes) */}
-            <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/50 px-4 py-3 text-sm text-amber-900">
-              <Zap size={16} className="flex-shrink-0 mt-0.5 text-amber-600" />
+        {/* ─── 4e. ON PROSPECTE. DANS LES RÈGLES. ─────────────── */}
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20">
+          <MotionInView>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-5">On prospecte. Dans les règles.</h2>
+            <div className="space-y-3 text-content-secondary leading-relaxed">
+              <p className="text-content-primary font-semibold">
+                « C’est légal, ce scraping ? » Oui. Et voilà pourquoi.
+              </p>
               <p>
-                Besoin d&apos;aller au-delà de MAX (workflows Autopilot illimités, multi-équipes,
-                SLA dédié) ? Offre sur-mesure — écrivez à{' '}
-                <a href="mailto:contact@volia.fr" className="underline font-semibold">contact@volia.fr</a>.{' '}
-                <Link href="/produits/autopilot" className="underline font-semibold">Voir le mode Autopilot →</Link>
+                La prospection B2B est légale en France. Base juridique :
+                l’intérêt légitime.
+              </p>
+              <p>
+                Volia est construit pour rester dans les clous, pas pour frôler
+                la ligne. Données professionnelles uniquement. Filtre automatique
+                des emails personnels — les @gmail restent dehors.
+              </p>
+              <p>Page d’opt-out publique. DPA téléchargeable.</p>
+              <p>
+                On ne joue pas avec ça — c’est aussi ton nom qui part dans ces
+                emails.
               </p>
             </div>
           </MotionInView>
         </section>
 
-        {/* ─── 5. PERSONAS — Quel plan pour vous ? ─────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
+        {/* ─── 4f. ET LES OUTILS AMÉRICAINS ? ─────────────────── */}
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20">
           <MotionInView>
-            <div className="text-center mb-10">
-              <p className="text-sm font-semibold text-violet-600 mb-3">GUIDE DE CHOIX</p>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-                Lequel pour vous ?
-              </h2>
-              <p className="text-content-tertiary text-base max-w-xl mx-auto">
-                Choisissez au feeling. Vous changez d&apos;avis demain ? 1 clic et c&apos;est fait.
+            <h2 className="text-2xl sm:text-3xl font-bold mb-5">Et les outils américains ?</h2>
+            <div className="space-y-3 text-content-secondary leading-relaxed">
+              <p>
+                Apollo et Lemlist sont d’excellents outils. Pensés pour des
+                équipes US, en anglais, facturés en dollars. Et il t’en faut
+                plusieurs pour couvrir la chaîne complète.
+              </p>
+              <p>
+                Volia fait tout du même endroit : trouvé → écrit → envoyé →
+                répondu → dans ton CRM. En français, sur des données françaises —
+                101 départements, 150+ catégories — avec le téléphone en plus de
+                l’email.
+              </p>
+              <p>
+                Toi, tu vends en France. C’est notre seul terrain, et on le
+                connaît.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {PERSONAS.map((p, idx) => {
-                const Icon = p.icon;
-                return (
-                  <MotionInView key={p.plan} delay={idx * 80}>
-                    <div className={`h-full p-6 rounded-2xl border transition hover:shadow-lg ${
-                      p.highlight
-                        ? 'border-violet-300 bg-gradient-to-b from-violet-50/60 to-white shadow-md'
-                        : 'border-line bg-surface-card'
-                    }`}>
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${p.color} flex items-center justify-center mb-4 shadow-md`}>
-                        <Icon size={22} className="text-white" />
-                      </div>
-                      <h3 className="text-base font-semibold text-content-primary mb-1">{p.title}</h3>
-                      <p className={`text-xs font-medium mb-3 ${p.highlight ? 'text-violet-700' : 'text-content-tertiary'}`}>
-                        {p.planLabel}
-                        {p.highlight && <span className="ml-1.5 inline-flex items-center gap-1 text-[10px] font-bold text-violet-700"><Star size={9} fill="currentColor" /> POPULAIRE</span>}
-                      </p>
-                      <p className="text-xs text-content-secondary leading-relaxed mb-5">
-                        {p.description}
-                      </p>
-                      <Link
-                        href={`/signup?plan=${p.plan}&period=${period}`}
-                        className={`inline-flex items-center gap-1.5 text-xs font-semibold transition ${
-                          p.highlight ? 'text-violet-700 hover:text-violet-800' : 'text-content-secondary hover:text-content-primary'
-                        }`}
-                      >
-                        Choisir ce plan <ArrowRight size={12} />
-                      </Link>
-                    </div>
-                  </MotionInView>
-                );
-              })}
-            </div>
-
-            {/* CTA booking démo sous les personas — friction zéro pour le profil "pas sûr" */}
-            <div className="mt-10 flex justify-center">
-              <BookDemoButton
-                label="Pas sûr ? Réservez une démo perso"
-                variant="primary"
-                size="md"
-                source="pricing_personas"
-              />
-            </div>
           </MotionInView>
         </section>
 
-        {/* ─── 6. TRUST STRIP ─────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-20">
-          <MotionInView>
-            <div className="rounded-2xl border border-line bg-surface-card p-6 sm:p-8">
-              <h2 className="text-center text-base font-semibold text-content-primary mb-6">
-                Tout est inclus dans chaque plan
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4">
-                {TRUST_SIGNALS.map((sig) => {
-                  const Icon = sig.icon;
-                  const inner = (
-                    <>
-                      <div className="w-10 h-10 rounded-full bg-violet-100 flex items-center justify-center">
-                        <Icon size={16} className="text-violet-600" />
-                      </div>
-                      <span className="text-xs text-content-secondary leading-tight">{sig.label}</span>
-                    </>
-                  );
-                  return sig.href ? (
-                    <Link
-                      key={sig.label}
-                      href={sig.href}
-                      className="flex flex-col items-center text-center gap-2 hover:text-content-primary transition"
-                    >
-                      {inner}
-                    </Link>
-                  ) : (
-                    <div key={sig.label} className="flex flex-col items-center text-center gap-2">
-                      {inner}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </MotionInView>
-        </section>
-
-        {/* ─── 7. STACK CONCURRENTS ───────────────────────── */}
-        <section className="max-w-5xl mx-auto px-4 sm:px-6 mb-20">
-          <MotionInView>
-            <div className="text-center mb-10">
-              <p className="text-sm font-semibold text-violet-600 mb-3">VS LA STACK TRADITIONNELLE</p>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-                1 outil au lieu de 5
-              </h2>
-              <p className="text-content-tertiary text-base max-w-xl mx-auto">
-                Volia One réunit les 5 modules (Prospection, Campagnes, CRM, Formulaires, Project) dans la même app — pour 3× moins cher.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              {/* Stack traditionnelle */}
-              <div className="p-6 rounded-2xl border border-line bg-surface-card">
-                <p className="text-xs font-semibold uppercase tracking-wider text-content-tertiary mb-4">
-                  Stack outbound typique
-                </p>
-                <div className="space-y-2.5 mb-4">
-                  {STACK_COMPETITORS.map((c) => (
-                    <div key={c.name} className="flex items-center justify-between text-sm">
-                      <span className="text-content-secondary">
-                        <strong className="text-content-primary">{c.name}</strong>
-                        <span className="text-content-tertiary text-xs ml-2">· {c.usage}</span>
-                      </span>
-                      <span className="text-content-secondary font-medium">{c.price} €/mo</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="border-t border-line pt-4 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-content-primary">Total mensuel</span>
-                  <span className="text-2xl font-bold text-content-primary">
-                    ~{competitorTotalMo} €<span className="text-sm font-normal text-content-tertiary">/mo</span>
-                  </span>
-                </div>
-                <p className="text-[11px] text-content-tertiary mt-2">5 outils silotés · 5 abonnements · 5 logins</p>
-              </div>
-
-              {/* Volia MAX — Volia One en Autopilot 24/7 + suite complète */}
-              <div className="p-6 rounded-2xl border border-violet-300 bg-gradient-to-br from-violet-50 via-violet-50/40 to-indigo-50 shadow-md">
-                <div className="flex items-center gap-2 mb-4">
-                  <Crown size={14} className="text-violet-600" />
-                  <p className="text-xs font-semibold uppercase tracking-wider text-violet-700">
-                    Volia MAX
-                  </p>
-                </div>
-                <div className="space-y-2.5 mb-4">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-content-secondary">
-                      <strong className="text-content-primary">Autopilot + Prospection</strong>
-                      <span className="text-content-tertiary text-xs ml-2">· 2 000 crédits/mo</span>
-                    </span>
-                    <Check size={14} className="text-emerald-500" />
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-content-secondary">
-                      <strong className="text-content-primary">Campagnes</strong>
-                      <span className="text-content-tertiary text-xs ml-2">· Cold email + warmup</span>
-                    </span>
-                    <Check size={14} className="text-emerald-500" />
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-content-secondary">
-                      <strong className="text-content-primary">CRM intégré</strong>
-                      <span className="text-content-tertiary text-xs ml-2">· Kanban + timeline</span>
-                    </span>
-                    <Check size={14} className="text-emerald-500" />
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-content-secondary">
-                      <strong className="text-content-primary">Email finder</strong>
-                      <span className="text-content-tertiary text-xs ml-2">· Vérif MillionVerifier</span>
-                    </span>
-                    <Check size={14} className="text-emerald-500" />
-                  </div>
-                </div>
-                <div className="border-t border-violet-200 pt-4 flex items-center justify-between">
-                  <span className="text-sm font-semibold text-content-primary">Total mensuel</span>
-                  <div className="text-right">
-                    <span className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                      179 €<span className="text-sm font-normal text-content-tertiary">/mo</span>
-                    </span>
-                    <div className="text-[11px] text-emerald-700 font-semibold mt-0.5">⚡ code MAX99 : 3 premiers mois à 99 €</div>
-                  </div>
-                </div>
-                <p className="text-[11px] text-emerald-700 font-semibold mt-2">
-                  Économie : ~{economyVsStack} €/mo (~{(economyVsStack * 12).toLocaleString('fr-FR')} €/an)
-                </p>
-              </div>
-            </div>
-          </MotionInView>
-        </section>
-
-        {/* ─── 8. FAQ PRICING ──────────────────────────────── */}
+        {/* ─── 5. FAQ TARIFAIRE (8 Q/R) ───────────────────────── */}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 mb-20" id="faq">
           <MotionInView>
             <div className="text-center mb-10">
               <p className="text-sm font-semibold text-violet-600 mb-3">FAQ TARIFICATION</p>
-              <h2 className="text-3xl sm:text-4xl font-bold mb-3">
-                Vos questions, nos réponses
-              </h2>
-              <p className="text-content-tertiary text-base">
-                Tout ce qu&apos;il faut savoir avant de souscrire.
-              </p>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-3">Vos questions, nos réponses</h2>
             </div>
 
             <div className="space-y-3">
@@ -909,83 +544,67 @@ export default function PricingContent() {
                 const panelId = `pricing-faq-panel-${idx}`;
                 const buttonId = `pricing-faq-button-${idx}`;
                 return (
-                <div
-                  key={idx}
-                  className="rounded-xl border border-line bg-surface-card overflow-hidden transition-colors hover:border-line-hover"
-                >
-                  <button
-                    type="button"
-                    id={buttonId}
-                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    aria-expanded={isOpen}
-                    aria-controls={panelId}
-                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-inset"
-                  >
-                    <span className="text-sm font-medium text-content-primary">{item.q}</span>
-                    <ChevronDown
-                      size={16}
-                      aria-hidden="true"
-                      className={`text-content-tertiary flex-shrink-0 transition-transform duration-300 ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
                   <div
-                    id={panelId}
-                    role="region"
-                    aria-labelledby={buttonId}
-                    hidden={!isOpen}
-                    className={`overflow-hidden transition-all duration-300 ${
-                      isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
+                    key={idx}
+                    className="rounded-xl border border-line bg-surface-card overflow-hidden transition-colors hover:border-line-hover"
                   >
-                    <div className="px-5 pb-4 pt-0">
-                      <p className="text-sm text-content-secondary leading-relaxed">{item.a}</p>
+                    <button
+                      type="button"
+                      id={buttonId}
+                      onClick={() => setOpenFaq(isOpen ? null : idx)}
+                      aria-expanded={isOpen}
+                      aria-controls={panelId}
+                      className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 focus-visible:ring-inset"
+                    >
+                      <span className="text-sm font-medium text-content-primary">{item.q}</span>
+                      <ChevronDown
+                        size={16}
+                        aria-hidden="true"
+                        className={`text-content-tertiary flex-shrink-0 transition-transform duration-300 ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
+                      hidden={!isOpen}
+                      className={`overflow-hidden transition-all duration-300 ${
+                        isOpen ? 'max-h-[32rem] opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <div className="px-5 pb-4 pt-0">
+                        <p className="text-sm text-content-secondary leading-relaxed">{item.a}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
                 );
               })}
             </div>
           </MotionInView>
         </section>
 
-        {/* ─── 9. CTA FINAL ────────────────────────────────── */}
+        {/* ─── 6. CTA FINAL (seul ✈️ de la page) ──────────────── */}
         <section className="max-w-4xl mx-auto px-4 sm:px-6">
           <MotionInView>
             <div className="rounded-3xl bg-gradient-to-br from-violet-600 via-violet-700 to-indigo-700 p-10 sm:p-14 text-center text-white shadow-2xl shadow-violet-500/20">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4 leading-tight">
-                Démarrez gratuitement.<br />Sans carte bancaire.
+              <h2 className="text-3xl sm:text-4xl font-bold mb-6 leading-tight">
+                Encore un doute ? Tant mieux.
               </h2>
-              <p className="text-violet-100 text-base sm:text-lg mb-8 max-w-xl mx-auto">
-                La suite est gratuite — Campagnes, CRM, Formulaires &amp; Project inclus. Code <strong className="text-white">MAX99</strong> : MAX à 99 €/mois les 3 premiers mois.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-                <Link
-                  href="/signup"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg w-full sm:w-auto"
-                >
-                  Démarrer gratuitement <ArrowRight size={14} />
-                </Link>
-                <Link
-                  href="/#try-live"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/30 text-white text-sm font-semibold hover:bg-white/10 transition w-full sm:w-auto"
-                >
-                  Voir une démo en direct
-                </Link>
-                <BookDemoButton
-                  label="Réserver 15 min avec le founder"
-                  variant="dark"
-                  size="md"
-                  source="pricing_final_cta"
-                  className="w-full sm:w-auto"
-                />
+              <div className="text-violet-100 text-base sm:text-lg mb-8 max-w-xl mx-auto space-y-2">
+                <p>Le doute, ça se règle avec une preuve, pas avec une page de vente.</p>
+                <p>Tape ton domaine. 30 secondes, 0 €, tes vrais leads.</p>
+                <p>Si Volia ne trouve rien sur ton secteur, tu le sauras sans payer.</p>
+                <p>Si ton pipeline décolle, tu sauras pourquoi. ✈️</p>
               </div>
-              <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-violet-100">
-                <span className="flex items-center gap-1.5"><Check size={11} /> Sans CB</span>
-                <span className="flex items-center gap-1.5"><Check size={11} /> Annulation 1 clic</span>
-                <span className="flex items-center gap-1.5"><Check size={11} /> RGPD France</span>
-              </div>
+              <Link
+                href="/one"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-violet-700 text-sm font-semibold hover:bg-violet-50 transition shadow-lg"
+              >
+                Tape ton domaine — 0 € <ArrowRight size={14} />
+              </Link>
+              <p className="text-xs text-violet-100 mt-4">Le piège n’est toujours pas là.</p>
             </div>
           </MotionInView>
         </section>
@@ -993,29 +612,5 @@ export default function PricingContent() {
 
       <ReaderFooter />
     </div>
-  );
-}
-
-// ─── Sous-composant : section comparatif (header + rows) ─────────
-function ComparisonSection({ section, renderCell }) {
-  return (
-    <>
-      <tr className="bg-violet-50/40">
-        <td colSpan={4} className="px-5 py-3 text-xs font-bold uppercase tracking-wider text-violet-700">
-          {section.title}
-        </td>
-      </tr>
-      {section.rows.map((row, idx) => (
-        <tr
-          key={row[0]}
-          className={`border-b border-line/60 ${idx % 2 === 1 ? 'bg-surface-elevated/30' : ''}`}
-        >
-          <td className="px-5 py-3 text-sm text-content-secondary">{row[0]}</td>
-          {row.slice(1).map((cell, i) => (
-            <td key={i} className="px-3 py-3 text-center">{renderCell(cell)}</td>
-          ))}
-        </tr>
-      ))}
-    </>
   );
 }

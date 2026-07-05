@@ -33,8 +33,39 @@ const statusBadge = {
 };
 const FEED_ORDER = ['pending', 'sent', 'delivered', 'opened', 'clicked', 'replied', 'bounced', 'failed'];
 
+// ─── FAQ /one — 6 Q/R (doc copy §9) ──────────────────────────────────
+// Accordéon local (état simple), distinct de <FAQSection> qui sert la FAQ
+// générale (FAQ_ITEMS). Ces 6 Q/R sont spécifiques à Volia One.
+const FAQ_ONE = [
+  {
+    q: 'C’est légal, ce scraping ?',
+    a: 'Oui. La prospection B2B est légale en France, sur la base de l’intérêt légitime. Volia est construit pour rester dans les clous : données professionnelles uniquement, filtre automatique des emails personnels, page d’opt-out publique, DPA téléchargeable. On ne joue pas avec ça.',
+  },
+  {
+    q: 'Ça marche vraiment ?',
+    a: 'On ne répond pas avec des témoignages. On répond avec tes données : tape ton domaine, regarde ce qui sort. Chaque email affiche sa source. Un email court, personnalisé, signé de toi reste le canal le moins cher pour ouvrir une conversation B2B. Et si ta niche est trop étroite, tu le verras sans payer.',
+  },
+  {
+    q: '19 €/mois, où est le piège ?',
+    a: 'Pas de piège : 500 crédits, sans engagement, annulable en 2 clics. On est moins cher parce qu’on vend en volume à des TPE, pas des licences à des grands comptes. Le plan gratuit existe pour vérifier avant de payer.',
+  },
+  {
+    q: '179 €/mois, c’est cher.',
+    a: 'C’est le prix d’un outil qui prospecte 24/7 selon tes règles. Compare à l’équivalent en stack US — Apollo + Lemlist + intégrations — ou à une demi-journée de commercial. MAX99 te donne 3 mois à 99 € pour juger sur pièces.',
+  },
+  {
+    q: 'Mes emails vont finir en spam.',
+    a: 'Personne d’honnête ne te garantit l’inbox. Ce qu’on fait : warmup progressif, envoi depuis ton domaine, volumes plafonnés, désinscription propre. Les bonnes pratiques par défaut, pas en option.',
+  },
+  {
+    q: 'J’ai déjà un CRM.',
+    a: 'Parfait, garde-le. Le CRM Volia est inclus, pas imposé. Export CSV et format Zoho en un clic.',
+  },
+];
+
 function OneInner() {
   const autoRan = useRef(false);
+  const [faqOpen, setFaqOpen] = useState(-1);
 
   const [domain, setDomain] = useState('');
   const [loading, setLoading] = useState(false);
@@ -219,21 +250,43 @@ function OneInner() {
 
       <main className="flex-1 pt-24 pb-12 px-4">
         <div className="max-w-4xl mx-auto">
+        {/* ─── Hero — variante 1 « sobre » (défaut SEO) ───────────────── */}
+        {/* Copy source : audit-prive/copy-one-pricing-volia.md §Hero.        */}
+        {/* A/B — variantes prêtes à swapper (H1 + sous-titre + libellé CTA) :*/}
+        {/*                                                                   */}
+        {/* VARIANTE 2 — medium (la signature) :                             */}
+        {/*   H1 : Tape ton domaine. Ton pipeline se remplit.               */}
+        {/*   Sous-titre : Volia One trouve tes prospects — email et         */}
+        {/*   téléphone —, écrit tes cold emails, les envoie et range les    */}
+        {/*   réponses dans ton CRM. Toi, tu signes.                        */}
+        {/*   CTA : Voir mes prospects · 0 €. Aucune carte bancaire.        */}
+        {/*   Tu regardes, tu décides.                                      */}
+        {/*                                                                   */}
+        {/* VARIANTE 3 — audacieuse (trafic pub froid) :                    */}
+        {/*   H1 : « Encore un outil de prospection. »                      */}
+        {/*   Sous-titre : On connaît le soupir. Alors on a mis la preuve    */}
+        {/*   avant le discours. Tape ton domaine, regarde ce qui sort. Si   */}
+        {/*   c’est nul, tu fermes l’onglet.                                */}
+        {/*   CTA : Voir avant de croire · Gratuit. Anonyme. Aucune          */}
+        {/*   inscription pour l’aperçu.                                    */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 text-violet-600 text-xs font-medium mb-4">
             Volia One
           </div>
-          <h1 className="font-display text-3xl sm:text-4xl font-bold text-content-primary mb-2">
-            Entre ton domaine
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-content-primary mb-3">
+            La prospection B2B, en un clic.
           </h1>
-          <p className="text-content-secondary">Je trouve à qui vendre, et je rédige le 1er email. Gratuit.</p>
+          <p className="text-content-secondary max-w-2xl mx-auto">
+            Tape ton domaine. Volia analyse ton activité et trouve des prospects joignables : email, téléphone, score de confiance. L&apos;IA rédige tes premiers cold emails. Toi, tu valides et tu signes.
+          </p>
         </div>
 
         <form onSubmit={run} className="flex gap-2 max-w-xl mx-auto mb-2">
           <input
+            id="one-domain-top"
             value={domain}
             onChange={(e) => setDomain(e.target.value)}
-            placeholder="agence-web-bordeaux.fr"
+            placeholder="tonentreprise.fr"
             className="flex-1 rounded-xl border border-line bg-surface-card px-4 py-3 text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-violet-500"
           />
           <button
@@ -241,11 +294,15 @@ function OneInner() {
             disabled={loading || !domain.trim()}
             className="rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-semibold px-6 py-3 transition-colors"
           >
-            {loading ? 'Analyse…' : 'Lancer'}
+            {loading ? 'Analyse…' : 'Voir mes prospects'}
           </button>
         </form>
+        {/* Microcopy sous le champ — OBLIGATOIRE (doc §Hero) */}
+        <p className="text-center text-xs text-content-tertiary mb-1">
+          Gratuit. Sans carte. 30 secondes.
+        </p>
         <p className="text-center text-xs text-content-tertiary mb-8">
-          ~20-40s : scrape du site, déduction ICP, recherche Places, enrichissement, rédaction.
+          Essai anonyme : résultats partiellement masqués. Compte gratuit (0 €) pour tout voir.
         </p>
 
         {/* Analyses persistées — rouvrir sans relancer (donc sans re-consommer de crédits) */}
@@ -508,6 +565,339 @@ function OneInner() {
             </div>
           </div>
         )}
+
+        {/* ═══════════════════════════════════════════════════════════════
+            SECTIONS STATIQUES — copy source : copy-one-pricing-volia.md
+            Ordre du doc : 2 anti-freins · 3 mécanisme (01→04) · 4 scoring
+            · 5 ce que ça remplace · 6 ce que One ne fait pas · 7 pont
+            compte gratuit · 8 prix 3 intensités · 9 FAQ · 10 RGPD · 11 CTA.
+            ═══════════════════════════════════════════════════════════════ */}
+
+        {/* ─── 2. Bandeau « avant que tu demandes » ───────────────────── */}
+        <div className="max-w-3xl mx-auto mt-20 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-line bg-surface-card p-4">
+            <p className="text-sm font-semibold text-content-primary mb-1">C&apos;est légal ?</p>
+            <p className="text-sm text-content-secondary">Oui — prospection B2B, données professionnelles uniquement. Détails plus bas.</p>
+          </div>
+          <div className="rounded-xl border border-line bg-surface-card p-4">
+            <p className="text-sm font-semibold text-content-primary mb-1">C&apos;est gratuit ?</p>
+            <p className="text-sm text-content-secondary">Oui — 0 € pour voir tes leads. Le prix complet est affiché plus bas, sur cette page.</p>
+          </div>
+          <div className="rounded-xl border border-line bg-surface-card p-4">
+            <p className="text-sm font-semibold text-content-primary mb-1">C&apos;est un robot qui écrit à ma place ?</p>
+            <p className="text-sm text-content-secondary">Non — l&apos;IA rédige, toi tu valides. C&apos;est ton nom en bas.</p>
+          </div>
+        </div>
+
+        {/* ─── 3. Ce qui se passe quand tu appuies sur Entrée ─────────── */}
+        <section className="max-w-3xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-2">
+            Ce qui se passe quand tu appuies sur Entrée
+          </h2>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mb-8">
+            Pas de démo à réserver. Pas de commercial à rappeler. La démo, c&apos;est ton domaine.
+          </p>
+          <div className="space-y-4">
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">01 — One lit ton site.</p>
+              <p className="text-sm text-content-secondary">Il comprend ce que tu vends, et à qui. Pas de formulaire à remplir : ton domaine contient déjà la réponse.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">02 — One trouve tes prospects.</p>
+              <p className="text-sm text-content-secondary">101 départements, 150+ catégories. Pour chaque prospect, une cascade de sources : son site web, puis une recherche Google, puis les formats d&apos;adresse classiques. Chaque fiche sort avec un email, un téléphone et un score de confiance.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">03 — One écrit tes brouillons.</p>
+              <p className="text-sm text-content-secondary">Un cold email par prospect, court, rédigé à partir de TON activité. Tu relis. Tu modifies. Tu valides. Rien ne part sans ta signature.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">04 — One envoie et range.</p>
+              <p className="text-sm text-content-secondary">L&apos;email part de ton domaine, après warmup progressif. Une réponse ? Le contact est créé automatiquement dans le CRM. Ta prochaine action est déjà au chaud.</p>
+            </div>
+          </div>
+          <p className="text-center text-sm font-medium text-content-primary mt-6">
+            Trouvé → écrit → envoyé → répondu → dans ton CRM. Un seul login.
+          </p>
+          <div className="text-center mt-4">
+            <button
+              type="button"
+              onClick={() => { document.getElementById('one-domain-top')?.focus(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="text-sm font-medium text-violet-600 hover:underline"
+            >
+              Voir avec mon domaine
+            </button>
+          </div>
+        </section>
+
+        {/* ─── 4. Chaque email a une origine. On te la montre. ────────── */}
+        <section className="max-w-3xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-3">
+            Chaque email a une origine. On te la montre.
+          </h2>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mb-2">
+            Aucun outil ne trouve un email fiable pour 100 % des prospects. Nous, on affiche d&apos;où vient chaque adresse.
+          </p>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mb-8">
+            La cascade cherche dans l&apos;ordre. Elle s&apos;arrête dès qu&apos;un email est trouvé. Le score te dit où elle s&apos;est arrêtée.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                <span className="text-sm font-semibold text-content-primary">Vérifié</span>
+              </div>
+              <p className="text-sm text-content-secondary">L&apos;email est écrit sur le site du prospect. On l&apos;a lu, pas deviné. Le plus solide.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" aria-hidden="true" />
+                <span className="text-sm font-semibold text-content-primary">Google</span>
+              </div>
+              <p className="text-sm text-content-secondary">L&apos;email apparaît dans une recherche Google. La source est consultable. Vérifie avant un envoi sensible.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true" />
+                <span className="text-sm font-semibold text-content-primary">Probable</span>
+              </div>
+              <p className="text-sm text-content-secondary">Aucune trace publique. On teste les formats classiques : contact@, prenom.nom@. Et on te le marque.</p>
+            </div>
+          </div>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mt-6">
+            « Probable » veut dire probable. On préfère l&apos;écrire que te le cacher. Tu filtres par score avant d&apos;envoyer.
+          </p>
+        </section>
+
+        {/* ─── 5. Ce que ça remplace ──────────────────────────────────── */}
+        <section className="max-w-3xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
+            Ce que ça remplace
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">Des prospects joignables. Vraiment.</p>
+              <p className="text-sm text-content-secondary">Email et téléphone sur chaque fiche, quand ils existent. Le téléphone, la plupart des outils US ne le fournissent pas sur la France. Toi, tu peux décrocher.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">Une seule chaîne, du clic au rendez-vous.</p>
+              <p className="text-sm text-content-secondary">Fini le Frankenstein Apollo + Lemlist + Zapier + Notion. 5 modules branchés entre eux : Prospection, Campagnes, CRM, Formulaires, Project. Une réponse crée le contact toute seule.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">En français, dans les règles.</p>
+              <p className="text-sm text-content-secondary">Interface en français, données françaises, prix en euros. Filtre automatique des emails personnels. Opt-out public. DPA téléchargeable.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── 6. Ce que One ne fait pas (bloc NOUVEAU) ───────────────── */}
+        <section className="max-w-3xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
+            Ce que One ne fait pas
+          </h2>
+          <ul className="space-y-4">
+            <li className="rounded-xl border border-line bg-surface-card p-5">
+              <span className="text-sm font-semibold text-content-primary">Il n&apos;envoie rien sans ta validation.</span>{' '}
+              <span className="text-sm text-content-secondary">L&apos;IA rédige, tu signes. C&apos;est ton nom en bas.</span>
+            </li>
+            <li className="rounded-xl border border-line bg-surface-card p-5">
+              <span className="text-sm font-semibold text-content-primary">Il ne garantit pas de résultats.</span>{' '}
+              <span className="text-sm text-content-secondary">Il te donne des prospects joignables et des brouillons prêts. La vente, c&apos;est toi.</span>
+            </li>
+            <li className="rounded-xl border border-line bg-surface-card p-5">
+              <span className="text-sm font-semibold text-content-primary">Il ne promet pas l&apos;inbox.</span>{' '}
+              <span className="text-sm text-content-secondary">Personne d&apos;honnête ne le fait. Ce qu&apos;on fait : warmup progressif, envoi depuis ton domaine, volumes plafonnés, désinscription propre.</span>
+            </li>
+            <li className="rounded-xl border border-line bg-surface-card p-5">
+              <span className="text-sm font-semibold text-content-primary">Il ne trouve pas tout.</span>{' '}
+              <span className="text-sm text-content-secondary">Sur une niche très étroite, les résultats peuvent être minces. Tu le verras en gratuit, avant de payer.</span>
+            </li>
+            <li className="rounded-xl border border-line bg-surface-card p-5">
+              <span className="text-sm font-semibold text-content-primary">Il ne décide pas à ta place.</span>{' '}
+              <span className="text-sm text-content-secondary">Même l&apos;Autopilot suit tes règles : ton ton, tes secteurs, tes exclusions, tes plafonds.</span>
+            </li>
+          </ul>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mt-6">
+            Si tu cherches un outil qui « fait tout à ta place », ce n&apos;est pas ici.
+          </p>
+          <p className="text-content-primary text-center max-w-2xl mx-auto mt-1 font-medium">
+            Si tu cherches un outil qui fait le travail ingrat pour que tu signes, tape ton domaine.
+          </p>
+        </section>
+
+        {/* ─── 7. L'essai est anonyme. Le compte est gratuit. ─────────── */}
+        <section className="max-w-2xl mx-auto mt-20 rounded-2xl border border-line bg-surface-card p-6 sm:p-8">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary mb-4">
+            L&apos;essai est anonyme. Le compte est gratuit.
+          </h2>
+          <p className="text-sm text-content-secondary mb-4">
+            Sans compte : tu tapes ton domaine, tes prospects s&apos;affichent, partiellement masqués.
+          </p>
+          <p className="text-sm text-content-secondary mb-2">
+            Avec un compte gratuit — 0 €, sans carte bancaire :
+          </p>
+          <ul className="space-y-1.5 mb-4 text-sm text-content-secondary">
+            <li className="flex gap-2"><span className="text-violet-600" aria-hidden="true">·</span> tes leads et leurs emails, complets ;</li>
+            <li className="flex gap-2"><span className="text-violet-600" aria-hidden="true">·</span> 25 crédits Prospection ;</li>
+            <li className="flex gap-2"><span className="text-violet-600" aria-hidden="true">·</span> l&apos;accès aux 5 modules, avec quotas.</li>
+          </ul>
+          <p className="text-sm text-content-secondary mb-5">
+            Tu paies quand tu veux prospecter en volume. Pas avant.
+          </p>
+          <a
+            href="/signup"
+            className="inline-flex items-center justify-center rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-3 transition-colors"
+          >
+            Créer mon compte gratuit
+          </a>
+        </section>
+
+        {/* ─── 8. Trois intensités. Un seul produit. ──────────────────── */}
+        <section className="max-w-4xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
+            Trois intensités. Un seul produit.
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* Gratuit */}
+            <div className="rounded-2xl border border-line bg-surface-card p-6 flex flex-col">
+              <p className="text-sm font-semibold text-content-primary">Gratuit</p>
+              <p className="font-display text-2xl font-bold text-content-primary mt-1 mb-3">0 €</p>
+              <p className="text-sm text-content-secondary flex-1">
+                Tape ton domaine, débloque tes leads et emails complets. 25 crédits Prospection. Les 5 modules, avec quotas. Pour voir avant de croire.
+              </p>
+              <a
+                href="/signup"
+                className="mt-5 inline-flex items-center justify-center rounded-xl border border-line hover:bg-surface-elevated text-content-primary font-semibold px-5 py-2.5 transition-colors"
+              >
+                Commencer gratuitement
+              </a>
+            </div>
+            {/* Prospection */}
+            <div className="rounded-2xl border border-line bg-surface-card p-6 flex flex-col">
+              <p className="text-sm font-semibold text-content-primary">Prospection</p>
+              <p className="font-display text-2xl font-bold text-content-primary mt-1 mb-3">19 €/mois</p>
+              <p className="text-sm text-content-secondary flex-1">
+                One en solo. 500 crédits par mois. Sans engagement, annulable en 2 clics. Moins cher que ton forfait mobile.
+              </p>
+              <a
+                href="/pricing"
+                className="mt-5 inline-flex items-center justify-center rounded-xl border border-line hover:bg-surface-elevated text-content-primary font-semibold px-5 py-2.5 transition-colors"
+              >
+                Passer à 19 €/mois
+              </a>
+            </div>
+            {/* MAX */}
+            <div className="rounded-2xl border-2 border-violet-500 bg-surface-card p-6 flex flex-col">
+              <p className="text-sm font-semibold text-violet-600">MAX</p>
+              <p className="font-display text-2xl font-bold text-content-primary mt-1 mb-3">179 €/mois</p>
+              <p className="text-sm text-content-secondary flex-1">
+                One en pilote automatique, 24/7, selon TES règles — ton ton, tes secteurs, tes exclusions, tes plafonds. 2 000 crédits par mois. Toute la suite.
+              </p>
+              <a
+                href="/pricing"
+                className="mt-5 inline-flex items-center justify-center rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold px-5 py-2.5 transition-colors"
+              >
+                Activer Autopilot
+              </a>
+              <p className="text-xs text-content-tertiary mt-3">
+                Code MAX99 — 3 premiers mois à 99 € au lieu de 179 €.
+              </p>
+            </div>
+          </div>
+          <p className="text-center text-sm text-content-secondary mt-6">
+            Besoin ponctuel de volume ? Des packs de crédits existent, sans abonnement.
+          </p>
+          <p className="text-center text-xs text-content-tertiary mt-2">
+            Aucun prix barré artificiel. Aucun « à partir de ». Ce que tu lis est ce que tu paies.
+          </p>
+        </section>
+
+        {/* ─── 9. FAQ — 6 Q/R (accordéon) ─────────────────────────────── */}
+        <section className="max-w-2xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
+            Les questions qu&apos;on nous pose vraiment
+          </h2>
+          <ul className="space-y-2">
+            {FAQ_ONE.map((item, i) => {
+              const isOpen = faqOpen === i;
+              return (
+                <li key={i} className="rounded-xl border border-line bg-surface-card overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setFaqOpen(isOpen ? -1 : i)}
+                    aria-expanded={isOpen}
+                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
+                  >
+                    <span className="text-sm font-semibold text-content-primary">{item.q}</span>
+                    <span className={`text-content-tertiary transition-transform ${isOpen ? 'rotate-180' : ''}`} aria-hidden="true">▾</span>
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-4">
+                      <p className="text-sm text-content-secondary leading-relaxed">{item.a}</p>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        {/* ─── 10. RGPD par construction. Pas en option. ──────────────── */}
+        <section className="max-w-3xl mx-auto mt-20">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
+            RGPD par construction. Pas en option.
+          </h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">Filtre automatique.</p>
+              <p className="text-sm text-content-secondary">Les emails personnels (@gmail et compagnie) n&apos;entrent jamais dans tes listes. Le B2B reste du B2B.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">Opt-out public.</p>
+              <p className="text-sm text-content-secondary">Un prospect veut sortir ? Une page, un clic, c&apos;est fait. Définitivement.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">DPA téléchargeable.</p>
+              <p className="text-sm text-content-secondary">Ton juriste veut lire ? Il peut. Tout est écrit.</p>
+            </div>
+          </div>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mt-6">
+            Tu restes responsable de tes envois. On te donne un outil propre pour le rester. Et prospecter dans les règles, c&apos;est aussi mieux prospecter — les boîtes mail le savent.
+          </p>
+        </section>
+
+        {/* ─── 11. CTA final — seul ✈️ de la page ─────────────────────── */}
+        <section className="max-w-2xl mx-auto mt-20 mb-4 text-center rounded-2xl border border-line bg-surface-card p-6 sm:p-10">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary mb-4">
+            Tu doutes encore ? Parfait.
+          </h2>
+          <p className="text-sm text-content-secondary max-w-xl mx-auto mb-1">
+            On préfère un sceptique qui teste à un convaincu qui signe les yeux fermés.
+          </p>
+          <p className="text-sm text-content-secondary max-w-xl mx-auto mb-1">
+            Le test prend 30 secondes. Il ne coûte rien. Il ne demande pas ta carte.
+          </p>
+          <p className="text-sm text-content-secondary max-w-xl mx-auto mb-6">
+            Tape ton domaine. Regarde ce qui sort. Décide.
+          </p>
+          <form onSubmit={run} className="flex gap-2 max-w-md mx-auto">
+            <input
+              value={domain}
+              onChange={(e) => setDomain(e.target.value)}
+              placeholder="tonentreprise.fr"
+              className="flex-1 rounded-xl border border-line bg-surface-base px-4 py-3 text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-violet-500"
+            />
+            <button
+              type="submit"
+              disabled={loading || !domain.trim()}
+              className="rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-semibold px-6 py-3 transition-colors"
+            >
+              {loading ? 'Analyse…' : 'Voir mes prospects'}
+            </button>
+          </form>
+          <p className="text-xs text-content-tertiary mt-3">
+            Ton pipeline est à un domaine de décoller. ✈️
+          </p>
+        </section>
         </div>
       </main>
 

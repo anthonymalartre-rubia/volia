@@ -111,56 +111,75 @@ const BREADCRUMB_JSON_LD = breadcrumbSchema([
   { label: 'Tarifs', href: '/pricing' },
 ]);
 
+// FAQPage — miroir des 8 Q/R rendues dans PricingContent (copy source :
+// audit-prive/copy-one-pricing-volia.md, « FAQ tarifaire »). À garder
+// synchronisé avec le tableau FAQ_PRICING du composant.
 const FAQ_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: [
     {
       '@type': 'Question',
-      name: 'Y a-t-il un plan gratuit ?',
+      name: '« Sans engagement », c\'est vraiment sans engagement ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui : un plan Gratuit à vie, sans carte bancaire, pour essayer Volia One. Vous accédez aux 5 modules (Prospection + Campagnes + CRM + Formulaires + Project) avec des limites : 25 crédits Prospection/mois, 1 séquence, 1 pipeline. Vous montez en intensité quand vous voulez (Prospection 19 €/mois en solo, ou MAX 179 €/mois en pilote automatique 24/7) — aucun prélèvement automatique.',
+        text: 'Oui. Abonnement mensuel, annulable en 2 clics depuis ton compte. Pas de préavis, pas d\'email à envoyer, personne à convaincre au téléphone. Tu gardes l\'accès jusqu\'à la fin du mois payé. Tu annules, ça s\'arrête. C\'est tout.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Puis-je changer de plan à tout moment ?',
+      name: 'Un crédit, c\'est quoi exactement ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui, l\'upgrade ou le downgrade se fait en 1 clic depuis les paramètres. Le pro-rata est calculé automatiquement.',
+        text: 'L\'unité qui paie le travail de recherche d\'un prospect : l\'entreprise, l\'email, le téléphone, le score de confiance. On cherche d\'abord sur leur site. Pas trouvé ? On fouille Google. Toujours rien ? On teste les formats classiques — et on te marque « Probable ». 25 crédits en Gratuit, 500 par mois en Prospection, 2 000 par mois en MAX.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Comment fonctionne la facturation annuelle ?',
+      name: 'Il me faut plus de crédits ce mois-ci. Je fais quoi ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'En annuel, vous payez moins et accédez à 12 mois. Prospection = 190 €/an au lieu de 228 € (2 mois offerts), MAX = 1 690 €/an au lieu de 2 148 €, soit 458 € économisés.',
+        text: 'Tu ajoutes un pack ponctuel. Paiement unique, pas un deuxième abonnement. Ton plan ne bouge pas, ton prix mensuel non plus. Le prix du pack est affiché au moment de l\'achat.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Le CRM est-il vraiment gratuit ?',
+      name: 'MAX99, où est l\'entourloupe ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Oui, dès le plan Gratuit : Kanban drag & drop, auto-création de deals depuis les replies, timeline 360°, activities (notes, calls, meetings). 1 pipeline en Gratuit/Prospection, illimité en MAX.',
+        text: 'Il n\'y en a pas, et voilà les termes complets : 3 premiers mois de MAX à 99 € au lieu de 179 €. Au 4e mois, 179 €/mois, le prix normal. Tu peux annuler avant, pendant, après — en 2 clics. On te le dit ici pour que tu ne le découvres jamais sur une facture.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Comment annuler mon abonnement ?',
+      name: 'Prospection ou MAX : la vraie différence ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Depuis vos paramètres > Plan, en 1 clic via le portail Stripe. L\'accès reste actif jusqu\'à la fin de la période payée.',
+        text: 'Le pilote. Avec Prospection, tu lances One quand tu veux : il trouve, il rédige, tu valides. Avec MAX, l\'Autopilot fait tourner One 24/7 selon tes règles — ton, secteurs, exclusions, plafonds. Plus 2 000 crédits au lieu de 500, et toute la suite. Si tu as le temps de piloter chaque semaine, Prospection te suffit. On te le dit franchement.',
       },
     },
     {
       '@type': 'Question',
-      name: 'Y a-t-il des frais cachés ?',
+      name: 'Et si le gratuit me suffit ?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Aucun. Le prix affiché TTC est le seul prélèvement. Pas de frais de mise en route, pas de surcharge à l\'export.',
+        text: 'Alors reste gratuit, sans culpabilité. Ce plan n\'est pas un appât, c\'est notre argument commercial : voir avant de croire. Le jour où tes 25 crédits ne suffisent plus, tu sauras exactement pourquoi tu passes à 19 €/mois. Et si ce jour n\'arrive pas, tu n\'auras rien payé pour l\'apprendre.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Comment je paie ? Comment j\'annule ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Carte bancaire, paiement sécurisé par Stripe — on ne voit jamais ton numéro. Tes factures sont dans ton espace. Pour annuler : ton compte, 2 clics, à tout moment. Tu changes de plan dans les deux sens, quand tu veux. Pas de rétention déguisée, pas de « appelez-nous pour résilier ».',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Et le RGPD, concrètement ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'La prospection B2B est légale en France (base : intérêt légitime). Volia est construit pour rester dans les clous : données professionnelles uniquement, filtre automatique des emails personnels, page d\'opt-out publique, DPA téléchargeable. Ton juriste veut vérifier ? Le DPA se télécharge, il n\'y a rien à nous demander. Quel que soit ton plan.',
       },
     },
   ],

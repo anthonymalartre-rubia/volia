@@ -1786,3 +1786,575 @@ export function teamInvitationEmail({
     }),
   };
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// SÉQUENCES LIFECYCLE VOLIA (A1-A5 · B1-B3 · C1-C3 · D)
+// ═══════════════════════════════════════════════════════════════════
+//
+// Copy issue VERBATIM de audit-prive/sequences-lifecycle-volia.md (v1.0),
+// conforme à la Bible de marque (tutoiement, « 19 €/mois » avec espace,
+// ✈️ signature, lexique). Signature « Anthony, fondateur de Volia ».
+//
+// {{prenom}} → paramètre `userName` (fallback sans prénom : « Salut, »),
+// même convention que les autres templates du fichier.
+//
+// Objet de chaque fonction = variante (a) du doc ; les variantes (b)/(c)
+// sont conservées en commentaire au-dessus de chaque template pour l'A/B.
+//
+// CÂBLAGE (cf. rapport d'intégration) :
+//   - A3  → nouveau step drip J+4 (process-drip-emails), condition
+//           « ≥1 email trouvé, 0 campagne ».
+//   - B1  → remplace le corps générique du seuil 100 % dans usage.js
+//           quand le compteur = crédits/enrichissements d'un plan gratuit.
+//   - D   → trigger event-driven dans lifecycle-triggers (modèle enrich_nudge).
+//   - A1/A2/A4/A5, B2/B3, C1/C2/C3 → templates seuls (non câblés, cf. rapport).
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * Salutation d'ouverture lifecycle. Le doc ouvre sur « Salut {{prenom}}, »
+ * avec fallback « Salut, » quand le prénom est absent.
+ */
+function lifecycleGreeting(name) {
+  return name ? `Salut ${name},` : 'Salut,';
+}
+
+/**
+ * Signature de bas d'email des séquences lifecycle : « Anthony, fondateur
+ * de Volia ». Le doc signe parfois « Anthony » seul (A2, A3, A4, B1…) ;
+ * on garde la signature complète partout pour l'ancrage de marque, sauf
+ * quand le corps signe déjà autrement (aucun cas ici).
+ */
+function signOffAnthony() {
+  return `<p style="margin:32px 0 0;font-size:14px;color:${COLORS.text};line-height:1.5;border-top:1px solid ${COLORS.border};padding-top:24px;">
+    <strong>Anthony</strong><br />
+    <span style="color:${COLORS.textMuted};font-size:13px;">fondateur de Volia</span>
+  </p>`;
+}
+
+// ─── SÉQUENCE A — Activation post-signup (5 emails / 14 jours) ────────
+
+/**
+ * A1 — Le premier clic (H+2 après signup, si 0 recherche).
+ * Objet (a). Variantes A/B :
+ *   b. {{prenom}}, ton pipeline est vide. Réparons ça.
+ *   c. Le test le plus rapide de ta semaine
+ * NON CÂBLÉ : H+2 non exprimable dans le drip journalier + collision avec
+ * stuck-user-detection (48h) et use_case_d1 (J+1). Template seul.
+ */
+export function lifecycleA1Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/one', 'lifecycle_a1');
+  return {
+    subject: '30 secondes pour voir tes futurs clients',
+    html: layout({
+      preheader: 'Tape ton domaine. Regarde. C\'est tout.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Le premier clic',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Tu t'es inscrit sur Volia. Bien.<br/>
+          Mais ton pipeline est encore vide.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Le test prend 30 secondes : tape ton domaine, et regarde qui sont tes futurs clients.<br/>
+          Email, téléphone, score de confiance. Le vrai résultat, pas une démo.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Pas de carte bleue. Pas de tuto.
+        </p>
+
+        <div align="center">${ctaPrimary('Lancer ma recherche', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * A2 — Lire le scoring (J+1, si recherche faite, peu/pas d'enrichissement).
+ * Objet (a). Variante A/B :
+ *   b. Tes leads ont un score. Voilà comment le lire.
+ * NON CÂBLÉ : collision de jour + d'intention avec use_case_d1 (J+1). Template seul.
+ */
+export function lifecycleA2Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/dashboard', 'lifecycle_a2');
+  return {
+    subject: 'Vérifié, Google, Probable : lequel contacter en premier ?',
+    html: layout({
+      preheader: '30 secondes pour comprendre, des heures de gagnées.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Lire le scoring',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Tu as vu tes premiers leads. Maintenant, le mode d'emploi — il tient en 3 lignes :
+        </p>
+
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
+          <tr>
+            <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
+              <p style="margin:0 0 8px;font-size:14px;color:${COLORS.text};line-height:1.6;"><strong style="color:${COLORS.text};">Vérifié</strong> : l'email vient de leur site. Fonce.</p>
+              <p style="margin:0 0 8px;font-size:14px;color:${COLORS.text};line-height:1.6;"><strong style="color:${COLORS.text};">Google</strong> : trouvé dans une recherche publique. Fiable.</p>
+              <p style="margin:0;font-size:14px;color:${COLORS.text};line-height:1.6;"><strong style="color:${COLORS.text};">Probable</strong> : un format classique testé. On préfère te le dire.</p>
+            </td>
+          </tr>
+        </table>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Commence par les « Vérifié ». C'est du temps de prospection que tu ne perds pas.
+        </p>
+
+        <div align="center">${ctaPrimary('Trouver leurs emails', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * A3 — Premier cold email (J+4, si ≥1 email trouvé, 0 campagne).
+ * Objet (a). Variantes A/B :
+ *   b. Ils sont dans ta liste. Écris-leur.
+ *   c. L'email que tu n'as pas besoin d'écrire
+ * CÂBLÉ : step drip J+4 (process-drip-emails), condition ≥1 email trouvé & 0 campagne.
+ */
+export function lifecycleA3Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/app/campagnes', 'lifecycle_a3');
+  return {
+    subject: 'Ton premier cold email en 10 minutes',
+    html: layout({
+      preheader: 'L\'IA rédige le brouillon. Toi, tu signes.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Premier cold email',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Tu as des leads avec de vrais emails. Étape suivante : leur écrire.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Bonne nouvelle : tu n'as pas à partir d'une page blanche.<br/>
+          L'IA rédige un brouillon à partir de ton activité et de ton ton.<br/>
+          Tu relis, tu ajustes, tu valides. C'est ton nom en bas.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Premier envoi ? On chauffe ton domaine progressivement.<br/>
+          C'est un peu plus lent — mais tes emails arrivent en boîte de réception, pas en spam.
+        </p>
+
+        <div align="center">${ctaPrimary('Créer ma première campagne', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * A4 — Les réponses atterrissent (J+8, toujours inscrit).
+ * Objet (a). Variante A/B :
+ *   b. Le module que tu n'as pas encore ouvert
+ * NON CÂBLÉ : collision de jour + d'intention avec crossmodule_crm_d8 (J+8). Template seul.
+ */
+export function lifecycleA4Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/app/crm', 'lifecycle_a4');
+  return {
+    subject: 'Quand ils répondent, ça atterrit où ?',
+    html: layout({
+      preheader: 'Chaque réponse devient un contact. Automatiquement.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Les réponses atterrissent',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Petit truc que beaucoup ratent : quand un prospect répond à ton cold email, Volia crée le contact dans ton CRM. Tout seul.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Pas de copier-coller. Pas de tableur qui déborde.<br/>
+          Un pipeline visuel, tes relances, tes rendez-vous.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Et pendant que tu y es : les Formulaires et les Projets sont inclus aussi. À 0 €.
+        </p>
+
+        <div align="center">${ctaPrimary('Ouvrir mon CRM', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * A5 — La version sans frein (J+13, si plan = free).
+ * Objet (a). Variantes A/B :
+ *   b. 25 crédits, c'était l'échauffement
+ *   c. La version sans frein
+ * NON CÂBLÉ : collision d'intention avec upgrade_soft_d12 (J+12, nudge upgrade). Template seul.
+ */
+export function lifecycleA5Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/pricing', 'lifecycle_a5');
+  return {
+    subject: 'Ce que tu as fait en 2 semaines (et la suite)',
+    html: layout({
+      preheader: '500 crédits par mois. 19 €. Sans engagement.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'La version sans frein',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          En deux semaines, tu as vu ce que Volia fait avec 25 crédits.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Prospection, c'est le même outil, sans le frein :<br/>
+          <strong style="color:${COLORS.text};">500 crédits par mois. 19 €. Sans engagement.</strong>
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Franchement : si le gratuit te suffit, reste. On ne force personne.<br/>
+          Mais si tu veux prospecter chaque semaine — et pas juste une fois pour voir — 19 €, c'est le prix de deux cafés par semaine.
+        </p>
+
+        <div align="center">${ctaPrimary('Passer à Prospection — 19 €/mois', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+// ─── SÉQUENCE B — Upgrade triggers (3 emails) ────────────────────────
+
+/**
+ * B1 — Bon signe (immédiat, crédits à 0, plan free).
+ * Objet (a). Variantes A/B :
+ *   b. Tu prospectes plus vite que ton plan
+ *   c. Stop. Enfin… pause.
+ * CÂBLÉ : remplace le corps générique du seuil 100 % dans usage.js quand
+ * le compteur épuisé = crédits/enrichissements d'un plan gratuit.
+ */
+export function lifecycleB1Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/pricing', 'lifecycle_b1');
+  return {
+    subject: 'Tes 25 crédits sont partis. Bon signe.',
+    html: layout({
+      preheader: '500 crédits t\'attendent. 19 €/mois, sans engagement.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Bon signe',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Tu viens d'utiliser tes 25 crédits gratuits.<br/>
+          C'est le meilleur signal qu'on puisse recevoir : tu prospectes vraiment.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          La suite logique :<br/>
+          <strong style="color:${COLORS.text};">Prospection — 500 crédits par mois, 19 €, sans engagement.</strong><br/>
+          Tu annules en deux clics si ça ne te va plus.
+        </p>
+
+        <div align="center">${ctaPrimary('Débloquer 500 crédits', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * B2 — Fais le calcul (J+2 après B1, toujours free, pas de checkout).
+ * Objet (a). Variante A/B :
+ *   b. 19 €, combien de rendez-vous ?
+ * NON CÂBLÉ : « J+2 après B1 » exige un timestamp d'envoi B1 qui n'est pas
+ * stocké (drip_emails_sent ne garde que la présence de clé). Template seul.
+ */
+export function lifecycleB2Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/pricing', 'lifecycle_b2');
+  return {
+    subject: 'Fais le calcul avec moi',
+    html: layout({
+      preheader: 'Pas de promesse. Juste ton propre calcul.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Fais le calcul',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Je ne vais pas te promettre X clients par mois. Personne ne peut, et ceux qui le font te mentent.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Mais fais ce calcul :<br/>
+          prends ton panier moyen. Divise-le par 19.<br/>
+          C'est le nombre de mois d'abonnement qu'un <strong style="color:${COLORS.text};">seul</strong> client te rembourse.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          500 entreprises de ton secteur, email et téléphone inclus, chaque mois. Le reste, c'est ton métier.
+        </p>
+
+        <div align="center">${ctaPrimary('Débloquer 500 crédits', ctaUrl)}</div>
+
+        <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
+          PS — Besoin ponctuel plutôt que régulier ? Il existe aussi des packs de crédits, sans abonnement.
+        </p>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * B3 — MAX, sans bullshit (J+5 après B1, ou seul si usage ≥ 80 %).
+ * Objet (a). Variantes A/B :
+ *   b. Si tu ne veux plus y penser du tout
+ *   c. L'Autopilot, expliqué sans bullshit
+ * NON CÂBLÉ : « J+5 après B1 » exige un timestamp B1 non stocké ; le
+ * déclencheur « ≥ 80 % » chevaucherait le seuil 80 % de usage.js et
+ * l'existant power_user_max. Template seul.
+ */
+export function lifecycleB3Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/pricing', 'lifecycle_b3');
+  return {
+    subject: 'MAX n\'est pas pour tout le monde',
+    html: layout({
+      preheader: '179 €/mois. Voilà exactement ce que tu achètes.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'MAX, sans bullshit',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Parlons de MAX. Honnêtement.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          179 €/mois, ce n'est pas pour tout le monde.<br/>
+          C'est pour ceux qui veulent un flux régulier de prospects <strong style="color:${COLORS.text};">sans y consacrer leurs soirées</strong>.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Concrètement, l'Autopilot fait tourner Volia One 24/7, selon TES règles :<br/>
+          ton ton, tes secteurs, tes exclusions, tes plafonds. L'IA propose, tu gardes la main.<br/>
+          Avec 2 000 crédits par mois et toute la suite.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Et pour juger sur pièces : le code <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong> te fait les 3 premiers mois à 99 €.
+        </p>
+
+        <div align="center">${ctaPrimary('Voir MAX en détail', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+// ─── SÉQUENCE C — Win-back inactifs (3 emails / 14 jours) ─────────────
+
+/**
+ * C1 — Tes futurs clients sont toujours là (14 j d'inactivité, free jamais converti).
+ * Objet (a). Variantes A/B :
+ *   b. 30 secondes. Vraiment.
+ *   c. {{prenom}}, on reprend ?
+ * NON CÂBLÉ : « 14 j d'inactivité » (gap glissant) exige un signal de
+ * dernière activité absent du schéma (pas de last_active_at, usage_tracking
+ * agrégé par mois). reactivation.js cible les CHURNERS PAYANTS (autre
+ * audience) — ne pas réutiliser. Template seul.
+ */
+export function lifecycleC1Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/one', 'lifecycle_c1');
+  return {
+    subject: 'Tes futurs clients sont toujours là',
+    html: layout({
+      preheader: 'La prospection, c\'est facile à repousser. On sait.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Tes futurs clients sont toujours là',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          La prospection, c'est le truc qu'on repousse toujours à la semaine prochaine. On sait — c'est exactement pour ça qu'on a construit Volia.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Ton compte est toujours là. Tes crédits gratuits aussi.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Une recherche prend 30 secondes. Littéralement.
+        </p>
+
+        <div align="center">${ctaPrimary('Relancer ma recherche', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * C2 — Je le fais pour toi ? (J+7 après C1, toujours inactif).
+ * Objet (a). Variante A/B :
+ *   b. Réponds juste « go »
+ * CTA = réponse directe à l'email (pas de bouton). NON CÂBLÉ (dépend de C1). Template seul.
+ */
+export function lifecycleC2Email(userName) {
+  const name = userName || null;
+  return {
+    subject: 'Je le fais pour toi ?',
+    html: layout({
+      preheader: 'Une vraie proposition, d\'un vrai humain.',
+      accent: COLORS.brand,
+      content: `
+        ${hero({
+          title: 'Je le fais pour toi ?',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Anthony ici — le fondateur, pas un robot.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Proposition simple : si tu n'as pas le temps, <strong style="color:${COLORS.text};">réponds « go » à cet email</strong>.<br/>
+          Je lance moi-même la recherche sur ton secteur et je t'envoie ce que je trouve.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Ça ne t'engage à rien. Au pire, tu auras une liste de prospects gratuite.
+        </p>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+/**
+ * C3 — Dernier email (promis) (J+14 après C1, toujours inactif).
+ * Objet (a). Variante A/B :
+ *   b. On arrête de t'écrire
+ * Sortie : fin de toute communication lifecycle. NON CÂBLÉ (dépend de C1). Template seul.
+ */
+export function lifecycleC3Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/login', 'lifecycle_c3');
+  return {
+    subject: 'Dernier email (promis)',
+    html: layout({
+      preheader: 'Pas de fausse urgence. Juste un au revoir propre.',
+      accent: COLORS.textMuted,
+      content: `
+        ${hero({
+          title: 'Dernier email (promis)',
+          greeting: lifecycleGreeting(name),
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Pas de compte à rebours, pas de « dernière chance » : c'est simplement notre dernier email.
+        </p>
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Ton compte reste ouvert. Le plan gratuit ne disparaît pas.<br/>
+          Si un jour la prospection remonte dans ta liste de priorités, tu sais où nous trouver.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.textMuted};">
+          Bonne route. ✈️
+        </p>
+
+        <div align="center">${ctaPrimary('Me reconnecter', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}
+
+// ─── SÉQUENCE D — Transactionnel « aha » (1 email) ───────────────────
+
+/**
+ * D1 — Premier lead trouvé (instantané, 1er email trouvé, une seule fois à vie).
+ * Objet (a). Variante A/B :
+ *   b. Trouvé. Et maintenant ?
+ * CÂBLÉ : trigger event-driven dans lifecycle-triggers (modèle enrich_nudge),
+ * idempotent via la clé drip 'first_lead'.
+ */
+export function lifecycleD1Email(userName) {
+  const name = userName || null;
+  const ctaUrl = utmify('/app/campagnes', 'lifecycle_d1');
+  // Le doc ouvre D1 sur « {{prenom}}, ça y est. » (pas « Salut ») ;
+  // fallback sans prénom : « Ça y est. »
+  const opener = name ? `${name}, ça y est.` : 'Ça y est.';
+  return {
+    subject: 'Ton premier lead vient d\'atterrir ✈️',
+    html: layout({
+      preheader: 'Un vrai contact, un vrai email. À toi de jouer.',
+      accent: COLORS.success,
+      content: `
+        ${hero({
+          title: opener,
+        })}
+
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Ton premier lead est là : une vraie entreprise, un vrai email.<br/>
+          C'est exactement pour ce moment que Volia existe.
+        </p>
+
+        <p style="margin:0 0 8px;font-size:15px;line-height:1.6;color:${COLORS.text};">
+          Le meilleur réflexe : lui écrire pendant que c'est frais.<br/>
+          L'IA te prépare le brouillon — tu relis, tu signes, c'est parti.
+        </p>
+
+        <div align="center">${ctaPrimary('Écrire mon premier email', ctaUrl)}</div>
+
+        ${signOffAnthony()}
+      `,
+    }),
+  };
+}

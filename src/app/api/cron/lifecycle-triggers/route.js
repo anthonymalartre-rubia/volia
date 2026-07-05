@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import { cleanEnv } from '@/lib/envClean';
-import { enrichNudgeEmail, postAhaEmail, powerUserMaxEmail } from '@/lib/emailTemplates';
+import { enrichNudgeEmail, postAhaEmail, powerUserMaxEmail, lifecycleD1Email } from '@/lib/emailTemplates';
 
 /**
  * GET /api/cron/lifecycle-triggers
@@ -10,6 +10,10 @@ import { enrichNudgeEmail, postAhaEmail, powerUserMaxEmail } from '@/lib/emailTe
  * Emails lifecycle EVENT-DRIVEN (vs le drip calendaire de process-drip-emails).
  * Tourne toutes les 3h (cf. vercel.json) pour réagir vite à l'activité user.
  *
+ *   D   'first_lead'     — 1er EMAIL trouvé, une seule fois À VIE (transactionnel
+ *                          « aha » de la séquence lifecycle Volia). Indépendant
+ *                          et PRIORITAIRE : évalué en premier, sans plafond d'âge
+ *                          (contrairement aux autres triggers, limités à 30 j).
  *   A2.5 'enrich_nudge'  — a sorti des prospects mais 0 email (jamais lancé
  *                          l'enrichissement = le vrai moment de valeur). But :
  *                          débloquer l'action n°1 « récupérer les emails ».
@@ -48,6 +52,7 @@ export async function GET(request) {
   const supabase = getSupabaseAdmin();
   const startedAt = new Date().toISOString();
   const stats = {
+    first_lead: { sent: 0, skipped: 0, failed: 0 },
     enrich_nudge: { sent: 0, skipped: 0, failed: 0 },
     post_aha: { sent: 0, skipped: 0, failed: 0 },
     power_user_max: { sent: 0, skipped: 0, failed: 0 },
@@ -66,6 +71,37 @@ export async function GET(request) {
 
   try {
     const sinceIso = new Date(Date.now() - POST_AHA_MAX_AGE_DAYS * 86400 * 1000).toISOString();
+
+    // ─── D : first-lead (1er EMAIL trouvé, une seule fois À VIE) ──────────
+    // Transactionnel « aha » : prioritaire et sans plafond d'âge (pas de
+    // gte(created_at) comme les autres triggers). Idempotent via 'first_lead'.
+    // Ordonné en PREMIER pour poser la marque emailedThisRun avant post_aha
+    // (les deux ciblent « ≥1 email » ; on ne veut pas les 2 le même run).
+    const { data: firstLeadCandidates, error: flErr } = await supabase
+      .from('user_profiles')
+      .select('id, drip_emails_sent')
+      .eq('drip_emails_enabled', true)
+      .not('drip_emails_sent', 'cs', '["first_lead"]')
+      .order('updated_at', { ascending: true }) // rotation équitable → pas de famine
+      .limit(BATCH);
+    if (flErr) console.error('[cron/lifecycle] first_lead fetch:', flErr);
+
+    for (const profile of firstLeadCandidates || []) {
+      try {
+        const withEmail = await countProspects(profile.id, true);
+        if (withEmail < 1) { stats.first_lead.skipped++; continue; } // pas encore de 1er email
+
+        const outcome = await sendLifecycleEmail(supabase, profile, (name) => lifecycleD1Email(name), 'first_lead');
+        if (outcome === 'sent') stats.first_lead.sent++;
+        else if (outcome === 'failed') stats.first_lead.failed++;
+        else stats.first_lead.skipped++;
+        emailedThisRun.add(profile.id); // D exempt du cap, mais post_aha/B3 lui cèdent ce run
+        await new Promise((r) => setTimeout(r, 50));
+      } catch (e) {
+        stats.first_lead.failed++;
+        console.error('[cron/lifecycle] first_lead error', profile.id, e?.message || e);
+      }
+    }
 
     // ─── A2.5 : enrich-nudge (a des prospects mais 0 email → débloque) ─────
     const { data: nudgeCandidates, error: nudgeErr } = await supabase

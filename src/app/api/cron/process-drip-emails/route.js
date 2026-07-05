@@ -11,6 +11,7 @@ import {
   crossModuleCampagnesDay5Email,
   crossModuleCrmDay8Email,
   upgradeSoftDay12Email,
+  lifecycleA3Email,
 } from '@/lib/emailTemplates';
 
 /**
@@ -117,6 +118,34 @@ const DRIP_STEPS = [
     },
   },
   {
+    // A3 (séquence lifecycle Volia) — Premier cold email.
+    // J+4 est un créneau libre : pas de collision de jour avec les steps
+    // existants (J+1/3/5/7/8/12/14). Réservé aux gratuits hors essai MAX
+    // actif (activation). Condition métier « ≥1 email trouvé & 0 campagne »
+    // → asyncGate (requêtes DB, comme le fait le loop pour trial_expiring_d7).
+    key: 'lifecycle_a3',
+    daysSinceSignup: 4,
+    label: 'J+4 A3 Premier cold email',
+    isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
+    // Vrai si l'user a au moins 1 prospect AVEC email et AUCUNE campagne.
+    // Retourne false → le loop skip ET marque la clé (pas de ré-évaluation
+    // quotidienne infinie), cohérent avec le traitement des steps skippés.
+    asyncGate: async (supabase, profile) => {
+      const { count: withEmail } = await supabase
+        .from('prospects')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', profile.id)
+        .not('email', 'is', null);
+      if (!withEmail || withEmail < 1) return false; // pas encore d'email trouvé
+      const { count: campaigns } = await supabase
+        .from('email_campaigns')
+        .select('id', { count: 'exact', head: true })
+        .eq('owner_id', profile.id);
+      return (campaigns || 0) === 0; // déjà une campagne → A3 sans objet
+    },
+    build: ({ fullName }) => lifecycleA3Email(fullName),
+  },
+  {
     key: 'crossmodule_campagnes_d5',
     daysSinceSignup: 5,
     label: 'J+5 Cross-module Campagnes',
@@ -217,6 +246,18 @@ export async function GET(request) {
             // même user (sinon il serait recalculé tous les jours sans fin).
             await markStepSent(supabase, profile.id, profile.drip_emails_sent, step.key);
             continue;
+          }
+
+          // Gate asynchrone optionnel (requêtes DB : ex. A3 « ≥1 email & 0
+          // campagne »). Contrairement à isEligible, false ne marque PAS la
+          // clé : la condition peut devenir vraie plus tard (l'user enrichit
+          // un email dans la fenêtre J+4→now), on veut pouvoir renvoyer.
+          if (step.asyncGate) {
+            const passes = await step.asyncGate(supabase, profile);
+            if (!passes) {
+              stepStats.skipped++;
+              continue;
+            }
           }
 
           stepStats.eligible++;

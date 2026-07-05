@@ -2,7 +2,7 @@
 import { getPlan, isLimitReached } from './plans';
 import { sendEmail } from './email';
 import { createNotification, NOTIF_TYPES } from './notifications';
-import { usageWarningEmail, usageLimitReachedEmail } from './emailTemplates';
+import { usageWarningEmail, usageLimitReachedEmail, lifecycleB1Email } from './emailTemplates';
 import { getEffectivePlan } from './trial';
 import { getQuotaMemberIds } from './teams';
 import { getSupabaseAdmin } from './supabase-admin';
@@ -223,9 +223,19 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
 
       if (email) {
         const limitType = action; // 'searches', 'enrichments', 'exports'
+        const firstName = fullName && fullName !== 'utilisateur' ? fullName.split(' ')[0] : null;
         let template;
         if (thresholdCrossed === 100) {
-          template = usageLimitReachedEmail(fullName, plan.name, limitType);
+          // B1 (séquence lifecycle Volia) — « Bon signe » : quand un gratuit
+          // épuise ses crédits (= enrichissements, seul compteur adossé au
+          // solde crédits, cf. checkLimit), on sert le template lifecycle B1
+          // au lieu du corps générique. Générique conservé pour tous les
+          // autres cas (autres plans, autres compteurs : searches/exports…).
+          if (plan.id === 'free' && action === 'enrichments') {
+            template = lifecycleB1Email(firstName);
+          } else {
+            template = usageLimitReachedEmail(fullName, plan.name, limitType);
+          }
         } else {
           template = usageWarningEmail(fullName, thresholdCrossed, plan.name, limitType);
         }

@@ -97,24 +97,36 @@ const nextConfig = {
 
     return [
       {
-        source: '/(.*)',
+        // WS15 : SOURCE UNIQUE des headers de sécurité. Le bloc headers de
+        // vercel.json a été vidé — son X-Frame-Options SAMEORIGIN s'empilait
+        // sur TOUTES les routes (dont /f/*) et cassait l'embed iframe
+        // cross-origin des Forms.
+        // Le pattern exclut /f/* : Next n'écrase pas un header posé par une
+        // règle générale quand la règle spécifique l'omet — la règle générale
+        // ne doit donc pas matcher /f/* du tout, sinon X-Frame-Options DENY
+        // et frame-ancestors 'none' y fuient.
+        source: '/((?!f/).*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(self "https://js.stripe.com")' },
           { key: 'Content-Security-Policy', value: csp },
         ],
       },
       ...noStorePaths.map((source) => ({ source, headers: noStore })),
       {
-        // Forms publics — override CSP pour autoriser embed iframe cross-origin.
-        // Cette règle est plus spécifique → Next.js merge/override les headers.
+        // Forms publics — embed iframe cross-origin autorisé : PAS de
+        // X-Frame-Options ici (la règle générale exclut /f/*) et une CSP
+        // dédiée avec frame-ancestors *.
         source: '/f/:slug*',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'Content-Security-Policy', value: cspForms },
         ],
       },

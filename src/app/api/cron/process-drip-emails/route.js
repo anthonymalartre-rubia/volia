@@ -2,28 +2,33 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
 import {
-  // Alias : le nom 'useCaseDay1Email' déclenche un faux positif
-  // react-hooks/rules-of-hooks (préfixe "use"). Ce n'est PAS un hook.
-  useCaseDay1Email as caseDay1Email,
   templateKillerDay3Email,
   trialExpiringDay7Email,
   finalDemoDay14Email,
   crossModuleCampagnesDay5Email,
-  crossModuleCrmDay8Email,
-  upgradeSoftDay12Email,
+  // Copy Fable (séquence lifecycle) : A2/A4/A5 remplacent l'ancienne copy des
+  // steps use_case_d1 / crossmodule_crm_d8 / upgrade_soft_d12 (mêmes clés,
+  // mêmes jours → idempotence drip_emails_sent intacte).
+  lifecycleA2Email,
   lifecycleA3Email,
+  lifecycleA4Email,
+  lifecycleA5Email,
 } from '@/lib/emailTemplates';
 
 /**
  * GET /api/cron/process-drip-emails
  *
  * Cron Vercel daily (10h UTC = 11h FR hiver / 12h FR été).
- * Envoie les 4 emails de la drip campaign onboarding :
+ * Envoie les emails de la drip campaign onboarding (copy Fable pour A2-A5) :
  *
- *   J+1  use_case_d1         — Tutorial 1ère recherche (TOUS les users)
+ *   J+1  use_case_d1         — A2 Lire le scoring (gate : ≥1 recherche faite)
  *   J+3  template_d3         — Template cold email killer (TOUS les users)
- *   J+7  trial_expiring_d7   — Push upgrade Pro (UNIQUEMENT users en trial actif)
- *   J+14 final_demo_d14      — CTA démo Cal.com (TOUS les users non convertis)
+ *   J+4  lifecycle_a3        — A3 Premier cold email (gate : ≥1 email & 0 campagne)
+ *   J+5  crossmodule_campagnes_d5 — Cross-module Campagnes (gratuits)
+ *   J+7  trial_expiring_d7   — Push upgrade (UNIQUEMENT users en trial actif)
+ *   J+8  crossmodule_crm_d8  — A4 Réponses → CRM (gratuits)
+ *   J+12 upgrade_soft_d12    — A5 Upgrade 19 € (gratuits)
+ *   J+14 final_demo_d14      — CTA démo Cal.com (users non convertis)
  *
  * Le welcome (J+0) n'est PAS envoyé ici — il est déclenché par le flux signup
  * (authSignupConfirm + welcomeEmail).
@@ -77,12 +82,24 @@ function isFreeNoActiveTrial(profile) {
  */
 const DRIP_STEPS = [
   {
+    // Copy Fable A2 « Lire le scoring » (remplace l'ancien tutorial use case).
+    // La copy présuppose une 1ʳᵉ recherche faite (« Tu as vu tes premiers
+    // leads ») → gate sur ≥1 search_session. asyncGate=false ne marque PAS la
+    // clé : un non-activé est ré-évalué chaque jour et reçoit A2 le lendemain
+    // de sa première recherche. Le nudge « fais ta 1ʳᵉ recherche », lui, est
+    // le rôle de stuck-user-detection (48 h).
     key: 'use_case_d1',
     daysSinceSignup: 1,
-    label: 'J+1 Use case',
-    /** Aucun pré-requis : envoyé à tout user actif. */
+    label: 'J+1 A2 Lire le scoring',
     isEligible: () => true,
-    build: ({ fullName }) => caseDay1Email(fullName),
+    asyncGate: async (supabase, profile) => {
+      const { count } = await supabase
+        .from('search_sessions')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', profile.id);
+      return (count || 0) >= 1;
+    },
+    build: ({ fullName }) => lifecycleA2Email(fullName),
   },
   {
     key: 'template_d3',
@@ -128,8 +145,8 @@ const DRIP_STEPS = [
     label: 'J+4 A3 Premier cold email',
     isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
     // Vrai si l'user a au moins 1 prospect AVEC email et AUCUNE campagne.
-    // Retourne false → le loop skip ET marque la clé (pas de ré-évaluation
-    // quotidienne infinie), cohérent avec le traitement des steps skippés.
+    // asyncGate=false ne marque PAS la clé (contrairement à isEligible) : la
+    // condition peut mûrir plus tard et le step sera renvoyé — cf. le loop.
     asyncGate: async (supabase, profile) => {
       const { count: withEmail } = await supabase
         .from('prospects')
@@ -154,19 +171,23 @@ const DRIP_STEPS = [
     build: ({ fullName }) => crossModuleCampagnesDay5Email(fullName),
   },
   {
+    // Copy Fable A4 « Les réponses atterrissent » (même intention que
+    // l'ancien cross-module CRM/Forms : découverte CRM + modules inclus).
     key: 'crossmodule_crm_d8',
     daysSinceSignup: 8,
-    label: 'J+8 Cross-module CRM/Forms',
+    label: 'J+8 A4 Réponses → CRM',
     isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
-    build: ({ fullName }) => crossModuleCrmDay8Email(fullName),
+    build: ({ fullName }) => lifecycleA4Email(fullName),
   },
   {
+    // Copy Fable A5 « La version sans frein » (1er nudge upgrade 19 €/mois —
+    // même intention que l'ancien upgrade soft ; J+12 conservé, le doc disait
+    // J+13, on garde le créneau existant pour ne pas bousculer les voisins).
     key: 'upgrade_soft_d12',
     daysSinceSignup: 12,
-    label: 'J+12 Upgrade soft',
-    /** 1er nudge upgrade : gratuits uniquement (un payant n'a rien à upgrader ici). */
+    label: 'J+12 A5 Upgrade 19 €',
     isEligible: ({ profile }) => isFreeNoActiveTrial(profile),
-    build: ({ fullName }) => upgradeSoftDay12Email(fullName),
+    build: ({ fullName }) => lifecycleA5Email(fullName),
   },
   {
     key: 'final_demo_d14',

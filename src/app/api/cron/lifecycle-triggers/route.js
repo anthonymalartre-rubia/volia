@@ -82,6 +82,10 @@ export async function GET(request) {
       .select('id, drip_emails_sent')
       .eq('drip_emails_enabled', true)
       .not('drip_emails_sent', 'cs', '["first_lead"]')
+      // Audit de clôture 06/07 : un compte dont le « aha » a déjà été célébré
+      // par post_aha ne doit pas recevoir « ton PREMIER lead vient d'atterrir »
+      // (doublon d'intention, et message factuellement faux pour un ancien).
+      .not('drip_emails_sent', 'cs', '["post_aha"]')
       .order('updated_at', { ascending: true }) // rotation équitable → pas de famine
       .limit(BATCH);
     if (flErr) console.error('[cron/lifecycle] first_lead fetch:', flErr);

@@ -224,6 +224,13 @@ export async function GET(request) {
   const startedAt = new Date().toISOString();
   const globalStats = { steps: {}, totalSent: 0, totalSkipped: 0, totalFailed: 0 };
 
+  // Garde anti-rafale (audit de clôture 06/07) : 1 email drip MAX par user et
+  // par run. Sans elle, un user éligible à plusieurs steps le même jour
+  // (backfill d'une clé nouvelle, rattrapage d'un compte ancien) recevait tous
+  // les steps d'un coup. Le step sauté n'est PAS marqué → il partira au
+  // prochain run, étalé naturellement à 1 email/jour (cron daily).
+  const emailedThisRun = new Set();
+
   try {
     for (const step of DRIP_STEPS) {
       const stepStats = { eligible: 0, sent: 0, skipped: 0, failed: 0 };
@@ -256,6 +263,13 @@ export async function GET(request) {
             ? profile.drip_emails_sent.includes(step.key)
             : false;
           if (already) {
+            stepStats.skipped++;
+            continue;
+          }
+
+          // Cap 1 email/run : déjà servi par un step précédent de ce run →
+          // on saute SANS marquer la clé (envoi au prochain run).
+          if (emailedThisRun.has(profile.id)) {
             stepStats.skipped++;
             continue;
           }
@@ -323,6 +337,7 @@ export async function GET(request) {
           if (result.success) {
             await markStepSent(supabase, profile.id, profile.drip_emails_sent, step.key);
             stepStats.sent++;
+            emailedThisRun.add(profile.id);
           } else {
             stepStats.failed++;
             console.warn(`[cron/drip] ${step.key} send failed for ${email}:`, result.error);

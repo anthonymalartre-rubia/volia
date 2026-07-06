@@ -41,10 +41,12 @@ export const metadata = {
     'crm français pas cher',
     'cold email pas cher',
   ],
+  // Audit de clôture 06/07 : descriptions alignées sur la copy rendue — plus
+  // de montants d'économie non sourcés (~316 €/~137 €) dans les partages.
   openGraph: {
-    title: 'Tarifs Volia — La suite B2B qui remplace votre stack',
+    title: 'Tarifs Volia — 0 € pour voir. 19 € pour prospecter. 179 € pour ne plus y penser.',
     description:
-      "Prospection + Campagnes + CRM gratuits pour démarrer. MAX à 179 €/mo remplace ~316 €/mo d'outils (Apollo + Lemlist + Smartlead + HubSpot + Hunter) : ~137 €/mo économisés. Sans engagement.",
+      'Gratuit pour voir tes leads (email + téléphone). Prospection 19 €/mois : 500 crédits. MAX 179 €/mois : Volia One en pilote automatique 24/7, selon tes règles. Sans engagement, annulable en 2 clics.',
     type: 'website',
     url: PAGE_URL,
     siteName: 'Volia',
@@ -52,8 +54,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Tarifs Volia — La suite B2B qui remplace votre stack',
-    description: 'Gratuit pour démarrer · Prospection 19 €/mo · MAX 179 €/mo (~137 €/mo économisés vs stack Apollo+Lemlist+HubSpot).',
+    title: 'Tarifs Volia — trois plans, zéro piège',
+    description: '0 € pour voir. 19 €/mois pour prospecter. 179 €/mois pour ne plus y penser. Sans engagement.',
   },
 };
 
@@ -82,7 +84,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup`,
         availability: 'https://schema.org/InStock',
-        description: 'Essaie Volia One : tape ton domaine, vois tes premiers leads + emails. Les 5 modules (Prospection + Campagnes + CRM + Formulaires + Project) avec limites : 25 crédits/mois, 1 séquence, 1 pipeline. Sans carte bancaire, à vie.',
+        description: 'Essaie Volia One : tape ton domaine, vois tes leads et leurs emails complets. 25 crédits Prospection, les 5 modules (Prospection + Campagnes + CRM + Formulaires + Project) avec quotas. Sans carte bancaire.',
       },
       {
         '@type': 'Offer',
@@ -91,7 +93,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=prospection`,
         availability: 'https://schema.org/InStock',
-        description: 'Volia One en solo : 500 crédits/mois (emails trouvés) + 500 téléphones, cascade waterfall 7 sources, exports illimités, API publique + Zapier/Make. Packs de crédits dès 9 €.',
+        description: 'Volia One en solo : 500 crédits par mois, email + téléphone + score de confiance (Vérifié / Google / Probable), cascade de sources (site web → recherche Google → formats classiques), warmup progressif. Sans engagement, annulable en 2 clics. Packs de crédits ponctuels disponibles.',
       },
       {
         '@type': 'Offer',
@@ -100,7 +102,7 @@ const PRODUCT_JSON_LD = {
         priceCurrency: 'EUR',
         url: `${SITE_URL}/signup?plan=max`,
         availability: 'https://schema.org/InStock',
-        description: 'Volia One en pilote automatique 24/7 (mode Autopilot : 3 workflows, IF/ELSE, A/B testing) + suite complète, 2 000 crédits/mois inclus, 10 000 téléphones, équipes multi-utilisateurs, serveur MCP. Code MAX99 : 99 €/mois les 3 premiers mois.',
+        description: "Volia One en pilote automatique 24/7 selon tes règles (Autopilot : ton ton, tes secteurs, tes exclusions, tes plafonds) + toute la suite (Prospection, Campagnes, CRM, Formulaires, Project), 2 000 crédits par mois. Code MAX99 : 3 premiers mois à 99 € au lieu de 179 €.",
       },
     ],
   },

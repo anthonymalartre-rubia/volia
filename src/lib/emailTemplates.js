@@ -255,24 +255,24 @@ function signOff(text = 'L’équipe Volia') {
  * Welcome email (post-signup)
  */
 export function welcomeEmail(userName) {
-  const name = userName || 'là';
+  const name = userName || null;
   return {
     subject: 'Bienvenue. On commence ?',
     html: layout({
-      preheader: 'Votre compte est prêt. Première recherche dans 30 secondes.',
+      preheader: 'Ton compte est prêt. Première recherche dans 30 secondes.',
       accent: COLORS.brand,
       content: `
         ${hero({
           emoji: '👋',
-          title: `Bienvenue ${name}.`,
-          greeting: 'Votre compte est prêt. Voici ce que vous pouvez lancer maintenant.',
+          title: name ? `Bienvenue ${name}.` : 'Bienvenue.',
+          greeting: 'Ton compte est prêt. Voici ce que tu peux lancer maintenant.',
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 8px;">
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;margin-bottom:8px;">
-              <p style="margin:0;font-size:15px;font-weight:600;color:${COLORS.text};">🚀 Lancez votre premier pipeline Autopilot</p>
-              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Choisissez votre cible, Volia scrape, écrit l'email, qualifie et remplit votre CRM. De la cible au lead chaud, en autopilot.</p>
+              <p style="margin:0;font-size:15px;font-weight:600;color:${COLORS.text};">🚀 Tape ton domaine, regarde</p>
+              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia One trouve tes prospects (email + téléphone), écrit tes cold emails et remplit ton pipeline. Le vrai résultat, pas une démo.</p>
             </td>
           </tr>
         </table>
@@ -280,7 +280,7 @@ export function welcomeEmail(userName) {
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;margin-bottom:8px;">
               <p style="margin:0;font-size:15px;font-weight:600;color:${COLORS.text};">🔍 Une recherche en 1 clic</p>
-              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Restaurants Marseille, BTP France entière, syndics par région… ou décrivez votre cible en français.</p>
+              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Restaurants Marseille, BTP France entière, syndics par région… ou décris ta cible en français.</p>
             </td>
           </tr>
         </table>
@@ -288,7 +288,7 @@ export function welcomeEmail(userName) {
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
               <p style="margin:0;font-size:15px;font-weight:600;color:${COLORS.text};">✉️ Les emails arrivent tout seuls</p>
-              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Cascade waterfall : on teste 7 sources jusqu'à choper le bon email. Score de confiance à chaque ligne.</p>
+              <p style="margin:6px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">On fouille leur site, puis Google, puis les formats classiques — jusqu'à choper le bon email. Score de confiance à chaque ligne.</p>
             </td>
           </tr>
         </table>
@@ -301,11 +301,11 @@ export function welcomeEmail(userName) {
           </tr>
         </table>
 
-        <div align="center">${ctaPrimary('Créer mon premier pipeline', `${APP_URL}/app/autopilot`)}</div>
+        <div align="center">${ctaPrimary('Voir mes futurs clients', `${APP_URL}/one`)}</div>
         <div align="center" style="margin-top:8px;">${ctaSecondary('Ou faire une première recherche', DASHBOARD_URL)}</div>
 
         <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
-          Plan Gratuit à vie : <strong style="color:${COLORS.text};">25 crédits Prospection/mois</strong>, sans CB.
+          Plan Gratuit : <strong style="color:${COLORS.text};">25 crédits Prospection offerts</strong>, sans carte bancaire.
         </p>
 
         <!-- PS parrainage : touchpoint discret en bas du welcome (push #5) -->
@@ -313,15 +313,15 @@ export function welcomeEmail(userName) {
           <tr>
             <td style="padding:14px 18px;background-color:${COLORS.brandLight};border-left:3px solid ${COLORS.brand};border-radius:8px;">
               <p style="margin:0;font-size:13px;color:${COLORS.text};line-height:1.5;">
-                <strong style="color:${COLORS.brand};">PS</strong> — Vous aimez Volia ? Invitez 3 amis et gagnez
-                <strong style="color:${COLORS.text};">3 mois d'abonnement offerts</strong> (et 1 mois bonus pour eux).
+                <strong style="color:${COLORS.brand};">PS</strong> — Tu aimes Volia ? Invite 3 amis :
+                <strong style="color:${COLORS.text};">3 mois d'abonnement offerts</strong> pour toi, 1 mois pour eux.
                 <a href="${APP_URL}/parrainage" style="color:${COLORS.brand};font-weight:600;text-decoration:none;">Voir le programme →</a>
               </p>
             </td>
           </tr>
         </table>
 
-        ${signOff()}
+        ${signOffAnthony()}
       `,
     }),
   };
@@ -1311,7 +1311,7 @@ export function useCaseDay1Email(userName) {
  * Concret, immédiatement actionnable.
  */
 export function templateKillerDay3Email(userName) {
-  const name = userName || 'là';
+  const name = userName || null;
   const ctaUrl = utmify('/app/campagnes/campaigns/new', 'template_d3');
   const browseUrl = utmify('/app/campagnes/templates', 'template_d3_browse');
   return {
@@ -1322,8 +1322,8 @@ export function templateKillerDay3Email(userName) {
       content: `
         ${hero({
           emoji: '✉️',
-          title: `${name}, voici LE template qui convertit`,
-          greeting: `Parmi les cold emails B2B envoyés via Volia, un template revient souvent en tête côté réponses. Le voici.`,
+          title: 'LE template qui convertit',
+          greeting: `${lifecycleGreeting(name)} parmi les cold emails B2B envoyés via Volia, un template revient souvent en tête côté réponses. Le voici — pique-le.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0 0 16px;">
@@ -1349,7 +1349,7 @@ export function templateKillerDay3Email(userName) {
             <td style="padding:16px 18px;background-color:${COLORS.successLight};border-radius:10px;">
               <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:${COLORS.text};">Pourquoi ça marche</p>
               <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
-                <li><strong style="color:${COLORS.text};">Subject court</strong> (3 mots) : ouvre à 65%+ sur mobile</li>
+                <li><strong style="color:${COLORS.text};">Subject court</strong> (3 mots) : il s'affiche en entier sur mobile</li>
                 <li><strong style="color:${COLORS.text};">1 question fermée</strong> : friction nulle pour répondre</li>
                 <li><strong style="color:${COLORS.text};">Pas de pitch</strong> : on demande, on ne vend pas</li>
               </ul>
@@ -1360,7 +1360,7 @@ export function templateKillerDay3Email(userName) {
         <div align="center">${ctaPrimary('Créer ma campagne', ctaUrl)}</div>
         <div align="center">${ctaSecondary('Voir tous les templates', browseUrl)}</div>
 
-        ${signOff()}
+        ${signOffAnthony()}
       `,
     }),
   };
@@ -1377,7 +1377,7 @@ export function templateKillerDay3Email(userName) {
  * @param {{ prospectsFound:number, emailsEnriched:number, daysRemaining:number }} stats
  */
 export function trialExpiringDay7Email(userName, stats = {}) {
-  const name = userName || 'là';
+  const name = userName || null;
   const {
     prospectsFound = 0,
     emailsEnriched = 0,
@@ -1385,15 +1385,15 @@ export function trialExpiringDay7Email(userName, stats = {}) {
   } = stats;
   const ctaUrl = utmify('/pricing?plan=max', 'trial_expiring_d7');
   return {
-    subject: `Plus que ${daysRemaining} jours de MAX — gardez vos features`,
+    subject: `Plus que ${daysRemaining} jours de MAX — garde ta lancée`,
     html: layout({
-      preheader: `${prospectsFound} prospects récupérés, ${emailsEnriched} emails enrichis. Conservez tout en passant MAX.`,
+      preheader: `${prospectsFound} prospects récupérés, ${emailsEnriched} emails enrichis. Garde tout en passant MAX.`,
       accent: COLORS.warning,
       content: `
         ${hero({
           emoji: '⏱️',
           title: `Plus que ${daysRemaining} jours de MAX`,
-          greeting: `Bonjour ${name}, votre essai MAX se termine bientôt. Voici ce que vous avez accompli en 1 semaine.`,
+          greeting: `${lifecycleGreeting(name)} ton essai MAX se termine bientôt. Voici ce que tu as accompli en 1 semaine.`,
         })}
 
         <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="stat-grid" style="width:100%;margin:0 0 24px;">
@@ -1422,20 +1422,20 @@ export function trialExpiringDay7Email(userName, stats = {}) {
         </table>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Sans upgrade, vous repasserez sur le plan Gratuit dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong> :
-          25 crédits Prospection/mois (au lieu de 2 000), Autopilot désactivé, retour aux limites du Gratuit (1 pipeline, 2 formulaires, 200 cold emails/mois).
+          Sans upgrade, tu repasses sur le plan Gratuit dans <strong style="color:${COLORS.text};">${daysRemaining} jours</strong> :
+          25 crédits Prospection (au lieu de 2 000 par mois), Autopilot coupé, retour aux limites du Gratuit (1 pipeline, 2 formulaires, 200 cold emails/mois).
           <br/><br/>
-          <strong style="color:${COLORS.text};">Gardez votre plan actuel</strong> et continuez sur votre lancée.
+          <strong style="color:${COLORS.text};">Garde ton plan actuel</strong> et continue sur ta lancée.
         </p>
 
         <div align="center">${ctaPrimary('Garder MAX', ctaUrl)}</div>
 
         <p style="margin:20px 0 0;font-size:13px;color:${COLORS.textMuted};text-align:center;line-height:1.5;">
-          Code <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong> au paiement : 99€/mois les 3 premiers mois.
-          Vous gardez quoi qu'il arrive vos prospects, dossiers et exports déjà réalisés.
+          Code <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong> au paiement : 3 premiers mois à 99 € au lieu de 179 €.
+          Tu gardes quoi qu'il arrive tes prospects, dossiers et exports déjà réalisés.
         </p>
 
-        ${signOff()}
+        ${signOffAnthony()}
       `,
     }),
   };
@@ -1449,28 +1449,28 @@ export function trialExpiringDay7Email(userName, stats = {}) {
  * avant qu'ils ne sortent du radar.
  */
 export function finalDemoDay14Email(userName) {
-  const name = userName || 'là';
+  const name = userName || null;
   const ctaUrl = utmify('/demo', 'final_demo_d14');
   return {
     subject: 'On se voit en démo ?',
     html: layout({
-      preheader: '15 min avec Anthony, fondateur de Volia. On voit ensemble si on peut vous faire gagner du temps.',
+      preheader: '15 min avec Anthony, fondateur de Volia. On voit ensemble si on peut te faire gagner du temps.',
       accent: COLORS.brand,
       content: `
         ${hero({
           emoji: '👋',
-          title: `${name}, on se voit 15 min ?`,
-          greeting: `Bonjour ${name}, vous avez créé votre compte Volia il y a 2 semaines. Je suis Anthony, le fondateur.`,
+          title: 'On se voit 15 min ?',
+          greeting: `${lifecycleGreeting(name)} tu as créé ton compte Volia il y a 2 semaines. Je suis Anthony, le fondateur.`,
         })}
 
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${COLORS.text};">
-          Je voulais simplement vous proposer un <strong>échange court (15 min)</strong> en visio pour :
+          Je voulais simplement te proposer un <strong>échange court (15 min)</strong> en visio pour :
         </p>
 
         <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
-          <li>Voir <strong style="color:${COLORS.text};">votre cas concret</strong> et si Volia peut vous faire gagner du temps</li>
-          <li>Vous montrer des features avancées (waterfall, campagnes, automations) si pertinent</li>
-          <li>Récolter votre avis — c'est aussi comme ça qu'on s'améliore</li>
+          <li>Voir <strong style="color:${COLORS.text};">ton cas concret</strong> et si Volia peut te faire gagner du temps</li>
+          <li>Te montrer les features avancées (Autopilot, campagnes, automations) si pertinent</li>
+          <li>Récolter ton avis — c'est aussi comme ça qu'on s'améliore</li>
         </ul>
 
         <p style="margin:0 0 24px;font-size:14px;line-height:1.7;color:${COLORS.textMuted};">
@@ -1480,7 +1480,7 @@ export function finalDemoDay14Email(userName) {
         <div align="center">${ctaPrimary('Réserver 15 min', ctaUrl)}</div>
 
         <p style="margin:24px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
-          Si la démo n'est pas pertinente pour vous, <strong style="color:${COLORS.text};">répondez juste à cet email</strong> avec vos questions / blocages. Je lis et je réponds personnellement.
+          Si la démo n'est pas pertinente pour toi, <strong style="color:${COLORS.text};">réponds juste à cet email</strong> avec tes questions / blocages. Je lis et je réponds personnellement.
         </p>
 
         <p style="margin:24px 0 0;font-size:14px;color:${COLORS.text};line-height:1.5;">
@@ -1500,33 +1500,33 @@ export function finalDemoDay14Email(userName) {
  * le plan gratuit. La perception de valeur de la suite est un moteur d'upgrade.
  */
 export function crossModuleCampagnesDay5Email(userName) {
-  const name = userName || 'là';
+  const name = userName || null;
   const ctaUrl = utmify('/app/campagnes', 'crossmodule_campagnes_d5');
   return {
     subject: 'Le cold email est inclus. Gratuit.',
     html: layout({
-      preheader: 'Volia Campagnes est déjà dans votre compte — pas besoin de Lemlist.',
+      preheader: 'Volia Campagnes est déjà dans ton compte — pas besoin d\'un outil en plus.',
       accent: COLORS.brand,
       content: `
         ${hero({
           emoji: '✉️',
-          title: 'Vos prospects → en campagne, direct',
-          greeting: `Bonjour ${name}, un truc que beaucoup ratent : <strong style="color:${COLORS.text};">Volia, ce n'est pas que la prospection.</strong>`,
+          title: 'Tes prospects → en campagne, direct',
+          greeting: `${lifecycleGreeting(name)} un truc que beaucoup ratent : <strong style="color:${COLORS.text};">Volia, ce n'est pas que la prospection.</strong>`,
         })}
 
         <p style="margin:0 0 16px;font-size:15px;line-height:1.7;color:${COLORS.text};">
-          Le cold email — séquences, warmup automatique, tracking des ouvertures — est <strong>inclus dans votre plan gratuit</strong>. Vous prospectez ET vous contactez au même endroit.
+          Le cold email — séquences, warmup automatique, tracking des ouvertures — est <strong>inclus dans ton plan gratuit</strong>. Tu prospectes ET tu contactes au même endroit.
         </p>
 
         <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
-          <li>Vos prospects déjà trouvés partent en campagne <strong style="color:${COLORS.text};">en 1 clic</strong></li>
-          <li>Pas de Lemlist à 39 €, pas d'export CSV à trimballer</li>
-          <li>Les réponses positives reviennent automatiquement dans votre CRM</li>
+          <li>Tes prospects déjà trouvés partent en campagne <strong style="color:${COLORS.text};">en 1 clic</strong></li>
+          <li>Pas d'outil en plus à payer, pas d'export CSV à trimballer</li>
+          <li>Les réponses positives reviennent automatiquement dans ton CRM</li>
         </ul>
 
         <div align="center">${ctaPrimary('Créer ma 1ère campagne', ctaUrl)}</div>
 
-        ${signOff()}
+        ${signOffAnthony()}
       `,
     }),
   };

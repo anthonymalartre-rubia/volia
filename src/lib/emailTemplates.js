@@ -352,8 +352,8 @@ export function usageWarningEmail(userName, usagePercent, planName, limitType) {
         <p style="margin:8px 0 24px;font-size:12px;color:${COLORS.textMuted};text-align:center;">${usagePercent}% utilisés &middot; ${100 - usagePercent}% restants</p>
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-          Pour ne pas vous faire couper la prospection : <strong style="color:${COLORS.text};">Prospection à 19€/mois</strong> (500 crédits)
-          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9€</strong> — et MAX <span style="color:${COLORS.text};">(code MAX99 : 99€ les 3 premiers mois)</span> pour Volia One en Autopilot 24/7, la suite complète et 2&nbsp;000 crédits/mois inclus (+ packs).
+          Pour ne pas vous faire couper la prospection : <strong style="color:${COLORS.text};">Prospection à 19 €/mois</strong> (500 crédits)
+          ou un <strong style="color:${COLORS.text};">pack de crédits dès 9 €</strong> — et MAX <span style="color:${COLORS.text};">(code MAX99 : 99 € les 3 premiers mois)</span> pour Volia One en Autopilot 24/7, la suite complète et 2&nbsp;000 crédits/mois inclus (+ packs).
         </p>
 
         <div align="center">${ctaPrimary('Voir les options', SETTINGS_URL)}</div>
@@ -389,7 +389,7 @@ export function usageLimitReachedEmail(userName, planName, limitType) {
 
         <p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
           Vos leads existants restent intacts. Pour reprendre <strong style="color:${COLORS.text};">tout de suite</strong> :
-          pack de crédits dès 9€, Prospection à 19€/mois (500 crédits), ou MAX (code MAX99 : 3 mois à 99€).
+          pack de crédits dès 9 €, Prospection à 19 €/mois (500 crédits), ou MAX (code MAX99 : 3 mois à 99 €).
           Sinon, le quota se reset au premier du mois prochain.
         </p>
 
@@ -611,7 +611,7 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
     subject,
     html: layout({
       preheader: isActive
-        ? `${prospectsFound} prospects récupérés ce mois en gratuit. Avec Prospection, 500 crédits/mois pour 19€.`
+        ? `${prospectsFound} prospects récupérés ce mois en gratuit. Avec Prospection, 500 crédits/mois pour 19 €.`
         : `Lancez votre première recherche en 30 secondes. 25 crédits offerts chaque mois.`,
       accent: COLORS.brand,
       content: `
@@ -664,11 +664,11 @@ export function monthlyUpgradeNudgeEmail(userName, stats = {}) {
             <tr>
               <td>
                 <p style="margin:0 0 12px;font-size:15px;font-weight:600;color:${COLORS.text};">
-                  ⚡ Avec Prospection à 19€/mois vous auriez pu :
+                  ⚡ Avec Prospection à 19 €/mois vous auriez pu :
                 </p>
                 <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.8;">
                   <li>Enrichir <strong style="color:${COLORS.text};">500 contacts/mois</strong> (vs 25 crédits gratuits)</li>
-                  <li>Lancer la cascade waterfall complète (7 sources)</li>
+                  <li>Lancer la cascade complète (site web → Google → formats classiques)</li>
                   <li>Trouver <strong style="color:${COLORS.text};">500 téléphones/mois</strong> (fixes &amp; mobiles)</li>
                   <li>Exporter sans limite vers votre CRM — et MAX pour l'Autopilot</li>
                 </ul>
@@ -746,10 +746,10 @@ export function trialStartedEmail(userName, trialEndsAt) {
         <p style="margin:24px 0 16px;font-size:13px;font-weight:600;color:${COLORS.text};">Ce qui est débloqué :</p>
         <ul style="margin:0 0 24px;padding:0 0 0 20px;color:${COLORS.textMuted};font-size:14px;line-height:1.8;">
           <li>⚡ <strong style="color:${COLORS.text};">Volia One en mode Autopilot 24/7</strong> — pipeline B2B end-to-end auto</li>
-          <li><strong style="color:${COLORS.text};">2 000 crédits Prospection</strong> (vs 25 en gratuit) + cascade waterfall 7 sources</li>
+          <li><strong style="color:${COLORS.text};">2 000 crédits Prospection</strong> (vs 25 en gratuit) + cascade complète avec score de confiance</li>
           <li>Campagnes, CRM, Formulaires &amp; Project <strong style="color:${COLORS.text};">illimités</strong></li>
           <li>10 000 cold emails/mois (warmup auto inclus)</li>
-          <li>Vérification d'emails, équipes, MCP &amp; API</li>
+          <li>Vérification d'emails, équipes &amp; API</li>
         </ul>
 
         <div align="center">${ctaPrimary('Lancer mon premier workflow', DASHBOARD_URL)}</div>
@@ -773,8 +773,8 @@ export function trialStartedEmail(userName, trialEndsAt) {
 export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max') {
   const name = userName || 'là';
   // Cohorte legacy (trials Pro démarrés avant le pivot freemium 11/06/2026) :
-  // garde l'offre Pro 49€ + ETE2026 promise dans la campagne en cours.
-  // Nouveaux trials (MAX) : offre MAX 179€ + code MAX99.
+  // garde l'offre Pro 49 € + ETE2026 promise dans la campagne en cours.
+  // Nouveaux trials (MAX) : offre MAX 179 € + code MAX99.
   const isLegacyPro = trialPlan === 'pro';
   const planLabel = isLegacyPro ? 'Pro' : 'MAX';
   const lossList = isLegacyPro
@@ -788,24 +788,24 @@ export function trialExpiringEmail(userName, daysRemaining = 3, trialPlan = 'max
        <li>Suite complète → limites du Gratuit (1 pipeline, 2 formulaires, 1 projet)</li>`;
   const offerBlock = isLegacyPro
     ? `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-        Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49€/mois</strong> (ou 490€/an, ~2 mois offerts).
+        Pour conserver toutes vos features Pro, passez à l'abonnement pour <strong style="color:${COLORS.text};">49 €/mois</strong> (ou 490 €/an, ~2 mois offerts).
       </p>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
         <tr><td style="text-align:center;">
           <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
             ☀️ Offre été : code <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> au paiement
-            = Pro à <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong>. Valable jusqu'au 30 septembre 2026.
+            = Pro à <strong style="color:${COLORS.text};">19 €/mois les 3 premiers mois</strong>. Valable jusqu'au 30 septembre 2026.
           </p>
         </td></tr>
       </table>`
     : `<p style="margin:0 0 20px;font-size:14px;line-height:1.6;color:${COLORS.textMuted};text-align:center;">
-        Pour garder MAX (Autopilot + suite complète), c'est <strong style="color:${COLORS.text};">179€/mois</strong> (ou 1 690€/an, ~2 mois offerts).
+        Pour garder MAX (Autopilot + suite complète), c'est <strong style="color:${COLORS.text};">179 €/mois</strong> (ou 1 690 €/an, ~2 mois offerts).
       </p>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background-color:${COLORS.brandLight};border:1px dashed ${COLORS.brand}50;border-radius:12px;padding:14px 18px;margin:0 0 24px;">
         <tr><td style="text-align:center;">
           <p style="margin:0;font-size:13px;color:${COLORS.textMuted};line-height:1.6;">
             ⚡ Offre de lancement : code <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong> au paiement
-            = MAX à <strong style="color:${COLORS.text};">99€/mois les 3 premiers mois</strong>.
+            = MAX à <strong style="color:${COLORS.text};">99 €/mois les 3 premiers mois</strong>.
           </p>
         </td></tr>
       </table>`;
@@ -866,11 +866,11 @@ export function trialExpiredEmail(userName, trialPlan = 'max') {
   const isLegacyPro = trialPlan === 'pro';
   const planLabel = isLegacyPro ? 'Pro' : 'MAX';
   const reactivateOffer = isLegacyPro
-    ? `passez à l'abonnement Pro à 49€/mois
-          — ou <strong style="color:${COLORS.text};">19€/mois les 3 premiers mois</strong> avec le code
+    ? `passez à l'abonnement Pro à 49 €/mois
+          — ou <strong style="color:${COLORS.text};">19 €/mois les 3 premiers mois</strong> avec le code
           <strong style="color:${COLORS.text};letter-spacing:1px;">ETE2026</strong> (valable jusqu'au 30 septembre 2026).`
-    : `passez à MAX à 179€/mois
-          — ou <strong style="color:${COLORS.text};">99€/mois les 3 premiers mois</strong> avec le code
+    : `passez à MAX à 179 €/mois
+          — ou <strong style="color:${COLORS.text};">99 €/mois les 3 premiers mois</strong> avec le code
           <strong style="color:${COLORS.text};letter-spacing:1px;">MAX99</strong>.`;
   const ctaPlanHref = isLegacyPro ? `${APP_URL}/pricing?plan=pro` : `${APP_URL}/pricing?plan=max`;
 
@@ -904,7 +904,7 @@ export function trialExpiredEmail(userName, trialPlan = 'max') {
               <p style="margin:0 0 8px;font-size:14px;font-weight:600;color:${COLORS.text};">⚠️ Limites appliquées</p>
               <ul style="margin:0;padding:0 0 0 18px;color:${COLORS.textMuted};font-size:13px;line-height:1.7;">
                 <li>⚡ Workflow Autopilot désactivé (réservé MAX)</li>
-                <li>Crédits Prospection : 25/mois (packs dès 9€ si besoin)</li>
+                <li>Crédits Prospection : 25/mois (packs dès 9 € si besoin)</li>
                 <li>Cold emails : 200/mois · 1 séquence</li>
                 <li>1 pipeline CRM · 2 formulaires · 1 projet actif</li>
               </ul>
@@ -1278,7 +1278,7 @@ export function useCaseDay1Email(userName) {
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
               <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">2. Cliquez sur "Lancer"</p>
-              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia interroge Google Places et la cascade waterfall (7 sources d'emails). Comptez 1-2 minutes.</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia interroge Google Places puis lance la cascade emails (site web → Google → formats classiques). Comptez 1-2 minutes.</p>
             </td>
           </tr>
         </table>
@@ -1645,7 +1645,7 @@ export function enrichNudgeEmail(userName, { count } = {}) {
           <tr>
             <td style="padding:16px 18px;background-color:${COLORS.brandLight};border-radius:10px;">
               <p style="margin:0;font-size:14px;font-weight:600;color:${COLORS.text};">Cliquez sur « Enrichir tout »</p>
-              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia scanne chaque site + des sources publiques (cascade 7 sources) et remplit les emails manquants. En arrière-plan : fermez l'onglet, on vous prévient à la fin.</p>
+              <p style="margin:4px 0 0;font-size:13px;color:${COLORS.textMuted};line-height:1.5;">Volia scanne chaque site, puis Google, puis les formats classiques — et remplit les emails manquants. En arrière-plan : fermez l'onglet, on vous prévient à la fin.</p>
             </td>
           </tr>
         </table>

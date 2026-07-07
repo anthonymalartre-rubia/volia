@@ -6,6 +6,7 @@ import { usageWarningEmail, usageLimitReachedEmail, lifecycleB1Email } from './e
 import { getEffectivePlan } from './trial';
 import { getQuotaMemberIds } from './teams';
 import { getSupabaseAdmin } from './supabase-admin';
+import { markLifecycleSent } from './lifecycle-state';
 
 function getCurrentMonth() {
   const now = new Date();
@@ -225,13 +226,25 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
         const limitType = action; // 'searches', 'enrichments', 'exports'
         const firstName = fullName && fullName !== 'utilisateur' ? fullName.split(' ')[0] : null;
         let template;
+        let isB1 = false;
         if (thresholdCrossed === 100) {
           // B1 (séquence lifecycle Volia) — « Bon signe » : quand un gratuit
           // épuise ses crédits (= enrichissements, seul compteur adossé au
           // solde crédits, cf. checkLimit), on sert le template lifecycle B1
-          // au lieu du corps générique. Générique conservé pour tous les
-          // autres cas (autres plans, autres compteurs : searches/exports…).
+          // au lieu du corps générique. UNE SEULE FOIS À VIE (clé
+          // lifecycle_b1 + timestamp — ancre de B2 « J+2 après B1 » et de B3,
+          // cf. lifecycle-triggers) ; les mois suivants, et si l'user a coupé
+          // les emails drip, le générique quota reprend (info de service).
           if (plan.id === 'free' && action === 'enrichments') {
+            const { data: dripState } = await supabaseAdmin
+              .from('user_profiles')
+              .select('drip_emails_enabled, drip_emails_sent')
+              .eq('id', userId)
+              .maybeSingle();
+            const sentKeys = Array.isArray(dripState?.drip_emails_sent) ? dripState.drip_emails_sent : [];
+            isB1 = dripState?.drip_emails_enabled !== false && !sentKeys.includes('lifecycle_b1');
+          }
+          if (isB1) {
             template = lifecycleB1Email(firstName);
           } else {
             template = usageLimitReachedEmail(fullName, plan.name, limitType);
@@ -239,8 +252,20 @@ export async function incrementUsage(supabase, userId, action, amount = 1) {
         } else {
           template = usageWarningEmail(fullName, thresholdCrossed, plan.name, limitType);
         }
-        sendEmail({ to: email, subject: template.subject, html: template.html })
-          .catch((err) => console.error(`[usage] ${thresholdCrossed}% email failed:`, err));
+        // Awaité (et pas fire-and-forget) : sur Vercel, une promesse détachée
+        // peut être gelée avec la lambda AVANT le marquage → B1 re-envoyé le
+        // mois suivant et ancre J+2 de B2 faussée. Rare (1 fois par
+        // franchissement de seuil), donc le coût de latence est négligeable.
+        // NB : B1 est volontairement HORS cap 24 h lifecycle — il remplace un
+        // email de quota transactionnel qui partirait de toute façon.
+        try {
+          const sendResult = await sendEmail({ to: email, subject: template.subject, html: template.html });
+          if (sendResult?.success && isB1) {
+            await markLifecycleSent(supabaseAdmin, userId, 'lifecycle_b1');
+          }
+        } catch (err) {
+          console.error(`[usage] ${thresholdCrossed}% email failed:`, err);
+        }
       }
 
       // ─── In-app notification (en plus de l'email) ────────────────────────

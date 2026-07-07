@@ -34,5 +34,23 @@ export async function getAuthenticatedUser() {
     return { user: null, supabase };
   }
 
+  // Heartbeat d'activité pour le win-back C1 (lifecycle-triggers) : au plus
+  // 1 écriture / 6 h grâce au WHERE — l'UPDATE ne matche que si la valeur est
+  // vieille (ou null, comptes pré-migration). RLS anyone_update_own l'autorise,
+  // et last_active_at n'est pas dans les colonnes gelées par le trigger WS1b.
+  // Best-effort : un échec ici ne doit jamais casser une route API.
+  try {
+    const cutoff = new Date(Date.now() - 6 * 3600 * 1000).toISOString();
+    // supabase-js ne throw pas sur un refus RLS/colonne absente : il renvoie
+    // { error }. On le logge — si ce heartbeat casse en silence, toute la
+    // base dérive vers « inactif 14 j » et le win-back C1 tire sur des actifs.
+    const { error: hbError } = await supabase
+      .from('user_profiles')
+      .update({ last_active_at: new Date().toISOString() })
+      .eq('id', user.id)
+      .or(`last_active_at.is.null,last_active_at.lt.${cutoff}`);
+    if (hbError) console.warn('[auth] last_active_at heartbeat failed:', hbError.message);
+  } catch {}
+
   return { user, supabase };
 }

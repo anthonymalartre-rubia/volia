@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { sendEmail } from '@/lib/email';
+import { markLifecycleSent, isLifecycleCapped } from '@/lib/lifecycle-state';
 import {
   templateKillerDay3Email,
   trialExpiringDay7Email,
@@ -242,7 +243,7 @@ export async function GET(request) {
       //    qui matche "la clé existe dans le tableau" (PostgreSQL natif).
       const { data: profiles, error: fetchError } = await supabase
         .from('user_profiles')
-        .select('id, created_at, plan, trial_ends_at, trial_converted_at, drip_emails_sent, company_name')
+        .select('id, created_at, plan, trial_ends_at, trial_converted_at, drip_emails_sent, drip_sent_at, company_name')
         .eq('drip_emails_enabled', true)
         .lte('created_at', to)
         .not('drip_emails_sent', 'cs', `["${step.key}"]`);
@@ -274,12 +275,22 @@ export async function GET(request) {
             continue;
           }
 
+          // Cap global doc séquences : 1 email lifecycle / 24 h / user, tous
+          // crons confondus (un trigger event-driven a pu envoyer il y a
+          // quelques heures). Non marqué → repart au prochain run daily.
+          if (isLifecycleCapped(profile.drip_sent_at)) {
+            stepStats.skipped++;
+            continue;
+          }
+
           // Critère d'éligibilité spécifique au step (trial actif, etc.)
           if (!step.isEligible({ profile })) {
             stepStats.skipped++;
             // On marque quand même la clé pour ne pas re-évaluer demain ce
             // même user (sinon il serait recalculé tous les jours sans fin).
-            await markStepSent(supabase, profile.id, profile.drip_emails_sent, step.key);
+            // stamp:false — aucun email n'est parti, pas de timestamp fantôme
+            // qui consommerait le cap 24 h du prochain envoi légitime.
+            await markLifecycleSent(supabase, profile.id, step.key, { stamp: false });
             continue;
           }
 
@@ -301,7 +312,7 @@ export async function GET(request) {
           const { data: userData } = await supabase.auth.admin.getUserById(profile.id);
           if (!userData?.user?.email) {
             stepStats.skipped++;
-            await markStepSent(supabase, profile.id, profile.drip_emails_sent, step.key);
+            await markLifecycleSent(supabase, profile.id, step.key, { stamp: false }); // compte fantôme, rien envoyé
             continue;
           }
           const email = userData.user.email;
@@ -335,7 +346,7 @@ export async function GET(request) {
           });
 
           if (result.success) {
-            await markStepSent(supabase, profile.id, profile.drip_emails_sent, step.key);
+            await markLifecycleSent(supabase, profile.id, step.key);
             stepStats.sent++;
             emailedThisRun.add(profile.id);
           } else {
@@ -366,20 +377,9 @@ export async function GET(request) {
   }
 }
 
-/**
- * Ajoute la step key au tableau drip_emails_sent du profil (idempotent).
- * On lit le tableau existant, on append si absent, on save. Évite la
- * concaténation jsonb naïve qui pourrait créer des doublons.
- */
-async function markStepSent(supabase, userId, existing, stepKey) {
-  const arr = Array.isArray(existing) ? existing : [];
-  if (arr.includes(stepKey)) return;
-  const next = [...arr, stepKey];
-  await supabase
-    .from('user_profiles')
-    .update({ drip_emails_sent: next, updated_at: new Date().toISOString() })
-    .eq('id', userId);
-}
+// Le marquage clé + timestamp vit désormais dans lib/lifecycle-state.js
+// (markLifecycleSent), partagé avec lifecycle-triggers et usage.js (B1) —
+// il relit l'état frais avant l'update au lieu du snapshot du fetch.
 
 /**
  * Compte les prospects récupérés et emails enrichis par l'user.

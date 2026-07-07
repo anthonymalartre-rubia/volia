@@ -52,6 +52,10 @@ export async function GET(request) {
       .from('user_profiles')
       .select('id, created_at')
       .eq('plan', 'free')
+      // Respect de l'opt-out marketing : sans ce filtre, un user qui a coupé
+      // les emails drip (ou reçu C3 « Dernier email (promis) », qui pose
+      // drip_emails_enabled=false) continuait de recevoir le nudge mensuel.
+      .eq('drip_emails_enabled', true)
       .lt('created_at', oneWeekAgo);
 
     if (profilesError) {

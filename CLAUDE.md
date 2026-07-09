@@ -166,3 +166,22 @@ npm run lint     # Linting ESLint
 ## Déploiement
 
 Push sur `main` → GitHub → Vercel auto-deploy. Toutes les env vars sont configurées sur Vercel (Production + Development).
+
+## État du chantier (au 07/07/2026)
+
+> ⚠️ Section vivante — reflète des travaux récents non encore fondus dans le corps de ce fichier. À relire en priorité pour reprendre le projet.
+
+**Docs de travail (`audit-prive/`, GITIGNORÉ — repo public)** — source de vérité pour la copy et les décisions récentes :
+- `bible-marque-volia.md` — bible de marque Fable (voix, lexique autorisé/banni, tutoiement, contraintes DGCCRF). **Coller en tête de tout prompt copy.** Interdits : faux témoignages, chiffres inventés, « 100 % autonome », garantie de résultat.
+- `sequences-lifecycle-volia.md` — 12 emails lifecycle (A1-A5, B1-B3, C1-C3, D).
+- `copy-one-pricing-volia.md` — copy /one + /pricing.
+- `templates-cold-email-volia.md` — 15 templates cold email (PAS encore intégrés dans `campaign-templates.js`).
+- `audit-adversarial.md` + `remediation-plan.md` — audit sécurité (122 findings) et sa remédiation.
+
+**Fait & en prod :** remédiation audit sécurité (P0 + vagues 2-3, cf. migrations `supabase/migrations/2026070*`), intégration du kit de marque Fable (pages /one + /pricing réécrites, 12 templates lifecycle dans `emailTemplates.js`), câblage drip d'activation sur copy Fable.
+
+**Câblage lifecycle B2/B3 + win-back C1-C3 — livré EN DRY-RUN** (`lib/lifecycle-state.js`, cron `lifecycle-triggers`). Ne s'active QUE si l'env var `LIFECYCLE_BC_LIVE=1` est posée sur Vercel ; sinon le cron liste les destinataires (`bcDryRun` dans sa réponse JSON) sans rien envoyer.
+
+**Actions en attente (côté fondateur) :**
+1. **WS2 — confirmation d'email** : vérifier bout-en-bout qu'un signup non confirmé se voit refuser le login (réglage Supabase Auth → Providers → Email « Confirm email »).
+2. **Armement lifecycle** : après avoir validé la liste `bcDryRun`, poser `LIFECYCLE_BC_LIVE=1` sur Vercel pour activer B2/B3 + C1-C3.

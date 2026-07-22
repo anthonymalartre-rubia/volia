@@ -78,20 +78,10 @@ export function serviceSchema({ name, description, url, areaName = 'France', pri
     areaServed: areaName === 'France'
       ? { '@type': 'Country', name: 'France' }
       : { '@type': 'AdministrativeArea', name: areaName, containedInPlace: { '@type': 'Country', name: 'France' } },
-    offers: {
-      '@type': 'Offer',
-      price: String(priceFrom),
-      priceCurrency: currency,
-      availability: 'https://schema.org/InStock',
-      url: `${BASE_URL}/signup`,
-      priceSpecification: {
-        '@type': 'UnitPriceSpecification',
-        price: String(priceFrom),
-        priceCurrency: currency,
-        unitText: 'MONTH',
-        referenceQuantity: { '@type': 'QuantitativeValue', value: 1, unitCode: 'MON' },
-      },
-    },
+    // Pas de bloc `offers` : un prix plat (« 19 € ») sur une page catégorie/
+    // territoire laissait croire à l'achat one-shot de CETTE liste, alors que
+    // 19 € = l'abonnement mensuel Prospection. Claim trompeur (DGCCRF) → retiré.
+    // priceFrom/currency conservés dans la signature pour compat appelants.
   };
 
   const aggregateRating = trustpilotAggregateRatingSchema();
@@ -112,13 +102,9 @@ export function productSchema({ name, description, url, priceFrom = 19, currency
     description,
     url,
     brand: { '@type': 'Brand', name: 'Volia' },
-    offers: {
-      '@type': 'Offer',
-      price: String(priceFrom),
-      priceCurrency: currency,
-      availability: 'https://schema.org/InStock',
-      url: `${BASE_URL}/signup`,
-    },
+    // Pas de bloc `offers` : voir serviceSchema — un prix plat en SERP sur une
+    // page catégorie induit un achat one-shot trompeur (DGCCRF). Retiré.
+    // priceFrom/currency conservés dans la signature pour compat appelants.
   };
 
   const aggregateRating = trustpilotAggregateRatingSchema();

@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   const { category: catSlug } = await params;
   const category = getCategoryBySlug(catSlug);
   if (!category) return {};
-  const title = `Trouver l'email des ${category.labelPlural} en Suisse romande — Volia`;
+  const title = `Trouver l'email des ${category.labelPlural} en Suisse romande`;
   const description = `Email professionnel des ${category.labelPlural} en Suisse romande (6 cantons francophones). Scraping intelligent + Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,

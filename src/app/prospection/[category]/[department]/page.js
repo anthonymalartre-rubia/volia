@@ -47,7 +47,7 @@ export async function generateMetadata({ params }) {
   const dept = getDepartmentBySlug(deptSlug);
   if (!category || !dept) return {};
 
-  const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code}) — Volia`;
+  const title = `Email des ${category.labelPlural} dans le ${dept.name} (${dept.code})`;
   const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} situés dans le ${dept.name} (${dept.code}). Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {

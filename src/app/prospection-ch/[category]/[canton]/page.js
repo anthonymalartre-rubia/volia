@@ -39,7 +39,7 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(catSlug);
   const canton = getCantonBySlugCH(cantonSlug);
   if (!category || !canton) return {};
-  const title = `Email des ${category.labelPlural} dans le canton ${canton.name} (Suisse) — Volia`;
+  const title = `Email des ${category.labelPlural} dans le canton ${canton.name} (Suisse)`;
   const description = `Trouvez l'email professionnel des ${category.labelPlural} du canton ${canton.name}. Scraping intelligent + Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,

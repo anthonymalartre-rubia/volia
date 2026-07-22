@@ -42,7 +42,7 @@ export async function generateMetadata({ params }) {
   const city = getCityBySlug(citySlug);
   if (!category || !city) return {};
 
-  const title = `Email des ${category.labelPlural} à ${city.name} — Volia`;
+  const title = `Email des ${category.labelPlural} à ${city.name}`;
   const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} à ${city.name}. Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {

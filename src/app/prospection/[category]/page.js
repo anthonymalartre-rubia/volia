@@ -18,7 +18,7 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(categorySlug);
   if (!category) return {};
 
-  const title = `Trouver l'email des ${category.labelPlural} en France — Volia`;
+  const title = `Trouver l'email des ${category.labelPlural} en France`;
   const description = `Email professionnel de tous les ${category.labelPlural} en France. 101 départements couverts, scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {

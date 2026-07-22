@@ -43,20 +43,57 @@ export function getAllCategories() {
   });
 }
 
+// Function words that introduce a complement: everything after them stays
+// singular ("agence de communication" → "agences de communication").
+const PLURAL_STOP_WORDS = new Set([
+  'de', 'du', 'des', 'à', 'au', 'aux', 'en', 'pour', 'sur', 'sans',
+  'avec', 'par', 'le', 'la', 'les', 'et',
+]);
+// Borrowed / invariable words that never take a plural "s".
+const PLURAL_INVARIABLE = new Set(['bio', 'web']);
+
 /**
- * Simple French pluralizer for category names.
+ * Pluralize a single French word.
+ */
+function pluralizeWord(word) {
+  const lower = word.toLowerCase();
+  if (PLURAL_INVARIABLE.has(lower)) return word;
+  // Already plural or ends in s/x/z
+  if (/[sxz]$/.test(lower)) return word;
+  // Words ending in -al → -aux (cheval → chevaux)
+  if (lower.endsWith('al')) return word.slice(0, -2) + 'aux';
+  // Words ending in -au or -eu → +x
+  if (/(au|eu)$/.test(lower)) return word + 'x';
+  // Default: +s
+  return word + 's';
+}
+
+/**
+ * French pluralizer for multi-word category names (display only — never used
+ * for slugs). Pluralizes the head noun and any adjective directly attached to
+ * it, but leaves complements introduced by a preposition untouched.
+ *   "centre commercial"        → "centres commerciaux"
+ *   "agence de communication"  → "agences de communication"
+ *   "magasin d'électroménager" → "magasins d'électroménager"
+ *   "magasin bio"              → "magasins bio"
  */
 function pluralize(str) {
   if (!str) return '';
-  const lower = str.toLowerCase().trim();
-  // Already plural or ends in s/x/z
-  if (/[sxz]$/.test(lower)) return str;
-  // Words ending in -al → -aux (cheval → chevaux)
-  if (lower.endsWith('al')) return str.slice(0, -2) + 'aux';
-  // Words ending in -au or -eu → +x
-  if (/(au|eu)$/.test(lower)) return str + 'x';
-  // Default: +s
-  return str + 's';
+  let afterPreposition = false;
+  return str
+    .trim()
+    .split(/\s+/)
+    .map((word) => {
+      const lower = word.toLowerCase();
+      // Preposition (standalone or elided "d'"/"l'") → complement stays singular
+      if (PLURAL_STOP_WORDS.has(lower) || /^[dl]['’]/.test(lower)) {
+        afterPreposition = true;
+        return word;
+      }
+      if (afterPreposition) return word;
+      return pluralizeWord(word);
+    })
+    .join(' ');
 }
 
 /**

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   if (!c) return {};
 
   return {
-    title: `${c.name} en 2026 : prix, avis, alternatives — Volia`,
+    title: `${c.name} en 2026 : prix, avis, alternatives`,
     description: `${c.name} : ${c.tagline}. Prix ${c.pricing} ${c.pricingUnit}. Avantages, limites, alternatives françaises et verdict pour la prospection B2B en 2026.`,
     keywords: [
       `${c.name.toLowerCase()}`,

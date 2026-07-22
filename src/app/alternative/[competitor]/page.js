@@ -22,7 +22,7 @@ export async function generateMetadata({ params }) {
       // mais sur le même outil, et qu'elles sont liées.
     },
     openGraph: {
-      title: `Alternative à ${c.name} en 2026 — Volia`,
+      title: `Alternative à ${c.name} en 2026`,
       description: `L'alternative française à ${c.name} : 19€/mois, scraping + Google Places, RGPD natif.`,
       url: `https://volia.fr/alternative/${slug}`,
     },

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const canton = getCantonBySlugCH(slug);
   if (!canton) return {};
-  const title = `Prospection B2B dans le canton ${canton.name} (Suisse) — Volia`;
+  const title = `Prospection B2B dans le canton ${canton.name} (Suisse)`;
   const description = `Trouvez les emails B2B des entreprises du canton ${canton.name} (Suisse romande). 150 secteurs couverts. À partir de 19 €/mois.`;
   return {
     title,

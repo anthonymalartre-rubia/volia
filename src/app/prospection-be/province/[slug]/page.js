@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const province = getProvinceBySlugBE(slug);
   if (!province) return {};
-  const title = `Prospection B2B en ${province.name} (Belgique) — Volia`;
+  const title = `Prospection B2B en ${province.name} (Belgique)`;
   const description = `Trouvez les emails B2B des entreprises de la province ${province.name} (Belgique francophone). 150 secteurs couverts. À partir de 19 €/mois.`;
   return {
     title,

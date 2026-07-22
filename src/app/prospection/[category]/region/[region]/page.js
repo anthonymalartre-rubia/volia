@@ -35,7 +35,7 @@ export async function generateMetadata({ params }) {
   const region = getRegionBySlug(regionSlug);
   if (!category || !region) return {};
 
-  const title = `Email des ${category.labelPlural} en ${region.name} — Volia`;
+  const title = `Email des ${category.labelPlural} en ${region.name}`;
   const description = `Trouvez l'email professionnel de tous les ${category.labelPlural} situés en ${region.name} (${region.depts.length} départements couverts). Scraping intelligent + recherche Google. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {

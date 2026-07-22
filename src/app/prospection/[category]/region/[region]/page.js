@@ -149,12 +149,7 @@ export default async function CategoryRegionPage({ params }) {
           name: region.name,
           containedInPlace: { '@type': 'Country', name: 'France' },
         },
-        offers: {
-          '@type': 'Offer',
-          price: '19',
-          priceCurrency: 'EUR',
-          availability: 'https://schema.org/InStock',
-        },
+        // Offer retiré : prix plat « 19 » trompeur en SERP (cf. seo-helpers).
       },
       {
         '@type': 'Place',

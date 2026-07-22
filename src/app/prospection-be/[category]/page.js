@@ -16,7 +16,7 @@ export async function generateMetadata({ params }) {
   const { category: catSlug } = await params;
   const category = getCategoryBySlug(catSlug);
   if (!category) return {};
-  const title = `Trouver l'email des ${category.labelPlural} en Belgique francophone — Volia`;
+  const title = `Trouver l'email des ${category.labelPlural} en Belgique francophone`;
   const description = `Email professionnel des ${category.labelPlural} en Wallonie et Bruxelles (6 provinces). Scraping intelligent + recherche Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,

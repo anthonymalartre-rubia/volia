@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
   const dept = getDepartmentBySlug(slug);
   if (!dept) return {};
 
-  const title = `Prospection B2B dans le ${dept.name} (${dept.code}) — Volia`;
+  const title = `Prospection B2B dans le ${dept.name} (${dept.code})`;
   const description = `Trouvez les emails B2B de toutes les entreprises du département ${dept.name} (${dept.code}). 150+ secteurs couverts : restaurants, commerces, artisans, services. À partir de 19 €/mois — le ticket d'entrée le moins cher du marché français.`;
 
   return {

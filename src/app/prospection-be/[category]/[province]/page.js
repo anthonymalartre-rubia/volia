@@ -40,7 +40,7 @@ export async function generateMetadata({ params }) {
   const category = getCategoryBySlug(catSlug);
   const province = getProvinceBySlugBE(provSlug);
   if (!category || !province) return {};
-  const title = `Email des ${category.labelPlural} en ${province.name} (Belgique) — Volia`;
+  const title = `Email des ${category.labelPlural} en ${province.name} (Belgique)`;
   const description = `Trouvez l'email professionnel des ${category.labelPlural} de la province ${province.name}. Scraping intelligent + recherche Google. À partir de 19 €/mois — RGPD européen.`;
   return {
     title,

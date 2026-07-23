@@ -43,6 +43,21 @@ if (dsn) {
       'Network request failed',
       /^canceled$/,
       /AbortError/,
+      // Bruit d'extensions navigateur (wallets crypto, etc.) : leur script
+      // injecté throw « ...reading 'sendMessage' » quand son contexte
+      // d'extension est invalidé. Volia n'appelle nulle part
+      // chrome.runtime.sendMessage → ce n'est jamais notre code.
+      /reading 'sendMessage'/,
+    ],
+
+    // Rejette les événements dont la frame fautive provient d'un script
+    // injecté par une extension (le fichier n'appartient pas à Volia). Nos
+    // fichiers vivent sous _next/static/… et ne matchent aucun de ces motifs.
+    denyUrls: [
+      /injectedScript/i,
+      /contentScript/i,
+      /inpage\.js/i,
+      /extension:\/\//i, // chrome-extension://, moz-extension://, safari-web-extension://
     ],
 
     beforeSend(event) {

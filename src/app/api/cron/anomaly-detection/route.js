@@ -138,7 +138,7 @@ export async function GET(request) {
   // ─── 5. Heartbeat cron auto-content-proposer ─────────────────
   // Devrait avoir tourné au moins 1× ces 7 derniers jours en semaine
   // (lu-ve 10h CET). Si rien depuis 8 jours → cron silencieusement broken.
-  const { data: lastProposerRun } = await supabase
+  const { data: lastProposerRun, error: heartbeatError } = await supabase
     .from('autonomous_actions')
     .select('created_at')
     .eq('source', 'cron/auto-content-proposer')
@@ -146,7 +146,16 @@ export async function GET(request) {
     .limit(1)
     .maybeSingle();
 
-  if (!lastProposerRun || new Date(lastProposerRun.created_at).getTime() < Date.now() - 8 * 86400 * 1000) {
+  if (heartbeatError) {
+    // Échec de LECTURE ≠ cron mort. Avant ce garde, une erreur transitoire
+    // était avalée (data vide) et déclenchait à tort l'alerte HIGH « cron
+    // mort depuis 8+ jours » (faux positif du 27/07/2026).
+    anomalies.push({
+      type: 'heartbeat_check_failed',
+      severity: 'medium',
+      message: `Vérification du heartbeat auto-content-proposer impossible (${heartbeatError.message}). Aucune conclusion sur l'état du cron — re-vérification au prochain run.`,
+    });
+  } else if (!lastProposerRun || new Date(lastProposerRun.created_at).getTime() < Date.now() - 8 * 86400 * 1000) {
     anomalies.push({
       type: 'cron_heartbeat_missing',
       severity: 'high',

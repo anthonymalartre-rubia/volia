@@ -46,7 +46,11 @@ function guessEmail(siteWeb) {
 // TOUTE la phase (temps mur = lead le plus lent, pas la somme). Budget global
 // en filet ultime.
 const PER_LEAD_WATERFALL_MS = 14000; // scrape + Serper d'un lead
-const PER_LEAD_DM_MS = 9000;         // découverte décideur d'un lead (connectés)
+// Découverte décideur d'un lead (connectés). Porté de 9 s à 13 s : le budget
+// global de la phase ③ (GLOBAL_ENRICH_MS) est inchangé et borne l'ensemble, donc
+// ce relèvement ne rallonge pas le run — il laisse juste le temps de vérifier
+// plus d'un ou deux patterns d'email avant d'abandonner (cf. maxToVerify).
+const PER_LEAD_DM_MS = 13000;
 const GLOBAL_ENRICH_MS = 42000;      // budget dur de toute la phase ③
 const TIMED_OUT = Symbol('one_timed_out');
 
@@ -88,7 +92,12 @@ async function enrichOneLead(c, { findDecisionMakers, dmRole }) {
             domain: host,
             role: dmRole,
             verifyEmail: isEmailDeliverable,
-            maxToVerify: 2,
+            // deriveEmailPatterns propose ~7 candidats par ordre de probabilité.
+            // On n'en vérifiait que 2 : le décideur était perdu dès que la boîte
+            // utilisait « prenomnom@ » ou « prenom-nom@ » plutôt que les deux
+            // premiers formats. 4 couvre les formats FR/EU courants, dans le
+            // délai désormais porté à PER_LEAD_DM_MS.
+            maxToVerify: 4,
           }),
           PER_LEAD_DM_MS
         );

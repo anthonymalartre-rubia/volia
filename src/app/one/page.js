@@ -11,6 +11,7 @@
 import { useState, useEffect, useRef, Fragment } from 'react';
 import ReaderHeader from '@/components/ReaderHeader';
 import ReaderFooter from '@/components/ReaderFooter';
+import OneRunProgress from '@/components/OneRunProgress';
 
 const methodBadge = {
   decision_maker: { label: 'décideur ✓', cls: 'bg-violet-600/15 text-violet-700' },
@@ -382,6 +383,10 @@ function OneInner() {
             </ul>
           </div>
         )}
+
+        {/* Pendant le run (~30 s) : les étapes réelles du pipeline, sinon le
+            bouton « Analyse… » seul laissait croire à une page plantée. */}
+        {loading && <OneRunProgress />}
 
         {error && (
           <div className="max-w-xl mx-auto rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 px-4 py-3 text-sm">

@@ -156,6 +156,25 @@ const nextConfig = {
       { source: '/admin/prospection/:path*', destination: '/app/campagnes/:path*', permanent: true },
       { source: '/admin/forms', destination: '/app/formulaires', permanent: true },
       { source: '/admin/forms/:path*', destination: '/app/formulaires/:path*', permanent: true },
+      // ── Slugs de blog renommés au rebrand Prospectia → Volia (mai 2026) ──
+      // Le redirect de domaine prospectia.cloud → volia.fr préserve le chemin,
+      // mais ces 3 slugs contenaient le nom de marque : l'ancienne URL finissait
+      // donc en 404 sur volia.fr (remonté par Search Console le 23/07/2026).
+      {
+        source: '/blog/apollo-vs-hunter-vs-prospectia-comparatif-2026',
+        destination: '/blog/apollo-vs-hunter-vs-volia-comparatif-2026',
+        permanent: true,
+      },
+      {
+        source: '/blog/dropcontact-vs-kaspr-vs-prospectia-2026',
+        destination: '/blog/dropcontact-vs-kaspr-vs-volia-2026',
+        permanent: true,
+      },
+      {
+        source: '/blog/hunter-vs-snov-vs-prospectia',
+        destination: '/blog/hunter-vs-snov-vs-volia',
+        permanent: true,
+      },
     ];
   },
 

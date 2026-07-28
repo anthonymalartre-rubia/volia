@@ -41,14 +41,37 @@ RÈGLES (DGCCRF + délivrabilité) :
 - Si CTA, mentionne en une demi-phrase la base RGPD (intérêt légitime B2B).
 - Écris à la personne qui DÉCIDE (dirigeant·e / gérant·e / responsable), pas à un service. Si tu n'as pas son nom, ne l'invente pas et n'ouvre pas par un « Madame, Monsieur » générique : attaque par une accroche directe et personnalisée.
 - L'objet (≤ 55 caractères) doit être SPÉCIFIQUE au destinataire : cite le nom de son entreprise OU un bénéfice concret pour lui. JAMAIS un objet générique réutilisable tel quel pour une autre boîte (évite "… à {ville}").
+- N'utilise QUE les faits listés sous « Destinataire ». N'invente aucun chiffre, aucune référence client, aucun détail sur son activité que tu n'as pas reçu. Si un fait manque, n'y fais pas allusion — une accroche vraie et sobre vaut mieux qu'une accroche inventée.
 
 SORTIE : commence par "Objet: ..." puis une ligne vide puis le corps. Pas de signature.`;
 
   const ville = cityOf(lead, icp);
   const who = lead.contact_name
-    ? ` Adresse-toi nommément à ${lead.contact_name}${lead.contact_role ? ` (${lead.contact_role})` : ''}.`
-    : ' Adresse-toi au dirigeant ou à la dirigeante de cette entreprise.';
-  const user = `Destinataire : ${lead.nom}${ville ? ` (${ville})` : ''} — un(e) ${lead.term || 'entreprise locale'}.${who}
+    ? `Adresse-toi nommément à ${lead.contact_name}${lead.contact_role ? ` (${lead.contact_role})` : ''}.`
+    : 'Adresse-toi au dirigeant ou à la dirigeante de cette entreprise.';
+
+  // Matière d'accroche. Deux règles :
+  //   1. Uniquement des faits DÉJÀ en main (Google Places) → zéro appel réseau
+  //      ajouté sur un chemin déjà contraint par maxDuration=60.
+  //   2. Uniquement des faits portant sur le PROSPECT lui-même, jamais dérivés
+  //      du domaine de son site : ce domaine peut appartenir à un tiers
+  //      (agrégateur, franchise), et on personnaliserait la mauvaise boîte.
+  // La note n'est transmise que valorisante ET adossée à un volume d'avis
+  // significatif : inutile de tendre au modèle une accroche gênante.
+  const metier = lead.term || 'entreprise locale';
+  const faits = [`métier : ${metier}`];
+  if (ville) faits.push(`ville : ${ville}`);
+  const note = Number(lead.note);
+  const avis = Number(lead.nb_avis);
+  if (note >= 4 && avis >= 10) {
+    faits.push(`réputation Google : ${note.toFixed(1).replace('.', ',')}/5 sur ${avis} avis`);
+  }
+
+  const user = `Destinataire : ${lead.nom}
+${faits.map((f) => `- ${f}`).join('\n')}
+${who}
+
+Le paragraphe de bénéfice doit être concret pour un(e) ${metier} — pas un « développez votre activité » interchangeable avec n'importe quel secteur.
 Écris l'email.`;
 
   try {

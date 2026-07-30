@@ -299,10 +299,18 @@ const en = {
     campaignHintTitle: 'Next step: take action',
     campaignHintDesc: '{{count}} prospects with an email, ready to reach out. Launch a campaign in a few clicks.',
     campaignHintCta: 'Launch a campaign',
-    crmHintTitle: 'Your leads are ready. File them.',
-    crmHintDesc: '{{count}} contacts with an email. Create your deals in the CRM in 1 click: pipeline tracking, follow-ups, zero export.',
-    crmHintCta: 'Send to CRM',
-    crmHintCampaign: 'Ready to reach out? Launch a campaign',
+    // « Next step » banner. Export is now the primary action: zero friction,
+    // unlimited on every paid plan, and it's what a first-time user wants. The
+    // CRM files leads, it doesn't move a sale forward.
+    nextStepTitle: 'Your leads are ready. What now?',
+    nextStepDesc: '{{count}} contacts with an email. Grab them right away, or file them in the CRM.',
+    nextStepExport: 'Export to CSV',
+    nextStepCrm: 'Send to CRM',
+    nextStepCampaign: 'Launch a campaign',
+    // Shown instead of the campaign button when no verified sending domain
+    // exists: the button used to fail without explaining why.
+    nextStepNoDomain: 'To email them from Volia, verify your sending domain first.',
+    nextStepNoDomainCta: 'Verify my domain (2 min)',
     // Enrichment buttons
     enrichBtn: 'Enrich',
     enrichAll: 'Enrich all ({{count}})',

@@ -70,6 +70,9 @@ function OneInner() {
 
   const [domain, setDomain] = useState('');
   const [loading, setLoading] = useState(false);
+  // Porte de sortie du hero : beaucoup d'artisans, syndics et TPE n'ont pas de
+  // site. Sans elle, ces visiteurs n'ont rien à taper et repartent en silence.
+  const [noSite, setNoSite] = useState(false);
   const [error, setError] = useState(null);
   const [needSignup, setNeedSignup] = useState(false);
   const [needUpgrade, setNeedUpgrade] = useState(false); // crédits épuisés (connecté)
@@ -277,8 +280,10 @@ function OneInner() {
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-content-primary mb-3">
             La prospection B2B, en un clic.
           </h1>
+          {/* Phrase de mécanisme : une ligne, une durée, ce qu'on obtient. La
+              version précédente empilait 4 propositions et noyait le résultat. */}
           <p className="text-content-secondary max-w-2xl mx-auto">
-            Tape ton domaine. Volia analyse ton activité et trouve des prospects joignables : email, téléphone, score de confiance. L&apos;IA rédige tes premiers cold emails. Toi, tu valides et tu signes.
+            Tape ton domaine. En <strong className="font-semibold text-content-primary">30 secondes</strong> : tes prospects, leurs emails, leurs téléphones, et tes premiers cold emails déjà écrits.
           </p>
         </div>
 
@@ -287,7 +292,7 @@ function OneInner() {
             id="one-domain-top"
             value={domain}
             onChange={(e) => setDomain(e.target.value)}
-            placeholder="tonentreprise.fr"
+            placeholder="ex. : volia.fr"
             className="flex-1 rounded-xl border border-line bg-surface-card px-4 py-3 text-content-primary placeholder:text-content-tertiary focus:outline-none focus:ring-2 focus:ring-violet-500"
           />
           <button
@@ -302,9 +307,34 @@ function OneInner() {
         <p className="text-center text-xs text-content-tertiary mb-1">
           Gratuit. Sans carte. 30 secondes.
         </p>
-        <p className="text-center text-xs text-content-tertiary mb-8">
+        <p className="text-center text-xs text-content-tertiary mb-3">
           Essai anonyme : résultats partiellement masqués. Compte gratuit (0 €) pour tout voir.
         </p>
+
+        {/* Porte de sortie. Volia One déduit ton activité DE ton site : sans site,
+            on ne fait pas semblant — on renvoie vers la recherche par métier et
+            département, qui ne demande aucun site. */}
+        <div className="text-center mb-8">
+          {!noSite ? (
+            <button
+              type="button"
+              onClick={() => setNoSite(true)}
+              className="text-xs text-content-secondary underline hover:text-content-primary transition-colors"
+            >
+              Je n&apos;ai pas de site web
+            </button>
+          ) : (
+            <div className="max-w-xl mx-auto rounded-xl border border-line bg-surface-card px-4 py-3 text-left">
+              <p className="text-sm text-content-secondary">
+                One lit ton site pour comprendre ce que tu vends — sans site, il ne peut pas deviner.
+                Tu peux quand même chercher tes prospects <strong className="text-content-primary font-medium">par métier et par département</strong> : c&apos;est le module Prospection, inclus dans le compte gratuit.
+              </p>
+              <a href="/signup" className="inline-block mt-2 text-sm font-semibold text-violet-600 hover:underline">
+                Créer mon compte gratuit (0 €)
+              </a>
+            </div>
+          )}
+        </div>
 
         {/* Analyses persistées — rouvrir sans relancer (donc sans re-consommer de crédits) */}
         {runs.length > 0 && (
@@ -424,25 +454,47 @@ function OneInner() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-content-secondary">
-              <span><strong className="text-content-primary">{data.counts?.total}</strong> leads</span>
-              <span><strong className="text-content-primary">{data.counts?.email_verified}</strong> emails fiables</span>
-              <span><strong className="text-content-primary">{data.counts?.email_guessed}</strong> devinés</span>
-              <span><strong className="text-content-primary">{data.counts?.with_phone}</strong> avec tél</span>
-              {data.counts?.decision_makers > 0 && (
-                <span><strong className="text-content-primary">{data.counts.decision_makers}</strong> décideurs</span>
-              )}
-              {data.credits_charged != null && (
-                <span className="text-content-tertiary">· {data.credits_charged} crédit{data.credits_charged > 1 ? 's' : ''} utilisé{data.credits_charged > 1 ? 's' : ''}</span>
-              )}
-              <div className="ml-auto">
-                <button
-                  onClick={() => setConfirmOpen(true)}
-                  disabled={sendable.length === 0 || launching}
-                  className="rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-2.5 transition-colors"
-                >
-                  Tout lancer ({sendable.length})
-                </button>
+            {/* Ce que le run a RÉELLEMENT rapporté. Ces chiffres étaient rendus en
+                text-sm, au même poids visuel que « 1 crédit utilisé » : la preuve
+                que le produit a marché se lisait comme une note de bas de page.
+                Les réserves (emails devinés, crédits) restent visibles, mais en
+                métadonnée — on ne les célèbre pas, on ne les cache pas. */}
+            <div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { n: data.counts?.total ?? 0, label: 'prospects trouvés' },
+                  { n: data.counts?.email_verified ?? 0, label: 'emails fiables' },
+                  { n: data.counts?.with_phone ?? 0, label: 'avec téléphone' },
+                  ...(data.counts?.decision_makers > 0
+                    ? [{ n: data.counts.decision_makers, label: 'décideurs nommés' }]
+                    : []),
+                ].map((s) => (
+                  <div key={s.label} className="rounded-xl bg-surface-elevated px-4 py-3">
+                    <div className="text-2xl font-semibold text-content-primary leading-tight">{s.n}</div>
+                    <div className="text-xs text-content-tertiary mt-0.5">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-3">
+                <span className="text-xs text-content-tertiary">
+                  {data.counts?.email_guessed > 0 && (
+                    <>dont {data.counts.email_guessed} email{data.counts.email_guessed > 1 ? 's' : ''} probable{data.counts.email_guessed > 1 ? 's' : ''}</>
+                  )}
+                  {data.counts?.email_guessed > 0 && data.credits_charged != null && ' · '}
+                  {data.credits_charged != null && (
+                    <>{data.credits_charged} crédit{data.credits_charged > 1 ? 's' : ''} utilisé{data.credits_charged > 1 ? 's' : ''}</>
+                  )}
+                </span>
+                <div className="ml-auto">
+                  <button
+                    onClick={() => setConfirmOpen(true)}
+                    disabled={sendable.length === 0 || launching}
+                    className="rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold px-5 py-2.5 transition-colors"
+                  >
+                    Tout lancer ({sendable.length})
+                  </button>
+                </div>
               </div>
             </div>
 

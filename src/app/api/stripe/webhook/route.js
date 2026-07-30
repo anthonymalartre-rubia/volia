@@ -8,6 +8,7 @@ import {
   planChangedEmail,
 } from '@/lib/emailTemplates';
 import { PLANS } from '@/lib/plans';
+import { planIdFromPriceId } from '@/lib/stripe-plan-mapping';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { createNotification, NOTIF_TYPES } from '@/lib/notifications';
@@ -41,38 +42,10 @@ async function getUserContact(supabaseAdmin, userId) {
   }
 }
 
-/**
- * Match un price.id Stripe avec un plan local.
- * Vérifie monthly ET yearly. Renvoie 'free' si aucun match (sécurité).
- *
- * ⚠️ Pivot freemium (11/06/2026) : les prices Solo et Business sont
- * PARTAGÉS avec les nouveaux plans 'prospection' et 'max'. Pour ne
- * jamais re-mapper un abonné grandfatheré (ex: Business 6000 crédits
- * → max 2000), si `currentPlan` correspond déjà à ce price, on le
- * conserve tel quel.
- */
-function planIdFromPriceId(priceId, currentPlan = null) {
-  if (!priceId) return 'free';
-  if (currentPlan && PLANS[currentPlan]) {
-    const cp = PLANS[currentPlan];
-    if (cp.stripePriceId === priceId || cp.stripePriceIdYearly === priceId) {
-      return currentPlan;
-    }
-  }
-  for (const [id, plan] of Object.entries(PLANS)) {
-    // 'enterprise_legacy' est l'ALIAS historique (ancien Business 99€). Il partage
-    // STRIPE_BUSINESS_YEARLY_PRICE_ID avec business → on le SKIP de la boucle pour
-    // éviter une collision de mapping, et on le route via le fallback ci-dessous.
-    // ⚠️ Ne PAS skip 'enterprise' : c'est désormais un vrai plan vendu (499€) avec
-    // ses propres price IDs — le skipper rétrogradait tout abonné Enterprise.
-    if (id === 'enterprise_legacy') continue;
-    if (plan.stripePriceId && plan.stripePriceId === priceId) return id;
-    if (plan.stripePriceIdYearly && plan.stripePriceIdYearly === priceId) return id;
-  }
-  // Fallback compat : ancien price_id Enterprise legacy → mappé sur business.
-  if (PLANS.enterprise_legacy?.stripePriceId === priceId) return 'business';
-  return 'free';
-}
+// planIdFromPriceId vit désormais dans src/lib/stripe-plan-mapping.js (extrait
+// le 30/07/2026, à l'identique). Motif : /api/stripe/sync-subscription en avait
+// une copie SANS les gardes, et écrivait `plan` en service_role. Une seule
+// source, couverte par src/lib/__tests__/stripe-plan-mapping.test.js.
 
 // ─── Handler ──────────────────────────────────────────────────────
 

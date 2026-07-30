@@ -630,23 +630,14 @@ function OneInner() {
             compte gratuit · 8 prix 3 intensités · 9 FAQ · 10 RGPD · 11 CTA.
             ═══════════════════════════════════════════════════════════════ */}
 
-        {/* ─── 2. Bandeau « avant que tu demandes » ───────────────────── */}
-        <div className="max-w-3xl mx-auto mt-20 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-line bg-surface-card p-4">
-            <p className="text-sm font-semibold text-content-primary mb-1">C&apos;est légal ?</p>
-            <p className="text-sm text-content-secondary">Oui — prospection B2B, données professionnelles uniquement. Détails plus bas.</p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-card p-4">
-            <p className="text-sm font-semibold text-content-primary mb-1">C&apos;est gratuit ?</p>
-            <p className="text-sm text-content-secondary">Oui — 0 € pour voir tes leads. Le prix complet est affiché plus bas, sur cette page.</p>
-          </div>
-          <div className="rounded-xl border border-line bg-surface-card p-4">
-            <p className="text-sm font-semibold text-content-primary mb-1">C&apos;est un robot qui écrit à ma place ?</p>
-            <p className="text-sm text-content-secondary">Non — l&apos;IA rédige, toi tu valides. C&apos;est ton nom en bas.</p>
-          </div>
-        </div>
+        {/* Le bandeau « avant que tu demandes » (légal ? gratuit ? robot ?) a été
+            retiré d'ici : il répondait à des objections AVANT d'avoir rien montré,
+            et ses 3 réponses existent déjà ailleurs sur la page — « c'est légal »
+            dans la FAQ, « c'est gratuit » dans le hero et le pricing, « un robot »
+            dans « Ce que One ne fait pas ». Le premier bloc après le champ montre
+            désormais le mécanisme. */}
 
-        {/* ─── 3. Ce qui se passe quand tu appuies sur Entrée ─────────── */}
+        {/* ─── 2. Ce qui se passe quand tu appuies sur Entrée ─────────── */}
         <section className="max-w-3xl mx-auto mt-20">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-2">
             Ce qui se passe quand tu appuies sur Entrée
@@ -661,7 +652,26 @@ function OneInner() {
             </div>
             <div className="rounded-xl border border-line bg-surface-card p-5">
               <p className="text-sm font-semibold text-content-primary mb-1">02 — One trouve tes prospects.</p>
-              <p className="text-sm text-content-secondary">101 départements, 150+ catégories. Pour chaque prospect, une cascade de sources : son site web, puis une recherche Google, puis les formats d&apos;adresse classiques. Chaque fiche sort avec un email, un téléphone et un score de confiance.</p>
+              <p className="text-sm text-content-secondary">101 départements, 150+ catégories. Pour chaque prospect, une cascade de sources : son site web, puis une recherche Google, puis les formats d&apos;adresse classiques. Elle s&apos;arrête dès qu&apos;un email est trouvé — et le score te dit où elle s&apos;est arrêtée.</p>
+
+              {/* Le scoring d'origine vivait dans une section à part. Sa place est
+                  ici : c'est à cette étape qu'il se décide. Aucun outil ne trouve
+                  un email fiable pour 100 % des prospects — nous, on affiche d'où
+                  vient chaque adresse. */}
+              <ul className="mt-3 space-y-1.5">
+                <li className="flex gap-2 text-sm">
+                  <span className="mt-1.5 w-2 h-2 rounded-full bg-emerald-500 flex-none" aria-hidden="true" />
+                  <span><strong className="font-medium text-content-primary">Vérifié</strong> <span className="text-content-secondary">— lu sur le site du prospect. Pas deviné. Le plus solide.</span></span>
+                </li>
+                <li className="flex gap-2 text-sm">
+                  <span className="mt-1.5 w-2 h-2 rounded-full bg-blue-500 flex-none" aria-hidden="true" />
+                  <span><strong className="font-medium text-content-primary">Google</strong> <span className="text-content-secondary">— trouvé dans une recherche publique. La source est consultable.</span></span>
+                </li>
+                <li className="flex gap-2 text-sm">
+                  <span className="mt-1.5 w-2 h-2 rounded-full bg-amber-500 flex-none" aria-hidden="true" />
+                  <span><strong className="font-medium text-content-primary">Probable</strong> <span className="text-content-secondary">— aucune trace publique, un format classique testé. « Probable » veut dire probable : on préfère l&apos;écrire que te le cacher, et tu filtres par score avant d&apos;envoyer.</span></span>
+                </li>
+              </ul>
             </div>
             <div className="rounded-xl border border-line bg-surface-card p-5">
               <p className="text-sm font-semibold text-content-primary mb-1">03 — One écrit tes brouillons.</p>
@@ -686,46 +696,11 @@ function OneInner() {
           </div>
         </section>
 
-        {/* ─── 4. Chaque email a une origine. On te la montre. ────────── */}
-        <section className="max-w-3xl mx-auto mt-20">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-3">
-            Chaque email a une origine. On te la montre.
-          </h2>
-          <p className="text-content-secondary text-center max-w-2xl mx-auto mb-2">
-            Aucun outil ne trouve un email fiable pour 100 % des prospects. Nous, on affiche d&apos;où vient chaque adresse.
-          </p>
-          <p className="text-content-secondary text-center max-w-2xl mx-auto mb-8">
-            La cascade cherche dans l&apos;ordre. Elle s&apos;arrête dès qu&apos;un email est trouvé. Le score te dit où elle s&apos;est arrêtée.
-          </p>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-line bg-surface-card p-5">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
-                <span className="text-sm font-semibold text-content-primary">Vérifié</span>
-              </div>
-              <p className="text-sm text-content-secondary">L&apos;email est écrit sur le site du prospect. On l&apos;a lu, pas deviné. Le plus solide.</p>
-            </div>
-            <div className="rounded-xl border border-line bg-surface-card p-5">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-500" aria-hidden="true" />
-                <span className="text-sm font-semibold text-content-primary">Google</span>
-              </div>
-              <p className="text-sm text-content-secondary">L&apos;email apparaît dans une recherche Google. La source est consultable. Vérifie avant un envoi sensible.</p>
-            </div>
-            <div className="rounded-xl border border-line bg-surface-card p-5">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true" />
-                <span className="text-sm font-semibold text-content-primary">Probable</span>
-              </div>
-              <p className="text-sm text-content-secondary">Aucune trace publique. On teste les formats classiques : contact@, prenom.nom@. Et on te le marque.</p>
-            </div>
-          </div>
-          <p className="text-content-secondary text-center max-w-2xl mx-auto mt-6">
-            « Probable » veut dire probable. On préfère l&apos;écrire que te le cacher. Tu filtres par score avant d&apos;envoyer.
-          </p>
-        </section>
+        {/* La section « Chaque email a une origine » a été fondue dans l'étape 02
+            ci-dessus : le score se décide à cette étape, l'expliquer deux fois
+            allongeait la page sans rien ajouter. */}
 
-        {/* ─── 5. Ce que ça remplace ──────────────────────────────────── */}
+        {/* ─── 3. Ce que ça remplace ──────────────────────────────────── */}
         <section className="max-w-3xl mx-auto mt-20">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
             Ce que ça remplace
@@ -746,10 +721,10 @@ function OneInner() {
           </div>
         </section>
 
-        {/* ─── 6. Ce que One ne fait pas (bloc NOUVEAU) ───────────────── */}
+        {/* ─── 4. Ce que One ne fait pas — et ce qui te protège ───────── */}
         <section className="max-w-3xl mx-auto mt-20">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
-            Ce que One ne fait pas
+            Ce que One ne fait pas — et ce qui te protège
           </h2>
           <ul className="space-y-4">
             <li className="rounded-xl border border-line bg-surface-card p-5">
@@ -779,36 +754,39 @@ function OneInner() {
           <p className="text-content-primary text-center max-w-2xl mx-auto mt-1 font-medium">
             Si tu cherches un outil qui fait le travail ingrat pour que tu signes, tape ton domaine.
           </p>
+
+          {/* Le RGPD avait sa propre section. Il relève du même registre que ce
+              bloc — ce qui te protège — et sa version courte figurait déjà dans
+              « Ce que ça remplace ». Fondu ici, formulations conservées telles
+              quelles : elles sont juridiquement engageantes. */}
+          <h3 className="font-display text-xl font-bold text-content-primary text-center mt-12 mb-6">
+            RGPD par construction. Pas en option.
+          </h3>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">Filtre automatique.</p>
+              <p className="text-sm text-content-secondary">Les emails personnels (@gmail et compagnie) n&apos;entrent jamais dans tes listes. Le B2B reste du B2B.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">Opt-out public.</p>
+              <p className="text-sm text-content-secondary">Un prospect veut sortir ? Une page, un clic, c&apos;est fait. Définitivement.</p>
+            </div>
+            <div className="rounded-xl border border-line bg-surface-card p-5">
+              <p className="text-sm font-semibold text-content-primary mb-1">DPA téléchargeable.</p>
+              <p className="text-sm text-content-secondary">Ton juriste veut lire ? Il peut. Tout est écrit.</p>
+            </div>
+          </div>
+          <p className="text-content-secondary text-center max-w-2xl mx-auto mt-6">
+            Tu restes responsable de tes envois. On te donne un outil propre pour le rester. Et prospecter dans les règles, c&apos;est aussi mieux prospecter — les boîtes mail le savent.
+          </p>
         </section>
 
-        {/* ─── 7. L'essai est anonyme. Le compte est gratuit. ─────────── */}
-        <section className="max-w-2xl mx-auto mt-20 rounded-2xl border border-line bg-surface-card p-6 sm:p-8">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary mb-4">
-            L&apos;essai est anonyme. Le compte est gratuit.
-          </h2>
-          <p className="text-sm text-content-secondary mb-4">
-            Sans compte : tu tapes ton domaine, tes prospects s&apos;affichent, partiellement masqués.
-          </p>
-          <p className="text-sm text-content-secondary mb-2">
-            Avec un compte gratuit — 0 €, sans carte bancaire :
-          </p>
-          <ul className="space-y-1.5 mb-4 text-sm text-content-secondary">
-            <li className="flex gap-2"><span className="text-violet-600" aria-hidden="true">·</span> tes leads et leurs emails, complets ;</li>
-            <li className="flex gap-2"><span className="text-violet-600" aria-hidden="true">·</span> 25 crédits Prospection ;</li>
-            <li className="flex gap-2"><span className="text-violet-600" aria-hidden="true">·</span> l&apos;accès aux 5 modules, avec quotas.</li>
-          </ul>
-          <p className="text-sm text-content-secondary mb-5">
-            Tu paies quand tu veux prospecter en volume. Pas avant.
-          </p>
-          <a
-            href="/signup"
-            className="inline-flex items-center justify-center rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-3 transition-colors"
-          >
-            Créer mon compte gratuit
-          </a>
-        </section>
+        {/* La section « L'essai est anonyme. Le compte est gratuit. » a été retirée :
+            le hero le dit déjà sous le champ (essai anonyme, résultats masqués,
+            compte gratuit pour tout voir) et la carte Gratuit ci-dessous détaille
+            les 25 crédits et les 5 modules. Trois fois la même information. */}
 
-        {/* ─── 8. Trois intensités. Un seul produit. ──────────────────── */}
+        {/* ─── 5. Trois intensités. Un seul produit. ──────────────────── */}
         <section className="max-w-4xl mx-auto mt-20">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
             Trois intensités. Un seul produit.
@@ -868,7 +846,7 @@ function OneInner() {
           </p>
         </section>
 
-        {/* ─── 9. FAQ — 6 Q/R (accordéon) ─────────────────────────────── */}
+        {/* ─── 6. FAQ — 6 Q/R (accordéon) ─────────────────────────────── */}
         <section className="max-w-2xl mx-auto mt-20">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
             Les questions qu&apos;on nous pose vraiment
@@ -898,31 +876,7 @@ function OneInner() {
           </ul>
         </section>
 
-        {/* ─── 10. RGPD par construction. Pas en option. ──────────────── */}
-        <section className="max-w-3xl mx-auto mt-20">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary text-center mb-8">
-            RGPD par construction. Pas en option.
-          </h2>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-line bg-surface-card p-5">
-              <p className="text-sm font-semibold text-content-primary mb-1">Filtre automatique.</p>
-              <p className="text-sm text-content-secondary">Les emails personnels (@gmail et compagnie) n&apos;entrent jamais dans tes listes. Le B2B reste du B2B.</p>
-            </div>
-            <div className="rounded-xl border border-line bg-surface-card p-5">
-              <p className="text-sm font-semibold text-content-primary mb-1">Opt-out public.</p>
-              <p className="text-sm text-content-secondary">Un prospect veut sortir ? Une page, un clic, c&apos;est fait. Définitivement.</p>
-            </div>
-            <div className="rounded-xl border border-line bg-surface-card p-5">
-              <p className="text-sm font-semibold text-content-primary mb-1">DPA téléchargeable.</p>
-              <p className="text-sm text-content-secondary">Ton juriste veut lire ? Il peut. Tout est écrit.</p>
-            </div>
-          </div>
-          <p className="text-content-secondary text-center max-w-2xl mx-auto mt-6">
-            Tu restes responsable de tes envois. On te donne un outil propre pour le rester. Et prospecter dans les règles, c&apos;est aussi mieux prospecter — les boîtes mail le savent.
-          </p>
-        </section>
-
-        {/* ─── 11. CTA final — seul ✈️ de la page ─────────────────────── */}
+        {/* ─── 7. CTA final — seul ✈️ de la page ──────────────────────── */}
         <section className="max-w-2xl mx-auto mt-20 mb-4 text-center rounded-2xl border border-line bg-surface-card p-6 sm:p-10">
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-content-primary mb-4">
             Tu doutes encore ? Parfait.

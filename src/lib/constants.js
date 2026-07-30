@@ -607,3 +607,56 @@ export const PERSONAL_DOMAINS = new Set([
   // Suisse
   'bluewin.ch', 'sunrise.ch', 'gmx.ch',
 ]);
+
+// ─── Domaines NON ATTRIBUABLES à un prospect ────────────────────────
+// Google Places renvoie souvent, comme « site web » d'une entreprise, l'URL
+// d'une plateforme tierce : sa page Facebook, sa fiche sur un annuaire, un
+// site gratuit d'agrégateur. Deviner `contact@<ce domaine>` produit alors une
+// adresse qui n'est PAS celle du prospect — au mieux inexploitable, au pire on
+// écrit à la mauvaise entreprise.
+//
+// Constaté en base le 30/07/2026 : 5 prospects avec facebook.com / fr-fr.
+// facebook.com en site_web, et un parking à Fort-de-France crédité de
+// `contact@mq.parkopedia.com` — domaine qui n'a même AUCUN enregistrement MX,
+// donc adresse garantie non délivrable, affichée telle quelle au client.
+//
+// Le test se fait par SUFFIXE (cf. isNonAttributableDomain) : `mq.parkopedia.com`
+// et `xyz.business.site` doivent matcher.
+//
+// NB : on n'y met PAS les domaines d'exploitants/franchises (road.io,
+// freshmile.com, une enseigne…). Ce sont de vraies entreprises avec de vraies
+// boîtes ; le problème là-bas est qu'un même domaine sert N établissements
+// distincts, ce qui se détecte par comptage, pas par liste figée.
+export const NON_ATTRIBUTABLE_DOMAINS = new Set([
+  // Réseaux sociaux
+  'facebook.com', 'fb.com', 'instagram.com', 'twitter.com', 'x.com',
+  'linkedin.com', 'tiktok.com', 'youtube.com', 'pinterest.com', 'snapchat.com',
+  // Annuaires & agrégateurs
+  'pagesjaunes.fr', 'parkopedia.com', 'tripadvisor.com', 'tripadvisor.fr',
+  'yelp.com', 'yelp.fr', 'leboncoin.fr', 'doctolib.fr', 'booking.com',
+  'thefork.com', 'lafourchette.com', 'petitfute.com', 'mappy.com',
+  'justacote.com', 'kompass.com', 'societe.com', 'verif.com', 'infogreffe.fr',
+  // Google (fiches et sites gratuits)
+  'google.com', 'business.site', 'sites.google.com', 'goo.gl',
+  // Constructeurs de sites / hébergeurs gratuits
+  'wixsite.com', 'wix.com', 'wordpress.com', 'blogspot.com', 'weebly.com',
+  'jimdo.com', 'jimdosite.com', 'e-monsite.com', 'site123.me', 'webnode.fr',
+  'pagesperso-orange.fr', 'wanadoo.fr',
+  // Liens-bio / prise de RDV
+  'linktr.ee', 'beacons.ai', 'calendly.com',
+]);
+
+/**
+ * True si le host appartient à un domaine non attribuable au prospect.
+ * Test par suffixe : « mq.parkopedia.com » → parkopedia.com ✓,
+ * « fr-fr.facebook.com » → facebook.com ✓, « xyz.business.site » ✓.
+ */
+export function isNonAttributableDomain(host) {
+  const h = String(host || '').toLowerCase().replace(/^www\./, '').trim();
+  if (!h) return false;
+  const parts = h.split('.');
+  for (let i = 0; i < parts.length - 1; i += 1) {
+    if (NON_ATTRIBUTABLE_DOMAINS.has(parts.slice(i).join('.'))) return true;
+  }
+  return false;
+}

@@ -29,7 +29,17 @@ import { buildFromDomain } from '@/lib/one/build';
 import { anonymizeEmail, anonymizePhone, anonymizeName } from '@/lib/anonymize';
 
 // Le pipeline (Places + enrich + Claude) dépasse les 10s par défaut.
-export const maxDuration = 60;
+// 60 s était structurellement insuffisant : la somme des garde-temps INTERNES du
+// pipeline appelé plus bas atteint ~112 s en pire cas —
+//   ICP        : fetchSiteText 10 s + Claude 25 s   (one/icp.js:14, :63)
+//   Places     : 10 s                               (one/build.js:133)
+//   Enrichir   : 42 s plafonnés                     (one/build.js:60)
+//   Rédaction  : Claude 25 s                        (one/draft.js:32)
+// Un run lent payait donc Places + Serper + Claude puis rendait un 504 à
+// l'utilisateur, sur le parcours d'acquisition : coût engagé, prospect perdu.
+// 180 s laisse le pire cas aboutir. Le compte supporte déjà 600 s ailleurs
+// (cron/autopilot-stepper/route.js:9), donc aucune limite plateforme atteinte.
+export const maxDuration = 180;
 
 const VERIFIED_METHODS = ['scrape', 'serper', 'decision_maker'];
 

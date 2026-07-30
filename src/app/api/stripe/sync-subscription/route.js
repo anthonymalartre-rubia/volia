@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getAuthenticatedUser } from '@/lib/auth';
-import { PLANS } from '@/lib/plans';
+import { planIdFromPriceId } from '@/lib/stripe-plan-mapping';
 import { cleanEnv } from '@/lib/envClean';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 
@@ -38,17 +38,12 @@ export async function POST() {
     }
 
     // RÉSERVÉ AUX ADMINS (30/07/2026). Cette route réécrit `plan` en
-    // service_role à partir d'un mapping price→plan qui, contrairement à celui
-    // du webhook (webhook/route.js:54), n'a NI le garde `currentPlan` NI le skip
-    // d'`enterprise_legacy`. Comme `max` est déclaré avant `business` dans PLANS
-    // et qu'ils partagent STRIPE_BUSINESS_PRICE_ID, la boucle ci-dessous
-    // reclasserait un abonné Business legacy en MAX — avec moins de crédits.
-    // La route n'a aucun appelant dans l'UI : la restreindre ferme le chemin
-    // sans rien retirer. À rouvrir seulement quand le mapping sera partagé et
-    // testé (cf. plan d'action, extraction de planIdFromPriceId).
+    // service_role ; elle n'a aucun appelant dans l'UI. Elle reste fermée par
+    // prudence même depuis que le mapping est partagé et testé — la rouvrir est
+    // une décision produit, pas une conséquence du correctif.
     const { data: adminProfile } = await supabase
       .from('user_profiles')
-      .select('is_admin')
+      .select('is_admin, plan')
       .eq('id', user.id)
       .single();
     if (!adminProfile?.is_admin) {
@@ -93,17 +88,12 @@ export async function POST() {
     const sub = subs.data[0];
     const priceId = sub.items?.data?.[0]?.price?.id;
 
-    // Map price → plan. ⚠️ Tester AUSSI le price annuel (stripePriceIdYearly),
-    // sinon un abonné yearly ne matche rien → downgradé à tort en 'free'.
-    let matchedPlan = 'free';
-    for (const [planId, plan] of Object.entries(PLANS)) {
-      const monthly = plan.stripePriceId?.trim();
-      const yearly = plan.stripePriceIdYearly?.trim();
-      if ((monthly && monthly === priceId) || (yearly && yearly === priceId)) {
-        matchedPlan = planId;
-        break;
-      }
-    }
+    // Map price → plan via la SOURCE UNIQUE, avec le plan courant en garde.
+    // L'ancienne boucle locale prenait le premier match sans ce garde : comme
+    // `max` précède `business` dans PLANS et qu'ils partagent
+    // STRIPE_BUSINESS_PRICE_ID, un abonné Business legacy était reclassé en MAX,
+    // donc avec moins de crédits que ce qu'il paie.
+    const matchedPlan = planIdFromPriceId(priceId, adminProfile?.plan);
 
     // 3. Update user_profiles via service_role
     const supabaseAdmin = getSupabaseAdmin();

@@ -488,6 +488,10 @@ export default memo(function ResultsPanel({
   onStartSearch,
   onSendToCrm,           // Phase 3 : ({ prospects: [...] }) => void
   hasCrmAccess = false,  // Phase 3 : true si user.plan ∈ {business, enterprise}
+  // true seulement si un domaine d'envoi VÉRIFIÉ existe. Défaut false : sans
+  // l'information, on affiche le chemin « vérifie ton domaine » plutôt qu'un
+  // bouton de campagne qui échouerait.
+  hasSendingDomain = false,
 }) {
   const { t } = useI18n();
   const [searchText, setSearchText] = useState("");
@@ -1392,40 +1396,56 @@ export default memo(function ResultsPanel({
         </div>
       )}
 
-      {/* UX-3 : étape suivante une fois des emails récupérés. CRM-FIRST (pivot
-          freemium) : le CRM est sans friction (zéro setup) et ouvert à tous →
-          action principale. La campagne exige un domaine d'envoi configuré →
-          option secondaire, présentée honnêtement. S'affiche dès >= 1 email. */}
+      {/* UX-3 : étape suivante une fois des emails récupérés. S'affiche dès >= 1 email.
+          EXPORT-FIRST (30/07/2026) — remplace le CRM-FIRST précédent. Constat sur
+          le premier client payant : 353 prospects, 198 emails, et 0 export,
+          0 contact CRM, 0 envoi. La bannière s'affichait bien (folderProspects
+          vaut « tous » par défaut) et le CRM lui était ouvert : il a vu la
+          suggestion et n'a rien fait. L'export est sans friction, illimité sur
+          son plan, et c'est ce qu'attend un primo-utilisateur — le CRM range des
+          fiches, il ne fait pas avancer une vente. Le CRM reste offert juste
+          après. Pour l'envoi, on ne propose plus un bouton qui échoue quand
+          aucun domaine n'est vérifié : on dit ce qu'il manque. */}
       {!campaignHintDismissed && !isAnyEnriching && folderProspects.length > 0 && stats.emails > 0 && (
         <div className="flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-teal-500/5 px-4 py-3">
           <div className="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-500">
-            <KanbanSquare size={18} />
+            <Download size={18} />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-semibold text-content-primary">{t('results.crmHintTitle')}</div>
+            <div className="text-sm font-semibold text-content-primary">{t('results.nextStepTitle')}</div>
             <div className="text-xs text-content-tertiary mt-0.5">
-              {t('results.crmHintDesc', { count: stats.emails })}
+              {t('results.nextStepDesc', { count: stats.emails })}
             </div>
             <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <Button tone="emerald" size="sm" icon={Download} onClick={() => handleExport('standard')}>
+                {t('results.nextStepExport')}
+              </Button>
               {onSendToCrm && hasCrmAccess && (
-                <Button
-                  tone="emerald"
-                  size="sm"
-                  icon={KanbanSquare}
+                <button
                   onClick={() => {
                     const list = folderProspects.filter((p) => p.email);
                     if (list.length) onSendToCrm({ prospects: list });
                   }}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-content-secondary hover:text-content-primary transition"
                 >
-                  {t('results.crmHintCta')}
-                </Button>
+                  <KanbanSquare size={12} /> {t('results.nextStepCrm')}
+                </button>
               )}
-              <button
-                onClick={() => setShowCampagneModal(true)}
-                className="inline-flex items-center gap-1 text-xs font-medium text-violet-400 hover:text-violet-300 transition"
-              >
-                <Send size={12} /> {t('results.crmHintCampaign')}
-              </button>
+              {hasSendingDomain ? (
+                <button
+                  onClick={() => setShowCampagneModal(true)}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-violet-400 hover:text-violet-300 transition"
+                >
+                  <Send size={12} /> {t('results.nextStepCampaign')}
+                </button>
+              ) : (
+                <span className="text-xs text-content-tertiary">
+                  {t('results.nextStepNoDomain')}{' '}
+                  <a href="/settings/email-senders" className="font-medium text-violet-400 hover:text-violet-300 transition">
+                    {t('results.nextStepNoDomainCta')}
+                  </a>
+                </span>
+              )}
             </div>
           </div>
           <button

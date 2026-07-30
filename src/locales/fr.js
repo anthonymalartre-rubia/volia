@@ -299,10 +299,18 @@ const fr = {
     campaignHintTitle: 'Étape suivante : passez à l\'action',
     campaignHintDesc: '{{count}} prospects avec email, prêts à être contactés. Lancez une campagne en quelques clics.',
     campaignHintCta: 'Lancer une campagne',
-    crmHintTitle: 'Vos leads sont prêts. Rangez-les.',
-    crmHintDesc: '{{count}} contacts avec email. Créez vos deals dans le CRM en 1 clic : suivi pipeline, relances, zéro export.',
-    crmHintCta: 'Envoyer vers le CRM',
-    crmHintCampaign: 'Prêt à les contacter ? Lancez une campagne',
+    // Bannière « étape suivante ». L'export passe en action principale : c'est
+    // sans friction, illimité sur tous les plans payants, et c'est ce que veut
+    // un primo-utilisateur. Le CRM range, il ne fait pas avancer une vente.
+    nextStepTitle: 'Vos leads sont prêts. Qu\'en faites-vous ?',
+    nextStepDesc: '{{count}} contacts avec un email. Récupérez-les tout de suite, ou classez-les dans le CRM.',
+    nextStepExport: 'Exporter en CSV',
+    nextStepCrm: 'Envoyer vers le CRM',
+    nextStepCampaign: 'Lancer une campagne',
+    // Affiché à la place du bouton de campagne quand aucun domaine d'envoi
+    // vérifié n'existe : le bouton échouait sans expliquer pourquoi.
+    nextStepNoDomain: 'Pour leur écrire depuis Volia, vérifiez d\'abord votre domaine d\'envoi.',
+    nextStepNoDomainCta: 'Vérifier mon domaine (2 min)',
     // Enrichment buttons
     enrichBtn: 'Enrichir',
     enrichAll: 'Enrichir tout ({{count}})',

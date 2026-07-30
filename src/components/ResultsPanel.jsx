@@ -771,6 +771,22 @@ export default memo(function ResultsPanel({
     return folderProspects.filter((p) => !p.email && p.site_web).length;
   }, [folderProspects]);
 
+  // ─── Une seule sollicitation à la fois ───────────────────────────────
+  // Les deux bannières exigeaient toutes les deux `stats.emails > 0` : dès qu'un
+  // dossier mélangeait des prospects avec et sans email — le cas le plus
+  // courant — elles s'affichaient ENSEMBLE, en concurrence avec le panneau
+  // d'enrichissement, la bannière d'upgrade et celle du plafond de numéros.
+  // Résultat : plus rien ne ressort, et l'utilisateur ne fait rien (constaté sur
+  // le premier client payant).
+  // Ordre : enrichir d'abord (il manque encore des emails), puis étape suivante.
+  // Si l'utilisateur masque la première, la seconde prend sa place.
+  const activeHint = (() => {
+    if (isAnyEnriching || folderProspects.length === 0 || stats.emails === 0) return null;
+    if (!enrichHintDismissed && prospectsWithoutEmail > 0) return 'enrich';
+    if (!campaignHintDismissed) return 'nextStep';
+    return null;
+  })();
+
   const totalPages = Math.ceil(filteredProspects.length / PAGE_SIZE);
   const displayProspects = filteredProspects.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
@@ -1361,7 +1377,7 @@ export default memo(function ResultsPanel({
       {/* Bannière "étape suivante : enrichir" — guide les nouveaux utilisateurs
           vers la récupération des emails (valeur n°1) juste après une recherche.
           S'affiche dès qu'il reste des prospects sans email ; masquable. */}
-      {!enrichHintDismissed && !isAnyEnriching && folderProspects.length > 0 && prospectsWithoutEmail > 0 && stats.emails > 0 && (
+      {activeHint === 'enrich' && (
         <div className="flex items-center gap-3 rounded-xl border border-violet-500/30 bg-gradient-to-r from-violet-500/10 to-indigo-500/5 px-4 py-3">
           <div className="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
             <Mail size={18} />
@@ -1406,7 +1422,7 @@ export default memo(function ResultsPanel({
           fiches, il ne fait pas avancer une vente. Le CRM reste offert juste
           après. Pour l'envoi, on ne propose plus un bouton qui échoue quand
           aucun domaine n'est vérifié : on dit ce qu'il manque. */}
-      {!campaignHintDismissed && !isAnyEnriching && folderProspects.length > 0 && stats.emails > 0 && (
+      {activeHint === 'nextStep' && (
         <div className="flex items-start gap-3 rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-500/10 to-teal-500/5 px-4 py-3">
           <div className="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-500">
             <Download size={18} />

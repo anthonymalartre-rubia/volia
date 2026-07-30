@@ -1,6 +1,6 @@
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { PERSONAL_DOMAINS } from '@/lib/constants';
+import { PERSONAL_DOMAINS, isNonAttributableDomain } from '@/lib/constants';
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
   const controller = new AbortController();
@@ -115,7 +115,9 @@ export async function POST(request) {
       }
 
       // Step 3: If still no email but we have name + domain, guess email patterns
-      if (!email && contactName && companyDomain) {
+      // Jamais sur un domaine de plateforme tierce : « jean.dupont@facebook.com »
+      // n'existe pas (cf. NON_ATTRIBUTABLE_DOMAINS).
+      if (!email && contactName && companyDomain && !isNonAttributableDomain(companyDomain)) {
         const nameParts = contactName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').split(/\s+/);
         if (nameParts.length >= 2) {
           const first = nameParts[0];
@@ -466,7 +468,9 @@ export async function POST(request) {
     }
 
     // Step 4: Fallback — generate generic email patterns for discovered domain
-    if (contacts.length === 0 && discoveredDomain) {
+    // Exclut les plateformes tierces : renvoyer « contact@facebook.com » comme
+    // contact d'une entreprise est pire que ne rien renvoyer.
+    if (contacts.length === 0 && discoveredDomain && !isNonAttributableDomain(discoveredDomain)) {
       const genericEmails = [
         `contact@${discoveredDomain}`,
         `info@${discoveredDomain}`,

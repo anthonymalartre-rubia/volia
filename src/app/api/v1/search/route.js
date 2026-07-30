@@ -11,6 +11,13 @@
 // Body : { query|category: string, dept: string, limit?: number }
 //   - dept : code département FR ("75", "13", "2A"…) ou zone multi-pays gérée par getDeptData
 //   - query/category : terme de recherche (ex "restaurant", "agence immobilière")
+//
+// Réponse : { ok, session_id, found, saved, duplicates, quota_remaining,
+//             phones_capped, phones_withheld, phones_quota_remaining, prospects[] }
+//   - phones_withheld : numéros qui EXISTENT chez Google mais masqués faute de
+//     quota 'phones'. Permet de distinguer « pas de numéro connu » (telephone
+//     null, rien masqué) de « plafond atteint » — sans quoi un intégrateur
+//     conclut à une donnée de mauvaise qualité.
 
 import { NextResponse } from 'next/server';
 import { authenticateApiRequest, apiCorsHeaders } from '@/lib/api-auth';
@@ -122,10 +129,17 @@ export async function POST(request) {
     .select('id')
     .single();
 
+  // Numéros qui EXISTENT chez Google mais qu'on masque faute de quota. Sans ce
+  // compteur, un intégrateur recevait `telephone: null` sans pouvoir distinguer
+  // « pas de numéro connu » de « plafond atteint » — et concluait à une donnée
+  // de mauvaise qualité (même défaut que /api/places, corrigé le 30/07/2026).
+  let phonesWithheld = 0;
+
   const rows = rawPlaces.map((p) => {
     const rawPhone = p.nationalPhoneNumber || p.internationalPhoneNumber || '';
     let telephone = '';
     if (rawPhone && phonesBudget > 0) { telephone = rawPhone; phonesBudget -= 1; phonesAttributed += 1; }
+    else if (rawPhone) { phonesWithheld += 1; }
     return {
       place_id: p.id || '',
       nom: p.displayName?.text || '',
@@ -168,6 +182,10 @@ export async function POST(request) {
       saved,
       duplicates: rawPlaces.length - saved,
       quota_remaining: limitCheck.limit === -1 ? -1 : Math.max(0, limitCheck.remaining - saved),
+      // Champs additifs : un client existant qui les ignore n'est pas impacté.
+      phones_capped: phonesWithheld > 0,
+      phones_withheld: phonesWithheld,
+      phones_quota_remaining: phonesCheck.limit === -1 ? -1 : Math.max(0, phonesCheck.remaining - phonesAttributed),
       prospects: (inserted || []).slice(0, 10).map((p) => ({ nom: p.nom, telephone: p.telephone || null, site_web: p.site_web || null })),
     },
     { headers: apiCorsHeaders() }

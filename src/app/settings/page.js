@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { safeStorage } from "@/lib/safe-storage";
 import { useRouter } from 'next/navigation';
 import { getSupabase } from '@/lib/supabase';
-import { PLANS } from '@/lib/plans';
+import { PLANS, nextPlanId } from '@/lib/plans';
 import { CREDIT_PACKS, CREDIT_PACK_LIST } from '@/lib/credit-packs';
 import {
   User, Lock, CreditCard, Trash2, Shield, Mail, Calendar,
@@ -383,10 +383,10 @@ export default function SettingsPage() {
 
   /**
    * Lance le checkout Stripe pour un plan donné.
-   * @param {'solo'|'pro'|'business'} targetPlan
+   * @param {'prospection'|'max'} targetPlan  (legacy solo/pro/business encore résolvables)
    * @param {'monthly'|'yearly'} [targetPeriod='monthly']
    */
-  async function handleCheckout(targetPlan = 'pro', targetPeriod = 'monthly') {
+  async function handleCheckout(targetPlan = 'prospection', targetPeriod = 'monthly') {
     setBillingLoading(true);
     try {
       const res = await fetch('/api/stripe/checkout', {
@@ -406,8 +406,11 @@ export default function SettingsPage() {
     setBillingLoading(false);
   }
 
-  // Compat avec le code existant qui appelait handleUpgradePro()
-  const handleUpgradePro = () => handleCheckout('pro', 'monthly');
+  // CTA rapide de l'encart abonnement (affiché aux comptes gratuits). Le nom
+  // reste historique, mais la cible suit désormais le lineup vendu : il
+  // envoyait sur 'pro' (49 €/mois, retiré de la vente) au lieu de Prospection
+  // à 19 €, alors que /pricing annonce bien 19 €.
+  const handleUpgradePro = () => handleCheckout(nextPlanId(planId) || 'prospection', 'monthly');
 
   /** Achat d'un pack de crédits Prospection (paiement one-time). */
   async function handleCreditsCheckout(packId) {

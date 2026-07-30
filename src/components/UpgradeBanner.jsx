@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { AlertTriangle, X, ArrowUpRight } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { PLANS, nextPlanId } from '@/lib/plans';
 
 export default function UpgradeBanner({ plan, usage, onUpgrade }) {
   const { t } = useI18n();
@@ -10,17 +11,21 @@ export default function UpgradeBanner({ plan, usage, onUpgrade }) {
 
   if (dismissed || !plan || !usage) return null;
 
-  // Plan suivant à proposer en upgrade
-  // Mapping : free → solo, solo → pro, pro → business, business → null (déjà top)
-  const upgradeTarget = {
-    free: { id: 'solo', name: 'Solo', price: '19' },
-    starter: { id: 'solo', name: 'Solo', price: '19' },
-    solo: { id: 'pro', name: 'Pro', price: '49' },
-    pro: { id: 'business', name: 'Business', price: '99' },
-  }[plan.id];
+  // Cible d'upgrade + nom + prix dérivés de plans.js (source de vérité). La
+  // carte codée en dur ici pointait encore vers le lineup legacy : un
+  // utilisateur gratuit achetait 'solo' (400 crédits) au lieu de 'prospection'
+  // (500), et le prix affiché était figé dans le composant.
+  const targetId = nextPlanId(plan.id);
+  const targetPlan = targetId ? PLANS[targetId] : null;
 
-  // Si pas de cible (plan business déjà), ne montre pas
-  if (!upgradeTarget) return null;
+  // Pas de cible (déjà au sommet du lineup vendu) → on ne montre rien.
+  if (!targetPlan) return null;
+
+  const upgradeTarget = {
+    id: targetId,
+    name: targetPlan.name,
+    price: String(Math.round((targetPlan.price || 0) / 100)),
+  };
 
   const items = [
     { key: 'searches', label: t('upgrade.searches'), current: usage.searches || 0, limit: plan.limits.searches_per_month },

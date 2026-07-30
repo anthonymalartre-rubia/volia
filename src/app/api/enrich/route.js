@@ -1,7 +1,7 @@
 import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { PERSONAL_DOMAINS } from '@/lib/constants';
+import { PERSONAL_DOMAINS, isNonAttributableDomain } from '@/lib/constants';
 
 const BLOCKED_DOMAINS = [
   'example.com',
@@ -175,6 +175,10 @@ async function enrichEmail(url, filterPersonal = true) {
       return { email: scoredEmails[0].email, method: 'scrape' };
     }
   }
+
+  // Plateforme tierce (page Facebook, annuaire, site gratuit) : ne rien deviner.
+  // `contact@<plateforme>` n'est pas l'adresse du prospect.
+  if (isNonAttributableDomain(domain)) return { email: '', method: 'none' };
 
   return { email: `contact@${domain}`, method: 'guess' };
 }

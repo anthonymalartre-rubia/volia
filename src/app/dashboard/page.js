@@ -1575,11 +1575,17 @@ export default function Dashboard() {
           {/* Trial MAX 14j — affiché en sticky top dès qu'un trial est actif ou
               vient d'expirer. Discreet en mode normal, urgent à J-3, rouge si expiré. */}
           <TrialBanner profile={userProfile} />
-          <UpgradeBanner
-            plan={userPlan}
-            usage={userUsage}
-            onUpgrade={(targetPlan) => handleUpgrade(targetPlan || nextPlanId(userPlan?.id) || 'prospection')}
-          />
+          {/* Hiérarchie : un blocage passe devant une incitation. Quand des
+              numéros sont masqués par le quota, l'utilisateur est ARRÊTÉ — on ne
+              lui superpose pas en plus une bannière d'upgrade « tu approches de
+              ta limite ». Les deux s'affichaient ensemble. */}
+          {!phonesCapped?.withheld && (
+            <UpgradeBanner
+              plan={userPlan}
+              usage={userUsage}
+              onUpgrade={(targetPlan) => handleUpgrade(targetPlan || nextPlanId(userPlan?.id) || 'prospection')}
+            />
+          )}
           {/* Plafond téléphones : dire explicitement que des numéros EXISTENT mais
               sont masqués, sinon la colonne vide passe pour de la donnée absente. */}
           {phonesCapped?.withheld > 0 && (

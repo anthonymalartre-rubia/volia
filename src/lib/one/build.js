@@ -11,6 +11,7 @@ import { PLACES_API_URL, FIELD_MASK } from '@/lib/constants';
 import { enrichWaterfall } from '@/lib/enrich-waterfall-core';
 import { enrichDecisionMaker } from '@/lib/decision-maker-core';
 import { isEmailDeliverable } from '@/lib/email-verify';
+import { trackApiCall } from '@/lib/apiCosts';
 import { inferIcp } from '@/lib/one/icp';
 import { draftEmail } from '@/lib/one/draft';
 
@@ -92,6 +93,11 @@ async function enrichOneLead(c, { findDecisionMakers, dmRole }) {
             domain: host,
             role: dmRole,
             verifyEmail: isEmailDeliverable,
+            // Sans ce passage, les recherches Serper du décideur lancées depuis
+            // Volia One n'étaient tracées NULLE PART : le coût Serper réel était
+            // sous-estimé et l'entonnoir du décideur invisible (0 ligne
+            // `search/decision-maker` en base alors que des décideurs sortaient).
+            trackApiCall,
             // deriveEmailPatterns propose ~7 candidats par ordre de probabilité.
             // On n'en vérifiait que 2 : le décideur était perdu dès que la boîte
             // utilisait « prenomnom@ » ou « prenom-nom@ » plutôt que les deux

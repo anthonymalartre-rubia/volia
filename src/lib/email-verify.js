@@ -10,12 +10,25 @@
 // `unknown` (jamais throw) pour ne pas casser la cascade appelante.
 // ─────────────────────────────────────────────────────────────────────
 
+import { trackApiCall } from './apiCosts';
+
 const MV_BASE = 'https://api.millionverifier.com/api/v3/';
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   return fetch(url, { ...options, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+// Trace un appel MillionVerifier avec son verdict. Ne doit JAMAIS faire échouer
+// une vérification : trackApiCall est déjà fire-and-forget, le try/catch couvre
+// le cas où le client admin n'est pas initialisable (tests, scripts hors app).
+function trackVerification(result) {
+  try {
+    trackApiCall('millionverifier', null, `verify/${result}`);
+  } catch {
+    /* observabilité best-effort */
+  }
 }
 
 /**
@@ -32,18 +45,28 @@ export async function verifyEmailRaw(email) {
     const params = new URLSearchParams({ api: apiKey, email });
     const res = await fetchWithTimeout(`${MV_BASE}?${params.toString()}`);
     if (!res.ok) {
+      // L'appel a bien été consommé même en erreur HTTP → on le compte.
+      trackVerification('http_error');
       return { email, result: 'unknown', error: `HTTP ${res.status}` };
     }
     const data = await res.json();
+    const result = data.result || 'unknown';
+    // Le VERDICT est encodé dans l'endpoint (verify/ok, verify/catch_all…).
+    // trackApiCall ne calcule le coût que d'après `service`, jamais d'après
+    // l'endpoint : faire varier ce dernier n'altère donc aucun montant, et ça
+    // rend enfin mesurable la part de catch_all — la principale cause de perte
+    // du décideur, jusqu'ici invisible faute de trace.
+    trackVerification(result);
     return {
       email,
-      result: data.result || 'unknown',
+      result,
       subresult: data.subresult || null,
       free: data.free || false,
       role: data.role || false,
       quality: data.quality_score ?? null,
     };
   } catch (err) {
+    trackVerification(err.name === 'AbortError' ? 'timeout' : 'network_error');
     return { email, result: 'unknown', error: err.name === 'AbortError' ? 'timeout' : err.message };
   }
 }

@@ -213,6 +213,10 @@ export default function Dashboard() {
   // Modal "limite atteinte" affichée quand une API renvoie 429
   // { type: 'searches'|'enrichments', current, limit, processed?, total? } | null
   const [limitModal, setLimitModal] = useState(null);
+  // Un domaine d'envoi VÉRIFIÉ existe-t-il ? Sert à ne pas proposer « lancer une
+  // campagne » à quelqu'un qui n'a rien configuré : le bouton échouait sans
+  // expliquer pourquoi. Le premier client payant n'avait aucun domaine.
+  const [hasSendingDomain, setHasSendingDomain] = useState(false);
   // Numéros existants masqués par le quota mensuel, cumulés sur la recherche.
   // Sans ça, la colonne Téléphone se vidait sans un mot : l'utilisateur croyait
   // que la donnée manquait alors qu'il avait juste atteint son plafond.
@@ -241,6 +245,26 @@ export default function Dashboard() {
   const supabase = getSupabase();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  // Domaine d'envoi vérifié ? Effet dédié, best-effort : volontairement HORS du
+  // Promise.all d'initialisation pour ne pas ralentir ni fragiliser le chargement
+  // du dashboard. En cas d'échec on reste sur false, donc on propose de vérifier
+  // son domaine — jamais un bouton de campagne qui échouerait.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch('/api/email-senders');
+        if (!r.ok) return; // 401 ou erreur → on garde false
+        const j = await r.json();
+        const verified = (j.senders || []).some((s) => s.status === 'verified' || s.verified_at);
+        if (!cancelled) setHasSendingDomain(verified);
+      } catch {
+        /* best-effort */
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   // ─── Sync URL ↔ activeView ───────────────────────────────────────
   // Source de vérité : l'URL. Quand ?view=X change (navigation utilisateur,
@@ -1671,6 +1695,7 @@ export default function Dashboard() {
                   onToggleProspectTag={toggleProspectTag}
                   onSendToCrm={handleSendToCrm}
                   hasCrmAccess={!!userPlan}
+                  hasSendingDomain={hasSendingDomain}
                 />
                 </>
               )}

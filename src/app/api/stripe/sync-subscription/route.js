@@ -20,7 +20,8 @@ import { getSupabaseAdmin } from '@/lib/supabase-admin';
  *  2. Liste les souscriptions actives du customer côté Stripe.
  *  3. Match avec un plan (via le price.id) et update user_profiles.
  *
- * Réservé aux utilisateurs authentifiés (chacun ne sync que son propre compte).
+ * ⚠️ RÉSERVÉ AUX ADMINS depuis le 30/07/2026 — voir le commentaire dans POST().
+ * Le mapping price→plan local ci-dessous n'est pas celui, gardé, du webhook.
  */
 function getStripe() {
   return new Stripe(cleanEnv(process.env.STRIPE_SECRET_KEY), {
@@ -34,6 +35,24 @@ export async function POST() {
     const { user, supabase } = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
+    }
+
+    // RÉSERVÉ AUX ADMINS (30/07/2026). Cette route réécrit `plan` en
+    // service_role à partir d'un mapping price→plan qui, contrairement à celui
+    // du webhook (webhook/route.js:54), n'a NI le garde `currentPlan` NI le skip
+    // d'`enterprise_legacy`. Comme `max` est déclaré avant `business` dans PLANS
+    // et qu'ils partagent STRIPE_BUSINESS_PRICE_ID, la boucle ci-dessous
+    // reclasserait un abonné Business legacy en MAX — avec moins de crédits.
+    // La route n'a aucun appelant dans l'UI : la restreindre ferme le chemin
+    // sans rien retirer. À rouvrir seulement quand le mapping sera partagé et
+    // testé (cf. plan d'action, extraction de planIdFromPriceId).
+    const { data: adminProfile } = await supabase
+      .from('user_profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .single();
+    if (!adminProfile?.is_admin) {
+      return NextResponse.json({ error: 'Non autorise' }, { status: 403 });
     }
 
     // 1. Fetch the user's stripe_customer_id

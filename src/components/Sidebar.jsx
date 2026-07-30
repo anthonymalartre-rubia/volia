@@ -17,6 +17,7 @@ import {
   PlayCircle,
 } from 'lucide-react';
 import { useI18n } from '@/lib/i18n';
+import { PLANS, nextPlanId } from '@/lib/plans';
 import UpgradeRequiredModal from '@/components/UpgradeRequiredModal';
 
 // ─── Hiérarchie des plans ──────────────────────────────────
@@ -27,6 +28,12 @@ const PLAN_ORDER = ['free', 'starter', 'solo', 'pro', 'business', 'enterprise'];
 const PLAN_LEVEL = {
   free: 0,
   starter: 0,
+  // Lineup actuel. Sans ces deux entrées, PLAN_LEVEL[plan] retombait sur 0 via
+  // le `?? 0` de hasAccess() : un abonné Prospection ou MAX était traité comme
+  // un compte gratuit et perdait les fonctionnalités gardées au-dessus.
+  prospection: 1,
+  max: 3,
+  // Legacy grandfatherés.
   solo: 1,
   pro: 2,
   business: 3,
@@ -43,19 +50,30 @@ function hasAccess(userPlanId, requiredPlanId) {
 // Métadonnées plans pour les badges et l'encart "next step".
 // Les clés restent les ids legacy (gating inchangé) ; seuls les libellés
 // affichés reflètent le lineup freemium (Prospection 19€ / MAX 179€).
-const PLAN_META = {
-  solo: { name: 'Prospection', price: 19, hint: 'Passe Prospection : 500 crédits/mois' },
-  pro: { name: 'MAX', price: 179, hint: 'Passe MAX : suite complète + Autopilot' },
-  business: { name: 'MAX', price: 179, hint: 'Passe MAX : suite complète + Autopilot' },
-};
+// Les NOMS restent des libellés freemium volontaires (un plan legacy 'pro' est
+// présenté comme « MAX »). Les PRIX et le nombre de crédits, eux, sont lus dans
+// plans.js : la sidebar promettait « 500 crédits » en lançant un checkout sur
+// 'solo', qui n'en donne que 400.
+const eur = (cents) => Math.round((cents || 0) / 100);
 
-// Plan suivant à proposer dans l'encart de bas de sidebar
-function getNextPlan(userPlanId) {
-  if (!userPlanId || userPlanId === 'free' || userPlanId === 'starter') return 'solo';
-  if (userPlanId === 'solo') return 'pro';
-  if (userPlanId === 'pro') return 'business';
-  return null; // business/enterprise : rien à upgrade
-}
+const PLAN_META = {
+  // Lineup actuel — cibles des CTA d'upgrade.
+  prospection: {
+    name: 'Prospection',
+    price: eur(PLANS.prospection?.price),
+    hint: `Passe Prospection : ${PLANS.prospection?.limits?.enrichments_per_month} crédits/mois`,
+  },
+  max: { name: 'MAX', price: eur(PLANS.max?.price), hint: 'Passe MAX : suite complète + Autopilot' },
+  // Clés legacy CONSERVÉES : elles étiquettent aussi les fonctionnalités
+  // verrouillées via item.requiredPlan (ex. 'pro' pour la vérification).
+  solo: {
+    name: 'Prospection',
+    price: eur(PLANS.solo?.price),
+    hint: `Passe Prospection : ${PLANS.solo?.limits?.enrichments_per_month} crédits/mois`,
+  },
+  pro: { name: 'MAX', price: eur(PLANS.max?.price), hint: 'Passe MAX : suite complète + Autopilot' },
+  business: { name: 'MAX', price: eur(PLANS.max?.price), hint: 'Passe MAX : suite complète + Autopilot' },
+};
 
 export default function Sidebar({ activeView, onViewChange, onClose, isOpen, prospectCount, searchHistory, isAdmin, userPlan }) {
   const { t, locale } = useI18n();
@@ -76,7 +94,7 @@ export default function Sidebar({ activeView, onViewChange, onClose, isOpen, pro
     { id: 'verify', label: t('sidebar.verify'), icon: ShieldCheck, description: t('sidebar.verifyDesc'), requiredPlan: 'pro' },
   ];
 
-  const nextPlan = isBusiness || isAdmin ? null : getNextPlan(userPlanId);
+  const nextPlan = isBusiness || isAdmin ? null : nextPlanId(userPlanId);
   const nextMeta = nextPlan ? PLAN_META[nextPlan] : null;
 
   const handleItemClick = (item) => {

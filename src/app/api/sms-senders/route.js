@@ -16,6 +16,7 @@ import {
   isValidE164,
 } from '@/lib/twilio-numbers';
 import { cleanEnv } from '@/lib/envClean';
+import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 
 // Champs sûrs à retourner via l'API (jamais le token chiffré).
 const SAFE_FIELDS =
@@ -41,6 +42,17 @@ export async function GET() {
 }
 
 export async function POST(request) {
+  // GARDE DE FEATURE (30/07/2026). Sans elle, le seul contrôle était
+  // getAuthenticatedUser : n'importe quel compte — gratuit inclus — pouvait
+  // appeler cette route en boucle et faire ACHETER des numéros Twilio sur le
+  // compte Volia (provisionTwilioNumber ci-dessous), pour un module qui ne peut
+  // rien envoyer : le flag est désactivé et le cron process-sms-campaigns n'est
+  // même pas déclaré dans vercel.json. Dépense réelle, valeur nulle.
+  // Même motif que cron/process-sms-campaigns/route.js.
+  if (!SMS_CAMPAIGNS_ENABLED) {
+    return NextResponse.json({ error: 'sms_disabled' }, { status: 403 });
+  }
+
   const { user, supabase } = await getAuthenticatedUser();
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

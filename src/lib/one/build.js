@@ -7,7 +7,7 @@
 // Enrichissement + rédaction parallélisés (tenir dans la limite Vercel).
 // ─────────────────────────────────────────────────────────────────────
 
-import { PLACES_API_URL, FIELD_MASK } from '@/lib/constants';
+import { PLACES_API_URL, FIELD_MASK, isNonAttributableDomain } from '@/lib/constants';
 import { enrichWaterfall } from '@/lib/enrich-waterfall-core';
 import { enrichDecisionMaker } from '@/lib/decision-maker-core';
 import { isEmailDeliverable } from '@/lib/email-verify';
@@ -36,6 +36,11 @@ function guessEmail(siteWeb) {
   if (!h || !h.includes('.')) return { email: '', method: 'none' };
   const tld = h.split('.').pop().toLowerCase();
   if (!GUESS_TLDS.has(tld)) return { email: '', method: 'none' };
+  // Le « site web » remonté par Places est parfois celui d'une plateforme tierce
+  // (page Facebook, fiche d'annuaire, site gratuit). Deviner sur ce domaine
+  // fabrique une adresse qui n'est pas celle du prospect : aucune adresse vaut
+  // mieux qu'une mauvaise. Cf. NON_ATTRIBUTABLE_DOMAINS.
+  if (isNonAttributableDomain(h)) return { email: '', method: 'none' };
   return { email: `contact@${h}`, method: 'guess' };
 }
 

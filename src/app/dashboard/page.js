@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import { DEPTS, REGIONS, COUNTRIES, getDeptData, getCountryForDept, getRegionsForCountry, getDeptsForCountry } from '@/lib/constants';
+import { nextPlanId } from '@/lib/plans';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
@@ -852,7 +853,10 @@ export default function Dashboard() {
     setIsSearching(false);
   }, [prospects, user, supabase]);
 
-  const handleUpgrade = async (planId = 'pro', period = 'monthly') => {
+  // Défaut aligné sur le lineup vendu. Avant : 'pro' — un utilisateur gratuit
+  // cliquant un CTA d'upgrade partait sur un checkout à 49 €/mois d'un plan
+  // legacy retiré de la vente, au lieu de Prospection à 19 €.
+  const handleUpgrade = async (planId = 'prospection', period = 'monthly') => {
     try {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -1522,7 +1526,7 @@ export default function Dashboard() {
           <UsageBanner
             plan={userPlan}
             usage={userUsage}
-            onUpgrade={() => handleUpgrade('pro')}
+            onUpgrade={() => handleUpgrade(nextPlanId(userPlan?.id) || 'prospection')}
           />
         </div>
 
@@ -1533,7 +1537,7 @@ export default function Dashboard() {
           <UpgradeBanner
             plan={userPlan}
             usage={userUsage}
-            onUpgrade={(targetPlan) => handleUpgrade(targetPlan || 'pro')}
+            onUpgrade={(targetPlan) => handleUpgrade(targetPlan || nextPlanId(userPlan?.id) || 'prospection')}
           />
           <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
@@ -1661,7 +1665,7 @@ export default function Dashboard() {
           total={limitModal.total}
           currentPlanName={userPlan?.name || 'Starter'}
           onClose={() => setLimitModal(null)}
-          onUpgrade={() => { setLimitModal(null); handleUpgrade('pro'); }}
+          onUpgrade={() => { setLimitModal(null); handleUpgrade(nextPlanId(userPlan?.id) || 'prospection'); }}
         />
       )}
 

@@ -114,6 +114,12 @@ export async function POST(request) {
       : Math.max(0, phonesLimitCheck.remaining);
 
     let phonesAttributed = 0;
+    // Numéros qui EXISTENT mais qu'on masque faute de quota. À ne pas confondre
+    // avec « cette entreprise n'a pas de numéro » : sans cette distinction, la
+    // colonne se vidait en silence et l'utilisateur en concluait que la donnée
+    // était mauvaise. Constaté sur le premier client payant (29/07/2026) : ses
+    // numéros se sont arrêtés à son plafond, sans message, et il n'est pas revenu.
+    let phonesWithheld = 0;
     const places = (data.places || []).map((place) => {
       const rawPhone = place.nationalPhoneNumber || place.internationalPhoneNumber || '';
       let telephone = '';
@@ -121,6 +127,8 @@ export async function POST(request) {
         telephone = rawPhone;
         phonesBudget -= 1;
         phonesAttributed += 1;
+      } else if (rawPhone) {
+        phonesWithheld += 1;
       }
       return {
         place_id: place.id || '',
@@ -164,7 +172,16 @@ export async function POST(request) {
         console.warn('[achievement] unlock failed:', err.message);
       }
     }
-    return Response.json({ places, achievement });
+    // Champs ajoutés (additifs — aucun consommateur existant n'est impacté) :
+    // permettent à l'UI de dire « plafond atteint » au lieu de laisser croire
+    // que les numéros n'existent pas.
+    return Response.json({
+      places,
+      achievement,
+      phones_withheld: phonesWithheld,
+      phones_capped: phonesWithheld > 0,
+      phones_limit: phonesUnlimited ? -1 : phonesLimitCheck.limit,
+    });
   } catch (error) {
     console.error('Places API route error:', error);
     return Response.json(

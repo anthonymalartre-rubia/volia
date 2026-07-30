@@ -437,6 +437,33 @@ export function isPaidPlan(planId) {
   return typeof planId === 'string' && planId !== '' && planId !== 'free';
 }
 
+/**
+ * Plan à proposer en upgrade DEPUIS L'APP (sidebar, bannière d'usage, modales
+ * de limite). Renvoie null quand il n'y a plus rien à vendre au-dessus.
+ *
+ * ⚠️ SOURCE UNIQUE — ne pas redéfinir cette carte dans un composant. Chaque
+ * CTA in-app avait la sienne, toutes restées sur le lineup legacy : la sidebar
+ * promettait « Prospection, 500 crédits » mais lançait un checkout sur 'solo'
+ * (400 crédits), et le dashboard envoyait sur 'pro' (49 €, retiré de la vente).
+ * Le webhook écrivant `session.metadata.plan_id` tel quel, l'écart se figeait
+ * dans le profil du client — constaté sur le premier abonné (29/07/2026).
+ *
+ * Les plans legacy grandfatherés ne sont jamais renvoyés vers un autre plan
+ * legacy : la seule montée proposée est MAX.
+ */
+const NEXT_PLAN_BY_CURRENT = {
+  free: 'prospection',
+  starter: 'prospection', // alias historique, jamais stocké en base
+  prospection: 'max',
+  solo: 'max',
+  pro: 'max',
+  business: 'max',
+};
+
+export function nextPlanId(currentPlanId) {
+  return NEXT_PLAN_BY_CURRENT[currentPlanId] || null;
+}
+
 // ═════════════════════════════════════════════════════════════════════
 // Volia Autopilot — limites par plan (juin 2026 pivot)
 // ═════════════════════════════════════════════════════════════════════

@@ -213,6 +213,10 @@ export default function Dashboard() {
   // Modal "limite atteinte" affichée quand une API renvoie 429
   // { type: 'searches'|'enrichments', current, limit, processed?, total? } | null
   const [limitModal, setLimitModal] = useState(null);
+  // Numéros existants masqués par le quota mensuel, cumulés sur la recherche.
+  // Sans ça, la colonne Téléphone se vidait sans un mot : l'utilisateur croyait
+  // que la donnée manquait alors qu'il avait juste atteint son plafond.
+  const [phonesCapped, setPhonesCapped] = useState(null); // { withheld, limit } | null
   const [isDeepEnriching, setIsDeepEnriching] = useState(false);
   const [deepEnrichProgress, setDeepEnrichProgress] = useState({
     current: 0, total: 0, currentSite: '', logs: [],
@@ -641,6 +645,7 @@ export default function Dashboard() {
     setIsSearching(true);
     handleViewChange('search');
     setSearchProgress({ current: 0, total: 0, currentQuery: '', logs: [] });
+    setPhonesCapped(null);
 
     const taskList = [];
     for (const dept of depts) {
@@ -732,6 +737,18 @@ export default function Dashboard() {
 
         const placesCount = data.places?.length || 0;
         setSearchProgress((prev) => addLog(prev, `→ ${placesCount} résultats trouvés`));
+
+        // Plafond téléphones atteint : on le DIT, au lieu de rendre des lignes
+        // sans numéro qui passent pour de la donnée manquante.
+        if (data.phones_capped && data.phones_withheld > 0) {
+          setPhonesCapped((prev) => ({
+            withheld: (prev?.withheld || 0) + data.phones_withheld,
+            limit: data.phones_limit,
+          }));
+          setSearchProgress((prev) =>
+            addLog(prev, `⚠ ${data.phones_withheld} numéro(s) masqué(s) : plafond mensuel atteint`)
+          );
+        }
 
         if (data.places && Array.isArray(data.places)) {
           let added = 0;
@@ -1539,6 +1556,29 @@ export default function Dashboard() {
             usage={userUsage}
             onUpgrade={(targetPlan) => handleUpgrade(targetPlan || nextPlanId(userPlan?.id) || 'prospection')}
           />
+          {/* Plafond téléphones : dire explicitement que des numéros EXISTENT mais
+              sont masqués, sinon la colonne vide passe pour de la donnée absente. */}
+          {phonesCapped?.withheld > 0 && (
+            <div className="mx-3 sm:mx-4 md:mx-6 mt-3 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-content-primary">
+              <span className="font-medium">
+                {phonesCapped.withheld} numéro{phonesCapped.withheld > 1 ? 's' : ''} masqué
+                {phonesCapped.withheld > 1 ? 's' : ''} : tu as atteint ton plafond mensuel
+                {phonesCapped.limit > 0 ? ` de ${phonesCapped.limit} numéros` : ''}.
+              </span>{' '}
+              <span className="text-content-secondary">
+                Ces entreprises ont bien un numéro — il se débloque au renouvellement, ou en montant de plan.
+              </span>
+              {nextPlanId(userPlan?.id) && (
+                <button
+                  type="button"
+                  onClick={() => handleUpgrade(nextPlanId(userPlan?.id))}
+                  className="ml-2 font-semibold text-violet-600 hover:underline"
+                >
+                  Voir les plans
+                </button>
+              )}
+            </div>
+          )}
           <div className="p-3 sm:p-4 md:p-6">
           <div className="max-w-6xl mx-auto">
             {/* Header de section premium pour les vues non-overview (Recherche,

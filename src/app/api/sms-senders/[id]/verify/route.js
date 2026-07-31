@@ -12,6 +12,7 @@ import { getAuthenticatedUser } from '@/lib/auth';
 import { decryptSecret } from '@/lib/crypto';
 import { verifyByoTwilioCredentials } from '@/lib/twilio-numbers';
 import { cleanEnv } from '@/lib/envClean';
+import { SMS_CAMPAIGNS_ENABLED } from '@/lib/feature-flags';
 
 const TWILIO_API_BASE = 'https://api.twilio.com/2010-04-01';
 
@@ -42,6 +43,14 @@ async function verifyVoliaManagedNumber(phoneSid) {
 }
 
 export async function POST(_request, { params }) {
+  // Même garde que POST /api/sms-senders : le module SMS est désactivé
+  // (feature-flags.js) et son cron n'est pas déclaré. Cette route frappe l'API
+  // Twilio ; sans objet tant qu'aucun sender ne peut être créé, on la ferme pour
+  // que la surface du module soit cohérente d'un bout à l'autre.
+  if (!SMS_CAMPAIGNS_ENABLED) {
+    return NextResponse.json({ error: 'sms_disabled' }, { status: 403 });
+  }
+
   const { user, supabase } = await getAuthenticatedUser();
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

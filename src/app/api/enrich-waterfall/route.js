@@ -2,7 +2,7 @@ import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { trackOnboardingStep } from '@/lib/onboarding';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { PERSONAL_DOMAINS } from '@/lib/constants';
+import { PERSONAL_DOMAINS, isThirdPartyEmailDomain } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
 import { getSupabaseAdmin } from '@/lib/supabase-admin';
 import { lookupGlobalContact, upsertGlobalContact, lookupDecisionMaker, upsertDecisionMaker } from '@/lib/global-contacts';
@@ -62,6 +62,9 @@ function extractEmails(html) {
     const [local, domain] = e.split('@');
     if (!local || !domain) return false;
     if (BLOCKED_DOMAINS.has(domain)) return false;
+    // Même filtre que enrich-waterfall-core : email d'un prestataire technique
+    // (hébergeur, constructeur de site, agence) trouvé chez son client.
+    if (isThirdPartyEmailDomain(domain)) return false;
     if (PERSONAL_DOMAINS.has(domain)) return false;
     if (local.includes('noreply') || local.includes('mailer-daemon')) return false;
     if (/\.(png|jpg|jpeg|gif|css|js|svg|pdf)$/i.test(local)) return false;

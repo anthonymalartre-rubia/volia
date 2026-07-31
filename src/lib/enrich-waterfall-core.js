@@ -9,7 +9,7 @@
 // Retour : { email, method } avec method ∈ 'scrape' | 'serper' | '' (rien trouvé).
 // ─────────────────────────────────────────────────────────────────────
 
-import { PERSONAL_DOMAINS } from '@/lib/constants';
+import { PERSONAL_DOMAINS, isThirdPartyEmailDomain } from '@/lib/constants';
 import { trackApiCall } from '@/lib/apiCosts';
 
 function fetchWithTimeout(url, options = {}, timeoutMs = 8000) {
@@ -47,6 +47,11 @@ function extractEmails(html) {
     const [local, domain] = e.split('@');
     if (!local || !domain) return false;
     if (BLOCKED_DOMAINS.has(domain)) return false;
+    // Hébergeur, constructeur de site ou agence web : leur adresse traîne dans
+    // les pieds de page de LEURS clients. Le scoring seul ne les arrête pas —
+    // le bonus « préfixe générique » (+50) annule à moitié la pénalité de
+    // domaine étranger (-100), et le repli accepte tout score > -100.
+    if (isThirdPartyEmailDomain(domain)) return false;
     if (PERSONAL_DOMAINS.has(domain)) return false;
     if (local.includes('noreply') || local.includes('mailer-daemon')) return false;
     if (/\.(png|jpg|jpeg|gif|css|js|svg|pdf)$/i.test(local)) return false;

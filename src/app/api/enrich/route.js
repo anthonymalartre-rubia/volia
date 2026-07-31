@@ -1,7 +1,7 @@
 import { validateUrl } from '@/lib/url-validation';
 import { getAuthenticatedUser } from '@/lib/auth';
 import { checkLimit, incrementUsage } from '@/lib/usage';
-import { PERSONAL_DOMAINS, isNonAttributableDomain } from '@/lib/constants';
+import { PERSONAL_DOMAINS, isNonAttributableDomain, isThirdPartyEmailDomain } from '@/lib/constants';
 
 const BLOCKED_DOMAINS = [
   'example.com',
@@ -81,6 +81,9 @@ function isValidEmail(email, filterPersonal = true) {
   const [localPart, domain] = email.split('@');
   if (!localPart || !domain) return false;
   if (BLOCKED_DOMAINS.includes(domain.toLowerCase())) return false;
+  // Email d'un prestataire technique (hébergeur, constructeur de site, agence)
+  // laissé dans le pied de page de son client — ce n'est pas celui du prospect.
+  if (isThirdPartyEmailDomain(domain)) return false;
   if (filterPersonal && PERSONAL_DOMAINS.has(domain.toLowerCase())) return false;
   if (BLOCKED_EXTENSIONS.some((ext) => localPart.toLowerCase().endsWith(ext))) return false;
   if (localPart.toLowerCase().includes('noreply') || localPart.toLowerCase().includes('mailer-daemon')) return false;

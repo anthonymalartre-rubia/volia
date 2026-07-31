@@ -646,6 +646,56 @@ export const NON_ATTRIBUTABLE_DOMAINS = new Set([
   'linktr.ee', 'beacons.ai', 'calendly.com',
 ]);
 
+// ─── Domaines de PRESTATAIRES techniques ────────────────────────────
+// À ne pas confondre avec NON_ATTRIBUTABLE_DOMAINS ci-dessus, qui filtre le
+// SITE du prospect. Ici on filtre l'EMAIL extrait d'une page : hébergeurs,
+// constructeurs de sites et agences web laissent leur propre adresse dans les
+// pieds de page et les mentions légales de leurs clients.
+//
+// POURQUOI LE SCORING NE SUFFIT PAS (mesuré le 30/07/2026) : scoreEmail retire
+// 100 points quand le domaine de l'email ne correspond pas au site, mais en
+// rend 50 dès que le préfixe est générique (contact@, support@, info@…). Le
+// repli de scrapeForEmail accepte tout score > -100 : il ne peut donc laisser
+// passer QUE des -50, soit précisément « domaine étranger + préfixe générique ».
+//
+// CAS RÉELS TROUVÉS EN BASE, tous en method 'scrape' :
+//   contact@azko.fr      → 8 fiches — l'agence web qui fait les sites de notaires
+//   support@webador.fr   → 7 fiches — constructeur de sites
+//   support@ovh.com      → 5 fiches — l'hébergeur
+// Huit notaires et avocats se retrouvaient donc avec l'email de leur prestataire.
+// Pire : certaines de ces adresses sont ensuite servies par la base mutualisée
+// (method 'volia_db'), donc l'erreur se propage aux autres utilisateurs.
+//
+// COMPROMIS ASSUMÉ : si un jour tu prospectes un hébergeur, son propre email
+// sera filtré. C'est volontaire — écrire à la mauvaise entreprise coûte plus
+// cher qu'un prospect manqué. Liste amorcée sur des cas observés : à étendre
+// depuis les données, pas à deviner.
+export const THIRD_PARTY_EMAIL_DOMAINS = new Set([
+  // Hébergeurs
+  'ovh.com', 'ovh.net', 'ovhcloud.com', 'ionos.fr', 'ionos.com', 'gandi.net',
+  'o2switch.fr', 'lws.fr', 'planethoster.com', 'hostinger.fr', 'hostinger.com',
+  'godaddy.com', 'secureserver.net', 'infomaniak.com',
+  // Constructeurs de sites
+  'webador.fr', 'webador.com', 'webadorsite.com', 'wix.com', 'wixpress.com',
+  'wixsite.com', 'squarespace.com', 'weebly.com', 'jimdo.com', 'shopify.com',
+  'sitew.com', 'e-monsite.com', 'wordpress.com', 'automattic.com',
+  // Agences / annuaires laissant leur adresse chez leurs clients
+  'azko.fr', 'solocal.com', 'pagesjaunes.fr',
+]);
+
+/** True si l'email appartient à un prestataire technique et non au prospect. */
+export function isThirdPartyEmailDomain(emailOrDomain) {
+  const s = String(emailOrDomain || '').toLowerCase().trim();
+  if (!s) return false;
+  const dom = (s.includes('@') ? s.split('@').pop() : s).replace(/^www\./, '');
+  if (!dom) return false;
+  const parts = dom.split('.');
+  for (let i = 0; i < parts.length - 1; i += 1) {
+    if (THIRD_PARTY_EMAIL_DOMAINS.has(parts.slice(i).join('.'))) return true;
+  }
+  return false;
+}
+
 /**
  * True si le host appartient à un domaine non attribuable au prospect.
  * Test par suffixe : « mq.parkopedia.com » → parkopedia.com ✓,

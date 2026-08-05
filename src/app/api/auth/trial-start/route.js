@@ -36,9 +36,13 @@ export async function POST() {
 
   // Cas edge : profil pas encore créé par le trigger → on le crée en free.
   if (!profile) {
-    await supabaseAdmin
+    const { error: insertErr } = await supabaseAdmin
       .from('user_profiles')
       .insert({ id: user.id, plan: 'free' });
+    if (insertErr) {
+      console.error('[trial-start] création du profil échouée:', insertErr);
+      return NextResponse.json({ error: 'profile creation failed' }, { status: 500 });
+    }
   }
 
   // Déjà accueilli → no-op (anti double-send sur re-confirm / double-clic).
@@ -47,10 +51,17 @@ export async function POST() {
   }
 
   // Marque comme accueilli AVANT l'envoi (idempotence forte).
-  await supabaseAdmin
+  // L'erreur était ignorée : si l'update échouait, welcomed_at restait vide et
+  // l'email de bienvenue repartait à CHAQUE appel. On préfère ne pas l'envoyer
+  // plutôt que de risquer d'en envoyer dix.
+  const { error: markErr } = await supabaseAdmin
     .from('user_profiles')
     .update({ welcomed_at: new Date().toISOString() })
     .eq('id', user.id);
+  if (markErr) {
+    console.error('[trial-start] marquage welcomed_at échoué:', markErr);
+    return NextResponse.json({ error: 'could not mark welcomed' }, { status: 500 });
+  }
 
   // Envoi email — fire & forget pour ne pas bloquer la redirect dashboard.
   try {

@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { getSupabase } from '@/lib/supabase';
 import { DEPTS, REGIONS, COUNTRIES, getDeptData, getCountryForDept, getRegionsForCountry, getDeptsForCountry } from '@/lib/constants';
-import { nextPlanId } from '@/lib/plans';
+import { nextPlanId, getPlan } from '@/lib/plans';
+import { buildProspectsCsv, prospectsCsvFilename } from '@/lib/csv-export';
 import TopBar from '@/components/TopBar';
 import Sidebar from '@/components/Sidebar';
 import UsageBanner from '@/components/UsageBanner';
@@ -110,16 +111,8 @@ function extractDeptFromAddress(addr) {
   return null;
 }
 
-// Escape CSV values to prevent injection (quotes, formulas)
-function escapeCSV(value) {
-  if (value == null) return '';
-  let str = String(value);
-  // Strip leading formula characters to prevent CSV injection
-  str = str.replace(/^[=+\-@\t\r]/, "'$&");
-  // Escape double quotes
-  str = str.replace(/"/g, '""');
-  return `"${str}"`;
-}
+// escapeCSV + sérialisation : déplacés dans lib/csv-export.js pour être
+// couverts par des tests (cf. la régression silencieuse de l'export, 19/05/2026).
 
 // Generate a descriptive label for search sessions
 function generateSessionLabel(depts, b2bCats, coproCats, customQueries) {
@@ -1411,33 +1404,20 @@ export default function Dashboard() {
       }
     }
 
-    const headers = ['nom', 'email', 'contact_decideur', 'role_decideur', 'telephone', 'site_web', 'adresse', 'departement', 'category'];
-
-    const rows = list.map((prospect) => {
-      return [
-        escapeCSV(prospect.nom),
-        escapeCSV(prospect.email),
-        escapeCSV(prospect.contact_name),
-        escapeCSV(prospect.contact_role),
-        escapeCSV(prospect.telephone),
-        escapeCSV(prospect.site_web),
-        escapeCSV(prospect.adresse),
-        escapeCSV(prospect.departement),
-        escapeCSV(prospect.category),
-      ].join(',');
-    });
-
-    // Add BOM for Excel UTF-8 compatibility
-    const csv = '\uFEFF' + headers.join(',') + '\n' + rows.join('\n') + '\n';
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const blob = new Blob([buildProspectsCsv(list)], { type: 'text/csv;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `prospects_${format}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = prospectsCsvFilename();
     document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    try {
+      link.click();
+    } finally {
+      // finally : un throw ici laisserait sinon une ancre orpheline dans le DOM
+      // et une URL blob non r\u00E9voqu\u00E9e \u00E0 chaque clic.
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
 
     // Increment export usage tracking — passe par une API serveur (service_role)
     // car la RLS UPDATE sur usage_tracking a été retirée pour empêcher les

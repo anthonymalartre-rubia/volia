@@ -124,5 +124,8 @@ export async function POST(request, { params }) {
     }
   }
 
-  return NextResponse.json({ ok: true, enrolled: rows.length, sequence: updated });
+  // `totalEligible` et pas `rows.length` : depuis la pagination (5b5bb0d), `rows`
+  // est block-scoped dans la boucle. La ReferenceError partait APRÈS les écritures
+  // → la séquence démarrait vraiment mais l'admin recevait un 500.
+  return NextResponse.json({ ok: true, enrolled: totalEligible, sequence: updated });
 }

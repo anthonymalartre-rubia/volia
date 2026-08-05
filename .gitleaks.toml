@@ -1,0 +1,117 @@
+# ============================================================================
+# gitleaks — détection de secrets. Repo PUBLIC : un secret committé est un
+# secret publié, y compris s'il est retiré ensuite (l'historique le garde).
+# ============================================================================
+# Utilisation :
+#   gitleaks git .   --redact        # tout l'historique
+#   gitleaks dir .   --redact        # l'arborescence de travail
+#   (le hook .githooks/pre-commit vérifie l'index avant chaque commit)
+#
+# --redact est important : sans lui, gitleaks IMPRIME les secrets trouvés, donc
+# les recopie dans tes logs de terminal et dans toute capture d'écran.
+#
+# Résultats attendus (vérifié le 05/08/2026) :
+#   gitleaks git .  → « no leaks found » sur les 756 commits.
+#   gitleaks dir .  → 13 trouvailles, TOUTES dans .env.local.
+#
+# Les 13 trouvailles de .env.local sont NORMALES : ce sont tes vraies clés, et
+# ce fichier est ignoré par git (.gitignore:50), jamais suivi, absent de tout
+# l'historique. Ne les mets PAS en exception : c'est justement ce qui ferait
+# bloquer le commit si .env.local finissait un jour dans l'index par erreur.
+# Accessoirement, elles prouvent que les règles ci-dessous détectent bien les
+# formats réels et pas seulement des valeurs de test.
+# ============================================================================
+
+title = "Volia — règles de détection de secrets"
+
+[extend]
+# On AJOUTE aux ~200 règles par défaut, on ne les remplace pas.
+useDefault = true
+
+# ─── Resend : angle mort des règles par défaut ──────────────────────────────
+# Vérifié le 31/07/2026 : le binaire gitleaks 8.30.1 ne contient AUCUNE règle
+# pour Resend (0 occurrence de « resend »). Or cette clé permet d'envoyer des
+# emails AU NOM DE volia.fr — c'est, de toute la pile, la fuite la plus
+# dommageable : usurpation d'expéditeur auprès des prospects et du client
+# payant, et destruction de la réputation du domaine.
+[[rules]]
+id = "resend-api-key"
+description = "Clé API Resend (envoi d'emails au nom du domaine)"
+regex = '''\bre_[A-Za-z0-9_-]{20,}\b'''
+entropy = 3.0
+keywords = ["re_"]
+
+# ─── MillionVerifier : clé hexadécimale, aucune règle générique fiable ──────
+[[rules]]
+id = "millionverifier-api-key"
+description = "Clé API MillionVerifier"
+regex = '''(?i)millionverifier[_-]?api[_-]?key['"\s:=]{1,10}([a-z0-9]{20,40})'''
+secretGroup = 1
+keywords = ["millionverifier"]
+
+# ─── Serper : même situation ────────────────────────────────────────────────
+[[rules]]
+id = "serper-api-key"
+description = "Clé API Serper.dev"
+regex = '''(?i)serper[_-]?api[_-]?key['"\s:=]{1,10}([a-f0-9]{32,64})'''
+secretGroup = 1
+keywords = ["serper"]
+
+# ─── CRON_SECRET : protège 44 crons, dont des envois d'emails réels ─────────
+[[rules]]
+id = "volia-cron-secret"
+description = "CRON_SECRET Volia (autorise l'exécution de n'importe quel cron)"
+regex = '''(?i)cron[_-]?secret['"\s:=]{1,10}([A-Za-z0-9_\-]{16,})'''
+secretGroup = 1
+keywords = ["cron_secret", "CRON_SECRET"]
+
+# ============================================================================
+# Faux positifs connus, vérifiés un par un le 31/07/2026.
+# Chaque exception est limitée à UNE règle sur UN fichier : jamais un chemin
+# entier, sinon un vrai secret pourrait s'y cacher sans être vu.
+# ============================================================================
+
+# Token PUBLIC du widget Trustpilot Review Collector. Le commentaire du code
+# le dit explicitement : « Public, à garder hardcoded ». Ce n'est pas un secret,
+# c'est l'équivalent d'une clé publiable.
+[[allowlists]]
+description = "Token public du widget Trustpilot"
+targetRules = ["generic-api-key"]
+paths = ['''src/lib/trustpilot-data\.js''']
+
+# Exemples de doc API : `curl -H "Authorization: Bearer sk_live_xxx"`.
+# `sk_live_xxx` est un placeholder, pas une clé.
+[[allowlists]]
+description = "Placeholders dans les exemples curl de la documentation"
+targetRules = ["curl-auth-header"]
+paths = ['''src/lib/docs\.js''']
+regexes = ['''sk_live_xxx''']
+
+# La phrase française « ou décris ce que tu cherches » a la même forme qu'un
+# Client ID LinkedIn (14 caractères alphanumériques). Restreint aux fichiers de
+# traduction, qui ne contiennent que de la copy.
+[[allowlists]]
+description = "Phrases de traduction confondues avec un Client ID LinkedIn"
+targetRules = ["linkedin-client-id"]
+paths = ['''src/locales/(fr|en)\.js''']
+
+# .env.example ne contient que des noms de variables et des valeurs vides.
+[[allowlists]]
+description = "Modèle d'environnement — noms de variables uniquement"
+paths = ['''\.env\.example$''']
+
+# Seule exception qui porte sur des CHEMINS ENTIERS, et non sur une règle+fichier.
+# Justification : `gitleaks dir` n'honore pas .gitignore, alors que node_modules
+# (611 Mo) et .next (2,8 Go) sont ignorés par git — rien de ce qui s'y trouve ne
+# peut donc atteindre le repo public. Les scanner ne protège de rien et rend la
+# commande `gitleaks dir .` inutilisable (plus de 10 minutes).
+# Corollaire à ne pas oublier : si l'un de ces répertoires sortait un jour de
+# .gitignore, cette exception deviendrait un angle mort. Elle est valable
+# uniquement tant qu'ils y restent.
+[[allowlists]]
+description = "Dépendances et artefacts de build, non versionnés"
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)\.next/''',
+  '''(^|/)coverage/''',
+]

@@ -1,0 +1,48 @@
+#!/bin/sh
+# ============================================================================
+# pre-commit — refuse un commit qui contient un secret.
+#
+# Le repo est PUBLIC. Un secret committé est un secret PUBLIÉ, même si tu le
+# retires juste après : l'historique le conserve, et GitHub garde les objets
+# devenus orphelins. Le seul moment où la fuite est encore réparable sans
+# douleur, c'est AVANT le commit. D'où ce hook.
+#
+# Installation — une fois par machine, car core.hooksPath n'est pas versionné :
+#   git config core.hooksPath .githooks
+#
+# En cas de faux positif : ne prends pas l'habitude de --no-verify. Ajoute une
+# exception CIBLÉE dans .gitleaks.toml (une règle, un fichier), sinon la
+# prochaine vraie fuite passera au même endroit.
+# ============================================================================
+
+RACINE=$(git rev-parse --show-toplevel) || exit 1
+CONFIG="$RACINE/.gitleaks.toml"
+
+if ! command -v gitleaks >/dev/null 2>&1; then
+  printf '\n\033[1;31m✖ commit refusé : gitleaks est introuvable.\033[0m\n'
+  printf '  Sans lui, impossible de vérifier que ce commit ne contient pas de secret,\n'
+  printf '  et le repo est public. Installe-le :\n\n'
+  printf '      brew install gitleaks\n\n'
+  printf '  Si tu es certain que ce commit est propre : git commit --no-verify\n\n'
+  exit 1
+fi
+
+# --staged  : ne scanne que ce qui est sur le point d'être committé, pas toute
+#             l'arborescence (rapide, et c'est le bon périmètre).
+# --verbose : affiche le fichier, la ligne et la règle — sans ça tu sais qu'il y
+#             a une fuite mais pas où, donc tu ne peux rien corriger.
+# --redact  : indispensable AVEC --verbose, sinon gitleaks imprime le secret en
+#             clair — donc le recopie dans l'historique de ton shell et dans
+#             toute capture d'écran.
+if gitleaks git "$RACINE" --staged --no-banner --verbose --redact --config "$CONFIG"; then
+  exit 0
+fi
+
+printf '\n\033[1;31m✖ commit refusé : gitleaks a trouvé un secret dans les fichiers indexés.\033[0m\n'
+printf '  Le détail est au-dessus (fichier, ligne, règle). La valeur elle-même est\n'
+printf '  masquée volontairement, pour ne pas la recopier dans ton terminal.\n\n'
+printf '  Que faire :\n'
+printf '   1. Retire la valeur du fichier et mets-la dans .env.local (ignoré par git).\n'
+printf '   2. Considère la clé comme compromise si elle a déjà été poussée : régénère-la.\n'
+printf '   3. Si c'"'"'est un faux positif, ajoute une exception ciblée dans .gitleaks.toml.\n\n'
+exit 1

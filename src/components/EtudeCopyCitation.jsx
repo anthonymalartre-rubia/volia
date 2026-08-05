@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
+import { copyToClipboard } from '@/lib/clipboard';
 
 export default function EtudeCopyCitation({ studyUrl, publishedAt, studyTitle }) {
   const [copied, setCopied] = useState(null);
@@ -13,8 +14,8 @@ export default function EtudeCopyCitation({ studyUrl, publishedAt, studyTitle })
   const html = `<p>Source : <a href="${studyUrl}">${title}</a> — Volia (${year})</p>`;
   const markdown = `[${title}](${studyUrl}) — Volia (${year})`;
 
-  const handleCopy = (text, label) => {
-    navigator.clipboard.writeText(text);
+  const handleCopy = async (text, label) => {
+    if (!(await copyToClipboard(text))) return; // pas de « Copié » si rien n'a été copié
     setCopied(label);
     setTimeout(() => setCopied(null), 2000);
   };

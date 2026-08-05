@@ -10,6 +10,7 @@
 
 import { useEffect, useState } from 'react';
 import { X, Copy, Check, ExternalLink, QrCode, Code2, Sparkles, Download } from 'lucide-react';
+import { copyToClipboard } from '@/lib/clipboard';
 
 export default function PublishedModal({ open, formId, slug, onClose }) {
   const [copied, setCopied] = useState(null);
@@ -36,14 +37,12 @@ export default function PublishedModal({ open, formId, slug, onClose }) {
   const embedCode = `<iframe src="${publicUrl}?embed=true" width="100%" height="600" style="border:0;" loading="lazy"></iframe>`;
   const qrSrc = `/api/admin/forms/${formId}/qr`;
 
-  function copy(text, key) {
-    try {
-      navigator.clipboard.writeText(text);
-      setCopied(key);
-      setTimeout(() => setCopied(null), 2000);
-    } catch {
-      // Best effort, do nothing on failure
-    }
+  // Le try/catch d'origine n'attrapait rien : writeText est asynchrone, son
+  // rejet ne remontait jamais. « Copié » s'affichait même sans copie.
+  async function copy(text, key) {
+    if (!(await copyToClipboard(text))) return;
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
   }
 
   return (

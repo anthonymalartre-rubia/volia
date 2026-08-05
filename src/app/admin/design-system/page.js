@@ -21,6 +21,7 @@ import {
   AlertCircle, ArrowLeft, Copy, Search, Inbox, Sparkles, LogIn,
 } from 'lucide-react';
 import { getSupabase } from '@/lib/supabase';
+import { copyToClipboard } from '@/lib/clipboard';
 import {
   Button, Input, Card, MarketingCard, BrandWordmark, Logo, LogoIcon,
 } from '@/components/ui';
@@ -56,9 +57,8 @@ export default function DesignSystemPage() {
     })();
   }, [router, supabase]);
 
-  function copyToClipboard(text, key) {
-    if (typeof navigator === 'undefined' || !navigator.clipboard) return;
-    navigator.clipboard.writeText(text);
+  async function handleCopy(text, key) {
+    if (!(await copyToClipboard(text))) return;
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 1500);
   }
@@ -80,7 +80,7 @@ export default function DesignSystemPage() {
   return (
     <div className="min-h-screen bg-surface-base text-content-primary">
       <StickyHeader />
-      <TokensSection copyToClipboard={copyToClipboard} copiedKey={copiedKey} />
+      <TokensSection copyToClipboard={handleCopy} copiedKey={copiedKey} />
       <ComponentsSection />
       <PatternsSection />
       <GuidelinesSection />

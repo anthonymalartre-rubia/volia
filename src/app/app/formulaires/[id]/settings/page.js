@@ -32,6 +32,7 @@ import {
   QrCode,
 } from 'lucide-react';
 import QrCustomizer from '@/components/forms/QrCustomizer';
+import { copyToClipboard } from '@/lib/clipboard';
 
 function Toggle({ checked, onChange, disabled = false }) {
   return (
@@ -191,12 +192,14 @@ export default function FormSettingsPage() {
     }
   }
 
-  function copyToClipboard(text, key) {
-    try {
-      navigator.clipboard.writeText(text);
+  // Le try/catch d'origine ne servait à rien : writeText est asynchrone, donc
+  // son rejet ne remontait jamais dans le catch. « Copié » s'affichait même
+  // quand rien n'était copié.
+  async function handleCopy(text, key) {
+    if (await copyToClipboard(text)) {
       setCopied(key);
       setTimeout(() => setCopied(null), 2000);
-    } catch {
+    } else {
       setError('Copie impossible — copiez manuellement');
     }
   }
@@ -340,7 +343,7 @@ export default function FormSettingsPage() {
                   className="flex-1 px-3 py-2 rounded-lg bg-surface-elevated border border-line text-sm text-content-primary font-mono"
                 />
                 <button
-                  onClick={() => copyToClipboard(publicUrl, 'url')}
+                  onClick={() => handleCopy(publicUrl, 'url')}
                   disabled={form.status !== 'published'}
                   className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
@@ -381,7 +384,7 @@ export default function FormSettingsPage() {
                       className="flex-1 px-3 py-2 rounded-lg bg-surface-elevated border border-line text-xs text-content-primary font-mono resize-none"
                     />
                     <button
-                      onClick={() => copyToClipboard(embedCode, 'embed')}
+                      onClick={() => handleCopy(embedCode, 'embed')}
                       className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white text-sm transition-colors"
                     >
                       {copied === 'embed' ? <Check size={14} /> : <Copy size={14} />}

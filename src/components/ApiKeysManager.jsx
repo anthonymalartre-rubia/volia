@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Check, Copy, Eye, EyeOff, Key, Loader2, Plus, Trash2, AlertCircle } from 'lucide-react';
 import { ConfirmModal } from '@/components/ui';
+import { copyToClipboard } from '@/lib/clipboard';
 
 export default function ApiKeysManager() {
   const [keys, setKeys] = useState([]);
@@ -71,11 +72,17 @@ export default function ApiKeysManager() {
     }
   };
 
-  const copyKey = () => {
+  // La clé n'est affichée qu'une fois et n'est jamais récupérable (seul son
+  // hash est en base). Un « Copié » affiché sans que la copie ait eu lieu fait
+  // perdre la clé définitivement → on ne confirme que si ça a marché.
+  const copyKey = async () => {
     if (!revealedKey?.key) return;
-    navigator.clipboard.writeText(revealedKey.key);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (await copyToClipboard(revealedKey.key)) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } else {
+      setError('Copie impossible. Sélectionnez la clé ci-dessous et copiez-la à la main — elle ne sera plus affichée.');
+    }
   };
 
   if (loading) {

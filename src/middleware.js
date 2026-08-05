@@ -147,6 +147,13 @@ export async function middleware(request) {
     pathname.startsWith('/manifest') ||       // manifest.webmanifest généré par Next
     pathname.startsWith('/apple-icon') ||
     pathname.startsWith('/api') ||
+    // Tunnel Sentry (next.config.js → tunnelRoute: '/monitoring'). Le
+    // middleware s'exécute AVANT les rewrites : sans cette exception, le POST
+    // d'un visiteur déconnecté était redirigé vers /login, qui n'accepte pas
+    // le POST → 405, et l'événement était perdu. Résultat : aucune erreur du
+    // tunnel d'acquisition (landing, pricing, signup, login) n'arrivait dans
+    // Sentry. Constaté en prod le 05/08/2026.
+    pathname.startsWith('/monitoring') ||
     pathname.startsWith('/auth');
 
   if (isPublicRoute) {

@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { DEPTS, REGIONS, B2B_CATS, COPRO_CATS, B2B_GROUPS, COPRO_GROUPS, COUNTRIES, getRegionsForCountry, getDeptsForCountry } from "@/lib/constants";
+import { findDeptByQuery } from "@/lib/dept-match";
 import { useI18n } from "@/lib/i18n";
 import OnboardingHint from "@/components/OnboardingHint";
 import {
@@ -237,11 +238,11 @@ export default function SearchPanel({
       return;
     }
     // Normalise le département : on accepte "75", "Paris", "75 - Paris"...
-    const allDepts = Object.entries(DEPTS); // [['75', 'Paris'], ...]
-    const q = quickDept.trim().toLowerCase();
-    const matchedDept = allDepts.find(([code, name]) =>
-      code === q || name.toLowerCase() === q || `${code} - ${name.toLowerCase()}` === q || name.toLowerCase().includes(q)
-    );
+    // Le code destructurait ici Object.entries(DEPTS) en [code, name] en
+    // croyant la valeur être une chaîne — DEPTS contient des objets. Toute
+    // saisie autre que « 75 » levait une TypeError non rattrapée (Sentry
+    // JAVASCRIPT-NEXTJS-1, 72 occurrences). Cf. lib/dept-match.js.
+    const matchedDept = findDeptByQuery(quickDept);
     if (!matchedDept) {
       setQuickError('Département non reconnu. Tape un code (ex: 75) ou un nom (ex: Paris).');
       return;

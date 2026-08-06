@@ -30,8 +30,25 @@ if (dsn) {
     // Replay sessions : désactivé par défaut (lourd en quota).
     // On capture quand même les sessions où une erreur se produit
     // pour pouvoir rejouer le contexte du crash.
+    //
+    // ⚠️ Ces deux taux ne pilotaient RIEN jusqu'au 06/08/2026 : l'intégration
+    // Replay n'était pas enregistrée, donc aucune session n'était capturée.
+    // Sentry affichait « Set up Session Replay » alors que la config semblait
+    // faite. C'est `integrations` ci-dessous qui les rend effectifs.
     replaysSessionSampleRate: 0.0,
     replaysOnErrorSampleRate: 1.0,
+
+    // Masquage explicite plutôt qu'implicite : ce sont les défauts de Sentry,
+    // mais un défaut peut changer d'une version à l'autre — et ici il protège
+    // des données de prospection (emails, téléphones, noms d'entreprises).
+    // Sentry est déclaré comme sous-traitant sur /sous-traitants.
+    integrations: [
+      Sentry.replayIntegration({
+        maskAllText: true,    // aucun texte affiché n'est enregistré
+        maskAllInputs: true,  // aucune saisie clavier n'est enregistrée
+        blockAllMedia: true,  // images et vidéos exclues
+      }),
+    ],
 
     environment: process.env.NEXT_PUBLIC_VERCEL_ENV || 'development',
     release: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA,

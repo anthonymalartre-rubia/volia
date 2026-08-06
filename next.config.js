@@ -33,12 +33,22 @@ const nextConfig = {
     const csp = [
       "default-src 'self'",
       // widget.trustpilot.com : script bootstrap du Review Collector
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://va.vercel-scripts.com https://widget.trustpilot.com",
+      // snap.licdn.com : LinkedIn Insight Tag. Il était appelé par le code mais
+      // absent d'ici → bloqué par la CSP à chaque page, donc AUCUNE conversion
+      // LinkedIn n'était attribuée (constaté en prod le 05/08/2026). Le tag ne
+      // se charge que pour les visiteurs ayant accepté les cookies marketing
+      // (cf. LinkedInInsight.jsx → hasConsent('marketing')).
+      // ⚠️ googletagmanager.com et connect.facebook.net sont dans le même cas :
+      // MarketingPixels.jsx les charge, ils ne sont pas autorisés ici. Ils ne
+      // posent pas problème aujourd'hui (aucun ID configuré) mais échoueront
+      // en silence le jour où tu les activeras — les ajouter ici à ce moment-là.
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://va.vercel-scripts.com https://widget.trustpilot.com https://snap.licdn.com",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' data: https://fonts.gstatic.com",
       "img-src 'self' data: blob: https:",
       // *.trustpilot.com : appels API du widget pour récupérer config + envoyer reviews
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://va.vercel-scripts.com https://vitals.vercel-insights.com https://*.trustpilot.com",
+      // px*.ads.linkedin.com : point de collecte des conversions de l'Insight Tag.
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.stripe.com https://va.vercel-scripts.com https://vitals.vercel-insights.com https://*.trustpilot.com https://px.ads.linkedin.com https://px4.ads.linkedin.com",
       // widget.trustpilot.com : le Review Collector affiche un iframe pour le formulaire d'avis
       "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://widget.trustpilot.com",
       "frame-ancestors 'none'",

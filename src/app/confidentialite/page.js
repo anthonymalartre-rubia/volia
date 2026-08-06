@@ -379,6 +379,25 @@ export default function ConfidentialitePage() {
                 </tbody>
               </table>
             </div>
+
+            <h3 className="text-lg font-medium text-content-primary mt-5 mb-2">8.3 Supervision technique et enregistrement de session</h3>
+            <p>
+              Nous utilisons <span className="text-content-primary font-medium">Sentry</span> (hébergé dans l&apos;Union européenne)
+              pour détecter les erreurs techniques du Service. Lorsqu&apos;une erreur survient pendant votre navigation,
+              Sentry enregistre le message d&apos;erreur, la page concernée, votre navigateur, l&apos;identifiant de votre
+              compte, ainsi que le parcours ayant mené à cette erreur.
+            </p>
+            <p className="mt-2">
+              Cet enregistrement est <span className="text-content-primary font-medium">limité aux sessions au cours desquelles une erreur se produit</span> :
+              nous n&apos;enregistrons pas la navigation ordinaire. Les textes affichés, les champs que vous saisissez et
+              les médias sont <span className="text-content-primary font-medium">masqués à la source</span> et ne nous
+              parviennent jamais. La finalité est exclusivement corrective : comprendre un dysfonctionnement pour le
+              réparer, sans attendre que vous nous le signaliez.
+            </p>
+            <p className="mt-2">
+              Base légale : intérêt légitime (article 6.1.f du RGPD) à assurer le bon fonctionnement et la sécurité du
+              Service. Vous pouvez vous opposer à ce traitement en nous écrivant à l&apos;adresse indiquée à l&apos;article 12.
+            </p>
           </section>
 
           <section>
@@ -437,7 +456,7 @@ export default function ConfidentialitePage() {
               </li>
               <li>
                 <span className="text-content-primary font-medium">Marketing</span> : tracking de
-                conversion (Stripe), widget de réservation de démo (Cal.com). Désactivés par défaut.
+                conversion (Stripe, LinkedIn), widget de réservation de démo (Cal.com). Désactivés par défaut.
               </li>
             </ul>
             <p className="mt-4">

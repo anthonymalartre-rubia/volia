@@ -91,6 +91,15 @@ const SUBPROCESSORS = [
     dpaLabel: 'Privacy Upstash',
   },
   {
+    name: 'Sentry',
+    role: 'Supervision technique : erreurs applicatives et enregistrement des sessions où une erreur survient',
+    data: 'Message d\'erreur, page visitée, navigateur, identifiant de compte, parcours menant à l\'erreur (textes saisis et médias masqués)',
+    location: 'UE',
+    region: 'eu',
+    dpaUrl: 'https://sentry.io/legal/dpa/',
+    dpaLabel: 'DPA Sentry',
+  },
+  {
     name: 'Anthropic',
     role: 'API IA (parse-search recherche en langage naturel)',
     data: 'Texte de requête utilisateur (anonymisé)',
@@ -148,7 +157,7 @@ export default function SousTraitantsPage() {
               et le lien vers leur DPA. Rien de caché.
             </p>
             <p className="text-xs text-content-muted mt-4">
-              Dernière mise à jour : 26 mai 2026
+              Dernière mise à jour : 6 août 2026
             </p>
           </header>
 
@@ -157,7 +166,7 @@ export default function SousTraitantsPage() {
             <div className="p-5 rounded-xl border border-violet-500/30 bg-violet-500/5 text-sm text-content-secondary leading-relaxed">
               <p className="text-content-primary font-semibold mb-2">En 2 phrases</p>
               <p>
-                Volia s&apos;appuie sur 10 services tiers (hébergement, paiement, IA, emails). Vos
+                Volia s&apos;appuie sur {SUBPROCESSORS.length} services tiers (hébergement, paiement, IA, emails). Vos
                 données utilisateur sont stockées dans l&apos;UE ; pour les rares sous-traitants
                 hors UE, on s&apos;appuie sur les Clauses Contractuelles Types et le Data Privacy
                 Framework.
